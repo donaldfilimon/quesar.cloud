@@ -59,6 +59,9 @@ import { Route as ConsoleWorkspaceRouteImport } from './routes/console.workspace
 import { Route as DocsSlugRouteImport } from './routes/docs.$slug'
 import { Route as ProductsSlugRouteImport } from './routes/products.$slug'
 import { Route as ProjectsSlugRouteImport } from './routes/projects.$slug'
+import { Route as QuasarNewRouteImport } from './routes/quasar.new'
+import { Route as QuasarSettingsRouteImport } from './routes/quasar.settings'
+import { Route as QuasarSitesRouteImport } from './routes/quasar.sites'
 import { Route as ResearchSlugRouteImport } from './routes/research.$slug'
 import { Route as ResearchImplementationsRouteImport } from './routes/research.implementations'
 import { Route as ShowcaseAbbeyRouteImport } from './routes/showcase.abbey'
@@ -70,6 +73,7 @@ import { Route as ShowcaseTrailerRouteImport } from './routes/showcase.trailer'
 import { Route as SourceNameRouteImport } from './routes/source.$name'
 import { Route as TeamSlugRouteImport } from './routes/team.$slug'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
+import { Route as QuasarSiteIdRouteImport } from './routes/quasar.site.$id'
 import { Route as ResearchImplementationsSlugRouteImport } from './routes/research.implementations.$slug'
 
 const IndexRoute = IndexRouteImport.update({
@@ -322,6 +326,21 @@ const ProjectsSlugRoute = ProjectsSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => ProjectsRoute,
 } as any)
+const QuasarNewRoute = QuasarNewRouteImport.update({
+  id: '/quasar/new',
+  path: '/quasar/new',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QuasarSettingsRoute = QuasarSettingsRouteImport.update({
+  id: '/quasar/settings',
+  path: '/quasar/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QuasarSitesRoute = QuasarSitesRouteImport.update({
+  id: '/quasar/sites',
+  path: '/quasar/sites',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ResearchSlugRoute = ResearchSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
@@ -375,6 +394,11 @@ const TeamSlugRoute = TeamSlugRouteImport.update({
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QuasarSiteIdRoute = QuasarSiteIdRouteImport.update({
+  id: '/quasar/site/$id',
+  path: '/quasar/site/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ResearchImplementationsSlugRoute =
@@ -435,6 +459,9 @@ export interface FileRoutesByFullPath {
   '/docs/$slug': typeof DocsSlugRoute
   '/products/$slug': typeof ProductsSlugRoute
   '/projects/$slug': typeof ProjectsSlugRoute
+  '/quasar/new': typeof QuasarNewRoute
+  '/quasar/settings': typeof QuasarSettingsRoute
+  '/quasar/sites': typeof QuasarSitesRoute
   '/research/$slug': typeof ResearchSlugRoute
   '/research/implementations': typeof ResearchImplementationsRouteWithChildren
   '/showcase/abbey': typeof ShowcaseAbbeyRoute
@@ -446,6 +473,7 @@ export interface FileRoutesByFullPath {
   '/source/$name': typeof SourceNameRoute
   '/team/$slug': typeof TeamSlugRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/quasar/site/$id': typeof QuasarSiteIdRoute
   '/research/implementations/$slug': typeof ResearchImplementationsSlugRoute
 }
 export interface FileRoutesByTo {
@@ -499,6 +527,9 @@ export interface FileRoutesByTo {
   '/docs/$slug': typeof DocsSlugRoute
   '/products/$slug': typeof ProductsSlugRoute
   '/projects/$slug': typeof ProjectsSlugRoute
+  '/quasar/new': typeof QuasarNewRoute
+  '/quasar/settings': typeof QuasarSettingsRoute
+  '/quasar/sites': typeof QuasarSitesRoute
   '/research/$slug': typeof ResearchSlugRoute
   '/research/implementations': typeof ResearchImplementationsRouteWithChildren
   '/showcase/abbey': typeof ShowcaseAbbeyRoute
@@ -510,6 +541,7 @@ export interface FileRoutesByTo {
   '/source/$name': typeof SourceNameRoute
   '/team/$slug': typeof TeamSlugRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/quasar/site/$id': typeof QuasarSiteIdRoute
   '/research/implementations/$slug': typeof ResearchImplementationsSlugRoute
 }
 export interface FileRoutesById {
@@ -564,6 +596,9 @@ export interface FileRoutesById {
   '/docs/$slug': typeof DocsSlugRoute
   '/products/$slug': typeof ProductsSlugRoute
   '/projects/$slug': typeof ProjectsSlugRoute
+  '/quasar/new': typeof QuasarNewRoute
+  '/quasar/settings': typeof QuasarSettingsRoute
+  '/quasar/sites': typeof QuasarSitesRoute
   '/research/$slug': typeof ResearchSlugRoute
   '/research/implementations': typeof ResearchImplementationsRouteWithChildren
   '/showcase/abbey': typeof ShowcaseAbbeyRoute
@@ -575,6 +610,7 @@ export interface FileRoutesById {
   '/source/$name': typeof SourceNameRoute
   '/team/$slug': typeof TeamSlugRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/quasar/site/$id': typeof QuasarSiteIdRoute
   '/research/implementations/$slug': typeof ResearchImplementationsSlugRoute
 }
 export interface FileRouteTypes {
@@ -630,6 +666,9 @@ export interface FileRouteTypes {
     | '/docs/$slug'
     | '/products/$slug'
     | '/projects/$slug'
+    | '/quasar/new'
+    | '/quasar/settings'
+    | '/quasar/sites'
     | '/research/$slug'
     | '/research/implementations'
     | '/showcase/abbey'
@@ -641,6 +680,7 @@ export interface FileRouteTypes {
     | '/source/$name'
     | '/team/$slug'
     | '/api/auth/$'
+    | '/quasar/site/$id'
     | '/research/implementations/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -694,6 +734,9 @@ export interface FileRouteTypes {
     | '/docs/$slug'
     | '/products/$slug'
     | '/projects/$slug'
+    | '/quasar/new'
+    | '/quasar/settings'
+    | '/quasar/sites'
     | '/research/$slug'
     | '/research/implementations'
     | '/showcase/abbey'
@@ -705,6 +748,7 @@ export interface FileRouteTypes {
     | '/source/$name'
     | '/team/$slug'
     | '/api/auth/$'
+    | '/quasar/site/$id'
     | '/research/implementations/$slug'
   id:
     | '__root__'
@@ -758,6 +802,9 @@ export interface FileRouteTypes {
     | '/docs/$slug'
     | '/products/$slug'
     | '/projects/$slug'
+    | '/quasar/new'
+    | '/quasar/settings'
+    | '/quasar/sites'
     | '/research/$slug'
     | '/research/implementations'
     | '/showcase/abbey'
@@ -769,6 +816,7 @@ export interface FileRouteTypes {
     | '/source/$name'
     | '/team/$slug'
     | '/api/auth/$'
+    | '/quasar/site/$id'
     | '/research/implementations/$slug'
   fileRoutesById: FileRoutesById
 }
@@ -818,7 +866,11 @@ export interface RootRouteChildren {
   TfPoseDemoRoute: typeof TfPoseDemoRoute
   WdbxRoute: typeof WdbxRoute
   WorkspaceRoute: typeof WorkspaceRoute
+  QuasarNewRoute: typeof QuasarNewRoute
+  QuasarSettingsRoute: typeof QuasarSettingsRoute
+  QuasarSitesRoute: typeof QuasarSitesRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+  QuasarSiteIdRoute: typeof QuasarSiteIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -1173,6 +1225,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProjectsSlugRouteImport
       parentRoute: typeof ProjectsRoute
     }
+    '/quasar/new': {
+      id: '/quasar/new'
+      path: '/quasar/new'
+      fullPath: '/quasar/new'
+      preLoaderRoute: typeof QuasarNewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/quasar/settings': {
+      id: '/quasar/settings'
+      path: '/quasar/settings'
+      fullPath: '/quasar/settings'
+      preLoaderRoute: typeof QuasarSettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/quasar/sites': {
+      id: '/quasar/sites'
+      path: '/quasar/sites'
+      fullPath: '/quasar/sites'
+      preLoaderRoute: typeof QuasarSitesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/research/$slug': {
       id: '/research/$slug'
       path: '/$slug'
@@ -1248,6 +1321,13 @@ declare module '@tanstack/react-router' {
       path: '/api/auth/$'
       fullPath: '/api/auth/$'
       preLoaderRoute: typeof ApiAuthSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/quasar/site/$id': {
+      id: '/quasar/site/$id'
+      path: '/quasar/site/$id'
+      fullPath: '/quasar/site/$id'
+      preLoaderRoute: typeof QuasarSiteIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/research/implementations/$slug': {
@@ -1432,7 +1512,11 @@ const rootRouteChildren: RootRouteChildren = {
   TfPoseDemoRoute: TfPoseDemoRoute,
   WdbxRoute: WdbxRoute,
   WorkspaceRoute: WorkspaceRoute,
+  QuasarNewRoute: QuasarNewRoute,
+  QuasarSettingsRoute: QuasarSettingsRoute,
+  QuasarSitesRoute: QuasarSitesRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
+  QuasarSiteIdRoute: QuasarSiteIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
