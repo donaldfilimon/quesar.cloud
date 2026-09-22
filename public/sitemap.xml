@@ -34,7 +34,6 @@
   <url><loc>https://quesar.cloud/demo</loc></url>
   <url><loc>https://quesar.cloud/links</loc></url>
   <url><loc>https://quesar.cloud/benchmarks</loc></url>
-  <url><loc>https://quesar.cloud/financial-model</loc></url>
   <url><loc>https://quesar.cloud/gama</loc></url>
   <url><loc>https://quesar.cloud/plugins</loc></url>
   <url><loc>https://quesar.cloud/companion</loc></url>
@@ -112,4 +111,6 @@
   <url><loc>https://quesar.cloud/research/implementations/abbey-executable-capability-ledger</loc></url>
   <url><loc>https://quesar.cloud/research/implementations/wdbx-specimen-architecture-and-conformance</loc></url>
   <url><loc>https://quesar.cloud/research/implementations/deterministic-research-provenance-exports</loc></url>
+  <url><loc>https://quesar.cloud/quasar/sites</loc></url>
+  <url><loc>https://quesar.cloud/feed.xml</loc></url>
 </urlset>

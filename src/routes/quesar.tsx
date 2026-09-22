@@ -43,7 +43,7 @@ function QuesarPage() {
       <Section
         eyebrow="Name"
         title="Quesar is the product. Quasar is the local builder."
-        lede="They are not interchangeable. The integration repository keeps the builder at apps/quasar and the production website at apps/quasar-web."
+        lede="They are not interchangeable. This repository keeps the builder service at sidecars/quasar-service and its screens at /quasar/sites; the website is this app."
       >
         <CopyGrid
           items={[
@@ -72,7 +72,7 @@ function QuesarPage() {
               body: "TypeScript types and zod schemas shared by the service and the Expo app — Site, GenerationEvent, PreviewStatus, request bodies.",
             },
             {
-              title: "packages/service",
+              title: "sidecars/quasar-service",
               body: "Local Bun service (default port 4700): registry, path guard, site filesystem tools, generation engine, scaffolder, preview manager.",
             },
             {
@@ -80,18 +80,38 @@ function QuesarPage() {
               body: "A buildable, checked-in Next.js 16 + Tailwind v4 starter, copied per-site as the generation baseline. Own lockfile, outside the root workspace.",
             },
             {
-              title: "apps/quasar",
-              body: "Expo SDK 53 app that drives the local service. There is no deploy step in v1.",
+              title: "/quasar screens",
+              body: "Sites, new site, site detail with live events and preview, and settings, in this app. They call the local service from your browser. There is no deploy step in v1.",
             },
           ]}
         />
         <div className="mt-6">
           <CodeBlock
-            label="apps/quasar"
-            code={`bun run dev:quasar
+            label="sidecars/quasar-service"
+            code={`bun run --cwd sidecars/quasar-service start
 # LAN service has no auth — trusted network only
-# see apps/quasar/README.md#how-to-run`}
+# see sidecars/quasar-service/README.md`}
           />
+        </div>
+        <div className="mt-6 flex flex-wrap gap-3">
+          <Link
+            to="/quasar/sites"
+            className="inline-flex h-10 items-center rounded-md bg-fg px-4 text-sm font-medium text-bg no-underline"
+          >
+            Open your sites
+          </Link>
+          <Link
+            to="/quasar/new"
+            className="inline-flex h-10 items-center rounded-md bg-bg-elevated px-4 text-sm font-medium text-fg no-underline shadow-[var(--shadow-border)]"
+          >
+            New site
+          </Link>
+          <Link
+            to="/quasar/settings"
+            className="inline-flex h-10 items-center rounded-md px-4 text-sm text-fg-muted no-underline hover:text-fg"
+          >
+            Service settings
+          </Link>
         </div>
         <div className="mt-6">
           <QuasarStudio />

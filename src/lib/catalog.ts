@@ -299,7 +299,7 @@ export const quasarParts = [
     body: "TypeScript types and zod schemas shared by the service and the Expo app — Site, GenerationEvent, PreviewStatus, request bodies.",
   },
   {
-    title: "packages/service",
+    title: "sidecars/quasar-service",
     body: "Local Bun service (default port 4700): registry, path guard, site filesystem tools, generation engine, scaffolder, preview manager.",
   },
   {
@@ -307,7 +307,7 @@ export const quasarParts = [
     body: "A buildable, checked-in Next.js 16 + Tailwind v4 starter, copied per-site as the generation baseline.",
   },
   {
-    title: "apps/quasar",
-    body: "Expo SDK 53 app that drives the local service. There is no deploy step in v1.",
+    title: "/quasar screens",
+    body: "Sites, new site, site detail with live events and preview, and settings, in this app. They call the local service from your browser. There is no deploy step in v1.",
   },
 ] as const;

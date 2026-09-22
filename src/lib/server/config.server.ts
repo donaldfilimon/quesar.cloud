@@ -6,6 +6,8 @@
  * create `.env` (Grok contract); values come from the deploy environment.
  */
 import { env } from "@/lib/env.server";
+import { readBillingConfig } from "@/lib/billing";
+import { encryptionConfigured } from "./crypto.server";
 
 export type LlmProviderId = "xai" | "gemini";
 
@@ -81,11 +83,13 @@ export interface FeatureFlags {
 export function features(): FeatureFlags {
   return {
     llm: llmProvider() !== null,
-    encryption: Boolean(env("APP_ENCRYPTION_KEY")),
+    // A set-but-malformed key is not configured: sealing would throw.
+    encryption: encryptionConfigured(),
     admin: adminEmails().size > 0,
     google: Boolean(env("GOOGLE_OAUTH_CLIENT_ID") && env("GOOGLE_OAUTH_CLIENT_SECRET")),
     microsoft: Boolean(env("MICROSOFT_OAUTH_CLIENT_ID") && env("MICROSOFT_OAUTH_CLIENT_SECRET")),
-    billing: Boolean(env("STRIPE_PAYMENT_LINK")),
+    // Same rule as the profile billing card: only a valid https link counts.
+    billing: readBillingConfig(env).state === "configured",
     turnstile: Boolean(env("TURNSTILE_SITE_KEY") && env("TURNSTILE_SECRET")),
     quasar: Boolean(env("QUASAR_SERVICE_ORIGIN")),
   };

@@ -33,18 +33,18 @@ export const homeBoundaries: readonly ({ title: string; body: string; accent: "a
   },
   {
     title: "Records you control",
-    body: "Data at rest is sealed with AES-256-GCM under APP_ENCRYPTION_KEY, bound to its owner and purpose. Without the key the feature refuses rather than storing plaintext. Consent-gated conversation audits you can read and delete are being built on top of it.",
+    body: "Data at rest is sealed with AES-256-GCM under APP_ENCRYPTION_KEY, bound to its owner and purpose. Without the key the feature refuses rather than storing plaintext. Console chat is consent-gated, and every exchange is stored as a sealed audit you can read, export and delete.",
     accent: "wdbx",
-    status: "development",
+    status: "current",
   },
 ];
 
 export const homeRequestPath: readonly ({ n: string; title: string; body: string } & Status)[] = [
   { n: "01", title: "Authenticate", body: "A Better Auth session establishes who is asking. No session, no server function.", status: "current" },
-  { n: "02", title: "Consent", body: "The current audit policy must be accepted before content leaves the application.", status: "development" },
+  { n: "02", title: "Consent", body: "The current audit policy must be accepted before content leaves the application.", status: "current" },
   { n: "03", title: "Generate", body: "The configured provider answers through the server interface, rate-limited per user. User email is not sent.", status: "current" },
-  { n: "04", title: "Encrypt", body: "Prompt and response are sealed with AES-256-GCM, bound to the owner. No key, no seal: the request refuses. The sealing primitive exists; applying it to conversations is being built.", status: "development" },
-  { n: "05", title: "Commit", body: "The sealed audit is written before the response returns. Fail closed.", status: "development" },
+  { n: "04", title: "Encrypt", body: "Prompt and response are sealed with AES-256-GCM, bound to the owner. No key, no seal: the request refuses.", status: "current" },
+  { n: "05", title: "Commit", body: "The sealed audit is written before the response returns. Fail closed.", status: "current" },
 ];
 
 export const homeProductBoundary = [
@@ -234,8 +234,8 @@ export const docsHub = {
     { name: "askDesk", body: "Server function behind the session: a desk answer from the catalog and, when configured, the model.", status: "current" },
     { name: "Console notes", body: "Per-user field notes on architecture nodes, scoped by user id.", status: "current" },
     { name: "GET /feed.xml", body: "RSS 2.0 for lab notes and research publications. Public.", status: "current" },
-    { name: "Consent, audits, admin review", body: "Consent-gated chat with sealed audits you can read and delete; admin review with a stated reason.", status: "development" },
-    { name: "Workspace connectors, billing, inquiries", body: "Drive and SharePoint connectors, profile billing, and the public inquiry form with a rate limit.", status: "development" },
+    { name: "Consent, audits, admin review", body: "Consent-gated chat with sealed audits you can read and delete; admin review with a stated reason.", status: "current" },
+    { name: "Workspace connectors, billing, inquiries", body: "Drive and SharePoint connectors, profile billing, and the public inquiry form with a rate limit.", status: "current" },
   ] satisfies readonly ({ name: string; body: string } & Status)[],
 } as const;
 
@@ -331,8 +331,8 @@ export const securitySections = [
   },
   {
     title: "Conversation audits and admin review",
-    body: "Consent-gated conversation audits that you can read and delete, and admin decryption that requires a stated reason, are being built on the sealing layer above. Until they ship, no conversation is stored as an audit.",
-    status: "development",
+    body: "Console chat requires consent to the current audit policy. Each exchange is sealed with AES-256-GCM, bound to its owner, before the reply returns, and kept for 365 days. You can list, read, export and delete your own audits. Admin decryption requires an allowlisted, broker-verified identity and a stated reason, and every access is logged.",
+    status: "current",
   },
   {
     title: "Responsible disclosure",
@@ -360,7 +360,11 @@ export const privacyPolicy = [
   },
   {
     title: "Security and retention",
-    body: "Data at rest that needs protection is sealed with AES-256-GCM under a server key and bound to its owner. Without the key those features refuse rather than store plaintext. Conversation audits with their own retention, export and deletion controls are in development; this policy will state their terms when they ship.",
+    body: "Data at rest that needs protection is sealed with AES-256-GCM under a server key and bound to its owner. Without the key those features refuse rather than store plaintext. Console chat is used only after you accept the current audit policy. Each exchange is stored as a sealed audit for 365 days, then deleted by a scheduled job. You can list, read, export and delete your own audits at any time. Administrators can open an audit only with a stated reason, and every access is logged.",
+  },
+  {
+    title: "Inquiries, telemetry and connected sources",
+    body: "The contact form stores your name, email, and message so we can reply; it is rate-limited, and may use a Cloudflare Turnstile check. Page telemetry records only an event name and a known route path, with no user id or IP address, and is skipped when your browser sends Do Not Track or Global Privacy Control. If you connect Google Drive or Microsoft SharePoint, only a sealed refresh token and the connected account email are stored, with read-only metadata access; disconnecting deletes them.",
   },
   {
     title: "Contact",
@@ -384,6 +388,10 @@ export const termsSections = [
   {
     title: "Experimental and preview features",
     body: "Model output can be incomplete or wrong and must not be treated as professional, safety-critical, legal, medical, or financial advice. Do not rely on preview features for production decisions without independent validation and a written deployment review.",
+  },
+  {
+    title: "Conversation audit consent",
+    body: "Console chat requires explicit consent to the displayed one-year encrypted-audit policy. You may withdraw consent for future chats, and you may inspect, export, or delete your live records. Withdrawal does not retroactively erase records you have not deleted, or provider processing already completed.",
   },
   {
     title: "Limitation of liability",

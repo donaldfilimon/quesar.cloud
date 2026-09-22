@@ -20,7 +20,7 @@ import { env } from "@/lib/env.server";
 import { adminDecisionFor, type AdminDecision } from "@/lib/server/admin.server";
 import { digest, encryptionConfigured, open, seal } from "@/lib/server/crypto.server";
 
-export const CHAT_AUDIT_POLICY_VERSION = "2026-08-24.1";
+export const CHAT_AUDIT_POLICY_VERSION = "2026-09-22.1";
 export const AUDIT_RETENTION_DAYS = 365;
 /** mlai: the handler keeps only the last 12 turns. */
 export const MAX_TURNS = 12;

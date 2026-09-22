@@ -18,7 +18,8 @@ const groups = [
     links: [
       { to: "/architecture", label: "Architecture" },
       { to: "/developers", label: "Source" },
-      { to: "/console", label: "Field notes" },
+      { to: "/console", label: "Console" },
+      { to: "/quasar/sites", label: "Quasar sites" },
       { to: "/research", label: "Research" },
       { to: "/research/implementations", label: "Implementations" },
       { to: "/docs", label: "Docs" },
