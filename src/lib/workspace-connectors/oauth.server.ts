@@ -55,7 +55,10 @@ const PROVIDERS: Record<WorkspaceProvider, ProviderConfig> = {
     label: "Google Drive",
     authorizeUrl: "https://accounts.google.com/o/oauth2/v2/auth",
     tokenUrl: "https://oauth2.googleapis.com/token",
-    scopes: ["https://www.googleapis.com/auth/drive.readonly", "openid", "email"],
+    // Metadata only: files.list with id, name, mimeType, modifiedTime, size,
+    // webViewLink and owners is all the panel renders; file contents are never
+    // read, so `drive.readonly` would grant more than is used.
+    scopes: ["https://www.googleapis.com/auth/drive.metadata.readonly", "openid", "email"],
     clientIdEnv: "GOOGLE_OAUTH_CLIENT_ID",
     clientSecretEnv: "GOOGLE_OAUTH_CLIENT_SECRET",
     // Google returns a refresh token only on the first consent unless both of
@@ -299,7 +302,14 @@ async function postToken(
   if (!response.ok) {
     throw new Error(`${provider} token endpoint responded ${response.status}`);
   }
-  return parseTokenResponse(await response.json());
+  let body: unknown;
+  try {
+    body = await response.json();
+  } catch {
+    // Status only: a JSON parse error message quotes the body it choked on.
+    throw new Error(`${provider} token endpoint responded ${response.status} with an unreadable body`);
+  }
+  return parseTokenResponse(body);
 }
 
 export async function exchangeAuthorizationCode(

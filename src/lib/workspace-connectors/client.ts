@@ -21,9 +21,11 @@ export interface ProviderConnection {
   label: string;
   /** Connect can run: OAuth client configured and the encryption key valid. */
   configured: boolean;
-  reason: "provider_not_configured" | "encryption_not_configured" | null;
-  /** This user has linked an account. */
+  reason: "provider_not_configured" | "encryption_not_configured" | "reauth_required" | null;
+  /** This user has a usable linked account. False while `reauth_required`. */
   connected: boolean;
+  /** A stored row exists (usable or not); Disconnect can delete it. */
+  stored: boolean;
   accountEmail: string | null;
   scope: string | null;
   connectedAt: string | null;
@@ -80,5 +82,6 @@ const CALLBACK_ERRORS: Record<string, string> = {
 
 /** Map the `?error=` code the callback redirects with to a sentence. Unknown codes are not echoed. */
 export function describeCallbackError(code: string): string {
-  return CALLBACK_ERRORS[code] ?? "The provider reported an error.";
+  // Own keys only: `?error=__proto__` or `constructor` must not reach the prototype.
+  return Object.hasOwn(CALLBACK_ERRORS, code) ? CALLBACK_ERRORS[code]! : "The provider reported an error.";
 }

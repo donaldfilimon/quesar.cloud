@@ -185,3 +185,21 @@ describe("fetchGraphFiles", () => {
     await expect(fetchGraphFiles("t", 30, fetchImpl)).resolves.toEqual([]);
   });
 });
+
+describe("unreadable provider body", () => {
+  it("throws a status-only message for Drive and Graph", async () => {
+    const fetchImpl = (async () => ({
+      ok: true,
+      status: 200,
+      json: async () => {
+        throw new SyntaxError('Unexpected token in JSON: "Bearer token-1 ..."');
+      },
+    })) as unknown as typeof fetch;
+    await expect(fetchDriveFiles("token-1", 30, fetchImpl)).rejects.toThrow(
+      /^Google Drive responded 200 with an unreadable body$/,
+    );
+    await expect(fetchGraphFiles("token-1", 30, fetchImpl)).rejects.toThrow(
+      /^Microsoft Graph responded 200 with an unreadable body$/,
+    );
+  });
+});

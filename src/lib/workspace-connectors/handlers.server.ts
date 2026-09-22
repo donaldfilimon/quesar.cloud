@@ -10,7 +10,7 @@
  */
 import { randomBytes } from "node:crypto";
 import { features } from "@/lib/server/config.server";
-import { EncryptionUnavailableError, encryptionConfigured } from "@/lib/server/crypto.server";
+import { EncryptionUnavailableError, SealedDataError, encryptionConfigured } from "@/lib/server/crypto.server";
 import {
   WORKSPACE_PROVIDERS,
   buildAuthorizeUrl,
@@ -189,10 +189,16 @@ export interface ProviderConnectionRow {
   label: string;
   /** Connect can run: OAuth client configured and the encryption key valid. */
   configured: boolean;
-  /** Why `configured` is false; null when it is true. */
-  reason: ConnectBlocker | null;
-  /** This user has linked an account. */
+  /**
+   * Why `configured` is false (a `ConnectBlocker`), or `reauth_required` when a
+   * row exists but its token no longer opens (e.g. after a key rotation). Null
+   * when there is nothing to report.
+   */
+  reason: ConnectBlocker | "reauth_required" | null;
+  /** This user has a usable linked account. False while `reauth_required`. */
   connected: boolean;
+  /** A stored row exists (usable or not); Disconnect can delete it. */
+  stored: boolean;
   accountEmail: string | null;
   scope: string | null;
   connectedAt: string | null;
@@ -208,13 +214,15 @@ export async function listConnections(userId: string): Promise<Response> {
     const byProvider = new Map(connections.map((row) => [row.provider, row]));
     const providers: ProviderConnectionRow[] = WORKSPACE_PROVIDERS.map((provider) => {
       const row = byProvider.get(provider);
-      const reason = connectBlocker(provider);
+      const blocker = connectBlocker(provider);
+      const reauth = Boolean(row?.needsReauth);
       return {
         provider,
         label: providerLabel(provider),
-        configured: reason === null,
-        reason,
-        connected: Boolean(row),
+        configured: blocker === null,
+        reason: blocker ?? (reauth ? "reauth_required" : null),
+        connected: Boolean(row) && !reauth,
+        stored: Boolean(row),
         accountEmail: row?.accountEmail ?? null,
         scope: row?.scope ?? null,
         connectedAt: row?.connectedAt ?? null,
@@ -287,6 +295,14 @@ export async function listSourceFiles(
     if (error instanceof WorkspaceNotConnectedError) {
       return Response.json(
         { ok: true, connected: false, reason: "not_connected", files: [] },
+        { headers: PRIVATE_NO_STORE },
+      );
+    }
+    if (error instanceof SealedDataError) {
+      // The stored token no longer opens (key rotated or row tampered with).
+      // The user must reconnect; that is a state, not an outage.
+      return Response.json(
+        { ok: true, connected: false, reason: "reauth_required", files: [] },
         { headers: PRIVATE_NO_STORE },
       );
     }

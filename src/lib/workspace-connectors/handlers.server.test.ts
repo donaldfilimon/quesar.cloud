@@ -6,7 +6,9 @@
 import { randomBytes } from "node:crypto";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { getSql } from "@/lib/db";
+import { saveWorkspaceConnection } from "./tokens.server";
 import {
+  disconnect,
   finishCallback,
   listConnections,
   listSourceFiles,
@@ -163,7 +165,7 @@ describe("finishCallback success", () => {
         return {
           ok: true,
           status: 200,
-          json: async () => ({ access_token: accessToken, refresh_token: refreshToken, expires_in: 3600, scope: "drive.readonly" }),
+          json: async () => ({ access_token: accessToken, refresh_token: refreshToken, expires_in: 3600, scope: "drive.metadata.readonly" }),
         };
       }
       return { ok: true, status: 200, json: async () => ({ email: "ada@example.test" }) };
@@ -251,4 +253,41 @@ describe("listSourceFiles", () => {
     expect(requestedDays(new Request(`${ORIGIN}/x?days=-1`))).toBe(30);
     expect(requestedDays(new Request(`${ORIGIN}/x`))).toBe(30);
   });
+});
+
+describe("reauth_required after a key rotation", () => {
+  it("lists the provider as reauth_required, answers files the same way, and disconnect still deletes", async () => {
+    configureGoogle();
+    const userId = uid("reauth");
+    await saveWorkspaceConnection({ userId, provider: "google", refreshToken: "rt", accountEmail: "a@x.test", scope: null });
+    vi.stubEnv("APP_ENCRYPTION_KEY", randomBytes(32).toString("base64"));
+
+    const listed = (await (await listConnections(userId)).json()) as {
+      providers: { provider: string; configured: boolean; reason: string | null; connected: boolean; stored: boolean }[];
+    };
+    expect(listed.providers[0]).toMatchObject({
+      provider: "google",
+      configured: true,
+      reason: "reauth_required",
+      connected: false,
+      stored: true,
+    });
+
+    let called = false;
+    const files = await listSourceFiles(new Request(`${ORIGIN}/api/workspace/drive`), "google", userId, async () => {
+      called = true;
+      return [];
+    });
+    expect(files.status).toBe(200);
+    expect(await files.json()).toMatchObject({ connected: false, reason: "reauth_required", files: [] });
+    expect(called).toBe(false);
+
+    const { calls, fetchImpl } = spyFetch();
+    const removed = await disconnect("google", userId, fetchImpl);
+    expect(await removed.json()).toMatchObject({ ok: true, removed: true, revoked: false });
+    // The token could not be opened, so nothing was sent to the provider.
+    expect(calls).toEqual([]);
+    const sql = await getSql();
+    expect(await sql`select 1 from workspace_connections where user_id = ${userId}`).toHaveLength(0);
+  }, 30_000);
 });

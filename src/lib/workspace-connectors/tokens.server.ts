@@ -9,9 +9,12 @@
  * Drive to the wrong account.
  *
  * What is not persisted: access tokens. They are short-lived, minted on demand
- * from the refresh token, and cached only in this process's memory. Nothing
- * here is ever returned to the browser: the panel calls our routes, and our
- * routes call the provider.
+ * from the refresh token, and cached only in this process's memory. Each cache
+ * entry is stamped with the row it was minted from (`updated_at` plus a digest
+ * of `sealed`) and re-checked against the table on every access, so a
+ * disconnect or reconnect on any instance invalidates it. Nothing here is ever
+ * returned to the browser: the panel calls our routes, and our routes call the
+ * provider.
  *
  * Fail closed: without a valid key, `seal`/`open` throw
  * `EncryptionUnavailableError`, and the connect route refuses before a flow
@@ -21,7 +24,7 @@
  * KMS envelope encryption replaced by `crypto.server.ts` (spec decision 3).
  */
 import { getSql } from "@/lib/db";
-import { open, seal } from "@/lib/server/crypto.server";
+import { EncryptionUnavailableError, SealedDataError, digest, open, seal } from "@/lib/server/crypto.server";
 import {
   providerCredentials,
   refreshAccessToken,
@@ -30,7 +33,36 @@ import {
 } from "./oauth.server";
 
 declare global {
-  var __quesarWorkspaceAccessTokens: Map<string, { token: string; expiresAt: number }> | undefined;
+  var __quesarWorkspaceAccessTokens: Map<string, CachedAccessToken> | undefined;
+}
+
+interface CachedAccessToken {
+  token: string;
+  expiresAt: number;
+  /** Identity of the row this token was minted from; see `rowStamp`. */
+  stamp: string;
+}
+
+interface StoredRow {
+  sealed: string;
+  stamp: string;
+}
+
+/**
+ * `updated_at` alone can repeat within one millisecond; `sealed` is re-sealed
+ * with a fresh IV on every write, so its digest always changes.
+ */
+function rowStamp(row: { sealed: string; updated_at: unknown }): string {
+  return `${iso(row.updated_at)}|${digest(row.sealed)}`;
+}
+
+async function readStoredRow(userId: string, provider: WorkspaceProvider): Promise<StoredRow | null> {
+  const sql = await getSql();
+  const rows = await sql<{ sealed: string; updated_at: unknown }>`
+    select sealed, updated_at from workspace_connections
+    where user_id = ${userId} and provider = ${provider}`;
+  const row = rows[0];
+  return row ? { sealed: row.sealed, stamp: rowStamp(row) } : null;
 }
 
 /** Binds a sealed refresh token to exactly one user and provider. */
@@ -43,6 +75,27 @@ export interface WorkspaceConnectionSummary {
   accountEmail: string | null;
   scope: string | null;
   connectedAt: string;
+  /**
+   * The stored token no longer opens (the encryption key changed, or the row
+   * was tampered with). The user has to reconnect; the row can still be deleted.
+   */
+  needsReauth: boolean;
+}
+
+/**
+ * False only when this row's sealed token provably does not open for this
+ * (user, provider) under the current key. With no key at all nothing can be
+ * judged; the connections route already reports `encryption_not_configured`.
+ */
+function opens(sealed: string, userId: string, provider: WorkspaceProvider): boolean {
+  try {
+    open(sealed, workspaceAad(userId, provider));
+    return true;
+  } catch (error) {
+    if (error instanceof SealedDataError) return false;
+    if (error instanceof EncryptionUnavailableError) return true;
+    throw error;
+  }
 }
 
 function iso(value: unknown): string {
@@ -82,8 +135,9 @@ export async function listWorkspaceConnections(userId: string): Promise<Workspac
     account_email: string | null;
     scope: string | null;
     connected_at: unknown;
+    sealed: string;
   }>`
-    select provider, account_email, scope, connected_at
+    select provider, account_email, scope, connected_at, sealed
     from workspace_connections
     where user_id = ${userId}
     order by provider`;
@@ -92,6 +146,7 @@ export async function listWorkspaceConnections(userId: string): Promise<Workspac
     accountEmail: row.account_email,
     scope: row.scope,
     connectedAt: iso(row.connected_at),
+    needsReauth: !opens(row.sealed, userId, row.provider),
   }));
 }
 
@@ -145,16 +200,11 @@ export async function revokeAndDeleteWorkspaceConnection(
  * sealed for this pair, and `EncryptionUnavailableError` without a key.
  */
 export async function readRefreshToken(userId: string, provider: WorkspaceProvider): Promise<string | null> {
-  const sql = await getSql();
-  const rows = await sql<{ sealed: string }>`
-    select sealed from workspace_connections
-    where user_id = ${userId} and provider = ${provider}`;
-  const row = rows[0];
-  if (!row) return null;
-  return open(row.sealed, workspaceAad(userId, provider));
+  const row = await readStoredRow(userId, provider);
+  return row ? open(row.sealed, workspaceAad(userId, provider)) : null;
 }
 
-function accessTokenCache(): Map<string, { token: string; expiresAt: number }> {
+function accessTokenCache(): Map<string, CachedAccessToken> {
   globalThis.__quesarWorkspaceAccessTokens ??= new Map();
   return globalThis.__quesarWorkspaceAccessTokens;
 }
@@ -173,41 +223,65 @@ export class WorkspaceNotConnectedError extends Error {
 
 /**
  * Mint an access token for one user and provider, refreshing through the
- * stored refresh token when the cached one has expired.
+ * stored refresh token when the cached one has expired or no longer matches
+ * the stored row.
  *
- * Throws `WorkspaceNotConnectedError` when there is no connection or the
- * provider has no credentials configured: both are "not connected" from the
- * panel's point of view, and the route renders them as such.
+ * Throws `WorkspaceNotConnectedError` when there is no connection (including
+ * one removed while the refresh was in flight) or the provider has no
+ * credentials configured, and `SealedDataError` when the stored token no longer
+ * opens (the caller reports that as "reconnect required").
  */
 export async function getWorkspaceAccessToken(
   userId: string,
   provider: WorkspaceProvider,
   fetchImpl: typeof fetch = fetch,
 ): Promise<string> {
-  const cached = accessTokenCache().get(cacheKey(userId, provider));
-  if (cached && cached.expiresAt > Date.now()) return cached.token;
+  const cache = accessTokenCache();
+  const key = cacheKey(userId, provider);
 
   const credentials = providerCredentials(provider);
   if (!credentials) throw new WorkspaceNotConnectedError(provider);
 
-  const refreshToken = await readRefreshToken(userId, provider);
-  if (!refreshToken) throw new WorkspaceNotConnectedError(provider);
+  // Checked on every access: a disconnect or reconnect anywhere changes or
+  // removes the row, and the cached token must not outlive it.
+  const row = await readStoredRow(userId, provider);
+  if (!row) {
+    cache.delete(key);
+    throw new WorkspaceNotConnectedError(provider);
+  }
+  const cached = cache.get(key);
+  if (cached && cached.stamp === row.stamp && cached.expiresAt > Date.now()) return cached.token;
+  cache.delete(key);
 
+  const refreshToken = open(row.sealed, workspaceAad(userId, provider));
   const refreshed = await refreshAccessToken(provider, credentials, refreshToken, fetchImpl);
+  const sql = await getSql();
 
-  // Providers that rotate refresh tokens hand back a new one; persisting it is
-  // not optional, because the old one stops working the moment it is used.
+  let stamp: string | null;
   if (refreshed.refreshToken && refreshed.refreshToken !== refreshToken) {
+    // Providers that rotate refresh tokens hand back a new one, and the old one
+    // stops working once used, so it must be persisted. Compare-and-swap on the
+    // envelope we read: a reconnect or disconnect that landed meanwhile wins,
+    // and this request's token is then not cached.
     const sealed = seal(refreshed.refreshToken, workspaceAad(userId, provider));
-    const sql = await getSql();
-    await sql`
+    const updated = await sql<{ sealed: string; updated_at: unknown }>`
       update workspace_connections set sealed = ${sealed}, updated_at = now()
-      where user_id = ${userId} and provider = ${provider}`;
+      where user_id = ${userId} and provider = ${provider} and sealed = ${row.sealed}
+      returning sealed, updated_at`;
+    stamp = updated[0] ? rowStamp(updated[0]) : null;
+  } else {
+    stamp = row.stamp;
   }
 
-  accessTokenCache().set(cacheKey(userId, provider), {
-    token: refreshed.accessToken,
-    expiresAt: refreshed.expiresAt,
-  });
+  // Re-read after the refresh: if the row vanished while we were talking to the
+  // provider, the user disconnected and nothing may be cached or returned.
+  const current = await readStoredRow(userId, provider);
+  if (!current) {
+    cache.delete(key);
+    throw new WorkspaceNotConnectedError(provider);
+  }
+  if (stamp !== null && current.stamp === stamp) {
+    cache.set(key, { token: refreshed.accessToken, expiresAt: refreshed.expiresAt, stamp });
+  }
   return refreshed.accessToken;
 }

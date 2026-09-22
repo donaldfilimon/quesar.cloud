@@ -52,7 +52,12 @@ async function readJson(response: Response, provider: string): Promise<unknown> 
     // endpoints, parts of the credential — none of it belongs in a log line.
     throw new Error(`${provider} responded ${response.status}`);
   }
-  return response.json();
+  try {
+    return await response.json();
+  } catch {
+    // Status only: a JSON parse error message quotes the body it choked on.
+    throw new Error(`${provider} responded ${response.status} with an unreadable body`);
+  }
 }
 
 /* ── Google Drive ─────────────────────────────────────────────────────────── */

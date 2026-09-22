@@ -59,7 +59,7 @@ describe("provider identity", () => {
      a user's account. That should be argued for in review, not slipped in. */
   it("requests read-only scopes and nothing else", () => {
     expect(providerConfig("google").scopes).toEqual([
-      "https://www.googleapis.com/auth/drive.readonly",
+      "https://www.googleapis.com/auth/drive.metadata.readonly",
       "openid",
       "email",
     ]);
@@ -69,6 +69,8 @@ describe("provider identity", () => {
       "offline_access",
     ]);
     const all = [...providerConfig("google").scopes, ...providerConfig("microsoft").scopes].join(" ");
+    // Metadata only: the panel never reads file contents.
+    expect(providerConfig("google").scopes).not.toContain("https://www.googleapis.com/auth/drive.readonly");
     for (const forbidden of ["write", "readwrite", "ReadWrite", "full_control", "Mail.Send"]) {
       expect(all).not.toContain(forbidden);
     }
@@ -202,7 +204,7 @@ describe("authorize URL", () => {
     expect(url.searchParams.get("code_challenge")).toBe("challenge-abc");
     expect(url.searchParams.get("code_challenge_method")).toBe("S256");
     expect(url.searchParams.get("redirect_uri")).toBe("https://quesar.cloud/api/workspace/callback/google");
-    expect(url.searchParams.get("scope")).toContain("drive.readonly");
+    expect(url.searchParams.get("scope")).toContain("drive.metadata.readonly");
     // The client secret is a server-side value; it must never ride along on a
     // URL the browser is about to follow.
     expect(url.toString()).not.toContain("secret-123");
@@ -274,7 +276,7 @@ describe("token endpoint", () => {
           access_token: "at-1",
           refresh_token: "rt-1",
           expires_in: 3600,
-          scope: "drive.readonly",
+          scope: "drive.metadata.readonly",
         }),
       };
     }) as unknown as typeof fetch;
@@ -339,5 +341,23 @@ describe("token endpoint", () => {
     const tokens = await refreshAccessToken("google", credentials, "rt", fetchImpl);
     expect(tokens.accessToken).toBe("at-2");
     expect(tokens.refreshToken).toBeNull();
+  });
+});
+
+describe("unreadable token-endpoint body", () => {
+  it("throws a status-only message, never a fragment of the body", async () => {
+    const fetchImpl = (async () => ({
+      ok: true,
+      status: 200,
+      json: async () => {
+        throw new SyntaxError('Unexpected token < in JSON at position 0: "<html>refresh_token=rt-secret"');
+      },
+    })) as unknown as typeof fetch;
+    const error = await refreshAccessToken("google", { clientId: "i", clientSecret: "s" }, "rt", fetchImpl).catch(
+      (e: Error) => e,
+    );
+    expect(error).toBeInstanceOf(Error);
+    expect((error as Error).message).toBe("google token endpoint responded 200 with an unreadable body");
+    expect((error as Error).message).not.toContain("rt-secret");
   });
 });

@@ -303,11 +303,13 @@ function SourceSection({
           {source.status === "ok"
             ? `${files.length} files · ${source.identity === "google" ? "my drive" : "tenant"}`
             : source.status === "unconfigured"
-              ? "not connected"
+              ? source.message === "reauth_required"
+                ? "reconnect required"
+                : "not connected"
               : source.status}
         </span>
         <span className="h-px min-w-4 flex-1 bg-border" aria-hidden />
-        {connection?.connected ? (
+        {connection?.stored ? (
           <>
             {connection.accountEmail ? (
               <span className="font-mono text-[10.5px] text-fg-muted">{connection.accountEmail}</span>
@@ -322,7 +324,13 @@ function SourceSection({
       {source.status === "error" ? (
         <EmptyPanel title={`${source.label} could not be reached.`} detail={source.message ?? "The source returned an error."} />
       ) : source.status === "unconfigured" ? (
-        connection && !connection.configured ? (
+        source.message === "reauth_required" || connection?.reason === "reauth_required" ? (
+          <ConnectPanel
+            label={source.label}
+            provider={provider}
+            reconnect
+          />
+        ) : connection && !connection.configured ? (
           <EmptyPanel
             title={`${source.label} is not available on this deployment.`}
             detail={
@@ -434,14 +442,27 @@ function EmptyPanel({ title, detail }: { title: string; detail: string }) {
 
 /* A plain link, not a form: the connect route answers with a cross-origin
    redirect to the provider's consent screen. */
-function ConnectPanel({ label, provider }: { label: string; provider: WorkspaceProviderSlug }) {
+function ConnectPanel({
+  label,
+  provider,
+  reconnect = false,
+}: {
+  label: string;
+  provider: WorkspaceProviderSlug;
+  /** The stored authorization no longer opens (for example after a key rotation). */
+  reconnect?: boolean;
+}) {
   return (
     <Panel>
-      <p className="mb-3 text-sm text-fg-muted">Connect {label} to see your recent files here.</p>
+      <p className="mb-3 text-sm text-fg-muted">
+        {reconnect
+          ? `The saved ${label} authorization can no longer be used. Reconnect to see your files again, or disconnect to remove it.`
+          : `Connect ${label} to see your recent files here.`}
+      </p>
       <Button asChild size="sm">
         <a href={connectHref(provider)}>
           <LinkIcon size={13} aria-hidden />
-          Connect {label}
+          {reconnect ? "Reconnect" : "Connect"} {label}
         </a>
       </Button>
       <p className={cn(EYEBROW, "mt-3")}>Read-only access · disconnect any time</p>
