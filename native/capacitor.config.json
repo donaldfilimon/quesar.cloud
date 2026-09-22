@@ -1,0 +1,9 @@
+{
+  "appId": "ai.mlai.app",
+  "appName": "MLAI",
+  "webDir": "www",
+  "server": {
+    "url": "https://quesar.cloud",
+    "cleartext": false
+  }
+}

@@ -78,11 +78,11 @@ A row is closed only when its **Status** reads `ported` (with the commit) or `re
 
 | mlai path | quesar target | WS | Status |
 |---|---|---|---|
-| `docs/brand.md`, `docs/verification/`, `docs/superpowers/`, dated records | `docs/mlai/` | H | open |
+| `docs/brand.md`, `docs/verification/`, `docs/superpowers/`, dated records | `docs/mlai/` | H | ported `3d35171` |
 | `docs/sources/` | stays in mlai (frozen, preserved by the GitHub archive) | — | retired: frozen reference |
-| `apps/quasar/packages/{service,shared}` | `sidecars/quasar-service/` | H | open |
-| `sidecars/python-worker` | `sidecars/python-worker/` | H | open |
-| `packages/capacitor-cloudkit`, Capacitor config, `android/` | `native/` | H | open |
+| `apps/quasar/packages/{service,shared}` | `sidecars/quasar-service/` | H | ported `3d35171` |
+| `sidecars/python-worker` | `sidecars/python-worker/` | H | ported `3d35171` (+ fixture `9151131`) |
+| `packages/capacitor-cloudkit`, Capacitor config, `android/` | `native/` | H | ported `3d35171` |
 | `packages/trailer-engine` | `src/lib/trailer-engine/` | — | ported `2763e7d` |
 | `packages/design-tokens`, `packages/contracts` | `src/lib/mlai/*` tokens and types, where used | D | open |
 | `packages/tooling` (monorepo topology check) | — | — | retired: one app, no workspace topology |

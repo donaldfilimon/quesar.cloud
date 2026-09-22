@@ -2,13 +2,15 @@ import { createFileRoute } from "@tanstack/react-router";
 import { PageClose, PageHero, Section, Surface } from "@/components/site";
 import { investor } from "@/lib/content";
 import { ProvTag } from "@/components/site/prov-tag";
+import { ThreeStatementModelDemo } from "@/components/demos/three-statement-model-demo";
 import { about } from "@/lib/mlai";
 
 export const Route = createFileRoute("/financial-model")({
   head: () => ({
     meta: [
       { title: "Financial model — MLAI" },
-      { name: "description", content: "Unit-economics targets and ARR projection. Every figure is tagged. A target is never a result." },
+      { name: "description", content: "Unit-economics targets and ARR projection, every figure tagged, plus an interactive three-statement model on illustrative sample data for a fictional company." },
+      { name: "robots", content: "noindex" },
     ],
   }),
   component: FinancialModelPage,
@@ -45,6 +47,14 @@ function FinancialModelPage() {
             </div>
           ))}
         </div>
+      </Section>
+      <Section
+        id="three-statement-model"
+        eyebrow="Interactive tool"
+        title="The model recalculates itself."
+        lede="An integrated three-statement model (income statement, balance sheet and cash flow) wired together in the browser. Flip the scenario and every projected line re-derives from the assumption drivers; cash is the cash-flow plug, so assets = liabilities + equity holds in every case. The figures are illustrative sample data for a fictional company, not Quesar's or MLAI's financials."
+      >
+        <ThreeStatementModelDemo />
       </Section>
       <PageClose
         primary={{ to: "/investors", label: "Investor notes" }}

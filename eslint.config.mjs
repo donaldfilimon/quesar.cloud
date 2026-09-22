@@ -15,6 +15,10 @@ export default tseslint.config(
       ".nitro/**",
       "node_modules/**",
       "src/routeTree.gen.ts",
+      // Standalone projects with their own toolchains (Bun, Gradle, Swift),
+      // outside the npm build. See their READMEs.
+      "sidecars/**",
+      "native/**",
     ],
   },
   js.configs.recommended,
