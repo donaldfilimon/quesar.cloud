@@ -55,6 +55,8 @@ import { Route as TermsRouteImport } from './routes/terms'
 import { Route as TfPoseDemoRouteImport } from './routes/tf-pose-demo'
 import { Route as WdbxRouteImport } from './routes/wdbx'
 import { Route as WorkspaceRouteImport } from './routes/workspace'
+import { Route as ApiCspReportRouteImport } from './routes/api/csp-report'
+import { Route as ApiTelemetryRouteImport } from './routes/api/telemetry'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as ConsoleWorkspaceRouteImport } from './routes/console.workspace'
 import { Route as DocsSlugRouteImport } from './routes/docs.$slug'
@@ -308,6 +310,16 @@ const WorkspaceRoute = WorkspaceRouteImport.update({
   path: '/workspace',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiCspReportRoute = ApiCspReportRouteImport.update({
+  id: '/api/csp-report',
+  path: '/api/csp-report',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiTelemetryRoute = ApiTelemetryRouteImport.update({
+  id: '/api/telemetry',
+  path: '/api/telemetry',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BlogSlugRoute = BlogSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
@@ -467,6 +479,8 @@ export interface FileRoutesByFullPath {
   '/tf-pose-demo': typeof TfPoseDemoRoute
   '/wdbx': typeof WdbxRoute
   '/workspace': typeof WorkspaceRoute
+  '/api/csp-report': typeof ApiCspReportRoute
+  '/api/telemetry': typeof ApiTelemetryRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/console/workspace': typeof ConsoleWorkspaceRoute
   '/docs/$slug': typeof DocsSlugRoute
@@ -537,6 +551,8 @@ export interface FileRoutesByTo {
   '/tf-pose-demo': typeof TfPoseDemoRoute
   '/wdbx': typeof WdbxRoute
   '/workspace': typeof WorkspaceRoute
+  '/api/csp-report': typeof ApiCspReportRoute
+  '/api/telemetry': typeof ApiTelemetryRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/console/workspace': typeof ConsoleWorkspaceRoute
   '/docs/$slug': typeof DocsSlugRoute
@@ -608,6 +624,8 @@ export interface FileRoutesById {
   '/tf-pose-demo': typeof TfPoseDemoRoute
   '/wdbx': typeof WdbxRoute
   '/workspace': typeof WorkspaceRoute
+  '/api/csp-report': typeof ApiCspReportRoute
+  '/api/telemetry': typeof ApiTelemetryRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/console/workspace': typeof ConsoleWorkspaceRoute
   '/docs/$slug': typeof DocsSlugRoute
@@ -680,6 +698,8 @@ export interface FileRouteTypes {
     | '/tf-pose-demo'
     | '/wdbx'
     | '/workspace'
+    | '/api/csp-report'
+    | '/api/telemetry'
     | '/blog/$slug'
     | '/console/workspace'
     | '/docs/$slug'
@@ -750,6 +770,8 @@ export interface FileRouteTypes {
     | '/tf-pose-demo'
     | '/wdbx'
     | '/workspace'
+    | '/api/csp-report'
+    | '/api/telemetry'
     | '/blog/$slug'
     | '/console/workspace'
     | '/docs/$slug'
@@ -820,6 +842,8 @@ export interface FileRouteTypes {
     | '/tf-pose-demo'
     | '/wdbx'
     | '/workspace'
+    | '/api/csp-report'
+    | '/api/telemetry'
     | '/blog/$slug'
     | '/console/workspace'
     | '/docs/$slug'
@@ -891,6 +915,8 @@ export interface RootRouteChildren {
   TfPoseDemoRoute: typeof TfPoseDemoRoute
   WdbxRoute: typeof WdbxRoute
   WorkspaceRoute: typeof WorkspaceRoute
+  ApiCspReportRoute: typeof ApiCspReportRoute
+  ApiTelemetryRoute: typeof ApiTelemetryRoute
   QuasarNewRoute: typeof QuasarNewRoute
   QuasarSettingsRoute: typeof QuasarSettingsRoute
   QuasarSitesRoute: typeof QuasarSitesRoute
@@ -1223,6 +1249,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WorkspaceRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/csp-report': {
+      id: '/api/csp-report'
+      path: '/api/csp-report'
+      fullPath: '/api/csp-report'
+      preLoaderRoute: typeof ApiCspReportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/telemetry': {
+      id: '/api/telemetry'
+      path: '/api/telemetry'
+      fullPath: '/api/telemetry'
+      preLoaderRoute: typeof ApiTelemetryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/blog/$slug': {
       id: '/blog/$slug'
       path: '/$slug'
@@ -1553,6 +1593,8 @@ const rootRouteChildren: RootRouteChildren = {
   TfPoseDemoRoute: TfPoseDemoRoute,
   WdbxRoute: WdbxRoute,
   WorkspaceRoute: WorkspaceRoute,
+  ApiCspReportRoute: ApiCspReportRoute,
+  ApiTelemetryRoute: ApiTelemetryRoute,
   QuasarNewRoute: QuasarNewRoute,
   QuasarSettingsRoute: QuasarSettingsRoute,
   QuasarSitesRoute: QuasarSitesRoute,
@@ -1565,10 +1607,11 @@ export const routeTree = rootRouteImport
   ._addFileTypes<FileRouteTypes>()
 
 import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
+import type { startInstance } from './start.ts'
 declare module '@tanstack/react-start' {
   interface Register {
     ssr: true
     router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
   }
 }

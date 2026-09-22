@@ -62,6 +62,8 @@ export function buildCsp({ dev }: { dev: boolean }): string {
     "https://huggingface.co",
     "https://*.huggingface.co",
     "https://*.hf.co",
+    // PoseNet weights for /tf-pose-demo (@tensorflow-models/posenet default model URL).
+    "https://storage.googleapis.com",
     "https://fonts.gstatic.com",
     "https://fonts.googleapis.com",
     TURNSTILE,
