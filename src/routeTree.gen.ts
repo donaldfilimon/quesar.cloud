@@ -77,8 +77,14 @@ import { Route as SourceNameRouteImport } from './routes/source.$name'
 import { Route as TeamSlugRouteImport } from './routes/team.$slug'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as ApiCronAuditsExpireRouteImport } from './routes/api/cron/audits-expire'
+import { Route as ApiWorkspaceConnectionsRouteImport } from './routes/api/workspace/connections'
+import { Route as ApiWorkspaceDriveRouteImport } from './routes/api/workspace/drive'
+import { Route as ApiWorkspaceSharepointRouteImport } from './routes/api/workspace/sharepoint'
 import { Route as QuasarSiteIdRouteImport } from './routes/quasar.site.$id'
 import { Route as ResearchImplementationsSlugRouteImport } from './routes/research.implementations.$slug'
+import { Route as ApiWorkspaceCallbackProviderRouteImport } from './routes/api/workspace/callback.$provider'
+import { Route as ApiWorkspaceConnectProviderRouteImport } from './routes/api/workspace/connect.$provider'
+import { Route as ApiWorkspaceDisconnectProviderRouteImport } from './routes/api/workspace/disconnect.$provider'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -420,6 +426,21 @@ const ApiCronAuditsExpireRoute = ApiCronAuditsExpireRouteImport.update({
   path: '/api/cron/audits-expire',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiWorkspaceConnectionsRoute = ApiWorkspaceConnectionsRouteImport.update({
+  id: '/api/workspace/connections',
+  path: '/api/workspace/connections',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiWorkspaceDriveRoute = ApiWorkspaceDriveRouteImport.update({
+  id: '/api/workspace/drive',
+  path: '/api/workspace/drive',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiWorkspaceSharepointRoute = ApiWorkspaceSharepointRouteImport.update({
+  id: '/api/workspace/sharepoint',
+  path: '/api/workspace/sharepoint',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const QuasarSiteIdRoute = QuasarSiteIdRouteImport.update({
   id: '/quasar/site/$id',
   path: '/quasar/site/$id',
@@ -430,6 +451,24 @@ const ResearchImplementationsSlugRoute =
     id: '/$slug',
     path: '/$slug',
     getParentRoute: () => ResearchImplementationsRoute,
+  } as any)
+const ApiWorkspaceCallbackProviderRoute =
+  ApiWorkspaceCallbackProviderRouteImport.update({
+    id: '/api/workspace/callback/$provider',
+    path: '/api/workspace/callback/$provider',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiWorkspaceConnectProviderRoute =
+  ApiWorkspaceConnectProviderRouteImport.update({
+    id: '/api/workspace/connect/$provider',
+    path: '/api/workspace/connect/$provider',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiWorkspaceDisconnectProviderRoute =
+  ApiWorkspaceDisconnectProviderRouteImport.update({
+    id: '/api/workspace/disconnect/$provider',
+    path: '/api/workspace/disconnect/$provider',
+    getParentRoute: () => rootRouteImport,
   } as any)
 
 export interface FileRoutesByFullPath {
@@ -501,8 +540,14 @@ export interface FileRoutesByFullPath {
   '/team/$slug': typeof TeamSlugRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/cron/audits-expire': typeof ApiCronAuditsExpireRoute
+  '/api/workspace/connections': typeof ApiWorkspaceConnectionsRoute
+  '/api/workspace/drive': typeof ApiWorkspaceDriveRoute
+  '/api/workspace/sharepoint': typeof ApiWorkspaceSharepointRoute
   '/quasar/site/$id': typeof QuasarSiteIdRoute
   '/research/implementations/$slug': typeof ResearchImplementationsSlugRoute
+  '/api/workspace/callback/$provider': typeof ApiWorkspaceCallbackProviderRoute
+  '/api/workspace/connect/$provider': typeof ApiWorkspaceConnectProviderRoute
+  '/api/workspace/disconnect/$provider': typeof ApiWorkspaceDisconnectProviderRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -573,8 +618,14 @@ export interface FileRoutesByTo {
   '/team/$slug': typeof TeamSlugRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/cron/audits-expire': typeof ApiCronAuditsExpireRoute
+  '/api/workspace/connections': typeof ApiWorkspaceConnectionsRoute
+  '/api/workspace/drive': typeof ApiWorkspaceDriveRoute
+  '/api/workspace/sharepoint': typeof ApiWorkspaceSharepointRoute
   '/quasar/site/$id': typeof QuasarSiteIdRoute
   '/research/implementations/$slug': typeof ResearchImplementationsSlugRoute
+  '/api/workspace/callback/$provider': typeof ApiWorkspaceCallbackProviderRoute
+  '/api/workspace/connect/$provider': typeof ApiWorkspaceConnectProviderRoute
+  '/api/workspace/disconnect/$provider': typeof ApiWorkspaceDisconnectProviderRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -646,8 +697,14 @@ export interface FileRoutesById {
   '/team/$slug': typeof TeamSlugRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/cron/audits-expire': typeof ApiCronAuditsExpireRoute
+  '/api/workspace/connections': typeof ApiWorkspaceConnectionsRoute
+  '/api/workspace/drive': typeof ApiWorkspaceDriveRoute
+  '/api/workspace/sharepoint': typeof ApiWorkspaceSharepointRoute
   '/quasar/site/$id': typeof QuasarSiteIdRoute
   '/research/implementations/$slug': typeof ResearchImplementationsSlugRoute
+  '/api/workspace/callback/$provider': typeof ApiWorkspaceCallbackProviderRoute
+  '/api/workspace/connect/$provider': typeof ApiWorkspaceConnectProviderRoute
+  '/api/workspace/disconnect/$provider': typeof ApiWorkspaceDisconnectProviderRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -720,8 +777,14 @@ export interface FileRouteTypes {
     | '/team/$slug'
     | '/api/auth/$'
     | '/api/cron/audits-expire'
+    | '/api/workspace/connections'
+    | '/api/workspace/drive'
+    | '/api/workspace/sharepoint'
     | '/quasar/site/$id'
     | '/research/implementations/$slug'
+    | '/api/workspace/callback/$provider'
+    | '/api/workspace/connect/$provider'
+    | '/api/workspace/disconnect/$provider'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -792,8 +855,14 @@ export interface FileRouteTypes {
     | '/team/$slug'
     | '/api/auth/$'
     | '/api/cron/audits-expire'
+    | '/api/workspace/connections'
+    | '/api/workspace/drive'
+    | '/api/workspace/sharepoint'
     | '/quasar/site/$id'
     | '/research/implementations/$slug'
+    | '/api/workspace/callback/$provider'
+    | '/api/workspace/connect/$provider'
+    | '/api/workspace/disconnect/$provider'
   id:
     | '__root__'
     | '/'
@@ -864,8 +933,14 @@ export interface FileRouteTypes {
     | '/team/$slug'
     | '/api/auth/$'
     | '/api/cron/audits-expire'
+    | '/api/workspace/connections'
+    | '/api/workspace/drive'
+    | '/api/workspace/sharepoint'
     | '/quasar/site/$id'
     | '/research/implementations/$slug'
+    | '/api/workspace/callback/$provider'
+    | '/api/workspace/connect/$provider'
+    | '/api/workspace/disconnect/$provider'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -922,7 +997,13 @@ export interface RootRouteChildren {
   QuasarSitesRoute: typeof QuasarSitesRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
   ApiCronAuditsExpireRoute: typeof ApiCronAuditsExpireRoute
+  ApiWorkspaceConnectionsRoute: typeof ApiWorkspaceConnectionsRoute
+  ApiWorkspaceDriveRoute: typeof ApiWorkspaceDriveRoute
+  ApiWorkspaceSharepointRoute: typeof ApiWorkspaceSharepointRoute
   QuasarSiteIdRoute: typeof QuasarSiteIdRoute
+  ApiWorkspaceCallbackProviderRoute: typeof ApiWorkspaceCallbackProviderRoute
+  ApiWorkspaceConnectProviderRoute: typeof ApiWorkspaceConnectProviderRoute
+  ApiWorkspaceDisconnectProviderRoute: typeof ApiWorkspaceDisconnectProviderRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -1403,6 +1484,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiCronAuditsExpireRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/workspace/connections': {
+      id: '/api/workspace/connections'
+      path: '/api/workspace/connections'
+      fullPath: '/api/workspace/connections'
+      preLoaderRoute: typeof ApiWorkspaceConnectionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/workspace/drive': {
+      id: '/api/workspace/drive'
+      path: '/api/workspace/drive'
+      fullPath: '/api/workspace/drive'
+      preLoaderRoute: typeof ApiWorkspaceDriveRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/workspace/sharepoint': {
+      id: '/api/workspace/sharepoint'
+      path: '/api/workspace/sharepoint'
+      fullPath: '/api/workspace/sharepoint'
+      preLoaderRoute: typeof ApiWorkspaceSharepointRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/quasar/site/$id': {
       id: '/quasar/site/$id'
       path: '/quasar/site/$id'
@@ -1416,6 +1518,27 @@ declare module '@tanstack/react-router' {
       fullPath: '/research/implementations/$slug'
       preLoaderRoute: typeof ResearchImplementationsSlugRouteImport
       parentRoute: typeof ResearchImplementationsRoute
+    }
+    '/api/workspace/callback/$provider': {
+      id: '/api/workspace/callback/$provider'
+      path: '/api/workspace/callback/$provider'
+      fullPath: '/api/workspace/callback/$provider'
+      preLoaderRoute: typeof ApiWorkspaceCallbackProviderRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/workspace/connect/$provider': {
+      id: '/api/workspace/connect/$provider'
+      path: '/api/workspace/connect/$provider'
+      fullPath: '/api/workspace/connect/$provider'
+      preLoaderRoute: typeof ApiWorkspaceConnectProviderRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/workspace/disconnect/$provider': {
+      id: '/api/workspace/disconnect/$provider'
+      path: '/api/workspace/disconnect/$provider'
+      fullPath: '/api/workspace/disconnect/$provider'
+      preLoaderRoute: typeof ApiWorkspaceDisconnectProviderRouteImport
+      parentRoute: typeof rootRouteImport
     }
   }
 }
@@ -1600,7 +1723,13 @@ const rootRouteChildren: RootRouteChildren = {
   QuasarSitesRoute: QuasarSitesRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
   ApiCronAuditsExpireRoute: ApiCronAuditsExpireRoute,
+  ApiWorkspaceConnectionsRoute: ApiWorkspaceConnectionsRoute,
+  ApiWorkspaceDriveRoute: ApiWorkspaceDriveRoute,
+  ApiWorkspaceSharepointRoute: ApiWorkspaceSharepointRoute,
   QuasarSiteIdRoute: QuasarSiteIdRoute,
+  ApiWorkspaceCallbackProviderRoute: ApiWorkspaceCallbackProviderRoute,
+  ApiWorkspaceConnectProviderRoute: ApiWorkspaceConnectProviderRoute,
+  ApiWorkspaceDisconnectProviderRoute: ApiWorkspaceDisconnectProviderRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
