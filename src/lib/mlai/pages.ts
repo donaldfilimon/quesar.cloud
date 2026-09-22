@@ -43,7 +43,7 @@ export const homeRequestPath: readonly ({ n: string; title: string; body: string
   { n: "01", title: "Authenticate", body: "A Better Auth session establishes who is asking. No session, no server function.", status: "current" },
   { n: "02", title: "Consent", body: "The current audit policy must be accepted before content leaves the application.", status: "development" },
   { n: "03", title: "Generate", body: "The configured provider answers through the server interface, rate-limited per user. User email is not sent.", status: "current" },
-  { n: "04", title: "Encrypt", body: "Prompt and response are sealed with AES-256-GCM, bound to the owner. No key, no seal: the request refuses.", status: "current" },
+  { n: "04", title: "Encrypt", body: "Prompt and response are sealed with AES-256-GCM, bound to the owner. No key, no seal: the request refuses. The sealing primitive exists; applying it to conversations is being built.", status: "development" },
   { n: "05", title: "Commit", body: "The sealed audit is written before the response returns. Fail closed.", status: "development" },
 ];
 
@@ -312,7 +312,7 @@ export const showcaseProgram = [
 
 export const showcaseVoice = {
   title: "On-device neural voice",
-  body: "Narration is synthesized in your browser by the Kokoro-82M text-to-speech model (WebGPU, falling back to WASM), with each persona in its own voice and prosody. The model downloads on first playback; the text is never sent to a server. If your browser can't run it, the rooms fall back to Web Speech, and captions carry the words.",
+  body: "Narration is synthesized in your browser by the Kokoro-82M text-to-speech model (WebGPU, falling back to WASM), with each persona in its own voice and prosody. The model downloads on first playback; the text is never sent to a server. If your browser can't run it, captions carry the words.",
   keys: "space play/pause · ←/→ scrub · 0 restart",
 } as const;
 

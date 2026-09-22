@@ -42,8 +42,9 @@ export function HomeControlPlane() {
               Five control points. One return condition.
             </h2>
             <p className="mt-5 max-w-xl text-base leading-relaxed text-fg-muted sm:text-lg">
-              Authenticate, consent, generate, encrypt, commit. If a control point fails, no unaudited response is
-              returned. Two of the five are still being built, and are labeled.
+              Authenticate, consent, generate, encrypt, commit. The design: if a control point fails, no unaudited
+              response is returned. Three of the five are still being built and are labeled; until they ship, replies
+              are not audited.
             </p>
             <Button asChild variant="secondary" className="mt-7">
               <Link to="/security">
