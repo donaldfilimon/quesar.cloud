@@ -1,4 +1,4 @@
-import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
+import { Link, useNavigate, useRouter } from "@tanstack/react-router";
 import { useEffect, useRef, useState, useSyncExternalStore, type ReactNode } from "react";
 import {
   DropdownMenu,
@@ -55,9 +55,10 @@ export function SignedOut({ children }: { children: ReactNode }) {
  */
 export function RedirectToSignIn({ to = SIGN_IN_PATH }: { to?: string }) {
   const navigate = useNavigate();
-  const next = useRouterState({
-    select: (s) => `${s.location.pathname}${s.location.searchStr ?? ""}`,
-  });
+  const router = useRouter();
+  // Capture where the visitor was at mount. Reading the live location instead
+  // picks up /login once the redirect starts, and nests ?next=/login?next=….
+  const [next] = useState(() => `${router.state.location.pathname}${router.state.location.searchStr ?? ""}`);
   // Navigate exactly once. `<Navigate search={{ next }}>` re-fires navigate()
   // on every render (its props object is new each time), and a gated page
   // re-renders while that navigation is pending: "Maximum update depth".
@@ -65,9 +66,10 @@ export function RedirectToSignIn({ to = SIGN_IN_PATH }: { to?: string }) {
   useEffect(() => {
     if (sent.current) return;
     sent.current = true;
+    if (router.state.location.pathname === SIGN_IN_PATH) return;
     if (to !== SIGN_IN_PATH) void navigate({ to, replace: true });
     else void navigate({ to: "/login", search: { next: next || "/console" }, replace: true });
-  }, [navigate, next, to]);
+  }, [navigate, next, router, to]);
   return <div className="mx-auto max-w-3xl px-4 py-24 text-sm text-fg-muted">Redirecting to sign in…</div>;
 }
 

@@ -42,5 +42,7 @@ export function safeInternalPath(path: string, fallback = "/console") {
     return fallback;
   }
   if (path.startsWith("/api") || path.startsWith("/auth/")) return fallback;
+  // Never bounce back into the sign-in page itself (a nested ?next= loop).
+  if (path === "/login" || path.startsWith("/login?") || path.startsWith("/login/")) return fallback;
   return path;
 }

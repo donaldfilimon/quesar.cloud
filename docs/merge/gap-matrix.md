@@ -93,6 +93,29 @@ A row is closed only when its **Status** reads `ported` (with the commit) or `re
 ## Follow-ups (known, not blocking)
 
 - **Account deletion** is not offered anywhere in the app. Any future deletion flow must purge the per-user rows in `workspace_connections`, `chat_consents`, `conversation_audits` and `field_notes`, and revoke the Google grant. A foreign key cascade was tried and rejected: auth-off dev mode and the tests use user ids that have no `user` row.
-- **Custom error pages**: mlai's `error.tsx` and `global-error.tsx` are not ported. The root route uses TanStack's default error boundary.
+- **Custom error pages**: closed in `3c36ea9`. `defaultErrorComponent` is the port of mlai's `error.tsx` (retry, home, report; the message shows in dev only). A root-layout failure still falls back to TanStack's default.
 - **Chat audit policy** was bumped to `2026-09-22.1` because its text changed (the KMS and MFA claims were removed), so existing consents must be re-accepted.
 - **Measured versus unmeasured**: every live credential path is unmeasured on this machine. That covers xAI and Gemini, the Google and Microsoft OAuth round trip, Stripe, Turnstile, a running Quasar service, and a broker-signed-in admin.
+
+## Browser verification (2026-09-22, dev preview on :8091 with `BETTER_AUTH_URL=http://localhost:8091`)
+
+- **SSR crawl:** all 68 page routes return 200 (dynamic routes use one real slug each). `/feed.xml` returns `application/rss+xml` with 36 items. Signed out, `/api/workspace/connections` returns 401. `/api/cron/audits-expire` returns 503 without `CRON_SECRET`. `/api/telemetry` returns 400 for an unknown event and 204 for a valid one. `/contact` carries the report-only CSP header.
+- **Signed out:** `/profile`, `/admin`, `/console?tab=chat` and `/dashboard` each land on `/login?next=<page>`. No hang, and no nested `next` (fixed in `7b61a0a` and the follow-up commit).
+- **Signed in via email sign-up:**
+  - sign-up lands on `next`;
+  - no hydration error;
+  - a console note saves;
+  - chat shows model and encryption "not configured" and stays off;
+  - consent accepts and withdraws;
+  - the My audits tab renders;
+  - `/admin` refuses with its reason;
+  - the Admin link stays hidden;
+  - a profile name edit persists across reload;
+  - billing shows "not configured";
+  - the workspace shows both providers "not available on this deployment";
+  - a contact inquiry is "Sent".
+- **Not driven in this pass:**
+  - Quasar settings save: workstream F verified it against a stub service.
+  - The inquiry showing in `/admin`: it needs an admin.
+- **Local-only note:** Better Auth trusts only `:8080` origins unless `BETTER_AUTH_URL` is set. On this machine a Python process holds 8080, so the preview runs on 8091 with that variable, and email sign-up returns "Invalid origin" without it.
+- **Report-only CSP:** it logs `frame-src` violations for an empty-src frame that is not in the page DOM, most likely the browser pane's own instrumentation. It is unresolved, and harmless in report-only mode.
