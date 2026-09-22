@@ -1,0 +1,14 @@
+# Sidecars install their own dependencies and assets; never commit them.
+quasar-service/node_modules/
+quasar-service/templates/next-site/node_modules/
+quasar-service/templates/next-site/.next/
+python-worker/.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+# python-worker resolves ROOT to this sidecars/ directory: the Tika jar lands in
+# .tools/ and the capability report in .data/ unless MLAI_TIKA_JAR / MLAI_DATA_DIR say otherwise.
+.tools/
+.data/
+*.log
+.DS_Store
