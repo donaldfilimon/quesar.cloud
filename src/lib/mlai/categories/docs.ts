@@ -312,7 +312,7 @@ const raw = [
         heading: "Configuration facts",
         paragraphs: [
           "The active substrate is the Rust tree extracted from donaldfilimon/abi on 2026-08-22 with history preserved. Crate names keep the abi- prefix deliberately. ABI owns this layer.",
-          "Engine: layered HNSW. Concurrency: MVCC. M=16, efConstruction=200, efSearch=64, cosine metric, content-addressed. Sharding is not established.",
+          "Engine: layered HNSW. Concurrency: MVCC. M=16, EF_CONSTRUCTION=40, EF_SEARCH=32, cosine metric, content-addressed. Sharding is not established.",
         ],
       },
       {
