@@ -1,4 +1,4 @@
-import { type FormEvent, useEffect, useState } from "react";
+import { type FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { NextUp, PageHero, Section, Surface } from "@/components/site";
@@ -7,10 +7,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
+import { Turnstile, type TurnstileHandle } from "@/components/turnstile";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
+import { getTurnstileConfig, INQUIRY_LIMITS, sendInquiry, TOPICS, type TurnstileConfig } from "@/lib/inquiries";
 import { readStore, writeStore } from "@/lib/local-store";
 import { pageHead } from "@/lib/seo";
-import { addNote } from "@/lib/workspace";
+import { track } from "@/lib/telemetry";
 
 export const Route = createFileRoute("/contact")({
   head: () =>
@@ -30,8 +32,8 @@ type Inquiry = {
   created: number;
 };
 
+/** Local receipts of inquiries the server accepted (newest first, max 20). */
 const KEY = "mlai-inquiries";
-const TOPICS = ["Quesar", "Abbey", "ABI / WDBX", "Services", "Investors", "Other"] as const;
 
 function ContactPage() {
   const { user } = useCurrentUserState();
@@ -41,9 +43,26 @@ function ContactPage() {
   const [message, setMessage] = useState("");
   const [saved, setSaved] = useState<Inquiry[]>([]);
   const [status, setStatus] = useState<"idle" | "saving" | "done" | "error">("idle");
+  const [error, setError] = useState("");
+  const [turnstile, setTurnstile] = useState<TurnstileConfig | "loading" | "unreachable">("loading");
+  const [turnstileToken, setTurnstileToken] = useState("");
+  const [turnstileFailed, setTurnstileFailed] = useState(false);
+  const turnstileRef = useRef<TurnstileHandle>(null);
+  const onTurnstileError = useCallback(() => setTurnstileFailed(true), []);
 
   useEffect(() => {
     setSaved(readStore<Inquiry[]>(KEY, []));
+    let cancelled = false;
+    getTurnstileConfig()
+      .then((config) => {
+        if (!cancelled) setTurnstile(config);
+      })
+      .catch(() => {
+        if (!cancelled) setTurnstile("unreachable");
+      });
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   useEffect(() => {
@@ -52,39 +71,49 @@ function ContactPage() {
     if (!email && user.primaryEmail) setEmail(user.primaryEmail);
   }, [user, name, email]);
 
+  const needsToken = typeof turnstile === "object" && turnstile.state === "ready";
+  const blocked =
+    turnstile === "loading" ||
+    turnstile === "unreachable" ||
+    (typeof turnstile === "object" && turnstile.state === "misconfigured") ||
+    (needsToken && !turnstileToken);
+
   async function onSubmit(event: FormEvent) {
     event.preventDefault();
     const trimmed = message.trim();
-    if (!trimmed) return;
+    if (!trimmed || blocked) return;
     setStatus("saving");
+    setError("");
+    track("inquiry_submit");
+    let result: Awaited<ReturnType<typeof sendInquiry>>;
+    try {
+      result = await sendInquiry({ data: { name, email, company: "", topic, message: trimmed, turnstileToken } });
+    } catch {
+      result = { ok: false, code: "unavailable", error: "We couldn't reach the server. Your message is still in the form." };
+    }
+    // Turnstile tokens are single-use: always start the next attempt fresh.
+    if (needsToken) turnstileRef.current?.reset();
+    if (!result.ok) {
+      setStatus("error");
+      setError(result.error);
+      toast.error(result.error);
+      return;
+    }
+    track("inquiry_success");
     const inquiry: Inquiry = {
       id: crypto.randomUUID(),
-      name: name.trim().slice(0, 80),
-      email: email.trim().slice(0, 120),
+      name: name.trim(),
+      email: email.trim(),
       topic,
-      message: trimmed.slice(0, 2000),
+      message: trimmed,
       created: Date.now(),
     };
     const next = [inquiry, ...saved].slice(0, 20);
     writeStore(KEY, next);
     setSaved(next);
     setMessage("");
-    if (user) {
-      try {
-        await addNote({
-          data: {
-            nodeId: "contact",
-            body: `[${topic}] ${inquiry.name} <${inquiry.email}>\n${inquiry.message}`,
-          },
-        });
-      } catch {
-        setStatus("done");
-        toast.success("Saved on this device.");
-        return;
-      }
-    }
     setStatus("done");
-    toast.success(user ? "Saved to your field console." : "Saved on this device.");
+    toast.success("Inquiry sent.");
   }
 
   return (
@@ -92,7 +121,7 @@ function ContactPage() {
       <PageHero
         eyebrow="Contact"
         title="Write here. Stay here."
-        lede="This site does not operate a hosted inbox. Your inquiry stays on this device, and if you are signed in it is also saved to your field console. For architecture questions, the pages themselves are the public path."
+        lede="Your inquiry is sent to MLAI and stored with this site; if you are signed in, it is linked to your account. A copy of what you sent stays on this device as a receipt. For architecture questions, the pages themselves are the public path."
       />
       <Section>
         <div className="grid gap-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)]">
@@ -100,13 +129,24 @@ function ContactPage() {
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
                 <Label htmlFor="contact-name">Name</Label>
-                <Input id="contact-name" value={name} onChange={(event) => setName(event.target.value)} autoComplete="name" className="mt-1 bg-bg" />
+                <Input
+                  id="contact-name"
+                  required
+                  minLength={INQUIRY_LIMITS.nameMin}
+                  maxLength={INQUIRY_LIMITS.nameMax}
+                  value={name}
+                  onChange={(event) => setName(event.target.value)}
+                  autoComplete="name"
+                  className="mt-1 bg-bg"
+                />
               </div>
               <div>
                 <Label htmlFor="contact-email">Email</Label>
                 <Input
                   id="contact-email"
                   type="email"
+                  required
+                  maxLength={INQUIRY_LIMITS.emailMax}
                   value={email}
                   onChange={(event) => setEmail(event.target.value)}
                   autoComplete="email"
@@ -134,18 +174,52 @@ function ContactPage() {
               <Textarea
                 id="contact-message"
                 required
+                minLength={INQUIRY_LIMITS.messageMin}
                 value={message}
-                onChange={(event) => setMessage(event.target.value.slice(0, 2000))}
+                onChange={(event) => setMessage(event.target.value.slice(0, INQUIRY_LIMITS.messageMax))}
                 rows={7}
                 className="mt-1 bg-bg"
               />
             </div>
+            {needsToken ? (
+              <div className="mt-4">
+                <Turnstile
+                  ref={turnstileRef}
+                  siteKey={turnstile.siteKey}
+                  action="inquiry"
+                  onTokenChange={setTurnstileToken}
+                  onLoadError={onTurnstileError}
+                />
+                {turnstileFailed ? (
+                  <p role="alert" className="mt-2 text-sm text-fg-muted">
+                    The bot check could not load. Allow challenges.cloudflare.com, then reload the page.
+                  </p>
+                ) : null}
+              </div>
+            ) : null}
+            {typeof turnstile === "object" && turnstile.state === "misconfigured" ? (
+              <p role="alert" className="mt-4 text-sm text-fg-muted">
+                Bot verification is misconfigured on this site, so inquiries cannot be sent right now.
+              </p>
+            ) : null}
+            {turnstile === "unreachable" ? (
+              <p role="alert" className="mt-4 text-sm text-fg-muted">
+                The server is unreachable, so inquiries cannot be sent right now. Reload to retry.
+              </p>
+            ) : null}
             <div className="mt-5 flex flex-wrap items-center gap-3">
-              <Button type="submit" disabled={status === "saving"}>
-                {status === "saving" ? "Saving…" : "Save inquiry"}
+              <Button type="submit" disabled={status === "saving" || blocked}>
+                {status === "saving" ? "Sending…" : "Send inquiry"}
               </Button>
               {status === "done" ? (
-                <p className="text-sm text-fg-muted">Saved on this device. Sign in to also keep it in the field console.</p>
+                <p role="status" className="text-sm text-fg-muted">
+                  Sent. A receipt is kept on this device.
+                </p>
+              ) : null}
+              {status === "error" && error ? (
+                <p role="alert" className="text-sm text-fg-muted">
+                  {error}
+                </p>
               ) : null}
             </div>
           </form>
