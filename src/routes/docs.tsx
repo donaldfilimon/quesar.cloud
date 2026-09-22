@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { PageClose, PageHero, RouteFrame, Section, Surface } from "@/components/site";
 import { DocSidebar } from "@/components/site/doc-nav";
+import { DocsHub } from "@/components/site/docs-hub";
 import { docs } from "@/lib/mlai";
 import { pageHead } from "@/lib/seo";
 
@@ -51,6 +52,9 @@ function DocsPage() {
                 </Surface>
               </div>
             ))}
+            <div className="mt-12 border-t border-border pt-12">
+              <DocsHub />
+            </div>
           </div>
         </div>
       </Section>

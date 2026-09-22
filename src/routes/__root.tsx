@@ -7,6 +7,7 @@ import {
 import { AuthProvider } from "@/lib/auth/provider";
 import { PreviewHostBridge } from "@/components/preview-host-bridge";
 import { SiteShell } from "@/components/site/shell";
+import { NotFound } from "@/components/site/not-found";
 import { site } from "@/lib/content";
 import appCss from "../styles.css?url";
 
@@ -57,31 +58,5 @@ function RootDocument() {
         <Scripts />
       </body>
     </html>
-  );
-}
-
-function NotFound() {
-  return (
-    <div className="mx-auto max-w-xl px-4 py-24 text-center">
-      <p className="font-mono text-[0.7rem] tracking-[0.16em] text-accent uppercase">404</p>
-      <h1 className="mt-3 font-display text-4xl tracking-tight">Page not found</h1>
-      <p className="mt-4 text-fg-muted">
-        That path is not part of the public Quesar site. Try the architecture, or start from home.
-      </p>
-      <div className="mt-8 flex justify-center gap-3">
-        <a
-          href="/"
-          className="inline-flex h-11 items-center rounded-md bg-fg px-4 text-sm font-medium text-bg no-underline"
-        >
-          Home
-        </a>
-        <a
-          href="/architecture"
-          className="inline-flex h-11 items-center rounded-md bg-bg-elevated px-4 text-sm font-medium text-fg no-underline shadow-[var(--shadow-border)]"
-        >
-          Architecture
-        </a>
-      </div>
-    </div>
   );
 }

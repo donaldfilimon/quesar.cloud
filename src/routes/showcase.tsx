@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { CopyGrid, PageClose, PageHero, RouteFrame, Section } from "@/components/site";
+import { PageClose, PageHero, RouteFrame, Section } from "@/components/site";
+import { ShowcaseWall } from "@/components/site/showcase-wall";
 import { Trailer } from "@/components/site/trailer";
-import { showcaseRooms } from "@/lib/content";
 import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/showcase")({
@@ -15,15 +15,12 @@ function ShowcasePage() {
       <PageHero
         eyebrow="Showcase"
         title="Look, then inspect."
-        lede="Atmosphere is not evidence. The film is orientation. Status lives on the product pages."
+        lede="The projection room. Films and trailers drawn frame by frame by a timeline engine in your browser, narrated by the three Quesar minds. Atmosphere is not evidence: the films are orientation, and status lives on the product pages."
       />
       <Section>
         <Trailer />
         <div className="mt-10">
-          <CopyGrid
-            items={showcaseRooms.map((room) => ({ title: room.title, body: room.body, href: room.href }))}
-            columns="sm:grid-cols-2 lg:grid-cols-3"
-          />
+          <ShowcaseWall />
         </div>
       </Section>
       <PageClose

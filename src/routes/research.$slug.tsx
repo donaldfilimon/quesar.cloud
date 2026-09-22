@@ -1,9 +1,12 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { ArticleBody, SourceChips } from "@/components/site/article";
+import { MathArticleBody } from "@/components/site/math-article";
+import { AppLink } from "@/components/site/app-link";
 import { Crumbs } from "@/components/site/crumbs";
 import { ResearchSidebar } from "@/components/site/research-nav";
 import { BulletSurface, PageClose, PageHero, Section, Surface } from "@/components/site";
-import { research, researchContext } from "@/lib/mlai";
+import { productJourneys, research, researchContext } from "@/lib/mlai";
+import { jsonLdScript, researchArticleLd } from "@/lib/mlai/structured-data";
+import { Button } from "@/components/ui/button";
 import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/research/$slug")({
@@ -12,15 +15,23 @@ export const Route = createFileRoute("/research/$slug")({
   },
   head: ({ params }) => {
     const paper = research.publications.find((item) => item.slug === params.slug);
-    return pageHead(`${paper?.title ?? "Research"} — MLAI`, paper?.abstract ?? "MLAI research note.");
+    return {
+      ...pageHead(`${paper?.title ?? "Research"} — MLAI`, paper?.abstract ?? "MLAI research note."),
+      scripts: paper ? [jsonLdScript(researchArticleLd(paper))] : [],
+    };
   },
   component: ResearchPaper,
 });
 
 function ResearchPaper() {
   const { slug } = Route.useParams();
-  const paper = research.publications.find((item) => item.slug === slug);
+  const index = research.publications.findIndex((item) => item.slug === slug);
+  const paper = research.publications[index];
   if (!paper) throw notFound();
+  const next = research.publications[(index + 1) % research.publications.length];
+  const relatedProducts = productJourneys.filter((product) =>
+    (product.researchSlugs as readonly string[]).includes(paper.slug),
+  );
   return (
     <>
       <Crumbs
@@ -46,7 +57,11 @@ function ResearchPaper() {
         lede={paper.abstract}
         atmosphere="none"
         compact
-      />
+      >
+        <p className="mt-4 font-mono text-xs tracking-wide text-fg-muted">
+          {paper.authors} · {paper.date} · {paper.readTime} · {paper.documentType.replaceAll("-", " ")}
+        </p>
+      </PageHero>
       <Section className="!pt-10">
         <div className="grid gap-10 lg:grid-cols-[16rem_minmax(0,1fr)]">
           <ResearchSidebar current={paper.slug} />
@@ -62,13 +77,36 @@ function ResearchPaper() {
                 <p className="mt-2 font-mono text-[11px] text-fg-subtle">Reviewed {paper.reviewedAt}</p>
               </Surface>
             </div>
-            <ArticleBody sections={paper.body} />
+            <nav aria-label="Related products" className="mb-8 flex flex-wrap gap-4 text-sm">
+              {relatedProducts.map((product) => (
+                <Link key={product.slug} to="/products/$slug" params={{ slug: product.slug }} className="text-accent">
+                  Explore {product.name}
+                </Link>
+              ))}
+              <Link to="/products" className="text-accent">
+                All products
+              </Link>
+            </nav>
+            <MathArticleBody sections={paper.body} />
             <h3 className="mt-10 font-display text-xl">Limitations</h3>
             <div className="mt-3">
               <BulletSurface items={paper.limitations} />
             </div>
-            <SourceChips sources={paper.sources.map((s) => ({ title: s.title, url: s.url, scope: s.kind }))} />
+            <Evidence paper={paper} />
             <Related paper={paper} />
+            <div className="mt-14 flex flex-wrap items-center justify-between gap-6 border-t border-border pt-8">
+              <Button asChild>
+                <Link to="/contact">Work with our research team</Link>
+              </Button>
+              {next && next.slug !== paper.slug ? (
+                <Link to="/research/$slug" params={{ slug: next.slug }} className="text-right no-underline">
+                  <span className="block font-mono text-[0.68rem] tracking-[0.16em] text-fg-subtle uppercase">
+                    Next article
+                  </span>
+                  <span className="mt-1 block font-display text-lg text-fg hover:underline">{next.title}</span>
+                </Link>
+              ) : null}
+            </div>
           </div>
         </div>
       </Section>
@@ -113,6 +151,48 @@ function Related({ paper }: { paper: (typeof research.publications)[number] }) {
                 >
                   {item.title}
                 </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+/** Sources with their revisions, and downloads with page counts and hashes (mlai ResearchArticleEvidence). */
+function Evidence({ paper }: { paper: (typeof research.publications)[number] }) {
+  return (
+    <div className="mt-10 grid gap-8">
+      <div>
+        <h3 className="font-display text-xl">Supporting sources</h3>
+        <ul className="mt-3 space-y-3">
+          {paper.sources.map((source) => (
+            <li key={`${source.url}-${source.title}`} className="surface p-4">
+              <AppLink to={source.url} className="text-sm font-medium text-accent no-underline hover:underline">
+                {source.title}
+              </AppLink>
+              <p className="mt-1 text-xs text-fg-muted">
+                {source.kind} · revision <code className="break-all font-mono">{source.revision}</code>
+              </p>
+            </li>
+          ))}
+        </ul>
+      </div>
+      {paper.attachments.length ? (
+        <div>
+          <h3 className="font-display text-xl">Downloads</h3>
+          <ul className="mt-3 space-y-3">
+            {paper.attachments.map((attachment) => (
+              <li key={attachment.url} className="surface p-4">
+                <a href={attachment.url} download className="text-sm font-medium text-accent no-underline hover:underline">
+                  {attachment.title} (PDF)
+                </a>
+                <p className="mt-1 text-xs text-fg-muted">
+                  {attachment.edition === "historical" ? "Historical edition" : "Current edition"} · {attachment.date} ·{" "}
+                  {attachment.pages} pages
+                </p>
+                <p className="mt-1 break-all font-mono text-[11px] text-fg-subtle">SHA-256: {attachment.sha256}</p>
               </li>
             ))}
           </ul>

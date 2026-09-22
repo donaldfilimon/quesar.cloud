@@ -1,9 +1,10 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { PersonaRouter } from "@/components/apps/persona-router";
-import { Equation } from "@/components/site/article";
+import { CosineSimDemo } from "@/components/demos/cosine-sim-demo";
+import { ShardingLatencyDemo } from "@/components/demos/sharding-latency-demo";
+import { BlockMath } from "@/components/math/math";
 import {
   ChipRow,
-  CopyGrid,
   NamedGrid,
   PageClose,
   PageHero,
@@ -11,7 +12,9 @@ import {
   Surface,
   TruthList,
 } from "@/components/site";
-import { productPages } from "@/lib/mlai";
+import { NextUp } from "@/components/site/lab";
+import { productJourneys, productPages, research } from "@/lib/mlai";
+import { jsonLdScript, softwareApplicationLd } from "@/lib/mlai/structured-data";
 import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/products/$slug")({
@@ -20,7 +23,10 @@ export const Route = createFileRoute("/products/$slug")({
   },
   head: ({ params }) => {
     const product = productPages.find((item) => item.slug === params.slug);
-    return pageHead(`${product?.name ?? "Product"} — Quesar`, product?.intro ?? "Quesar product.");
+    return {
+      ...pageHead(`${product?.name ?? "Product"} — Quesar`, product?.intro ?? "Quesar product."),
+      scripts: product ? [jsonLdScript(softwareApplicationLd(product))] : [],
+    };
   },
   component: ProductPage,
 });
@@ -29,7 +35,27 @@ function ProductPage() {
   const { slug } = Route.useParams();
   const product = productPages.find((item) => item.slug === slug);
   if (!product) throw notFound();
-  const accent = product.accent === "aviva" ? "abi" : product.accent;
+  const journey = productJourneys.find((item) => item.slug === product.slug);
+  // Cross-navigation derives from the content layer (mlai Product.tsx), so it never points at this page.
+  const next = [
+    ...(journey
+      ? [
+          { to: journey.setupHref, label: "Setup documentation", body: journey.prerequisites },
+          ...journey.researchSlugs.map((paperSlug) => ({
+            to: `/research/${paperSlug}`,
+            label: research.publications.find((paper) => paper.slug === paperSlug)?.title ?? paperSlug,
+            body: "Read the supporting research and its limitations.",
+          })),
+        ]
+      : []),
+    { to: "/get-started", label: "Get started", body: "Choose your next step." },
+    ...productPages
+      .filter((item) => item.slug !== product.slug)
+      .map((item) => ({ to: `/products/${item.slug}`, label: item.name, body: item.kicker })),
+    { to: "/benchmarks", label: "WDBX benchmarks", body: "Configuration facts and interactive models, not a scoreboard." },
+    { to: "/docs", label: "Documentation", body: "Platform and WDBX documentation." },
+    { to: "/showcase", label: "The projection room", body: "The cinematic showcase surfaces." },
+  ];
   return (
     <>
       <PageHero eyebrow={product.kicker} title={product.name} lede={product.intro} />
@@ -40,9 +66,18 @@ function ProductPage() {
               {p}
             </p>
           ))}
-          {section.equations?.map((eq) => (
-            <Equation key={eq.tex} tex={eq.tex} note={eq.note} />
-          ))}
+          {section.equations?.length ? (
+            <div className="mt-6 grid gap-4 md:grid-cols-2">
+              {section.equations.map((eq) => (
+                <Surface key={eq.tex} className="h-full text-fg">
+                  <div className="overflow-x-auto">
+                    <BlockMath tex={eq.tex} />
+                  </div>
+                  <p className="mt-3 text-xs leading-relaxed text-fg-muted">{eq.note}</p>
+                </Surface>
+              ))}
+            </div>
+          ) : null}
           {section.blendTable ? (
             <div className="mt-6">
               <NamedGrid
@@ -52,16 +87,22 @@ function ProductPage() {
             </div>
           ) : null}
           {section.pillars ? (
-            <div className="mt-6">
-              <CopyGrid
-                items={section.pillars.map((pillar) => ({
-                  title: pillar.title,
-                  body: pillar.description,
-                  note: pillar.eq,
-                  accent: pillar.accent === "aviva" ? "abi" : pillar.accent,
-                }))}
-                columns="md:grid-cols-3"
-              />
+            <div className={section.pillars.length === 4 ? "mt-6 grid gap-4 sm:grid-cols-2" : "mt-6 grid gap-4 md:grid-cols-3"}>
+              {section.pillars.map((pillar) => (
+                <Surface
+                  key={pillar.title}
+                  accent={(pillar.accent ?? product.accent) === "aviva" ? "abi" : (pillar.accent ?? product.accent)}
+                  className="flex h-full flex-col"
+                >
+                  <h3 className="font-display text-xl">{pillar.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-fg-muted">{pillar.description}</p>
+                  {pillar.eq ? (
+                    <div className="mt-auto overflow-x-auto pt-4 text-fg">
+                      <BlockMath tex={pillar.eq} />
+                    </div>
+                  ) : null}
+                </Surface>
+              ))}
             </div>
           ) : null}
           {section.steps ? (
@@ -75,17 +116,14 @@ function ProductPage() {
             </div>
           ) : null}
           {section.demo === "cosine-sim" ? (
-            <Surface accent={accent} className="mt-6">
-              <p className="font-mono text-sm">cos(θ) = (A · B) / (‖A‖ ‖B‖)</p>
-              <p className="mt-2 text-sm text-fg-muted">Configuration fact for the active crate, not a recall scoreboard.</p>
-            </Surface>
+            <div className="mt-6 max-w-2xl">
+              <CosineSimDemo />
+            </div>
           ) : null}
           {section.demo === "sharding-latency" ? (
-            <Surface className="mt-6">
-              <p className="text-sm text-fg-muted">
-                Reference cluster replication exists in source. It does not establish production sharding or a latency SLA.
-              </p>
-            </Surface>
+            <div className="mt-6 max-w-2xl">
+              <ShardingLatencyDemo />
+            </div>
           ) : null}
           {section.chips ? (
             <div className="mt-4">
@@ -94,6 +132,9 @@ function ProductPage() {
           ) : null}
         </Section>
       ))}
+      <Section eyebrow="Next" title="Keep going.">
+        <NextUp items={next} />
+      </Section>
       <PageClose
         primary={{ to: "/products", label: "All products" }}
         next={[
