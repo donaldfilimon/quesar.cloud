@@ -1,39 +1,21 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { ArchitectureDiagram } from "@/components/diagram/architecture-diagram";
-import { ChipCutaway } from "@/components/diagram/chip-cutaway";
-import { RepoList } from "@/components/github/repo-list";
-import { PageClose, PageHero, Section } from "@/components/site";
-import { Trailer } from "@/components/site/trailer";
+import { lazy, Suspense } from "react";
+import { CinematicFallback } from "@/cinematic/components/CinematicFallback";
 import { pageHead } from "@/lib/seo";
 
+const Room = lazy(() => import("@/cinematic/rooms/mega"));
+
 export const Route = createFileRoute("/showcase/mega")({
-  head: () => pageHead("Mega — Showcase", "Full Quesar orientation board."),
-  component: Page,
+  // Canvas, requestAnimationFrame and WebAudio only exist in the browser.
+  ssr: false,
+  head: () => pageHead("Mega — Showcase", "The ~4.7-minute mega-trailer: kinetic beats and film scenes over a 3D neural field."),
+  component: ShowcaseMegaPage,
 });
 
-function Page() {
+function ShowcaseMegaPage() {
   return (
-    <>
-      <PageHero eyebrow="Mega" title="The whole board." lede="Film, chip, architecture, source. Still not a hosted session." />
-      <Section>
-        <Trailer />
-        <div className="mt-12">
-          <ChipCutaway />
-        </div>
-        <div className="mt-12">
-          <ArchitectureDiagram compact />
-        </div>
-        <div className="mt-12">
-          <RepoList compact />
-        </div>
-      </Section>
-      <PageClose
-        primary={{ to: "/", label: "Home" }}
-        next={[
-          { to: "/architecture", label: "Architecture", body: "Inspect a node." },
-          { to: "/developers", label: "Developers", body: "Live READMEs when GitHub answers." },
-        ]}
-      />
-    </>
+    <Suspense fallback={<CinematicFallback />}>
+      <Room />
+    </Suspense>
   );
 }

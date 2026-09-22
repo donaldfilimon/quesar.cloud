@@ -1,0 +1,38 @@
+// @mlai/trailer-engine — framework-agnostic cinematic playback core.
+//
+// Nothing here may import React or reach for a bundler global. Browser APIs are
+// allowed only where the capability is inherently one — Web Audio, canvas, rAF —
+// and never at module scope, so importing this package stays safe in Node. The
+// modules below are pure and fully Node-testable; React bindings stay in
+// apps/quasar-web/src/film/.
+export { MAX_FRAME_DT, frameDelta } from "./clock";
+export type { EaseFn } from "./easing";
+export { Easing, animate, clamp, fade, interpolate, step } from "./easing";
+export type { AdvanceResult } from "./timeline";
+export { advance } from "./timeline";
+export { createRandom } from "./random";
+export { ParticleBuffer } from "./particles";
+export type { PlaybackHooks, PlaybackState } from "./playback";
+export { PlaybackController } from "./playback";
+export type {
+  AudioContextLike,
+  AudioEngineOptions,
+  AudioParamLike,
+  EqBand,
+  EqBandType,
+  LoadTTS,
+  PersonaVoice,
+  PersonaVoiceRegistry,
+  Scheduler,
+  SpeakOptions,
+  TTSAudio,
+  TTSHandle,
+  VoiceSnapshot,
+} from "./audio";
+export { AudioEngine, chunkText } from "./audio";
+export type { DrawContext, RenderTarget, Renderer, Scene } from "./renderer";
+export { Canvas2DRenderer } from "./renderer";
+export type { Net, NetEdge, NetNode, NetStar, NeuralModePreset, NeuralSceneOptions } from "./neural-scene";
+export { NL_LAYERS, NeuralScene, buildNet3D } from "./neural-scene";
+export type { LifecycleScene, SceneContext, SceneCue, SequencerOptions } from "./sequencer";
+export { SceneSequencer } from "./sequencer";

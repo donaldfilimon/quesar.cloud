@@ -1063,10 +1063,10 @@ export const researchSources = [
 ] as const;
 
 export const showcaseRooms = [
-  { href: "/showcase/trailer", title: "Trailer", body: "The product film, in-page." },
-  { href: "/showcase/film", title: "Film", body: "Longer cut. Atmosphere, not a benchmark." },
-  { href: "/showcase/explainer", title: "Explainer", body: "Three layers on one chip, narrated." },
-  { href: "/showcase/design", title: "Design lab", body: "Tokens, type, and the mark." },
-  { href: "/showcase/abbey", title: "Abbey", body: "Companion stills and claims language." },
-  { href: "/showcase/mega", title: "Mega", body: "The full orientation board." },
+  { href: "/showcase/trailer", title: "Trailer", body: "The 62-second vision trailer, rendered live." },
+  { href: "/showcase/film", title: "Film", body: "The long brand film. Atmosphere, not a benchmark." },
+  { href: "/showcase/explainer", title: "Explainer", body: "What is MLAI? A narrated two-minute cut." },
+  { href: "/showcase/design", title: "Design lab", body: "Brand, system, hero, lab, console and docs boards." },
+  { href: "/showcase/abbey", title: "Abbey", body: "The Abbey companion trailer." },
+  { href: "/showcase/mega", title: "Mega", body: "The longest cut: every beat and scene in one sitting." },
 ] as const;

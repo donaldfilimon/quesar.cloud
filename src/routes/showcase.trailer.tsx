@@ -1,33 +1,21 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { PageClose, PageHero, Section } from "@/components/site";
-import { Trailer } from "@/components/site/trailer";
+import { lazy, Suspense } from "react";
+import { CinematicFallback } from "@/cinematic/components/CinematicFallback";
 import { pageHead } from "@/lib/seo";
 
+const Room = lazy(() => import("@/cinematic/rooms/trailer"));
+
 export const Route = createFileRoute("/showcase/trailer")({
-  head: () => pageHead("Trailer — Showcase", "Quesar trailer, played on this site."),
-  component: Page,
+  // Canvas, requestAnimationFrame and WebAudio only exist in the browser.
+  ssr: false,
+  head: () => pageHead("Trailer — Showcase", "The 62-second MLAI vision trailer, rendered live in the browser. Orientation, not a benchmark."),
+  component: ShowcaseTrailerPage,
 });
 
-function Page() {
+function ShowcaseTrailerPage() {
   return (
-    <>
-      <PageHero
-        eyebrow="Trailer"
-        title="Three cuts. One sitting."
-        lede="The mark, the wafer, and the board play in order. Press play, or jump a chapter. Nothing in the film is a measured result."
-        atmosphere="none"
-        compact
-      />
-      <Section className="!pt-10">
-        <Trailer full />
-      </Section>
-      <PageClose
-        primary={{ to: "/showcase", label: "Showcase" }}
-        next={[
-          { to: "/architecture", label: "Architecture", body: "Click a node for current versus not claimed." },
-          { to: "/quesar", label: "Quesar", body: "The product the trailer orients." },
-        ]}
-      />
-    </>
+    <Suspense fallback={<CinematicFallback />}>
+      <Room />
+    </Suspense>
   );
 }
