@@ -500,10 +500,20 @@ export async function deleteOwnAudit(
 
 // --------------------------------------------------------------------- admin
 
-export type AdminStatus = AdminDecision;
+/**
+ * Client-visible admin status. "Not on the allowlist" and "on the allowlist
+ * but not broker-verified" collapse to one answer: sign-up is open, so the
+ * finer reason would let anyone probe which addresses are admins.
+ */
+export type AdminStatus = { admin: true } | { admin: false; reason: "no_allowlist" | "not_admin" };
 
 export async function adminStatus(userId: string): Promise<AdminStatus> {
-  return adminDecisionFor(userId);
+  const decision: AdminDecision = await adminDecisionFor(userId);
+  if (decision.admin) return decision;
+  return {
+    admin: false,
+    reason: decision.reason === "no_allowlist" ? "no_allowlist" : "not_admin",
+  };
 }
 
 async function isAdmin(userId: string): Promise<boolean> {

@@ -16,6 +16,7 @@ vi.mock("@/lib/server/llm", () => ({
 }));
 
 import { getSql } from "@/lib/db";
+import { adminDecisionFor } from "@/lib/server/admin.server";
 import {
   AUDIT_RETENTION_DAYS,
   CHAT_AUDIT_POLICY_VERSION,
@@ -286,10 +287,13 @@ describe("admin", () => {
         reason: "forbidden",
       });
     }
-    expect(await adminStatus(credential.id)).toEqual({
+    // The server still knows why; the client only learns "not an admin".
+    expect(await adminDecisionFor(credential.id)).toEqual({
       admin: false,
       reason: "unverified_identity",
     });
+    expect(await adminStatus(credential.id)).toEqual({ admin: false, reason: "not_admin" });
+    expect(await adminStatus(stranger.id)).toEqual({ admin: false, reason: "not_admin" });
   });
 
   it("requires a reason to read, logs it as admin, and opens another user's audit", async () => {

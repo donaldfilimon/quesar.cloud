@@ -11,9 +11,8 @@ import { TelemetrySummaryPanel } from "./telemetry-summary";
 const REFUSAL: Record<Extract<AdminStatus, { admin: false }>["reason"], string> = {
   no_allowlist:
     "No administrators are configured in this environment (ADMIN_EMAILS is empty), so nobody can open /admin.",
-  not_allowlisted: "Your account's email is not on the administrator allowlist.",
-  unverified_identity:
-    "Your email is on the allowlist, but this account did not sign in through the Google or X broker. Email/password sign-up sends no verification mail, so an allowlisted address alone does not prove you control it.",
+  not_admin:
+    "This account is not an administrator. Email/password sign-up sends no verification mail, so an allowlisted address alone proves nothing.",
 };
 
 /** Admin gate: shows the panels only when the server says this user is an admin. */

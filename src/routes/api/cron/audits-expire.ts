@@ -8,8 +8,12 @@ import { createFileRoute } from "@tanstack/react-router";
  */
 async function expire(request: Request): Promise<Response> {
   const { authorizeCron, expireAudits } = await import("@/lib/console.server");
-  const verdict = authorizeCron(request);
+  const { clientSubject, hit } = await import("@/lib/server/rate-limit.server");
   const headers = { "Cache-Control": "no-store" };
+  // mlai rate-limited this endpoint to 5 calls a minute per client.
+  const gate = await hit("audit-expiry", clientSubject(request), { windowMs: 60_000, max: 5 });
+  if (!gate.allowed) return Response.json({ error: "Too many requests" }, { status: 429, headers });
+  const verdict = authorizeCron(request);
   if (verdict === 503)
     return Response.json({ error: "CRON_SECRET is not configured" }, { status: 503, headers });
   if (verdict === 401) return Response.json({ error: "Unauthorized" }, { status: 401, headers });
