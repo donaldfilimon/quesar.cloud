@@ -1,0 +1,1 @@
+function e(e,t){if(typeof window>`u`)return t;try{let n=window.localStorage.getItem(e);return n?JSON.parse(n):t}catch{return t}}function t(e,t){typeof window>`u`||window.localStorage.setItem(e,JSON.stringify(t))}export{t as n,e as t};

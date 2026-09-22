@@ -3,7 +3,7 @@ import { AppLink } from "@/components/site/app-link";
 import { Input } from "@/components/ui/input";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { repos, type RepoKind } from "@/lib/content";
-import { loadGithub, type EventItem, type LiveRepo } from "@/lib/github";
+import { loadGithubData, type EventItem, type LiveRepo } from "@/lib/github";
 import { pathForRepo } from "@/lib/catalog";
 import { cn } from "@/lib/utils";
 
@@ -42,7 +42,7 @@ export function RepoList({ compact = false }: { compact?: boolean }) {
 
   useEffect(() => {
     let cancelled = false;
-    void loadGithub().then((payload) => {
+    void loadGithubData().then((payload) => {
       if (cancelled) return;
       setLive(payload.repos);
       setEvents(payload.events);

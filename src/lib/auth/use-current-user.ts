@@ -1,5 +1,6 @@
 import { useHydrated } from "@tanstack/react-router";
 import { authClient, authEnabled } from "./client";
+import { staticSite } from "@/lib/static-site";
 
 /** Normalized user shape used across the app, auth on or off. */
 export type AppUser = {
@@ -56,6 +57,9 @@ export type CurrentUserState = {
  * call keeps a stable hook order across every render of a given component.
  */
 export function useCurrentUserState(): CurrentUserState {
+  // Static GitHub Pages build: no auth server exists, so there is never a user
+  // (and no dev fallback user either: nothing on the static site is per-user).
+  if (staticSite) return { user: null, isPending: false };
   if (!authEnabled) return { user: DEV_USER, isPending: false };
   // eslint-disable-next-line react-hooks/rules-of-hooks -- authEnabled is constant for the app's lifetime
   const { data, isPending: sessionPending } = authClient.useSession();

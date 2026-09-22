@@ -145,47 +145,75 @@ function authPopupPlugin(): Plugin {
 // `0.0.0.0:8080` is the live-preview contract — don't change host/port.
 // The dev server starts once `src/router.tsx` and `src/routes/` exist — see
 // AGENTS.md § "First scaffold".
-export default defineConfig(({ command, isPreview }) => ({
-  server: {
-    host: "0.0.0.0",
-    port: 8080,
-    strictPort: true,
-  },
-  preview: {
-    host: "127.0.0.1",
-    port: 8081,
-    strictPort: true,
-  },
-  resolve: { tsconfigPaths: true },
-  plugins: [
-    pgliteBootstrapPlugin(),
-    // Before tanstackStart so /auth/popup never falls through to the SPA.
-    authPopupPlugin(),
-    // Dev-only /__app-env, read by scripts/check-auth-invariant.mjs.
-    appEnvPlugin(),
-    // PWA head + ?install=1 tutorial page; runs before Start/Nitro.
-    grokPwaPlugin(),
-    tailwindcss(),
-    tanstackStart(),
-    ...(command === "build" || isPreview
-      ? [
-          nitro({
-            preset: "vercel",
-            // Auto-registers server/middleware/* (the PWA install page +
-            // manifest + head-tag middleware). Nitro v3 defaults serverDir to
-            // false, so removing this silently unwires /?install=1 on deploys.
-            serverDir: "./server",
-            // Vercel cron: expire conversation audits past their retention.
-            // Vercel sends GET with `Authorization: Bearer $CRON_SECRET`; the
-            // route answers 503 until CRON_SECRET is set.
-            vercel: {
-              config: {
-                crons: [{ path: "/api/cron/audits-expire", schedule: "17 3 * * *" }],
+export default defineConfig(({ command, isPreview, mode }) => {
+  // `npm run build:static` (mode "static"): prerender every page to plain files
+  // for GitHub Pages. No server exists there; see src/lib/static-site.ts.
+  const isStatic = mode === "static";
+  return {
+    server: {
+      host: "0.0.0.0",
+      port: 8080,
+      strictPort: true,
+    },
+    preview: {
+      host: "127.0.0.1",
+      port: 8081,
+      strictPort: true,
+    },
+    resolve: { tsconfigPaths: true },
+    plugins: [
+      pgliteBootstrapPlugin(),
+      // Before tanstackStart so /auth/popup never falls through to the SPA.
+      authPopupPlugin(),
+      // Dev-only /__app-env, read by scripts/check-auth-invariant.mjs.
+      appEnvPlugin(),
+      // PWA head + ?install=1 tutorial page; runs before Start/Nitro.
+      grokPwaPlugin(),
+      tailwindcss(),
+      tanstackStart(
+        isStatic
+          ? {
+              prerender: {
+                enabled: true,
+                crawlLinks: true,
+                autoSubfolderIndex: true,
+                failOnError: true,
+                // Server-only surfaces have nothing to prerender on a static host.
+                filter: ({ path }) => !path.startsWith("/api/") && !path.startsWith("/_serverFn"),
               },
-            },
-          }),
-        ]
-      : []),
-    viteReact(),
-  ],
-}));
+
+              pages: [
+                { path: "/feed.xml" },
+                { path: "/unauthorized" },
+                { path: "/signup" },
+                { path: "/404" },
+              ],
+            }
+          : undefined,
+      ),
+      ...(isStatic
+        ? // The prerenderer drives a local Nitro node server; only the HTML is published.
+          [nitro({ preset: "node-server" })]
+        : command === "build" || isPreview
+          ? [
+              nitro({
+                preset: "vercel",
+                // Auto-registers server/middleware/* (the PWA install page +
+                // manifest + head-tag middleware). Nitro v3 defaults serverDir to
+                // false, so removing this silently unwires /?install=1 on deploys.
+                serverDir: "./server",
+                // Vercel cron: expire conversation audits past their retention.
+                // Vercel sends GET with `Authorization: Bearer $CRON_SECRET`; the
+                // route answers 503 until CRON_SECRET is set.
+                vercel: {
+                  config: {
+                    crons: [{ path: "/api/cron/audits-expire", schedule: "17 3 * * *" }],
+                  },
+                },
+              }),
+            ]
+          : []),
+      viteReact(),
+    ],
+  };
+});

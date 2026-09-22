@@ -4,7 +4,7 @@ import { CellMachine } from "@/components/apps/cell-machine";
 import { PageClose, PageHero, Section, Surface } from "@/components/site";
 import { StatusBadge } from "@/components/site/status-badge";
 import { pathForRepo, repoDocs, repoPaths } from "@/lib/catalog";
-import { loadGithub, type LiveRepo } from "@/lib/github";
+import { loadGithubData, type LiveRepo } from "@/lib/github";
 import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/source/$name")({
@@ -24,7 +24,7 @@ function SourceRepoPage() {
   const [live, setLive] = useState<LiveRepo | null>(null);
 
   useEffect(() => {
-    void loadGithub().then((payload) => {
+    void loadGithubData().then((payload) => {
       setLive(payload.repos.find((row) => row.name === decoded) ?? null);
     });
   }, [decoded]);

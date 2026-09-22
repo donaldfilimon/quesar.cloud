@@ -15,6 +15,8 @@ export default tseslint.config(
       ".nitro/**",
       "node_modules/**",
       "src/routeTree.gen.ts",
+      // Built static site (npm run build:static) published by GitHub Pages.
+      "docs/**",
       // Standalone projects with their own toolchains (Bun, Gradle, Swift),
       // outside the npm build. See their READMEs.
       "sidecars/**",

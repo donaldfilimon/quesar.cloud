@@ -3,7 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { PersonaRouter, scoreMessage } from "@/components/apps/persona-router";
 import { PageClose, PageHero, Section } from "@/components/site";
 import { Button } from "@/components/ui/button";
-import { askPersona } from "@/lib/ai";
+import { askPersonaFromClient } from "@/lib/ai";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { StatusBadge } from "@/components/site/status-badge";
 
@@ -35,7 +35,7 @@ function AbbeyBotPage() {
     setInput("");
     setPending(true);
     try {
-      const result = await askPersona({ data: { prompt: text, persona } });
+      const result = await askPersonaFromClient({ data: { prompt: text, persona } });
       const reply = result.ok
         ? result.text
         : `${persona} would answer locally: ${result.error} Heuristic α=${scores.alpha.toFixed(2)}.`;

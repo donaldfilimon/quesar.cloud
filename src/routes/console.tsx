@@ -58,7 +58,7 @@ function ConsoleTabs() {
     void navigate({ search: (prev) => ({ ...prev, tab: next === "notes" ? undefined : next }) });
   return (
     <RouteFrame>
-      <RequireSession>
+      <RequireSession feature="The console">
         {(user) => (
           <>
             <PageHero

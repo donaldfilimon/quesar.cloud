@@ -1,0 +1,1 @@
+function e(e,t){return{meta:[{title:e},{name:`description`,content:t}]}}export{e as t};

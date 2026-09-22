@@ -367,6 +367,10 @@ export const privacyPolicy = [
     body: "The contact form stores your name, email, and message so we can reply; it is rate-limited, and may use a Cloudflare Turnstile check. Page telemetry records only an event name and a known route path, with no user id or IP address, and is skipped when your browser sends Do Not Track or Global Privacy Control. If you connect Google Drive or Microsoft SharePoint, only a sealed refresh token and the connected account email are stored, with read-only metadata access; disconnecting deletes them.",
   },
   {
+    title: "Deleting your account",
+    body: "You can delete your account from your profile. That removes the account, its sessions, your field notes, chat consents, encrypted audits and workspace connections, and revokes any Google grant it held. Contact inquiries you sent are kept as business records, with your account detached from them.",
+  },
+  {
     title: "Contact",
     body: "For privacy requests, security questions, or data-handling reviews, contact privacy@mlai-corp.com or security@mlai-corp.com.",
   },

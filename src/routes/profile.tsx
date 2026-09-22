@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState, useSyncExternalStore } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { PageClose, PageHero, Section, Surface } from "@/components/site";
 import { AccountCard, NameForm, type SaveName } from "@/components/profile/account-card";
+import { DeleteAccountCard } from "@/components/profile/delete-account-card";
 import { BillingCard, type BillingState } from "@/components/profile/billing-card";
 import {
   SessionsCard,
@@ -31,7 +32,7 @@ const noGateSessionOnServer = () => false;
 const SESSIONS_FAILED = "Sessions could not be loaded. Try again in a moment.";
 
 function ProfilePage() {
-  return <RequireSession>{(user) => <ProfileInner user={user} />}</RequireSession>;
+  return <RequireSession feature="Your profile">{(user) => <ProfileInner user={user} />}</RequireSession>;
 }
 
 function ProfileInner({ user }: { user: AppUser }) {
@@ -119,6 +120,14 @@ function ProfileInner({ user }: { user: AppUser }) {
       <Section eyebrow="Billing" title="Plans">
         <BillingPanel />
       </Section>
+      {canSignOut ? (
+        <Section eyebrow="Account" title="Delete account">
+          <DeleteAccountCard
+            email={account.email}
+            hasPassword={Boolean(account.providers?.includes("credential"))}
+          />
+        </Section>
+      ) : null}
       <PageClose
         primary={{ to: "/console", label: "Field console" }}
         secondary={[{ to: "/console/workspace", label: "Console workspace" }]}

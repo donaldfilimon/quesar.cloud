@@ -1,0 +1,1 @@
+import{a as e,o as t}from"./schemas-DX7Y1K_m.js";var n=e({name:t().min(1).max(60),prompt:t().min(1).max(4e3)}),r=e({prompt:t().min(1).max(4e3)});export{r as n,n as t};

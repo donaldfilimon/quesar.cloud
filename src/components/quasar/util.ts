@@ -2,11 +2,11 @@
 // components so fast refresh keeps working).
 import { useEffect, useState } from "react";
 import { getBaseUrl, hydrateOrigin, setFallbackOrigin, subscribeOrigin } from "@/lib/quasar/api";
-import { getQuasarDefaultOrigin } from "@/lib/quasar/config";
+import { quasarDefaultOrigin } from "@/lib/quasar/config";
 
 // Every Quasar screen reads the deployment default the same way: once, from the
 // server, only when this device has no saved origin.
-setFallbackOrigin(() => getQuasarDefaultOrigin());
+setFallbackOrigin(() => quasarDefaultOrigin());
 
 /** The exact start commands, quoted from the service's own package and README. */
 export const START_COMMANDS = {

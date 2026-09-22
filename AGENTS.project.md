@@ -30,7 +30,7 @@ These are Donald's standing instructions. Grok's `AGENTS.md` loads this file wit
 
 ## Merged from mlai (2026-09-22): deliberate deviations and runtime config
 
-Spec: `docs/superpowers/specs/2026-09-22-mlai-merge-design.md`. Checklist: `docs/merge/gap-matrix.md`.
+Spec: `notes/superpowers/specs/2026-09-22-mlai-merge-design.md`. Checklist: `notes/merge/gap-matrix.md`.
 
 - **Google Drive and Microsoft SharePoint/OneDrive use our own OAuth connectors**
   (`/api/workspace/*`). This is Donald's explicit override of the `app-data` rule.
@@ -47,6 +47,16 @@ Spec: `docs/superpowers/specs/2026-09-22-mlai-merge-design.md`. Checklist: `docs
   Without the key those features refuse; they never store plaintext.
 - **One LLM interface**: `src/lib/server/llm` (xAI or the Cloudflare AI
   Gateway → Gemini). No provider means an honest "not configured" state.
+- **Account deletion** (Donald authorized this edit on 2026-09-22): `src/lib/auth/server.ts` gained one
+  additive block, `user.deleteUser` with a `beforeDelete` hook. The hook calls
+  `purgeUserData` (`src/lib/server/account-deletion.server.ts`), which revokes
+  workspace grants and deletes per-user rows. Inquiries are unlinked, not
+  deleted. Nothing else in that file was changed.
+- **Static preview build** (`npm run build:static`, published from `docs/` by
+  GitHub Pages): `VITE_STATIC_SITE=true` makes every server feature render
+  `ServerOnlyNotice` instead of calling the server. The GitHub panels fetch
+  GitHub's public API from the browser, and contact opens an email. `docs/`
+  contains only the built site; internal records are in `notes/`.
 - **Rate limits are database-backed** (`rate_limits` table), because serverless
   instances share no memory.
 

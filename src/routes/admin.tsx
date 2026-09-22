@@ -21,7 +21,7 @@ export const Route = createFileRoute("/admin")({
 function AdminPage() {
   return (
     <RouteFrame>
-      <RequireSession>
+      <RequireSession feature="Admin review">
         {() => (
           <>
             <PageHero

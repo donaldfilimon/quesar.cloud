@@ -92,9 +92,9 @@ export const integrationApps = [
     status: "partial" as StatusKind,
   },
   {
-    path: "docs/",
+    path: "notes/",
     href: "/docs",
-    purpose: "Merge spec, plan and gap matrix, plus the pre-merge MLAI records under docs/mlai/",
+    purpose: "Merge spec, plan and gap matrix, plus the pre-merge MLAI records under notes/mlai/ (docs/ holds the built static site)",
     gate: "reviewed, not built",
     status: "current" as StatusKind,
   },

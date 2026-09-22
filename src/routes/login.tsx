@@ -1,4 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { ServerOnlyNotice } from "@/components/site/server-only-notice";
+import { staticSite } from "@/lib/static-site";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -34,6 +36,12 @@ const schema = z.object({
 type FormValues = z.infer<typeof schema>;
 
 function Login() {
+  // Static GitHub Pages build: there is no auth server to sign in against.
+  if (staticSite) return <ServerOnlyNotice feature="Sign-in" className="my-24" />;
+  return <LoginForm />;
+}
+
+function LoginForm() {
   const { user, isPending } = useCurrentUserState();
   const { next = "/dashboard" } = Route.useSearch();
   const [mode, setMode] = useState<"signin" | "signup">("signin");

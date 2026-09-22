@@ -210,6 +210,19 @@ export const auth = betterAuth({
   // flicker-prevention guidance (gate on `isPending`; SSR the session).
   session: { cookieCache: { enabled: true, maxAge: 300 } },
 
+  // Account deletion. Additive edit authorized by Donald on 2026-09-22 (see
+  // AGENTS.project.md). Purge per-user app data first; a DB failure there
+  // throws, so Better Auth aborts rather than leaving orphaned data behind.
+  user: {
+    deleteUser: {
+      enabled: true,
+      beforeDelete: async (user) => {
+        const { purgeUserData } = await import("../server/account-deletion.server");
+        await purgeUserData(user.id);
+      },
+    },
+  },
+
   // Local email/password — toggled only via `./email-password` (not a plugin).
   ...(emailAndPasswordEnabled ? { emailAndPassword: { enabled: true } } : {}),
 

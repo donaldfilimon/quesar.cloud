@@ -1,4 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
+import { staticSite } from "@/lib/static-site";
 
 /**
  * The deployment's default Quasar service origin (`QUASAR_SERVICE_ORIGIN`), or
@@ -19,3 +20,8 @@ export const getQuasarDefaultOrigin = createServerFn({ method: "GET" }).handler(
     }
   },
 );
+
+/** What components call: the static preview has no server, so it has no configured default. */
+export function quasarDefaultOrigin(): Promise<string | null> {
+  return staticSite ? Promise.resolve(null) : getQuasarDefaultOrigin();
+}

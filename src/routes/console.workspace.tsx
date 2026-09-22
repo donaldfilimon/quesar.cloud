@@ -16,7 +16,7 @@ export const Route = createFileRoute("/console/workspace")({
 
 function ConsoleWorkspacePage() {
   return (
-    <RequireSession>
+    <RequireSession feature="The console workspace">
       {(user) => (
         <>
           <PageHero

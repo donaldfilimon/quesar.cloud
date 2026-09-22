@@ -11,6 +11,7 @@
  * Mount `usePageViewTelemetry()` once in the root component to record page
  * views on every route change.
  */
+import { staticSite } from "@/lib/static-site";
 import { useEffect } from "react";
 import { useRouterState } from "@tanstack/react-router";
 
@@ -24,6 +25,8 @@ export function optedOut(): boolean {
 }
 
 export function track(event: TelemetryEvent, path?: string): void {
+  // Static preview: there is no /api/telemetry to receive it.
+  if (staticSite) return;
   if (optedOut()) return;
   try {
     const payload = JSON.stringify({ event, path: path ?? window.location.pathname });

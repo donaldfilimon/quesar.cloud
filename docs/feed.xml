@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>MLAI Corporation — Lab Notes &amp; Research</title>
+    <link>https://quesar.cloud</link>
+    <description>Quesar is MLAI&apos;s infrastructure for persistent, adaptive AI — inspectable orchestration, provenance-aware memory, and compute that stays on machines you own.</description>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 22 Sep 2026 23:22:19 GMT</lastBuildDate>
+    <atom:link href="https://quesar.cloud/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>AI &amp; agent behavior</title>
+      <link>https://quesar.cloud/research/ai-overview</link>
+      <guid isPermaLink="true">https://quesar.cloud/research/ai-overview</guid>
+      <description>Understand how Abbey and ABI route requests, produce local responses, and expose bounded checks.</description>
+      <category>OVERVIEW</category>
+      <dc:creator>MLAI Research</dc:creator>
+      <pubDate>Tue, 01 Sep 2026 04:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>WDBX memory &amp; retrieval</title>
+      <link>https://quesar.cloud/research/wdbx-overview</link>
+      <guid isPermaLink="true">https://quesar.cloud/research/wdbx-overview</guid>
+      <description>Durable records, searchable vectors and inspectable retrieval for applications that need continuity.</description>
+      <category>OVERVIEW</category>
+      <dc:creator>MLAI Research</dc:creator>
+      <pubDate>Tue, 01 Sep 2026 04:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>SEA evidence selection</title>
+      <link>https://quesar.cloud/research/sea-overview</link>
+      <guid isPermaLink="true">https://quesar.cloud/research/sea-overview</guid>
+      <description>Select a bounded set of relevant records before assembling an assistant context.</description>
+      <category>OVERVIEW</category>
+      <dc:creator>MLAI Research</dc:creator>
+      <pubDate>Tue, 01 Sep 2026 04:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>GPU &amp; compute</title>
+      <link>https://quesar.cloud/research/gpu-overview</link>
+      <guid isPermaLink="true">https://quesar.cloud/research/gpu-overview</guid>
+      <description>Inspect native vector-operation support and explicit CPU fallback.</description>
+      <category>OVERVIEW</category>
+      <dc:creator>MLAI Research</dc:creator>
+      <pubDate>Tue, 01 Sep 2026 04:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>MCP integrations</title>
+      <link>https://quesar.cloud/research/mcp-overview</link>
+      <guid isPermaLink="true">https://quesar.cloud/research/mcp-overview</guid>
+      <description>Expose bounded ABI operations through a documented tool interface.</description>
+      <category>OVERVIEW</category>
+      <dc:creator>MLAI Research</dc:creator>
+      <pubDate>Tue, 01 Sep 2026 04:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>TUI &amp; operator tools</title>
+      <link>https://quesar.cloud/research/tui-overview</link>
+      <guid isPermaLink="true">https://quesar.cloud/research/tui-overview</guid>
+      <description>Inspect local runtime state and explore session-based agent interactions.</description>
+      <category>OVERVIEW</category>
+      <dc:creator>MLAI Research</dc:creator>
+      <pubDate>Tue, 01 Sep 2026 04:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>Evaluating Metal acceleration and CPU fallback</title>
+      <link>https://quesar.cloud/research/gpu-implementation-guide</link>
+      <guid isPermaLink="true">https://quesar.cloud/research/gpu-implementation-guide</guid>
+      <description>Inspect native vector-operation support and explicit CPU fallback.</description>
+      <category>IMPLEMENTATION GUIDE</category>
+      <dc:creator>MLAI Runtime Engineering</dc:creator>
+      <pubDate>Tue, 01 Sep 2026 04:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>Connecting an MCP client to ABI</title>
+      <link>https://quesar.cloud/research/mcp-implementation-guide</link>
+      <guid isPermaLink="true">https://quesar.cloud/research/mcp-implementation-guide</guid>
+      <description>Expose bounded ABI operations through a documented tool interface.</description>
+      <category>IMPLEMENTATION GUIDE</category>
+      <dc:creator>MLAI Runtime Engineering</dc:creator>
+      <pubDate>Tue, 01 Sep 2026 04:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>Using the local diagnostics dashboard and agent REPL</title>
+      <link>https://quesar.cloud/research/tui-implementation-guide</link>
+      <guid isPermaLink="true">https://quesar.cloud/research/tui-implementation-guide</guid>
+      <description>Inspect local runtime state and explore session-based agent interactions.</description>
+      <category>IMPLEMENTATION GUIDE</category>
+      <dc:creator>MLAI Runtime Engineering</dc:creator>
+      <pubDate>Tue, 01 Sep 2026 04:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>WDBX V2: Observable Memory, Multimodal Inputs, and Research Alignment</title>
+      <link>https://quesar.cloud/blog/wdbx-v2-release</link>
+      <guid isPermaLink="true">https://quesar.cloud/blog/wdbx-v2-release</guid>
+      <description>The second iteration of the WDBX runtime ships an observable pipeline: block-chain memory with temporal queries, multimodal input fusion, an async neural job queue, and a research-alignment telemetry layer that scores every turn against the constitution.</description>
+      <category>RELEASE</category>
+      <dc:creator>MLAI Research</dc:creator>
+      <pubDate>Tue, 09 Jun 2026 04:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>On Saying “I&apos;m Not Sure”</title>
+      <link>https://quesar.cloud/blog/on-saying-im-not-sure</link>
+      <guid isPermaLink="true">https://quesar.cloud/blog/on-saying-im-not-sure</guid>
+      <description>A note in Abbey&apos;s voice — the empathetic-polymath persona — on why an honest “I don&apos;t know” is one of the most useful things an agent can say.</description>
+      <category>FROM ABBEY</category>
+      <dc:creator>Abbey</dc:creator>
+      <pubDate>Mon, 08 Jun 2026 04:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>Inside the WDBX Hybrid Ranker: Four Factors, One Score</title>
+      <link>https://quesar.cloud/blog/inside-wdbx-hybrid-ranker</link>
+      <guid isPermaLink="true">https://quesar.cloud/blog/inside-wdbx-hybrid-ranker</guid>
+      <description>Semantic similarity is only the first of four factors. Here is the exact score WDBX uses to rank retrieval candidates — and why every factor is bounded to [0,1].</description>
+      <category>ENGINEERING</category>
+      <dc:creator>MLAI Research · WDBX Core</dc:creator>
+      <pubDate>Sat, 06 Jun 2026 04:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>How Sparse Evidence Attention Decides What the Model Sees</title>
+      <link>https://quesar.cloud/blog/what-the-model-sees-sea</link>
+      <guid isPermaLink="true">https://quesar.cloud/blog/what-the-model-sees-sea</guid>
+      <description>Before a model reasons, something must choose which records reach the context window. SEA scores eight criteria, then packs greedily under a hard token budget.</description>
+      <category>RESEARCH</category>
+      <dc:creator>MLAI Research · Abbey</dc:creator>
+      <pubDate>Thu, 04 Jun 2026 04:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>The Weights Behind Abbey, Aviva, and Abi</title>
+      <link>https://quesar.cloud/blog/weights-behind-the-personas</link>
+      <guid isPermaLink="true">https://quesar.cloud/blog/weights-behind-the-personas</guid>
+      <description>Persona routing is not a hidden model call. It is a normalized weight vector with hard policy overrides and an inspectable strategy decision.</description>
+      <category>SAFETY</category>
+      <dc:creator>MLAI Safety Engineering</dc:creator>
+      <pubDate>Tue, 02 Jun 2026 04:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>WDBX: A Weighted-Backtrace Memory Store for Traceable Retrieval</title>
+      <link>https://quesar.cloud/research/wdbx-weighted-backtrace-memory-store</link>
+      <guid isPermaLink="true">https://quesar.cloud/research/wdbx-weighted-backtrace-memory-store</guid>
+      <description>A technical note on durable storage, approximate vector search and inspectable ranking, with legacy and canonical episode paths distinguished.</description>
+      <category>CORE ARCHITECTURE</category>
+      <dc:creator>MLAI Research · WDBX Core</dc:creator>
+      <pubDate>Mon, 01 Jun 2026 04:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>Sparse Evidence Attention for Bounded Context Assembly</title>
+      <link>https://quesar.cloud/research/sparse-evidence-attention-context-assembly</link>
+      <guid isPermaLink="true">https://quesar.cloud/research/sparse-evidence-attention-context-assembly</guid>
+      <description>A source-backed account of eight-signal selection and bounded prompt assembly.</description>
+      <category>RESEARCH</category>
+      <dc:creator>MLAI Research · Abbey</dc:creator>
+      <pubDate>Mon, 01 Jun 2026 04:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>Multi-Persona Routing Under Uncertainty: Policy Weights and Request Classification</title>
+      <link>https://quesar.cloud/research/multi-persona-routing-policy-weights</link>
+      <guid isPermaLink="true">https://quesar.cloud/research/multi-persona-routing-policy-weights</guid>
+      <description>A corrected account of deterministic local profile routing and adaptive state in the SEA path.</description>
+      <category>ROUTING</category>
+      <dc:creator>MLAI Research · Agent Safety</dc:creator>
+      <pubDate>Mon, 01 Jun 2026 04:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>Designing AI Systems That Can Explain Their Last Move</title>
+      <link>https://quesar.cloud/blog/explainable-last-move</link>
+      <guid isPermaLink="true">https://quesar.cloud/blog/explainable-last-move</guid>
+      <description>A practical guide to capturing retrieval paths, policy checks, and operator decisions so teams can debug autonomous workflows after the fact.</description>
+      <category>FIELD NOTE</category>
+      <dc:creator>MLAI Engineering</dc:creator>
+      <pubDate>Thu, 21 May 2026 04:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>What We Measure Before Calling an Agent Production-Ready</title>
+      <link>https://quesar.cloud/blog/production-ready-agent-metrics</link>
+      <guid isPermaLink="true">https://quesar.cloud/blog/production-ready-agent-metrics</guid>
+      <description>Latency and accuracy are not enough. We track tool-boundary violations, source coverage, rollback paths, abstention quality, and human-review burden.</description>
+      <category>ENGINEERING</category>
+      <dc:creator>MLAI Safety Engineering</dc:creator>
+      <pubDate>Mon, 18 May 2026 04:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>From Vector Search to Weighted Backtrace Graphs</title>
+      <link>https://quesar.cloud/blog/vector-search-to-backtrace-graphs</link>
+      <guid isPermaLink="true">https://quesar.cloud/blog/vector-search-to-backtrace-graphs</guid>
+      <description>Why retrieval infrastructure needs relationship-aware context and why ranking alone is not sufficient for high-stakes answer generation.</description>
+      <category>RESEARCH</category>
+      <dc:creator>MLAI Research</dc:creator>
+      <pubDate>Tue, 12 May 2026 04:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>The Case for Separate Planning, Review, and Execution Agents</title>
+      <link>https://quesar.cloud/blog/separate-planning-review-execution</link>
+      <guid isPermaLink="true">https://quesar.cloud/blog/separate-planning-review-execution</guid>
+      <description>Role separation lets teams encode checks and balances into an AI workflow instead of relying on a single agent to police itself.</description>
+      <category>SAFETY</category>
+      <dc:creator>MLAI Safety Engineering</dc:creator>
+      <pubDate>Fri, 08 May 2026 04:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>WDBX Graph Weights for Traceable Neural Retrieval</title>
+      <link>https://quesar.cloud/research/wdbx-graph-weights-traceable-retrieval</link>
+      <guid isPermaLink="true">https://quesar.cloud/research/wdbx-graph-weights-traceable-retrieval</guid>
+      <description>Inspect how a candidate ranking can expose the factors that influenced it.</description>
+      <category>CORE ARCHITECTURE</category>
+      <dc:creator>MLAI Research · WDBX Core</dc:creator>
+      <pubDate>Fri, 01 May 2026 04:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>Making AI Control Surfaces Feel Calm Under Pressure</title>
+      <link>https://quesar.cloud/blog/calm-control-surfaces</link>
+      <guid isPermaLink="true">https://quesar.cloud/blog/calm-control-surfaces</guid>
+      <description>Interface details that prevent overload: progressive disclosure, confidence bands, decision diffs, and emergency stop affordances.</description>
+      <category>PRODUCT</category>
+      <dc:creator>MLAI Product</dc:creator>
+      <pubDate>Wed, 29 Apr 2026 04:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>What Incident Reviews Need From AI Logs</title>
+      <link>https://quesar.cloud/blog/incident-reviews-from-ai-logs</link>
+      <guid isPermaLink="true">https://quesar.cloud/blog/incident-reviews-from-ai-logs</guid>
+      <description>How to structure traces so teams can reconstruct context, model output, policy decisions, tool calls, and human overrides after a production event.</description>
+      <category>OPERATIONS</category>
+      <dc:creator>MLAI Operations</dc:creator>
+      <pubDate>Sat, 18 Apr 2026 04:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>Private AI Does Not Mean Invisible AI</title>
+      <link>https://quesar.cloud/blog/private-ai-is-not-invisible-ai</link>
+      <guid isPermaLink="true">https://quesar.cloud/blog/private-ai-is-not-invisible-ai</guid>
+      <description>Offline and VPC deployments still need measurable controls: local audit trails, release gates, repeatable evals, and operator-visible confidence signals.</description>
+      <category>DEPLOYMENT</category>
+      <dc:creator>MLAI Engineering</dc:creator>
+      <pubDate>Sat, 11 Apr 2026 04:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>Policy-Locked Tool Use in Multi-Agent Systems</title>
+      <link>https://quesar.cloud/research/policy-locked-tool-use-multi-agent</link>
+      <guid isPermaLink="true">https://quesar.cloud/research/policy-locked-tool-use-multi-agent</guid>
+      <description>A proposed evaluation method for explicit authorization boundaries in agent workflows.</description>
+      <category>SAFETY</category>
+      <dc:creator>MLAI Safety Engineering</dc:creator>
+      <pubDate>Wed, 01 Apr 2026 04:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>Latency Budgets for Real-Time AI Orchestration</title>
+      <link>https://quesar.cloud/research/latency-budgets-real-time-orchestration</link>
+      <guid isPermaLink="true">https://quesar.cloud/research/latency-budgets-real-time-orchestration</guid>
+      <description>A proposed method for measuring the stages that determine interactive response time.</description>
+      <category>ENGINEERING</category>
+      <dc:creator>MLAI Runtime Engineering</dc:creator>
+      <pubDate>Sun, 01 Mar 2026 05:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>Neural Backtracking: What a Block Chain Buys an AI Memory</title>
+      <link>https://quesar.cloud/blog/neural-backtracking</link>
+      <guid isPermaLink="true">https://quesar.cloud/blog/neural-backtracking</guid>
+      <description>Hallucination debugging is archaeology. WDBX chains every interaction block to its parent so you can walk back to the exact moment a model drifted — and prove nobody edited the record.</description>
+      <category>FIELD NOTE</category>
+      <dc:creator>MLAI Research · WDBX Core</dc:creator>
+      <pubDate>Wed, 18 Feb 2026 05:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>Backtrace Confidence Signals for Hallucination Reduction</title>
+      <link>https://quesar.cloud/research/backtrace-confidence-signals-hallucination</link>
+      <guid isPermaLink="true">https://quesar.cloud/research/backtrace-confidence-signals-hallucination</guid>
+      <description>A proposed study of whether visible evidence helps reviewers detect unsupported answers.</description>
+      <category>RESEARCH</category>
+      <dc:creator>MLAI Research</dc:creator>
+      <pubDate>Sun, 01 Feb 2026 05:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>Surviving Writergate: Migrating ABI to Zig 0.16</title>
+      <link>https://quesar.cloud/blog/zig-016-migration</link>
+      <guid isPermaLink="true">https://quesar.cloud/blog/zig-016-migration</guid>
+      <description>Zig 0.16 rebuilt std.io around vtable-based Reader and Writer interfaces. Ninety-five files later, here&apos;s what the migration actually looked like — and the patterns we standardized on.</description>
+      <category>ENGINEERING</category>
+      <dc:creator>MLAI Runtime Engineering</dc:creator>
+      <pubDate>Thu, 08 Jan 2026 05:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>Vector Index Maintenance Under Continuous Ingestion</title>
+      <link>https://quesar.cloud/research/vector-index-maintenance-continuous-ingestion</link>
+      <guid isPermaLink="true">https://quesar.cloud/research/vector-index-maintenance-continuous-ingestion</guid>
+      <description>A source-based guide to persistence and index maintenance boundaries.</description>
+      <category>SCALABILITY</category>
+      <dc:creator>MLAI Runtime Engineering · WDBX Core</dc:creator>
+      <pubDate>Thu, 01 Jan 2026 05:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>Human Approval Gates That Operators Actually Use</title>
+      <link>https://quesar.cloud/research/human-approval-gates-operators-use</link>
+      <guid isPermaLink="true">https://quesar.cloud/research/human-approval-gates-operators-use</guid>
+      <description>A proposed usability study for understandable approval and refusal flows.</description>
+      <category>ETHICS &amp; SAFETY</category>
+      <dc:creator>MLAI Safety Engineering · Product</dc:creator>
+      <pubDate>Mon, 01 Dec 2025 05:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>Why WDBX Is Written in Zig</title>
+      <link>https://quesar.cloud/blog/why-zig</link>
+      <guid isPermaLink="true">https://quesar.cloud/blog/why-zig</guid>
+      <description>Garbage collection pauses are invisible in the mean and fatal in the tail. WDBX is Zig because a real-time vector database is a p99 product, not a p50 product.</description>
+      <category>FIELD NOTE</category>
+      <dc:creator>MLAI Runtime Engineering</dc:creator>
+      <pubDate>Sun, 30 Nov 2025 05:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>Chunk Provenance in Long-Context Retrieval Systems</title>
+      <link>https://quesar.cloud/research/chunk-provenance-long-context-retrieval</link>
+      <guid isPermaLink="true">https://quesar.cloud/research/chunk-provenance-long-context-retrieval</guid>
+      <description>A proposed application pattern for preserving source references through document retrieval.</description>
+      <category>CORE ARCHITECTURE</category>
+      <dc:creator>MLAI Research · WDBX Core</dc:creator>
+      <pubDate>Sat, 01 Nov 2025 04:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>Offline-First AI Workflows for Sensitive Data</title>
+      <link>https://quesar.cloud/research/offline-first-ai-sensitive-data</link>
+      <guid isPermaLink="true">https://quesar.cloud/research/offline-first-ai-sensitive-data</guid>
+      <description>A bounded description of local deterministic processing and its evaluation uses.</description>
+      <category>ENGINEERING</category>
+      <dc:creator>MLAI Runtime Engineering</dc:creator>
+      <pubDate>Wed, 01 Oct 2025 04:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>Prompt Injection Drills for Agentic Systems</title>
+      <link>https://quesar.cloud/research/prompt-injection-drills-agentic-systems</link>
+      <guid isPermaLink="true">https://quesar.cloud/research/prompt-injection-drills-agentic-systems</guid>
+      <description>A proposed adversarial test set for agent boundaries and failure handling.</description>
+      <category>SAFETY</category>
+      <dc:creator>MLAI Safety Engineering</dc:creator>
+      <pubDate>Mon, 01 Sep 2025 04:00:00 GMT</pubDate>
+    </item>
+  </channel>
+</rss>

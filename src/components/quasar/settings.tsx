@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { getBaseUrl, hydrateOrigin, listSites, setBaseUrl, storedOrigin } from "@/lib/quasar/api";
-import { getQuasarDefaultOrigin } from "@/lib/quasar/config";
+import { quasarDefaultOrigin } from "@/lib/quasar/config";
 import { DEFAULT_ORIGIN, ORIGIN_KEY } from "@/lib/quasar";
 import { probeSidecar } from "@/lib/quasar/sidecars";
 import { cn } from "@/lib/utils";
@@ -42,7 +42,7 @@ export function QuasarSettings() {
         if (!cancelled) setReady(true);
       },
     );
-    getQuasarDefaultOrigin().then(
+    quasarDefaultOrigin().then(
       (value) => {
         if (!cancelled) setDeploymentDefault(value);
       },

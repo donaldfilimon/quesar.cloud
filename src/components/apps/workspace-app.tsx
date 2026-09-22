@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { askPersona } from "@/lib/ai";
+import { askPersonaFromClient } from "@/lib/ai";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { readStore, writeStore } from "@/lib/local-store";
 
@@ -79,7 +79,7 @@ export function WorkspaceApp() {
     setStatus("asking");
     setAnswer("");
     try {
-      const result = await askPersona({
+      const result = await askPersonaFromClient({
         data: {
           persona: "abbey",
           prompt: `Document titled ${title}:\n${body.slice(0, 800)}\n\nOperator question: ${question}`,

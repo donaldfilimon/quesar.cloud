@@ -13,6 +13,10 @@ import { getTurnstileConfig, INQUIRY_LIMITS, sendInquiry, TOPICS, type Turnstile
 import { readStore, writeStore } from "@/lib/local-store";
 import { pageHead } from "@/lib/seo";
 import { track } from "@/lib/telemetry";
+import { staticSite } from "@/lib/static-site";
+
+/** Static preview has no server: inquiries go out as an email instead. */
+const INQUIRY_EMAIL = "partnerships@mlai-corp.com";
 
 export const Route = createFileRoute("/contact")({
   head: () =>
@@ -53,6 +57,10 @@ function ContactPage() {
   useEffect(() => {
     setSaved(readStore<Inquiry[]>(KEY, []));
     let cancelled = false;
+    if (staticSite) {
+      setTurnstile({ state: "off" });
+      return;
+    }
     getTurnstileConfig()
       .then((config) => {
         if (!cancelled) setTurnstile(config);
@@ -85,6 +93,18 @@ function ContactPage() {
     setStatus("saving");
     setError("");
     track("inquiry_submit");
+    if (staticSite) {
+      const subject = encodeURIComponent(`[${topic}] Inquiry from ${name.trim() || "the Quesar site"}`);
+      const body = encodeURIComponent(`${trimmed}\n\n— ${name.trim()} <${email.trim()}>`);
+      window.location.href = `mailto:${INQUIRY_EMAIL}?subject=${subject}&body=${body}`;
+      const draft: Inquiry = { id: crypto.randomUUID(), name: name.trim(), email: email.trim(), topic, message: trimmed, created: Date.now() };
+      const kept = [draft, ...saved].slice(0, 20);
+      writeStore(KEY, kept);
+      setSaved(kept);
+      setStatus("done");
+      toast.success(`Opening your email app to send this to ${INQUIRY_EMAIL}.`);
+      return;
+    }
     let result: Awaited<ReturnType<typeof sendInquiry>>;
     try {
       result = await sendInquiry({ data: { name, email, company: "", topic, message: trimmed, turnstileToken } });
@@ -121,7 +141,11 @@ function ContactPage() {
       <PageHero
         eyebrow="Contact"
         title="Write here. Stay here."
-        lede="Your inquiry is sent to MLAI and stored with this site; if you are signed in, it is linked to your account. A copy of what you sent stays on this device as a receipt. For architecture questions, the pages themselves are the public path."
+        lede={
+          staticSite
+            ? `This static preview has no server, so sending opens your email app addressed to ${INQUIRY_EMAIL}. A copy of what you wrote stays on this device as a receipt. For architecture questions, the pages themselves are the public path.`
+            : "Your inquiry is sent to MLAI and stored with this site; if you are signed in, it is linked to your account. A copy of what you sent stays on this device as a receipt. For architecture questions, the pages themselves are the public path."
+        }
       />
       <Section>
         <div className="grid gap-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)]">

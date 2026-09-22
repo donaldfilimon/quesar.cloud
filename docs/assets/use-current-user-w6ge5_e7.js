@@ -1,0 +1,1 @@
+import"./link-CNg0e4ZH.js";import"./client-HmbBsfvO.js";function e(){return{user:null,isPending:!1}}function t(){return e().user}export{e as n,t};

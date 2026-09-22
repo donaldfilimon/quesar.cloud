@@ -24,7 +24,7 @@ type Reply = {
 
 function DashboardPage() {
   return (
-    <RequireSession>
+    <RequireSession feature="The desk">
       {(user) => <Desk name={user.displayName ?? user.primaryEmail ?? "operator"} />}
     </RequireSession>
   );

@@ -11,6 +11,8 @@ import {
 import { GROK_PROVIDERS, authEnabled, signIn, signOut } from "./client";
 import { hasGateSessionMarker } from "./gate-session-marker";
 import { resolveSignInGateState } from "./sign-in-gate";
+import { ServerOnlyNotice } from "@/components/site/server-only-notice";
+import { staticSite } from "@/lib/static-site";
 import { useCurrentUser, useCurrentUserState, type AppUser } from "./use-current-user";
 
 const subscribeToNothing = () => () => {};
@@ -74,8 +76,15 @@ export function RedirectToSignIn({ to = SIGN_IN_PATH }: { to?: string }) {
 }
 
 /** Wait out session load, then render with the signed-in user or send them to login. */
-export function RequireSession({ children }: { children: (user: AppUser) => ReactNode }) {
+export function RequireSession({
+  children,
+  feature = "This page",
+}: {
+  children: (user: AppUser) => ReactNode;
+  feature?: string;
+}) {
   const { user, isPending } = useCurrentUserState();
+  if (staticSite) return <ServerOnlyNotice feature={feature} className="my-24" />;
   if (isPending) {
     return <div className="mx-auto max-w-3xl px-4 py-24 text-sm text-fg-muted">Loading session…</div>;
   }

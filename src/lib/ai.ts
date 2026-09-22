@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { authMiddleware } from "@/lib/auth/middleware";
+import { staticSite } from "@/lib/static-site";
 
 const input = z.object({
   prompt: z.string().trim().min(1).max(1200),
@@ -38,3 +39,20 @@ export const askPersona = createServerFn({ method: "POST" })
     }
     return { ok: true as const, text: result.text };
   });
+
+type AskInput = { data: { prompt: string; persona?: "abbey" | "aviva" | "abi" } };
+type AskResult = { ok: true; text: string } | { ok: false; error: string };
+
+/**
+ * What components call. The static GitHub Pages build has no server, so it
+ * answers honestly instead of hitting a server function that does not exist.
+ */
+export function askPersonaFromClient(input: AskInput): Promise<AskResult> {
+  if (staticSite) {
+    return Promise.resolve({
+      ok: false,
+      error: "The live model runs on the server deployment; this is the static preview, so no model call was made.",
+    });
+  }
+  return askPersona(input);
+}

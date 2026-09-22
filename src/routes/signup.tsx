@@ -1,4 +1,6 @@
 import { createFileRoute, Navigate } from "@tanstack/react-router";
+import { ServerOnlyNotice } from "@/components/site/server-only-notice";
+import { staticSite } from "@/lib/static-site";
 
 export const Route = createFileRoute("/signup")({
   head: () => ({
@@ -8,6 +10,7 @@ export const Route = createFileRoute("/signup")({
     ],
   }),
   component: function Signup() {
+    if (staticSite) return <ServerOnlyNotice feature="Sign-up" className="my-24" />;
     return <Navigate to="/login" search={{ next: "/console" }} />;
   },
 });

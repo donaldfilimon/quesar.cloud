@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { loadGithub, type ReadmeCard } from "@/lib/github";
+import { loadGithubData, type ReadmeCard } from "@/lib/github";
 import { pathForRepo } from "@/lib/catalog";
 
 const FALLBACK: ReadmeCard[] = [
@@ -48,7 +48,7 @@ export function GithubStatusLine() {
 
   useEffect(() => {
     let cancelled = false;
-    void loadGithub().then((payload) => {
+    void loadGithubData().then((payload) => {
       if (cancelled) return;
       setWhen(relFetched(payload.fetchedAt));
       setStatus(payload.readmes.length ? "live" : "local");
@@ -77,7 +77,7 @@ export function SourcePanel() {
 
   useEffect(() => {
     let cancelled = false;
-    void loadGithub().then((payload) => {
+    void loadGithubData().then((payload) => {
       if (cancelled) return;
       setFetchedAt(payload.fetchedAt);
       if (payload.readmes.length) {
