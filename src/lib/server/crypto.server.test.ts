@@ -6,6 +6,7 @@ import {
   encryptionConfigured,
   open,
   openWithKey,
+  openWithRotation,
   parseKey,
   seal,
   sealWithKey,
@@ -16,6 +17,7 @@ const keyB = randomBytes(32);
 
 afterEach(() => {
   delete process.env.APP_ENCRYPTION_KEY;
+  delete process.env.APP_ENCRYPTION_KEY_PREVIOUS;
 });
 
 describe("crypto.server", () => {
@@ -65,5 +67,15 @@ describe("crypto.server", () => {
     process.env.APP_ENCRYPTION_KEY = keyA.toString("base64");
     expect(encryptionConfigured()).toBe(true);
     expect(open(seal("via env", "aad"), "aad")).toBe("via env");
+  });
+
+  it("opens values sealed under the previous key after rotation, and flags them", () => {
+    const old = sealWithKey(keyA, "legacy", "aad");
+    process.env.APP_ENCRYPTION_KEY = keyB.toString("base64");
+    expect(() => open(old, "aad")).toThrow(SealedDataError);
+    process.env.APP_ENCRYPTION_KEY_PREVIOUS = keyA.toString("base64");
+    expect(openWithRotation(old, "aad")).toEqual({ plaintext: "legacy", rotated: true });
+    const fresh = seal("new", "aad");
+    expect(openWithRotation(fresh, "aad")).toEqual({ plaintext: "new", rotated: false });
   });
 });

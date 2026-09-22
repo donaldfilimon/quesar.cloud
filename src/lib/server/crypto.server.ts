@@ -8,6 +8,10 @@
  * Key: 32 bytes, given as base64/base64url (44/43 chars) or hex (64 chars).
  * Generate one with `openssl rand -base64 32`.
  *
+ * Rotation: set the new key as `APP_ENCRYPTION_KEY` and the old one as
+ * `APP_ENCRYPTION_KEY_PREVIOUS`. `open` tries the active key, then the previous
+ * one, and reports `rotated: true` via `openWithRotation` so callers can re-seal.
+ *
  * Fail closed: without a valid key, `seal` and `open` throw
  * `EncryptionUnavailableError`. Callers must refuse the feature, never fall
  * back to plaintext.
@@ -85,9 +89,34 @@ export function seal(plaintext: string, aad: string): string {
   return sealWithKey(activeKey(), plaintext, aad);
 }
 
+function previousKey(): Buffer | null {
+  const raw = env("APP_ENCRYPTION_KEY_PREVIOUS");
+  if (!raw) return null;
+  try {
+    return parseKey(raw);
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Open with the active key, falling back to `APP_ENCRYPTION_KEY_PREVIOUS`.
+ * `rotated` is true when only the previous key worked: re-seal and store.
+ */
+export function openWithRotation(envelope: string, aad: string): { plaintext: string; rotated: boolean } {
+  const active = activeKey();
+  try {
+    return { plaintext: openWithKey(active, envelope, aad), rotated: false };
+  } catch (error) {
+    const previous = previousKey();
+    if (!previous || !(error instanceof SealedDataError)) throw error;
+    return { plaintext: openWithKey(previous, envelope, aad), rotated: true };
+  }
+}
+
 /** Open a sealed value; throws `SealedDataError` on tamper or AAD mismatch. */
 export function open(envelope: string, aad: string): string {
-  return openWithKey(activeKey(), envelope, aad);
+  return openWithRotation(envelope, aad).plaintext;
 }
 
 /** Keyed, non-reversible identifier (replaces mlai's AUDIT_SUBJECT_PEPPER hash). */
