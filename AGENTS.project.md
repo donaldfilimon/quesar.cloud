@@ -27,3 +27,38 @@ These are Donald's standing instructions. Grok's `AGENTS.md` loads this file wit
     accident.
 - Grok exports push to `main`. Always `git fetch` before pushing, and never
   force-push.
+
+## Merged from mlai (2026-09-22): deliberate deviations and runtime config
+
+Spec: `docs/superpowers/specs/2026-09-22-mlai-merge-design.md`. Checklist: `docs/merge/gap-matrix.md`.
+
+- **Google Drive and Microsoft SharePoint/OneDrive use our own OAuth connectors**
+  (`/api/workspace/*`). This is Donald's explicit override of the `app-data` rule.
+  These are *data connectors*, not sign-in methods: sign-in stays limited to the
+  broker (Google, X) plus email/password. Don't "fix" them into app-data.
+- **Admin** = `ADMIN_EMAILS` allowlist **plus** a broker-linked account
+  (`grok-google`/`grok-x`). An allowlisted email/password account is refused,
+  because sign-up is open and unverified (`src/lib/server/admin.server.ts`, with a
+  test proving the refusal).
+- **Every app table is user-scoped by the Better Auth `user.id`.** WorkOS,
+  organisations and MFA are retired.
+- **Data at rest**: audits and workspace refresh tokens are sealed with
+  AES-256-GCM under `APP_ENCRYPTION_KEY` (`src/lib/server/crypto.server.ts`).
+  Without the key those features refuse; they never store plaintext.
+- **One LLM interface**: `src/lib/server/llm` (xAI or the Cloudflare AI
+  Gateway → Gemini). No provider means an honest "not configured" state.
+- **Rate limits are database-backed** (`rate_limits` table), because serverless
+  instances share no memory.
+
+| Env var | Feature | Missing means |
+|---|---|---|
+| `XAI_API_KEY` / `CLOUDFLARE_AI_GATEWAY_URL`+`_TOKEN`+`_ID` / `LLM_PROVIDER` | model calls | "model not configured"; desk answers from the catalog |
+| `APP_ENCRYPTION_KEY` (32 bytes, `openssl rand -base64 32`) | audits, workspace tokens | chat audits and workspace connect disabled |
+| `ADMIN_EMAILS` | `/admin` | nobody is admin |
+| `GOOGLE_OAUTH_CLIENT_ID`/`_SECRET`, `MICROSOFT_OAUTH_CLIENT_ID`/`_SECRET`/`_TENANT` | workspace sources | connect buttons disabled |
+| `STRIPE_PAYMENT_LINK`, `BILLING_PROVIDER` | profile billing | "billing not configured" |
+| `TURNSTILE_SITE_KEY`/`_SECRET`/`_HOSTNAMES` | contact form bot check | form works without the challenge, rate-limited |
+| `QUASAR_SERVICE_ORIGIN` | Quasar screens default origin | user sets the origin in `/quasar/settings` |
+| `DATABASE_URL` | persistence | in-memory PGLite; **data does not survive a restart or serverless instance** |
+
+Tests: `npm run test:app` (vitest; app code). `npm test` is Grok's template suite.

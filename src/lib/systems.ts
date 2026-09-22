@@ -77,34 +77,24 @@ function localReply(desk: DeskId, hits: Hit[]) {
 export const askDesk = createServerFn({ method: "POST" })
   .middleware([authMiddleware])
   .validator((value: unknown) => input.parse(value))
-  .handler(async ({ data }) => {
+  .handler(async ({ data, context }) => {
     const hits = catalogHits(data.prompt);
-    const apiKey = process.env.XAI_API_KEY;
-    if (!apiKey) {
-      return { ok: true as const, mode: "local" as const, desk: data.desk, text: localReply(data.desk, hits), hits };
+    const local = { ok: true as const, mode: "local" as const, desk: data.desk, text: localReply(data.desk, hits), hits };
+    const { complete, status } = await import("@/lib/server/llm");
+    // Unconfigured: the desk answers from the catalog and says so (localReply names it).
+    if (!status().configured) return local;
+    const { hit, LIMITS } = await import("@/lib/server/rate-limit.server");
+    if (!(await hit("llm", context.userId, LIMITS.llm)).allowed) {
+      return { ...local, text: `Rate limit reached for model calls. ${local.text}` };
     }
-    const context = hits.map((hit) => `${hit.title} (${hit.href}): ${hit.excerpt}`).join("\n");
-    const res = await fetch("https://api.x.ai/v1/chat/completions", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },
-      body: JSON.stringify({
-        model: "grok-4.5",
-        max_tokens: 320,
-        messages: [
-          { role: "system", content: SYSTEM[data.desk] },
-          { role: "user", content: `Catalog hits:\n${context}\n\nOperator: ${data.prompt}` },
-        ],
-      }),
+    const catalog = hits.map((item) => `${item.title} (${item.href}): ${item.excerpt}`).join("\n");
+    const result = await complete({
+      maxTokens: 320,
+      messages: [
+        { role: "system", content: SYSTEM[data.desk] },
+        { role: "user", content: `Catalog hits:\n${catalog}\n\nOperator: ${data.prompt}` },
+      ],
     });
-    if (!res.ok) {
-      return { ok: true as const, mode: "local" as const, desk: data.desk, text: localReply(data.desk, hits), hits };
-    }
-    const body = (await res.json()) as { choices?: { message?: { content?: string } }[] };
-    return {
-      ok: true as const,
-      mode: "model" as const,
-      desk: data.desk,
-      text: body.choices?.[0]?.message?.content ?? localReply(data.desk, hits),
-      hits,
-    };
+    if (!result.ok) return { ...local, text: `The model call failed (${result.message}). ${local.text}` };
+    return { ok: true as const, mode: "model" as const, desk: data.desk, text: result.text, hits };
   });
