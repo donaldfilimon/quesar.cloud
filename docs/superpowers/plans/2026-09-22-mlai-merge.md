@@ -16,21 +16,21 @@
 - [x] Write the spec, this plan, and the gap matrix.
 
 ## Phase 1: foundations (sequential, main checkout)
-1. [ ] `vitest` dev dependency plus a `test:app` script (`vitest run`); config includes `src/**/*.test.ts(x)` but excludes the Grok template tests that `npm test` already runs.
-2. [ ] `src/lib/server/config.server.ts`: zod-parsed optional env, with `configured(feature)` helpers covering `llm`, `encryption`, `admin`, `google`, `microsoft`, `billing`, `turnstile` and `quasar`.
-3. [ ] `src/lib/server/crypto.server.ts`: AES-256-GCM `seal`/`open` with the envelope `v1.<iv>.<ct>.<tag>` (base64url), plus an HMAC `subjectHash`. Tests: round trip, tamper rejection, wrong key, missing key rejected.
-4. [ ] Migrations `0003_inquiries.sql`, `0004_telemetry.sql`, `0005_console_audits.sql` (`chat_consents`, `conversation_audits`, `audit_access_events`), `0006_workspace_connections.sql` and `0007_rate_limits.sql`. Port the columns from mlai `src/lib/server/db.ts`, with every row owned by the Better Auth `user.id`.
-5. [ ] `src/lib/server/admin.server.ts`: `isAdminUser(user, accounts)` (pure) and `requireAdmin` middleware. Admin requires the allowlist **and** (`emailVerified` or an account with provider `grok-google`/`grok-x`). Tests: an allowlisted email/password account is rejected; a verified broker account is accepted; a non-allowlisted account is rejected.
-6. [ ] `src/lib/server/rate-limit.server.ts`: a fixed window stored in the `rate_limits` table. Tests use a PGLite instance.
-7. [ ] `src/lib/server/llm/`:
+1. [x] `vitest` dev dependency plus a `test:app` script (`vitest run`); config includes `src/**/*.test.ts(x)` but excludes the Grok template tests that `npm test` already runs.
+2. [x] `src/lib/server/config.server.ts`: zod-parsed optional env, with `configured(feature)` helpers covering `llm`, `encryption`, `admin`, `google`, `microsoft`, `billing`, `turnstile` and `quasar`.
+3. [x] `src/lib/server/crypto.server.ts`: AES-256-GCM `seal`/`open` with the envelope `v1.<iv>.<ct>.<tag>` (base64url), plus an HMAC `subjectHash`. Tests: round trip, tamper rejection, wrong key, missing key rejected.
+4. [x] Migrations `0003_inquiries.sql`, `0004_telemetry.sql`, `0005_console_audits.sql` (`chat_consents`, `conversation_audits`, `audit_access_events`), `0006_workspace_connections.sql` and `0007_rate_limits.sql`. Port the columns from mlai `src/lib/server/db.ts`, with every row owned by the Better Auth `user.id`.
+5. [x] `src/lib/server/admin.server.ts`: `isAdminUser(user, accounts)` (pure) and `requireAdmin` middleware. Admin requires the allowlist **and** (`emailVerified` or an account with provider `grok-google`/`grok-x`). Tests: an allowlisted email/password account is rejected; a verified broker account is accepted; a non-allowlisted account is rejected.
+6. [x] `src/lib/server/rate-limit.server.ts`: a fixed window stored in the `rate_limits` table. Tests use a PGLite instance.
+7. [x] `src/lib/server/llm/`:
    - `types.ts` and `index.ts` with `complete()` and `status()`
    - `xai.ts`, lifted from `src/lib/ai.ts`
    - `gemini-gateway.ts`, ported from mlai `src/lib/server/llm.ts`
 
    Rewire `askPersona` and `askDesk`. Tests cover adapter selection and the not-configured state using a stubbed `fetch`.
-8. [ ] Install the Phase 2 dependencies: `katex`, `@types/katex`, `@tensorflow/tfjs`, `@tensorflow-models/posenet`, and `framer-motion` only if the ported demos import it.
-9. [ ] `AGENTS.project.md`: record the deviations (own OAuth connectors, admin model, user-scoped rows), the env table, and the test command.
-10. [ ] Commit and push after the gates are green.
+8. [x] Install the Phase 2 dependencies: `katex`, `@types/katex`, `@tensorflow/tfjs`, `@tensorflow-models/posenet`, and `framer-motion` only if the ported demos import it.
+9. [x] `AGENTS.project.md`: record the deviations (own OAuth connectors, admin model, user-scoped rows), the env table, and the test command.
+10. [x] Commit and push after the gates are green.
 
 ## Phase 2: workstreams (parallel subagents, `isolation: worktree`)
 Rules every implementer gets:

@@ -175,6 +175,14 @@ export default defineConfig(({ command, isPreview }) => ({
             // manifest + head-tag middleware). Nitro v3 defaults serverDir to
             // false, so removing this silently unwires /?install=1 on deploys.
             serverDir: "./server",
+            // Vercel cron: expire conversation audits past their retention.
+            // Vercel sends GET with `Authorization: Bearer $CRON_SECRET`; the
+            // route answers 503 until CRON_SECRET is set.
+            vercel: {
+              config: {
+                crons: [{ path: "/api/cron/audits-expire", schedule: "17 3 * * *" }],
+              },
+            },
           }),
         ]
       : []),

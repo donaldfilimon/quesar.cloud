@@ -54,6 +54,8 @@ Spec: `docs/superpowers/specs/2026-09-22-mlai-merge-design.md`. Checklist: `docs
 |---|---|---|
 | `XAI_API_KEY` / `CLOUDFLARE_AI_GATEWAY_URL`+`_TOKEN`+`_ID` / `LLM_PROVIDER` | model calls | "model not configured"; desk answers from the catalog |
 | `APP_ENCRYPTION_KEY` (32 bytes, `openssl rand -base64 32`) | audits, workspace tokens | chat audits and workspace connect disabled |
+| `APP_ENCRYPTION_KEY_PREVIOUS` | key rotation | values sealed under the old key stop opening; connectors show "reconnect" |
+| `CRON_SECRET` | daily audit expiry (`/api/cron/audits-expire`, scheduled in `vite.config.ts` → Vercel `crons`) | the job answers 503; expired audits are not deleted |
 | `ADMIN_EMAILS` | `/admin` | nobody is admin |
 | `GOOGLE_OAUTH_CLIENT_ID`/`_SECRET`, `MICROSOFT_OAUTH_CLIENT_ID`/`_SECRET`/`_TENANT` | workspace sources | connect buttons disabled |
 | `STRIPE_PAYMENT_LINK`, `BILLING_PROVIDER` | profile billing | "billing not configured" |
