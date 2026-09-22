@@ -1,28 +1,62 @@
-import { Link, type ErrorComponentProps } from "@tanstack/react-router";
-import { TriangleAlert } from "lucide-react";
+import { Link, useRouter, type ErrorComponentProps } from "@tanstack/react-router";
+import { RotateCcw, TriangleAlert } from "lucide-react";
+import { useEffect } from "react";
 
 const FALLBACK_MESSAGE = "An unexpected error occurred. Try reloading the page.";
 
+/** Only surfaced in development: a production error message can carry server detail. */
 function errorMessage(error: unknown): string {
   if (error instanceof Error && error.message) return error.message;
   if (typeof error === "string" && error) return error;
   return FALLBACK_MESSAGE;
 }
 
-export function AppErrorComponent({ error }: ErrorComponentProps) {
+/**
+ * Route error boundary (ported from mlai app/error.tsx). Renders inside the
+ * site shell, so navigation still works. Retry re-runs the route's loaders
+ * and re-renders it.
+ */
+export function AppErrorComponent({ error, reset }: ErrorComponentProps) {
+  const router = useRouter();
+  useEffect(() => {
+    // Local debugging only; telemetry is event-allowlisted and never ships error payloads.
+    console.error(error);
+  }, [error]);
   return (
     <main
-      className={
-        "flex min-h-screen flex-col items-center justify-center gap-3 px-6 text-center " +
-        "bg-zinc-50 text-zinc-900 dark:bg-zinc-950 dark:text-zinc-50"
-      }
+      role="alert"
+      aria-labelledby="route-error-heading"
+      className="mx-auto flex min-h-[60vh] max-w-xl flex-col justify-center px-6 py-24"
     >
-      <span className="text-red-500" aria-hidden="true">
-        <TriangleAlert className="size-10" strokeWidth={2} />
-      </span>
-      <h1 className="text-lg font-semibold">Something went wrong</h1>
-      <p className="max-w-md text-sm break-words text-zinc-500 dark:text-zinc-400">
-        {errorMessage(error)}
+      <p className="flex items-center gap-2 font-mono text-[0.68rem] tracking-[0.16em] text-accent uppercase">
+        <TriangleAlert className="size-3.5" aria-hidden="true" /> 500: something failed
+      </p>
+      <h1 id="route-error-heading" className="mt-3 font-display text-4xl tracking-tight">
+        This page hit an unexpected error.
+      </h1>
+      <p className="mt-4 text-sm leading-relaxed text-fg-muted">
+        The rest of the site is fine; this route failed to render. Retry it, or go back to solid ground.
+      </p>
+      {import.meta.env.DEV ? (
+        <p className="mt-3 font-mono text-xs break-words text-fg-subtle">{errorMessage(error)}</p>
+      ) : null}
+      <p className="mt-8 flex flex-wrap items-center gap-4 text-sm">
+        <button
+          type="button"
+          onClick={() => {
+            reset();
+            void router.invalidate();
+          }}
+          className="inline-flex h-10 items-center gap-2 rounded-md bg-fg px-4 font-medium text-bg"
+        >
+          <RotateCcw className="size-3.5" aria-hidden="true" /> Try again
+        </button>
+        <Link to="/" className="text-accent">
+          Home
+        </Link>
+        <Link to="/contact" className="text-accent">
+          Report it
+        </Link>
       </p>
     </main>
   );

@@ -1,5 +1,6 @@
 import { createFileRoute, Outlet, useChildMatches, useNavigate } from "@tanstack/react-router";
 import { JourneyRail, PageClose, PageHero, RouteFrame, Section } from "@/components/site";
+import { AdminLink } from "@/components/console/admin-link";
 import { AuditsPanel } from "@/components/console/audits-panel";
 import { ChatPanel } from "@/components/console/chat-panel";
 import { NotesPanel } from "@/components/console/notes-panel";
@@ -67,6 +68,7 @@ function ConsoleTabs() {
             />
             <JourneyRail current="console" />
             <Section>
+              <AdminLink />
               <Tabs value={tab} onValueChange={(value) => selectTab(parseTab(value) ?? "notes")}>
                 <TabsList aria-label="Console sections" className="mb-8 px-0">
                   <TabsTrigger value="notes">Notes</TabsTrigger>

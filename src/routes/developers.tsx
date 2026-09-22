@@ -86,7 +86,7 @@ function DevelopersPage() {
           { to: "/skill-creator", label: "skill-creator" },
         ]}
         next={[
-          { to: "/console", label: "Field notes", body: "Sign in and save what you observed on a node." },
+          { to: "/console", label: "Console", body: "Sign in and save what you observed on a node." },
           { to: "/services", label: "Services", body: "Audit, design, build, harden." },
           { to: "/contact", label: "Contact", body: "The public path is source." },
         ]}

@@ -63,7 +63,7 @@ function Desk({ name }: { name: string }) {
           </p>
         </div>
         <Link to="/console" className="text-sm text-primary no-underline hover:underline">
-          Field notes
+          Console
         </Link>
       </header>
 

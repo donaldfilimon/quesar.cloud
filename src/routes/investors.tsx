@@ -98,7 +98,7 @@ function InvestorsPage() {
           { to: "/skill-creator", label: "Master reference" },
         ]}
         next={[
-          { to: "/console", label: "Field notes", body: "Sign in and keep a node-level observation." },
+          { to: "/console", label: "Console", body: "Sign in and keep a node-level observation." },
           { to: "/company", label: "Company", body: "Entity, team, and public path." },
           { to: "/contact", label: "Contact", body: "Source is the public path." },
         ]}

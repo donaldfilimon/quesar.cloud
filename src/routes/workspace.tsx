@@ -28,7 +28,7 @@ function WorkspacePage() {
       </Section>
       <PageClose
         primary={{ to: "/abbey", label: "Abbey" }}
-        secondary={[{ to: "/console", label: "Field notes" }]}
+        secondary={[{ to: "/console", label: "Console" }]}
         next={[{ to: "/developers", label: "Developers", body: "Setup lives with the source." }]}
       />
     </>

@@ -37,12 +37,19 @@ The staging script was not copied: there is nothing to stage.
   `../../../packages/capacitor-cloudkit/android`. Those paths do not resolve
   here. The copied `android/app/src/main/assets/` config is gitignored, so the
   new `server.url` reaches Android only after a sync.
-- quesar.cloud's root `package.json` has **no Capacitor dependencies**. mlai
-  used `@capacitor/core`, `@capacitor/android`, `@capacitor/ios` and
-  `@capacitor/cli` `^7.4.3`, `@capacitor-community/apple-sign-in` `^7.1.0` and
-  `capacitor-secure-storage-plugin` `0.12.0`. Building the shell needs those
-  installed somewhere, either as root devDependencies or as a small
-  `native/package.json`; that is a decision for whoever owns `package.json`.
+- **Dependencies live in `native/package.json`**, separate from the root npm
+  build so the web app never installs Capacitor. The versions are mlai's pins:
+  `@capacitor/{core,android,ios,cli}` `^7.4.3`, `@capacitor-community/apple-sign-in`
+  `^7.1.0`, `capacitor-secure-storage-plugin` `0.12.0`, and the CloudKit plugin as
+  `file:./capacitor-cloudkit`. To build:
+
+  ```bash
+  cd native && npm install && npm run sync:android && npm run open:android
+  ```
+
+  The sync rewrites `android/capacitor.settings.gradle` to this directory's
+  `node_modules`. Neither the install nor the sync has been run here, and they
+  are unmeasured.
 - **iOS is blocked:** `npx cap add ios` needs CocoaPods, which is not
   installed on this machine. `capacitor-cloudkit/ios/` holds the Swift plugin
   source only.

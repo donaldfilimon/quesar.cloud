@@ -38,7 +38,7 @@ const extra = [
   { to: "/research/implementations", label: "Implementations" },
   { to: "/docs", label: "Documents" },
   { to: "/dashboard", label: "Desk" },
-  { to: "/console", label: "Field notes" },
+  { to: "/console", label: "Console" },
   { to: "/workspace", label: "Workspace" },
   { to: "/investors", label: "Investors" },
   { to: "/developers", label: "Developers" },
@@ -97,7 +97,7 @@ export function SiteHeader() {
             </DropdownMenu>
           </nav>
           <div className="flex items-center gap-1">
-            <Hint label={user ? "Signed in. Field notes stay on your account." : "Local session. Sign in to keep field notes."}>
+            <Hint label={user ? "Signed in. Console notes, chat and audits stay on your account." : "Sign in to use the console."}>
               <span
                 tabIndex={0}
                 className="mr-2 hidden items-center gap-2 font-mono text-[10px] tracking-[0.18em] text-fg-subtle uppercase xl:inline-flex"

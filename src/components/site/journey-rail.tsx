@@ -5,7 +5,7 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 const journeys = [
   { id: "home", to: "/", label: "Home" },
   { id: "architecture", to: "/architecture", label: "Architecture" },
-  { id: "console", to: "/console", label: "Field notes" },
+  { id: "console", to: "/console", label: "Console" },
   { id: "investors", to: "/investors", label: "Investors" },
   { id: "developers", to: "/developers", label: "Developers" },
 ] as const;

@@ -35,7 +35,7 @@ function AppsPage() {
         primary={{ to: "/architecture", label: "Architecture" }}
         next={[
           { to: "/workspace", label: "Workspace", body: "Documents on this machine." },
-          { to: "/console", label: "Field notes", body: "Sign in and save what is current versus not claimed." },
+          { to: "/console", label: "Console", body: "Sign in and save what is current versus not claimed." },
           { to: "/developers", label: "Developers", body: "Live READMEs when GitHub answers." },
         ]}
       />

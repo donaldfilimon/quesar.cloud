@@ -155,7 +155,7 @@ export function UserButton() {
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
           <Link to="/console" className="no-underline">
-            Field notes
+            Console
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
