@@ -14,6 +14,7 @@ import { Route as AbbeyRouteImport } from './routes/abbey'
 import { Route as AbbeyBotRouteImport } from './routes/abbey-bot'
 import { Route as AbiRouteImport } from './routes/abi'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AppsRouteImport } from './routes/apps'
 import { Route as ArchitectureRouteImport } from './routes/architecture'
 import { Route as BenchmarksRouteImport } from './routes/benchmarks'
@@ -73,6 +74,7 @@ import { Route as ShowcaseTrailerRouteImport } from './routes/showcase.trailer'
 import { Route as SourceNameRouteImport } from './routes/source.$name'
 import { Route as TeamSlugRouteImport } from './routes/team.$slug'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
+import { Route as ApiCronAuditsExpireRouteImport } from './routes/api/cron/audits-expire'
 import { Route as QuasarSiteIdRouteImport } from './routes/quasar.site.$id'
 import { Route as ResearchImplementationsSlugRouteImport } from './routes/research.implementations.$slug'
 
@@ -99,6 +101,11 @@ const AbiRoute = AbiRouteImport.update({
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppsRoute = AppsRouteImport.update({
@@ -396,6 +403,11 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiCronAuditsExpireRoute = ApiCronAuditsExpireRouteImport.update({
+  id: '/api/cron/audits-expire',
+  path: '/api/cron/audits-expire',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const QuasarSiteIdRoute = QuasarSiteIdRouteImport.update({
   id: '/quasar/site/$id',
   path: '/quasar/site/$id',
@@ -414,6 +426,7 @@ export interface FileRoutesByFullPath {
   '/abbey-bot': typeof AbbeyBotRoute
   '/abi': typeof AbiRoute
   '/about': typeof AboutRoute
+  '/admin': typeof AdminRoute
   '/apps': typeof AppsRoute
   '/architecture': typeof ArchitectureRoute
   '/benchmarks': typeof BenchmarksRoute
@@ -473,6 +486,7 @@ export interface FileRoutesByFullPath {
   '/source/$name': typeof SourceNameRoute
   '/team/$slug': typeof TeamSlugRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/cron/audits-expire': typeof ApiCronAuditsExpireRoute
   '/quasar/site/$id': typeof QuasarSiteIdRoute
   '/research/implementations/$slug': typeof ResearchImplementationsSlugRoute
 }
@@ -482,6 +496,7 @@ export interface FileRoutesByTo {
   '/abbey-bot': typeof AbbeyBotRoute
   '/abi': typeof AbiRoute
   '/about': typeof AboutRoute
+  '/admin': typeof AdminRoute
   '/apps': typeof AppsRoute
   '/architecture': typeof ArchitectureRoute
   '/benchmarks': typeof BenchmarksRoute
@@ -541,6 +556,7 @@ export interface FileRoutesByTo {
   '/source/$name': typeof SourceNameRoute
   '/team/$slug': typeof TeamSlugRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/cron/audits-expire': typeof ApiCronAuditsExpireRoute
   '/quasar/site/$id': typeof QuasarSiteIdRoute
   '/research/implementations/$slug': typeof ResearchImplementationsSlugRoute
 }
@@ -551,6 +567,7 @@ export interface FileRoutesById {
   '/abbey-bot': typeof AbbeyBotRoute
   '/abi': typeof AbiRoute
   '/about': typeof AboutRoute
+  '/admin': typeof AdminRoute
   '/apps': typeof AppsRoute
   '/architecture': typeof ArchitectureRoute
   '/benchmarks': typeof BenchmarksRoute
@@ -610,6 +627,7 @@ export interface FileRoutesById {
   '/source/$name': typeof SourceNameRoute
   '/team/$slug': typeof TeamSlugRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/cron/audits-expire': typeof ApiCronAuditsExpireRoute
   '/quasar/site/$id': typeof QuasarSiteIdRoute
   '/research/implementations/$slug': typeof ResearchImplementationsSlugRoute
 }
@@ -621,6 +639,7 @@ export interface FileRouteTypes {
     | '/abbey-bot'
     | '/abi'
     | '/about'
+    | '/admin'
     | '/apps'
     | '/architecture'
     | '/benchmarks'
@@ -680,6 +699,7 @@ export interface FileRouteTypes {
     | '/source/$name'
     | '/team/$slug'
     | '/api/auth/$'
+    | '/api/cron/audits-expire'
     | '/quasar/site/$id'
     | '/research/implementations/$slug'
   fileRoutesByTo: FileRoutesByTo
@@ -689,6 +709,7 @@ export interface FileRouteTypes {
     | '/abbey-bot'
     | '/abi'
     | '/about'
+    | '/admin'
     | '/apps'
     | '/architecture'
     | '/benchmarks'
@@ -748,6 +769,7 @@ export interface FileRouteTypes {
     | '/source/$name'
     | '/team/$slug'
     | '/api/auth/$'
+    | '/api/cron/audits-expire'
     | '/quasar/site/$id'
     | '/research/implementations/$slug'
   id:
@@ -757,6 +779,7 @@ export interface FileRouteTypes {
     | '/abbey-bot'
     | '/abi'
     | '/about'
+    | '/admin'
     | '/apps'
     | '/architecture'
     | '/benchmarks'
@@ -816,6 +839,7 @@ export interface FileRouteTypes {
     | '/source/$name'
     | '/team/$slug'
     | '/api/auth/$'
+    | '/api/cron/audits-expire'
     | '/quasar/site/$id'
     | '/research/implementations/$slug'
   fileRoutesById: FileRoutesById
@@ -826,6 +850,7 @@ export interface RootRouteChildren {
   AbbeyBotRoute: typeof AbbeyBotRoute
   AbiRoute: typeof AbiRoute
   AboutRoute: typeof AboutRoute
+  AdminRoute: typeof AdminRoute
   AppsRoute: typeof AppsRoute
   ArchitectureRoute: typeof ArchitectureRoute
   BenchmarksRoute: typeof BenchmarksRoute
@@ -870,6 +895,7 @@ export interface RootRouteChildren {
   QuasarSettingsRoute: typeof QuasarSettingsRoute
   QuasarSitesRoute: typeof QuasarSitesRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+  ApiCronAuditsExpireRoute: typeof ApiCronAuditsExpireRoute
   QuasarSiteIdRoute: typeof QuasarSiteIdRoute
 }
 
@@ -908,6 +934,13 @@ declare module '@tanstack/react-router' {
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/apps': {
@@ -1323,6 +1356,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/cron/audits-expire': {
+      id: '/api/cron/audits-expire'
+      path: '/api/cron/audits-expire'
+      fullPath: '/api/cron/audits-expire'
+      preLoaderRoute: typeof ApiCronAuditsExpireRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/quasar/site/$id': {
       id: '/quasar/site/$id'
       path: '/quasar/site/$id'
@@ -1472,6 +1512,7 @@ const rootRouteChildren: RootRouteChildren = {
   AbbeyBotRoute: AbbeyBotRoute,
   AbiRoute: AbiRoute,
   AboutRoute: AboutRoute,
+  AdminRoute: AdminRoute,
   AppsRoute: AppsRoute,
   ArchitectureRoute: ArchitectureRoute,
   BenchmarksRoute: BenchmarksRoute,
@@ -1516,6 +1557,7 @@ const rootRouteChildren: RootRouteChildren = {
   QuasarSettingsRoute: QuasarSettingsRoute,
   QuasarSitesRoute: QuasarSitesRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
+  ApiCronAuditsExpireRoute: ApiCronAuditsExpireRoute,
   QuasarSiteIdRoute: QuasarSiteIdRoute,
 }
 export const routeTree = rootRouteImport
