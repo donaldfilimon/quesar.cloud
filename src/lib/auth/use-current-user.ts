@@ -1,3 +1,4 @@
+import { useHydrated } from "@tanstack/react-router";
 import { authClient, authEnabled } from "./client";
 
 /** Normalized user shape used across the app, auth on or off. */
@@ -57,8 +58,14 @@ export type CurrentUserState = {
 export function useCurrentUserState(): CurrentUserState {
   if (!authEnabled) return { user: DEV_USER, isPending: false };
   // eslint-disable-next-line react-hooks/rules-of-hooks -- authEnabled is constant for the app's lifetime
-  const { data, isPending } = authClient.useSession();
-  const user = data?.user;
+  const { data, isPending: sessionPending } = authClient.useSession();
+  // The server always renders the pending state. Report pending until
+  // hydration completes so the first client render matches it; otherwise a
+  // session resolved from the client cache mismatches ("Hydration failed").
+  // eslint-disable-next-line react-hooks/rules-of-hooks -- same constant guard as above
+  const hydrated = useHydrated();
+  const isPending = sessionPending || !hydrated;
+  const user = hydrated ? data?.user : undefined;
   return {
     user: user
       ? {

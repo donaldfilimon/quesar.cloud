@@ -1,5 +1,5 @@
-import { Link, Navigate, useRouterState } from "@tanstack/react-router";
-import { useState, useSyncExternalStore, type ReactNode } from "react";
+import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
+import { useEffect, useRef, useState, useSyncExternalStore, type ReactNode } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -54,11 +54,21 @@ export function SignedOut({ children }: { children: ReactNode }) {
  * render this.
  */
 export function RedirectToSignIn({ to = SIGN_IN_PATH }: { to?: string }) {
+  const navigate = useNavigate();
   const next = useRouterState({
     select: (s) => `${s.location.pathname}${s.location.searchStr ?? ""}`,
   });
-  if (to !== SIGN_IN_PATH) return <Navigate to={to} />;
-  return <Navigate to="/login" search={{ next: next || "/console" }} />;
+  // Navigate exactly once. `<Navigate search={{ next }}>` re-fires navigate()
+  // on every render (its props object is new each time), and a gated page
+  // re-renders while that navigation is pending: "Maximum update depth".
+  const sent = useRef(false);
+  useEffect(() => {
+    if (sent.current) return;
+    sent.current = true;
+    if (to !== SIGN_IN_PATH) void navigate({ to, replace: true });
+    else void navigate({ to: "/login", search: { next: next || "/console" }, replace: true });
+  }, [navigate, next, to]);
+  return <div className="mx-auto max-w-3xl px-4 py-24 text-sm text-fg-muted">Redirecting to sign in…</div>;
 }
 
 /** Wait out session load, then render with the signed-in user or send them to login. */
