@@ -64,3 +64,9 @@ Spec: `docs/superpowers/specs/2026-09-22-mlai-merge-design.md`. Checklist: `docs
 | `DATABASE_URL` | persistence | in-memory PGLite; **data does not survive a restart or serverless instance** |
 
 Tests: `npm run test:app` (vitest; app code). `npm test` is Grok's template suite.
+
+Local dev: Better Auth trusts only the `:8080` origins unless `BETTER_AUTH_URL`
+is set. If port 8080 is taken, run on another port with
+`BETTER_AUTH_URL=http://localhost:<port>` passed through the environment (not
+`.env`); otherwise email sign-up fails with "Invalid origin". The native shell's
+dependencies live in `native/package.json`, outside the root build.
