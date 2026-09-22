@@ -1,0 +1,1 @@
+import{t as e}from"./createServerFn-BLsTj1oA.js";import{M as t}from"./index-DwYFUvTG.js";import{t as n}from"./middleware-ChMHMhP-.js";var r=e({method:`POST`}).middleware([n]).handler(t(`c1aeecd732699de99d2098573d71dd95723e0fdaed88559c669cfe086ffc66fd`));export{r as t};

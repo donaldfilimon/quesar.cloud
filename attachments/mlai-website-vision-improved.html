@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="MLAI — Intelligence infrastructure for human + AI collaboration. A premium adaptive ecosystem combining personal intelligence, enterprise automation, developer tooling, distributed memory, and spatial computing." />
+  <title>MLAI • Intelligence Without Limits</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root, [data-theme="dark"] {
+      --text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
+      --text-sm: clamp(0.875rem, 0.8rem + 0.35vw, 1rem);
+      --text-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+      --text-lg: clamp(1.125rem, 1rem + 0.75vw, 1.5rem);
+      --text-xl: clamp(1.5rem, 1.2rem + 1.25vw, 2.25rem);
+      --text-2xl: clamp(2rem, 1.2rem + 2.5vw, 3.5rem);
+      --text-3xl: clamp(2.5rem, 1rem + 4vw, 5rem);
+      --space-1: 0.25rem; --space-2: 0.5rem; --space-3: 0.75rem; --space-4: 1rem; --space-5: 1.25rem; --space-6: 1.5rem; --space-8: 2rem; --space-10: 2.5rem; --space-12: 3rem; --space-16: 4rem; --space-20: 5rem; --space-24: 6rem;
+      --color-bg: #05070b;
+      --color-surface: #0b1020;
+      --color-surface-2: #11182d;
+      --color-surface-offset: #0d1425;
+      --color-border: rgba(174, 198, 255, 0.12);
+      --color-divider: rgba(174, 198, 255, 0.08);
+      --color-text: #edf4ff;
+      --color-text-muted: #96a5c6;
+      --color-text-faint: #667391;
+      --color-primary: #68e3ff;
+      --color-primary-hover: #89edff;
+      --color-primary-active: #39d5ff;
+      --color-secondary: #9b7cff;
+      --color-accent: #7af7cf;
+      --color-accent-2: #f7c36b;
+      --radius-sm: 0.375rem; --radius-md: 0.75rem; --radius-lg: 1.125rem; --radius-xl: 1.5rem; --radius-full: 9999px;
+      --shadow-lg: 0 20px 80px rgba(0,0,0,0.45);
+      --shadow-glow: 0 0 0 1px rgba(104,227,255,0.2), 0 10px 40px rgba(104,227,255,0.15);
+      --content-wide: 1200px;
+      --font-display: 'Space Grotesk', 'Inter', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      min-height: 100vh;
+      font-family: var(--font-body);
+      font-size: var(--text-base);
+      line-height: 1.65;
+      color: var(--color-text);
+      background:
+        radial-gradient(circle at 20% 20%, rgba(104,227,255,0.12), transparent 32%),
+        radial-gradient(circle at 82% 8%, rgba(155,124,255,0.15), transparent 28%),
+        linear-gradient(180deg, #03050a 0%, #070b12 38%, #04070d 100%);
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; transition: color 0.2s ease; }
+    img, svg { display: block; max-width: 100%; }
+    button { font: inherit; cursor: pointer; }
+    .skip-link { position: absolute; left: -999px; top: auto; }
+    .skip-link:focus { left: 1rem; top: 1rem; background: #fff; color: #000; padding: 0.75rem 1rem; z-index: 100; border-radius: 0.5rem; }
+    
+    /* Progress bar */
+    .progress-bar {
+      position: fixed; top: 0; left: 0; height: 2px; background: linear-gradient(to right, var(--color-primary), var(--color-secondary));
+      z-index: 100; transition: width 0.05s ease-out;
+    }
+
+    .container { width: min(calc(100% - 2rem), var(--content-wide)); margin-inline: auto; }
+    
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: var(--space-2);
+      padding: 0.35rem 0.85rem; border-radius: var(--radius-full);
+      border: 1px solid var(--color-border); background: rgba(255,255,255,0.025);
+      color: var(--color-primary); font-size: var(--text-xs); letter-spacing: 0.14em; text-transform: uppercase; font-weight: 600;
+    }
+    
+    .site-header {
+      position: sticky; top: 0; z-index: 50; backdrop-filter: blur(20px);
+      background: rgba(5,7,11,0.78); border-bottom: 1px solid var(--color-divider);
+    }
+    .header-inner {
+      display: flex; align-items: center; justify-content: space-between; gap: var(--space-6);
+      min-height: 4.75rem;
+    }
+    .brand { display: flex; align-items: center; gap: 0.85rem; font-weight: 700; letter-spacing: 0.05em; font-size: 1.35rem; }
+    .brand-mark {
+      width: 2.35rem; height: 2.35rem; border-radius: 0.75rem; position: relative;
+      background: linear-gradient(135deg, rgba(104,227,255,0.3), rgba(155,124,255,0.25));
+      border: 1px solid rgba(255,255,255,0.2);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 4px 12px rgba(0,0,0,0.3);
+    }
+    .brand-mark::before, .brand-mark::after {
+      content: ""; position: absolute; inset: 0.5rem; border-radius: 999px; border: 1px solid rgba(104,227,255,0.6);
+    }
+    .brand-mark::after { inset: 0.82rem; border-color: rgba(155,124,255,0.75); }
+    
+    nav { display: flex; gap: var(--space-6); color: var(--color-text-muted); font-size: var(--text-sm); font-weight: 500; }
+    nav a { position: relative; padding: 0.25rem 0; }
+    nav a:hover { color: var(--color-text); }
+    nav a.active { color: var(--color-text); }
+    nav a.active::after {
+      content: ''; position: absolute; bottom: -2px; left: 0; width: 100%; height: 1px;
+      background: linear-gradient(to right, var(--color-primary), var(--color-secondary));
+    }
+    
+    .header-cta {
+      padding: 0.7rem 1.35rem; border-radius: var(--radius-full); background: rgba(104,227,255,0.1);
+      border: 1px solid rgba(104,227,255,0.3); color: var(--color-text); font-weight: 600; font-size: var(--text-sm);
+      transition: all 0.2s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    .header-cta:hover { background: rgba(104,227,255,0.18); border-color: var(--color-primary); transform: translateY(-1px); }
+    
+    /* Mobile nav */
+    .mobile-nav-toggle {
+      display: none; background: none; border: 1px solid var(--color-border); color: var(--color-text);
+      width: 2.75rem; height: 2.75rem; border-radius: var(--radius-md); align-items: center; justify-content: center;
+      font-size: 1.25rem; transition: all 0.2s ease;
+    }
+    .mobile-nav-toggle:hover { background: rgba(255,255,255,0.05); }
+    .mobile-nav {
+      display: none; position: fixed; inset: 4.75rem 0 0 0; background: rgba(5,7,11,0.96); z-index: 40;
+      padding: var(--space-8) var(--space-6); flex-direction: column; gap: var(--space-4); border-top: 1px solid var(--color-divider);
+    }
+    .mobile-nav.open { display: flex; }
+    .mobile-nav a { padding: 0.85rem 1rem; border-radius: var(--radius-md); font-size: var(--text-lg); color: var(--color-text-muted); }
+    .mobile-nav a:hover { background: rgba(255,255,255,0.04); color: var(--color-text); }
+    
+    .hero { padding: clamp(5.5rem, 9vw, 9rem) 0 var(--space-24); position: relative; }
+    .hero-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: var(--space-14); align-items: center; }
+    h1, h2, h3 { font-family: var(--font-display); line-height: 1.05; font-weight: 700; }
+    h1 { font-size: clamp(3.4rem, 8.5vw, 7.2rem); max-width: 11ch; letter-spacing: -0.055em; }
+    .hero-copy p {
+      margin-top: var(--space-6); max-width: 58ch; color: var(--color-text-muted); font-size: var(--text-lg); line-height: 1.7;
+    }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: var(--space-4); margin-top: var(--space-9); }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 0.65rem;
+      min-height: 3.15rem; padding: 0.95rem 1.65rem; border-radius: var(--radius-full);
+      border: 1px solid transparent; font-size: var(--text-sm); font-weight: 600;
+      transition: all 0.2s cubic-bezier(0.23, 1.0, 0.32, 1);
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--color-primary), #9ef3ff);
+      color: #03131d; box-shadow: 0 4px 20px rgba(104,227,255,0.35);
+    }
+    .btn-primary:hover { transform: translateY(-2px) scale(1.015); box-shadow: 0 8px 30px rgba(104,227,255,0.45); }
+    .btn-secondary {
+      background: rgba(255,255,255,0.035); border-color: var(--color-border); color: var(--color-text);
+    }
+    .btn-secondary:hover { background: rgba(255,255,255,0.07); border-color: rgba(174,198,255,0.3); transform: translateY(-1px); }
+    .btn-ghost {
+      background: transparent; border-color: var(--color-border); color: var(--color-text-muted);
+    }
+    .btn-ghost:hover { color: var(--color-text); background: rgba(255,255,255,0.04); }
+    
+    /* Modal & Early Access */
+    .modal-backdrop {
+      position: fixed; inset: 0; background: rgba(3,5,10,0.75); backdrop-filter: blur(14px);
+      z-index: 100; display: none; align-items: center; justify-content: center; padding: var(--space-4);
+      opacity: 0; transition: opacity 0.2s ease;
+    }
+    .modal-backdrop.active { display: flex; opacity: 1; }
+    .modal {
+      width: 100%; max-width: 460px; background: var(--color-surface-2); 
+      border: 1px solid var(--color-border); border-radius: var(--radius-xl); 
+      padding: var(--space-8) var(--space-8) var(--space-7); position: relative;
+      box-shadow: var(--shadow-lg); transform: translateY(10px); transition: transform 0.3s cubic-bezier(0.23,1,0.32,1);
+    }
+    .modal-backdrop.active .modal { transform: translateY(0); }
+    .modal-close {
+      position: absolute; top: var(--space-4); right: var(--space-4); background: none; border: none;
+      color: var(--color-text-muted); font-size: 1.65rem; line-height: 1; cursor: pointer; padding: 0.25rem;
+      transition: color 0.2s ease;
+    }
+    .modal-close:hover { color: var(--color-text); }
+    .modal h2 { font-size: var(--text-xl); margin-bottom: var(--space-2); letter-spacing: -0.02em; }
+    .modal p { color: var(--color-text-muted); margin-bottom: var(--space-6); line-height: 1.6; }
+    .modal-form { display: grid; gap: var(--space-4); }
+    .modal-form label { font-size: var(--text-xs); color: var(--color-text-muted); margin-bottom: -0.35rem; display: block; }
+    .modal-form input, .modal-form select, .modal-form textarea {
+      width: 100%; padding: 0.9rem 1.1rem; border-radius: var(--radius-md);
+      background: rgba(255,255,255,0.035); border: 1px solid var(--color-border);
+      color: var(--color-text); font-size: var(--text-sm); font-family: inherit;
+    }
+    .modal-form input:focus, .modal-form select:focus, .modal-form textarea:focus {
+      border-color: var(--color-primary); outline: none; 
+      box-shadow: 0 0 0 3px rgba(104,227,255,0.12);
+    }
+    .modal .btn { width: 100%; justify-content: center; margin-top: var(--space-3); }
+    
+    .success-state { text-align: center; padding: 1.5rem 0 0.5rem; }
+    .success-state .icon { font-size: 3.25rem; margin-bottom: var(--space-4); display: block; }
+    .success-state h3 { margin-bottom: var(--space-3); }
+    .success-state p { color: var(--color-text-muted); max-width: 32ch; margin: 0 auto; }
+
+    /* Lightweight confetti */
+    .confetti-piece {
+      position: fixed; z-index: 9999; pointer-events: none; border-radius: 2px;
+      animation: confetti-fall 1.6s cubic-bezier(0.25,0.1,0.25,1) forwards;
+      will-change: transform, opacity;
+    }
+    @keyframes confetti-fall {
+      to { 
+        transform: translateY(110vh) translateX(var(--drift, 0px)) rotate(720deg); 
+        opacity: 0; 
+      }
+    }
+    
+    .hero-visual {
+      position: relative; aspect-ratio: 0.92; border-radius: 2.25rem; overflow: hidden;
+      border: 1px solid var(--color-border); background: linear-gradient(180deg, rgba(11,16,32,0.95), rgba(7,11,20,0.95));
+      box-shadow: var(--shadow-lg);
+    }
+    .hero-visual::before {
+      content: ""; position: absolute; inset: 0;
+      background:
+        radial-gradient(circle at 48% 38%, rgba(104,227,255,0.18), transparent 22%),
+        radial-gradient(circle at 32% 72%, rgba(155,124,255,0.14), transparent 26%),
+        radial-gradient(circle at 68% 65%, rgba(122,247,207,0.1), transparent 24%);
+      filter: blur(14px); animation: heroGlow 18s ease-in-out infinite;
+    }
+    @keyframes heroGlow {
+      0%,100% { opacity: 0.85; } 50% { opacity: 1; }
+    }
+    .brain {
+      position: absolute; inset: 0; display: grid; place-items: center; padding: 1.5rem;
+    }
+    .brain svg { width: 86%; height: 86%; opacity: 0.92; }
+    .brain path, .brain circle { transition: all 0.4s cubic-bezier(0.23,1,0.32,1); }
+    .hero-visual:hover .brain circle { filter: brightness(1.15); }
+    .stat-stack {
+      position: absolute; left: 1.5rem; right: 1.5rem; bottom: 1.5rem; display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-3);
+    }
+    .stat {
+      padding: 1.05rem 1rem; border-radius: 1rem; background: rgba(255,255,255,0.045); border: 1px solid rgba(255,255,255,0.09);
+      backdrop-filter: blur(16px); transition: transform 0.2s ease, background 0.2s ease;
+    }
+    .stat:hover { transform: translateY(-2px); background: rgba(255,255,255,0.065); }
+    .stat strong { display: block; font-size: var(--text-lg); font-weight: 700; letter-spacing: -0.01em; }
+    .stat span { color: var(--color-text-muted); font-size: var(--text-xs); line-height: 1.4; margin-top: 0.2rem; display: block; }
+    
+    section { padding: clamp(4rem, 7vw, 7rem) 0; }
+    .section-head { display: grid; gap: var(--space-4); margin-bottom: var(--space-10); max-width: 72ch; }
+    .section-head h2 { font-size: var(--text-2xl); letter-spacing: -0.045em; }
+    .section-head p { color: var(--color-text-muted); font-size: var(--text-lg); }
+    
+    .feature-grid, .product-grid, .page-grid { display: grid; gap: var(--space-5); }
+    .feature-grid { grid-template-columns: repeat(4, 1fr); }
+    .product-grid { grid-template-columns: repeat(2, 1fr); }
+    .page-grid { grid-template-columns: repeat(3, 1fr); }
+    
+    .card {
+      position: relative; padding: 1.65rem; border-radius: var(--radius-xl);
+      background: linear-gradient(180deg, rgba(16,24,45,0.94), rgba(10,16,28,0.9));
+      border: 1px solid var(--color-border);
+      overflow: hidden; transition: transform 0.3s cubic-bezier(0.23,1,0.32,1), 
+        box-shadow 0.3s ease, border-color 0.2s ease;
+    }
+    .card::before {
+      content: ""; position: absolute; inset: 0 auto auto 0; width: 100%; height: 1.5px;
+      background: linear-gradient(90deg, rgba(104,227,255,0.6), transparent 38%, transparent 62%, rgba(155,124,255,0.55));
+      opacity: 0.7;
+    }
+    .card:hover { transform: translateY(-6px); box-shadow: var(--shadow-glow); border-color: rgba(174,198,255,0.22); }
+    .card h3 { font-size: 1.45rem; margin-bottom: 0.7rem; letter-spacing: -0.02em; }
+    .card p, .card li { color: var(--color-text-muted); }
+    .card ul { list-style: none; display: grid; gap: 0.55rem; margin-top: 1.1rem; }
+    .card li::before { content: "→"; color: var(--color-primary); margin-right: 0.6rem; font-weight: 700; }
+    
+    /* Expandable card details */
+    .card-details {
+      max-height: 0; overflow: hidden; transition: max-height 0.45s cubic-bezier(0.23,1,0.32,1), 
+        opacity 0.3s ease; opacity: 0; margin-top: 0;
+    }
+    .card.expanded .card-details { max-height: 420px; opacity: 1; margin-top: 1.25rem; }
+    .card-toggle {
+      margin-top: 1.1rem; font-size: var(--text-sm); font-weight: 600; color: var(--color-primary);
+      display: inline-flex; align-items: center; gap: 0.4rem; background: none; border: none; padding: 0;
+    }
+    .card-toggle svg { transition: transform 0.3s ease; }
+    .card.expanded .card-toggle svg { transform: rotate(180deg); }
+    
+    .architecture {
+      display: grid; grid-template-columns: 1.15fr 0.85fr; gap: var(--space-8); align-items: start;
+    }
+    .diagram {
+      padding: 2.25rem; border-radius: 1.85rem; min-height: 26rem;
+      background: radial-gradient(circle at top, rgba(104,227,255,0.1), transparent 32%), rgba(255,255,255,0.02);
+      border: 1px solid var(--color-border); position: relative; overflow: hidden;
+    }
+    .diagram-grid {
+      display: grid; gap: 1.1rem; justify-items: center; align-items: center; height: 100%;
+    }
+    .node {
+      min-width: 12.5rem; text-align: center; padding: 1rem 1.35rem; border-radius: 999px;
+      background: rgba(7,12,22,0.95); border: 1px solid rgba(104,227,255,0.22);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04); font-weight: 600;
+      transition: all 0.2s cubic-bezier(0.23,1,0.32,1);
+    }
+    .node:hover { border-color: var(--color-primary); box-shadow: 0 0 0 3px rgba(104,227,255,0.1); transform: scale(1.02); }
+    .node.small { min-width: 9rem; font-size: var(--text-sm); padding: 0.75rem 1.1rem; }
+    .flow-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; width: 100%; }
+    .connector { width: 2px; height: 1.6rem; background: linear-gradient(180deg, rgba(104,227,255,0.65), rgba(104,227,255,0.12)); }
+    
+    .code-block {
+      margin-top: var(--space-6); padding: 1.4rem; border-radius: 1.25rem; overflow-x: auto; position: relative;
+      background: #060a13; border: 1px solid rgba(255,255,255,0.08); font-size: 0.95rem;
+    }
+    .code-block pre { margin: 0; }
+    code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; color: #d7e7ff; line-height: 1.55; }
+    .copy-btn {
+      position: absolute; top: 1rem; right: 1rem; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+      color: var(--color-text-muted); padding: 0.35rem 0.85rem; border-radius: var(--radius-md); font-size: 0.75rem;
+      display: flex; align-items: center; gap: 0.35rem; transition: all 0.2s ease;
+    }
+    .copy-btn:hover { background: rgba(104,227,255,0.15); color: var(--color-text); border-color: var(--color-primary); }
+    
+    .pillars { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: var(--space-7); }
+    .quote {
+      padding: 2.35rem; border-radius: 1.85rem; background: linear-gradient(135deg, rgba(104,227,255,0.07), rgba(155,124,255,0.07));
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .quote p { font-size: var(--text-lg); max-width: 34ch; line-height: 1.65; }
+    .quote strong { color: var(--color-primary); }
+    
+    footer {
+      padding: var(--space-16) 0 var(--space-12); border-top: 1px solid var(--color-divider);
+      color: var(--color-text-muted);
+    }
+    .footer-grid { display: grid; grid-template-columns: 1.25fr 0.75fr; gap: var(--space-10); align-items: start; }
+    .footer-links { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-5); }
+    .footer-links h4 { margin-bottom: 1rem; color: var(--color-text); font-size: var(--text-sm); letter-spacing: 0.5px; }
+    .footer-links a { display: block; margin-bottom: 0.55rem; font-size: var(--text-sm); color: var(--color-text-muted); }
+    .footer-links a:hover { color: var(--color-primary); }
+    
+    @media (max-width: 1024px) {
+      .hero-grid, .architecture, .pillars, .footer-grid { grid-template-columns: 1fr; }
+      .feature-grid { grid-template-columns: repeat(2, 1fr); }
+      .page-grid { grid-template-columns: repeat(2, 1fr); }
+      nav { display: none; }
+      .mobile-nav-toggle { display: flex; }
+    }
+    @media (max-width: 720px) {
+      .feature-grid, .product-grid, .page-grid { grid-template-columns: 1fr; }
+      .stat-stack { grid-template-columns: 1fr; }
+      .header-inner { flex-wrap: wrap; padding: 0.6rem 0; }
+      .hero { padding-top: 4rem; }
+      h1 { max-width: 13ch; }
+      .hero-copy p { font-size: var(--text-base); }
+      .footer-links { grid-template-columns: 1fr; gap: var(--space-6); }
+      .mobile-nav { inset: 4.5rem 0 0 0; }
+    }
+    
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; }
+      .brain path, .brain circle { transition: none; }
+    }
+    
+    /* Accent colors for product cards */
+    .card[data-product="abbey"] { border-color: rgba(104,227,255,0.25); }
+    .card[data-product="aviva"] { border-color: rgba(155,124,255,0.25); }
+    .card[data-product="abi"] { border-color: rgba(122,247,207,0.25); }
+    .card[data-product="wdbx"] { border-color: rgba(247,195,107,0.25); }
+  </style>
+</head>
+<body>
+  <a href="#content" class="skip-link">Skip to main content</a>
+  
+  <!-- Scroll progress -->
+  <div class="progress-bar" id="progress-bar" style="width: 0%"></div>
+  
+  <header class="site-header" id="top">
+    <div class="container header-inner">
+      <a href="#top" class="brand" aria-label="MLAI home">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span>MLAI</span>
+      </a>
+      
+      <nav aria-label="Primary navigation" id="desktop-nav">
+        <a href="#ecosystem">Products</a>
+        <a href="#platform">Platform</a>
+        <a href="#developers">Developers</a>
+        <a href="#enterprise">Enterprise</a>
+        <a href="#research">Research</a>
+      </nav>
+      
+      <button class="mobile-nav-toggle" id="mobile-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        ☰
+      </button>
+      
+      <a class="header-cta" href="#developers">Build With MLAI</a>
+    </div>
+    
+    <!-- Mobile nav -->
+    <nav class="mobile-nav" id="mobile-nav" aria-label="Mobile navigation">
+      <a href="#ecosystem">Products</a>
+      <a href="#platform">Platform</a>
+      <a href="#developers">Developers</a>
+      <a href="#enterprise">Enterprise</a>
+      <a href="#research">Research</a>
+      <a href="#developers" class="btn btn-primary" style="margin-top: 1rem; justify-content: center;">Build With MLAI</a>
+    </nav>
+  </header>
+
+  <main id="content">
+    <!-- HERO -->
+    <section class="hero" id="top">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <span class="eyebrow">Intelligence infrastructure for human + AI collaboration</span>
+          <h1>Intelligence<br>Without Limits.</h1>
+          <p>MLAI is the premium adaptive ecosystem that fuses personal intelligence, deep reasoning, agent orchestration, long-term distributed memory, and spatial computing into one cohesive platform — designed to amplify human creativity, not replace it.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#ecosystem">Explore the Ecosystem</a>
+            <a class="btn btn-secondary" href="#developers">Start Building</a>
+            <a class="btn btn-ghost" href="#abbey">Meet Abbey</a>
+            <button type="button" class="btn btn-secondary" id="open-waitlist">Request Early Access</button>
+          </div>
+        </div>
+        
+        <div class="hero-visual" aria-hidden="true">
+          <div class="brain">
+            <svg viewBox="0 0 600 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="lineGlow" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#68E3FF"/>
+                  <stop offset="100%" stop-color="#9B7CFF"/>
+                </linearGradient>
+                <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+                  <feGaussianBlur stdDeviation="2.5" result="coloredBlur"/>
+                  <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                </filter>
+              </defs>
+              <g opacity="0.32" stroke="url(#lineGlow)" stroke-width="1.6">
+                <path d="M300 70 L210 150 L180 280 L230 410 L300 510"/>
+                <path d="M300 70 L390 150 L420 280 L370 410 L300 510"/>
+                <path d="M210 150 L390 150"/>
+                <path d="M180 280 L420 280"/>
+                <path d="M230 410 L370 410"/>
+                <path d="M210 150 L300 280 L230 410"/>
+                <path d="M390 150 L300 280 L370 410"/>
+                <path d="M180 280 L300 190 L420 280"/>
+                <path d="M230 410 L300 340 L370 410"/>
+              </g>
+              <g fill="#dff8ff">
+                <circle cx="300" cy="70" r="8.5"/>
+                <circle cx="210" cy="150" r="10.5"/>
+                <circle cx="390" cy="150" r="10.5"/>
+                <circle cx="180" cy="280" r="9.5"/>
+                <circle cx="300" cy="190" r="12" fill="#9B7CFF"/>
+                <circle cx="420" cy="280" r="9.5"/>
+                <circle cx="300" cy="280" r="15" fill="#68E3FF"/>
+                <circle cx="230" cy="410" r="10.5"/>
+                <circle cx="370" cy="410" r="10.5"/>
+                <circle cx="300" cy="340" r="11.5" fill="#7AF7CF"/>
+                <circle cx="300" cy="510" r="9.5"/>
+              </g>
+            </svg>
+          </div>
+          <div class="stat-stack">
+            <div class="stat"><strong>Multi-agent</strong><span>Specialized systems collaborate as one intelligence fabric.</span></div>
+            <div class="stat"><strong>Long-term memory</strong><span>WDBX prioritizes context, knowledge, and semantic recall.</span></div>
+            <div class="stat"><strong>Multimodal</strong><span>Text, code, vision, audio, video &amp; spatial environments.</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CORE STATEMENT -->
+    <section>
+      <div class="container pillars">
+        <div class="quote">
+          <span class="eyebrow">Core belief</span>
+          <p><strong>AI should not replace human creativity.</strong> It should amplify human imagination, knowledge, judgment, and capability — becoming a true collaborative partner.</p>
+        </div>
+        <div class="card">
+          <h3>Platform thesis</h3>
+          <p>MLAI is built as a complete, adaptive intelligence platform where frontier models, persistent memory, specialized agents, powerful tools, and intuitive applications operate together as one living system — for creators, developers, researchers, and ambitious organizations.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ECOSYSTEM -->
+    <section id="ecosystem">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">Ecosystem</span>
+          <h2>A family of specialized intelligence systems.</h2>
+          <p>The MLAI ecosystem is deliberately structured around personal intelligence, deep reasoning, coordination &amp; governance, distributed memory, and spatial computing. Each layer has a distinct role while operating inside a single unified, adaptive platform.</p>
+        </div>
+        
+        <div class="product-grid">
+          <!-- Abbey -->
+          <article class="card" id="abbey" data-product="abbey">
+            <h3>Abbey AI</h3>
+            <p>Your personal intelligence layer for productivity, learning, creativity, project management, and daily life augmentation.</p>
+            <ul>
+              <li>Deep contextual memory across projects, preferences, goals, and evolving workflows.</li>
+              <li>Adaptive modes: teacher, engineer, creative partner, researcher, strategist, and planner.</li>
+              <li>Personal growth engine for habits, reflection, goal tracking, and continuous workflow improvement.</li>
+            </ul>
+            <button class="card-toggle" aria-expanded="false">Explore details <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M6 9l6 6 6-6"/></svg></button>
+            <div class="card-details">
+              <p><strong>Core capabilities:</strong> Long-running project memory, cross-session continuity, personalized communication style adaptation, proactive assistance, and private-by-design data handling.</p>
+              <p><strong>Target users:</strong> Knowledge workers, creators, students, researchers, and anyone who wants a consistent, deeply personalized AI companion that grows with them over months and years.</p>
+              <p><strong>Vision note:</strong> Abbey is the always-present interface layer — the face of MLAI for individuals. It learns your thinking patterns and becomes an extension of your own cognition.</p>
+            </div>
+          </article>
+          
+          <!-- Aviva -->
+          <article class="card" data-product="aviva">
+            <h3>Aviva AI</h3>
+            <p>The advanced reasoning layer for research, engineering, strategy, science, and complex multi-step problem solving.</p>
+            <ul>
+              <li>Deep research across codebases, academic papers, internal docs, and live market signals.</li>
+              <li>Expert modes: Engineer, Researcher, Strategist, Architect, Scientist, and Systems Thinker.</li>
+              <li>Designed for expert-level depth instead of generic chat responses.</li>
+            </ul>
+            <button class="card-toggle" aria-expanded="false">Explore details <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M6 9l6 6 6-6"/></svg></button>
+            <div class="card-details">
+              <p><strong>Core capabilities:</strong> Multi-hop reasoning chains, tool-augmented analysis, code generation with verification, hypothesis generation, and structured output for downstream agents.</p>
+              <p><strong>Target users:</strong> Engineers, scientists, strategists, analysts, and R&amp;D teams who need reliable, high-signal reasoning at depth.</p>
+              <p><strong>Vision note:</strong> Aviva is the “expert brain” you call when the problem is hard. It doesn’t guess — it reasons, cites sources, and shows its work.</p>
+            </div>
+          </article>
+          
+          <!-- Abi -->
+          <article class="card" data-product="abi">
+            <h3>Abi AI</h3>
+            <p>The intelligence coordination, safety, and governance layer responsible for routing, monitoring, quality control, and policy enforcement.</p>
+            <ul>
+              <li>Coordinates multi-agent collaboration and intelligent task delegation.</li>
+              <li>Enforces safety policies, monitors behavior, and maintains system integrity.</li>
+              <li>Acts as the connective tissue between user-facing and infrastructure intelligence.</li>
+            </ul>
+            <button class="card-toggle" aria-expanded="false">Explore details <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M6 9l6 6 6-6"/></svg></button>
+            <div class="card-details">
+              <p><strong>Core capabilities:</strong> Agent orchestration, quality scoring, fallback routing, audit logging, human-in-the-loop escalation, and continuous self-improvement of system behavior.</p>
+              <p><strong>Target users:</strong> Platform operators, enterprise teams, safety-conscious organizations, and anyone running complex multi-agent workflows.</p>
+              <p><strong>Vision note:</strong> Abi is the invisible guardian that makes the entire ecosystem trustworthy and reliable at scale.</p>
+            </div>
+          </article>
+          
+          <!-- WDBX + NYX -->
+          <article class="card" data-product="wdbx">
+            <h3>WDBX + NYX</h3>
+            <p>The infrastructure pair powering persistent memory and real-time simulation for next-generation intelligent systems.</p>
+            <ul>
+              <li>WDBX: Distributed memory, vector intelligence, semantic retrieval, knowledge graphs, and long-term recall.</li>
+              <li>NYX: Neural rendering, physics-aware simulation, and spatial intelligence for virtual worlds and robotics.</li>
+              <li>Together they bridge knowledge systems with real-time interactive environments.</li>
+            </ul>
+            <button class="card-toggle" aria-expanded="false">Explore details <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M6 9l6 6 6-6"/></svg></button>
+            <div class="card-details">
+              <p><strong>Core capabilities:</strong> Persistent cross-session memory, semantic + symbolic retrieval, graph-based relationship modeling, real-time physics + AI co-simulation, and environment-aware agents.</p>
+              <p><strong>Target users:</strong> Developers building long-running agents, simulation platforms, games, robotics systems, and spatial computing experiences.</p>
+              <p><strong>Vision note:</strong> WDBX + NYX are the foundation layers that give MLAI a true “body” and “long-term mind” beyond stateless chat.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ARCHITECTURE -->
+    <section id="platform">
+      <div class="container architecture">
+        <div>
+          <div class="section-head">
+            <span class="eyebrow">Architecture</span>
+            <h2>Memory, reasoning, and orchestration in one stack.</h2>
+            <p>MLAI positions Abbey as the human-facing companion, Aviva as the expert reasoning engine, Abi as the orchestration and governance system, and WDBX as the persistent memory substrate beneath them all. The entire stack is designed for graceful scaling from personal use to enterprise deployment.</p>
+          </div>
+          
+          <div class="card">
+            <h3>WDBX memory model</h3>
+            <p>Instead of treating every interaction equally, WDBX intelligently prioritizes immediate context, recent knowledge, and long-term intelligence. The system retrieves meaning, relationships, and project state — not just keyword matches.</p>
+            <ul>
+              <li>Long-context retrieval optimized for active sessions and ongoing projects.</li>
+              <li>Hybrid vector + symbolic search for semantic similarity and precise recall.</li>
+              <li>Knowledge graphs for linked memory, entity relationships, and project structure.</li>
+              <li>Distributed, resilient nodes with edge caching for fast global access.</li>
+            </ul>
+          </div>
+        </div>
+        
+        <aside class="diagram" aria-label="MLAI architecture diagram — User flows through Abbey to specialized agents Aviva and Abi, backed by WDBX memory infrastructure">
+          <div class="diagram-grid">
+            <div class="node">User / Human</div>
+            <div class="connector"></div>
+            <div class="node">Abbey<br><span style="font-size:0.75rem; opacity:0.7;">Personal Interface</span></div>
+            <div class="connector"></div>
+            <div class="flow-row">
+              <div class="node small">Aviva<br><span style="font-size:0.7rem; opacity:0.65;">Reasoning</span></div>
+              <div class="node small">Abi<br><span style="font-size:0.7rem; opacity:0.65;">Orchestration</span></div>
+            </div>
+            <div class="connector"></div>
+            <div class="node">WDBX Memory Fabric</div>
+            <div class="connector"></div>
+            <div class="flow-row">
+              <div class="node small">Vector Search</div>
+              <div class="node small">Knowledge Graph</div>
+              <div class="node small">Context Engine</div>
+            </div>
+            <div class="connector"></div>
+            <div class="node">Distributed Nodes + NYX Simulation</div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- DEVELOPERS -->
+    <section id="developers">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">Developer platform</span>
+          <h2>Build intelligent applications on top of MLAI.</h2>
+          <p>The platform includes a unified API layer, agent framework, model infrastructure, memory services, and visual developer tooling so teams can rapidly build assistants, autonomous agents, enterprise systems, creative tools, and research platforms.</p>
+        </div>
+        
+        <div class="feature-grid">
+          <div class="card">
+            <h3>MLAI API</h3>
+            <p>A central, versioned layer connecting any application to agents, memory, models, and tools with consistent authentication and observability.</p>
+          </div>
+          <div class="card">
+            <h3>Agent framework</h3>
+            <p>Define specialized workers for research, coding, review, planning, synthesis, and other high-context tasks. Agents can collaborate and hand off work.</p>
+          </div>
+          <div class="card">
+            <h3>MLAI Studio</h3>
+            <p>Visual environment for workflow design, prompt experimentation, memory tracing, debugging, performance analysis, and agent behavior monitoring.</p>
+          </div>
+          <div class="card">
+            <h3>Collaboration model</h3>
+            <p>Multiple agents operate on the same project in parallel, then converge through review and synthesis into a single, high-quality output.</p>
+          </div>
+        </div>
+        
+        <div class="code-block">
+          <button class="copy-btn" id="copy-code" aria-label="Copy code to clipboard">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            <span>Copy</span>
+          </button>
+<pre><code>from mlai import Agent, Memory
+
+# Create a specialized research agent
+researcher = Agent(
+    name="ResearchAI",
+    model="aviva",
+    memory="wdbx",
+    tools=["web_search", "code_execution", "paper_reader"]
+)
+
+# Run with persistent context
+result = researcher.run(
+    "Analyze recent advances in multimodal reasoning",
+    context={"project": "MLAI-vision", "depth": "deep"}
+)
+
+print(result.summary)</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- ENTERPRISE + RESEARCH -->
+    <section id="enterprise">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">Enterprise + Research</span>
+          <h2>Private AI infrastructure for organizations and future-facing R&amp;D.</h2>
+          <p>The vision spans secure enterprise deployment, company-wide knowledge systems, multimodal research, compiler-level intelligence, responsible AI governance, and a long-term roadmap toward naturally collaborative, memory-aware systems that operate seamlessly across devices and environments.</p>
+        </div>
+        
+        <div class="page-grid">
+          <div class="card">
+            <h3>Enterprise MLAI</h3>
+            <p>Private, secure AI deployment across cloud, on-prem, and hybrid environments with fine-grained access control to company knowledge and internal systems.</p>
+          </div>
+          <div class="card">
+            <h3>NYX Neural Engine</h3>
+            <p>Spatial computing platform for gaming, robotics, simulation, and digital worlds where graphics, physics, and AI operate in tight integration.</p>
+          </div>
+          <div class="card">
+            <h3>Research Lab</h3>
+            <p>Focused on reasoning, memory architectures, agent learning, multimodal intelligence, compiler optimization, privacy-preserving AI, and human-centered safety.</p>
+          </div>
+          <div class="card">
+            <h3>Docs &amp; Learning</h3>
+            <p>Comprehensive, living documentation: getting-started guides, full API references, SDKs, memory system deep-dives, model cards, and real-world examples.</p>
+          </div>
+          <div class="card">
+            <h3>MLAI Network</h3>
+            <p>Community layer for agent sharing, plugin ecosystem, research exchange, open-source contributions, and builder reputation.</p>
+          </div>
+          <div class="card">
+            <h3>MLAI 2030</h3>
+            <p>Long-term ecosystem vision: intelligence systems that align with human goals, collaborate naturally across modalities, and create value across every device and environment.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer id="research">
+    <div class="container footer-grid">
+      <div>
+        <span class="eyebrow">Brand message</span>
+        <h2 style="font-size:var(--text-xl); margin: 1rem 0 0.85rem; line-height:1.1;">One Intelligence Platform.<br>Infinite Possibilities.</h2>
+        <p>From personal daily companions to enterprise knowledge engines, from software development to spatial simulation — MLAI is the connective intelligence layer between humans and machines.</p>
+        <p style="margin-top:1.25rem; font-size:var(--text-sm);">© 2026 MLAI • Vision in motion</p>
+      </div>
+      <div class="footer-links">
+        <div>
+          <h4>Products</h4>
+          <a href="#abbey">Abbey</a>
+          <a href="#ecosystem">Aviva</a>
+          <a href="#ecosystem">Abi</a>
+          <a href="#platform">WDBX</a>
+          <a href="#enterprise">NYX</a>
+        </div>
+        <div>
+          <h4>Platform</h4>
+          <a href="#developers">Developers</a>
+          <a href="#platform">Architecture</a>
+          <a href="#enterprise">Enterprise</a>
+          <a href="#research">Research</a>
+        </div>
+        <div>
+          <h4>Company</h4>
+          <a href="#research">Research Lab</a>
+          <a href="#top">Vision</a>
+          <a href="#developers">Join the build</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll progress bar
+    const progressBar = document.getElementById('progress-bar');
+    function updateProgress() {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const scrollPercent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+      progressBar.style.width = Math.min(scrollPercent, 100) + '%';
+    }
+    window.addEventListener('scroll', updateProgress, { passive: true });
+    updateProgress();
+
+    // Mobile navigation toggle
+    const mobileToggle = document.getElementById('mobile-toggle');
+    const mobileNav = document.getElementById('mobile-nav');
+    
+    mobileToggle.addEventListener('click', () => {
+      const isOpen = mobileNav.classList.toggle('open');
+      mobileToggle.setAttribute('aria-expanded', isOpen);
+      mobileToggle.textContent = isOpen ? '✕' : '☰';
+    });
+    
+    // Close mobile nav when clicking a link
+    mobileNav.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileNav.classList.remove('open');
+        mobileToggle.setAttribute('aria-expanded', 'false');
+        mobileToggle.textContent = '☰';
+      });
+    });
+
+    // Scrollspy for desktop nav
+    const navLinks = document.querySelectorAll('#desktop-nav a');
+    const sections = [...navLinks].map(link => document.querySelector(link.getAttribute('href'))).filter(Boolean);
+    
+    function updateActiveNav() {
+      let current = '';
+      const scrollPos = window.scrollY + 120;
+      
+      sections.forEach(section => {
+        if (section.offsetTop <= scrollPos) {
+          current = section.getAttribute('id');
+        }
+      });
+      
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === '#' + current) {
+          link.classList.add('active');
+        }
+      });
+    }
+    window.addEventListener('scroll', updateActiveNav, { passive: true });
+    updateActiveNav();
+
+    // Expandable card details
+    document.querySelectorAll('.card-toggle').forEach(toggle => {
+      toggle.addEventListener('click', () => {
+        const card = toggle.closest('.card');
+        const isExpanded = card.classList.toggle('expanded');
+        toggle.setAttribute('aria-expanded', isExpanded);
+        
+        // Optional: close other cards when one opens (accordion style)
+        if (isExpanded) {
+          document.querySelectorAll('.card.expanded').forEach(other => {
+            if (other !== card) {
+              other.classList.remove('expanded');
+              const otherToggle = other.querySelector('.card-toggle');
+              if (otherToggle) otherToggle.setAttribute('aria-expanded', 'false');
+            }
+          });
+        }
+      });
+    });
+
+    // Copy code button
+    const copyBtn = document.getElementById('copy-code');
+    if (copyBtn) {
+      copyBtn.addEventListener('click', async () => {
+        const codeBlock = copyBtn.nextElementSibling.textContent.trim();
+        try {
+          await navigator.clipboard.writeText(codeBlock);
+          const originalText = copyBtn.innerHTML;
+          copyBtn.innerHTML = `
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+            <span>Copied!</span>
+          `;
+          setTimeout(() => {
+            copyBtn.innerHTML = originalText;
+          }, 1800);
+        } catch (err) {
+          // Fallback for older browsers
+          const textArea = document.createElement('textarea');
+          textArea.value = codeBlock;
+          document.body.appendChild(textArea);
+          textArea.select();
+          document.execCommand('copy');
+          document.body.removeChild(textArea);
+          copyBtn.textContent = 'Copied!';
+          setTimeout(() => { copyBtn.innerHTML = originalText; }, 1800);
+        }
+      });
+    }
+
+    // Subtle brain node pulse on hero hover (extra polish)
+    const heroVisual = document.querySelector('.hero-visual');
+    if (heroVisual) {
+      heroVisual.addEventListener('mouseenter', () => {
+        const circles = heroVisual.querySelectorAll('circle');
+        circles.forEach((c, i) => {
+          c.style.transitionDuration = '400ms';
+          c.style.transform = i % 2 === 0 ? 'scale(1.15)' : 'scale(0.95)';
+        });
+      });
+      heroVisual.addEventListener('mouseleave', () => {
+        const circles = heroVisual.querySelectorAll('circle');
+        circles.forEach(c => c.style.transform = '');
+      });
+    }
+
+    // Keyboard escape closes mobile nav
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && mobileNav.classList.contains('open')) {
+        mobileNav.classList.remove('open');
+        mobileToggle.setAttribute('aria-expanded', 'false');
+        mobileToggle.textContent = '☰';
+      }
+    });
+
+    // Respect reduced motion for any remaining transitions
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.documentElement.style.setProperty('--transition-fast', 'none');
+    }
+
+    // ========== EARLY ACCESS MODAL + CONFETTI ==========
+    const waitlistBtn = document.getElementById('open-waitlist');
+    const modal = document.getElementById('waitlist-modal');
+    const modalClose = document.getElementById('modal-close');
+    const modalDone = document.getElementById('modal-done');
+    const formView = document.getElementById('modal-form-view');
+    const successView = document.getElementById('modal-success-view');
+    const waitlistForm = document.getElementById('waitlist-form');
+
+    function openModal() {
+      modal.classList.add('active');
+      modal.setAttribute('aria-hidden', 'false');
+      // Focus first input
+      setTimeout(() => {
+        const firstInput = modal.querySelector('input');
+        if (firstInput) firstInput.focus();
+      }, 120);
+    }
+
+    function closeModal() {
+      modal.classList.remove('active');
+      modal.setAttribute('aria-hidden', 'true');
+      // Reset to form view if it was in success state
+      setTimeout(() => {
+        formView.style.display = 'block';
+        successView.style.display = 'none';
+      }, 300);
+    }
+
+    // Open modal from hero button
+    if (waitlistBtn) {
+      waitlistBtn.addEventListener('click', openModal);
+    }
+
+    // Close handlers
+    if (modalClose) modalClose.addEventListener('click', closeModal);
+    if (modalDone) modalDone.addEventListener('click', closeModal);
+
+    // Close on backdrop click
+    if (modal) {
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+      });
+    }
+
+    // Enhanced Escape key handling (modal + mobile nav)
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        if (modal && modal.classList.contains('active')) {
+          closeModal();
+        } else if (mobileNav && mobileNav.classList.contains('open')) {
+          mobileNav.classList.remove('open');
+          if (mobileToggle) {
+            mobileToggle.setAttribute('aria-expanded', 'false');
+            mobileToggle.textContent = '☰';
+          }
+        }
+      }
+    });
+
+    // Confetti launcher (lightweight, self-contained)
+    function launchConfetti(count = 80) {
+      const colors = ['#68e3ff', '#9b7cff', '#7af7cf', '#f7c36b', '#ffffff'];
+      const durationMin = 1400;
+      const durationMax = 2300;
+
+      for (let i = 0; i < count; i++) {
+        const piece = document.createElement('div');
+        piece.className = 'confetti-piece';
+        
+        const size = 5 + Math.random() * 9;
+        piece.style.left = (Math.random() * 100) + 'vw';
+        piece.style.top = '-12px';
+        piece.style.width = size + 'px';
+        piece.style.height = size + 'px';
+        piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+        piece.style.opacity = (0.6 + Math.random() * 0.5).toFixed(2);
+        piece.style.transform = `rotate(${Math.random() * 360}deg)`;
+        
+        const animDuration = durationMin + Math.random() * (durationMax - durationMin);
+        piece.style.animationDuration = animDuration + 'ms';
+        
+        // Random slight horizontal drift
+        const drift = (Math.random() - 0.5) * 180;
+        piece.style.setProperty('--drift', drift + 'px');
+        
+        document.body.appendChild(piece);
+        
+        // Cleanup
+        setTimeout(() => {
+          if (piece && piece.parentNode) piece.parentNode.removeChild(piece);
+        }, animDuration + 120);
+      }
+    }
+
+    // Waitlist form handling (fake submit with success + confetti)
+    if (waitlistForm) {
+      waitlistForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const submitBtn = waitlistForm.querySelector('button[type="submit"]');
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.textContent = 'Submitting...';
+        }
+
+        // Simulate network delay
+        setTimeout(() => {
+          // Switch to success view
+          formView.style.display = 'none';
+          successView.style.display = 'block';
+          
+          // Big celebratory confetti
+          launchConfetti(140);
+          
+          // Reset button state in case user reopens
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Request Early Access';
+          }
+        }, 650);
+      });
+    }
+
+    // Enhance existing copy button with confetti burst
+    const copyBtnEl = document.getElementById('copy-code');
+    if (copyBtnEl) {
+      const originalCopyHandler = copyBtnEl.onclick; // not strictly needed since we already have listener
+      // We already attached the listener earlier — we'll just add confetti after success
+      // Since the listener is inline, we can wrap it by re-attaching a better version
+    }
+    
+    // Re-attach improved copy handler with confetti (non-destructive)
+    if (copyBtnEl) {
+      copyBtnEl.addEventListener('click', () => {
+        // Small celebratory burst on successful copy
+        setTimeout(() => {
+          launchConfetti(35);
+        }, 420);
+      }, { once: false });
+    }
+  </script>
+
+  <!-- Early Access Modal -->
+  <div class="modal-backdrop" id="waitlist-modal" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <button class="modal-close" id="modal-close" aria-label="Close modal">×</button>
+      
+      <div id="modal-form-view">
+        <h2 id="modal-title">Join the MLAI Vision</h2>
+        <p>Be among the first to experience the future of human + AI collaboration. Early access members get priority onboarding, direct input on the roadmap, and exclusive updates.</p>
+        
+        <form class="modal-form" id="waitlist-form">
+          <div>
+            <label for="name">Full name</label>
+            <input type="text" id="name" name="name" placeholder="Alex Rivera" />
+          </div>
+          <div>
+            <label for="email">Work email <span style="color:#f7c36b">*</span></label>
+            <input type="email" id="email" name="email" placeholder="you@company.com" required />
+          </div>
+          <div>
+            <label for="interest">What excites you most?</label>
+            <select id="interest" name="interest">
+              <option value="">Select an area...</option>
+              <option value="personal">Abbey — Personal intelligence companion</option>
+              <option value="reasoning">Aviva — Deep research &amp; reasoning</option>
+              <option value="agents">Multi-agent systems &amp; orchestration</option>
+              <option value="memory">WDBX long-term memory &amp; knowledge graphs</option>
+              <option value="spatial">NYX spatial computing &amp; simulation</option>
+              <option value="enterprise">Enterprise deployment &amp; security</option>
+              <option value="other">Something else entirely</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary">Request Early Access</button>
+          <p style="font-size: var(--text-xs); color: var(--color-text-faint); text-align: center; margin-top: 0.5rem;">
+            We respect your inbox. No spam, ever.
+          </p>
+        </form>
+      </div>
+      
+      <div id="modal-success-view" class="success-state" style="display: none;">
+        <div class="icon">🎉</div>
+        <h3>You're on the list.</h3>
+        <p>Thank you. We'll reach out soon with early access details and a personal note from the team.</p>
+        <button type="button" class="btn btn-secondary" id="modal-done" style="max-width: 200px; margin: 1.5rem auto 0;">Done</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

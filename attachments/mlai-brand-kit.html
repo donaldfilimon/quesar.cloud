@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>MLAI — Lab Design System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Spectral:wght@600;700&family=Geist:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<style>
+  /* ---------------------------------------------------------------
+     Tokens copied verbatim from src/index.css (:root). This file is a
+     REFERENCE, not a second source of truth — if these drift from the
+     repo, the repo wins. Regenerate rather than hand-edit.
+     --------------------------------------------------------------- */
+  :root {
+    --background: oklch(0.07 0.012 260);
+    --foreground: oklch(0.94 0.008 255);
+    --card: oklch(0.13 0.014 260 / 0.80);
+    --primary: oklch(0.79 0.13 207);
+    --primary-foreground: oklch(0.10 0.015 260);
+    --secondary: oklch(0.18 0.014 260);
+    --muted-foreground: oklch(0.70 0.025 255);
+    --accent: oklch(0.30 0.045 215);
+    --destructive: oklch(0.68 0.21 25);
+    --destructive-foreground: oklch(0.15 0.02 25);
+    --border: oklch(1 0 0 / 10%);
+
+    --abbey: #34d399;
+    --aviva: #a855f7;
+    --abi:   #22d3ee;
+
+    --display: "Spectral", Georgia, serif;
+    --sans: "Geist", ui-sans-serif, system-ui, sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, monospace;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--sans);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.55;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 28px; }
+
+  /* Deliberately asymmetric: content sits left of centre on wide screens,
+     matching the site's hero rather than the centred-column default. */
+  header.mast {
+    border-bottom: 1px solid var(--border);
+    padding: 72px 0 48px;
+    position: relative;
+    overflow: hidden;
+  }
+  header.mast::after {
+    content: ""; position: absolute; top: -260px; right: -160px;
+    width: 640px; height: 640px; border-radius: 50%;
+    background: radial-gradient(circle, oklch(0.79 0.13 207 / 0.16) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .brandline { display: flex; align-items: center; gap: 14px; margin-bottom: 40px; }
+  .wordmark { font-weight: 600; letter-spacing: -0.01em; font-size: 19px; }
+  .wordmark span { color: var(--muted-foreground); }
+  h1 {
+    font-family: var(--display); font-weight: 700;
+    font-size: clamp(38px, 6vw, 64px); line-height: 1.05;
+    letter-spacing: -0.02em; margin: 0 0 18px; max-width: 15ch;
+  }
+  h1 em { font-style: normal; color: var(--primary); }
+  .lede { color: var(--muted-foreground); max-width: 56ch; font-size: 17px; margin: 0; }
+
+  section { padding: 64px 0; border-bottom: 1px solid var(--border); }
+  .eyebrow {
+    font-family: var(--mono); font-size: 10px; font-weight: 700;
+    letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--primary); margin: 0 0 10px;
+  }
+  h2 {
+    font-family: var(--display); font-weight: 600;
+    font-size: 30px; letter-spacing: -0.015em; margin: 0 0 8px;
+  }
+  .note { color: var(--muted-foreground); font-size: 15px; margin: 0 0 32px; max-width: 62ch; }
+
+  /* Token grid ---------------------------------------------------- */
+  .tokens { display: grid; grid-template-columns: repeat(auto-fill, minmax(232px,1fr)); gap: 12px; }
+  .token {
+    border: 1px solid var(--border); border-radius: 14px 14px 6px 6px;
+    overflow: hidden; background: oklch(1 0 0 / 2.5%);
+    cursor: pointer; text-align: left; padding: 0; width: 100%;
+    color: inherit; font: inherit; transition: border-color .15s;
+  }
+  .token:hover, .token:focus-visible { border-color: oklch(0.79 0.13 207 / 0.45); }
+  .token:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+  .chip { height: 62px; border-bottom: 1px solid var(--border); box-shadow: inset 0 0 0 1px oklch(1 0 0 / 6%); }
+  .token .meta { padding: 11px 13px 13px; }
+  .token .name { font-family: var(--mono); font-size: 12px; font-weight: 500; }
+  .token .val { font-family: var(--mono); font-size: 10.5px; color: var(--muted-foreground); margin-top: 3px; }
+  .ratio {
+    display: inline-block; margin-top: 8px; font-family: var(--mono);
+    font-size: 10px; padding: 2px 7px; border-radius: 999px;
+    border: 1px solid var(--border); color: var(--muted-foreground);
+  }
+  .ratio.pass { color: var(--abbey); border-color: oklch(0.75 0.15 160 / 0.4); }
+
+  /* Type ---------------------------------------------------------- */
+  .spec { border-left: 2px solid var(--accent); padding-left: 22px; margin-bottom: 30px; }
+  .spec .lbl {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--muted-foreground); margin-bottom: 8px;
+  }
+  .s-display { font-family: var(--display); font-size: 42px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; }
+  .s-body { font-size: 17px; max-width: 58ch; color: var(--foreground); }
+  .s-mono { font-family: var(--mono); font-size: 13px; color: var(--muted-foreground); }
+
+  /* Personas ------------------------------------------------------ */
+  .personas { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: 14px; }
+  .persona { border: 1px solid var(--border); border-radius: 16px 16px 4px 4px; padding: 18px; }
+  .dot { width: 11px; height: 11px; border-radius: 50%; display: inline-block; margin-right: 9px; }
+  .persona h3 { margin: 0 0 4px; font-size: 16px; font-weight: 600; display: flex; align-items: center; }
+  .persona p { margin: 0; font-size: 13.5px; color: var(--muted-foreground); }
+  .persona code { font-family: var(--mono); font-size: 11px; display: block; margin-top: 12px; color: var(--muted-foreground); }
+
+  /* Signature ----------------------------------------------------- */
+  .panel { border: 1px solid var(--border); border-radius: 22px; overflow: hidden; background: #070914cc; max-width: 500px; }
+  .panel .bar { display:flex; justify-content:space-between; padding: 12px 18px; border-bottom: 1px solid var(--border); font-family: var(--mono); font-size: 10px; letter-spacing: .2em; text-transform: uppercase; }
+  .panel .bar .l { color: var(--primary); font-weight: 700; }
+  .panel .bar .r { color: oklch(0.70 0.025 255 / 0.55); }
+  .answer { padding: 18px 18px 14px; }
+  .answer .k { font-family: var(--mono); font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: oklch(0.70 0.025 255 / .65); }
+  .answer .q { font-family: var(--display); font-size: 18px; margin-top: 7px; }
+  .chain { position: relative; padding: 0 18px 18px; }
+  .rail { position:absolute; left: 1.4375rem; top: 19px; bottom: 52px; width: 1px;
+          background: linear-gradient(to bottom, oklch(0.79 0.13 207 / .75), oklch(1 0 0 / .28)); }
+  .blk { display: flex; gap: 13px; margin-bottom: 10px; position: relative; }
+  .node { width: 10px; height: 10px; border-radius: 50%; margin-top: 14px; flex: none; box-shadow: 0 0 0 4px #070914; z-index: 1; }
+  .body { flex: 1; min-width: 0; border: 1px solid var(--border); border-radius: 11px; padding: 11px 13px; background: oklch(1 0 0 / 2.8%); }
+  .row { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; }
+  .src { font-family: var(--mono); font-size: 11px; color: oklch(0.70 0.025 255 / .85); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .w { font-family: var(--mono); font-size: 11px; font-variant-numeric: tabular-nums; }
+  .ex { font-size: 13px; margin: 6px 0 0; }
+  .meter { height: 2px; background: oklch(1 0 0 / 10%); border-radius: 999px; margin-top: 10px; overflow: hidden; }
+  .meter i { display:block; height:100%; border-radius: 999px; }
+  .ids { display:flex; gap: 12px; margin-top: 8px; font-family: var(--mono); font-size: 10px; color: oklch(0.70 0.025 255 / .45); }
+  .ids .p { margin-left: auto; }
+  figcaption { border-top: 1px solid var(--border); padding: 12px 18px; font-family: var(--mono); font-size: 10px; color: oklch(0.70 0.025 255 / .5); line-height: 1.6; }
+
+  /* Rules --------------------------------------------------------- */
+  .rules { display: grid; gap: 10px; }
+  .rule { border: 1px solid var(--border); border-left: 2px solid var(--primary); border-radius: 0 12px 12px 0; padding: 15px 18px; }
+  .rule b { display:block; font-size: 14.5px; margin-bottom: 4px; }
+  .rule p { margin: 0; font-size: 13.5px; color: var(--muted-foreground); }
+
+  footer { padding: 40px 0 72px; color: var(--muted-foreground); font-size: 13px; }
+  .toast {
+    position: fixed; left: 50%; bottom: 30px; transform: translate(-50%, 14px);
+    background: var(--primary); color: var(--primary-foreground);
+    font-family: var(--mono); font-size: 12px; font-weight: 700;
+    padding: 9px 17px; border-radius: 999px; opacity: 0;
+    transition: opacity .18s, transform .18s; pointer-events: none;
+  }
+  .toast.on { opacity: 1; transform: translate(-50%, 0); }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+
+<header class="mast">
+  <div class="wrap">
+    <div class="brandline">
+      <svg width="34" height="34" viewBox="0 0 64 64" aria-hidden="true">
+        <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#60a5fa"/><stop offset="1" stop-color="#0ea5e9"/>
+        </linearGradient></defs>
+        <rect x="4" y="4" width="56" height="56" rx="16" fill="url(#g)"/>
+        <path d="M20 45 L20 22 L32 32 L44 22 L44 45" fill="none" stroke="#fff" stroke-width="3.4"
+              stroke-linecap="round" stroke-linejoin="round" opacity=".95"/>
+        <g fill="#fff">
+          <circle cx="20" cy="45" r="4.2"/><circle cx="20" cy="22" r="3.5"/><circle cx="32" cy="32" r="3"/>
+          <circle cx="44" cy="22" r="3.5"/><circle cx="44" cy="45" r="4.2"/>
+        </g>
+      </svg>
+      <div class="wordmark">MLAI <span>CORPORATION</span></div>
+    </div>
+    <h1>The <em>Lab</em> design system.</h1>
+    <p class="lede">
+      Tokens, type, and the one signature element — extracted from
+      <code style="font-family:var(--mono);font-size:14px">src/index.css</code>,
+      not redrawn. Click any token to copy it.
+    </p>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <p class="eyebrow">01 — Color</p>
+    <h2>Semantic tokens, OKLCH</h2>
+    <p class="note">
+      OKLCH so lightness stays perceptually even when a hue shifts. Every pairing below
+      is measured, not asserted — ratios are WCAG 2.1 against the surface each token
+      actually sits on.
+    </p>
+    <div class="tokens" id="tokens"></div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="eyebrow">02 — Type</p>
+    <h2>Three faces, three jobs</h2>
+    <p class="note">
+      Spectral carries voice, Geist carries text, JetBrains Mono carries data. A face
+      never does a second job — the mono is for values and identifiers, never for
+      atmosphere.
+    </p>
+    <div class="spec">
+      <div class="lbl">Display — Spectral 700 · headlines only</div>
+      <div class="s-display">Traceable AI systems</div>
+    </div>
+    <div class="spec">
+      <div class="lbl">Body — Geist 400/500 · all running text</div>
+      <div class="s-body">
+        Every answer keeps the weighted, hash-chained path back to the records that
+        produced it. Retrieval that cannot show its evidence is not retrieval you can
+        deploy under audit.
+      </div>
+    </div>
+    <div class="spec">
+      <div class="lbl">Mono — JetBrains Mono 400/700 · data, ids, labels</div>
+      <div class="s-mono">blk_8f21c4 ← parent a17d… · weight 0.94 · chain verified</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="eyebrow">03 — Personas</p>
+    <h2>Abbey · Aviva · Abi</h2>
+    <p class="note">
+      Fixed brand colors. These three never re-map with the theme — a persona's color is
+      part of its identity, so a reader learns it once and it holds everywhere.
+    </p>
+    <div class="personas">
+      <div class="persona">
+        <h3><span class="dot" style="background:var(--abbey)"></span>Abbey</h3>
+        <p>Empathetic polymath. Broad context, warm register.</p>
+        <code>#34d399 · 10.85:1 on canvas</code>
+      </div>
+      <div class="persona">
+        <h3><span class="dot" style="background:var(--aviva)"></span>Aviva</h3>
+        <p>Direct precision expert. Terse, high-confidence answers.</p>
+        <code>#a855f7 · 5.27:1 on canvas</code>
+      </div>
+      <div class="persona">
+        <h3><span class="dot" style="background:var(--abi)"></span>Abi</h3>
+        <p>Adaptive moderator. Routes between the other two.</p>
+        <code>#22d3ee · 11.54:1 on canvas</code>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="eyebrow">04 — Signature</p>
+    <h2>The weighted backtrace</h2>
+    <p class="note">
+      The one element the system is remembered by. It mirrors the logo mark — that “M” is
+      a weighted directed graph — and shows the product's actual mechanism rather than a
+      generic AI motif. Boldness is spent here and nowhere else.
+    </p>
+    <figure class="panel" style="margin:0">
+      <div class="bar"><span class="l">wdbx · backtrace</span><span class="r">chain verified</span></div>
+      <div class="answer">
+        <div class="k">Answer</div>
+        <div class="q">“Keep the German customer records in-region.”</div>
+      </div>
+      <div class="chain">
+        <div class="rail"></div>
+        <div class="blk">
+          <span class="node" style="background:var(--aviva)"></span>
+          <div class="body">
+            <div class="row"><span class="src">runbook/retention-policy.md</span><span class="w" style="color:var(--aviva)">0.94</span></div>
+            <p class="ex">EU records stay in-region; no cross-border egress.</p>
+            <div class="meter"><i style="width:94%;background:var(--aviva);opacity:.7"></i></div>
+            <div class="ids"><span>blk_8f21c4</span><span>← parent a17d…</span><span class="p" style="color:var(--aviva)">Aviva</span></div>
+          </div>
+        </div>
+        <div class="blk">
+          <span class="node" style="background:var(--abi)"></span>
+          <div class="body">
+            <div class="row"><span class="src">contracts/dpa-2026.pdf</span><span class="w" style="color:var(--abi)">0.71</span></div>
+            <p class="ex">Processor may not sub-process without written notice.</p>
+            <div class="meter"><i style="width:71%;background:var(--abi);opacity:.7"></i></div>
+            <div class="ids"><span>blk_8f21b0</span><span>← parent 6c02…</span><span class="p" style="color:var(--abi)">Abi</span></div>
+          </div>
+        </div>
+        <div class="blk">
+          <span class="node" style="background:var(--abbey)"></span>
+          <div class="body">
+            <div class="row"><span class="src">thread/eng-platform#412</span><span class="w" style="color:var(--abbey)">0.38</span></div>
+            <p class="ex">Earlier draft — superseded, retained for audit.</p>
+            <div class="meter"><i style="width:38%;background:var(--abbey);opacity:.7"></i></div>
+            <div class="ids"><span>blk_8f2196</span><span>← parent 3e9f…</span><span class="p" style="color:var(--abbey)">Abbey</span></div>
+          </div>
+        </div>
+      </div>
+      <figcaption>
+        Illustrative trace. The meter WIDTH carries the weight — never animate it from a
+        full bar, or every row reads 1.00 under prefers-reduced-motion.
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="eyebrow">05 — Rules</p>
+    <h2>What holds this together</h2>
+    <div class="rules">
+      <div class="rule">
+        <b>Re-value tokens, never restructure them.</b>
+        <p>A re-skin changes what <code>--primary</code> equals. It does not add a token or
+        rename one. Components reference semantics, never raw hex.</p>
+      </div>
+      <div class="rule">
+        <b>Update both blocks.</b>
+        <p>Every token lives twice: defined in <code>:root</code>, re-exposed in
+        <code>@theme inline</code> as <code>--color-*</code>. Miss the second and Tailwind
+        emits no rule at all — the style silently does nothing.</p>
+      </div>
+      <div class="rule">
+        <b>Every metric carries provenance.</b>
+        <p>● measured · ○ target · ◆ reported. A target never appears as a measurement,
+        in marketing copy or anywhere else.</p>
+      </div>
+      <div class="rule">
+        <b>Contrast is checked, not assumed.</b>
+        <p><code>--destructive</code> is a light red, so its foreground is dark ink — the
+        inherited light foreground gave 2.7:1 and failed AA for months without anyone
+        seeing a broken pixel.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    Generated from <code style="font-family:var(--mono)">src/index.css</code> ·
+    the repository is the source of truth · regenerate rather than hand-edit.
+  </div>
+</footer>
+
+<div class="toast" id="toast">copied</div>
+
+<script>
+const TOKENS = [
+  ["--background","oklch(0.07 0.012 260)","#010103",null],
+  ["--foreground","oklch(0.94 0.008 255)","#e8ebf1","17.50:1 on canvas"],
+  ["--primary","oklch(0.79 0.13 207)","#25d1e5","11.29:1 on canvas"],
+  ["--primary-foreground","oklch(0.10 0.015 260)","#020307","11.14:1 on primary"],
+  ["--secondary","oklch(0.18 0.014 260)","#0e1218","15.78:1 w/ foreground"],
+  ["--muted-foreground","oklch(0.70 0.025 255)","#94a0ae","7.82:1 on canvas"],
+  ["--accent","oklch(0.30 0.045 215)","#0c333c",null],
+  ["--destructive","oklch(0.68 0.21 25)","#ff5352",null],
+  ["--destructive-foreground","oklch(0.15 0.02 25)","#130807","6.22:1 on destructive"],
+  ["--border","oklch(1 0 0 / 10%)","rgba(255,255,255,.10)",null]
+];
+const grid = document.getElementById("tokens");
+const toast = document.getElementById("toast");
+let t;
+TOKENS.forEach(([name, oklch, hex, ratio]) => {
+  const b = document.createElement("button");
+  b.className = "token";
+  b.type = "button";
+  b.setAttribute("aria-label", `Copy ${name}`);
+  b.innerHTML =
+    `<div class="chip" style="background:${oklch}"></div>
+     <div class="meta">
+       <div class="name">${name}</div>
+       <div class="val">${oklch}</div>
+       <div class="val">${hex}</div>
+       ${ratio ? `<span class="ratio pass">${ratio}</span>` : ""}
+     </div>`;
+  b.addEventListener("click", async () => {
+    try { await navigator.clipboard.writeText(`${name}: ${oklch};`); }
+    catch { return; }
+    toast.textContent = `copied ${name}`;
+    toast.classList.add("on");
+    clearTimeout(t);
+    t = setTimeout(() => toast.classList.remove("on"), 1400);
+  });
+  grid.appendChild(b);
+});
+</script>
+</body>
+</html>

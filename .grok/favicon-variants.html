@@ -1,0 +1,93 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  body { background: #333; color: #fff; font: 12px sans-serif; padding: 16px; }
+  .row { display: flex; gap: 24px; align-items: flex-end; margin-bottom: 24px; }
+  .cell { text-align: center; }
+  .cell svg { display: block; image-rendering: auto; background: #111; }
+  .s16 svg { width: 16px; height: 16px; }
+  .s32 svg { width: 32px; height: 32px; }
+  .s64 svg { width: 64px; height: 64px; }
+</style>
+</head>
+<body>
+<div class="row">
+
+<div class="cell s16">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+    <rect width="16" height="16" rx="3" fill="#08090b"/>
+    <circle cx="7.5" cy="7.5" r="5" fill="none" stroke="#9eb4bf" stroke-width="2"/>
+    <path d="M11 11 L13.6 13.8" stroke="#9eb4bf" stroke-width="2" stroke-linecap="square"/>
+  </svg>
+  16 A ring
+</div>
+
+<div class="cell s16">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+    <rect width="16" height="16" rx="3" fill="#08090b"/>
+    <circle cx="7.5" cy="7.5" r="5" fill="none" stroke="#9eb4bf" stroke-width="2"/>
+    <circle cx="7.5" cy="7.5" r="1.15" fill="#9eb4bf"/>
+    <path d="M11 11 L13.6 13.8" stroke="#9eb4bf" stroke-width="2" stroke-linecap="square"/>
+  </svg>
+  16 B +dot
+</div>
+
+<div class="cell s16">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+    <rect width="16" height="16" rx="3" fill="#08090b"/>
+    <path fill="#9eb4bf" fill-rule="evenodd" d="M7.5 2a5.5 5.5 0 1 1 0 11 5.5 5.5 0 0 1 0-11zm0 2.25a3.25 3.25 0 1 0 0 6.5 3.25 3.25 0 0 0 0-6.5z"/>
+    <path d="M11 11 L13.6 13.8" stroke="#9eb4bf" stroke-width="2" stroke-linecap="square"/>
+  </svg>
+  16 C fill
+</div>
+
+<div class="cell s16">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+    <rect width="16" height="16" rx="3" fill="#08090b"/>
+    <circle cx="7.5" cy="7.5" r="5.1" fill="none" stroke="#9eb4bf" stroke-width="2.4"/>
+    <path d="M10.8 10.8 L13.7 13.9" stroke="#9eb4bf" stroke-width="2.4" stroke-linecap="butt"/>
+  </svg>
+  16 D thick
+</div>
+
+</div>
+<div class="row">
+<div class="cell s32">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+    <rect width="16" height="16" rx="3" fill="#08090b"/>
+    <circle cx="7.5" cy="7.5" r="5" fill="none" stroke="#9eb4bf" stroke-width="2"/>
+    <circle cx="7.5" cy="7.5" r="1.15" fill="#9eb4bf"/>
+    <path d="M11 11 L13.6 13.8" stroke="#9eb4bf" stroke-width="2" stroke-linecap="square"/>
+  </svg>
+  32 B +dot
+</div>
+<div class="cell s32">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+    <rect width="16" height="16" rx="3" fill="#08090b"/>
+    <circle cx="7.5" cy="7.5" r="5" fill="none" stroke="#9eb4bf" stroke-width="2"/>
+    <path d="M11 11 L13.6 13.8" stroke="#9eb4bf" stroke-width="2" stroke-linecap="square"/>
+  </svg>
+  32 A ring
+</div>
+<div class="cell s32">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+    <rect width="16" height="16" rx="3" fill="#08090b"/>
+    <circle cx="7.5" cy="7.5" r="5.1" fill="none" stroke="#9eb4bf" stroke-width="2.4"/>
+    <path d="M10.8 10.8 L13.7 13.9" stroke="#9eb4bf" stroke-width="2.4" stroke-linecap="butt"/>
+  </svg>
+  32 D thick
+</div>
+<div class="cell s64">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+    <rect width="16" height="16" rx="3" fill="#08090b"/>
+    <circle cx="7.5" cy="7.5" r="5" fill="none" stroke="#9eb4bf" stroke-width="2"/>
+    <circle cx="7.5" cy="7.5" r="1.15" fill="#9eb4bf"/>
+    <path d="M11 11 L13.6 13.8" stroke="#9eb4bf" stroke-width="2" stroke-linecap="square"/>
+  </svg>
+  64 B +dot
+</div>
+</div>
+</body>
+</html>

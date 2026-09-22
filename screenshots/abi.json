@@ -1,0 +1,36 @@
+{
+  "url": "http://127.0.0.1:8080/abi",
+  "viewports": {
+    "desktop": {
+      "width": 1280,
+      "height": 800,
+      "status": 200,
+      "title": "ABI — Orchestration and inspectable context",
+      "hasCanvas": false,
+      "bodyTextLen": 5340,
+      "bodyTextHash": "0b828f919a0e42fb9ffa22b256ca3e95b82d6d216a3d52820d43e9bc7328aaae",
+      "bodyTextPrefix": "Skip to content Quesar BY MLAI Quesar Platform Architecture Sour",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/abi.png"
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "status": 200,
+      "title": "ABI — Orchestration and inspectable context",
+      "hasCanvas": false,
+      "bodyTextLen": 5295,
+      "bodyTextHash": "da967e824bc66e6aeee362634d50752f08a1a7b88475050c4ecc0d4e4fa598e1",
+      "bodyTextPrefix": "Skip to content Quesar BY MLAI Sign in Open menu ABI Orchestrati",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/abi-mobile.png"
+    }
+  },
+  "brandWarnings": [],
+  "authWarnings": [],
+  "verdictFile": "/workspace/screenshots/abi.json"
+}

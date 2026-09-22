@@ -1,0 +1,36 @@
+{
+  "url": "http://127.0.0.1:8080/developers",
+  "viewports": {
+    "desktop": {
+      "width": 1280,
+      "height": 800,
+      "status": 200,
+      "title": "Source — Quesar, ABI, WDBX, Abbey",
+      "hasCanvas": false,
+      "bodyTextLen": 6957,
+      "bodyTextHash": "cfd8dbff3a0d596efd0476d7b4b6b15012e2eee9adda873c284aa3d146ff3932",
+      "bodyTextPrefix": "Skip to content Quesar BY MLAI Quesar Platform Architecture Sour",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/developers.png"
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "status": 200,
+      "title": "Source — Quesar, ABI, WDBX, Abbey",
+      "hasCanvas": false,
+      "bodyTextLen": 6904,
+      "bodyTextHash": "7ecc66da1d951808b2818e90da631997a04e8b809d11e412b61f807ef0262f3d",
+      "bodyTextPrefix": "Skip to content Quesar BY MLAI Sign in Open menu SOURCE The publ",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/developers-mobile.png"
+    }
+  },
+  "brandWarnings": [],
+  "authWarnings": [],
+  "verdictFile": "/workspace/screenshots/developers.json"
+}
