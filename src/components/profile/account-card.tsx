@@ -3,7 +3,12 @@ import { Surface } from "@/components/site";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { DISPLAY_NAME_MAX, providerLabel, validateDisplayName, verificationCopy } from "@/lib/profile";
+import {
+  DISPLAY_NAME_MAX,
+  providerLabel,
+  validateDisplayName,
+  verificationCopy,
+} from "@/lib/profile";
 
 const kicker = "font-mono text-[0.68rem] tracking-[0.16em] text-fg-subtle uppercase";
 
@@ -36,7 +41,9 @@ export function AccountCard({ account }: { account: AccountView }) {
       <dl className="mt-6 grid gap-4 text-sm">
         <div>
           <dt className={kicker}>Email verification</dt>
-          <dd className="mt-1 text-fg-muted">{verificationCopy(account.emailVerified, account.providers)}</dd>
+          <dd className="mt-1 text-fg-muted">
+            {verificationCopy(account.emailVerified, account.providers)}
+          </dd>
         </div>
         <div>
           <dt className={kicker}>Sign-in methods</dt>
@@ -72,10 +79,17 @@ export function NameForm({ initialName, onSave }: { initialName: string; onSave:
     setStatus(null);
     try {
       const result = await onSave(check.name);
-      setStatus(result.ok ? { tone: "ok", text: "Display name updated." } : { tone: "error", text: result.error });
+      setStatus(
+        result.ok
+          ? { tone: "ok", text: "Display name updated." }
+          : { tone: "error", text: result.error },
+      );
       if (result.ok) setName(check.name);
     } catch {
-      setStatus({ tone: "error", text: "We couldn't save your name right now. Try again in a moment." });
+      setStatus({
+        tone: "error",
+        text: "We couldn't save your name right now. Try again in a moment.",
+      });
     } finally {
       setSaving(false);
     }
@@ -93,7 +107,9 @@ export function NameForm({ initialName, onSave }: { initialName: string; onSave:
           autoComplete="name"
           onChange={(event) => setName(event.target.value)}
         />
-        <p className="text-xs text-fg-subtle">Up to {DISPLAY_NAME_MAX} characters. Shown in the header and on notes.</p>
+        <p className="text-xs text-fg-subtle">
+          Up to {DISPLAY_NAME_MAX} characters. Shown in the header and on notes.
+        </p>
         <div>
           <Button type="submit" disabled={saving}>
             {saving ? "Saving…" : "Save name"}
@@ -101,7 +117,11 @@ export function NameForm({ initialName, onSave }: { initialName: string; onSave:
         </div>
         {status ? (
           <p
-            className={status.tone === "error" ? "text-sm text-status-partial" : "text-sm text-status-current"}
+            className={
+              status.tone === "error"
+                ? "text-sm text-status-partial"
+                : "text-sm text-status-current"
+            }
             role={status.tone === "error" ? "alert" : "status"}
           >
             {status.text}

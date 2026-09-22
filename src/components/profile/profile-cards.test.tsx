@@ -18,7 +18,9 @@ const noop = () => {};
 describe("NameForm", () => {
   // Port of mlai product-forms "limits the profile use case to the server's accepted length".
   it("limits the display name input to mlai's 80-character cap", () => {
-    const html = renderToStaticMarkup(<NameForm initialName="Ada" onSave={async () => ({ ok: true })} />);
+    const html = renderToStaticMarkup(
+      <NameForm initialName="Ada" onSave={async () => ({ ok: true })} />,
+    );
     expect(html).toMatch(/id="displayName"[^>]*maxLength="80"/);
     expect(html).toContain('value="Ada"');
   });
@@ -55,7 +57,10 @@ describe("BillingCard", () => {
   it("shows the not-configured card and no plans when billing is unconfigured", () => {
     const html = renderToStaticMarkup(
       <BillingCard
-        state={{ kind: "loaded", result: { configured: false, provider: "manual", reason: "unconfigured" } }}
+        state={{
+          kind: "loaded",
+          result: { configured: false, provider: "manual", reason: "unconfigured" },
+        }}
         pendingPlan={null}
         message={null}
         onCheckout={noop}
@@ -70,7 +75,10 @@ describe("BillingCard", () => {
   it("explains a misconfigured link without showing plans", () => {
     const html = renderToStaticMarkup(
       <BillingCard
-        state={{ kind: "loaded", result: { configured: false, provider: "manual", reason: "misconfigured" } }}
+        state={{
+          kind: "loaded",
+          result: { configured: false, provider: "manual", reason: "misconfigured" },
+        }}
         pendingPlan={null}
         message={null}
         onCheckout={noop}
@@ -83,9 +91,15 @@ describe("BillingCard", () => {
   it("lists mlai's plans when configured, with checkout only for Pilot", () => {
     const html = renderToStaticMarkup(
       <BillingCard
-        state={{ kind: "loaded", result: { configured: true, provider: "stripe", plans: [...PLANS] } }}
+        state={{
+          kind: "loaded",
+          result: { configured: true, provider: "stripe", plans: [...PLANS] },
+        }}
         pendingPlan={null}
-        message={{ error: "Billing checkout is not configured yet.", nextStep: "Set STRIPE_PAYMENT_LINK." }}
+        message={{
+          error: "Billing checkout is not configured yet.",
+          nextStep: "Set STRIPE_PAYMENT_LINK.",
+        }}
         onCheckout={noop}
       />,
     );
@@ -100,8 +114,20 @@ describe("BillingCard", () => {
 
 describe("SessionsCard", () => {
   const sessions = [
-    { id: "s1", token: "t1", createdAt: "2026-09-22T10:00:00Z", expiresAt: "2026-09-29T10:00:00Z", userAgent: "Safari" },
-    { id: "s2", token: "t2", createdAt: "2026-09-21T10:00:00Z", expiresAt: "2026-09-28T10:00:00Z", userAgent: "Firefox" },
+    {
+      id: "s1",
+      token: "t1",
+      createdAt: "2026-09-22T10:00:00Z",
+      expiresAt: "2026-09-29T10:00:00Z",
+      userAgent: "Safari",
+    },
+    {
+      id: "s2",
+      token: "t2",
+      createdAt: "2026-09-21T10:00:00Z",
+      expiresAt: "2026-09-28T10:00:00Z",
+      userAgent: "Firefox",
+    },
   ];
 
   it("marks the current session and offers revoke only on the others", () => {
@@ -135,6 +161,9 @@ describe("SessionsCard", () => {
       />,
     );
     expect(html).toContain("sign in again to manage sessions");
+    // revoke-other-sessions has no freshness check, so it stays usable here.
+    expect(html).toMatch(/<button[^>]*>Sign out other sessions<\/button>/);
+    expect(html).not.toMatch(/<button[^>]*disabled=""[^>]*>Sign out other sessions/);
   });
 
   it("hides sign out everywhere behind a gate session", () => {

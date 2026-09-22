@@ -6,9 +6,7 @@ import type { BillingPlansResult } from "@/lib/billing";
 const kicker = "font-mono text-[0.68rem] tracking-[0.16em] text-fg-subtle uppercase";
 
 export type BillingState =
-  | { kind: "loading" }
-  | { kind: "error" }
-  | { kind: "loaded"; result: BillingPlansResult };
+  { kind: "loading" } | { kind: "error" } | { kind: "loaded"; result: BillingPlansResult };
 
 /**
  * Plans and checkout. With no usable payment link there are no plans to show,

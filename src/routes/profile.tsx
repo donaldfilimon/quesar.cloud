@@ -3,7 +3,11 @@ import { createFileRoute } from "@tanstack/react-router";
 import { PageClose, PageHero, Section, Surface } from "@/components/site";
 import { AccountCard, NameForm, type SaveName } from "@/components/profile/account-card";
 import { BillingCard, type BillingState } from "@/components/profile/billing-card";
-import { SessionsCard, type SessionRow, type SessionsState } from "@/components/profile/sessions-card";
+import {
+  SessionsCard,
+  type SessionRow,
+  type SessionsState,
+} from "@/components/profile/sessions-card";
 import { Button } from "@/components/ui/button";
 import { RequireSession } from "@/lib/auth/gates";
 import { authClient, signOut } from "@/lib/auth/client";
@@ -15,7 +19,10 @@ import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/profile")({
   head: () =>
-    pageHead("Profile — Quesar", "Your Quesar account: display name, sign-in methods, sessions, and billing."),
+    pageHead(
+      "Profile — Quesar",
+      "Your Quesar account: display name, sign-in methods, sessions, and billing.",
+    ),
   component: ProfilePage,
 });
 
@@ -29,14 +36,20 @@ function ProfilePage() {
 
 function ProfileInner({ user }: { user: AppUser }) {
   const [profile, setProfile] = useState<ProfileRecord | null | "error">(null);
-  const gateSession = useSyncExternalStore(subscribeToNothing, hasGateSessionMarker, noGateSessionOnServer);
+  const gateSession = useSyncExternalStore(
+    subscribeToNothing,
+    hasGateSessionMarker,
+    noGateSessionOnServer,
+  );
   const canSignOut = !user.isDevFallback && !gateSession;
 
   const loadProfile = useCallback(() => {
+    // The disabled-auth dev user has no row by construction.
+    if (user.isDevFallback) return;
     getProfile()
       .then((record) => setProfile(record))
       .catch(() => setProfile("error"));
-  }, []);
+  }, [user.isDevFallback]);
   useEffect(loadProfile, [loadProfile]);
 
   const record = profile && profile !== "error" ? profile : null;
@@ -50,7 +63,8 @@ function ProfileInner({ user }: { user: AppUser }) {
 
   const saveName: SaveName = async (name) => {
     const { error } = await authClient.updateUser({ name });
-    if (error) return { ok: false, error: error.message ?? "We couldn't save your name. Try again." };
+    if (error)
+      return { ok: false, error: error.message ?? "We couldn't save your name. Try again." };
     loadProfile();
     return { ok: true };
   };
@@ -73,10 +87,12 @@ function ProfileInner({ user }: { user: AppUser }) {
           <AccountCard account={account} />
           {user.isDevFallback ? (
             <Surface>
-              <p className="font-mono text-[0.68rem] tracking-[0.16em] text-fg-subtle uppercase">Session</p>
+              <p className="font-mono text-[0.68rem] tracking-[0.16em] text-fg-subtle uppercase">
+                Session
+              </p>
               <p className="mt-2 text-sm text-fg-muted">
-                Auth is off in this build, so notes use the local fallback account. There is no name to edit and no
-                session to manage.
+                Auth is off in this build, so notes use the local fallback account. There is no name
+                to edit and no session to manage.
               </p>
             </Surface>
           ) : (
@@ -87,7 +103,9 @@ function ProfileInner({ user }: { user: AppUser }) {
           <div className="mt-4 grid gap-4 md:grid-cols-2">
             <SessionsPanel canSignOut={canSignOut} />
             <Surface>
-              <p className="font-mono text-[0.68rem] tracking-[0.16em] text-fg-subtle uppercase">This device</p>
+              <p className="font-mono text-[0.68rem] tracking-[0.16em] text-fg-subtle uppercase">
+                This device
+              </p>
               <p className="mt-2 text-sm text-fg-muted">
                 {gateSession
                   ? "Signed in through Grok. The next request signs you straight back in, so there is no sign-out here."
@@ -187,7 +205,9 @@ function SessionsPanel({ canSignOut }: { canSignOut: boolean }) {
     try {
       await signOut("/");
     } catch {
-      setNotice("Other sessions were revoked, but this device could not be signed out. Use Sign out to try again.");
+      setNotice(
+        "Other sessions were revoked, but this device could not be signed out. Use Sign out to try again.",
+      );
       setBusy(false);
       void load();
     }
@@ -200,8 +220,12 @@ function SessionsPanel({ canSignOut }: { canSignOut: boolean }) {
         currentSessionId={currentSessionId}
         busy={busy}
         canSignOut={canSignOut}
-        onRevoke={(token) => void run(() => authClient.revokeSession({ token }), "Session revoked.")}
-        onRevokeOthers={() => void run(() => authClient.revokeOtherSessions(), "Other sessions revoked.")}
+        onRevoke={(token) =>
+          void run(() => authClient.revokeSession({ token }), "Session revoked.")
+        }
+        onRevokeOthers={() =>
+          void run(() => authClient.revokeOtherSessions(), "Other sessions revoked.")
+        }
         onSignOutEverywhere={() => void signOutEverywhere()}
       />
       {notice ? (
@@ -242,6 +266,11 @@ function BillingPanel() {
   }
 
   return (
-    <BillingCard state={state} pendingPlan={pendingPlan} message={message} onCheckout={(id) => void checkout(id)} />
+    <BillingCard
+      state={state}
+      pendingPlan={pendingPlan}
+      message={message}
+      onCheckout={(id) => void checkout(id)}
+    />
   );
 }

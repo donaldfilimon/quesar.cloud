@@ -22,7 +22,10 @@ export function validateDisplayName(input: string): NameCheck {
   const name = input.trim();
   if (!name) return { ok: false, error: "Enter a display name." };
   if ([...name].length > DISPLAY_NAME_MAX) {
-    return { ok: false, error: `Keep the display name to ${DISPLAY_NAME_MAX} characters or fewer.` };
+    return {
+      ok: false,
+      error: `Keep the display name to ${DISPLAY_NAME_MAX} characters or fewer.`,
+    };
   }
   return { ok: true, name };
 }
@@ -44,7 +47,10 @@ export function providerLabel(providerId: string): string {
 }
 
 /** Honest wording: email/password sign-up here sends no verification mail, so "pending" would mislead. */
-export function verificationCopy(emailVerified: boolean | null, providers: string[] | null): string {
+export function verificationCopy(
+  emailVerified: boolean | null,
+  providers: string[] | null,
+): string {
   if (emailVerified === null) return "Unknown";
   if (emailVerified) return "Verified";
   if (providers?.includes("credential")) {
@@ -72,7 +78,12 @@ export const getProfile = createServerFn({ method: "GET" })
     const { getSql } = await import("@/lib/db");
     const sql = await getSql();
     // Explicit columns only: `account` also holds OAuth tokens and the password hash.
-    const users = await sql<{ name: string | null; email: string | null; image: string | null; emailVerified: boolean }>`
+    const users = await sql<{
+      name: string | null;
+      email: string | null;
+      image: string | null;
+      emailVerified: boolean;
+    }>`
       select "name", "email", "image", "emailVerified" from "user" where "id" = ${context.userId} limit 1`;
     const user = users[0];
     if (!user) return null;

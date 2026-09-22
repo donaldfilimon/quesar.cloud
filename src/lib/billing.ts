@@ -87,8 +87,7 @@ export function plansFor(config: BillingConfig): BillingPlansResult {
 }
 
 export type CheckoutResult =
-  | { ok: true; url: string }
-  | { ok: false; error: string; nextStep?: string };
+  { ok: true; url: string } | { ok: false; error: string; nextStep?: string };
 
 /** Pure checkout decision, unit-tested. `email` is omitted from the link when unknown. */
 export function checkoutFor(

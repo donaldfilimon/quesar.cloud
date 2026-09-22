@@ -11,13 +11,17 @@ describe("readBillingConfig", () => {
   });
 
   it("carries BILLING_PROVIDER through", () => {
-    const config = readBillingConfig(envOf({ BILLING_PROVIDER: "stripe", STRIPE_PAYMENT_LINK: LINK }));
+    const config = readBillingConfig(
+      envOf({ BILLING_PROVIDER: "stripe", STRIPE_PAYMENT_LINK: LINK }),
+    );
     expect(config.state).toBe("configured");
     expect(config.provider).toBe("stripe");
   });
 
   it("reports a malformed or non-https link as misconfigured rather than throwing", () => {
-    expect(readBillingConfig(envOf({ STRIPE_PAYMENT_LINK: "not a url" })).state).toBe("misconfigured");
+    expect(readBillingConfig(envOf({ STRIPE_PAYMENT_LINK: "not a url" })).state).toBe(
+      "misconfigured",
+    );
     expect(readBillingConfig(envOf({ STRIPE_PAYMENT_LINK: "http://buy.stripe.com/x" })).state).toBe(
       "misconfigured",
     );
@@ -80,7 +84,11 @@ describe("checkoutFor", () => {
   });
 
   it("says checkout is misconfigured for an unusable link", () => {
-    const result = checkoutFor("pilot", readBillingConfig(envOf({ STRIPE_PAYMENT_LINK: "nope" })), user);
+    const result = checkoutFor(
+      "pilot",
+      readBillingConfig(envOf({ STRIPE_PAYMENT_LINK: "nope" })),
+      user,
+    );
     expect(result).toMatchObject({ ok: false, error: "Billing checkout is misconfigured." });
   });
 
