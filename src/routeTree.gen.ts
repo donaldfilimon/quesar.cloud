@@ -29,6 +29,7 @@ import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as DemoRouteImport } from './routes/demo'
 import { Route as DevelopersRouteImport } from './routes/developers'
 import { Route as DocsRouteImport } from './routes/docs'
+import { Route as FeedDotxmlRouteImport } from './routes/feed[.]xml'
 import { Route as FinancialModelRouteImport } from './routes/financial-model'
 import { Route as GamaRouteImport } from './routes/gama'
 import { Route as GetStartedRouteImport } from './routes/get-started'
@@ -53,6 +54,7 @@ import { Route as SourceRouteImport } from './routes/source'
 import { Route as TeamRouteImport } from './routes/team'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as TfPoseDemoRouteImport } from './routes/tf-pose-demo'
+import { Route as UnauthorizedRouteImport } from './routes/unauthorized'
 import { Route as WdbxRouteImport } from './routes/wdbx'
 import { Route as WorkspaceRouteImport } from './routes/workspace'
 import { Route as ApiCspReportRouteImport } from './routes/api/csp-report'
@@ -186,6 +188,11 @@ const DocsRoute = DocsRouteImport.update({
   path: '/docs',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FeedDotxmlRoute = FeedDotxmlRouteImport.update({
+  id: '/feed.xml',
+  path: '/feed.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const FinancialModelRoute = FinancialModelRouteImport.update({
   id: '/financial-model',
   path: '/financial-model',
@@ -304,6 +311,11 @@ const TermsRoute = TermsRouteImport.update({
 const TfPoseDemoRoute = TfPoseDemoRouteImport.update({
   id: '/tf-pose-demo',
   path: '/tf-pose-demo',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UnauthorizedRoute = UnauthorizedRouteImport.update({
+  id: '/unauthorized',
+  path: '/unauthorized',
   getParentRoute: () => rootRouteImport,
 } as any)
 const WdbxRoute = WdbxRouteImport.update({
@@ -492,6 +504,7 @@ export interface FileRoutesByFullPath {
   '/demo': typeof DemoRoute
   '/developers': typeof DevelopersRoute
   '/docs': typeof DocsRouteWithChildren
+  '/feed.xml': typeof FeedDotxmlRoute
   '/financial-model': typeof FinancialModelRoute
   '/gama': typeof GamaRoute
   '/get-started': typeof GetStartedRoute
@@ -516,6 +529,7 @@ export interface FileRoutesByFullPath {
   '/team': typeof TeamRouteWithChildren
   '/terms': typeof TermsRoute
   '/tf-pose-demo': typeof TfPoseDemoRoute
+  '/unauthorized': typeof UnauthorizedRoute
   '/wdbx': typeof WdbxRoute
   '/workspace': typeof WorkspaceRoute
   '/api/csp-report': typeof ApiCspReportRoute
@@ -570,6 +584,7 @@ export interface FileRoutesByTo {
   '/demo': typeof DemoRoute
   '/developers': typeof DevelopersRoute
   '/docs': typeof DocsRouteWithChildren
+  '/feed.xml': typeof FeedDotxmlRoute
   '/financial-model': typeof FinancialModelRoute
   '/gama': typeof GamaRoute
   '/get-started': typeof GetStartedRoute
@@ -594,6 +609,7 @@ export interface FileRoutesByTo {
   '/team': typeof TeamRouteWithChildren
   '/terms': typeof TermsRoute
   '/tf-pose-demo': typeof TfPoseDemoRoute
+  '/unauthorized': typeof UnauthorizedRoute
   '/wdbx': typeof WdbxRoute
   '/workspace': typeof WorkspaceRoute
   '/api/csp-report': typeof ApiCspReportRoute
@@ -649,6 +665,7 @@ export interface FileRoutesById {
   '/demo': typeof DemoRoute
   '/developers': typeof DevelopersRoute
   '/docs': typeof DocsRouteWithChildren
+  '/feed.xml': typeof FeedDotxmlRoute
   '/financial-model': typeof FinancialModelRoute
   '/gama': typeof GamaRoute
   '/get-started': typeof GetStartedRoute
@@ -673,6 +690,7 @@ export interface FileRoutesById {
   '/team': typeof TeamRouteWithChildren
   '/terms': typeof TermsRoute
   '/tf-pose-demo': typeof TfPoseDemoRoute
+  '/unauthorized': typeof UnauthorizedRoute
   '/wdbx': typeof WdbxRoute
   '/workspace': typeof WorkspaceRoute
   '/api/csp-report': typeof ApiCspReportRoute
@@ -729,6 +747,7 @@ export interface FileRouteTypes {
     | '/demo'
     | '/developers'
     | '/docs'
+    | '/feed.xml'
     | '/financial-model'
     | '/gama'
     | '/get-started'
@@ -753,6 +772,7 @@ export interface FileRouteTypes {
     | '/team'
     | '/terms'
     | '/tf-pose-demo'
+    | '/unauthorized'
     | '/wdbx'
     | '/workspace'
     | '/api/csp-report'
@@ -807,6 +827,7 @@ export interface FileRouteTypes {
     | '/demo'
     | '/developers'
     | '/docs'
+    | '/feed.xml'
     | '/financial-model'
     | '/gama'
     | '/get-started'
@@ -831,6 +852,7 @@ export interface FileRouteTypes {
     | '/team'
     | '/terms'
     | '/tf-pose-demo'
+    | '/unauthorized'
     | '/wdbx'
     | '/workspace'
     | '/api/csp-report'
@@ -885,6 +907,7 @@ export interface FileRouteTypes {
     | '/demo'
     | '/developers'
     | '/docs'
+    | '/feed.xml'
     | '/financial-model'
     | '/gama'
     | '/get-started'
@@ -909,6 +932,7 @@ export interface FileRouteTypes {
     | '/team'
     | '/terms'
     | '/tf-pose-demo'
+    | '/unauthorized'
     | '/wdbx'
     | '/workspace'
     | '/api/csp-report'
@@ -964,6 +988,7 @@ export interface RootRouteChildren {
   DemoRoute: typeof DemoRoute
   DevelopersRoute: typeof DevelopersRoute
   DocsRoute: typeof DocsRouteWithChildren
+  FeedDotxmlRoute: typeof FeedDotxmlRoute
   FinancialModelRoute: typeof FinancialModelRoute
   GamaRoute: typeof GamaRoute
   GetStartedRoute: typeof GetStartedRoute
@@ -988,6 +1013,7 @@ export interface RootRouteChildren {
   TeamRoute: typeof TeamRouteWithChildren
   TermsRoute: typeof TermsRoute
   TfPoseDemoRoute: typeof TfPoseDemoRoute
+  UnauthorizedRoute: typeof UnauthorizedRoute
   WdbxRoute: typeof WdbxRoute
   WorkspaceRoute: typeof WorkspaceRoute
   ApiCspReportRoute: typeof ApiCspReportRoute
@@ -1146,6 +1172,13 @@ declare module '@tanstack/react-router' {
       path: '/docs'
       fullPath: '/docs'
       preLoaderRoute: typeof DocsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/feed.xml': {
+      id: '/feed.xml'
+      path: '/feed.xml'
+      fullPath: '/feed.xml'
+      preLoaderRoute: typeof FeedDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/financial-model': {
@@ -1314,6 +1347,13 @@ declare module '@tanstack/react-router' {
       path: '/tf-pose-demo'
       fullPath: '/tf-pose-demo'
       preLoaderRoute: typeof TfPoseDemoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/unauthorized': {
+      id: '/unauthorized'
+      path: '/unauthorized'
+      fullPath: '/unauthorized'
+      preLoaderRoute: typeof UnauthorizedRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/wdbx': {
@@ -1690,6 +1730,7 @@ const rootRouteChildren: RootRouteChildren = {
   DemoRoute: DemoRoute,
   DevelopersRoute: DevelopersRoute,
   DocsRoute: DocsRouteWithChildren,
+  FeedDotxmlRoute: FeedDotxmlRoute,
   FinancialModelRoute: FinancialModelRoute,
   GamaRoute: GamaRoute,
   GetStartedRoute: GetStartedRoute,
@@ -1714,6 +1755,7 @@ const rootRouteChildren: RootRouteChildren = {
   TeamRoute: TeamRouteWithChildren,
   TermsRoute: TermsRoute,
   TfPoseDemoRoute: TfPoseDemoRoute,
+  UnauthorizedRoute: UnauthorizedRoute,
   WdbxRoute: WdbxRoute,
   WorkspaceRoute: WorkspaceRoute,
   ApiCspReportRoute: ApiCspReportRoute,
