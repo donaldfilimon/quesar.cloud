@@ -2,6 +2,7 @@ import { createFileRoute, notFound } from "@tanstack/react-router";
 import { AppLink } from "@/components/site/app-link";
 import { BulletSurface, PageClose, PageHero, Section, Surface } from "@/components/site";
 import { projects } from "@/lib/mlai";
+import { jsonLdScript, projectLd } from "@/lib/mlai/structured-data";
 import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/projects/$slug")({
@@ -10,7 +11,10 @@ export const Route = createFileRoute("/projects/$slug")({
   },
   head: ({ params }) => {
     const project = projects.find((item) => item.slug === params.slug);
-    return pageHead(`${project?.name ?? "Project"} — MLAI`, project?.description ?? "MLAI project.");
+    return {
+      ...pageHead(`${project?.name ?? "Project"} — MLAI`, project?.description ?? "MLAI project."),
+      scripts: project ? [jsonLdScript(projectLd(project))] : [],
+    };
   },
   component: ProjectPage,
 });

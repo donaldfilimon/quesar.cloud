@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { PageClose, PageHero, Section } from "@/components/site";
+import { PageClose, PageHero, Section, Surface } from "@/components/site";
+import { termsSections } from "@/lib/mlai/pages";
 
 export const Route = createFileRoute("/terms")({
   head: () => ({
@@ -35,6 +36,21 @@ function TermsPage() {
             MLAI software is independent and is not affiliated with, endorsed by, or sponsored by Apple Inc.
           </p>
         </div>
+      </Section>
+      <Section eyebrow="Terms of use" title="Use, accounts, and limits.">
+        <ol className="grid max-w-3xl gap-4">
+          {termsSections.map((section, index) => (
+            <li key={section.title}>
+              <Surface>
+                <h2 className="font-display text-xl">
+                  <span className="mr-2 font-mono text-sm text-accent">{index + 1}.</span>
+                  {section.title}
+                </h2>
+                <p className="mt-3 text-sm leading-relaxed text-fg-muted">{section.body}</p>
+              </Surface>
+            </li>
+          ))}
+        </ol>
       </Section>
       <PageClose
         primary={{ to: "/privacy", label: "Privacy" }}

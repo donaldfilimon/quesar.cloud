@@ -1,5 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { PageClose, PageHero, Section } from "@/components/site";
+import { PageClose, PageHero, Section, Surface } from "@/components/site";
+import { StatusBadge } from "@/components/site/status-badge";
+import { LEGAL_UPDATED, securitySections } from "@/lib/mlai/pages";
 
 export const Route = createFileRoute("/security")({
   head: () => ({
@@ -23,6 +25,28 @@ function SecurityPage() {
         title="Responsible language. Documented hazards."
         lede="We do not describe Quesar as 100% private, completely secure, military-grade, or unhackable. Security claims track source, tests, and operator choices."
       />
+      <Section
+        eyebrow="Security whitepaper"
+        title="Controls, as implemented."
+        lede={`Last updated ${LEGAL_UPDATED}. Each control is labeled with its status; nothing below is a certification claim.`}
+      >
+        <ol className="grid gap-4">
+          {securitySections.map((section, index) => (
+            <li key={section.title}>
+              <Surface>
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <h2 className="font-display text-xl">
+                    <span className="mr-2 font-mono text-sm text-accent">{index + 1}.</span>
+                    {section.title}
+                  </h2>
+                  <StatusBadge status={section.status} />
+                </div>
+                <p className="mt-3 max-w-3xl text-sm leading-relaxed text-fg-muted">{section.body}</p>
+              </Surface>
+            </li>
+          ))}
+        </ol>
+      </Section>
       <Section title="What we will say">
         <ul className="max-w-2xl space-y-3 text-sm leading-relaxed text-fg-muted">
           <li>

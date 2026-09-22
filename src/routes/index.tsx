@@ -33,40 +33,46 @@ import {
   products,
   site,
   statusCopy,
-  wdbxSpecs,
   type StatusKind,
 } from "@/lib/content";
 import { pageHead } from "@/lib/seo";
+import { jsonLdScript } from "@/lib/mlai/structured-data";
+import { wdbxFacts } from "@/lib/mlai/pages";
+import {
+  HomeControlPlane,
+  HomeCta,
+  HomeProductBoundary,
+  HomeResearchPreview,
+} from "@/components/site/home-sections";
+
+const organizationLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "MLAI Corporation",
+  legalName: site.legal,
+  url: "https://quesar.cloud/",
+  description: site.mission,
+  sameAs: [
+    "https://github.com/donaldfilimon/quesar.cloud",
+    "https://github.com/donaldfilimon/abi",
+    "https://github.com/donaldfilimon/wdbx",
+    "https://github.com/donaldfilimon/abbey",
+    "https://github.com/donaldfilimon/skill-creator",
+    "https://github.com/donaldfilimon/gama",
+  ],
+};
 
 export const Route = createFileRoute("/")({
-  head: () => pageHead(`${site.name} — Private intelligence, built around you`, site.description),
+  head: () => ({
+    ...pageHead(`${site.name} — Private intelligence, built around you`, site.description),
+    scripts: [jsonLdScript(organizationLd)],
+  }),
   component: Home,
 });
 
 function Home() {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Organization",
-            name: "MLAI Corporation",
-            legalName: site.legal,
-            url: "https://quesar.cloud/",
-            description: site.mission,
-            sameAs: [
-              "https://github.com/donaldfilimon/MLAI-CORPORATION-WWW",
-              "https://github.com/donaldfilimon/abi",
-              "https://github.com/donaldfilimon/wdbx",
-              "https://github.com/donaldfilimon/abbey",
-              "https://github.com/donaldfilimon/skill-creator",
-              "https://github.com/donaldfilimon/gama",
-            ],
-          }),
-        }}
-      />
       <Hero />
       <HomeJump />
       <section id="origin" className="statement-band scroll-mt-32">
@@ -125,6 +131,7 @@ function Home() {
         <PersonaGrid />
       </Section>
       <Memory />
+      <HomeControlPlane />
       <Section
         id="products"
         eyebrow="System"
@@ -150,7 +157,7 @@ function Home() {
             </div>
           </Surface>
           <dl className="surface divide-y divide-border overflow-hidden">
-            {wdbxSpecs.map((row) => (
+            {wdbxFacts.map((row) => (
               <div key={row.k} className="flex items-baseline justify-between gap-4 px-5 py-3.5">
                 <dt className="font-mono text-[11px] tracking-wide text-fg-subtle uppercase">{row.k}</dt>
                 <dd className="font-mono text-sm text-fg">{row.v}</dd>
@@ -189,6 +196,8 @@ function Home() {
           </Button>
         </div>
       </Section>
+      <HomeProductBoundary />
+      <HomeResearchPreview />
       <Section
         eyebrow="Start"
         title="What would you like to do?"
@@ -234,6 +243,7 @@ function Home() {
         </ul>
         <ProvLegend className="mt-8" />
       </Section>
+      <HomeCta />
       <section className="border-t border-border">
         <div className="mx-auto max-w-6xl px-4 py-24 sm:px-6">
           <p className="eyebrow">Next</p>

@@ -40,6 +40,12 @@ function ServicesPage() {
                   </li>
                 ))}
               </ul>
+              <Link
+                to="/contact"
+                className="mt-5 inline-flex items-center gap-2 border-t border-border pt-4 text-sm text-accent no-underline hover:underline"
+              >
+                Discuss this service <span aria-hidden="true">→</span>
+              </Link>
             </Surface>
           ))}
         </div>

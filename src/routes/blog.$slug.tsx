@@ -1,7 +1,9 @@
-import { createFileRoute, notFound } from "@tanstack/react-router";
-import { ArticleBody } from "@/components/site/article";
+import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { MathArticleBody } from "@/components/site/math-article";
 import { PageClose, PageHero, Section } from "@/components/site";
+import { Button } from "@/components/ui/button";
 import { blog } from "@/lib/mlai";
+import { blogPostingLd, jsonLdScript } from "@/lib/mlai/structured-data";
 import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/blog/$slug")({
@@ -10,25 +12,43 @@ export const Route = createFileRoute("/blog/$slug")({
   },
   head: ({ params }) => {
     const post = blog.find((item) => item.slug === params.slug);
-    return pageHead(`${post?.title ?? "Note"} — Blog`, post?.excerpt ?? "MLAI engineering note.");
+    return {
+      ...pageHead(`${post?.title ?? "Note"} — Blog`, post?.excerpt ?? "MLAI engineering note."),
+      scripts: post ? [jsonLdScript(blogPostingLd(post))] : [],
+    };
   },
   component: BlogPost,
 });
 
 function BlogPost() {
   const { slug } = Route.useParams();
-  const post = blog.find((item) => item.slug === slug);
+  const index = blog.findIndex((item) => item.slug === slug);
+  const post = blog[index];
   if (!post) throw notFound();
+  const next = blog[(index + 1) % blog.length];
   return (
     <>
       <PageHero
-        eyebrow={`${post.tag} · ${post.date}`}
+        eyebrow={`${post.tag} · ${post.date} · ${post.readTime}`}
         title={post.title}
         lede={post.excerpt}
         atmosphere="lab"
-      />
+      >
+        {post.author ? <p className="mt-5 font-mono text-xs tracking-wide text-fg-muted">By {post.author}</p> : null}
+      </PageHero>
       <Section>
-        <ArticleBody sections={post.body} />
+        <MathArticleBody sections={post.body} />
+        <div className="mt-14 flex max-w-3xl flex-wrap items-center justify-between gap-6 border-t border-border pt-8">
+          <Button asChild>
+            <Link to="/contact">Talk to our engineers</Link>
+          </Button>
+          {next && next.slug !== post.slug ? (
+            <Link to="/blog/$slug" params={{ slug: next.slug }} className="text-right no-underline">
+              <span className="block font-mono text-[0.68rem] tracking-[0.16em] text-fg-subtle uppercase">Next note</span>
+              <span className="mt-1 block font-display text-lg text-fg hover:underline">{next.title}</span>
+            </Link>
+          ) : null}
+        </div>
       </Section>
       <PageClose
         primary={{ to: "/blog", label: "All notes" }}

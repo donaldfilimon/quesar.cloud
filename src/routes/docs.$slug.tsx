@@ -1,9 +1,11 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
-import { ArticleBody, SourceChips } from "@/components/site/article";
+import { SourceChips } from "@/components/site/article";
+import { MathArticleBody } from "@/components/site/math-article";
 import { DocOutline, DocSidebar } from "@/components/site/doc-nav";
 import { Crumbs } from "@/components/site/crumbs";
 import { PageClose, PageHero, Pager, Section } from "@/components/site";
 import { docs } from "@/lib/mlai";
+import { docLd, jsonLdScript } from "@/lib/mlai/structured-data";
 import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/docs/$slug")({
@@ -14,7 +16,10 @@ export const Route = createFileRoute("/docs/$slug")({
   head: ({ params }) => {
     const resolved = params.slug === "intro" ? "getting-started" : params.slug;
     const doc = docs.find((item) => item.slug === resolved);
-    return pageHead(`${doc?.title ?? "Doc"} — Docs`, doc?.description ?? "Quesar documentation.");
+    return {
+      ...pageHead(`${doc?.title ?? "Doc"} — Docs`, doc?.description ?? "Quesar documentation."),
+      scripts: doc ? [jsonLdScript(docLd(doc))] : [],
+    };
   },
   component: DocArticle,
 });
@@ -40,9 +45,9 @@ function DocArticle() {
         <div className="grid gap-10 lg:grid-cols-[16rem_minmax(0,1fr)] xl:grid-cols-[16rem_minmax(0,1fr)_14rem]">
           <DocSidebar current={resolved} />
           <div>
-            <ArticleBody sections={doc.body}>
+            <MathArticleBody sections={doc.body}>
               <SourceChips sources={doc.sources} />
-            </ArticleBody>
+            </MathArticleBody>
             <Pager
               index={{ to: "/docs", label: "All docs" }}
               prev={prev ? { to: `/docs/${prev.slug}`, label: `Previous: ${prev.title}` } : undefined}

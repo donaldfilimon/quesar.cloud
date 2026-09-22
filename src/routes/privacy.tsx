@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { PageClose, PageHero, Section } from "@/components/site";
+import { PageClose, PageHero, Section, Surface } from "@/components/site";
+import { LEGAL_UPDATED, privacyPolicy } from "@/lib/mlai/pages";
 
 export const Route = createFileRoute("/privacy")({
   head: () => ({
@@ -21,7 +22,7 @@ function PrivacyPage() {
       <PageHero
         eyebrow="Privacy"
         title="This site does not take your data because it cannot."
-        lede="The public Quesar website is orientation plus an optional console for field notes. It does not host assistant sessions, accept document uploads, or run generation. Product privacy lives in the architecture you run locally."
+        lede="The public Quesar website is orientation plus an optional console. It does not host Abbey sessions or accept document uploads. Signed-in persona replies reach a model provider only when one is configured. Product privacy lives in the architecture you run locally."
       />
       <Section title="What this website collects">
         <p className="max-w-2xl text-sm leading-relaxed text-fg-muted">
@@ -36,6 +37,21 @@ function PrivacyPage() {
           We do not invent a hosted analytics program here. If this deployment injects platform
           tooling outside MLAI's source, that tooling is not an MLAI product claim.
         </p>
+      </Section>
+      <Section eyebrow="Privacy policy" title="What is collected, and how it is handled." lede={`Last updated ${LEGAL_UPDATED}.`}>
+        <ol className="grid max-w-3xl gap-4">
+          {privacyPolicy.map((section, index) => (
+            <li key={section.title}>
+              <Surface>
+                <h2 className="font-display text-xl">
+                  <span className="mr-2 font-mono text-sm text-accent">{index + 1}.</span>
+                  {section.title}
+                </h2>
+                <p className="mt-3 text-sm leading-relaxed text-fg-muted">{section.body}</p>
+              </Surface>
+            </li>
+          ))}
+        </ol>
       </Section>
       <Section
         eyebrow="Product"
