@@ -100,76 +100,6 @@ export const integrationApps = [
   },
 ] as const;
 
-export const products = [
-  {
-    id: "abbey",
-    name: "Abbey",
-    href: "/abbey",
-    oneLiner: "Companion experience with a claims ledger. Personas, not products.",
-    status: "partial" as StatusKind,
-  },
-  {
-    id: "abi",
-    name: "ABI",
-    href: "/abi",
-    oneLiner: "Nightly Rust orchestration. Routes, context, honest capability reporting.",
-    status: "current" as StatusKind,
-  },
-  {
-    id: "wdbx",
-    name: "WDBX",
-    href: "/wdbx",
-    oneLiner: "Provenance-aware episodic substrate. Memory is not a lookup.",
-    status: "current" as StatusKind,
-  },
-  {
-    id: "quesar",
-    name: "Quesar",
-    href: "/quesar",
-    oneLiner: "The product envelope that makes the stack inspectable.",
-    status: "partial" as StatusKind,
-  },
-] as const;
-
-export const personas = [
-  {
-    id: "abbey",
-    name: "Abbey",
-    role: "Empathic polymath",
-    color: "abbey" as const,
-    body: "High-EQ tutor and partner. Scaffolds, names uncertainty, and keeps the human in the loop.",
-  },
-  {
-    id: "aviva",
-    name: "Aviva",
-    role: "Unfiltered expert",
-    color: "aviva" as const,
-    body: "Direct, concise, unhedged. Fewer tokens by design. Facts without preamble.",
-  },
-  {
-    id: "abi",
-    name: "Abi",
-    role: "Adaptive moderator",
-    color: "abi" as const,
-    body: "Routes and blends. Classifies intent, applies policy, and reports what the ledger can prove.",
-  },
-] as const;
-
-export const companionPersonas = [
-  {
-    name: "Abbey",
-    body: "Care first. Scaffolded teaching, frustration detection, and a named uncertainty budget.",
-  },
-  {
-    name: "Aviva",
-    body: "Clarity always. Strip hedges. Answer the question that was asked.",
-  },
-  {
-    name: "Abi",
-    body: "Competence throughout. Route, blend, refuse, and leave a trace.",
-  },
-] as const;
-
 export const integrityRules = [
   {
     title: "Apple sentence",
@@ -486,93 +416,6 @@ export const architectureNodes: ArchNode[] = [
   },
 ];
 
-export const services = [
-  {
-    title: "Autonomy Readiness Audit",
-    description:
-      "Map workflows, prompt surfaces, data paths, and approval gates to determine which tasks are safe to automate.",
-    outcomes: ["Risk register", "Control-map", "90-day rollout plan"],
-  },
-  {
-    title: "WDBX Retrieval Architecture",
-    description:
-      "Design weighted backtrace retrieval pipelines that preserve source context and support inspectable vector search.",
-    outcomes: ["Index strategy", "Recall benchmarks", "Trace schema"],
-  },
-  {
-    title: "Multi-Agent Orchestration",
-    description:
-      "Implement agent roles, tool permissions, task handoffs, and conflict-resolution policies.",
-    outcomes: ["Agent graph", "Tool policy", "Evaluation harness"],
-  },
-  {
-    title: "Model & Runtime Optimization",
-    description:
-      "Profile inference paths, memory pressure, batching, and edge constraints for real-world latency.",
-    outcomes: ["Latency profile", "Optimization backlog", "Capacity model"],
-  },
-  {
-    title: "Safety & Compliance Layering",
-    description:
-      "Embed policy checks, audit trails, and red-team scenarios into high-trust systems.",
-    outcomes: ["Policy matrix", "Audit events", "Red-team scripts"],
-  },
-  {
-    title: "Private AI Deployment",
-    description:
-      "Package workflows for VPC, on-premise, offline, and hybrid environments.",
-    outcomes: ["Deployment topology", "Runbook", "Rollback plan"],
-  },
-  {
-    title: "Research Translation",
-    description:
-      "Turn papers and notebooks into constrained, documented services engineers can maintain.",
-    outcomes: ["Prototype hardening", "API contract", "Test plan"],
-  },
-  {
-    title: "Executive & Engineering Workshops",
-    description:
-      "Align leadership, security, product, and engineering around autonomy strategy and risk boundaries.",
-    outcomes: ["Decision memo", "Team training", "Architecture review"],
-  },
-  {
-    title: "Continuous Evaluation Systems",
-    description:
-      "Build suites for tool use, retrieval faithfulness, safety behavior, and regression drift.",
-    outcomes: ["Eval suite", "Scorecards", "Release gates"],
-  },
-] as const;
-
-export const engagement = [
-  {
-    title: "Audit",
-    body: "Inventory workflows, data, tools, and failure modes. Ends with a risk register the next phase is not allowed to ignore.",
-  },
-  {
-    title: "Design",
-    body: "Bounded architecture: retrieval, policy, personas, deployment topology. Ends with a harness, not a slide.",
-  },
-  {
-    title: "Build",
-    body: "Implement against the harness on hardware you own. Ends with a baseline you can re-run.",
-  },
-  {
-    title: "Harden",
-    body: "Red-team, rollback, observability, and operator training. Ends with a gate, not a demo day.",
-  },
-] as const;
-
-export const refusals = [
-  {
-    label: "Scope discipline",
-    body: "We don't take work that puts your data in our hands. If the engagement requires your corpus to leave your hardware, the engagement is designed wrong — and we'll say so.",
-  },
-  {
-    label: "Claims discipline",
-    body: "Deliverables ship with provenance-tagged numbers. Targets are framed as targets; nothing is reported as measured until it reproduces on your hardware.",
-  },
-] as const;
-
 export const investor = {
   entity: "Delaware C-Corp · Machine Learning Advanced Innovations, Inc.",
   market: [
@@ -812,24 +655,6 @@ export const searchIndex = [
   { title: "About", href: "/about", group: "Company", body: "Values principles entity" },
 ] as const;
 
-export const homeProposition = [
-  {
-    n: "01",
-    title: "What MLAI is",
-    body: "A company building assistant workflows, memory systems, and developer tools. Sources are inspectable. Implementation boundaries are explicit.",
-  },
-  {
-    n: "02",
-    title: "What Quesar is",
-    body: "The infrastructure experience that connects ABI, WDBX, and Abbey. Persistent context, private by architecture, runnable on your machines.",
-  },
-  {
-    n: "03",
-    title: "Why it exists",
-    body: "Models are powerful and forgetful. Memory is often bolted on. Privacy often means trusting someone else's cluster. Developers need a different substrate.",
-  },
-] as const;
-
 export const homeStart = [
   {
     title: "Read the architecture",
@@ -1062,11 +887,3 @@ export const researchSources = [
   { title: "Gama", href: "/gama", body: "Founder-owned Swift UI framework. Not a Quesar product." },
 ] as const;
 
-export const showcaseRooms = [
-  { href: "/showcase/trailer", title: "Trailer", body: "The 62-second vision trailer, rendered live." },
-  { href: "/showcase/film", title: "Film", body: "The long brand film. Atmosphere, not a benchmark." },
-  { href: "/showcase/explainer", title: "Explainer", body: "What is MLAI? A narrated two-minute cut." },
-  { href: "/showcase/design", title: "Design lab", body: "Brand, system, hero, lab, console and docs boards." },
-  { href: "/showcase/abbey", title: "Abbey", body: "The Abbey companion trailer." },
-  { href: "/showcase/mega", title: "Mega", body: "The longest cut: every beat and scene in one sitting." },
-] as const;

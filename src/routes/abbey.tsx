@@ -19,8 +19,8 @@ import {
   abbeyLedger,
   abbeyWorkflow,
   abbeyWorkspaceFacts,
-  companionPersonas,
 } from "@/lib/content";
+import { companionPersonas } from "@/lib/mlai/categories/personas";
 import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/abbey")({

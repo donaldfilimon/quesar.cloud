@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { PageClose, PageHero, Section, Surface } from "@/components/site";
 import { Callout, StepList } from "@/components/site/lab";
 import { Button } from "@/components/ui/button";
-import { engagement, refusals, services } from "@/lib/content";
+import { engagement, refusals, services } from "@/lib/mlai/categories/services";
 
 export const Route = createFileRoute("/services")({
   head: () => ({
