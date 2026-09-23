@@ -60,14 +60,14 @@ export const integrationApps = [
     path: "src/",
     href: "/",
     purpose: "The one app: TanStack Start site, console, admin, workspace, demos, Quasar screens, and cinematic showcase",
-    gate: "npm run typecheck && npm run lint && npm run test:app && npm run build",
+    gate: "bun run typecheck && bun run lint && bun run test && bun run build",
     status: "current" as StatusKind,
   },
   {
     path: "migrations/",
     href: "/security",
     purpose: "Postgres schema (Neon, or in-memory PGLite without DATABASE_URL): auth, notes, audits, connectors, rate limits",
-    gate: "npm run build (applies migrations)",
+    gate: "bun run build (applies migrations)",
     status: "current" as StatusKind,
   },
   {

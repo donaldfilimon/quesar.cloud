@@ -1,4 +1,4 @@
-import { pendingMigrations } from "../../scripts/migration-plan.mjs";
+import { pendingMigrations } from "../../scripts/migration-plan.ts";
 import { staticSite } from "./static-site";
 
 /** Which database backend is active. */

@@ -31,7 +31,7 @@ The staging script was not copied: there is nothing to stage.
 
 ## State: not built, not synced
 
-- `npx cap sync` was **not** run. The Android project still carries the files
+- `bunx cap sync` was **not** run. The Android project still carries the files
   `cap sync` generated inside mlai: `android/capacitor.settings.gradle` points
   at mlai's Bun store (`../../../node_modules/.bun/...`) and at
   `../../../packages/capacitor-cloudkit/android`. Those paths do not resolve
@@ -44,13 +44,13 @@ The staging script was not copied: there is nothing to stage.
   `file:./capacitor-cloudkit`. To build:
 
   ```bash
-  cd native && npm install && npm run sync:android && npm run open:android
+  cd native && bun install && bun run sync:android && bun run open:android
   ```
 
   The sync rewrites `android/capacitor.settings.gradle` to this directory's
   `node_modules`. Neither the install nor the sync has been run here, and they
   are unmeasured.
-- **iOS is blocked:** `npx cap add ios` needs CocoaPods, which is not
+- **iOS is blocked:** `bunx cap add ios` needs CocoaPods, which is not
   installed on this machine. `capacitor-cloudkit/ios/` holds the Swift plugin
   source only.
 

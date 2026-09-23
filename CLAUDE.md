@@ -10,27 +10,29 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Commands
 
-npm only (`package-lock.json`); run `npm ci` first.
+bun is the package manager (`bun.lock`; there is no `package-lock.json`). The tools themselves run on Node (>= 24): use `bun run <script>`, never `bun --bun`, and never bare `bun test` (that is Bun's own runner, not vitest).
 
 ```bash
-npm run dev          # 0.0.0.0:8080, strictPort
-npm run typecheck    # tsc --noEmit over src/
-npm run lint         # eslint; 0 errors expected
-npm run test:app     # vitest: the app suite
-npm run build        # vite build (Vercel preset) + PGLite assets + db:migrate
-npm run build:static # GitHub Pages build into docs/
+bun install          # --frozen-lockfile in CI and on Vercel (vercel.json)
+bun run dev          # 0.0.0.0:8080, strictPort
+bun run typecheck    # tsc --noEmit over src/, scripts/ and the vite/vitest/eslint configs
+bun run lint         # eslint (eslint.config.ts, loaded through jiti); 0 errors expected
+bun run test         # vitest: src/**/*.test.{ts,tsx} and scripts/**/*.test.ts
+bun run build        # vite build (Vercel preset) + PGLite assets + migrations
+bun run build:static # GitHub Pages build into docs/
 ```
 
-- **Gate:** `typecheck`, `lint`, `test:app`, `build`, and `build:static` when a change can reach the static site. `.vercel/` and `.output/` are git-ignored build output.
-- **Single test:** `npx vitest run src/lib/server/crypto.server.test.ts`, or add `-t "<name>"` for one case. Vitest covers `src/**/*.test.{ts,tsx}` but **excludes `src/lib/auth/**`**. `npm test` runs `scripts/**/*.test.mjs` plus two named files there (`gate-identity.test.ts`, `sign-in-gate.test.ts`) under `node --test`; a new test file in `src/lib/auth/` runs under neither runner unless added to that script. (Phase 3 of the modernization plan folds both into vitest.)
+- **Gate:** `typecheck`, `lint`, `test`, `build`, and `build:static` when a change can reach the static site. `.vercel/` and `.output/` are git-ignored build output.
+- **Single test:** `bunx vitest run src/lib/server/crypto.server.test.ts`, or add `-t "<name>"` for one case. vitest is the only test runner.
+- **`scripts/*.ts` run directly on Node's type stripping** (`node scripts/migrate.ts`), so they may use only erasable TypeScript syntax (no enums, namespaces or parameter properties) and import each other with `.ts` extensions. The build runs them, so a violation fails the gate.
 - **Lint ignores `docs/**`, `sidecars/**`, `native/**` and `src/routeTree.gen.ts`**, so a green lint says nothing about those.
 - `VITE_AUTH_ENABLED` is an ordinary env var (sign-in is on unless it is `"false"`); only `build:static` sets it.
 - If port 8080 is taken, see `AGENTS.md` (pass `BETTER_AUTH_URL` via the environment, or email sign-up fails with "Invalid origin").
 
 ## Deployment
 
-- **As of 2026-09-23, `https://quesar.cloud` is the static build**, served by GitHub Pages from `main:/docs`. `npm run build:static` sets `VITE_STATIC_SITE=true` and `VITE_AUTH_ENABLED=false`, prerenders every crawlable page (skipping `/api/*` and server functions), then `scripts/publish-static.mjs` replaces `docs/` wholesale and adds `.nojekyll`, `CNAME` and `404.html`. **`docs/` is build output only: never hand-edit it.** Internal records go in `notes/`.
-- The full server build (`npm run build`, Nitro `vercel` preset with the daily audit-expiry cron in `vite.config.ts`) is planned for Vercel. Secrets and go-live order are in `notes/deploy/secrets-checklist.md`.
+- **As of 2026-09-23, `https://quesar.cloud` is the static build**, served by GitHub Pages from `main:/docs`. `bun run build:static` sets `VITE_STATIC_SITE=true` and `VITE_AUTH_ENABLED=false`, prerenders every crawlable page (skipping `/api/*` and server functions), then `scripts/publish-static.mjs` replaces `docs/` wholesale and adds `.nojekyll`, `CNAME` and `404.html`. **`docs/` is build output only: never hand-edit it.** Internal records go in `notes/`.
+- The full server build (`bun run build`, Nitro `vercel` preset; `vercel.json` sets the bun install and build commands with the daily audit-expiry cron in `vite.config.ts`) is planned for Vercel. Secrets and go-live order are in `notes/deploy/secrets-checklist.md`.
 - `git fetch` before any push, never force-push.
 
 ## Architecture
@@ -41,7 +43,7 @@ npm run build:static # GitHub Pages build into docs/
 
 **Auth.** Better Auth (`src/lib/auth/server.ts`, mounted at `src/routes/api/auth/$.ts`): email/password, passkeys, and first-party Google, Apple and X. `src/lib/auth/methods.server.ts` reads each provider's credentials from the env (Apple's client-secret JWT is minted in `apple-secret.server.ts`), and the login page asks `getSignInMethods` (`src/lib/auth/methods.ts`) which buttons to render, so an unconfigured provider never shows. The admin rule (`src/lib/server/admin.server.ts`) accepts only a linked Google or Apple account. Session cookies are `__Host-quesar.*`.
 
-**Database.** `src/lib/db.ts` uses Neon/pg when `DATABASE_URL` is set, otherwise in-memory PGLite (WASM Postgres), which loses data on restart. Both drivers are normalized to the same JSON-safe row shapes (int8 becomes a number). Migrations are plain SQL read non-recursively from `migrations/*.sql`. `migrations/auth/` is the template's opt-in copy of the auth schema and is never applied from there; `0001_auth.sql` is already in the root. PGLite applies them itself at startup (awaited by a Vite plugin in dev). Against Neon they are applied only by `npm run db:migrate`, which `build` runs last. New schema means a new numbered file; never edit an applied one.
+**Database.** `src/lib/db.ts` uses Neon/pg when `DATABASE_URL` is set, otherwise in-memory PGLite (WASM Postgres), which loses data on restart. Both drivers are normalized to the same JSON-safe row shapes (int8 becomes a number). Migrations are plain SQL read non-recursively from `migrations/*.sql`. `migrations/auth/` is the template's opt-in copy of the auth schema and is never applied from there; `0001_auth.sql` is already in the root. PGLite applies them itself at startup (awaited by a Vite plugin in dev). Against Neon they are applied only by `scripts/migrate.ts` (`bun run db:migrate`), which `build` runs last. New schema means a new numbered file; never edit an applied one.
 
 **Static mode.** `src/lib/static-site.ts` exports `staticSite`. Every surface that needs the server checks it and renders `src/components/site/server-only-notice.tsx` instead of calling out. GitHub panels fetch GitHub's public API from the browser, and contact becomes a mailto. New server-backed UI must handle `staticSite` or the Pages build breaks (`failOnError: true`) or ships dead controls.
 
@@ -53,6 +55,6 @@ npm run build:static # GitHub Pages build into docs/
 
 **Cinematic showcase.** `/showcase/*` are `ssr: false` routes that lazy-load `src/cinematic/rooms/<room>.tsx`. Playback runs on `src/lib/trailer-engine/` (vendored from mlai). `src/cinematic/components/CinematicShell.tsx` portals to `<body>` because `.page-enter`'s transform would trap `position: fixed`, so keep the portal. `/showcase` and the home teaser use the MP4 player in `src/components/site/trailer.tsx`.
 
-**Standalone projects outside the npm build.** `sidecars/quasar-service` (Bun, drives the `/quasar/*` screens), `sidecars/python-worker` (uv), and `native/` (Capacitor Android shell pointed at `https://quesar.cloud`, own `package.json`). None of them is covered by the root tsconfig, vitest or lint. Each README records its provenance from mlai `b6f3686`.
+**Standalone projects outside the root build.** `sidecars/quasar-service` (Bun, drives the `/quasar/*` screens), `sidecars/python-worker` (uv), and `native/` (Capacitor Android shell pointed at `https://quesar.cloud`, own `package.json`). None of them is covered by the root tsconfig, vitest or lint. Each README records its provenance from mlai `b6f3686`.
 
 **Records.** `notes/merge/gap-matrix.md` is the mlai merge record, and `notes/superpowers/specs/2026-09-22-mlai-merge-design.md` is its spec. `notes/grok-export/` keeps the Grok-generated media and attachments. `screenshots/` and `artifacts/` are git-ignored local QA scratch.

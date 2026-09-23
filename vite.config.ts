@@ -6,7 +6,7 @@ import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import viteReact from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import { nitro } from "nitro/vite";
-import { isMigrationFile } from "./scripts/migration-plan.mjs";
+import { isMigrationFile } from "./scripts/migration-plan.ts";
 
 /** The files `src/lib/db.ts` globs — same directory, same non-recursive scope. */
 function hasGlobbedMigrations(root: string): boolean {
@@ -50,7 +50,7 @@ function pgliteBootstrapPlugin(): Plugin {
 // Dev server on :8080 (Better Auth trusts that origin; see AGENTS.md for
 // running on another port).
 export default defineConfig(({ command, isPreview, mode }) => {
-  // `npm run build:static` (mode "static"): prerender every page to plain files
+  // `bun run build:static` (mode "static"): prerender every page to plain files
   // for GitHub Pages. No server exists there; see src/lib/static-site.ts.
   const isStatic = mode === "static";
   return {
@@ -101,6 +101,7 @@ export default defineConfig(({ command, isPreview, mode }) => {
                 // route answers 503 until CRON_SECRET is set.
                 vercel: {
                   config: {
+                    version: 3,
                     crons: [{ path: "/api/cron/audits-expire", schedule: "17 3 * * *" }],
                   },
                 },

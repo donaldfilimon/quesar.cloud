@@ -46,7 +46,7 @@ function devAuthSecret(): string {
 /** True when sign-in is enforced (everywhere except the static build). */
 export const authConfigured = authEnabledOnServer();
 
-// Local `npm run dev` (port 8080). Browsers may send Origin as any of these for
+// Local `bun run dev` (port 8080). Browsers may send Origin as any of these for
 // the same server; trusting only `localhost` rejects `127.0.0.1` and breaks
 // email/password with "Invalid origin".
 const LOCAL_DEV_ORIGINS: string[] = [
