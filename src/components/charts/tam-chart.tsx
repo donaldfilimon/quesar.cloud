@@ -37,8 +37,8 @@ export function TamChart() {
               color: "var(--fg)",
               fontSize: 12,
             }}
-            formatter={(value: number, _name, item) => {
-              const label = (item?.payload as { label?: string } | undefined)?.label ?? `$${value}B`;
+            formatter={(value, _name, item) => {
+              const label = (item?.payload as { label?: string } | undefined)?.label ?? `$${String(value ?? "")}B`;
               return [label, "Category sizing · target"];
             }}
           />

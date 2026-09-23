@@ -1,1 +1,0 @@
-import{I as e}from"./index-B8rAcz-a.js";var t=e({type:`function`});export{t};

@@ -1,0 +1,1 @@
+import{t as e}from"./jsx-runtime-BNakU3Ej.js";var t=e();function n(){return(0,t.jsx)(`div`,{className:`fixed inset-0 z-80 flex items-center justify-center bg-[#040406] font-mono text-xs tracking-[0.2em] text-white/60`,role:`status`,"aria-live":`polite`,children:`LOADING`})}export{n as t};
