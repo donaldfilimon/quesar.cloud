@@ -17,7 +17,13 @@ type Section = {
  * `ArticleBody` shows raw TeX in a `<pre>`. Markup and ids otherwise match
  * `ArticleBody`, so `DocOutline` anchors keep working.
  */
-export function MathArticleBody({ sections, children }: { sections: readonly Section[]; children?: ReactNode }) {
+export function MathArticleBody({
+  sections,
+  children,
+}: {
+  sections: readonly Section[];
+  children?: ReactNode;
+}) {
   return (
     <div className="max-w-3xl space-y-10">
       {sections.map((section, index) => (
@@ -31,7 +37,10 @@ export function MathArticleBody({ sections, children }: { sections: readonly Sec
             </h2>
           ) : null}
           {section.paragraphs?.map((p) => (
-            <p key={p.slice(0, 48)} className="mt-4 max-w-[66ch] text-[1.0625rem] leading-8 text-fg">
+            <p
+              key={p.slice(0, 48)}
+              className="mt-4 max-w-[66ch] text-[1.0625rem] leading-8 text-fg"
+            >
               {p}
             </p>
           ))}
@@ -39,7 +48,10 @@ export function MathArticleBody({ sections, children }: { sections: readonly Sec
             <ul className="mt-5 max-w-[66ch] space-y-3">
               {section.list.map((item) => (
                 <li key={item} className="flex gap-3 text-[1.0625rem] leading-8 text-fg">
-                  <span className="mt-3 size-1.5 shrink-0 rounded-full bg-primary" aria-hidden="true" />
+                  <span
+                    className="mt-3 size-1.5 shrink-0 rounded-full bg-primary"
+                    aria-hidden="true"
+                  />
                   {item}
                 </li>
               ))}

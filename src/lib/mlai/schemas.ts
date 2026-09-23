@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 /** A titled prose card — the shape shared by `about.values` and `about.investorThesis`. */
 const CardSchema = z.object({
@@ -7,17 +7,19 @@ const CardSchema = z.object({
 });
 
 /** Key/value rows rendered by `site/SpecList` — configuration facts, never measurements. */
-const SpecRowsSchema = z.array(z.object({
-  k: z.string(),
-  v: z.string(),
-}));
+const SpecRowsSchema = z.array(
+  z.object({
+    k: z.string(),
+    v: z.string(),
+  }),
+);
 
 /**
  * The `site/` **product** accent axis (wdbx cyan · abi violet · abbey emerald).
  * Distinct from the persona enum used by `ProductsSchema` below — the product
  * "abi" is violet while the persona "Abi" is cyan. See `src/components/site/accent.ts`.
  */
-const SiteAccentSchema = z.enum(['wdbx', 'abi', 'abbey']);
+const SiteAccentSchema = z.enum(["wdbx", "abi", "abbey"]);
 
 /** Eyebrow/title/lead copy for a sub-section — kept in data so views hold no content. */
 const SectionChromeSchema = z.object({
@@ -35,11 +37,13 @@ export const AboutSchema = z.object({
   investorThesis: z.array(CardSchema),
 });
 
-export const PlatformSchema = z.array(z.object({
-  title: z.string(),
-  description: z.string(),
-  detail: z.string(),
-}));
+export const PlatformSchema = z.array(
+  z.object({
+    title: z.string(),
+    description: z.string(),
+    detail: z.string(),
+  }),
+);
 
 export const IndustriesSchema = z.array(z.string());
 
@@ -75,80 +79,105 @@ export const ChangelogSchema = z.array(
   }),
 );
 
-export const ServicesSchema = z.array(z.object({
-  title: z.string(),
-  description: z.string(),
-  outcomes: z.array(z.string()),
-}));
+export const ServicesSchema = z.array(
+  z.object({
+    title: z.string(),
+    description: z.string(),
+    outcomes: z.array(z.string()),
+  }),
+);
 
 export const ResearchTopicSchema = z.enum(["ai", "wdbx", "sea", "gpu", "mcp", "tui"]);
 
 export const ResearchSchema = z.object({
-  tracks: z.array(z.object({
-    id: ResearchTopicSchema,
-    name: z.string(),
-    description: z.string(),
-    application: z.string(),
-    availability: z.string(),
-    limitations: z.array(z.string()),
-    overviewSlug: z.string(),
-  })),
-  publications: z.array(z.object({
+  tracks: z.array(
+    z.object({
+      id: ResearchTopicSchema,
+      name: z.string(),
+      description: z.string(),
+      application: z.string(),
+      availability: z.string(),
+      limitations: z.array(z.string()),
+      overviewSlug: z.string(),
+    }),
+  ),
+  publications: z.array(
+    z.object({
+      slug: z.string(),
+      tag: z.string(),
+      title: z.string(),
+      date: z.string(),
+      abstract: z.string(),
+      readTime: z.string(),
+      authors: z.string().optional(),
+      topic: ResearchTopicSchema,
+      documentType: z.enum(["overview", "research-note", "implementation-guide"]),
+      practicalSummary: z.string(),
+      status: z.enum(["Implemented", "Experimental", "Proposed"]),
+      statusNote: z.string(),
+      reviewedAt: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+      sources: z
+        .array(
+          z.object({
+            title: z.string(),
+            url: z.string().url(),
+            revision: z.string().regex(/^[a-f0-9]{40}$/),
+            kind: z.enum(["source", "specification", "test"]),
+          }),
+        )
+        .min(1),
+      limitations: z.array(z.string()).min(1),
+      attachments: z.array(
+        z.object({
+          title: z.string(),
+          url: z.string(),
+          edition: z.enum(["current", "historical"]),
+          date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+          sha256: z.string().regex(/^[a-f0-9]{64}$/),
+          pages: z.number().int().positive(),
+        }),
+      ),
+      body: z.array(BlogSectionSchema).default([]),
+    }),
+  ),
+});
+
+export const BlogSchema = z.array(
+  z.object({
     slug: z.string(),
     tag: z.string(),
     title: z.string(),
+    excerpt: z.string(),
     date: z.string(),
-    abstract: z.string(),
     readTime: z.string(),
-    authors: z.string().optional(),
-    topic: ResearchTopicSchema,
-    documentType: z.enum(["overview", "research-note", "implementation-guide"]),
-    practicalSummary: z.string(),
-    status: z.enum(["Implemented", "Experimental", "Proposed"]),
-    statusNote: z.string(),
-    reviewedAt: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
-    sources: z.array(z.object({
-      title: z.string(), url: z.string().url(), revision: z.string().regex(/^[a-f0-9]{40}$/),
-      kind: z.enum(["source", "specification", "test"]),
-    })).min(1),
-    limitations: z.array(z.string()).min(1),
-    attachments: z.array(z.object({
-      title: z.string(), url: z.string(), edition: z.enum(["current", "historical"]),
-      date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/), sha256: z.string().regex(/^[a-f0-9]{64}$/),
-      pages: z.number().int().positive(),
-    })),
+    author: z.string().optional(),
     body: z.array(BlogSectionSchema).default([]),
-  })),
-});
-
-export const BlogSchema = z.array(z.object({
-  slug: z.string(),
-  tag: z.string(),
-  title: z.string(),
-  excerpt: z.string(),
-  date: z.string(),
-  readTime: z.string(),
-  author: z.string().optional(),
-  body: z.array(BlogSectionSchema).default([]),
-}));
+  }),
+);
 
 export const DocSectionSchema = BlogSectionSchema.extend({
   /** Vendored Section.note — an aside the blog shape has no home for. */
   note: z.string().optional(),
 });
 
-export const DocsSchema = z.array(z.object({
-  slug: z.string(),
-  title: z.string(),
-  description: z.string(),
-  group: z.string(),
-  body: z.array(DocSectionSchema).default([]),
-  sources: z.array(z.object({
+export const DocsSchema = z.array(
+  z.object({
+    slug: z.string(),
     title: z.string(),
-    url: z.string().url(),
-    scope: z.string(),
-  })).default([]),
-}));
+    description: z.string(),
+    group: z.string(),
+    body: z.array(DocSectionSchema).default([]),
+    sources: z
+      .array(
+        z.object({
+          title: z.string(),
+          url: z.string().url(),
+          scope: z.string(),
+        }),
+      )
+      .default([]),
+  }),
+);
 
 export type DocSection = z.infer<typeof DocSectionSchema>;
 export type Docs = z.infer<typeof DocsSchema>;
@@ -178,99 +207,123 @@ export type Doc = Docs[number];
  * silently rendering nothing. Content modules do not parse at runtime, so
  * zod never reaches the client bundle.
  */
-export const ProjectsSchema = z.array(z.object({
-  slug: z.string(),
-  name: z.string(),
-  kind: z.string(),
-  tagline: z.string(),
-  description: z.string(),
-  scope: z.array(z.string()).default([]),
-  /** A stated scope limitation. Always non-empty — dropping it would turn a
-   *  hedged claim into an unhedged one. */
-  limit: z.string(),
-  source: z.object({
-    title: z.string(),
-    url: z.string().url(),
+export const ProjectsSchema = z.array(
+  z.object({
+    slug: z.string(),
+    name: z.string(),
+    kind: z.string(),
+    tagline: z.string(),
+    description: z.string(),
+    scope: z.array(z.string()).default([]),
+    /** A stated scope limitation. Always non-empty — dropping it would turn a
+     *  hedged claim into an unhedged one. */
+    limit: z.string(),
+    source: z.object({
+      title: z.string(),
+      url: z.string().url(),
+    }),
+    docsHref: z.string(),
+    glyph: z.enum(["layers", "database", "spark", "command"]),
   }),
-  docsHref: z.string(),
-  glyph: z.enum(["layers", "database", "spark", "command"]),
-}));
+);
 export type Projects = z.infer<typeof ProjectsSchema>;
 export type Project = Projects[number];
 
-export const TeamSchema = z.array(z.object({
-  name: z.string(),
-  role: z.string(),
-  bio: z.string(),
-  image: z.string(),
-  // Optional fields that promote a member to a dedicated profile page at
-  // /team/:slug. Only populated members get a "Read profile" link.
-  slug: z.string().optional(),
-  tagline: z.string().optional(),
-  location: z.string().optional(),
-  socials: z
-    .object({
-      github: z.string().optional(),
-      x: z.string().optional(),
-      web: z.string().optional(),
-    })
-    .optional(),
-  focusAreas: z
-    .array(z.object({ title: z.string(), description: z.string() }))
-    .optional(),
-  projects: z
-    .array(
-      z.object({
-        name: z.string(),
-        description: z.string(),
-        url: z.string().optional(),
-        lang: z.string().optional(),
-      }),
-    )
-    .optional(),
-  body: z.array(BlogSectionSchema).optional(),
-}));
+export const TeamSchema = z.array(
+  z.object({
+    name: z.string(),
+    role: z.string(),
+    bio: z.string(),
+    image: z.string(),
+    // Optional fields that promote a member to a dedicated profile page at
+    // /team/:slug. Only populated members get a "Read profile" link.
+    slug: z.string().optional(),
+    tagline: z.string().optional(),
+    location: z.string().optional(),
+    socials: z
+      .object({
+        github: z.string().optional(),
+        x: z.string().optional(),
+        web: z.string().optional(),
+      })
+      .optional(),
+    focusAreas: z.array(z.object({ title: z.string(), description: z.string() })).optional(),
+    projects: z
+      .array(
+        z.object({
+          name: z.string(),
+          description: z.string(),
+          url: z.string().optional(),
+          lang: z.string().optional(),
+        }),
+      )
+      .optional(),
+    body: z.array(BlogSectionSchema).optional(),
+  }),
+);
 
-export const StatsSchema = z.array(z.object({
-  value: z.string(),
-  label: z.string(),
-  detail: z.string(),
-}));
+export const StatsSchema = z.array(
+  z.object({
+    value: z.string(),
+    label: z.string(),
+    detail: z.string(),
+  }),
+);
 
 // Product deep-dive pages (/products/:slug) — structured narrative content
 // ported from the MLAI mega-site. Equations are LaTeX (KaTeX block render);
 // accents bind to the persona palette already used by the Docs persona dots.
-export const ProductsSchema = z.array(z.object({
-  slug: z.string(),
-  kicker: z.string(),
-  name: z.string(),
-  intro: z.string(),
-  accent: z.enum(['abbey', 'aviva', 'abi']),
-  sections: z.array(z.object({
-    eyebrow: z.string(),
-    title: z.string(),
-    sub: z.string().optional(),
-    paragraphs: z.array(z.string()).default([]),
-    equations: z.array(z.object({ tex: z.string(), note: z.string() })).optional(),
-    pillars: z.array(z.object({
-      title: z.string(),
-      description: z.string(),
-      eq: z.string().optional(),
-      accent: z.enum(['abbey', 'aviva', 'abi']).optional(),
-    })).optional(),
-    steps: z.array(z.object({ n: z.string(), title: z.string(), description: z.string() })).optional(),
-    blendTable: z.array(z.object({ range: z.string(), meaning: z.string(), accent: z.enum(['abbey', 'aviva', 'abi']) })).optional(),
-    demo: z.enum(['persona-router', 'cosine-sim', 'sharding-latency']).optional(),
-    chips: z.array(z.string()).optional(),
-  })),
-}));
+export const ProductsSchema = z.array(
+  z.object({
+    slug: z.string(),
+    kicker: z.string(),
+    name: z.string(),
+    intro: z.string(),
+    accent: z.enum(["abbey", "aviva", "abi"]),
+    sections: z.array(
+      z.object({
+        eyebrow: z.string(),
+        title: z.string(),
+        sub: z.string().optional(),
+        paragraphs: z.array(z.string()).default([]),
+        equations: z.array(z.object({ tex: z.string(), note: z.string() })).optional(),
+        pillars: z
+          .array(
+            z.object({
+              title: z.string(),
+              description: z.string(),
+              eq: z.string().optional(),
+              accent: z.enum(["abbey", "aviva", "abi"]).optional(),
+            }),
+          )
+          .optional(),
+        steps: z
+          .array(z.object({ n: z.string(), title: z.string(), description: z.string() }))
+          .optional(),
+        blendTable: z
+          .array(
+            z.object({
+              range: z.string(),
+              meaning: z.string(),
+              accent: z.enum(["abbey", "aviva", "abi"]),
+            }),
+          )
+          .optional(),
+        demo: z.enum(["persona-router", "cosine-sim", "sharding-latency"]).optional(),
+        chips: z.array(z.string()).optional(),
+      }),
+    ),
+  }),
+);
 
 /** "What we say no to" — refusal callouts on the Services page. */
-export const RefusalsSchema = z.array(z.object({
-  label: z.string(),
-  accent: SiteAccentSchema,
-  body: z.string(),
-}));
+export const RefusalsSchema = z.array(
+  z.object({
+    label: z.string(),
+    accent: SiteAccentSchema,
+    body: z.string(),
+  }),
+);
 
 /**
  * The Home "runtime underneath" block: the L6→L1 layer stack and the
@@ -280,12 +333,14 @@ export const RefusalsSchema = z.array(z.object({
  */
 export const RuntimeSchema = z.object({
   section: SectionChromeSchema,
-  layers: z.array(z.object({
-    /** Tier label, L6 (surface) down to L1 (audit). Rendered as the mono meta line. */
-    tier: z.string(),
-    title: z.string(),
-    description: z.string(),
-  })),
+  layers: z.array(
+    z.object({
+      /** Tier label, L6 (surface) down to L1 (audit). Rendered as the mono meta line. */
+      tier: z.string(),
+      title: z.string(),
+      description: z.string(),
+    }),
+  ),
   memorySection: SectionChromeSchema,
   memoryModel: SpecRowsSchema,
 });

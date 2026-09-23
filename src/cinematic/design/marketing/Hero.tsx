@@ -180,8 +180,8 @@ export default function Hero({ onAccess }: HeroProps) {
             marginInline: "auto",
           }}
         >
-          From the vector engine up — WDBX, the ABI framework, and three minds in one
-          system. Fast by design, private by default, verifiable by architecture.
+          From the vector engine up — WDBX, the ABI framework, and three minds in one system. Fast
+          by design, private by default, verifiable by architecture.
         </p>
         <div
           style={{

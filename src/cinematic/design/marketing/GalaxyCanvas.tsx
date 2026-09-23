@@ -68,11 +68,7 @@ export interface GalaxyCanvasProps {
   chain?: boolean;
 }
 
-export default function GalaxyCanvas({
-  speed = 1,
-  glow = 1,
-  chain = true,
-}: GalaxyCanvasProps) {
+export default function GalaxyCanvas({ speed = 1, glow = 1, chain = true }: GalaxyCanvasProps) {
   const ref = useRef<HTMLCanvasElement>(null);
   const ptr = useRef({ tx: 0, ty: 0, x: 0, y: 0 });
 

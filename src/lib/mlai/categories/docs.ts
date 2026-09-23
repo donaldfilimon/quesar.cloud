@@ -1,4 +1,4 @@
-import type { Docs } from '../schemas';
+import type { Docs } from "../schemas";
 
 /**
  * Provenance sources, ported verbatim from the vendored review site's own
@@ -13,34 +13,35 @@ import type { Docs } from '../schemas';
  */
 const DOC_SOURCES = {
   platform: {
-    title: 'Quesar platform README',
-    url: 'https://github.com/donaldfilimon/MLAI-CORPORATION-WWW/blob/f08203c58ce1c1ab5ce69f5790597a72d1bad830/README.md',
-    scope: 'Repository structure; reviewed at the pinned source revision.',
+    title: "Quesar platform README",
+    url: "https://github.com/donaldfilimon/MLAI-CORPORATION-WWW/blob/f08203c58ce1c1ab5ce69f5790597a72d1bad830/README.md",
+    scope: "Repository structure; reviewed at the pinned source revision.",
   },
   abi: {
-    title: 'ABI README',
-    url: 'https://github.com/donaldfilimon/abi/blob/main/README.md',
-    scope: 'Source description, tool commands and stated limitations; not a reproduced test run.',
+    title: "ABI README",
+    url: "https://github.com/donaldfilimon/abi/blob/main/README.md",
+    scope: "Source description, tool commands and stated limitations; not a reproduced test run.",
   },
   gama: {
-    title: 'Gama README',
-    url: 'https://github.com/donaldfilimon/gama/blob/main/README.md',
-    scope: 'Documented framework architecture, not independent platform acceptance.',
+    title: "Gama README",
+    url: "https://github.com/donaldfilimon/gama/blob/main/README.md",
+    scope: "Documented framework architecture, not independent platform acceptance.",
   },
   identity: {
-    title: 'Abbey identity specification',
-    url: 'https://github.com/donaldfilimon/abi/blob/main/docs/spec/abbey-core-identity.mdx',
-    scope: 'Further reading linked by the ABI README; not separately audited here.',
+    title: "Abbey identity specification",
+    url: "https://github.com/donaldfilimon/abi/blob/main/docs/spec/abbey-core-identity.mdx",
+    scope: "Further reading linked by the ABI README; not separately audited here.",
   },
   claims: {
-    title: 'External claims audit',
-    url: 'https://github.com/donaldfilimon/abi/blob/main/docs/contracts/external-claims-audit.mdx',
-    scope: 'Further reading linked by the ABI README; not separately audited here.',
+    title: "External claims audit",
+    url: "https://github.com/donaldfilimon/abi/blob/main/docs/contracts/external-claims-audit.mdx",
+    scope: "Further reading linked by the ABI README; not separately audited here.",
   },
   wdbx: {
-    title: 'WDBX substrate',
-    url: 'https://github.com/donaldfilimon/wdbx/blob/main/README.md',
-    scope: 'Rust substrate README. Configuration facts, not a hosted database or a recall scoreboard.',
+    title: "WDBX substrate",
+    url: "https://github.com/donaldfilimon/wdbx/blob/main/README.md",
+    scope:
+      "Rust substrate README. Configuration facts, not a hosted database or a recall scoreboard.",
   },
 } as const;
 
@@ -97,7 +98,8 @@ const raw = [
   {
     slug: "architecture",
     title: "Different tools. Clear roles.",
-    description: "Separate runtime, storage, interface, and application framework responsibilities.",
+    description:
+      "Separate runtime, storage, interface, and application framework responsibilities.",
     group: "Start here",
     sources: ["abi", "identity", "platform", "gama"],
     body: [
@@ -186,7 +188,8 @@ const raw = [
   {
     slug: "evidence",
     title: "Evidence before promises.",
-    description: "Keep documented behavior, reported testing, measured results and targets separate.",
+    description:
+      "Keep documented behavior, reported testing, measured results and targets separate.",
     group: "Principles",
     sources: ["platform", "abi", "claims"],
     body: [
@@ -216,7 +219,8 @@ const raw = [
   {
     slug: "runtime",
     title: "ABI runtime, as the tree actually ships.",
-    description: "Nightly Rust orchestration, wrappers, crates, and what a successful gate actually proves.",
+    description:
+      "Nightly Rust orchestration, wrappers, crates, and what a successful gate actually proves.",
     group: "Start",
     sources: ["abi"],
     body: [
@@ -254,7 +258,8 @@ const raw = [
   {
     slug: "trust",
     title: "Fail closed. Tag the figure.",
-    description: "Sessions, evaluation gates, and the difference between measured, reported, and target.",
+    description:
+      "Sessions, evaluation gates, and the difference between measured, reported, and target.",
     group: "Security & trust",
     sources: ["claims", "platform"],
     body: [
@@ -304,7 +309,8 @@ const raw = [
   {
     slug: "wdbx",
     title: "Memory is a substrate, not a chat log.",
-    description: "Layered HNSW, MVCC, content addressing. Integrity of storage is not truth of the record.",
+    description:
+      "Layered HNSW, MVCC, content addressing. Integrity of storage is not truth of the record.",
     group: "Architecture",
     sources: ["wdbx", "abi"],
     body: [
@@ -327,7 +333,8 @@ const raw = [
   {
     slug: "wdbx-v2",
     title: "Historical Zig-era documentation.",
-    description: "A frozen mirror retained so the catalog is complete. Not the current implementation guide.",
+    description:
+      "A frozen mirror retained so the catalog is complete. Not the current implementation guide.",
     group: "Architecture",
     sources: ["wdbx", "claims"],
     body: [
@@ -372,7 +379,8 @@ const raw = [
   {
     slug: "deployment",
     title: "Each surface has its own gate.",
-    description: "Packaging orchestration, retrieval, and controls. A web check is not mobile evidence.",
+    description:
+      "Packaging orchestration, retrieval, and controls. A web check is not mobile evidence.",
     group: "Operations",
     sources: ["platform", "abi"],
     body: [

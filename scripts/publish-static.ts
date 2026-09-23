@@ -8,7 +8,16 @@
  * self-contained `404.html`. `docs/` holds ONLY the built site; internal
  * records live in `notes/`.
  */
-import { copyFileSync, cpSync, existsSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
+import {
+  copyFileSync,
+  cpSync,
+  existsSync,
+  readdirSync,
+  readFileSync,
+  rmSync,
+  statSync,
+  writeFileSync,
+} from "node:fs";
 import { join, relative } from "node:path";
 
 const root = process.cwd();
@@ -17,7 +26,9 @@ const out = join(root, "docs");
 const DOMAIN = "quesar.cloud";
 
 if (!existsSync(join(src, "index.html"))) {
-  console.error("[publish-static] .output/public/index.html is missing; run the static build first.");
+  console.error(
+    "[publish-static] .output/public/index.html is missing; run the static build first.",
+  );
   process.exit(1);
 }
 
@@ -41,7 +52,8 @@ for (const file of htmlFiles(out)) {
   const html = readFileSync(file, "utf8");
   for (const [, asset] of html.matchAll(/"\/assets\/([^"?#]+)"/g)) {
     if (existsSync(join(out, "assets", asset))) continue;
-    if (existsSync(join(SSR_ASSETS, asset))) copyFileSync(join(SSR_ASSETS, asset), join(out, "assets", asset));
+    if (existsSync(join(SSR_ASSETS, asset)))
+      copyFileSync(join(SSR_ASSETS, asset), join(out, "assets", asset));
     else missing.add(`${asset} (in ${relative(out, file)})`);
   }
 }
@@ -54,7 +66,9 @@ writeFileSync(join(out, "CNAME"), `${DOMAIN}\n`);
 // Reuse the site's stylesheet so the 404 page looks like the site without
 // needing the app bundle (a prerendered route would hydrate as the wrong page).
 const index = readFileSync(join(out, "index.html"), "utf8");
-const css = [...index.matchAll(/<link[^>]+rel="stylesheet"[^>]*>/g)].map((m) => m[0]).join("\n    ");
+const css = [...index.matchAll(/<link[^>]+rel="stylesheet"[^>]*>/g)]
+  .map((m) => m[0])
+  .join("\n    ");
 writeFileSync(
   join(out, "404.html"),
   `<!doctype html>

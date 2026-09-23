@@ -16,7 +16,14 @@ import { useTime, useTimeline } from "../film/timeline-context";
 import { Grain, Vignette, GridBG } from "../film/primitives";
 import { NeuralLayer } from "../film/neural";
 import { VoiceToggle } from "../film/narration";
-import { speak, lineSpeechDur, stopSpeech, setSpeechPlaying, primeNeural, useVoiceReady } from "../film/speech";
+import {
+  speak,
+  lineSpeechDur,
+  stopSpeech,
+  setSpeechPlaying,
+  primeNeural,
+  useVoiceReady,
+} from "../film/speech";
 import { SceneOpen, SceneClose } from "../film/scenes/title";
 import { Scene3 } from "../film/scenes/intro";
 import { SceneStorage } from "../film/scenes/extra";
@@ -26,28 +33,35 @@ import { BeatPersona } from "../film/scenes/beats";
 
 /* ── scene slots [start, end] in seconds — aligned to the narration ── */
 const T = {
-  open:    [0, 10],
+  open: [0, 10],
   runtime: [10, 28],
   storage: [28, 43],
-  memory:  [43, 60],
-  minds:   [60, 76],
-  pAbbey:  [76, 79],
-  pAviva:  [79, 82],
-  pAbi:    [82, 85],
-  govern:  [85, 101],
-  vision:  [101, 120],
-  close:   [120, 132],
+  memory: [43, 60],
+  minds: [60, 76],
+  pAbbey: [76, 79],
+  pAviva: [79, 82],
+  pAbi: [82, 85],
+  govern: [85, 101],
+  vision: [101, 120],
+  close: [120, 132],
 } as const;
 const DURATION = 132;
 
 /* ── narration: Abbey, clear register (one thought per beat) ── */
-interface ELine { t: number; text: string; dur: number }
+interface ELine {
+  t: number;
+  text: string;
+  dur: number;
+}
 const RAW: Array<Omit<ELine, "dur">> = [
-  { t: 1.2,  text: "This is MLAI — infrastructure for intelligence you can actually trust." },
-  { t: 5.6,  text: "Let me walk you through it, calmly, one idea at a time." },
+  { t: 1.2, text: "This is MLAI — infrastructure for intelligence you can actually trust." },
+  { t: 5.6, text: "Let me walk you through it, calmly, one idea at a time." },
   // the runtime
   { t: 11.0, text: "Most AI is a single black box. We built something you can open." },
-  { t: 16.4, text: "One runtime, in honest layers — memory, compute, and safety, each doing one job." },
+  {
+    t: 16.4,
+    text: "One runtime, in honest layers — memory, compute, and safety, each doing one job.",
+  },
   { t: 22.6, text: "Nothing hidden. Every layer is something you can name and inspect." },
   // storage
   { t: 29.0, text: "Underneath it all is WDBX — a memory that writes things down and keeps them." },
@@ -57,7 +71,10 @@ const RAW: Array<Omit<ELine, "dur">> = [
   { t: 47.8, text: "Every entry is sealed in a chain, each block signed by the one before it." },
   { t: 53.6, text: "Change a single word, and the whole chain notices. Tampering can't hide." },
   // three minds
-  { t: 61.0, text: "On top of that memory live three minds — not one model pretending to be everything." },
+  {
+    t: 61.0,
+    text: "On top of that memory live three minds — not one model pretending to be everything.",
+  },
   { t: 67.6, text: "Each question is scored, then sent to whoever should answer it." },
   { t: 76.2, text: "Abbey — the careful one, for proof and verified answers." },
   { t: 79.2, text: "Aviva — the explorer, for research and what comes next." },
@@ -67,7 +84,10 @@ const RAW: Array<Omit<ELine, "dur">> = [
   { t: 92.0, text: "Truthfulness, safety, helpfulness, fairness, privacy, transparency." },
   { t: 97.0, text: "Six checks. Every response, governed." },
   // vision
-  { t: 102.4, text: "The longer-term aim is a fabric of intelligence across every kind of hardware." },
+  {
+    t: 102.4,
+    text: "The longer-term aim is a fabric of intelligence across every kind of hardware.",
+  },
   { t: 108.6, text: "That part is still vision — a direction we're honest about, not a promise." },
   { t: 114.2, text: "What's real today is the runtime, the memory, and the three minds." },
   // close
@@ -88,9 +108,13 @@ function ExplainerNarration() {
   const { clock: time, playing } = useTimeline();
   const prev = useRef(0);
   const spoken = useRef<Set<number>>(new Set());
-  useEffect(() => { primeNeural(SCRIPT); return () => stopSpeech(); }, []);
   useEffect(() => {
-    const p = prev.current; prev.current = time;
+    primeNeural(SCRIPT);
+    return () => stopSpeech();
+  }, []);
+  useEffect(() => {
+    const p = prev.current;
+    prev.current = time;
     if (time < p - 0.35) {
       stopSpeech();
       spoken.current = new Set(SCRIPT.filter((l) => l.t <= time + 0.05).map((l) => l.t));
@@ -104,7 +128,9 @@ function ExplainerNarration() {
       }
     }
   }, [time, playing]);
-  useEffect(() => { setSpeechPlaying(playing); }, [playing]);
+  useEffect(() => {
+    setSpeechPlaying(playing);
+  }, [playing]);
   return null;
 }
 
@@ -123,15 +149,77 @@ function ExplainerCaption() {
   const spokenCount = Math.floor(frac * wordIdx.length);
   let seen = 0;
   return (
-    <div style={{ position: "absolute", left: 0, right: 0, bottom: 64, zIndex: 42, display: "flex", justifyContent: "center", pointerEvents: "none" }}>
-      <div style={{ display: "flex", alignItems: "center", gap: 18, opacity: op, maxWidth: 1500, padding: "14px 30px", borderRadius: 999, background: "rgba(6,14,10,0.62)", border: `1px solid ${C.green}33`, backdropFilter: "blur(14px)", WebkitBackdropFilter: "blur(14px)", boxShadow: `0 18px 60px rgba(0,0,0,0.5)` }}>
-        <span style={{ width: 9, height: 9, borderRadius: "50%", background: C.green, boxShadow: `0 0 14px ${C.green}`, opacity: playing ? 0.55 + 0.45 * Math.sin(time * 6) : 0.4, flexShrink: 0 }} />
-        <span style={{ fontFamily: FONT.mono, fontSize: 13, letterSpacing: "0.28em", color: C.green, flexShrink: 0 }}>ABBEY</span>
-        <span style={{ fontFamily: FONT.display, fontWeight: 600, fontSize: 32, letterSpacing: "-0.01em", textShadow: "0 2px 24px rgba(0,0,0,0.85)" }}>
+    <div
+      style={{
+        position: "absolute",
+        left: 0,
+        right: 0,
+        bottom: 64,
+        zIndex: 42,
+        display: "flex",
+        justifyContent: "center",
+        pointerEvents: "none",
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 18,
+          opacity: op,
+          maxWidth: 1500,
+          padding: "14px 30px",
+          borderRadius: 999,
+          background: "rgba(6,14,10,0.62)",
+          border: `1px solid ${C.green}33`,
+          backdropFilter: "blur(14px)",
+          WebkitBackdropFilter: "blur(14px)",
+          boxShadow: `0 18px 60px rgba(0,0,0,0.5)`,
+        }}
+      >
+        <span
+          style={{
+            width: 9,
+            height: 9,
+            borderRadius: "50%",
+            background: C.green,
+            boxShadow: `0 0 14px ${C.green}`,
+            opacity: playing ? 0.55 + 0.45 * Math.sin(time * 6) : 0.4,
+            flexShrink: 0,
+          }}
+        />
+        <span
+          style={{
+            fontFamily: FONT.mono,
+            fontSize: 13,
+            letterSpacing: "0.28em",
+            color: C.green,
+            flexShrink: 0,
+          }}
+        >
+          ABBEY
+        </span>
+        <span
+          style={{
+            fontFamily: FONT.display,
+            fontWeight: 600,
+            fontSize: 32,
+            letterSpacing: "-0.01em",
+            textShadow: "0 2px 24px rgba(0,0,0,0.85)",
+          }}
+        >
           {tokens.map((tk, i) => {
             if (!/\S/.test(tk)) return tk;
-            const lit = seen < spokenCount; seen++;
-            return <span key={i} style={{ color: lit ? C.text : C.dim, transition: "color 90ms linear" }}>{tk}</span>;
+            const lit = seen < spokenCount;
+            seen++;
+            return (
+              <span
+                key={i}
+                style={{ color: lit ? C.text : C.dim, transition: "color 90ms linear" }}
+              >
+                {tk}
+              </span>
+            );
           })}
         </span>
       </div>
@@ -156,25 +244,54 @@ function ExplainerNeural() {
 export function Explainer() {
   const ready = useVoiceReady();
   return (
-    <Stage width={1920} height={1080} duration={DURATION} background="#040406" persistKey="mlai-explainer" ready={ready}>
+    <Stage
+      width={1920}
+      height={1080}
+      duration={DURATION}
+      background="#040406"
+      persistKey="mlai-explainer"
+      ready={ready}
+    >
       <ExplainerNeural />
       <GridBG opacity={0.26} />
       <Vignette />
 
-      <Sprite start={T.open[0]} end={T.open[1]}><SceneOpen /></Sprite>
-      <Sprite start={T.runtime[0]} end={T.runtime[1]}><Scene3 /></Sprite>
-      <Sprite start={T.storage[0]} end={T.storage[1]}><SceneStorage /></Sprite>
-      <Sprite start={T.memory[0]} end={T.memory[1]}><SceneVerifiableMemory /></Sprite>
-      <Sprite start={T.minds[0]} end={T.minds[1]}><ScenePersonaRouting /></Sprite>
+      <Sprite start={T.open[0]} end={T.open[1]}>
+        <SceneOpen />
+      </Sprite>
+      <Sprite start={T.runtime[0]} end={T.runtime[1]}>
+        <Scene3 />
+      </Sprite>
+      <Sprite start={T.storage[0]} end={T.storage[1]}>
+        <SceneStorage />
+      </Sprite>
+      <Sprite start={T.memory[0]} end={T.memory[1]}>
+        <SceneVerifiableMemory />
+      </Sprite>
+      <Sprite start={T.minds[0]} end={T.minds[1]}>
+        <ScenePersonaRouting />
+      </Sprite>
 
       {/* three minds — each reveals with its own motion signature */}
-      <Sprite start={T.pAbbey[0]} end={T.pAbbey[1]}><BeatPersona name="Abbey" role="proof · verified" accent={C.green} /></Sprite>
-      <Sprite start={T.pAviva[0]} end={T.pAviva[1]}><BeatPersona name="Aviva" role="research · vision" accent={C.purple} /></Sprite>
-      <Sprite start={T.pAbi[0]} end={T.pAbi[1]}><BeatPersona name="Abi" role="interactive · fast" accent={C.cyan} /></Sprite>
+      <Sprite start={T.pAbbey[0]} end={T.pAbbey[1]}>
+        <BeatPersona name="Abbey" role="proof · verified" accent={C.green} />
+      </Sprite>
+      <Sprite start={T.pAviva[0]} end={T.pAviva[1]}>
+        <BeatPersona name="Aviva" role="research · vision" accent={C.purple} />
+      </Sprite>
+      <Sprite start={T.pAbi[0]} end={T.pAbi[1]}>
+        <BeatPersona name="Abi" role="interactive · fast" accent={C.cyan} />
+      </Sprite>
 
-      <Sprite start={T.govern[0]} end={T.govern[1]}><SceneGovernance /></Sprite>
-      <Sprite start={T.vision[0]} end={T.vision[1]}><SceneNorthStar /></Sprite>
-      <Sprite start={T.close[0]} end={T.close[1]}><SceneClose /></Sprite>
+      <Sprite start={T.govern[0]} end={T.govern[1]}>
+        <SceneGovernance />
+      </Sprite>
+      <Sprite start={T.vision[0]} end={T.vision[1]}>
+        <SceneNorthStar />
+      </Sprite>
+      <Sprite start={T.close[0]} end={T.close[1]}>
+        <SceneClose />
+      </Sprite>
 
       {/* Abbey voiceover + caption */}
       <ExplainerNarration />

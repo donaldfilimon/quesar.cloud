@@ -74,10 +74,18 @@ describe("saveWorkspaceConnection", () => {
     vi.stubEnv("APP_ENCRYPTION_KEY", "");
     const userId = uid("nokey");
     await expect(
-      saveWorkspaceConnection({ userId, provider: "google", refreshToken: "rt", accountEmail: null, scope: null }),
+      saveWorkspaceConnection({
+        userId,
+        provider: "google",
+        refreshToken: "rt",
+        accountEmail: null,
+        scope: null,
+      }),
     ).rejects.toBeInstanceOf(EncryptionUnavailableError);
     const sql = await getSql();
-    expect(await sql`select 1 from workspace_connections where user_id = ${userId}`).toHaveLength(0);
+    expect(await sql`select 1 from workspace_connections where user_id = ${userId}`).toHaveLength(
+      0,
+    );
   }, 30_000);
 });
 
@@ -106,7 +114,13 @@ describe("AAD binding", () => {
 
   it("a Google token copied into the Microsoft slot of the same user is refused", async () => {
     const userId = uid("swap");
-    await saveWorkspaceConnection({ userId, provider: "google", refreshToken: "g-rt", accountEmail: null, scope: null });
+    await saveWorkspaceConnection({
+      userId,
+      provider: "google",
+      refreshToken: "g-rt",
+      accountEmail: null,
+      scope: null,
+    });
     const sql = await getSql();
     await sql`
       insert into workspace_connections (user_id, provider, sealed)
@@ -120,14 +134,22 @@ describe("getWorkspaceAccessToken", () => {
   it("reports not-connected when no row exists", async () => {
     vi.stubEnv("GOOGLE_OAUTH_CLIENT_ID", "id");
     vi.stubEnv("GOOGLE_OAUTH_CLIENT_SECRET", "secret");
-    await expect(getWorkspaceAccessToken(uid("none"), "google")).rejects.toBeInstanceOf(WorkspaceNotConnectedError);
+    await expect(getWorkspaceAccessToken(uid("none"), "google")).rejects.toBeInstanceOf(
+      WorkspaceNotConnectedError,
+    );
   }, 30_000);
 
   it("mints from the sealed refresh token, persists a rotated one sealed, never the access token", async () => {
     vi.stubEnv("MICROSOFT_OAUTH_CLIENT_ID", "id");
     vi.stubEnv("MICROSOFT_OAUTH_CLIENT_SECRET", "secret");
     const userId = uid("rotate");
-    await saveWorkspaceConnection({ userId, provider: "microsoft", refreshToken: "rt-old", accountEmail: null, scope: null });
+    await saveWorkspaceConnection({
+      userId,
+      provider: "microsoft",
+      refreshToken: "rt-old",
+      accountEmail: null,
+      scope: null,
+    });
 
     let sentRefresh = "";
     const fetchImpl = (async (_url: string, init: RequestInit) => {
@@ -144,7 +166,9 @@ describe("getWorkspaceAccessToken", () => {
     await expect(readRefreshToken(userId, "microsoft")).resolves.toBe("rt-new");
 
     const sql = await getSql();
-    const serialized = JSON.stringify(await sql`select * from workspace_connections where user_id = ${userId}`);
+    const serialized = JSON.stringify(
+      await sql`select * from workspace_connections where user_id = ${userId}`,
+    );
     expect(serialized).not.toContain("rt-new");
     expect(serialized).not.toContain("at-live");
   }, 30_000);
@@ -155,7 +179,13 @@ describe("revokeAndDeleteWorkspaceConnection", () => {
     vi.stubEnv("GOOGLE_OAUTH_CLIENT_ID", "id");
     vi.stubEnv("GOOGLE_OAUTH_CLIENT_SECRET", "secret");
     const userId = uid("disc");
-    await saveWorkspaceConnection({ userId, provider: "google", refreshToken: "rt", accountEmail: null, scope: null });
+    await saveWorkspaceConnection({
+      userId,
+      provider: "google",
+      refreshToken: "rt",
+      accountEmail: null,
+      scope: null,
+    });
     const failing = (async () => {
       throw new Error("network down");
     }) as unknown as typeof fetch;
@@ -176,7 +206,11 @@ describe("access-token cache follows the stored row", () => {
       return {
         ok: true,
         status: 200,
-        json: async () => ({ access_token: next.access, refresh_token: next.refresh, expires_in: 3600 }),
+        json: async () => ({
+          access_token: next.access,
+          refresh_token: next.refresh,
+          expires_in: 3600,
+        }),
       };
     }) as unknown as typeof fetch;
     return { fetchImpl, calls: () => calls };
@@ -189,7 +223,13 @@ describe("access-token cache follows the stored row", () => {
 
   it("serves from cache, then refuses after disconnect instead of returning the stale token", async () => {
     const userId = uid("stale");
-    await saveWorkspaceConnection({ userId, provider: "google", refreshToken: "rt", accountEmail: null, scope: null });
+    await saveWorkspaceConnection({
+      userId,
+      provider: "google",
+      refreshToken: "rt",
+      accountEmail: null,
+      scope: null,
+    });
     const { fetchImpl, calls } = counter([{ access: "at-1" }]);
     await expect(getWorkspaceAccessToken(userId, "google", fetchImpl)).resolves.toBe("at-1");
     await expect(getWorkspaceAccessToken(userId, "google", fetchImpl)).resolves.toBe("at-1");
@@ -207,13 +247,23 @@ describe("access-token cache follows the stored row", () => {
 
   it("drops the cached token when the row is replaced by a reconnect", async () => {
     const userId = uid("reconnect");
-    await saveWorkspaceConnection({ userId, provider: "google", refreshToken: "rt-a", accountEmail: null, scope: null });
+    await saveWorkspaceConnection({
+      userId,
+      provider: "google",
+      refreshToken: "rt-a",
+      accountEmail: null,
+      scope: null,
+    });
     const { fetchImpl, calls } = counter([{ access: "at-a" }, { access: "at-b" }]);
     await expect(getWorkspaceAccessToken(userId, "google", fetchImpl)).resolves.toBe("at-a");
     // Replace the row behind the cache's back (another instance's callback).
     const sql = await getSql();
-    await sql`update workspace_connections set sealed = ${(await sql<{ sealed: string }>`
-      select sealed from workspace_connections where user_id = ${userId}`)[0]!.sealed}, updated_at = now() + interval '1 second'
+    await sql`update workspace_connections set sealed = ${
+      (
+        await sql<{ sealed: string }>`
+      select sealed from workspace_connections where user_id = ${userId}`
+      )[0]!.sealed
+    }, updated_at = now() + interval '1 second'
       where user_id = ${userId}`;
     await expect(getWorkspaceAccessToken(userId, "google", fetchImpl)).resolves.toBe("at-b");
     expect(calls()).toBe(2);
@@ -221,21 +271,37 @@ describe("access-token cache follows the stored row", () => {
 
   it("a refresh that finishes after the row is gone neither returns nor caches a token", async () => {
     const userId = uid("race");
-    await saveWorkspaceConnection({ userId, provider: "google", refreshToken: "rt", accountEmail: null, scope: null });
+    await saveWorkspaceConnection({
+      userId,
+      provider: "google",
+      refreshToken: "rt",
+      accountEmail: null,
+      scope: null,
+    });
     const sql = await getSql();
     let calls = 0;
     const fetchImpl = (async () => {
       calls += 1;
       // The user disconnects while the provider call is in flight.
       await sql`delete from workspace_connections where user_id = ${userId}`;
-      return { ok: true, status: 200, json: async () => ({ access_token: "at-late", expires_in: 3600 }) };
+      return {
+        ok: true,
+        status: 200,
+        json: async () => ({ access_token: "at-late", expires_in: 3600 }),
+      };
     }) as unknown as typeof fetch;
     await expect(getWorkspaceAccessToken(userId, "google", fetchImpl)).rejects.toBeInstanceOf(
       WorkspaceNotConnectedError,
     );
 
     // Reconnect: the late token must not have been cached, so a fresh refresh runs.
-    await saveWorkspaceConnection({ userId, provider: "google", refreshToken: "rt-2", accountEmail: null, scope: null });
+    await saveWorkspaceConnection({
+      userId,
+      provider: "google",
+      refreshToken: "rt-2",
+      accountEmail: null,
+      scope: null,
+    });
     const { fetchImpl: fresh, calls: freshCalls } = counter([{ access: "at-fresh" }]);
     await expect(getWorkspaceAccessToken(userId, "google", fresh)).resolves.toBe("at-fresh");
     expect(freshCalls()).toBe(1);
@@ -251,16 +317,40 @@ describe("rotated refresh-token write-back is compare-and-swap", () => {
 
   it("does not overwrite a reconnect that landed during the refresh, and does not cache", async () => {
     const userId = uid("cas");
-    await saveWorkspaceConnection({ userId, provider: "google", refreshToken: "rt-old", accountEmail: null, scope: null });
+    await saveWorkspaceConnection({
+      userId,
+      provider: "google",
+      refreshToken: "rt-old",
+      accountEmail: null,
+      scope: null,
+    });
     let calls = 0;
     const fetchImpl = (async () => {
       calls += 1;
       if (calls === 1) {
         // A concurrent reconnect replaces the row mid-refresh.
-        await saveWorkspaceConnection({ userId, provider: "google", refreshToken: "rt-reconnected", accountEmail: null, scope: null });
-        return { ok: true, status: 200, json: async () => ({ access_token: "at-1", refresh_token: "rt-rotated", expires_in: 3600 }) };
+        await saveWorkspaceConnection({
+          userId,
+          provider: "google",
+          refreshToken: "rt-reconnected",
+          accountEmail: null,
+          scope: null,
+        });
+        return {
+          ok: true,
+          status: 200,
+          json: async () => ({
+            access_token: "at-1",
+            refresh_token: "rt-rotated",
+            expires_in: 3600,
+          }),
+        };
       }
-      return { ok: true, status: 200, json: async () => ({ access_token: "at-2", expires_in: 3600 }) };
+      return {
+        ok: true,
+        status: 200,
+        json: async () => ({ access_token: "at-2", expires_in: 3600 }),
+      };
     }) as unknown as typeof fetch;
 
     await expect(getWorkspaceAccessToken(userId, "google", fetchImpl)).resolves.toBe("at-1");
@@ -273,11 +363,21 @@ describe("rotated refresh-token write-back is compare-and-swap", () => {
 
   it("persists the rotation when the row is unchanged, and caches it", async () => {
     const userId = uid("cas-ok");
-    await saveWorkspaceConnection({ userId, provider: "google", refreshToken: "rt-old", accountEmail: null, scope: null });
+    await saveWorkspaceConnection({
+      userId,
+      provider: "google",
+      refreshToken: "rt-old",
+      accountEmail: null,
+      scope: null,
+    });
     let calls = 0;
     const fetchImpl = (async () => {
       calls += 1;
-      return { ok: true, status: 200, json: async () => ({ access_token: "at-1", refresh_token: "rt-new", expires_in: 3600 }) };
+      return {
+        ok: true,
+        status: 200,
+        json: async () => ({ access_token: "at-1", refresh_token: "rt-new", expires_in: 3600 }),
+      };
     }) as unknown as typeof fetch;
     await expect(getWorkspaceAccessToken(userId, "google", fetchImpl)).resolves.toBe("at-1");
     await expect(readRefreshToken(userId, "google")).resolves.toBe("rt-new");
@@ -289,7 +389,13 @@ describe("rotated refresh-token write-back is compare-and-swap", () => {
 describe("key rotation", () => {
   it("flags a row whose token no longer opens as needing reauth", async () => {
     const userId = uid("rotkey");
-    await saveWorkspaceConnection({ userId, provider: "google", refreshToken: "rt", accountEmail: "a@x.test", scope: null });
+    await saveWorkspaceConnection({
+      userId,
+      provider: "google",
+      refreshToken: "rt",
+      accountEmail: "a@x.test",
+      scope: null,
+    });
     vi.stubEnv("APP_ENCRYPTION_KEY", randomBytes(32).toString("base64"));
     const [row] = await listWorkspaceConnections(userId);
     expect(row).toMatchObject({ provider: "google", needsReauth: true, accountEmail: "a@x.test" });

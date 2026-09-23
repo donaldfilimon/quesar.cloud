@@ -35,7 +35,8 @@ export function AppErrorComponent({ error, reset }: ErrorComponentProps) {
         This page hit an unexpected error.
       </h1>
       <p className="mt-4 text-sm leading-relaxed text-fg-muted">
-        The rest of the site is fine; this route failed to render. Retry it, or go back to solid ground.
+        The rest of the site is fine; this route failed to render. Retry it, or go back to solid
+        ground.
       </p>
       {import.meta.env.DEV ? (
         <p className="mt-3 font-mono text-xs break-words text-fg-subtle">{errorMessage(error)}</p>
@@ -66,9 +67,12 @@ export function AppNotFoundComponent() {
   return (
     <main className="mx-auto flex min-h-[60vh] max-w-xl flex-col justify-center px-6 py-24">
       <p className="text-xs text-accent">404</p>
-      <h1 className="mt-3 font-display text-4xl tracking-tight">This page is not in the catalog.</h1>
+      <h1 className="mt-3 font-display text-4xl tracking-tight">
+        This page is not in the catalog.
+      </h1>
       <p className="mt-4 text-sm leading-relaxed text-fg-muted">
-        Every public surface lives on this site. If a name moved, start from docs, apps, or the source catalog.
+        Every public surface lives on this site. If a name moved, start from docs, apps, or the
+        source catalog.
       </p>
       <p className="mt-8 flex flex-wrap gap-4 text-sm">
         <Link to="/" className="text-accent">

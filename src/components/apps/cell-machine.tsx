@@ -90,10 +90,16 @@ export function CellMachine() {
           const rect = event.currentTarget.getBoundingClientRect();
           const x = Math.floor(((event.clientX - rect.left) / rect.width) * COLS);
           const y = Math.floor(((event.clientY - rect.top) / rect.height) * ROWS);
-          setGrid((g) => g.map((row, yy) => row.map((cell, xx) => (xx === x && yy === y ? (cell ? 0 : 1) : cell))));
+          setGrid((g) =>
+            g.map((row, yy) =>
+              row.map((cell, xx) => (xx === x && yy === y ? (cell ? 0 : 1) : cell)),
+            ),
+          );
         }}
       />
-      <p className="mt-3 text-xs text-fg-subtle">Founder research. Not a Quesar product. Click a cell to toggle.</p>
+      <p className="mt-3 text-xs text-fg-subtle">
+        Founder research. Not a Quesar product. Click a cell to toggle.
+      </p>
     </div>
   );
 }

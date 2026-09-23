@@ -23,7 +23,8 @@ export const askPersona = createServerFn({ method: "POST" })
     const { complete } = await import("@/lib/server/llm");
     const { hit, LIMITS } = await import("@/lib/server/rate-limit.server");
     const limited = await hit("llm", context.userId, LIMITS.llm);
-    if (!limited.allowed) return { ok: false as const, error: "Too many requests. Try again in a minute." };
+    if (!limited.allowed)
+      return { ok: false as const, error: "Too many requests. Try again in a minute." };
     const result = await complete({
       maxTokens: 280,
       messages: [
@@ -34,7 +35,10 @@ export const askPersona = createServerFn({ method: "POST" })
     if (!result.ok) {
       return {
         ok: false as const,
-        error: result.reason === "not_configured" ? "Live model is not available in this environment." : result.message,
+        error:
+          result.reason === "not_configured"
+            ? "Live model is not available in this environment."
+            : result.message,
       };
     }
     return { ok: true as const, text: result.text };
@@ -51,7 +55,8 @@ export function askPersonaFromClient(input: AskInput): Promise<AskResult> {
   if (staticSite) {
     return Promise.resolve({
       ok: false,
-      error: "The live model runs on the server deployment; this is the static preview, so no model call was made.",
+      error:
+        "The live model runs on the server deployment; this is the static preview, so no model call was made.",
     });
   }
   return askPersona(input);

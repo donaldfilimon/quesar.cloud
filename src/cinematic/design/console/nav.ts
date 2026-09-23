@@ -1,13 +1,6 @@
 /* Console navigation — routes, sidebar entries and page titles. Split out of
    Shell.tsx so that module exports only components (fast refresh). */
-import {
-  IActivity,
-  IDb,
-  ILayers,
-  IMsg,
-  ISettings,
-  type IconComponent,
-} from "./Icons.tsx";
+import { IActivity, IDb, ILayers, IMsg, ISettings, type IconComponent } from "./Icons.tsx";
 
 export type Route = "overview" | "telemetry" | "personas" | "memory" | "settings";
 

@@ -27,7 +27,9 @@ describe("rate-limit.server", () => {
   }, 30_000);
 
   it("never exposes the raw client address", () => {
-    const req = new Request("https://quesar.cloud/", { headers: { "x-forwarded-for": "203.0.113.9, 10.0.0.1" } });
+    const req = new Request("https://quesar.cloud/", {
+      headers: { "x-forwarded-for": "203.0.113.9, 10.0.0.1" },
+    });
     const subject = clientSubject(req);
     expect(subject).not.toContain("203.0.113.9");
     expect(subject).toBe(clientSubject(req));

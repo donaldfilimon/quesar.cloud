@@ -22,7 +22,10 @@ const linkClass =
 
 function navActive(to: string, pathname: string) {
   if (to === "/research") {
-    return pathname === "/research" || (pathname.startsWith("/research/") && !pathname.startsWith("/research/implementations"));
+    return (
+      pathname === "/research" ||
+      (pathname.startsWith("/research/") && !pathname.startsWith("/research/implementations"))
+    );
   }
   if (to === "/docs" || to === "/apps" || to === "/research/implementations") {
     return pathname === to || pathname.startsWith(`${to}/`);
@@ -77,7 +80,9 @@ export function SiteHeader() {
             <DropdownMenuTrigger
               className={cn(
                 linkClass,
-                extra.some((item) => navActive(item.to, pathname)) ? "text-fg" : "text-fg-muted hover:text-fg",
+                extra.some((item) => navActive(item.to, pathname))
+                  ? "text-fg"
+                  : "text-fg-muted hover:text-fg",
               )}
             >
               More
@@ -122,7 +127,10 @@ export function SiteHeader() {
                     <X className="size-5" strokeWidth={1.75} aria-hidden="true" />
                   </Sheet.Close>
                 </div>
-                <nav className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-2 py-3" aria-label="Mobile">
+                <nav
+                  className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-2 py-3"
+                  aria-label="Mobile"
+                >
                   <ul className="flex flex-col">
                     {mobileLinks.map((item) => (
                       <li key={item.to}>
@@ -132,7 +140,9 @@ export function SiteHeader() {
                           aria-current={navActive(item.to, pathname) ? "page" : undefined}
                           className={cn(
                             "flex min-h-11 items-center rounded-md px-3 text-base no-underline",
-                            navActive(item.to, pathname) ? "bg-muted text-fg" : "text-fg-muted hover:text-fg",
+                            navActive(item.to, pathname)
+                              ? "bg-muted text-fg"
+                              : "text-fg-muted hover:text-fg",
                           )}
                         >
                           {item.label}

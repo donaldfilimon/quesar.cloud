@@ -34,7 +34,10 @@ export function PasskeysCard() {
     () =>
       authClient.passkey.listUserPasskeys().then(({ data, error }) => {
         if (error)
-          setState({ kind: "error", message: "Passkeys could not be loaded. Try again in a moment." });
+          setState({
+            kind: "error",
+            message: "Passkeys could not be loaded. Try again in a moment.",
+          });
         else setState({ kind: "ready", passkeys: (data ?? []) as PasskeyRow[] });
       }),
     [],
@@ -69,9 +72,7 @@ export function PasskeysCard() {
 
   return (
     <Surface>
-      <p className="text-xs text-fg-subtle">
-        Passkeys
-      </p>
+      <p className="text-xs text-fg-subtle">Passkeys</p>
       <p className="mt-2 text-sm text-fg-muted">
         Sign in with Face ID, Touch ID, Windows Hello or a security key instead of a password.
       </p>

@@ -12,15 +12,28 @@ const tagOptions = [
 
 export const Route = createFileRoute("/blog")({
   head: () => ({
-    ...pageHead("Blog — MLAI", "Engineering notes from MLAI: memory, personas, privacy, and runtime discipline."),
-    links: [{ rel: "alternate", type: "application/rss+xml", title: "MLAI lab notes and research", href: "/feed.xml" }],
+    ...pageHead(
+      "Blog — MLAI",
+      "Engineering notes from MLAI: memory, personas, privacy, and runtime discipline.",
+    ),
+    links: [
+      {
+        rel: "alternate",
+        type: "application/rss+xml",
+        title: "MLAI lab notes and research",
+        href: "/feed.xml",
+      },
+    ],
   }),
   component: BlogPage,
 });
 
 function BlogPage() {
   const [tag, setTag] = useState("all");
-  const posts = useMemo(() => (tag === "all" ? blog : blog.filter((post) => post.tag === tag)), [tag]);
+  const posts = useMemo(
+    () => (tag === "all" ? blog : blog.filter((post) => post.tag === tag)),
+    [tag],
+  );
   return (
     <RouteFrame>
       <PageHero

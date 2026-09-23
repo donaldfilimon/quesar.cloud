@@ -21,7 +21,9 @@ describe("CSP policy (ported from mlai)", () => {
 
   it("grants 'unsafe-eval' and HMR websockets in development only", () => {
     expect(directive(dev, "script-src")).toContain("'unsafe-eval'");
-    expect(directive(dev, "connect-src").split(" ")).toEqual(expect.arrayContaining(["ws:", "wss:"]));
+    expect(directive(dev, "connect-src").split(" ")).toEqual(
+      expect.arrayContaining(["ws:", "wss:"]),
+    );
     expect(directive(prod, "connect-src").split(" ")).not.toContain("ws:");
   });
 
@@ -34,7 +36,8 @@ describe("CSP policy (ported from mlai)", () => {
   });
 
   it("allows framing only by the site itself", () => {
-    for (const csp of [prod, dev]) expect(directive(csp, "frame-ancestors")).toBe("frame-ancestors 'self'");
+    for (const csp of [prod, dev])
+      expect(directive(csp, "frame-ancestors")).toBe("frame-ancestors 'self'");
   });
 
   it("locks down the object, base and form surface", () => {

@@ -25,9 +25,13 @@ export async function handleCspReport(req: Request, now?: number): Promise<Respo
   // content is "directive D blocked URI U", which report #1 already carries.
   try {
     const { allowed } = await hit("csp-report", clientSubject(req), LIMITS.cspReport, now);
-    if (!allowed) return Response.json({ error: "Too many requests. Try again shortly." }, { status: 429 });
+    if (!allowed)
+      return Response.json({ error: "Too many requests. Try again shortly." }, { status: 429 });
   } catch (error) {
-    console.error("CSP report rate limit unavailable:", error instanceof Error ? error.message : "unknown error");
+    console.error(
+      "CSP report rate limit unavailable:",
+      error instanceof Error ? error.message : "unknown error",
+    );
     return new Response(null, { status: 204 });
   }
 

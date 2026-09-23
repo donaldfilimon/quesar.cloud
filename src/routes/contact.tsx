@@ -9,7 +9,13 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
 import { Turnstile, type TurnstileHandle } from "@/components/turnstile";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
-import { getTurnstileConfig, INQUIRY_LIMITS, sendInquiry, TOPICS, type TurnstileConfig } from "@/lib/inquiries";
+import {
+  getTurnstileConfig,
+  INQUIRY_LIMITS,
+  sendInquiry,
+  TOPICS,
+  type TurnstileConfig,
+} from "@/lib/inquiries";
 import { readStore, writeStore } from "@/lib/local-store";
 import { pageHead } from "@/lib/seo";
 import { track } from "@/lib/telemetry";
@@ -106,10 +112,19 @@ function ContactPage() {
     setError("");
     track("inquiry_submit");
     if (staticSite) {
-      const subject = encodeURIComponent(`[${topic}] Inquiry from ${name.trim() || "the Quesar site"}`);
+      const subject = encodeURIComponent(
+        `[${topic}] Inquiry from ${name.trim() || "the Quesar site"}`,
+      );
       const body = encodeURIComponent(`${trimmed}\n\n— ${name.trim()} <${email.trim()}>`);
       window.location.href = `mailto:${INQUIRY_EMAIL}?subject=${subject}&body=${body}`;
-      const draft: Inquiry = { id: crypto.randomUUID(), name: name.trim(), email: email.trim(), topic, message: trimmed, created: Date.now() };
+      const draft: Inquiry = {
+        id: crypto.randomUUID(),
+        name: name.trim(),
+        email: email.trim(),
+        topic,
+        message: trimmed,
+        created: Date.now(),
+      };
       const kept = [draft, ...saved].slice(0, 20);
       writeStore(KEY, kept);
       setSaved(kept);
@@ -119,9 +134,15 @@ function ContactPage() {
     }
     let result: Awaited<ReturnType<typeof sendInquiry>>;
     try {
-      result = await sendInquiry({ data: { name, email, company: "", topic, message: trimmed, turnstileToken } });
+      result = await sendInquiry({
+        data: { name, email, company: "", topic, message: trimmed, turnstileToken },
+      });
     } catch {
-      result = { ok: false, code: "unavailable", error: "We couldn't reach the server. Your message is still in the form." };
+      result = {
+        ok: false,
+        code: "unavailable",
+        error: "We couldn't reach the server. Your message is still in the form.",
+      };
     }
     // Turnstile tokens are single-use: always start the next attempt fresh.
     if (needsToken) turnstileRef.current?.reset();
@@ -212,7 +233,9 @@ function ContactPage() {
                 required
                 minLength={INQUIRY_LIMITS.messageMin}
                 value={message}
-                onChange={(event) => setMessage(event.target.value.slice(0, INQUIRY_LIMITS.messageMax))}
+                onChange={(event) =>
+                  setMessage(event.target.value.slice(0, INQUIRY_LIMITS.messageMax))
+                }
                 rows={7}
                 className="mt-1 bg-bg"
               />
@@ -228,14 +251,16 @@ function ContactPage() {
                 />
                 {turnstileFailed ? (
                   <p role="alert" className="mt-2 text-sm text-fg-muted">
-                    The bot check could not load. Allow challenges.cloudflare.com, then reload the page.
+                    The bot check could not load. Allow challenges.cloudflare.com, then reload the
+                    page.
                   </p>
                 ) : null}
               </div>
             ) : null}
             {typeof turnstile === "object" && turnstile.state === "misconfigured" ? (
               <p role="alert" className="mt-4 text-sm text-fg-muted">
-                Bot verification is misconfigured on this site, so inquiries cannot be sent right now.
+                Bot verification is misconfigured on this site, so inquiries cannot be sent right
+                now.
               </p>
             ) : null}
             {turnstile === "unreachable" ? (
@@ -301,7 +326,11 @@ function ContactPage() {
           <NextUp
             items={[
               { to: "/developers", label: "Developers", body: "Full repository index and gates." },
-              { to: "/services", label: "Services", body: "If you need an engagement, start there." },
+              {
+                to: "/services",
+                label: "Services",
+                body: "If you need an engagement, start there.",
+              },
             ]}
           />
         </div>

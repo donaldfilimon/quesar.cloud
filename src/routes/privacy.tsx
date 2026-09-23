@@ -26,19 +26,23 @@ function PrivacyPage() {
       />
       <Section title="What this website collects">
         <p className="max-w-2xl text-sm leading-relaxed text-fg-muted">
-          This product site stores a theme preference in your browser when you toggle light or
-          dark. If you sign in, it stores an account and the field notes you write in the console.
-          Notes are scoped to your account on the server. They are not Abbey memory and not a hosted
-          WDBX store. If you click through to GitHub, GitHub's own policies apply. Optional live
-          repository metadata is requested from GitHub's public API in your browser; if that
-          request fails, the page falls back to verified links with no statistics.
+          This product site stores a theme preference in your browser when you toggle light or dark.
+          If you sign in, it stores an account and the field notes you write in the console. Notes
+          are scoped to your account on the server. They are not Abbey memory and not a hosted WDBX
+          store. If you click through to GitHub, GitHub's own policies apply. Optional live
+          repository metadata is requested from GitHub's public API in your browser; if that request
+          fails, the page falls back to verified links with no statistics.
         </p>
         <p className="mt-4 max-w-2xl text-sm leading-relaxed text-fg-muted">
           We do not invent a hosted analytics program here. If this deployment injects platform
           tooling outside MLAI's source, that tooling is not an MLAI product claim.
         </p>
       </Section>
-      <Section eyebrow="Privacy policy" title="What is collected, and how it is handled." lede={`Last updated ${LEGAL_UPDATED}.`}>
+      <Section
+        eyebrow="Privacy policy"
+        title="What is collected, and how it is handled."
+        lede={`Last updated ${LEGAL_UPDATED}.`}
+      >
         <ol className="grid max-w-3xl gap-4">
           {privacyPolicy.map((section, index) => (
             <li key={section.title}>
@@ -85,7 +89,10 @@ function PrivacyPage() {
               body: "Local models are optional. Live providers require stored credentials. This website does not broker them.",
             },
           ].map((item) => (
-            <li key={item.title} className="rounded-lg bg-bg-elevated p-5 shadow-[var(--shadow-border)]">
+            <li
+              key={item.title}
+              className="rounded-lg bg-bg-elevated p-5 shadow-[var(--shadow-border)]"
+            >
               <h3 className="text-base font-semibold">{item.title}</h3>
               <p className="mt-2 text-sm text-fg-muted">{item.body}</p>
             </li>

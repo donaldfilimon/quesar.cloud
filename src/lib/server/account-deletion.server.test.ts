@@ -23,10 +23,18 @@ async function rowsFor(userId: string) {
   const one = async (q: Promise<{ n: number }[]>) => Number((await q)[0].n);
   return {
     notes: await one(sql`select count(*)::int as n from field_notes where user_id = ${userId}`),
-    consents: await one(sql`select count(*)::int as n from chat_consents where user_id = ${userId}`),
-    audits: await one(sql`select count(*)::int as n from conversation_audits where user_id = ${userId}`),
-    access: await one(sql`select count(*)::int as n from audit_access_events where actor_user_id = ${userId}`),
-    connections: await one(sql`select count(*)::int as n from workspace_connections where user_id = ${userId}`),
+    consents: await one(
+      sql`select count(*)::int as n from chat_consents where user_id = ${userId}`,
+    ),
+    audits: await one(
+      sql`select count(*)::int as n from conversation_audits where user_id = ${userId}`,
+    ),
+    access: await one(
+      sql`select count(*)::int as n from audit_access_events where actor_user_id = ${userId}`,
+    ),
+    connections: await one(
+      sql`select count(*)::int as n from workspace_connections where user_id = ${userId}`,
+    ),
     limits: await one(sql`select count(*)::int as n from rate_limits where subject = ${userId}`),
     inquiries: await one(sql`select count(*)::int as n from inquiries where user_id = ${userId}`),
   };
@@ -50,13 +58,27 @@ describe("purgeUserData", () => {
     expect(report.workspace).toEqual([{ provider: "google", revoked: true }]);
     expect(report.inquiriesUnlinked).toBe(1);
     expect(await rowsFor(victim)).toEqual({
-      notes: 0, consents: 0, audits: 0, access: 0, connections: 0, limits: 0, inquiries: 0,
+      notes: 0,
+      consents: 0,
+      audits: 0,
+      access: 0,
+      connections: 0,
+      limits: 0,
+      inquiries: 0,
     });
     expect(await rowsFor(bystander)).toEqual({
-      notes: 1, consents: 1, audits: 1, access: 1, connections: 1, limits: 1, inquiries: 1,
+      notes: 1,
+      consents: 1,
+      audits: 1,
+      access: 1,
+      connections: 1,
+      limits: 1,
+      inquiries: 1,
     });
     const sql = await getSql();
-    const kept = await sql<{ n: number }>`select count(*)::int as n from inquiries where user_id is null and email = 'e@example.com'`;
+    const kept = await sql<{
+      n: number;
+    }>`select count(*)::int as n from inquiries where user_id is null and email = 'e@example.com'`;
     expect(Number(kept[0].n)).toBeGreaterThanOrEqual(1);
   }, 30_000);
 

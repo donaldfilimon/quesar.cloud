@@ -96,8 +96,21 @@ function Bubble({ msg }: { msg: Message }) {
       <Avatar who={msg.who} />
       <div style={{ maxWidth: "78%" }}>
         <div style={{ display: "flex", alignItems: "baseline", gap: 8, marginBottom: 4 }}>
-          <span style={{ fontFamily: "var(--font-display)", fontWeight: 600, fontSize: 13, color: p.color }}>{msg.who}</span>
-          <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: "var(--text-faint)" }}>{p.role}</span>
+          <span
+            style={{
+              fontFamily: "var(--font-display)",
+              fontWeight: 600,
+              fontSize: 13,
+              color: p.color,
+            }}
+          >
+            {msg.who}
+          </span>
+          <span
+            style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: "var(--text-faint)" }}
+          >
+            {p.role}
+          </span>
         </div>
         <div
           style={{

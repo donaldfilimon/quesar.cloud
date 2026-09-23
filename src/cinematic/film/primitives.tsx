@@ -10,8 +10,13 @@ export function Grain() {
   return (
     <div
       style={{
-        position: "absolute", inset: 0, opacity: 0.04, zIndex: 60,
-        backgroundImage: `url("${GRAIN_URL}")`, mixBlendMode: "overlay", pointerEvents: "none",
+        position: "absolute",
+        inset: 0,
+        opacity: 0.04,
+        zIndex: 60,
+        backgroundImage: `url("${GRAIN_URL}")`,
+        mixBlendMode: "overlay",
+        pointerEvents: "none",
       }}
     />
   );
@@ -21,7 +26,10 @@ export function Vignette() {
   return (
     <div
       style={{
-        position: "absolute", inset: 0, zIndex: 1, pointerEvents: "none",
+        position: "absolute",
+        inset: 0,
+        zIndex: 1,
+        pointerEvents: "none",
         background: "radial-gradient(120% 90% at 50% 42%, transparent 40%, rgba(0,0,0,0.55) 100%)",
       }}
     />
@@ -32,7 +40,11 @@ export function GridBG({ opacity = 1 }: { opacity?: number }) {
   return (
     <div
       style={{
-        position: "absolute", inset: 0, zIndex: 0, pointerEvents: "none", opacity,
+        position: "absolute",
+        inset: 0,
+        zIndex: 0,
+        pointerEvents: "none",
+        opacity,
         backgroundImage:
           "linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px)," +
           "linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px)",
@@ -44,15 +56,35 @@ export function GridBG({ opacity = 1 }: { opacity?: number }) {
   );
 }
 
-export function Orb({ x, y, size, color, opacity = 0.18 }: {
-  x: number; y: number; size: number; color: string; opacity?: number;
+export function Orb({
+  x,
+  y,
+  size,
+  color,
+  opacity = 0.18,
+}: {
+  x: number;
+  y: number;
+  size: number;
+  color: string;
+  opacity?: number;
 }) {
   return (
     <div
       style={{
-        position: "absolute", left: x, top: y, width: size, height: size,
-        marginLeft: -size / 2, marginTop: -size / 2, borderRadius: "50%",
-        background: color, filter: "blur(120px)", opacity, zIndex: 0, pointerEvents: "none",
+        position: "absolute",
+        left: x,
+        top: y,
+        width: size,
+        height: size,
+        marginLeft: -size / 2,
+        marginTop: -size / 2,
+        borderRadius: "50%",
+        background: color,
+        filter: "blur(120px)",
+        opacity,
+        zIndex: 0,
+        pointerEvents: "none",
       }}
     />
   );

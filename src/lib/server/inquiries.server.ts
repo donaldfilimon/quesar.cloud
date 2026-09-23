@@ -17,30 +17,51 @@ export interface SubmitContext {
   now?: number;
 }
 
-export async function submitInquiry(input: InquiryInput, ctx: SubmitContext): Promise<InquiryResult> {
+export async function submitInquiry(
+  input: InquiryInput,
+  ctx: SubmitContext,
+): Promise<InquiryResult> {
   try {
     const { allowed } = await hit("inquiry", clientSubject(ctx.request), LIMITS.inquiry, ctx.now);
     if (!allowed) {
-      return { ok: false, code: "rate_limited", error: "Too many inquiries from here. Try again in a few minutes." };
+      return {
+        ok: false,
+        code: "rate_limited",
+        error: "Too many inquiries from here. Try again in a few minutes.",
+      };
     }
   } catch (error) {
-    console.error("Inquiry rate limit unavailable:", error instanceof Error ? error.message : "unknown error");
-    return { ok: false, code: "unavailable", error: "We couldn't save that. Try again in a moment." };
+    console.error(
+      "Inquiry rate limit unavailable:",
+      error instanceof Error ? error.message : "unknown error",
+    );
+    return {
+      ok: false,
+      code: "unavailable",
+      error: "We couldn't save that. Try again in a moment.",
+    };
   }
 
   const checked = validateInquiry(input);
-  if (!checked.ok) return { ok: false, code: "invalid", error: checked.error, field: checked.field };
+  if (!checked.ok)
+    return { ok: false, code: "invalid", error: checked.error, field: checked.field };
 
   const turnstile = turnstileState();
   if (turnstile === "misconfigured") {
-    console.error("Turnstile is misconfigured: TURNSTILE_HOSTNAMES is empty while the key and secret are set.");
+    console.error(
+      "Turnstile is misconfigured: TURNSTILE_HOSTNAMES is empty while the key and secret are set.",
+    );
     return {
       ok: false,
       code: "misconfigured",
-      error: "Bot verification is misconfigured on this site, so inquiries cannot be accepted right now.",
+      error:
+        "Bot verification is misconfigured on this site, so inquiries cannot be accepted right now.",
     };
   }
-  if (turnstile === "ready" && !(await verifyTurnstile(ctx.request, input.turnstileToken.trim(), "inquiry"))) {
+  if (
+    turnstile === "ready" &&
+    !(await verifyTurnstile(ctx.request, input.turnstileToken.trim(), "inquiry"))
+  ) {
     return {
       ok: false,
       code: "verification",
@@ -56,7 +77,14 @@ export async function submitInquiry(input: InquiryInput, ctx: SubmitContext): Pr
       values (${ctx.userId}, ${name}, ${email}, ${company}, ${topic}, ${message})`;
     return { ok: true };
   } catch (error) {
-    console.error("Database error saving inquiry:", error instanceof Error ? error.message : "unknown error");
-    return { ok: false, code: "unavailable", error: "We couldn't save that. Try again in a moment." };
+    console.error(
+      "Database error saving inquiry:",
+      error instanceof Error ? error.message : "unknown error",
+    );
+    return {
+      ok: false,
+      code: "unavailable",
+      error: "We couldn't save that. Try again in a moment.",
+    };
   }
 }

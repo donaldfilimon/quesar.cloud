@@ -39,8 +39,16 @@ function BenchmarksPage() {
           rows={benchmarkArchitecture}
           rowKey={(row) => row.property}
           columns={[
-            { header: "Source-backed property", className: "text-fg-muted", cell: (row) => row.property },
-            { header: "WDBX implementation", className: "font-mono text-[12px] text-fg", cell: (row) => row.value },
+            {
+              header: "Source-backed property",
+              className: "text-fg-muted",
+              cell: (row) => row.property,
+            },
+            {
+              header: "WDBX implementation",
+              className: "font-mono text-[12px] text-fg",
+              cell: (row) => row.value,
+            },
           ]}
         />
         <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -49,7 +57,8 @@ function BenchmarksPage() {
           ))}
         </div>
         <p className="mt-8 max-w-2xl text-sm text-fg-muted">
-          Reproduce on your hardware. Record commit, toolchain, and output. A green web check is not GPU evidence.
+          Reproduce on your hardware. Record commit, toolchain, and output. A green web check is not
+          GPU evidence.
         </p>
       </Section>
       <Section eyebrow="Interactive" title="Models you can move.">
@@ -66,7 +75,9 @@ function BenchmarksPage() {
       </Section>
       <PageClose
         primary={{ to: "/research", label: "Research" }}
-        next={[{ to: "/wdbx", label: "WDBX", body: "The substrate these configuration facts describe." }]}
+        next={[
+          { to: "/wdbx", label: "WDBX", body: "The substrate these configuration facts describe." },
+        ]}
       />
     </>
   );

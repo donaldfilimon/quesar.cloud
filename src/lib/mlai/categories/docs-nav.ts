@@ -34,7 +34,8 @@ export const docNav: readonly DocNavGroup[] = [
       {
         id: "architecture",
         label: "Roles",
-        description: "Separate runtime, storage, interface, and application framework responsibilities.",
+        description:
+          "Separate runtime, storage, interface, and application framework responsibilities.",
         body: "architecture roles ABI WDBX Abbey Gama",
       },
       {
@@ -59,7 +60,8 @@ export const docNav: readonly DocNavGroup[] = [
       {
         id: "evidence",
         label: "Evidence",
-        description: "Documented behavior, reported testing, measured results, and targets stay separate.",
+        description:
+          "Documented behavior, reported testing, measured results, and targets stay separate.",
         body: "evidence claims measured reported target",
       },
     ],
@@ -141,9 +143,7 @@ export const docNav: readonly DocNavGroup[] = [
 ] as const;
 
 export function flattenDocNav(): DocNavItem[] {
-  return docNav.flatMap((g) =>
-    g.items.map((item) => ({ ...item, /* group carried via lookup */ })),
-  );
+  return docNav.flatMap((g) => g.items.map((item) => ({ ...item /* group carried via lookup */ })));
 }
 
 export function docNavGroupFor(id: string): string | undefined {

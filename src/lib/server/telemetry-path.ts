@@ -67,7 +67,9 @@ export function routePatternsFromFiles(files: Iterable<string>): RoutePatterns {
     if (splat) continue;
 
     if (segments.some((segment) => segment.startsWith("$"))) {
-      const pattern = segments.map((segment) => (segment.startsWith("$") ? SLUG : escapeRegExp(segment))).join("/");
+      const pattern = segments
+        .map((segment) => (segment.startsWith("$") ? SLUG : escapeRegExp(segment)))
+        .join("/");
       dynamic.push(new RegExp(`^/${pattern}$`));
     } else {
       staticPaths.add(`/${segments.join("/")}`);

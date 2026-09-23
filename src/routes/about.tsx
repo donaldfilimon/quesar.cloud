@@ -8,7 +8,10 @@ import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/about")({
   head: () =>
-    pageHead("About — MLAI Corporation", "MLAI Corporation values, operating principles, and registration-level facts."),
+    pageHead(
+      "About — MLAI Corporation",
+      "MLAI Corporation values, operating principles, and registration-level facts.",
+    ),
   component: AboutPage,
 });
 
@@ -27,7 +30,9 @@ function AboutPage() {
         </ul>
       </Section>
       <Section eyebrow="Values" title="What the company is for.">
-        <CopyGrid items={about.values.map((value) => ({ title: value.title, body: value.description }))} />
+        <CopyGrid
+          items={about.values.map((value) => ({ title: value.title, body: value.description }))}
+        />
       </Section>
       <Section eyebrow="Our mission" title={aboutMission.title}>
         <div className="grid gap-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] lg:items-start">
@@ -41,7 +46,10 @@ function AboutPage() {
       <Section eyebrow="Thesis" title="Why on-device wins.">
         <CopyGrid
           columns="md:grid-cols-3"
-          items={about.investorThesis.map((item) => ({ title: item.title, body: item.description }))}
+          items={about.investorThesis.map((item) => ({
+            title: item.title,
+            body: item.description,
+          }))}
         />
       </Section>
       <Section eyebrow="Entity" title="Registration-level facts.">
@@ -55,7 +63,11 @@ function AboutPage() {
           { to: "/research", label: "Read our research" },
         ]}
         next={[
-          { to: "/investors", label: "Investors", body: "TAM and ARR tagged as targets, not results." },
+          {
+            to: "/investors",
+            label: "Investors",
+            body: "TAM and ARR tagged as targets, not results.",
+          },
           { to: "/services", label: "Services", body: "Integration work with named limits." },
         ]}
       />

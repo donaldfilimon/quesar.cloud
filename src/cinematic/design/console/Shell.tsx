@@ -169,7 +169,9 @@ export function Sidebar({ route, setRoute }: SidebarProps) {
           >
             MLAI
           </div>
-          <div style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: "var(--text-faint)" }}>console</div>
+          <div style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: "var(--text-faint)" }}>
+            console
+          </div>
         </div>
       </div>
       <nav style={{ display: "flex", flexDirection: "column", gap: 4 }}>
@@ -220,7 +222,14 @@ export function Sidebar({ route, setRoute }: SidebarProps) {
           border: "1px solid var(--hair)",
         }}
       >
-        <div style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: "var(--text-faint)", marginBottom: 8 }}>
+        <div
+          style={{
+            fontFamily: "var(--font-mono)",
+            fontSize: 10,
+            color: "var(--text-faint)",
+            marginBottom: 8,
+          }}
+        >
           PERSONAS ONLINE
         </div>
         <div style={{ display: "flex", gap: 12 }}>
@@ -232,7 +241,15 @@ export function Sidebar({ route, setRoute }: SidebarProps) {
             ] as const
           ).map(([n, c]) => (
             <div key={n} style={{ display: "flex", alignItems: "center", gap: 5 }}>
-              <span style={{ width: 7, height: 7, borderRadius: "50%", background: c, boxShadow: `0 0 8px ${c}` }} />
+              <span
+                style={{
+                  width: 7,
+                  height: 7,
+                  borderRadius: "50%",
+                  background: c,
+                  boxShadow: `0 0 8px ${c}`,
+                }}
+              />
               <span style={{ fontSize: 11, color: "var(--text-dim)" }}>{n}</span>
             </div>
           ))}
@@ -310,7 +327,15 @@ export function Topbar({ route, onCmd }: TopbarProps) {
             background: "rgba(52,211,153,0.1)",
           }}
         >
-          <span style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--proof)", boxShadow: "0 0 8px var(--proof)" }} />
+          <span
+            style={{
+              width: 6,
+              height: 6,
+              borderRadius: "50%",
+              background: "var(--proof)",
+              boxShadow: "0 0 8px var(--proof)",
+            }}
+          />
           on-device
         </span>
       </div>

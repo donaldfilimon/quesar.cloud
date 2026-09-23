@@ -24,7 +24,13 @@
  * KMS envelope encryption replaced by `crypto.server.ts` (spec decision 3).
  */
 import { getSql } from "@/lib/db";
-import { EncryptionUnavailableError, SealedDataError, digest, open, seal } from "@/lib/server/crypto.server";
+import {
+  EncryptionUnavailableError,
+  SealedDataError,
+  digest,
+  open,
+  seal,
+} from "@/lib/server/crypto.server";
 import {
   providerCredentials,
   refreshAccessToken,
@@ -56,7 +62,10 @@ function rowStamp(row: { sealed: string; updated_at: unknown }): string {
   return `${iso(row.updated_at)}|${digest(row.sealed)}`;
 }
 
-async function readStoredRow(userId: string, provider: WorkspaceProvider): Promise<StoredRow | null> {
+async function readStoredRow(
+  userId: string,
+  provider: WorkspaceProvider,
+): Promise<StoredRow | null> {
   const sql = await getSql();
   const rows = await sql<{ sealed: string; updated_at: unknown }>`
     select sealed, updated_at from workspace_connections
@@ -128,7 +137,9 @@ export async function saveWorkspaceConnection(input: {
   accessTokenCache().delete(cacheKey(input.userId, input.provider));
 }
 
-export async function listWorkspaceConnections(userId: string): Promise<WorkspaceConnectionSummary[]> {
+export async function listWorkspaceConnections(
+  userId: string,
+): Promise<WorkspaceConnectionSummary[]> {
   const sql = await getSql();
   const rows = await sql<{
     provider: WorkspaceProvider;
@@ -150,7 +161,10 @@ export async function listWorkspaceConnections(userId: string): Promise<Workspac
   }));
 }
 
-export async function deleteWorkspaceConnection(userId: string, provider: WorkspaceProvider): Promise<boolean> {
+export async function deleteWorkspaceConnection(
+  userId: string,
+  provider: WorkspaceProvider,
+): Promise<boolean> {
   const sql = await getSql();
   const rows = await sql`
     delete from workspace_connections
@@ -199,7 +213,10 @@ export async function revokeAndDeleteWorkspaceConnection(
  * is no row. Throws `SealedDataError` when the row's sealed value was not
  * sealed for this pair, and `EncryptionUnavailableError` without a key.
  */
-export async function readRefreshToken(userId: string, provider: WorkspaceProvider): Promise<string | null> {
+export async function readRefreshToken(
+  userId: string,
+  provider: WorkspaceProvider,
+): Promise<string | null> {
   const row = await readStoredRow(userId, provider);
   return row ? open(row.sealed, workspaceAad(userId, provider)) : null;
 }

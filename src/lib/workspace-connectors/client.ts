@@ -31,11 +31,13 @@ export async function fetchConnections(signal?: AbortSignal): Promise<Connection
   });
   if (!response.ok) return { ok: false, status: response.status };
   const body: unknown = await response.json();
-  const rows = body && typeof body === "object" ? (body as { providers?: unknown }).providers : null;
+  const rows =
+    body && typeof body === "object" ? (body as { providers?: unknown }).providers : null;
   const providers: Partial<Record<WorkspaceProviderSlug, ProviderConnection>> = {};
   if (Array.isArray(rows)) {
     for (const row of rows as ProviderConnection[]) {
-      if (row && (row.provider === "google" || row.provider === "microsoft")) providers[row.provider] = row;
+      if (row && (row.provider === "google" || row.provider === "microsoft"))
+        providers[row.provider] = row;
     }
   }
   return { ok: true, providers };
@@ -60,10 +62,12 @@ export function connectHref(provider: WorkspaceProviderSlug): string {
 
 const CALLBACK_ERRORS: Record<string, string> = {
   provider_not_configured: "That provider has no OAuth client configured on this deployment.",
-  encryption_not_configured: "APP_ENCRYPTION_KEY is not set, so tokens cannot be stored. Connect is disabled.",
+  encryption_not_configured:
+    "APP_ENCRYPTION_KEY is not set, so tokens cannot be stored. Connect is disabled.",
   invalid_state: "The sign-in round trip could not be verified. Start the connection again.",
   missing_code: "The provider returned no authorization code.",
-  no_refresh_token: "The provider returned no refresh token, so the connection would stop working within an hour.",
+  no_refresh_token:
+    "The provider returned no refresh token, so the connection would stop working within an hour.",
   connection_failed: "The connection could not be completed.",
   unknown_provider: "Unknown provider.",
   access_denied: "Access was not granted.",
@@ -72,5 +76,7 @@ const CALLBACK_ERRORS: Record<string, string> = {
 /** Map the `?error=` code the callback redirects with to a sentence. Unknown codes are not echoed. */
 export function describeCallbackError(code: string): string {
   // Own keys only: `?error=__proto__` or `constructor` must not reach the prototype.
-  return Object.hasOwn(CALLBACK_ERRORS, code) ? CALLBACK_ERRORS[code]! : "The provider reported an error.";
+  return Object.hasOwn(CALLBACK_ERRORS, code)
+    ? CALLBACK_ERRORS[code]!
+    : "The provider reported an error.";
 }

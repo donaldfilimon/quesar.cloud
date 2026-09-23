@@ -1,6 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { CopyGrid, FilterChips, PageClose, PageHero, RouteFrame, Section, Surface } from "@/components/site";
+import {
+  CopyGrid,
+  FilterChips,
+  PageClose,
+  PageHero,
+  RouteFrame,
+  Section,
+  Surface,
+} from "@/components/site";
 import { research } from "@/lib/mlai/categories/research";
 import { researchContext } from "@/lib/mlai/categories/research-context";
 import { researchSources, researchTopics } from "@/lib/content";
@@ -24,7 +32,14 @@ export const Route = createFileRoute("/research")({
       "Research — MLAI memory, retrieval, and orchestration",
       "Research notes for MLAI and Quesar: memory architecture, retrieval, provenance, local inference, and implementation case studies with sources attached.",
     ),
-    links: [{ rel: "alternate", type: "application/rss+xml", title: "MLAI lab notes and research", href: "/feed.xml" }],
+    links: [
+      {
+        rel: "alternate",
+        type: "application/rss+xml",
+        title: "MLAI lab notes and research",
+        href: "/feed.xml",
+      },
+    ],
   }),
   component: ResearchPage,
 });
@@ -42,7 +57,10 @@ function ResearchPage() {
     [topic, kind],
   );
   const cases = useMemo(
-    () => (topic === "all" ? researchContext : researchContext.filter((item) => item.relatedTopics.includes(topic))),
+    () =>
+      topic === "all"
+        ? researchContext
+        : researchContext.filter((item) => item.relatedTopics.includes(topic)),
     [topic],
   );
 
@@ -60,8 +78,15 @@ function ResearchPage() {
         lede="Six research areas, from AI assistance and durable memory to evidence selection and integration. Start with practical applications, then inspect the sources, implementation status, and limitations."
       >
         <p className="-mt-6 mb-8 text-sm text-fg-muted">
-          Put these ideas in context: <Link to="/products" className="text-accent">explore ABI, Abbey, WDBX and Quasar</Link>, or{" "}
-          <Link to="/get-started" className="text-accent">choose a starting point</Link>.
+          Put these ideas in context:{" "}
+          <Link to="/products" className="text-accent">
+            explore ABI, Abbey, WDBX and Quasar
+          </Link>
+          , or{" "}
+          <Link to="/get-started" className="text-accent">
+            choose a starting point
+          </Link>
+          .
         </p>
         <CopyGrid
           columns="md:grid-cols-2 xl:grid-cols-3"
@@ -91,21 +116,39 @@ function ResearchPage() {
 
       <Section eyebrow="Collection" title="Notes, overviews, and implementation guides.">
         <div className="grid gap-3">
-          <FilterChips label="Research track" value={topic} onChange={setTopic} options={topicOptions} />
-          <FilterChips label="Document type" value={kind} onChange={setKind} options={kindOptions} />
+          <FilterChips
+            label="Research track"
+            value={topic}
+            onChange={setTopic}
+            options={topicOptions}
+          />
+          <FilterChips
+            label="Document type"
+            value={kind}
+            onChange={setKind}
+            options={kindOptions}
+          />
         </div>
         <div className="mt-6 grid gap-4">
           {papers.length === 0 ? (
             <p className="text-sm text-muted-foreground">No documents in that slice.</p>
           ) : (
             papers.map((paper) => (
-              <Link key={paper.slug} to="/research/$slug" params={{ slug: paper.slug }} className="no-underline">
+              <Link
+                key={paper.slug}
+                to="/research/$slug"
+                params={{ slug: paper.slug }}
+                className="no-underline"
+              >
                 <Surface hover>
                   <p className="text-xs text-accent">
-                    {paper.tag} · {paper.documentType.replaceAll("-", " ")} · {paper.status} · {paper.date} · {paper.readTime}
+                    {paper.tag} · {paper.documentType.replaceAll("-", " ")} · {paper.status} ·{" "}
+                    {paper.date} · {paper.readTime}
                   </p>
                   <h3 className="mt-2 font-display text-xl">{paper.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{paper.practicalSummary}</p>
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                    {paper.practicalSummary}
+                  </p>
                 </Surface>
               </Link>
             ))
@@ -127,9 +170,7 @@ function ResearchPage() {
               className="no-underline"
             >
               <Surface hover className="h-full">
-                <p className="text-xs text-accent">
-                  {item.relatedTopics.join(" · ")}
-                </p>
+                <p className="text-xs text-accent">{item.relatedTopics.join(" · ")}</p>
                 <h3 className="mt-2 font-display text-xl">{item.title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{item.summary}</p>
               </Surface>
@@ -139,12 +180,26 @@ function ResearchPage() {
       </Section>
 
       <Section eyebrow="Sources" title="Setup and claims, on this site.">
-        <CopyGrid items={researchSources.map((source) => ({ title: source.title, body: source.body, href: source.href }))} />
+        <CopyGrid
+          items={researchSources.map((source) => ({
+            title: source.title,
+            body: source.body,
+            href: source.href,
+          }))}
+        />
       </Section>
       <PageClose
         next={[
-          { to: "/research/implementations", label: "Implementation index", body: "The seven nested case studies." },
-          { to: "/developers", label: "Developers", body: "Run the gates that produce the evidence." },
+          {
+            to: "/research/implementations",
+            label: "Implementation index",
+            body: "The seven nested case studies.",
+          },
+          {
+            to: "/developers",
+            label: "Developers",
+            body: "Run the gates that produce the evidence.",
+          },
           { to: "/architecture", label: "Architecture", body: "Map topics onto the stack." },
         ]}
       />

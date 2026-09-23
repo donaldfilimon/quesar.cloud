@@ -20,7 +20,10 @@ function WorkspacePage() {
         title="Documents, on this machine."
         lede="The shipping Abbey workspace runs locally with SQLite, Better Auth, a Python worker, and an agent package. This page is the in-browser orientation of that loop."
       >
-        <HeroStatus status="current" note="Notes stay in this browser. Live model requires sign-in." />
+        <HeroStatus
+          status="current"
+          note="Notes stay in this browser. Live model requires sign-in."
+        />
       </PageHero>
       <Section>
         <WorkspaceApp />

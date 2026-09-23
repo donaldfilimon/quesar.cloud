@@ -68,9 +68,13 @@ describe("provider identity", () => {
       "User.Read",
       "offline_access",
     ]);
-    const all = [...providerConfig("google").scopes, ...providerConfig("microsoft").scopes].join(" ");
+    const all = [...providerConfig("google").scopes, ...providerConfig("microsoft").scopes].join(
+      " ",
+    );
     // Metadata only: the panel never reads file contents.
-    expect(providerConfig("google").scopes).not.toContain("https://www.googleapis.com/auth/drive.readonly");
+    expect(providerConfig("google").scopes).not.toContain(
+      "https://www.googleapis.com/auth/drive.readonly",
+    );
     for (const forbidden of ["write", "readwrite", "ReadWrite", "full_control", "Mail.Send"]) {
       expect(all).not.toContain(forbidden);
     }
@@ -99,14 +103,20 @@ describe("provider identity", () => {
 
 describe("redirect URI", () => {
   it("derives from the request origin, upgrading to https behind a TLS proxy only", () => {
-    expect(requestOrigin(new Request("https://quesar.cloud/api/workspace/connect/google"))).toBe("https://quesar.cloud");
+    expect(requestOrigin(new Request("https://quesar.cloud/api/workspace/connect/google"))).toBe(
+      "https://quesar.cloud",
+    );
     expect(requestOrigin(new Request("http://localhost:8080/x"))).toBe("http://localhost:8080");
     expect(
-      requestOrigin(new Request("http://quesar.cloud/x", { headers: { "x-forwarded-proto": "https" } })),
+      requestOrigin(
+        new Request("http://quesar.cloud/x", { headers: { "x-forwarded-proto": "https" } }),
+      ),
     ).toBe("https://quesar.cloud");
     // Never downgraded by a header.
     expect(
-      requestOrigin(new Request("https://quesar.cloud/x", { headers: { "x-forwarded-proto": "http" } })),
+      requestOrigin(
+        new Request("https://quesar.cloud/x", { headers: { "x-forwarded-proto": "http" } }),
+      ),
     ).toBe("https://quesar.cloud");
     expect(workspaceRedirectUri("https://quesar.cloud", "microsoft")).toBe(
       "https://quesar.cloud/api/workspace/callback/microsoft",
@@ -203,7 +213,9 @@ describe("authorize URL", () => {
     expect(url.searchParams.get("state")).toBe("state-abc");
     expect(url.searchParams.get("code_challenge")).toBe("challenge-abc");
     expect(url.searchParams.get("code_challenge_method")).toBe("S256");
-    expect(url.searchParams.get("redirect_uri")).toBe("https://quesar.cloud/api/workspace/callback/google");
+    expect(url.searchParams.get("redirect_uri")).toBe(
+      "https://quesar.cloud/api/workspace/callback/google",
+    );
     expect(url.searchParams.get("scope")).toContain("drive.metadata.readonly");
     // The client secret is a server-side value; it must never ride along on a
     // URL the browser is about to follow.
@@ -212,7 +224,13 @@ describe("authorize URL", () => {
 
   it("asks Google for offline access, or the connection dies in an hour", () => {
     const url = new URL(
-      buildAuthorizeUrl("google", { clientId: "i", clientSecret: "s" }, "st", "ch", "https://x.test/cb"),
+      buildAuthorizeUrl(
+        "google",
+        { clientId: "i", clientSecret: "s" },
+        "st",
+        "ch",
+        "https://x.test/cb",
+      ),
     );
     expect(url.searchParams.get("access_type")).toBe("offline");
     expect(url.searchParams.get("prompt")).toBe("consent");
@@ -309,9 +327,9 @@ describe("token endpoint", () => {
       json: async () => ({ error: "invalid_grant", client_secret: "secret-1" }),
     })) as unknown as typeof fetch;
 
-    await expect(
-      refreshAccessToken("google", credentials, "rt-1", fetchImpl),
-    ).rejects.toThrow(/google token endpoint responded 400/);
+    await expect(refreshAccessToken("google", credentials, "rt-1", fetchImpl)).rejects.toThrow(
+      /google token endpoint responded 400/,
+    );
 
     // The thrown message reaches logs; the provider's body can contain the
     // credential we just sent, so it must not be part of it.
@@ -350,14 +368,21 @@ describe("unreadable token-endpoint body", () => {
       ok: true,
       status: 200,
       json: async () => {
-        throw new SyntaxError('Unexpected token < in JSON at position 0: "<html>refresh_token=rt-secret"');
+        throw new SyntaxError(
+          'Unexpected token < in JSON at position 0: "<html>refresh_token=rt-secret"',
+        );
       },
     })) as unknown as typeof fetch;
-    const error = await refreshAccessToken("google", { clientId: "i", clientSecret: "s" }, "rt", fetchImpl).catch(
-      (e: Error) => e,
-    );
+    const error = await refreshAccessToken(
+      "google",
+      { clientId: "i", clientSecret: "s" },
+      "rt",
+      fetchImpl,
+    ).catch((e: Error) => e);
     expect(error).toBeInstanceOf(Error);
-    expect((error as Error).message).toBe("google token endpoint responded 200 with an unreadable body");
+    expect((error as Error).message).toBe(
+      "google token endpoint responded 200 with an unreadable body",
+    );
     expect((error as Error).message).not.toContain("rt-secret");
   });
 });

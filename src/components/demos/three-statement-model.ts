@@ -51,8 +51,15 @@ export const DRIVERS: Record<Scenario, Drivers> = {
     sm: [0.25, 0.24, 0.24, 0.23, 0.23],
     rd: [0.15, 0.15, 0.15, 0.14, 0.14],
     ga: [0.1, 0.09, 0.09, 0.09, 0.09],
-    da: 0.05, capex: 0.06, taxRate: 0.25, interestRate: 0.06,
-    dso: 45, dio: 30, dpo: 35, accruedPctRev: 0.05, dividendPayout: 0,
+    da: 0.05,
+    capex: 0.06,
+    taxRate: 0.25,
+    interestRate: 0.06,
+    dso: 45,
+    dio: 30,
+    dpo: 35,
+    accruedPctRev: 0.05,
+    dividendPayout: 0,
   },
   // Upside — faster growth, stronger margin expansion. Profitable throughout.
   upside: {
@@ -61,8 +68,15 @@ export const DRIVERS: Record<Scenario, Drivers> = {
     sm: [0.23, 0.22, 0.21, 0.2, 0.2],
     rd: [0.15, 0.14, 0.14, 0.13, 0.13],
     ga: [0.09, 0.08, 0.08, 0.08, 0.08],
-    da: 0.05, capex: 0.07, taxRate: 0.25, interestRate: 0.06,
-    dso: 40, dio: 28, dpo: 40, accruedPctRev: 0.05, dividendPayout: 0,
+    da: 0.05,
+    capex: 0.07,
+    taxRate: 0.25,
+    interestRate: 0.06,
+    dso: 40,
+    dio: 28,
+    dpo: 40,
+    accruedPctRev: 0.05,
+    dividendPayout: 0,
   },
   // Downside — a revenue dip + margin compression drives two early loss years
   // (FY2025E–FY2026E) that bank an NOL; the recovery years then utilize it.
@@ -72,8 +86,15 @@ export const DRIVERS: Record<Scenario, Drivers> = {
     sm: [0.3, 0.28, 0.26, 0.25, 0.24],
     rd: [0.17, 0.16, 0.15, 0.15, 0.15],
     ga: [0.13, 0.12, 0.11, 0.1, 0.1],
-    da: 0.05, capex: 0.04, taxRate: 0.25, interestRate: 0.06,
-    dso: 55, dio: 38, dpo: 28, accruedPctRev: 0.05, dividendPayout: 0,
+    da: 0.05,
+    capex: 0.04,
+    taxRate: 0.25,
+    interestRate: 0.06,
+    dso: 55,
+    dio: 38,
+    dpo: 28,
+    accruedPctRev: 0.05,
+    dividendPayout: 0,
   },
 };
 
@@ -82,9 +103,17 @@ export const DRIVERS: Record<Scenario, Drivers> = {
 // cash is the balancing plug, so the opening balance sheet ties out on its own.
 const HIST_ANCHOR = { revenue: 120, ppe: 50, debt: 40, commonStock: 30, retainedEarnings: 25 };
 const HIST = {
-  grossMargin: 0.65, sm: 0.25, rd: 0.15, ga: 0.1,
-  da: 0.05, taxRate: 0.25, interestRate: 0.06,
-  dso: 45, dio: 30, dpo: 35, accruedPctRev: 0.05,
+  grossMargin: 0.65,
+  sm: 0.25,
+  rd: 0.15,
+  ga: 0.1,
+  da: 0.05,
+  taxRate: 0.25,
+  interestRate: 0.06,
+  dso: 45,
+  dio: 30,
+  dpo: 35,
+  accruedPctRev: 0.05,
 };
 
 const PERIODS = ["FY2024A", "FY2025E", "FY2026E", "FY2027E", "FY2028E", "FY2029E"];
@@ -93,20 +122,45 @@ export interface Period {
   label: string;
   isActual: boolean;
   // Income statement
-  revenue: number; cogs: number; grossProfit: number;
-  sm: number; rd: number; ga: number; opex: number;
-  ebitda: number; da: number; ebit: number;
-  interest: number; ebt: number; tax: number; netIncome: number;
+  revenue: number;
+  cogs: number;
+  grossProfit: number;
+  sm: number;
+  rd: number;
+  ga: number;
+  opex: number;
+  ebitda: number;
+  da: number;
+  ebit: number;
+  interest: number;
+  ebt: number;
+  tax: number;
+  netIncome: number;
   // NOL / deferred-tax schedule
-  nolBalance: number; dta: number; deferredTax: number | null;
+  nolBalance: number;
+  dta: number;
+  deferredTax: number | null;
   // Balance sheet
-  cash: number; ar: number; inventory: number; ppe: number; totalAssets: number;
-  ap: number; accrued: number; debt: number; totalLiabilities: number;
-  commonStock: number; retainedEarnings: number; totalEquity: number;
+  cash: number;
+  ar: number;
+  inventory: number;
+  ppe: number;
+  totalAssets: number;
+  ap: number;
+  accrued: number;
+  debt: number;
+  totalLiabilities: number;
+  commonStock: number;
+  retainedEarnings: number;
+  totalEquity: number;
   // Cash flow (null for the actual anchor — no prior period)
-  cfo: number | null; cfi: number | null; cff: number | null;
-  capex: number | null; dividends: number | null;
-  beginningCash: number | null; netChangeCash: number | null;
+  cfo: number | null;
+  cfi: number | null;
+  cff: number | null;
+  capex: number | null;
+  dividends: number | null;
+  beginningCash: number | null;
+  netChangeCash: number | null;
 }
 
 export function buildModel(scenario: Scenario): Period[] {
@@ -205,13 +259,15 @@ export function buildModel(scenario: Scenario): Period[] {
     // asset side and the −ΔDTA carried by deferredTax here cancel, so the sheet
     // still balances by construction.
     p.cfo =
-      p.netIncome + p.da + p.deferredTax
-      - (p.ar - prior.ar) // ΔAR increase = use of cash
-      - (p.inventory - prior.inventory)
-      + (p.ap - prior.ap) // ΔAP increase = source of cash
-      + (p.accrued - prior.accrued);
+      p.netIncome +
+      p.da +
+      p.deferredTax -
+      (p.ar - prior.ar) - // ΔAR increase = use of cash
+      (p.inventory - prior.inventory) +
+      (p.ap - prior.ap) + // ΔAP increase = source of cash
+      (p.accrued - prior.accrued);
     p.cfi = -p.capex;
-    p.cff = (p.debt - prior.debt) - p.dividends; // Δdebt (0) − dividends
+    p.cff = p.debt - prior.debt - p.dividends; // Δdebt (0) − dividends
     p.netChangeCash = p.cfo + p.cfi + p.cff;
     p.beginningCash = prior.cash;
     p.cash = p.beginningCash + p.netChangeCash; // ending cash feeds the BS
@@ -236,4 +292,3 @@ export function cashTieCheck(p: Period): number | null {
   if (p.netChangeCash === null || p.beginningCash === null) return null;
   return p.beginningCash + p.netChangeCash - p.cash;
 }
-

@@ -32,14 +32,20 @@ export async function gateWorkspaceRequest(): Promise<WorkspaceGate> {
     if (error instanceof UnauthorizedError) return deny(401, "Unauthorized");
     // requireUserId fails closed (auth disabled on a real database): an
     // operator misconfiguration, not the caller's fault.
-    console.error("[Workspace] Session check failed:", error instanceof Error ? error.message : error);
+    console.error(
+      "[Workspace] Session check failed:",
+      error instanceof Error ? error.message : error,
+    );
     return deny(503, "Sign-in is not available");
   }
   try {
     const { allowed } = await hit("workspace", userId, LIMITS.workspace);
     if (!allowed) return deny(429, "Too many requests. Try again shortly.");
   } catch (error) {
-    console.error("[Workspace] Rate limit check failed:", error instanceof Error ? error.message : error);
+    console.error(
+      "[Workspace] Rate limit check failed:",
+      error instanceof Error ? error.message : error,
+    );
     return deny(503, "Workspace unavailable");
   }
   return { ok: true, userId };

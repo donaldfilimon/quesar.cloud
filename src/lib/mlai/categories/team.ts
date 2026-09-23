@@ -1,6 +1,6 @@
-import type { Team } from '../schemas';
+import type { Team } from "../schemas";
 
-export const team: Team = ([
+export const team: Team = [
   {
     name: "Donald Filimon",
     role: "Founder & Systems Architect",
@@ -90,10 +90,10 @@ export const team: Team = ([
       {
         heading: "Autonomy with a boundary",
         paragraphs: [
-          "On top of retrieval, Quesar's orchestration layer adds the Abbey–Aviva–Abi persona system — Abbey the empathetic polymath, Aviva the direct expert, and Abi the adaptive router — operating under one motto: \"Care first. Clarity always. Competence throughout.\"",
+          'On top of retrieval, Quesar\'s orchestration layer adds the Abbey–Aviva–Abi persona system — Abbey the empathetic polymath, Aviva the direct expert, and Abi the adaptive router — operating under one motto: "Care first. Clarity always. Competence throughout."',
           "It is built around bounded execution and explicit approvals: no autonomous write action without an observable policy boundary, and escalation, review, and override flows kept visible so the people responsible stay in control. Safety before scale is the founding constraint, not a later addition.",
         ],
       },
     ],
   },
-]);
+];

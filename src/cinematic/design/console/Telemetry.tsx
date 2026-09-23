@@ -37,7 +37,13 @@ function ArcGauge({ label, value, max, unit, color, decimals = 0 }: ArcGaugeProp
       }}
     >
       <svg width="100%" viewBox="0 0 140 120" style={{ maxWidth: 150, display: "block" }}>
-        <path d={arc} fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="9" strokeLinecap="round" />
+        <path
+          d={arc}
+          fill="none"
+          stroke="rgba(255,255,255,0.1)"
+          strokeWidth="9"
+          strokeLinecap="round"
+        />
         <path
           d={arc}
           fill="none"
@@ -46,16 +52,33 @@ function ArcGauge({ label, value, max, unit, color, decimals = 0 }: ArcGaugeProp
           strokeLinecap="round"
           strokeDasharray={circ}
           strokeDashoffset={circ * (1 - pct)}
-          style={{ filter: `drop-shadow(0 0 6px ${color})`, transition: "stroke-dashoffset .6s var(--ease-out)" }}
+          style={{
+            filter: `drop-shadow(0 0 6px ${color})`,
+            transition: "stroke-dashoffset .6s var(--ease-out)",
+          }}
         />
-        <text x={cx} y={cy + 4} textAnchor="middle" fill="#fafafa" style={{ font: "700 26px var(--font-mono)" }}>
+        <text
+          x={cx}
+          y={cy + 4}
+          textAnchor="middle"
+          fill="#fafafa"
+          style={{ font: "700 26px var(--font-mono)" }}
+        >
           {value.toFixed(decimals)}
         </text>
-        <text x={cx} y={cy + 24} textAnchor="middle" fill="#71717a" style={{ font: "400 11px var(--font-mono)" }}>
+        <text
+          x={cx}
+          y={cy + 24}
+          textAnchor="middle"
+          fill="#71717a"
+          style={{ font: "400 11px var(--font-mono)" }}
+        >
           {unit}
         </text>
       </svg>
-      <div style={{ color: "var(--text-dim)", fontSize: 12, fontWeight: 600, marginTop: 2 }}>{label}</div>
+      <div style={{ color: "var(--text-dim)", fontSize: 12, fontWeight: 600, marginTop: 2 }}>
+        {label}
+      </div>
     </div>
   );
 }
@@ -87,14 +110,26 @@ function Sparkline({ data, color, label, unit }: SparklineProps) {
         boxShadow: "var(--shadow-2)",
       }}
     >
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 8 }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "baseline",
+          marginBottom: 8,
+        }}
+      >
         <span style={{ color: "var(--text-dim)", fontSize: 12, fontWeight: 500 }}>{label}</span>
         <span style={{ fontFamily: "var(--font-mono)", fontSize: 14, color }}>
           {last.toFixed(1)}
           <span style={{ color: "var(--text-faint)", fontSize: 11 }}> {unit}</span>
         </span>
       </div>
-      <svg width="100%" viewBox={`0 0 ${w} ${h}`} preserveAspectRatio="none" style={{ display: "block" }}>
+      <svg
+        width="100%"
+        viewBox={`0 0 ${w} ${h}`}
+        preserveAspectRatio="none"
+        style={{ display: "block" }}
+      >
         <polyline
           points={pts}
           fill="none"
@@ -118,34 +153,48 @@ interface Gauges {
 
 type ShardState = "ok" | "warn" | "down";
 
-const SHARD_COLORS: Record<ShardState, string> = { ok: "#34d399", warn: "#fbbf24", down: "#f87171" };
+const SHARD_COLORS: Record<ShardState, string> = {
+  ok: "#34d399",
+  warn: "#fbbf24",
+  down: "#f87171",
+};
 
 export function Telemetry() {
   const [g, setG] = useState<Gauges>({ thru: 78, p99: 9.4, recall: 94.6, mem: 1.48 });
-  const [thruHist, setThruHist] = useState<number[]>(() => Array.from({ length: 30 }, () => 76 + Math.random() * 8));
-  const [latHist, setLatHist] = useState<number[]>(() => Array.from({ length: 30 }, () => 8 + Math.random() * 3));
-  const [shards, setShards] = useState<ShardState[]>(() => Array.from({ length: 12 }, (): ShardState => "ok"));
+  const [thruHist, setThruHist] = useState<number[]>(() =>
+    Array.from({ length: 30 }, () => 76 + Math.random() * 8),
+  );
+  const [latHist, setLatHist] = useState<number[]>(() =>
+    Array.from({ length: 30 }, () => 8 + Math.random() * 3),
+  );
+  const [shards, setShards] = useState<ShardState[]>(() =>
+    Array.from({ length: 12 }, (): ShardState => "ok"),
+  );
 
   const rootRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const el = rootRef.current;
     if (!el) return;
-    return attachIntervalGate(el, () => {
-      setG((p) => ({
-        thru: Math.max(60, Math.min(96, p.thru + (Math.random() - 0.5) * 7)),
-        p99: Math.max(6, Math.min(16, p.p99 + (Math.random() - 0.5) * 1.6)),
-        recall: Math.max(91, Math.min(97, p.recall + (Math.random() - 0.5) * 0.8)),
-        mem: Math.max(1.2, Math.min(1.9, p.mem + (Math.random() - 0.5) * 0.08)),
-      }));
-      setThruHist((h) => [...h.slice(1), 70 + Math.random() * 22]);
-      setLatHist((h) => [...h.slice(1), 7 + Math.random() * 6]);
-      setShards((s) =>
-        s.map((): ShardState => {
-          const r = Math.random();
-          return r > 0.97 ? "warn" : r > 0.995 ? "down" : "ok";
-        }),
-      );
-    }, 900);
+    return attachIntervalGate(
+      el,
+      () => {
+        setG((p) => ({
+          thru: Math.max(60, Math.min(96, p.thru + (Math.random() - 0.5) * 7)),
+          p99: Math.max(6, Math.min(16, p.p99 + (Math.random() - 0.5) * 1.6)),
+          recall: Math.max(91, Math.min(97, p.recall + (Math.random() - 0.5) * 0.8)),
+          mem: Math.max(1.2, Math.min(1.9, p.mem + (Math.random() - 0.5) * 0.08)),
+        }));
+        setThruHist((h) => [...h.slice(1), 70 + Math.random() * 22]);
+        setLatHist((h) => [...h.slice(1), 7 + Math.random() * 6]);
+        setShards((s) =>
+          s.map((): ShardState => {
+            const r = Math.random();
+            return r > 0.97 ? "warn" : r > 0.995 ? "down" : "ok";
+          }),
+        );
+      },
+      900,
+    );
   }, []);
 
   return (
@@ -172,9 +221,19 @@ export function Telemetry() {
                 animation: "cnPing 1.4s cubic-bezier(0,0,.2,1) infinite",
               }}
             />
-            <span style={{ position: "relative", borderRadius: "50%", width: 10, height: 10, background: "#34d399" }} />
+            <span
+              style={{
+                position: "relative",
+                borderRadius: "50%",
+                width: 10,
+                height: 10,
+                background: "#34d399",
+              }}
+            />
           </span>
-          <span style={{ fontFamily: "var(--font-mono)", fontSize: 14, color: "var(--text)" }}>wdbx-prod-01</span>
+          <span style={{ fontFamily: "var(--font-mono)", fontSize: 14, color: "var(--text)" }}>
+            wdbx-prod-01
+          </span>
           <span
             style={{
               fontFamily: "var(--font-mono)",
@@ -189,7 +248,9 @@ export function Telemetry() {
             SIMULATED · ILLUSTRATIVE
           </span>
         </div>
-        <span style={{ fontFamily: "var(--font-mono)", fontSize: 12, color: "var(--text-faint)" }}>live · 900ms tick</span>
+        <span style={{ fontFamily: "var(--font-mono)", fontSize: 12, color: "var(--text-faint)" }}>
+          live · 900ms tick
+        </span>
       </div>
       <div
         style={{
@@ -201,8 +262,22 @@ export function Telemetry() {
         className="cn-gauge-grid"
       >
         <ArcGauge label="Throughput" value={g.thru} max={100} unit="req/s" color="#22d3ee" />
-        <ArcGauge label="p99 latency" value={g.p99} max={20} unit="ms" color="#a855f7" decimals={1} />
-        <ArcGauge label="Recall@10" value={g.recall} max={100} unit="%" color="#34d399" decimals={1} />
+        <ArcGauge
+          label="p99 latency"
+          value={g.p99}
+          max={20}
+          unit="ms"
+          color="#a855f7"
+          decimals={1}
+        />
+        <ArcGauge
+          label="Recall@10"
+          value={g.recall}
+          max={100}
+          unit="%"
+          color="#34d399"
+          decimals={1}
+        />
         <ArcGauge label="Memory" value={g.mem} max={2} unit="GB" color="#fbbf24" decimals={2} />
       </div>
       <div
@@ -218,7 +293,9 @@ export function Telemetry() {
         <Sparkline data={latHist} color="#a855f7" label="latency stream" unit="ms" />
       </div>
       <div>
-        <div style={{ color: "var(--text-dim)", fontSize: 12, fontWeight: 500, marginBottom: 8 }}>shard health · 12 nodes</div>
+        <div style={{ color: "var(--text-dim)", fontSize: 12, fontWeight: 500, marginBottom: 8 }}>
+          shard health · 12 nodes
+        </div>
         <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
           {shards.map((s, i) => {
             const c = SHARD_COLORS[s];

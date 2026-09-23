@@ -1,12 +1,7 @@
 import type { Provenance } from "@/components/site/prov-tag";
 
 export type StatusKind =
-  | "current"
-  | "partial"
-  | "experimental"
-  | "development"
-  | "planned"
-  | "research";
+  "current" | "partial" | "experimental" | "development" | "planned" | "research";
 
 export type RepoKind = "core" | "surface" | "skill" | "related";
 
@@ -47,54 +42,80 @@ export const nav = [
 ] as const;
 
 export const statusCopy: Record<StatusKind, { mark: string; label: string; meaning: string }> = {
-  current: { mark: "●", label: "Current", meaning: "Present in public source and used as described." },
-  partial: { mark: "◐", label: "Partial", meaning: "Implemented in part. Scope is named on the page." },
-  experimental: { mark: "◌", label: "Experimental", meaning: "Runnable or inspectable, not a product claim." },
-  development: { mark: "◦", label: "In development", meaning: "Actively changing. Do not treat as stable." },
+  current: {
+    mark: "●",
+    label: "Current",
+    meaning: "Present in public source and used as described.",
+  },
+  partial: {
+    mark: "◐",
+    label: "Partial",
+    meaning: "Implemented in part. Scope is named on the page.",
+  },
+  experimental: {
+    mark: "◌",
+    label: "Experimental",
+    meaning: "Runnable or inspectable, not a product claim.",
+  },
+  development: {
+    mark: "◦",
+    label: "In development",
+    meaning: "Actively changing. Do not treat as stable.",
+  },
   planned: { mark: "○", label: "Planned", meaning: "Intent. Never presented as shipping." },
-  research: { mark: "◆", label: "Research", meaning: "Founder or lab work. Not a Quesar product surface." },
+  research: {
+    mark: "◆",
+    label: "Research",
+    meaning: "Founder or lab work. Not a Quesar product surface.",
+  },
 };
 
 export const integrationApps = [
   {
     path: "src/",
     href: "/",
-    purpose: "The one app: TanStack Start site, console, admin, workspace, demos, Quasar screens, and cinematic showcase",
+    purpose:
+      "The one app: TanStack Start site, console, admin, workspace, demos, Quasar screens, and cinematic showcase",
     gate: "bun run typecheck && bun run lint && bun run test && bun run build",
     status: "current" as StatusKind,
   },
   {
     path: "migrations/",
     href: "/security",
-    purpose: "Postgres schema (Neon, or in-memory PGLite without DATABASE_URL): auth, notes, audits, connectors, rate limits",
+    purpose:
+      "Postgres schema (Neon, or in-memory PGLite without DATABASE_URL): auth, notes, audits, connectors, rate limits",
     gate: "bun run build (applies migrations)",
     status: "current" as StatusKind,
   },
   {
     path: "sidecars/quasar-service/",
     href: "/quasar/sites",
-    purpose: "Local AI site-builder service (Bun, port 4700) that the /quasar screens drive; run it yourself, never hosted",
+    purpose:
+      "Local AI site-builder service (Bun, port 4700) that the /quasar screens drive; run it yourself, never hosted",
     gate: "bun test",
     status: "experimental" as StatusKind,
   },
   {
     path: "sidecars/python-worker/",
     href: "/workspace",
-    purpose: "Optional local document extraction and embeddings worker, reached by URL, never spawned",
+    purpose:
+      "Optional local document extraction and embeddings worker, reached by URL, never spawned",
     gate: "uv run pytest",
     status: "experimental" as StatusKind,
   },
   {
     path: "native/",
     href: "/mobile",
-    purpose: "Capacitor shell that loads the deployed site; Android project and CloudKit plugin, iOS blocked on CocoaPods",
+    purpose:
+      "Capacitor shell that loads the deployed site; Android project and CloudKit plugin, iOS blocked on CocoaPods",
     gate: "not gated (no Capacitor build on this machine)",
     status: "partial" as StatusKind,
   },
   {
     path: "notes/",
     href: "/docs",
-    purpose: "Merge spec, plan and gap matrix, plus the pre-merge MLAI records under notes/mlai/ (docs/ holds the built static site)",
+    purpose:
+      "Merge spec, plan and gap matrix, plus the pre-merge MLAI records under notes/mlai/ (docs/ holds the built static site)",
     gate: "reviewed, not built",
     status: "current" as StatusKind,
   },
@@ -167,18 +188,30 @@ export const wdbxSpecs = [
 
 export const wdbxCrates = [
   { name: "abi-wdbx", body: "Episodic store, HNSW graph, query path, and persistence contracts." },
-  { name: "abi-compute", body: "CPU vector ops and optional macOS Metal DOT. CUDA/Vulkan not linked here." },
+  {
+    name: "abi-compute",
+    body: "CPU vector ops and optional macOS Metal DOT. CUDA/Vulkan not linked here.",
+  },
   { name: "abi-foundation", body: "Shared primitives: identifiers, hashing, time, error types." },
   { name: "abi-core", body: "Episode types, witness encoding, causal DAG helpers." },
-  { name: "abi-telemetry", body: "Local traces and capability reporting. Not a hosted metrics product." },
+  {
+    name: "abi-telemetry",
+    body: "Local traces and capability reporting. Not a hosted metrics product.",
+  },
 ] as const;
 
 export const abiCrates = [
   { name: "abi-cli", body: "Operator surface. backends, scheduler, dashboard, plugin, wdbx." },
   { name: "abi-mcp", body: "JSON-RPC 2.0 over stdio, optional loopback HTTP with bearer auth." },
-  { name: "abi-ai", body: "Exact model registry and template completion. Quality is not inferred." },
+  {
+    name: "abi-ai",
+    body: "Exact model registry and template completion. Quality is not inferred.",
+  },
   { name: "abi-sea", body: "Scheduler and execution adapter. Device selection is explicit." },
-  { name: "abi-gpu", body: "Capability reporting. accelerated=false when native kernels are not linked." },
+  {
+    name: "abi-gpu",
+    body: "Capability reporting. accelerated=false when native kernels are not linked.",
+  },
 ] as const;
 
 export const mcpTools = [
@@ -191,7 +224,10 @@ export const mcpTools = [
 ] as const;
 
 export const abiCli = [
-  { cmd: "abi backends", note: "List configured execution backends and what they actually report." },
+  {
+    cmd: "abi backends",
+    note: "List configured execution backends and what they actually report.",
+  },
   { cmd: "abi scheduler status", note: "Scheduler health for this process. Not a fleet view." },
   { cmd: "abi dashboard --once --plain", note: "One-shot text dashboard. No hosted UI implied." },
   { cmd: "abi plugin list", note: "Plugins the current binary loaded under contract." },
@@ -338,8 +374,7 @@ export const architectureNodes: ArchNode[] = [
     layer: "runtime",
     status: "partial",
     summary: "Assembled before execution.",
-    detail:
-      "Context is assembled before the model runs, not reconstructed in a post-hoc story.",
+    detail: "Context is assembled before the model runs, not reconstructed in a post-hoc story.",
     implemented: ["Inspectable context assembly in ABI"],
     notClaimed: ["Perfect recall of every prior episode", "Silent prompt rewriting"],
     href: "/abi",
@@ -374,7 +409,8 @@ export const architectureNodes: ArchNode[] = [
     layer: "memory",
     status: "partial",
     summary: "Vectors with a contract.",
-    detail: "Ordered vector search and hybrid ranking contracts exist. Collapsing every signal into one score is a documented limitation.",
+    detail:
+      "Ordered vector search and hybrid ranking contracts exist. Collapsing every signal into one score is a documented limitation.",
     implemented: ["Cosine search", "Graph construction parameters as configuration"],
     notClaimed: ["A published recall/QPS scoreboard", "Cross-encoder rerank as current"],
     href: "/research",
@@ -388,7 +424,10 @@ export const architectureNodes: ArchNode[] = [
     detail:
       "Signatures and causal history answer why a record is trusted. They do not make the record true.",
     implemented: ["Content addressing", "Causal history"],
-    notClaimed: ["Federation evidence without separate authorization", "Truth of stored statements"],
+    notClaimed: [
+      "Federation evidence without separate authorization",
+      "Truth of stored statements",
+    ],
     href: "/research",
   },
   {
@@ -458,7 +497,10 @@ export const investor = {
     { year: "Y5", v: "42" },
   ],
   founder: [
-    { k: "Public source across ABI, WDBX, Abbey, Gama, and this site", tag: "measured" as Provenance },
+    {
+      k: "Public source across ABI, WDBX, Abbey, Gama, and this site",
+      tag: "measured" as Provenance,
+    },
     { k: "Claims ledger in abbey/src/claims.rs", tag: "measured" as Provenance },
     { k: "Independent verification gates per app", tag: "measured" as Provenance },
     { k: "295× GPU figure", tag: "target" as Provenance },
@@ -614,44 +656,114 @@ export const repos = [
 ] as const;
 
 export const searchIndex = [
-  { title: "Quesar", href: "/quesar", group: "Product", body: "Infrastructure for private persistent adaptive AI" },
-  { title: "Platform", href: "/platform", group: "Product", body: "Three layers one chip WDBX ABI Abbey" },
-  { title: "Architecture", href: "/architecture", group: "Developers", body: "Interactive stack diagram nodes current vs not claimed" },
+  {
+    title: "Quesar",
+    href: "/quesar",
+    group: "Product",
+    body: "Infrastructure for private persistent adaptive AI",
+  },
+  {
+    title: "Platform",
+    href: "/platform",
+    group: "Product",
+    body: "Three layers one chip WDBX ABI Abbey",
+  },
+  {
+    title: "Architecture",
+    href: "/architecture",
+    group: "Developers",
+    body: "Interactive stack diagram nodes current vs not claimed",
+  },
   { title: "Abbey", href: "/abbey", group: "Product", body: "Companion claims ledger personas" },
   { title: "ABI", href: "/abi", group: "Product", body: "Rust orchestration MCP CLI" },
   { title: "WDBX", href: "/wdbx", group: "Product", body: "Episodic memory HNSW provenance" },
   { title: "Docs", href: "/docs", group: "Developers", body: "Getting started runtime MCP WDBX" },
-  { title: "Research", href: "/research", group: "Developers", body: "Papers notes implementation limits" },
+  {
+    title: "Research",
+    href: "/research",
+    group: "Developers",
+    body: "Papers notes implementation limits",
+  },
   { title: "Blog", href: "/blog", group: "Company", body: "Engineering notes and essays" },
   { title: "Team", href: "/team", group: "Company", body: "Donald Filimon founder" },
-  { title: "Projects", href: "/projects", group: "Developers", body: "ABI WDBX Abbey Gama directory" },
+  {
+    title: "Projects",
+    href: "/projects",
+    group: "Developers",
+    body: "ABI WDBX Abbey Gama directory",
+  },
   { title: "Products", href: "/products", group: "Product", body: "Product deep dives journeys" },
   { title: "Apps", href: "/apps", group: "Apps", body: "Workspace mobile vault builder bot" },
   { title: "Workspace", href: "/workspace", group: "Apps", body: "Abbey document workspace" },
   { title: "Mobile vault", href: "/mobile", group: "Apps", body: "Expo companion web vault" },
   { title: "Abbey bot", href: "/abbey-bot", group: "Apps", body: "Persona router companion chat" },
   { title: "Companion", href: "/companion", group: "Apps", body: "macOS SwiftUI companion" },
-  { title: "Skill creator", href: "/skill-creator", group: "Apps", body: "Integrity skill builder" },
+  {
+    title: "Skill creator",
+    href: "/skill-creator",
+    group: "Apps",
+    body: "Integrity skill builder",
+  },
   { title: "Plugins", href: "/plugins", group: "Apps", body: "abi-mega skills scripts" },
   { title: "Gama", href: "/gama", group: "Related", body: "Swift UI framework" },
   { title: "Quasar studio", href: "/quesar", group: "Apps", body: "Local site builder preview" },
   { title: "Demo", href: "/demo", group: "Apps", body: "Persona router live demo" },
   { title: "Showcase", href: "/showcase", group: "Company", body: "Film trailer design lab mega" },
   { title: "Changelog", href: "/changelog", group: "Developers", body: "Release history" },
-  { title: "Benchmarks", href: "/benchmarks", group: "Developers", body: "Workload notes not scoreboard" },
+  {
+    title: "Benchmarks",
+    href: "/benchmarks",
+    group: "Developers",
+    body: "Workload notes not scoreboard",
+  },
   { title: "Get started", href: "/get-started", group: "Developers", body: "Start journeys setup" },
-  { title: "Investors", href: "/investors", group: "Company", body: "TAM SAM SOM ARR tagged targets not results" },
+  {
+    title: "Investors",
+    href: "/investors",
+    group: "Company",
+    body: "TAM SAM SOM ARR tagged targets not results",
+  },
   { title: "Services", href: "/services", group: "Company", body: "Audit design build harden" },
   { title: "Security", href: "/security", group: "Company", body: "Trust posture fail closed" },
   { title: "Privacy", href: "/privacy", group: "Company", body: "Local by default" },
   { title: "Terms", href: "/terms", group: "Company", body: "Legal terms" },
-  { title: "Contact", href: "/contact", group: "Company", body: "Inquiry without leaving the site" },
-  { title: "Console", href: "/console", group: "Apps", body: "Signed-in field notes on architecture nodes" },
-  { title: "Developers", href: "/developers", group: "Developers", body: "Live GitHub READMEs when GitHub answers" },
-  { title: "Source catalog", href: "/source", group: "Developers", body: "Public repositories in-site" },
-  { title: "Cell machine", href: "/source/cell-machine", group: "Apps", body: "Cellular automaton" },
+  {
+    title: "Contact",
+    href: "/contact",
+    group: "Company",
+    body: "Inquiry without leaving the site",
+  },
+  {
+    title: "Console",
+    href: "/console",
+    group: "Apps",
+    body: "Signed-in field notes on architecture nodes",
+  },
+  {
+    title: "Developers",
+    href: "/developers",
+    group: "Developers",
+    body: "Live GitHub READMEs when GitHub answers",
+  },
+  {
+    title: "Source catalog",
+    href: "/source",
+    group: "Developers",
+    body: "Public repositories in-site",
+  },
+  {
+    title: "Cell machine",
+    href: "/source/cell-machine",
+    group: "Apps",
+    body: "Cellular automaton",
+  },
   { title: "Links", href: "/links", group: "Company", body: "Internal directory" },
-  { title: "Financial model", href: "/financial-model", group: "Company", body: "Unit economics model" },
+  {
+    title: "Financial model",
+    href: "/financial-model",
+    group: "Company",
+    body: "Unit economics model",
+  },
   { title: "About", href: "/about", group: "Company", body: "Values principles entity" },
 ] as const;
 
@@ -698,19 +810,31 @@ export const homePrivacy = [
 ] as const;
 
 export const quesarSurfaces = [
-  { surface: "This website", role: "Product orientation and source setup links", status: "current" as StatusKind },
+  {
+    surface: "This website",
+    role: "Product orientation and source setup links",
+    status: "current" as StatusKind,
+  },
   {
     surface: "Local site builder (Quasar)",
     role: "Prompt-to-Next.js on your machine (Bun + Expo, Anthropic credentials)",
     status: "experimental" as StatusKind,
   },
-  { surface: "Abbey workspace", role: "Local document workspace with assistant context", status: "current" as StatusKind },
+  {
+    surface: "Abbey workspace",
+    role: "Local document workspace with assistant context",
+    status: "current" as StatusKind,
+  },
   {
     surface: "Mobile companion",
     role: "Source-based Expo app; native CloudKit is distinct from web export",
     status: "partial" as StatusKind,
   },
-  { surface: "Hosted Quesar cloud", role: "Managed sessions, generation, authentication", status: "planned" as StatusKind },
+  {
+    surface: "Hosted Quesar cloud",
+    role: "Managed sessions, generation, authentication",
+    status: "planned" as StatusKind,
+  },
 ] as const;
 
 export const quesarWhat = [
@@ -804,16 +928,52 @@ export const abiNotClaimed = [
 ] as const;
 
 export const wdbxCapabilities: { concern: string; what: string; status: StatusKind }[] = [
-  { concern: "Blocks / segments", what: "On-disk segment format, CRC-framed WAL, checkpoint publication and salvage", status: "current" },
-  { concern: "Embeddings / search", what: "Exact and layered HNSW, ordered vector search, 3-D spatial index", status: "current" },
-  { concern: "Metadata", what: "Block metadata round-tripping, versioning, access and execution state in records", status: "current" },
+  {
+    concern: "Blocks / segments",
+    what: "On-disk segment format, CRC-framed WAL, checkpoint publication and salvage",
+    status: "current",
+  },
+  {
+    concern: "Embeddings / search",
+    what: "Exact and layered HNSW, ordered vector search, 3-D spatial index",
+    status: "current",
+  },
+  {
+    concern: "Metadata",
+    what: "Block metadata round-tripping, versioning, access and execution state in records",
+    status: "current",
+  },
   { concern: "Relationships", what: "Multi-parent causal audit DAG", status: "current" },
-  { concern: "Provenance", what: "SHA-256 content addressing, Ed25519 signing, deterministic CBOR envelopes", status: "current" },
-  { concern: "Retrieval", what: "Hybrid ranking contracts; score currently collapses several axes", status: "partial" },
-  { concern: "Evidence-weighted rank", what: "Separate semantic, temporal, causal, and persona signals", status: "planned" },
-  { concern: "Distributed operation", what: "Cluster replication with read repair in source; not production sharding", status: "experimental" },
-  { concern: "Trust / federation", what: "Local deterministic replay tests. Not deployed federation evidence.", status: "research" },
-  { concern: "Hosted service", what: "Nothing in the repository provides production authority", status: "planned" },
+  {
+    concern: "Provenance",
+    what: "SHA-256 content addressing, Ed25519 signing, deterministic CBOR envelopes",
+    status: "current",
+  },
+  {
+    concern: "Retrieval",
+    what: "Hybrid ranking contracts; score currently collapses several axes",
+    status: "partial",
+  },
+  {
+    concern: "Evidence-weighted rank",
+    what: "Separate semantic, temporal, causal, and persona signals",
+    status: "planned",
+  },
+  {
+    concern: "Distributed operation",
+    what: "Cluster replication with read repair in source; not production sharding",
+    status: "experimental",
+  },
+  {
+    concern: "Trust / federation",
+    what: "Local deterministic replay tests. Not deployed federation evidence.",
+    status: "research",
+  },
+  {
+    concern: "Hosted service",
+    what: "Nothing in the repository provides production authority",
+    status: "planned",
+  },
 ];
 
 export const abbeyWorkspaceFacts = [
@@ -877,13 +1037,40 @@ export const researchTopics = [
 ] as const;
 
 export const researchSources = [
-  { title: "ABI", href: "/abi", body: "Nightly Rust tree, wrappers, MCP, claim-honest GPU reporting." },
-  { title: "WDBX", href: "/wdbx", body: "Provenance-aware episodic substrate, crate map, evidence vs gaps." },
-  { title: "Abbey claims", href: "/abbey", body: "Companion interface with enumerated Current / Partial / Proposed / Blocked / Out of scope." },
-  { title: "Integration surfaces", href: "/developers", body: "Website, mobile, local builder, Abbey workspace, research export." },
-  { title: "Mobile companion", href: "/mobile", body: "Expo SDK 53. Native CloudKit is distinct from this web vault." },
-  { title: "Quasar builder", href: "/quesar", body: "v1 writes a Next.js project on disk. Unit suite is not a live generation." },
-  { title: "skill-creator", href: "/skill-creator", body: "Public skill for site integrity: Apple sentence, provenance tags, Apache-2.0, toolchain facts." },
+  {
+    title: "ABI",
+    href: "/abi",
+    body: "Nightly Rust tree, wrappers, MCP, claim-honest GPU reporting.",
+  },
+  {
+    title: "WDBX",
+    href: "/wdbx",
+    body: "Provenance-aware episodic substrate, crate map, evidence vs gaps.",
+  },
+  {
+    title: "Abbey claims",
+    href: "/abbey",
+    body: "Companion interface with enumerated Current / Partial / Proposed / Blocked / Out of scope.",
+  },
+  {
+    title: "Integration surfaces",
+    href: "/developers",
+    body: "Website, mobile, local builder, Abbey workspace, research export.",
+  },
+  {
+    title: "Mobile companion",
+    href: "/mobile",
+    body: "Expo SDK 53. Native CloudKit is distinct from this web vault.",
+  },
+  {
+    title: "Quasar builder",
+    href: "/quesar",
+    body: "v1 writes a Next.js project on disk. Unit suite is not a live generation.",
+  },
+  {
+    title: "skill-creator",
+    href: "/skill-creator",
+    body: "Public skill for site integrity: Apple sentence, provenance tags, Apache-2.0, toolchain facts.",
+  },
   { title: "Gama", href: "/gama", body: "Founder-owned Swift UI framework. Not a Quesar product." },
 ] as const;
-

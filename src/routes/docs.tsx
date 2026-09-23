@@ -31,7 +31,11 @@ function DocsPage() {
                 <Surface>
                   <p className="text-xs text-accent">{doc.group}</p>
                   <h2 className="mt-2 font-display text-2xl">
-                    <Link to="/docs/$slug" params={{ slug: doc.slug }} className="text-fg no-underline hover:underline">
+                    <Link
+                      to="/docs/$slug"
+                      params={{ slug: doc.slug }}
+                      className="text-fg no-underline hover:underline"
+                    >
                       {doc.title}
                     </Link>
                   </h2>
@@ -41,7 +45,10 @@ function DocsPage() {
                       1,
                       Math.round(
                         doc.body
-                          .flatMap((section) => [...(section.paragraphs ?? []), ...(section.list ?? [])])
+                          .flatMap((section) => [
+                            ...(section.paragraphs ?? []),
+                            ...(section.list ?? []),
+                          ])
                           .join(" ")
                           .split(/\s+/)
                           .filter(Boolean).length / 220,

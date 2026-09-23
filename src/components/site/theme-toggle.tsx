@@ -27,14 +27,18 @@ export function ThemeToggle({ className }: { className?: string }) {
           <Sun
             className={cn(
               "absolute inset-0 size-4 transition-[opacity,transform,filter] duration-250 ease-[cubic-bezier(0.22,1,0.36,1)]",
-              theme === "light" ? "scale-100 opacity-100 blur-0" : "scale-[0.25] opacity-0 blur-[4px]",
+              theme === "light"
+                ? "scale-100 opacity-100 blur-0"
+                : "scale-[0.25] opacity-0 blur-[4px]",
             )}
             strokeWidth={1.75}
           />
           <Moon
             className={cn(
               "absolute inset-0 size-4 transition-[opacity,transform,filter] duration-250 ease-[cubic-bezier(0.22,1,0.36,1)]",
-              theme === "dark" ? "scale-100 opacity-100 blur-0" : "scale-[0.25] opacity-0 blur-[4px]",
+              theme === "dark"
+                ? "scale-100 opacity-100 blur-0"
+                : "scale-[0.25] opacity-0 blur-[4px]",
             )}
             strokeWidth={1.75}
           />

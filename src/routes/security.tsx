@@ -41,7 +41,9 @@ function SecurityPage() {
                   </h2>
                   <StatusBadge status={section.status} />
                 </div>
-                <p className="mt-3 max-w-3xl text-sm leading-relaxed text-fg-muted">{section.body}</p>
+                <p className="mt-3 max-w-3xl text-sm leading-relaxed text-fg-muted">
+                  {section.body}
+                </p>
               </Surface>
             </li>
           ))}
@@ -72,12 +74,20 @@ function SecurityPage() {
           <li>That the reference cluster protocol is production sharding.</li>
           <li>That FHE reference paths, AES/RBAC, or key rotation are complete products.</li>
           <li>That the local site builder is safe to expose beyond a trusted LAN.</li>
-          <li>That storing a record makes it true, or that a signature makes a deployment federated.</li>
+          <li>
+            That storing a record makes it true, or that a signature makes a deployment federated.
+          </li>
         </ul>
       </Section>
       <PageClose
         primary={{ to: "/contact", label: "Contact" }}
-        next={[{ to: "/privacy", label: "Privacy", body: "What this site stores, and what it does not." }]}
+        next={[
+          {
+            to: "/privacy",
+            label: "Privacy",
+            body: "What this site stores, and what it does not.",
+          },
+        ]}
       />
     </>
   );

@@ -54,7 +54,12 @@ export type TurnstileHandle = { reset: () => void };
 
 export const Turnstile = forwardRef<
   TurnstileHandle,
-  { siteKey: string; action: string; onTokenChange: (token: string) => void; onLoadError?: () => void }
+  {
+    siteKey: string;
+    action: string;
+    onTokenChange: (token: string) => void;
+    onLoadError?: () => void;
+  }
 >(function Turnstile({ siteKey, action, onTokenChange, onLoadError }, ref) {
   const container = useRef<HTMLDivElement>(null);
   const widgetId = useRef<TurnstileWidgetId | null>(null);

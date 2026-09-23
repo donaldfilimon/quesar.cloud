@@ -7,7 +7,11 @@ export const Select = SelectPrimitive.Root;
 export const SelectGroup = SelectPrimitive.Group;
 export const SelectValue = SelectPrimitive.Value;
 
-export function SelectTrigger({ className, children, ...props }: ComponentProps<typeof SelectPrimitive.Trigger>) {
+export function SelectTrigger({
+  className,
+  children,
+  ...props
+}: ComponentProps<typeof SelectPrimitive.Trigger>) {
   return (
     <SelectPrimitive.Trigger
       className={cn(
@@ -25,7 +29,11 @@ export function SelectTrigger({ className, children, ...props }: ComponentProps<
   );
 }
 
-export function SelectContent({ className, children, ...props }: ComponentProps<typeof SelectPrimitive.Content>) {
+export function SelectContent({
+  className,
+  children,
+  ...props
+}: ComponentProps<typeof SelectPrimitive.Content>) {
   return (
     <SelectPrimitive.Portal>
       <SelectPrimitive.Content
@@ -43,7 +51,11 @@ export function SelectContent({ className, children, ...props }: ComponentProps<
   );
 }
 
-export function SelectItem({ className, children, ...props }: ComponentProps<typeof SelectPrimitive.Item>) {
+export function SelectItem({
+  className,
+  children,
+  ...props
+}: ComponentProps<typeof SelectPrimitive.Item>) {
   return (
     <SelectPrimitive.Item
       className={cn(

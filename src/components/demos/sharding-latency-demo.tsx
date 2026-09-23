@@ -24,15 +24,22 @@ export function ShardingLatencyDemo() {
             {L.toFixed(0)}
             <span className="text-lg text-fg-muted"> ms</span>
           </div>
-          <div className="text-xs text-fg-muted">modeled retrieval latency (illustrative parameters)</div>
+          <div className="text-xs text-fg-muted">
+            modeled retrieval latency (illustrative parameters)
+          </div>
         </div>
-        <span className="rounded-full border border-border px-2.5 py-0.5 text-xs text-fg-muted">{n} partitions (modeled)</span>
+        <span className="rounded-full border border-border px-2.5 py-0.5 text-xs text-fg-muted">
+          {n} partitions (modeled)
+        </span>
       </div>
       <div className="my-4 rounded-lg bg-bg-subtle px-3 py-2 font-mono text-xs text-accent">
         L(n) = {alpha} + {betaS}/{n} = {L.toFixed(1)} ms
       </div>
       <input
-        type="range" min={1} max={32} value={n}
+        type="range"
+        min={1}
+        max={32}
+        value={n}
         aria-label="Modeled partition count"
         onChange={(e) => setN(+e.currentTarget.value)}
         className="w-full accent-primary"
@@ -42,23 +49,32 @@ export function ShardingLatencyDemo() {
           const v = alpha + betaS / b;
           const pct = (v / (alpha + betaS)) * 100;
           return (
-            <button key={b} type="button" aria-label={`Model ${b} partitions`} aria-pressed={b === n} onClick={() => setN(b)} className="group flex flex-1 flex-col items-center gap-1">
+            <button
+              key={b}
+              type="button"
+              aria-label={`Model ${b} partitions`}
+              aria-pressed={b === n}
+              onClick={() => setN(b)}
+              className="group flex flex-1 flex-col items-center gap-1"
+            >
               <div
                 className={`w-full rounded-t-md transition-all ${b === n ? "bg-linear-to-t from-accent to-accent/60" : "bg-border group-hover:bg-border-strong"}`}
                 style={{ height: `${pct}%` }}
               />
-              <span className={`text-[10px] ${b === n ? "text-accent" : "text-fg-subtle"}`}>{b}</span>
+              <span className={`text-[10px] ${b === n ? "text-accent" : "text-fg-subtle"}`}>
+                {b}
+              </span>
             </button>
           );
         })}
       </div>
       <p className="mt-3 text-xs text-fg-muted">
-        Splitting a scan across more partitions drives latency toward the fixed
-        overhead α — the shape of that curve is the point, and the constants are
-        illustrative rather than benchmark results.{" "}
+        Splitting a scan across more partitions drives latency toward the fixed overhead α — the
+        shape of that curve is the point, and the constants are illustrative rather than benchmark
+        results.{" "}
         <strong className="text-fg">
-          This models how partitioned retrieval scales in general, not a WDBX
-          feature; the active cluster RPC source explicitly disclaims sharding.
+          This models how partitioned retrieval scales in general, not a WDBX feature; the active
+          cluster RPC source explicitly disclaims sharding.
         </strong>
       </p>
     </div>

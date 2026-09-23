@@ -14,12 +14,7 @@ import {
 import { StatusBadge } from "@/components/site/status-badge";
 import { ProvTag } from "@/components/site/prov-tag";
 import { Button } from "@/components/ui/button";
-import {
-  abbeyCommands,
-  abbeyLedger,
-  abbeyWorkflow,
-  abbeyWorkspaceFacts,
-} from "@/lib/content";
+import { abbeyCommands, abbeyLedger, abbeyWorkflow, abbeyWorkspaceFacts } from "@/lib/content";
 import { companionPersonas } from "@/lib/mlai/categories/personas";
 import { pageHead } from "@/lib/seo";
 
@@ -65,8 +60,9 @@ function AbbeyPage() {
       >
         <PersonaGrid />
         <p className="mt-6 text-sm text-fg-subtle">
-          The Abbey CLI uses a different persona axis — Gemma interprets, Max implements — carried by prompts under fm
-          and abi backends. Those are not distinct models and not a second product line.
+          The Abbey CLI uses a different persona axis — Gemma interprets, Max implements — carried
+          by prompts under fm and abi backends. Those are not distinct models and not a second
+          product line.
         </p>
         <div className="mt-4">
           <CopyGrid
@@ -95,8 +91,9 @@ function AbbeyPage() {
           ]}
         />
         <p className="mt-4 mb-6 text-sm text-fg-muted">
-          Enumerated with evidence in <code className="font-mono">{abbeyLedger.source}</code>, schema {abbeyLedger.schema},
-          digest <code className="font-mono text-[11px] break-all">{abbeyLedger.digest}</code>.{" "}
+          Enumerated with evidence in <code className="font-mono">{abbeyLedger.source}</code>,
+          schema {abbeyLedger.schema}, digest{" "}
+          <code className="font-mono text-[11px] break-all">{abbeyLedger.digest}</code>.{" "}
           <ProvTag tag="reported" className="ml-1 align-middle" />
         </p>
         <StatGrid
@@ -108,8 +105,9 @@ function AbbeyPage() {
           ]}
         />
         <p className="mt-4 mb-6 text-sm text-fg-subtle">
-          Executable workflow ledger from <code className="font-mono">{abbeyWorkflow.source}</code>: {abbeyWorkflow.done}{" "}
-          done, {abbeyWorkflow.inProgress} in progress, {abbeyWorkflow.proposed} proposed, {abbeyWorkflow.blocked} blocked.{" "}
+          Executable workflow ledger from <code className="font-mono">{abbeyWorkflow.source}</code>:{" "}
+          {abbeyWorkflow.done} done, {abbeyWorkflow.inProgress} in progress,{" "}
+          {abbeyWorkflow.proposed} proposed, {abbeyWorkflow.blocked} blocked.{" "}
           <ProvTag tag="reported" className="ml-1 align-middle" />
         </p>
         <SpecList
@@ -139,7 +137,11 @@ ABBEY_CARGO_FEATURES=wdbx cargo build --release`}
         primary={{ to: "/workspace", label: "Abbey workspace" }}
         secondary={[{ to: "/abbey-bot", label: "abbey-bot" }]}
         next={[
-          { to: "/architecture", label: "Architecture", body: "See where Abbey sits in the stack." },
+          {
+            to: "/architecture",
+            label: "Architecture",
+            body: "See where Abbey sits in the stack.",
+          },
           { to: "/developers", label: "Developers", body: "Setup and claims-ledger source." },
         ]}
       />

@@ -5,7 +5,10 @@ import { cn } from "@/lib/utils";
 
 export function ResearchSidebar({ current }: { current?: string }) {
   return (
-    <nav aria-label="Research" className="lg:sticky lg:top-24 lg:max-h-[calc(100dvh-7rem)] lg:overflow-y-auto">
+    <nav
+      aria-label="Research"
+      className="lg:sticky lg:top-24 lg:max-h-[calc(100dvh-7rem)] lg:overflow-y-auto"
+    >
       <Link to="/research" className="text-xs text-fg-subtle no-underline hover:text-fg">
         All research
       </Link>
@@ -25,7 +28,9 @@ export function ResearchSidebar({ current }: { current?: string }) {
                       aria-current={active ? "page" : undefined}
                       className={cn(
                         "flex min-h-10 items-center rounded-md px-2 text-sm no-underline transition-colors",
-                        active ? "bg-primary/10 text-fg" : "text-fg-muted hover:bg-muted hover:text-fg",
+                        active
+                          ? "bg-primary/10 text-fg"
+                          : "text-fg-muted hover:bg-muted hover:text-fg",
                       )}
                     >
                       {paper.documentType === "overview" ? track.name : paper.title}

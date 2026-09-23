@@ -54,7 +54,9 @@ export function collectFeedItems(): FeedItem[] {
     timestamp: parseContentDate(p.date),
   }));
 
-  return [...posts, ...papers].sort((a, b) => (b.timestamp ?? -Infinity) - (a.timestamp ?? -Infinity));
+  return [...posts, ...papers].sort(
+    (a, b) => (b.timestamp ?? -Infinity) - (a.timestamp ?? -Infinity),
+  );
 }
 
 export function buildRssFeed(now: Date = new Date()): string {
@@ -69,7 +71,8 @@ export function buildRssFeed(now: Date = new Date()): string {
         `      <category>${escapeXml(item.category)}</category>`,
       ];
       if (item.author) lines.push(`      <dc:creator>${escapeXml(item.author)}</dc:creator>`);
-      if (item.timestamp !== null) lines.push(`      <pubDate>${new Date(item.timestamp).toUTCString()}</pubDate>`);
+      if (item.timestamp !== null)
+        lines.push(`      <pubDate>${new Date(item.timestamp).toUTCString()}</pubDate>`);
       lines.push("    </item>");
       return lines.join("\n");
     })

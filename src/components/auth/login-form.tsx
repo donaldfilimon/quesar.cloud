@@ -107,9 +107,7 @@ export function LoginForm() {
   return (
     <div className="mx-auto grid max-w-6xl items-start gap-10 px-4 py-10 sm:px-6 lg:grid-cols-[minmax(0,1fr)_24rem] lg:py-16">
       <aside className="order-2 lg:order-1">
-        <p className="text-xs text-primary">
-          After sign-in
-        </p>
+        <p className="text-xs text-primary">After sign-in</p>
         <h2 className="mt-3 font-display text-3xl tracking-tight sm:text-4xl">
           One desk. Five systems.
         </h2>
@@ -130,9 +128,7 @@ export function LoginForm() {
       </aside>
       <div className="order-1 grid gap-8 lg:order-2">
         <header>
-          <p className="text-xs text-accent">
-            Quesar desk
-          </p>
+          <p className="text-xs text-accent">Quesar desk</p>
           <h1 className="mt-3 font-display text-4xl tracking-tight">
             {mode === "signup" ? "Create an account" : "Sign in"}
           </h1>
@@ -176,9 +172,7 @@ export function LoginForm() {
                   ))}
                 </div>
 
-                <p className="text-center text-xs text-fg-subtle">
-                  or email
-                </p>
+                <p className="text-center text-xs text-fg-subtle">or email</p>
               </>
             ) : null}
 

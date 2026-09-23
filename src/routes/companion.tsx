@@ -24,16 +24,27 @@ function CompanionPage() {
       <Section>
         <CopyGrid
           items={[
-            { title: "SwiftData", body: "Local records on device. Not a cloud workspace disguised as a native shell." },
-            { title: "SwiftUI", body: "Menus, threads, and claims. The companion does not invent a hosted API." },
-            { title: "Boundary", body: "Not Quesar-as-a-service. Related to Abbey Bot, not a third product line." },
+            {
+              title: "SwiftData",
+              body: "Local records on device. Not a cloud workspace disguised as a native shell.",
+            },
+            {
+              title: "SwiftUI",
+              body: "Menus, threads, and claims. The companion does not invent a hosted API.",
+            },
+            {
+              title: "Boundary",
+              body: "Not Quesar-as-a-service. Related to Abbey Bot, not a third product line.",
+            },
           ]}
           columns="md:grid-cols-3"
         />
         <div className="mt-8 overflow-hidden rounded-[24px] bg-bg-elevated p-6 shadow-[var(--shadow-border)]">
           <p className="text-xs text-accent">Window</p>
           <div className="mt-4 grid gap-3 sm:grid-cols-[8rem_1fr]">
-            <div className="rounded-lg bg-bg p-3 font-mono text-[11px] text-fg-subtle">Threads · Claims · Memory</div>
+            <div className="rounded-lg bg-bg p-3 font-mono text-[11px] text-fg-subtle">
+              Threads · Claims · Memory
+            </div>
             <div className="rounded-lg bg-bg p-4 text-sm text-fg-muted">
               Companion chrome. Sign-in on this website opens field notes, not this native session.
             </div>

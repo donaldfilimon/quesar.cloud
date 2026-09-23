@@ -4,7 +4,10 @@ import { frozenCli } from "@/lib/catalog";
 import { pageHead } from "@/lib/seo";
 
 const packs = [
-  { name: "claims", body: "Ledger language, status labels, and refusal copy used across Abbey and this site." },
+  {
+    name: "claims",
+    body: "Ledger language, status labels, and refusal copy used across Abbey and this site.",
+  },
   { name: "wdbx-tools", body: "Scripts consumed by ABI sync. Not a hosted plugin store." },
   { name: "site-integrity", body: "Apple sentence, provenance tags, Apache-2.0, toolchain facts." },
   { name: "mcp-allowlist", body: "Contract-covered tool names. Unknown tools fail closed." },

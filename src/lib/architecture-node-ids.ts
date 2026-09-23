@@ -19,6 +19,8 @@ export const ARCHITECTURE_NODE_IDS = [
   "output",
 ] as const;
 
-export function isArchitectureNodeId(value: unknown): value is (typeof ARCHITECTURE_NODE_IDS)[number] {
+export function isArchitectureNodeId(
+  value: unknown,
+): value is (typeof ARCHITECTURE_NODE_IDS)[number] {
   return typeof value === "string" && (ARCHITECTURE_NODE_IDS as readonly string[]).includes(value);
 }

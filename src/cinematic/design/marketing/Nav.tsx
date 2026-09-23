@@ -41,9 +41,7 @@ function CommandPalette({ open, onClose }: CommandPaletteProps) {
 
   if (!open) return null;
 
-  const items = PALETTE_ITEMS.filter((n) =>
-    n[0].toLowerCase().includes(q.toLowerCase()),
-  );
+  const items = PALETTE_ITEMS.filter((n) => n[0].toLowerCase().includes(q.toLowerCase()));
 
   return (
     <div
@@ -223,10 +221,7 @@ export default function Nav({ onAccess }: NavProps) {
             MLAI
           </span>
         </a>
-        <nav
-          style={{ display: "flex", alignItems: "center", gap: 28 }}
-          className="mk-navlinks"
-        >
+        <nav style={{ display: "flex", alignItems: "center", gap: 28 }} className="mk-navlinks">
           {NAV_LINKS.map((l) => (
             <a
               key={l}

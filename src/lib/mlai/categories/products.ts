@@ -1,11 +1,11 @@
-import type { Products } from '../schemas';
-import { productJourneys } from './product-journeys';
+import type { Products } from "../schemas";
+import { productJourneys } from "./product-journeys";
 
 // Product deep-dive narratives ported from the MLAI mega-site export.
 // Claims discipline: equations describe the DESIGN of the routing/persona
 // architecture (verifiable against the abi repo), not measured benchmarks.
 // Anything aspirational is framed as design intent, never as a result.
-const narratives: Products = ([
+const narratives: Products = [
   {
     slug: "abi",
     kicker: "Multi-Persona AI Framework",
@@ -36,7 +36,11 @@ const narratives: Products = ([
         // accent, which also frees Aviva's for the band that actually is Aviva.
         blendTable: [
           { range: "α > 0.8", meaning: "Pure Abbey — empathetic, scaffolded", accent: "abbey" },
-          { range: "0.2 ≤ α ≤ 0.8", meaning: "Blend — Aviva's facts, Abbey's voice, mixed by Abi", accent: "abi" },
+          {
+            range: "0.2 ≤ α ≤ 0.8",
+            meaning: "Blend — Aviva's facts, Abbey's voice, mixed by Abi",
+            accent: "abi",
+          },
           { range: "α < 0.2", meaning: "Pure Aviva — concise, unfiltered", accent: "aviva" },
         ],
       },
@@ -69,19 +73,22 @@ const narratives: Products = ([
         pillars: [
           {
             title: "Abbey — Empathic Polymath",
-            description: "High-EQ tutor and partner, tuned toward empathetic dialogue and scaffolded teaching.",
+            description:
+              "High-EQ tutor and partner, tuned toward empathetic dialogue and scaffolded teaching.",
             eq: "L = L_{NLL} + \\lambda \\cdot L_{empathy} + L_{technical}",
             accent: "abbey",
           },
           {
             title: "Aviva — Unfiltered Expert",
-            description: "High-IQ, low-latency by design. Strips hedges and preambles; generating fewer tokens is the efficiency lever.",
+            description:
+              "High-IQ, low-latency by design. Strips hedges and preambles; generating fewer tokens is the efficiency lever.",
             eq: "L = L_{factual} + \\gamma \\cdot L_{directness}",
             accent: "aviva",
           },
           {
             title: "Abi — Adaptive Moderator",
-            description: "The gateway: classifies intent, moderates content, routes and blends. The system's regulatory firewall.",
+            description:
+              "The gateway: classifies intent, moderates content, routes and blends. The system's regulatory firewall.",
             eq: "L = L_{moderation} + \\delta \\cdot L_{sentiment}",
             accent: "abi",
           },
@@ -122,17 +129,20 @@ const narratives: Products = ([
         pillars: [
           {
             title: "Persona routing",
-            description: "Routes each turn through Abbey, Aviva, or Abi with an inspectable reason — so the voice matches the job and the handoff is a trace event, not a guess.",
+            description:
+              "Routes each turn through Abbey, Aviva, or Abi with an inspectable reason — so the voice matches the job and the handoff is a trace event, not a guess.",
             accent: "abbey",
           },
           {
             title: "Durable memory",
-            description: "Remembers facts and channel context with permission, on namespace-scoped stores you can inspect — rapport without opaque black-box recall.",
+            description:
+              "Remembers facts and channel context with permission, on namespace-scoped stores you can inspect — rapport without opaque black-box recall.",
             accent: "abbey",
           },
           {
             title: "Ops with guardrails",
-            description: "Calm ops help that names uncertainty, defers when policy says so, and never claims unlimited capability, AGI, unverified benchmarks, or NYX/Quesar as bot features.",
+            description:
+              "Calm ops help that names uncertainty, defers when policy says so, and never claims unlimited capability, AGI, unverified benchmarks, or NYX/Quesar as bot features.",
             accent: "abbey",
           },
         ],
@@ -145,22 +155,26 @@ const narratives: Products = ([
           {
             n: "01",
             title: "Sentiment & frustration detection",
-            description: "Input from Abi is evaluated for emotional state, prior knowledge, and subject complexity. A high frustration score triggers the Scaffolding Protocol.",
+            description:
+              "Input from Abi is evaluated for emotional state, prior knowledge, and subject complexity. A high frustration score triggers the Scaffolding Protocol.",
           },
           {
             n: "02",
             title: "The Scaffolding Protocol",
-            description: "A tiered explanation: a high-level metaphor first → the precise technical answer → suggested pathways for deeper exploration.",
+            description:
+              "A tiered explanation: a high-level metaphor first → the precise technical answer → suggested pathways for deeper exploration.",
           },
           {
             n: "03",
             title: "Metaphorical Mapping Engine",
-            description: "Finds the most conceptually parallel non-technical domain (e.g. music theory for distributed systems). Measured by conceptual isomorphism — structural similarity, not factual overlap.",
+            description:
+              "Finds the most conceptually parallel non-technical domain (e.g. music theory for distributed systems). Measured by conceptual isomorphism — structural similarity, not factual overlap.",
           },
           {
             n: "04",
             title: "Dynamic visual aid",
-            description: "The mapping becomes a generative-image prompt, producing a visual anchor that encapsulates the core concept.",
+            description:
+              "The mapping becomes a generative-image prompt, producing a visual anchor that encapsulates the core concept.",
           },
         ],
       },
@@ -171,22 +185,26 @@ const narratives: Products = ([
         pillars: [
           {
             title: "Confident & theoretical",
-            description: "Encouraged to form and share well-reasoned opinions and engage 'what-if' ideas — human-like, not merely a fact reporter.",
+            description:
+              "Encouraged to form and share well-reasoned opinions and engage 'what-if' ideas — human-like, not merely a fact reporter.",
             accent: "abbey",
           },
           {
             title: "Unwavering technical rigor",
-            description: "Meticulous code analysis and completion with validation in the loop, so answers are checked rather than assumed.",
+            description:
+              "Meticulous code analysis and completion with validation in the loop, so answers are checked rather than assumed.",
             accent: "abbey",
           },
           {
             title: "Perpetual student",
-            description: "Designed to research live sources when a query exceeds internal knowledge, and to validate sources before responding.",
+            description:
+              "Designed to research live sources when a query exceeds internal knowledge, and to validate sources before responding.",
             accent: "abbey",
           },
           {
             title: "Deep personalization",
-            description: "Recalls and synthesizes prior conversations (with permission) to build genuine, long-term rapport.",
+            description:
+              "Recalls and synthesizes prior conversations (with permission) to build genuine, long-term rapport.",
             accent: "abbey",
           },
         ],
@@ -200,16 +218,33 @@ const narratives: Products = ([
       },
     ],
   },
-]);
+];
 
 // Preserve the design narratives while keeping implementation scope explicit.
 export const products: Products = productJourneys.map((product) => ({
-  slug: product.slug, kicker: product.availability, name: product.name, intro: product.purpose,
+  slug: product.slug,
+  kicker: product.availability,
+  name: product.name,
+  intro: product.purpose,
   accent: product.slug === "abbey" ? "abbey" : product.slug === "abi" ? "aviva" : "abi",
   sections: [
-    { eyebrow: "Availability", title: "What you can use today", paragraphs: [product.availability, product.limitation] },
+    {
+      eyebrow: "Availability",
+      title: "What you can use today",
+      paragraphs: [product.availability, product.limitation],
+    },
     { eyebrow: "Setup", title: "Prepare your environment", paragraphs: [product.prerequisites] },
-    ...(narratives.find((item) => item.slug === product.slug) ? [{ eyebrow: "Design context", title: "Read the design alongside the evidence", paragraphs: ["The following equations, persona descriptions and interactive demonstrations explain design intent. They do not establish trained-model quality, general safety, emotional understanding or implementation beyond the availability stated above. Follow the research links for source-backed status and limitations. The local Abbey document workspace and the ABI persona design are separate integration surfaces."] }] : []),
+    ...(narratives.find((item) => item.slug === product.slug)
+      ? [
+          {
+            eyebrow: "Design context",
+            title: "Read the design alongside the evidence",
+            paragraphs: [
+              "The following equations, persona descriptions and interactive demonstrations explain design intent. They do not establish trained-model quality, general safety, emotional understanding or implementation beyond the availability stated above. Follow the research links for source-backed status and limitations. The local Abbey document workspace and the ABI persona design are separate integration surfaces.",
+            ],
+          },
+        ]
+      : []),
     ...(narratives.find((item) => item.slug === product.slug)?.sections ?? []),
   ],
 }));

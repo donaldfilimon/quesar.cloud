@@ -57,11 +57,17 @@ function SourceRepoPage() {
       <PageHero
         eyebrow="Source"
         title={doc?.title ?? decoded}
-        lede={live?.description || doc?.lede || "Public repository. Described here so the catalog is complete without sending you away."}
+        lede={
+          live?.description ||
+          doc?.lede ||
+          "Public repository. Described here so the catalog is complete without sending you away."
+        }
       >
         <div className="mt-6 flex flex-wrap gap-3">
           {doc ? <StatusBadge status={doc.status} /> : <StatusBadge status="research" />}
-          <span className="font-mono text-sm text-fg-subtle">{live?.language ?? doc?.language ?? "public"}</span>
+          <span className="font-mono text-sm text-fg-subtle">
+            {live?.language ?? doc?.language ?? "public"}
+          </span>
         </div>
       </PageHero>
       <Section>
@@ -84,7 +90,9 @@ function SourceRepoPage() {
       </Section>
       <PageClose
         primary={{ to: "/source", label: "Source catalog" }}
-        next={[{ to: "/developers", label: "Developers", body: "Live READMEs when GitHub answers." }]}
+        next={[
+          { to: "/developers", label: "Developers", body: "Live READMEs when GitHub answers." },
+        ]}
       />
     </>
   );

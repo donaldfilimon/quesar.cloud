@@ -2,11 +2,38 @@
 
 export type Scores = { abbey: number; aviva: number; abi: number; alpha: number };
 
-const ABBEY_WORDS = ["feel", "help", "stuck", "please", "sorry", "confused", "learn", "teach", "why", "worried", "together"];
-const AVIVA_WORDS = ["fix", "error", "benchmark", "latency", "code", "api", "schema", "proof", "number", "diff", "ship"];
+const ABBEY_WORDS = [
+  "feel",
+  "help",
+  "stuck",
+  "please",
+  "sorry",
+  "confused",
+  "learn",
+  "teach",
+  "why",
+  "worried",
+  "together",
+];
+const AVIVA_WORDS = [
+  "fix",
+  "error",
+  "benchmark",
+  "latency",
+  "code",
+  "api",
+  "schema",
+  "proof",
+  "number",
+  "diff",
+  "ship",
+];
 
 export function scoreMessage(text: string): Scores {
-  const tokens = text.toLowerCase().split(/[^a-z0-9]+/).filter(Boolean);
+  const tokens = text
+    .toLowerCase()
+    .split(/[^a-z0-9]+/)
+    .filter(Boolean);
   let abbey = 0.28;
   let aviva = 0.28;
   for (const token of tokens) {

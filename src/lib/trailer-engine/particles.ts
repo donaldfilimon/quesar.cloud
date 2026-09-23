@@ -37,7 +37,9 @@ export class ParticleBuffer {
 
   constructor(capacity: number) {
     if (!Number.isInteger(capacity) || capacity < 0) {
-      throw new RangeError(`ParticleBuffer capacity must be a non-negative integer, got ${capacity}`);
+      throw new RangeError(
+        `ParticleBuffer capacity must be a non-negative integer, got ${capacity}`,
+      );
     }
     this.capacity = capacity;
     this.count = capacity;

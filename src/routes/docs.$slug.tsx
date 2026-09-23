@@ -19,7 +19,10 @@ export const Route = createFileRoute("/docs/$slug")({
     return { title: doc.title, description: doc.description, ld: docLd(doc) };
   },
   head: ({ loaderData }) => ({
-    ...pageHead(`${loaderData?.title ?? "Doc"} — Docs`, loaderData?.description ?? "Quesar documentation."),
+    ...pageHead(
+      `${loaderData?.title ?? "Doc"} — Docs`,
+      loaderData?.description ?? "Quesar documentation.",
+    ),
     scripts: loaderData ? [jsonLdScript(loaderData.ld)] : [],
   }),
   component: DocArticle,
@@ -35,12 +38,7 @@ function DocArticle() {
   const next = docs[idx + 1];
   return (
     <>
-      <Crumbs
-        items={[
-          { to: "/docs", label: "Docs" },
-          { label: doc.title },
-        ]}
-      />
+      <Crumbs items={[{ to: "/docs", label: "Docs" }, { label: doc.title }]} />
       <PageHero eyebrow={doc.group} title={doc.title} lede={doc.description} compact />
       <Section className="!pt-8">
         <div className="grid gap-10 lg:grid-cols-[16rem_minmax(0,1fr)] xl:grid-cols-[16rem_minmax(0,1fr)_14rem]">
@@ -51,16 +49,24 @@ function DocArticle() {
             </MathArticleBody>
             <Pager
               index={{ to: "/docs", label: "All docs" }}
-              prev={prev ? { to: `/docs/${prev.slug}`, label: `Previous: ${prev.title}` } : undefined}
+              prev={
+                prev ? { to: `/docs/${prev.slug}`, label: `Previous: ${prev.title}` } : undefined
+              }
               next={next ? { to: `/docs/${next.slug}`, label: `Next: ${next.title}` } : undefined}
             />
           </div>
-          <DocOutline headings={doc.body.map((section) => section.heading).filter((heading): heading is string => Boolean(heading))} />
+          <DocOutline
+            headings={doc.body
+              .map((section) => section.heading)
+              .filter((heading): heading is string => Boolean(heading))}
+          />
         </div>
       </Section>
       <PageClose
         primary={{ to: "/architecture", label: "Architecture" }}
-        next={[{ to: "/developers", label: "Developers", body: "The READMEs these articles cite." }]}
+        next={[
+          { to: "/developers", label: "Developers", body: "The READMEs these articles cite." },
+        ]}
       />
     </>
   );

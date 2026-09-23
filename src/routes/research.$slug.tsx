@@ -21,7 +21,10 @@ export const Route = createFileRoute("/research/$slug")({
     return { title: paper.title, abstract: paper.abstract, ld: researchArticleLd(paper) };
   },
   head: ({ loaderData }) => ({
-    ...pageHead(`${loaderData?.title ?? "Research"} — MLAI`, loaderData?.abstract ?? "MLAI research note."),
+    ...pageHead(
+      `${loaderData?.title ?? "Research"} — MLAI`,
+      loaderData?.abstract ?? "MLAI research note.",
+    ),
     scripts: loaderData ? [jsonLdScript(loaderData.ld)] : [],
   }),
   component: ResearchPaper,
@@ -41,10 +44,7 @@ function ResearchPaper() {
       <Crumbs
         items={
           paper.slug.endsWith("-overview")
-            ? [
-                { to: "/research", label: "Research" },
-                { label: paper.title },
-              ]
+            ? [{ to: "/research", label: "Research" }, { label: paper.title }]
             : [
                 { to: "/research", label: "Research" },
                 {
@@ -62,7 +62,8 @@ function ResearchPaper() {
         compact
       >
         <p className="mt-4 font-mono text-xs tracking-wide text-fg-muted">
-          {paper.authors} · {paper.date} · {paper.readTime} · {paper.documentType.replaceAll("-", " ")}
+          {paper.authors} · {paper.date} · {paper.readTime} ·{" "}
+          {paper.documentType.replaceAll("-", " ")}
         </p>
       </PageHero>
       <Section className="!pt-10">
@@ -77,12 +78,19 @@ function ResearchPaper() {
               <Surface>
                 <p className="text-xs text-accent">Status</p>
                 <p className="mt-2 text-sm text-fg-muted">{paper.statusNote}</p>
-                <p className="mt-2 font-mono text-[11px] text-fg-subtle">Reviewed {paper.reviewedAt}</p>
+                <p className="mt-2 font-mono text-[11px] text-fg-subtle">
+                  Reviewed {paper.reviewedAt}
+                </p>
               </Surface>
             </div>
             <nav aria-label="Related products" className="mb-8 flex flex-wrap gap-4 text-sm">
               {relatedProducts.map((product) => (
-                <Link key={product.slug} to="/products/$slug" params={{ slug: product.slug }} className="text-accent">
+                <Link
+                  key={product.slug}
+                  to="/products/$slug"
+                  params={{ slug: product.slug }}
+                  className="text-accent"
+                >
                   Explore {product.name}
                 </Link>
               ))}
@@ -102,11 +110,15 @@ function ResearchPaper() {
                 <Link to="/contact">Work with our research team</Link>
               </Button>
               {next && next.slug !== paper.slug ? (
-                <Link to="/research/$slug" params={{ slug: next.slug }} className="text-right no-underline">
-                  <span className="block text-xs text-fg-subtle">
-                    Next article
+                <Link
+                  to="/research/$slug"
+                  params={{ slug: next.slug }}
+                  className="text-right no-underline"
+                >
+                  <span className="block text-xs text-fg-subtle">Next article</span>
+                  <span className="mt-1 block font-display text-lg text-fg hover:underline">
+                    {next.title}
                   </span>
-                  <span className="mt-1 block font-display text-lg text-fg hover:underline">{next.title}</span>
                 </Link>
               ) : null}
             </div>
@@ -122,8 +134,12 @@ function ResearchPaper() {
 }
 
 function Related({ paper }: { paper: (typeof research.publications)[number] }) {
-  const siblings = research.publications.filter((item) => item.topic === paper.topic && item.slug !== paper.slug).slice(0, 3);
-  const cases = researchContext.filter((item) => item.relatedTopics.includes(paper.topic)).slice(0, 3);
+  const siblings = research.publications
+    .filter((item) => item.topic === paper.topic && item.slug !== paper.slug)
+    .slice(0, 3);
+  const cases = researchContext
+    .filter((item) => item.relatedTopics.includes(paper.topic))
+    .slice(0, 3);
   if (!siblings.length && !cases.length) return null;
   return (
     <div className="mt-12 grid gap-8">
@@ -133,7 +149,11 @@ function Related({ paper }: { paper: (typeof research.publications)[number] }) {
           <ul className="mt-3 grid gap-3">
             {siblings.map((item) => (
               <li key={item.slug}>
-                <Link to="/research/$slug" params={{ slug: item.slug }} className="text-sm text-accent no-underline hover:underline">
+                <Link
+                  to="/research/$slug"
+                  params={{ slug: item.slug }}
+                  className="text-sm text-accent no-underline hover:underline"
+                >
                   {item.title}
                 </Link>
               </li>
@@ -172,11 +192,15 @@ function Evidence({ paper }: { paper: (typeof research.publications)[number] }) 
         <ul className="mt-3 space-y-3">
           {paper.sources.map((source) => (
             <li key={`${source.url}-${source.title}`} className="surface p-4">
-              <AppLink to={source.url} className="text-sm font-medium text-accent no-underline hover:underline">
+              <AppLink
+                to={source.url}
+                className="text-sm font-medium text-accent no-underline hover:underline"
+              >
                 {source.title}
               </AppLink>
               <p className="mt-1 text-xs text-fg-muted">
-                {source.kind} · revision <code className="break-all font-mono">{source.revision}</code>
+                {source.kind} · revision{" "}
+                <code className="break-all font-mono">{source.revision}</code>
               </p>
             </li>
           ))}
@@ -188,14 +212,20 @@ function Evidence({ paper }: { paper: (typeof research.publications)[number] }) 
           <ul className="mt-3 space-y-3">
             {paper.attachments.map((attachment) => (
               <li key={attachment.url} className="surface p-4">
-                <a href={attachment.url} download className="text-sm font-medium text-accent no-underline hover:underline">
+                <a
+                  href={attachment.url}
+                  download
+                  className="text-sm font-medium text-accent no-underline hover:underline"
+                >
                   {attachment.title} (PDF)
                 </a>
                 <p className="mt-1 text-xs text-fg-muted">
-                  {attachment.edition === "historical" ? "Historical edition" : "Current edition"} · {attachment.date} ·{" "}
-                  {attachment.pages} pages
+                  {attachment.edition === "historical" ? "Historical edition" : "Current edition"} ·{" "}
+                  {attachment.date} · {attachment.pages} pages
                 </p>
-                <p className="mt-1 break-all font-mono text-[11px] text-fg-subtle">SHA-256: {attachment.sha256}</p>
+                <p className="mt-1 break-all font-mono text-[11px] text-fg-subtle">
+                  SHA-256: {attachment.sha256}
+                </p>
               </li>
             ))}
           </ul>

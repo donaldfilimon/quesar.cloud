@@ -5,7 +5,10 @@ import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/source")({
   head: () =>
-    pageHead("Source — MLAI public tree", "In-site catalog of public MLAI repositories. Each name opens a page here."),
+    pageHead(
+      "Source — MLAI public tree",
+      "In-site catalog of public MLAI repositories. Each name opens a page here.",
+    ),
   component: SourceIndex,
 });
 
@@ -23,7 +26,11 @@ function SourceIndex() {
       <PageClose
         primary={{ to: "/developers", label: "Developers" }}
         next={[
-          { to: "/architecture", label: "Architecture", body: "Click a node for current versus not claimed." },
+          {
+            to: "/architecture",
+            label: "Architecture",
+            body: "Click a node for current versus not claimed.",
+          },
           { to: "/apps", label: "Apps", body: "Working orientations of the public tree." },
         ]}
       />

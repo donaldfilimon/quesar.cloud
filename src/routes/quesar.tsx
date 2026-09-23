@@ -1,6 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { QuasarStudio } from "@/components/apps/quasar-studio";
-import { CodeBlock, CopyGrid, DataTable, PageClose, PageHero, Section, StepList } from "@/components/site";
+import {
+  CodeBlock,
+  CopyGrid,
+  DataTable,
+  PageClose,
+  PageHero,
+  Section,
+  StepList,
+} from "@/components/site";
 import { StatusBadge } from "@/components/site/status-badge";
 import { Button } from "@/components/ui/button";
 import { quesarSurfaces, quesarWhat } from "@/lib/content";
@@ -26,7 +34,8 @@ function QuesarPage() {
         <div className="mt-6 flex flex-wrap items-center gap-3">
           <StatusBadge status="partial" />
           <span className="text-sm text-fg-muted">
-            Public orientation and a signed-in console are current. Hosted assistant sessions are not.
+            Public orientation and a signed-in console are current. Hosted assistant sessions are
+            not.
           </span>
         </div>
       </PageHero>
@@ -122,14 +131,17 @@ function QuesarPage() {
           rows={quesarSurfaces}
           rowKey={(row) => row.surface}
           columns={[
-            { header: "Surface", cell: (row) => <span className="font-medium">{row.surface}</span> },
+            {
+              header: "Surface",
+              cell: (row) => <span className="font-medium">{row.surface}</span>,
+            },
             { header: "Role", className: "text-fg-muted", cell: (row) => row.role },
             { header: "Status", cell: (row) => <StatusBadge status={row.status} /> },
           ]}
         />
         <p className="mt-4 text-sm text-fg-subtle">
-          The builder service listens on the LAN without authentication — run it only on a network you trust. In-browser
-          studio above. Setup notes:{" "}
+          The builder service listens on the LAN without authentication — run it only on a network
+          you trust. In-browser studio above. Setup notes:{" "}
           <Link to="/docs/$slug" params={{ slug: "getting-started" }} className="text-accent">
             getting started
           </Link>

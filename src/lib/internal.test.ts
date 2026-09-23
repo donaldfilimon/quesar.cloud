@@ -8,7 +8,13 @@ describe("safeInternalPath", () => {
   });
 
   it("refuses external, protocol-relative and API targets", () => {
-    for (const bad of ["https://evil.example", "//evil.example", "/\\evil", "/api/auth/x", "/auth/popup"]) {
+    for (const bad of [
+      "https://evil.example",
+      "//evil.example",
+      "/\\evil",
+      "/api/auth/x",
+      "/auth/popup",
+    ]) {
       expect(safeInternalPath(bad)).toBe("/console");
     }
   });

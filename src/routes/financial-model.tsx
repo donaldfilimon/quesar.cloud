@@ -9,7 +9,11 @@ export const Route = createFileRoute("/financial-model")({
   head: () => ({
     meta: [
       { title: "Financial model — MLAI" },
-      { name: "description", content: "Unit-economics targets and ARR projection, every figure tagged, plus an interactive three-statement model on illustrative sample data for a fictional company." },
+      {
+        name: "description",
+        content:
+          "Unit-economics targets and ARR projection, every figure tagged, plus an interactive three-statement model on illustrative sample data for a fictional company.",
+      },
       { name: "robots", content: "noindex" },
     ],
   }),
@@ -58,7 +62,9 @@ function FinancialModelPage() {
       </Section>
       <PageClose
         primary={{ to: "/investors", label: "Investor notes" }}
-        next={[{ to: "/company", label: "Company", body: "Registration-level facts beside the model." }]}
+        next={[
+          { to: "/company", label: "Company", body: "Registration-level facts beside the model." },
+        ]}
       />
     </>
   );

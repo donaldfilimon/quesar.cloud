@@ -1,7 +1,14 @@
 import { useMemo, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { CodeBlock } from "@/components/site/lab";
-import { HeroStatus, IntegrityList, PageClose, PageHero, Section, Surface } from "@/components/site";
+import {
+  HeroStatus,
+  IntegrityList,
+  PageClose,
+  PageHero,
+  Section,
+  Surface,
+} from "@/components/site";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -19,7 +26,9 @@ export const Route = createFileRoute("/skill-creator")({
 
 function SkillCreatorPage() {
   const [name, setName] = useState("site-integrity");
-  const [purpose, setPurpose] = useState("Ship the company site without breaking Apple framing or provenance tags.");
+  const [purpose, setPurpose] = useState(
+    "Ship the company site without breaking Apple framing or provenance tags.",
+  );
   const skill = useMemo(
     () => `---
 name: ${name || "untitled"}

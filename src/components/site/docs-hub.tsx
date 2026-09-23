@@ -19,7 +19,19 @@ import { DOCS_HUB_ANCHORS } from "./docs-hub-anchors";
  * already use the bare slugs (`runtime`, `wdbx`, `mcp`, ...).
  */
 
-function RefSection({ id, group, title, lede, children }: { id: string; group: string; title: string; lede?: string; children: ReactNode }) {
+function RefSection({
+  id,
+  group,
+  title,
+  lede,
+  children,
+}: {
+  id: string;
+  group: string;
+  title: string;
+  lede?: string;
+  children: ReactNode;
+}) {
   return (
     <section id={`ref-${id}`} aria-labelledby={`ref-${id}-title`} className="mt-16 scroll-mt-28">
       <p className="text-xs text-accent">{group}</p>
@@ -92,20 +104,23 @@ export function DocsHub() {
       >
         <CopyGrid items={docsHub.routingSignals} columns="md:grid-cols-3" />
         <Callout label="Authority boundary" className="mt-6">
-          A persona name is not an authorization mechanism. Execution and admission controls enforce their own policy
-          checks independently of the selected profile.
+          A persona name is not an authorization mechanism. Execution and admission controls enforce
+          their own policy checks independently of the selected profile.
         </Callout>
         <h4 className="mt-8 font-display text-lg">Abbey's voice</h4>
         <p className="mt-3 max-w-2xl text-sm leading-relaxed text-fg-muted">
-          Abbey is the profile you hear most in explanation and review, so her voice sets the tone for the framework:
-          Intelligence Without Limits, gated by policy. She says what she knows and what she doesn't, and will not claim
-          unlimited or AGI capability, unverified benchmarks, or Quesar as a bot feature.
+          Abbey is the profile you hear most in explanation and review, so her voice sets the tone
+          for the framework: Intelligence Without Limits, gated by policy. She says what she knows
+          and what she doesn't, and will not claim unlimited or AGI capability, unverified
+          benchmarks, or Quesar as a bot feature.
         </p>
         <PullQuote className="mt-6">“Care first. Clarity always. Competence throughout.”</PullQuote>
         <div className="mt-6">
           <CopyGrid items={docsHub.abbeyPrinciples} columns="md:grid-cols-3" />
         </div>
-        <PaperLink to="/research/policy-locked-tool-use-multi-agent">Read the paper: policy-locked tool use</PaperLink>
+        <PaperLink to="/research/policy-locked-tool-use-multi-agent">
+          Read the paper: policy-locked tool use
+        </PaperLink>
       </RefSection>
 
       <RefSection
@@ -116,10 +131,12 @@ export function DocsHub() {
       >
         <CopyGrid items={docsHub.wdbxCapabilities} />
         <Callout label="Fail closed" className="mt-6">
-          The Rust workspace links WDBX directly. Storage, authentication, and admission failures must be explicit; legacy
-          disabled-feature flags are not the current runtime boundary.
+          The Rust workspace links WDBX directly. Storage, authentication, and admission failures
+          must be explicit; legacy disabled-feature flags are not the current runtime boundary.
         </Callout>
-        <PaperLink to="/research/wdbx-weighted-backtrace-memory-store">Read the paper: WDBX weighted-backtrace store</PaperLink>
+        <PaperLink to="/research/wdbx-weighted-backtrace-memory-store">
+          Read the paper: WDBX weighted-backtrace store
+        </PaperLink>
       </RefSection>
 
       <RefSection
@@ -131,7 +148,11 @@ export function DocsHub() {
         <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {docsHub.wdbxV2Docs.map((doc) => (
             <li key={doc.file}>
-              <a href={`/docs/wdbx/${doc.file}`} download className="surface surface-hover block h-full p-4 no-underline">
+              <a
+                href={`/docs/wdbx/${doc.file}`}
+                download
+                className="surface surface-hover block h-full p-4 no-underline"
+              >
                 <span className="flex items-center justify-between gap-2">
                   <span className="text-sm font-medium text-fg">{doc.label}</span>
                   <span className="font-mono text-[10px] text-fg-subtle">.md ↓</span>
@@ -144,10 +165,15 @@ export function DocsHub() {
         <ul className="mt-6 flex flex-wrap gap-3">
           {attachments.map((attachment) => (
             <li key={attachment.url}>
-              <a href={attachment.url} download className="surface surface-hover inline-flex flex-col gap-1 px-4 py-3 no-underline">
+              <a
+                href={attachment.url}
+                download
+                className="surface surface-hover inline-flex flex-col gap-1 px-4 py-3 no-underline"
+              >
                 <span className="text-sm text-fg">{attachment.title} (PDF)</span>
                 <span className="text-xs text-fg-muted">
-                  {attachment.edition === "historical" ? "Historical edition" : "Current edition"} · {attachment.date}
+                  {attachment.edition === "historical" ? "Historical edition" : "Current edition"} ·{" "}
+                  {attachment.date}
                 </span>
               </a>
             </li>
@@ -165,7 +191,11 @@ export function DocsHub() {
         <SpecList rows={docsHub.mcpSpec} />
         <h4 className="mt-8 font-display text-lg">Tools</h4>
         <div className="mt-4">
-          <NamedGrid items={docsHub.mcpTools} nameClass="text-accent" columns="sm:grid-cols-2 lg:grid-cols-3" />
+          <NamedGrid
+            items={docsHub.mcpTools}
+            nameClass="text-accent"
+            columns="sm:grid-cols-2 lg:grid-cols-3"
+          />
         </div>
       </RefSection>
 
@@ -173,7 +203,7 @@ export function DocsHub() {
         id="deployment"
         group="Operations"
         title="Deployment checklist"
-        lede="For this site. Each missing value produces a clear &quot;not configured&quot; state, never a crash."
+        lede='For this site. Each missing value produces a clear "not configured" state, never a crash.'
       >
         <StepList steps={docsHub.deploymentSteps} />
       </RefSection>

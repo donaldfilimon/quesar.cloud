@@ -1,7 +1,13 @@
 import { useNavigate } from "@tanstack/react-router";
 import { Search as SearchIcon } from "lucide-react";
 import { lazy, Suspense, useEffect, useState } from "react";
-import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import type { Hit } from "./search-panel";
 
 // The catalog indexes every content dataset and pulls in cmdk. This trigger is
@@ -13,9 +19,14 @@ const SearchPanel = lazy(() => loadPanel().then((m) => ({ default: m.SearchPanel
 /** Same footprint as the panel's input row, shown while the panel loads. */
 function PanelFallback() {
   return (
-    <div className="flex items-center gap-3 border-b border-border bg-bg-elevated px-4" aria-busy="true">
+    <div
+      className="flex items-center gap-3 border-b border-border bg-bg-elevated px-4"
+      aria-busy="true"
+    >
       <SearchIcon className="size-4 text-fg-subtle" strokeWidth={1.75} />
-      <span className="flex h-14 items-center text-sm text-fg-subtle">Search pages, products, and public repositories</span>
+      <span className="flex h-14 items-center text-sm text-fg-subtle">
+        Search pages, products, and public repositories
+      </span>
     </div>
   );
 }

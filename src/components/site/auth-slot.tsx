@@ -16,7 +16,9 @@ export function AuthSlot() {
     );
   }
   if (isPending) {
-    return <div className="h-11 w-16 animate-pulse rounded-md bg-bg-subtle sm:w-20" aria-hidden="true" />;
+    return (
+      <div className="h-11 w-16 animate-pulse rounded-md bg-bg-subtle sm:w-20" aria-hidden="true" />
+    );
   }
   return (
     <>

@@ -24,17 +24,33 @@ function GamaPage() {
       <Section>
         <CopyGrid
           items={[
-            { title: "GamaCore", body: "Scenes, state, layout, and events. The retained tree is the contract." },
-            { title: "Backends", body: "Documented: TUI, Apple, WebAssembly, embed. Check current source for your target." },
-            { title: "MLX track", body: "On-device language-model work on Apple Silicon lives in related founder trees — not as a Quesar claim." },
-            { title: "Boundary", body: "A passing web gate is not Swift evidence. A local runtime test does not validate a mobile app." },
+            {
+              title: "GamaCore",
+              body: "Scenes, state, layout, and events. The retained tree is the contract.",
+            },
+            {
+              title: "Backends",
+              body: "Documented: TUI, Apple, WebAssembly, embed. Check current source for your target.",
+            },
+            {
+              title: "MLX track",
+              body: "On-device language-model work on Apple Silicon lives in related founder trees — not as a Quesar claim.",
+            },
+            {
+              title: "Boundary",
+              body: "A passing web gate is not Swift evidence. A local runtime test does not validate a mobile app.",
+            },
           ]}
         />
       </Section>
       <PageClose
         primary={{ to: "/docs/gama", label: "Gama docs" }}
         next={[
-          { to: "/projects/gama", label: "Project card", body: "Scope and the limit, on one page." },
+          {
+            to: "/projects/gama",
+            label: "Project card",
+            body: "Scope and the limit, on one page.",
+          },
           { to: "/apps", label: "Apps", body: "Founder surfaces, labeled as research." },
         ]}
       />

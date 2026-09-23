@@ -28,8 +28,16 @@ function CellMachinePage() {
       <PageClose
         primary={{ to: "/apps", label: "Apps" }}
         next={[
-          { to: "/source/cell-machine", label: "Source note", body: "The public tree this experiment belongs to." },
-          { to: "/research", label: "Research", body: "Other founder and lab work, labeled as such." },
+          {
+            to: "/source/cell-machine",
+            label: "Source note",
+            body: "The public tree this experiment belongs to.",
+          },
+          {
+            to: "/research",
+            label: "Research",
+            body: "Other founder and lab work, labeled as such.",
+          },
         ]}
       />
     </>

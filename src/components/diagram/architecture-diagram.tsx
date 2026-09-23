@@ -1,11 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useCallback, useEffect, useId, useMemo, useState } from "react";
 import { toast } from "sonner";
-import {
-  architectureNodes,
-  layerCopy,
-  type ArchNode,
-} from "@/lib/content";
+import { architectureNodes, layerCopy, type ArchNode } from "@/lib/content";
 import { cn } from "@/lib/utils";
 import { StatusBadge } from "@/components/site/status-badge";
 import { Instrument } from "@/components/site/instrument";
@@ -111,7 +107,8 @@ export function ArchitectureDiagram({
           className="p-3 sm:p-4"
         >
           <p id={labelId} className="sr-only">
-            Architecture. Use arrow keys to move between components. Enter selects. The inspector lists what is current in source versus what is not claimed.
+            Architecture. Use arrow keys to move between components. Enter selects. The inspector
+            lists what is current in source versus what is not claimed.
           </p>
           <div className="mb-4 flex flex-wrap gap-x-4 gap-y-1 px-1">
             {(Object.keys(layerCopy) as Array<keyof typeof layerCopy>).map((layer) => (
@@ -133,7 +130,12 @@ export function ArchitectureDiagram({
                   )}
                 >
                   {row.map((id) => (
-                    <NodeButton key={id} node={nodeById(id)} selected={selected === id} onSelect={select} />
+                    <NodeButton
+                      key={id}
+                      node={nodeById(id)}
+                      selected={selected === id}
+                      onSelect={select}
+                    />
                   ))}
                 </div>
                 {rowIndex < DESKTOP_ORDER.length - 1 ? <FlowRail /> : null}
@@ -154,21 +156,22 @@ export function ArchitectureDiagram({
         </div>
       </Instrument>
 
-      <aside className="rounded-[28px] bg-bg-elevated p-6 shadow-[var(--shadow-border)] sm:p-7" aria-live="polite">
-        <p className="text-xs text-fg-subtle">
-          {layerCopy[node.layer]}
-        </p>
+      <aside
+        className="rounded-[28px] bg-bg-elevated p-6 shadow-[var(--shadow-border)] sm:p-7"
+        aria-live="polite"
+      >
+        <p className="text-xs text-fg-subtle">{layerCopy[node.layer]}</p>
         <div className="mt-2 flex flex-wrap items-center gap-3">
           <h3 className="font-display text-2xl tracking-tight">{node.name}</h3>
           <StatusBadge status={node.status} />
         </div>
-        <p className="mt-4 text-sm leading-relaxed text-fg-muted">{compact ? node.summary : node.detail}</p>
+        <p className="mt-4 text-sm leading-relaxed text-fg-muted">
+          {compact ? node.summary : node.detail}
+        </p>
         <CapabilityList title="Current in source" items={node.implemented} positive />
         <Separator className="my-5" />
         <CapabilityList title="Not claimed" items={node.notClaimed} className="mt-0" />
-        <p className="mt-5 text-xs text-fg-subtle">
-          Arrow keys move between nodes
-        </p>
+        <p className="mt-5 text-xs text-fg-subtle">Arrow keys move between nodes</p>
         <div className="mt-3 flex flex-wrap items-center gap-2">
           <Button asChild>
             <Link to="/console" search={{ node: node.id }}>
@@ -212,7 +215,16 @@ function FlowRail() {
   return (
     <div className="flex h-7 items-center justify-center" aria-hidden="true">
       <svg width="12" height="28" viewBox="0 0 12 28" className="text-accent">
-        <line className="flow-line" x1="6" y1="0" x2="6" y2="28" stroke="currentColor" strokeWidth="1.25" opacity="0.7" />
+        <line
+          className="flow-line"
+          x1="6"
+          y1="0"
+          x2="6"
+          y2="28"
+          stroke="currentColor"
+          strokeWidth="1.25"
+          opacity="0.7"
+        />
       </svg>
     </div>
   );
@@ -275,7 +287,10 @@ function CapabilityList({
         {items.map((item) => (
           <li key={item} className="flex gap-2 text-sm text-fg-muted">
             <span
-              className={cn("mt-1.5 size-1.5 shrink-0 rounded-full", positive ? "bg-status-current" : "bg-border-strong")}
+              className={cn(
+                "mt-1.5 size-1.5 shrink-0 rounded-full",
+                positive ? "bg-status-current" : "bg-border-strong",
+              )}
               aria-hidden="true"
             />
             {item}
