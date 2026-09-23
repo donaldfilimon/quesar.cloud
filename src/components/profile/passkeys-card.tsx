@@ -30,7 +30,8 @@ export function PasskeysCard() {
 
   const load = useCallback(async () => {
     const { data, error } = await authClient.passkey.listUserPasskeys();
-    if (error) setState({ kind: "error", message: "Passkeys could not be loaded. Try again in a moment." });
+    if (error)
+      setState({ kind: "error", message: "Passkeys could not be loaded. Try again in a moment." });
     else setState({ kind: "ready", passkeys: (data ?? []) as PasskeyRow[] });
   }, []);
 
@@ -63,11 +64,15 @@ export function PasskeysCard() {
 
   return (
     <Surface>
-      <p className="font-mono text-[0.68rem] tracking-[0.16em] text-fg-subtle uppercase">Passkeys</p>
+      <p className="font-mono text-[0.68rem] tracking-[0.16em] text-fg-subtle uppercase">
+        Passkeys
+      </p>
       <p className="mt-2 text-sm text-fg-muted">
         Sign in with Face ID, Touch ID, Windows Hello or a security key instead of a password.
       </p>
-      {state.kind === "loading" ? <p className="mt-3 text-sm text-fg-muted">Loading passkeys…</p> : null}
+      {state.kind === "loading" ? (
+        <p className="mt-3 text-sm text-fg-muted">Loading passkeys…</p>
+      ) : null}
       {state.kind === "error" ? (
         <p className="mt-3 text-sm text-destructive" role="alert">
           {state.message}
@@ -88,7 +93,13 @@ export function PasskeysCard() {
                     {key.backedUp ? " · synced" : ""}
                   </span>
                 </span>
-                <Button type="button" variant="ghost" size="sm" disabled={busy} onClick={() => void remove(key.id)}>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  disabled={busy}
+                  onClick={() => void remove(key.id)}
+                >
                   Remove
                 </Button>
               </li>
@@ -96,7 +107,13 @@ export function PasskeysCard() {
           </ul>
         )
       ) : null}
-      <Button type="button" className="mt-4" variant="secondary" disabled={busy} onClick={() => void add()}>
+      <Button
+        type="button"
+        className="mt-4"
+        variant="secondary"
+        disabled={busy}
+        onClick={() => void add()}
+      >
         Add a passkey
       </Button>
     </Surface>

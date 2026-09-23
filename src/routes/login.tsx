@@ -35,7 +35,8 @@ export const Route = createFileRoute("/login")({
   validateSearch: (search: Record<string, unknown>): LoginSearch => parseNext(search),
   // The static build has no server to ask; the page shows ServerOnlyNotice there.
   loader: async () => (staticSite || !authEnabled ? NO_METHODS : getSignInMethods()),
-  head: () => pageHead("Sign in — Quesar", "Sign in to the desk for Abbey, Aviva, Abi, Quesar, and WDBX."),
+  head: () =>
+    pageHead("Sign in — Quesar", "Sign in to the desk for Abbey, Aviva, Abi, Quesar, and WDBX."),
   component: Login,
 });
 
@@ -59,7 +60,9 @@ function LoginForm() {
   const methods = Route.useLoaderData();
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [pending, setPending] = useState<SocialProviderId | "passkey" | null>(null);
-  const offeredProviders = SOCIAL_PROVIDERS.filter((provider) => methods.social.includes(provider.id));
+  const offeredProviders = SOCIAL_PROVIDERS.filter((provider) =>
+    methods.social.includes(provider.id),
+  );
 
   async function continueWith(provider: SocialProviderId) {
     setPending(provider);
@@ -116,14 +119,22 @@ function LoginForm() {
   }, [isPending, user, next]);
 
   if (!isPending && user) {
-    return <p className="mx-auto max-w-md px-4 py-16 text-sm text-fg-muted">Continuing to field notes…</p>;
+    return (
+      <p className="mx-auto max-w-md px-4 py-16 text-sm text-fg-muted">
+        Continuing to field notes…
+      </p>
+    );
   }
 
   return (
     <div className="mx-auto grid max-w-6xl items-start gap-10 px-4 py-10 sm:px-6 lg:grid-cols-[minmax(0,1fr)_24rem] lg:py-16">
       <aside className="order-2 lg:order-1">
-        <p className="font-mono text-[0.68rem] tracking-[0.16em] text-primary uppercase">After sign-in</p>
-        <h2 className="mt-3 font-display text-3xl tracking-tight sm:text-4xl">One desk. Five systems.</h2>
+        <p className="font-mono text-[0.68rem] tracking-[0.16em] text-primary uppercase">
+          After sign-in
+        </p>
+        <h2 className="mt-3 font-display text-3xl tracking-tight sm:text-4xl">
+          One desk. Five systems.
+        </h2>
         <ul className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-2">
           {[
             ["Abbey", "Care first"],
@@ -140,135 +151,159 @@ function LoginForm() {
         </ul>
       </aside>
       <div className="order-1 grid gap-8 lg:order-2">
-      <header>
-        <p className="font-mono text-[0.7rem] tracking-[0.16em] text-accent uppercase">Quesar desk</p>
-        <h1 className="mt-3 font-display text-4xl tracking-tight">{mode === "signup" ? "Create an account" : "Sign in"}</h1>
-        <p className="mt-3 max-w-[66ch] text-base leading-7 text-fg">
-          The desk calls Abbey, Aviva, Abi, Quesar, and WDBX through the site API. Field notes stay on the same account.
-        </p>
-      </header>
+        <header>
+          <p className="font-mono text-[0.7rem] tracking-[0.16em] text-accent uppercase">
+            Quesar desk
+          </p>
+          <h1 className="mt-3 font-display text-4xl tracking-tight">
+            {mode === "signup" ? "Create an account" : "Sign in"}
+          </h1>
+          <p className="mt-3 max-w-[66ch] text-base leading-7 text-fg">
+            The desk calls Abbey, Aviva, Abi, Quesar, and WDBX through the site API. Field notes
+            stay on the same account.
+          </p>
+        </header>
 
-      {!authEnabled ? (
-        <p className="text-sm text-fg-muted">Sign-in is disabled.</p>
-      ) : (
-        <>
-          {methods.passkey || offeredProviders.length > 0 ? (
-            <>
-              <div className="flex flex-col gap-2">
-                {methods.passkey && mode === "signin" ? (
-                  <Button
-                    type="button"
-                    variant="secondary"
-                    disabled={pending !== null}
-                    onClick={() => void continueWithPasskey()}
-                  >
-                    {pending === "passkey" ? "Waiting for your passkey…" : "Sign in with a passkey"}
-                  </Button>
-                ) : null}
-                {offeredProviders.map((provider) => (
-                  <Button
-                    key={provider.id}
-                    type="button"
-                    variant="secondary"
-                    disabled={pending !== null}
-                    onClick={() => void continueWith(provider.id)}
-                  >
-                    {pending === provider.id ? `Opening ${provider.label}…` : `Continue with ${provider.label}`}
-                  </Button>
-                ))}
-              </div>
+        {!authEnabled ? (
+          <p className="text-sm text-fg-muted">Sign-in is disabled.</p>
+        ) : (
+          <>
+            {methods.passkey || offeredProviders.length > 0 ? (
+              <>
+                <div className="flex flex-col gap-2">
+                  {methods.passkey && mode === "signin" ? (
+                    <Button
+                      type="button"
+                      variant="secondary"
+                      disabled={pending !== null}
+                      onClick={() => void continueWithPasskey()}
+                    >
+                      {pending === "passkey"
+                        ? "Waiting for your passkey…"
+                        : "Sign in with a passkey"}
+                    </Button>
+                  ) : null}
+                  {offeredProviders.map((provider) => (
+                    <Button
+                      key={provider.id}
+                      type="button"
+                      variant="secondary"
+                      disabled={pending !== null}
+                      onClick={() => void continueWith(provider.id)}
+                    >
+                      {pending === provider.id
+                        ? `Opening ${provider.label}…`
+                        : `Continue with ${provider.label}`}
+                    </Button>
+                  ))}
+                </div>
 
-              <p className="text-center font-mono text-[0.68rem] tracking-[0.14em] text-fg-subtle uppercase">or email</p>
-            </>
-          ) : null}
+                <p className="text-center font-mono text-[0.68rem] tracking-[0.14em] text-fg-subtle uppercase">
+                  or email
+                </p>
+              </>
+            ) : null}
 
-          <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-3">
-            {mode === "signup" ? (
+            <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-3">
+              {mode === "signup" ? (
+                <div>
+                  <Label htmlFor="name">Name</Label>
+                  <Input
+                    id="name"
+                    autoComplete="name"
+                    className="mt-1"
+                    {...form.register("name")}
+                  />
+                </div>
+              ) : null}
               <div>
-                <Label htmlFor="name">Name</Label>
-                <Input id="name" autoComplete="name" className="mt-1" {...form.register("name")} />
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  required
+                  autoComplete="username webauthn"
+                  className="mt-1"
+                  aria-invalid={form.formState.errors.email ? true : undefined}
+                  aria-describedby={form.formState.errors.email ? "email-error" : undefined}
+                  {...form.register("email")}
+                />
+                {form.formState.errors.email ? (
+                  <p id="email-error" className="mt-1 text-sm text-destructive">
+                    {form.formState.errors.email.message}
+                  </p>
+                ) : null}
               </div>
-            ) : null}
-            <div>
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                required
-                autoComplete="username webauthn"
-                className="mt-1"
-                aria-invalid={form.formState.errors.email ? true : undefined}
-                aria-describedby={form.formState.errors.email ? "email-error" : undefined}
-                {...form.register("email")}
-              />
-              {form.formState.errors.email ? (
-                <p id="email-error" className="mt-1 text-sm text-destructive">
-                  {form.formState.errors.email.message}
+              <div>
+                <div className="flex items-center justify-between gap-3">
+                  <Label htmlFor="password">Password</Label>
+                  <button
+                    type="button"
+                    className="text-xs text-fg-subtle hover:text-fg"
+                    aria-controls="password"
+                    aria-pressed={showPassword}
+                    onClick={() => setShowPassword((value) => !value)}
+                  >
+                    {showPassword ? "Hide" : "Show"}
+                  </button>
+                </div>
+                <Input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  required
+                  minLength={8}
+                  autoComplete={mode === "signup" ? "new-password" : "current-password"}
+                  className="mt-1"
+                  aria-invalid={form.formState.errors.password ? true : undefined}
+                  aria-describedby={form.formState.errors.password ? "password-error" : undefined}
+                  {...form.register("password")}
+                />
+                {form.formState.errors.password ? (
+                  <p id="password-error" className="mt-1 text-sm text-destructive">
+                    {form.formState.errors.password.message}
+                  </p>
+                ) : mode === "signup" ? (
+                  <p className="mt-1 text-xs text-fg-subtle">
+                    At least 8 characters. Stored as a hash, not the password itself.
+                  </p>
+                ) : null}
+              </div>
+              {form.formState.errors.root ? (
+                <p className="text-sm text-destructive" role="alert">
+                  {form.formState.errors.root.message}
                 </p>
               ) : null}
-            </div>
-            <div>
-              <div className="flex items-center justify-between gap-3">
-                <Label htmlFor="password">Password</Label>
-                <button
-                  type="button"
-                  className="text-xs text-fg-subtle hover:text-fg"
-                  aria-controls="password"
-                  aria-pressed={showPassword}
-                  onClick={() => setShowPassword((value) => !value)}
-                >
-                  {showPassword ? "Hide" : "Show"}
-                </button>
-              </div>
-              <Input
-                id="password"
-                type={showPassword ? "text" : "password"}
-                required
-                minLength={8}
-                autoComplete={mode === "signup" ? "new-password" : "current-password"}
-                className="mt-1"
-                aria-invalid={form.formState.errors.password ? true : undefined}
-                aria-describedby={form.formState.errors.password ? "password-error" : undefined}
-                {...form.register("password")}
-              />
-              {form.formState.errors.password ? (
-                <p id="password-error" className="mt-1 text-sm text-destructive">
-                  {form.formState.errors.password.message}
-                </p>
-              ) : mode === "signup" ? (
-                <p className="mt-1 text-xs text-fg-subtle">At least 8 characters. Stored as a hash, not the password itself.</p>
-              ) : null}
-            </div>
-            {form.formState.errors.root ? (
-              <p className="text-sm text-destructive" role="alert">
-                {form.formState.errors.root.message}
-              </p>
-            ) : null}
-            <Button type="submit" disabled={form.formState.isSubmitting}>
-              {form.formState.isSubmitting ? "Working…" : mode === "signup" ? "Create account" : "Sign in with email"}
-            </Button>
-          </form>
+              <Button type="submit" disabled={form.formState.isSubmitting}>
+                {form.formState.isSubmitting
+                  ? "Working…"
+                  : mode === "signup"
+                    ? "Create account"
+                    : "Sign in with email"}
+              </Button>
+            </form>
 
-          <button
-            type="button"
-            className="text-sm text-fg-muted underline-offset-4 hover:text-fg hover:underline"
-            onClick={() => {
-              setMode(mode === "signup" ? "signin" : "signup");
-              form.clearErrors();
-            }}
-          >
-            {mode === "signup" ? "Already have an account? Sign in" : "Need an account? Create one"}
-          </button>
-        </>
-      )}
+            <button
+              type="button"
+              className="text-sm text-fg-muted underline-offset-4 hover:text-fg hover:underline"
+              onClick={() => {
+                setMode(mode === "signup" ? "signin" : "signup");
+                form.clearErrors();
+              }}
+            >
+              {mode === "signup"
+                ? "Already have an account? Sign in"
+                : "Need an account? Create one"}
+            </button>
+          </>
+        )}
 
-      <p className="text-sm leading-6 text-fg">
-        After sign-in you land on the desk. Field notes stay at{" "}
-        <Link to="/console" className="text-primary">
-          the console
-        </Link>
-        .
-      </p>
+        <p className="text-sm leading-6 text-fg">
+          After sign-in you land on the desk. Field notes stay at{" "}
+          <Link to="/console" className="text-primary">
+            the console
+          </Link>
+          .
+        </p>
       </div>
     </div>
   );

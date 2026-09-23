@@ -4,7 +4,12 @@ import { APPLE_SECRET_TTL_SECONDS, appleClientSecret } from "./apple-secret.serv
 
 const { privateKey, publicKey } = generateKeyPairSync("ec", { namedCurve: "P-256" });
 const pem = privateKey.export({ type: "pkcs8", format: "pem" }).toString();
-const key = { clientId: "cloud.quesar.signin", teamId: "TEAM123456", keyId: "KEY1234567", privateKey: pem };
+const key = {
+  clientId: "cloud.quesar.signin",
+  teamId: "TEAM123456",
+  keyId: "KEY1234567",
+  privateKey: pem,
+};
 
 function decode(part: string) {
   return JSON.parse(Buffer.from(part, "base64url").toString("utf8"));
@@ -33,7 +38,10 @@ describe("appleClientSecret", () => {
     const ok = verify(
       "sha256",
       Buffer.from(`${header}.${payload}`),
-      { key: createPublicKey(publicKey.export({ type: "spki", format: "pem" })), dsaEncoding: "ieee-p1363" },
+      {
+        key: createPublicKey(publicKey.export({ type: "spki", format: "pem" })),
+        dsaEncoding: "ieee-p1363",
+      },
       Buffer.from(signature, "base64url"),
     );
     expect(ok).toBe(true);

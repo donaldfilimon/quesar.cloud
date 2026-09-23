@@ -49,7 +49,11 @@ export const authConfigured = authEnabledOnServer();
 // Local `npm run dev` (port 8080). Browsers may send Origin as any of these for
 // the same server; trusting only `localhost` rejects `127.0.0.1` and breaks
 // email/password with "Invalid origin".
-const LOCAL_DEV_ORIGINS: string[] = ["http://localhost:8080", "http://127.0.0.1:8080", "http://[::1]:8080"];
+const LOCAL_DEV_ORIGINS: string[] = [
+  "http://localhost:8080",
+  "http://127.0.0.1:8080",
+  "http://[::1]:8080",
+];
 
 // The public origin. Deployed builds set BETTER_AUTH_URL; local dev falls back
 // to a dynamic baseURL restricted to the loopback hosts.

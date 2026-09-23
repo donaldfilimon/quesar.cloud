@@ -33,10 +33,13 @@ Spec: `notes/superpowers/specs/2026-09-22-mlai-merge-design.md`. Checklist: `not
 
 - **Google Drive and Microsoft SharePoint/OneDrive use our own OAuth connectors**
   (`/api/workspace/*`). These are *data connectors*, not sign-in methods.
-- **Admin** = `ADMIN_EMAILS` allowlist **plus** a linked, verified OAuth account.
-  An allowlisted email/password account is refused, because sign-up is open and
-  unverified (`src/lib/server/admin.server.ts`, with a test proving the
-  refusal).
+- **Sign-in is first-party Better Auth (2026-09-23):** email/password,
+  passkeys (`@better-auth/passkey`), and Google, Apple and X, each offered only
+  once its credentials are set (`src/lib/auth/methods.server.ts`). No broker.
+- **Admin** = `ADMIN_EMAILS` allowlist **plus** a linked Google or Apple
+  account. An allowlisted email/password account is refused, because sign-up is
+  open and unverified; X and passkeys never grant admin
+  (`src/lib/server/admin.server.ts`, with tests proving each refusal).
 - **Every app table is user-scoped by the Better Auth `user.id`.** WorkOS,
   organisations and MFA are retired.
 - **Data at rest**: audits and workspace refresh tokens are sealed with
@@ -63,6 +66,11 @@ Spec: `notes/superpowers/specs/2026-09-22-mlai-merge-design.md`. Checklist: `not
 | `APP_ENCRYPTION_KEY_PREVIOUS` | key rotation | values sealed under the old key stop opening; connectors show "reconnect" |
 | `CRON_SECRET` | daily audit expiry (`/api/cron/audits-expire`, scheduled in `vite.config.ts` → Vercel `crons`) | the job answers 503; expired audits are not deleted |
 | `ADMIN_EMAILS` | `/admin` | nobody is admin |
+| `BETTER_AUTH_SECRET` | session signing | a per-process random secret: sessions break across restarts and instances |
+| `BETTER_AUTH_URL` | auth origin, passkey relying party | only the local `:8080` origins are trusted; passkeys use `localhost` |
+| `GOOGLE_SIGNIN_CLIENT_ID`/`_SECRET` (falls back to `GOOGLE_OAUTH_*`) | Google sign-in | no Google button |
+| `APPLE_CLIENT_ID`/`_TEAM_ID`/`_KEY_ID`/`_PRIVATE_KEY` | Apple sign-in (client secret minted from the key) | no Apple button |
+| `TWITTER_CLIENT_ID`/`_SECRET` | X sign-in | no X button |
 | `GOOGLE_OAUTH_CLIENT_ID`/`_SECRET`, `MICROSOFT_OAUTH_CLIENT_ID`/`_SECRET`/`_TENANT` | workspace sources | connect buttons disabled |
 | `STRIPE_PAYMENT_LINK`, `BILLING_PROVIDER` | profile billing | "billing not configured" |
 | `TURNSTILE_SITE_KEY`/`_SECRET`/`_HOSTNAMES` | contact form bot check | form works without the challenge, rate-limited |

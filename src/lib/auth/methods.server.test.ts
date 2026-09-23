@@ -54,10 +54,16 @@ describe("signInMethods", () => {
     clear();
     process.env.GOOGLE_OAUTH_CLIENT_ID = "drive-id";
     process.env.GOOGLE_OAUTH_CLIENT_SECRET = "drive-secret";
-    expect(socialCredentials().google).toEqual({ clientId: "drive-id", clientSecret: "drive-secret" });
+    expect(socialCredentials().google).toEqual({
+      clientId: "drive-id",
+      clientSecret: "drive-secret",
+    });
     process.env.GOOGLE_SIGNIN_CLIENT_ID = "signin-id";
     process.env.GOOGLE_SIGNIN_CLIENT_SECRET = "signin-secret";
-    expect(socialCredentials().google).toEqual({ clientId: "signin-id", clientSecret: "signin-secret" });
+    expect(socialCredentials().google).toEqual({
+      clientId: "signin-id",
+      clientSecret: "signin-secret",
+    });
   });
 
   it("mints the Apple secret from a complete key set, and lists providers in a stable order", () => {

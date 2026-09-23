@@ -21,7 +21,10 @@ export const APPLE_SECRET_TTL_SECONDS = 180 * 24 * 60 * 60;
 
 const base64url = (input: Buffer | string) => Buffer.from(input).toString("base64url");
 
-export function appleClientSecret(key: AppleKey, nowSeconds = Math.floor(Date.now() / 1000)): string {
+export function appleClientSecret(
+  key: AppleKey,
+  nowSeconds = Math.floor(Date.now() / 1000),
+): string {
   const header = { alg: "ES256", kid: key.keyId };
   const payload = {
     iss: key.teamId,
@@ -31,7 +34,9 @@ export function appleClientSecret(key: AppleKey, nowSeconds = Math.floor(Date.no
     sub: key.clientId,
   };
   const signingInput = `${base64url(JSON.stringify(header))}.${base64url(JSON.stringify(payload))}`;
-  const pem = key.privateKey.includes("\\n") ? key.privateKey.replace(/\\n/g, "\n") : key.privateKey;
+  const pem = key.privateKey.includes("\\n")
+    ? key.privateKey.replace(/\\n/g, "\n")
+    : key.privateKey;
   // JOSE wants the raw r||s signature, not DER.
   const signature = sign("sha256", Buffer.from(signingInput), {
     key: createPrivateKey(pem),

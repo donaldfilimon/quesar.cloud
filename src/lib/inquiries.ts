@@ -17,17 +17,17 @@ export { INQUIRY_LIMITS, TOPICS, type InquiryResult, type InquiryTopic } from "@
  * shared dev user, which would stamp every anonymous inquiry with it.
  */
 const optionalSession = createMiddleware({ type: "function" }).server(async ({ next }) => {
-    const { assertSameSiteRequest } = await import("@/lib/auth/isolation.server");
-    assertSameSiteRequest();
-    let userId: string | null = null;
-    try {
-      const { getSessionUser } = await import("@/lib/auth/verify.server");
-      userId = (await getSessionUser())?.id ?? null;
-    } catch {
-      userId = null;
-    }
-    return next({ context: { userId } });
-  });
+  const { assertSameSiteRequest } = await import("@/lib/auth/isolation.server");
+  assertSameSiteRequest();
+  let userId: string | null = null;
+  try {
+    const { getSessionUser } = await import("@/lib/auth/verify.server");
+    userId = (await getSessionUser())?.id ?? null;
+  } catch {
+    userId = null;
+  }
+  return next({ context: { userId } });
+});
 
 export const sendInquiry = createServerFn({ method: "POST" })
   .middleware([optionalSession])
@@ -39,15 +39,15 @@ export const sendInquiry = createServerFn({ method: "POST" })
   });
 
 export type TurnstileConfig =
-  | { state: "off" }
-  | { state: "misconfigured" }
-  | { state: "ready"; siteKey: string };
+  { state: "off" } | { state: "misconfigured" } | { state: "ready"; siteKey: string };
 
 /** The public Turnstile site key, read from the server environment (never bundled). */
-export const getTurnstileConfig = createServerFn({ method: "GET" }).handler(async (): Promise<TurnstileConfig> => {
-  const { turnstileSiteKey, turnstileState } = await import("@/lib/server/turnstile.server");
-  const state = turnstileState();
-  const siteKey = turnstileSiteKey();
-  if (state === "ready" && siteKey) return { state, siteKey };
-  return state === "misconfigured" ? { state } : { state: "off" };
-});
+export const getTurnstileConfig = createServerFn({ method: "GET" }).handler(
+  async (): Promise<TurnstileConfig> => {
+    const { turnstileSiteKey, turnstileState } = await import("@/lib/server/turnstile.server");
+    const state = turnstileState();
+    const siteKey = turnstileSiteKey();
+    if (state === "ready" && siteKey) return { state, siteKey };
+    return state === "misconfigured" ? { state } : { state: "off" };
+  },
+);

@@ -51,7 +51,8 @@ export function socialCredentials(): SocialCredentials {
 
   const twitterId = env("TWITTER_CLIENT_ID");
   const twitterSecret = env("TWITTER_CLIENT_SECRET");
-  if (twitterId && twitterSecret) out.twitter = { clientId: twitterId, clientSecret: twitterSecret };
+  if (twitterId && twitterSecret)
+    out.twitter = { clientId: twitterId, clientSecret: twitterSecret };
 
   return out;
 }
@@ -63,8 +64,8 @@ export function authEnabledOnServer(): boolean {
 
 export function signInMethods(credentials: SocialCredentials = socialCredentials()): SignInMethods {
   if (!authEnabledOnServer()) return { email: false, passkey: false, social: [] };
-  const social = (["google", "apple", "twitter"] as const).filter(
-    (id): id is SocialProviderId => Boolean(credentials[id]),
+  const social = (["google", "apple", "twitter"] as const).filter((id): id is SocialProviderId =>
+    Boolean(credentials[id]),
   );
   return { email: true, passkey: true, social };
 }
