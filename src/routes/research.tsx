@@ -100,7 +100,7 @@ function ResearchPage() {
             papers.map((paper) => (
               <Link key={paper.slug} to="/research/$slug" params={{ slug: paper.slug }} className="no-underline">
                 <Surface hover>
-                  <p className="font-mono text-[0.68rem] tracking-[0.16em] text-accent uppercase">
+                  <p className="text-xs text-accent">
                     {paper.tag} · {paper.documentType.replaceAll("-", " ")} · {paper.status} · {paper.date} · {paper.readTime}
                   </p>
                   <h3 className="mt-2 font-display text-xl">{paper.title}</h3>
@@ -126,7 +126,7 @@ function ResearchPage() {
               className="no-underline"
             >
               <Surface hover className="h-full">
-                <p className="font-mono text-[0.68rem] tracking-[0.16em] text-accent uppercase">
+                <p className="text-xs text-accent">
                   {item.relatedTopics.join(" · ")}
                 </p>
                 <h3 className="mt-2 font-display text-xl">{item.title}</h3>

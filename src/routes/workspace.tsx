@@ -19,7 +19,6 @@ function WorkspacePage() {
         eyebrow="Workspace"
         title="Documents, on this machine."
         lede="The shipping Abbey workspace runs locally with SQLite, Better Auth, a Python worker, and an agent package. This page is the in-browser orientation of that loop."
-        atmosphere="lab"
       >
         <HeroStatus status="current" note="Notes stay in this browser. Live model requires sign-in." />
       </PageHero>

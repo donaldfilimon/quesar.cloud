@@ -56,7 +56,7 @@ function Desk({ name }: { name: string }) {
     <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-12">
       <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="font-mono text-[0.68rem] tracking-[0.16em] text-primary uppercase">Signed-in desk</p>
+          <p className="text-xs text-primary">Signed-in desk</p>
           <h1 className="mt-2 font-display text-3xl tracking-tight sm:text-5xl">Hello, {name}.</h1>
           <p className="mt-3 max-w-[66ch] text-base leading-7 text-fg">
             Abbey, Aviva, Abi, Quesar, and WDBX answer through one API. WDBX here is lexical catalog retrieval, not the Rust index.
@@ -105,12 +105,12 @@ function Desk({ name }: { name: string }) {
         </aside>
 
         <section className="min-w-0 rounded-xl border border-border bg-card p-4 sm:p-6">
-          <p className="font-mono text-[0.68rem] tracking-[0.16em] text-primary uppercase">{current.name}</p>
+          <p className="text-xs text-primary">{current.name}</p>
           <p className="mt-2 text-base leading-7 text-fg">{current.line}</p>
 
           {reply ? (
             <div className="mt-6">
-              <p className="font-mono text-[11px] tracking-[0.14em] text-fg-subtle uppercase">
+              <p className="text-xs text-fg-subtle">
                 {reply.mode === "model" ? "Model endpoint" : "Local catalog"}
               </p>
               <p className="mt-3 max-w-[66ch] text-[1.0625rem] leading-8 text-fg">{reply.text}</p>

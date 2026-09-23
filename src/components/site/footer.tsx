@@ -54,7 +54,7 @@ export function SiteFooter() {
             MLAI Corporation builds assistant workflows, memory systems, and developer tools with
             inspectable sources and explicit implementation boundaries.
           </p>
-          <p className="mt-6 font-mono text-[0.62rem] tracking-[0.18em] text-fg-subtle uppercase">
+          <p className="mt-6 text-xs text-fg-subtle">
             QSR-WEB · Local orientation · No hosted session
           </p>
           <ProvLegend className="mt-6 max-w-sm" />
@@ -62,7 +62,7 @@ export function SiteFooter() {
         <div className="grid grid-cols-2 gap-8 sm:grid-cols-3">
           {groups.map((group) => (
             <div key={group.title}>
-              <p className="font-mono text-[0.68rem] font-medium tracking-[0.16em] text-fg-subtle uppercase">
+              <p className="text-xs font-medium text-fg-subtle">
                 {group.title}
               </p>
               <ul className="mt-3 space-y-2">

@@ -10,7 +10,7 @@ export function PersonaRouter({ compact = false }: { compact?: boolean }) {
 
   return (
     <div className="surface p-5 sm:p-6">
-      <p className="font-mono text-[0.68rem] tracking-[0.16em] text-accent uppercase">Persona router</p>
+      <p className="text-xs text-accent">Persona router</p>
       <p className="mt-2 text-sm text-fg-muted">
         Illustrative keyword-sentiment heuristic. The inspected local router uses deterministic rules; this is not evidence of a learned classifier.
       </p>
@@ -28,7 +28,7 @@ export function PersonaRouter({ compact = false }: { compact?: boolean }) {
         <Meter label="Aviva 1−α" value={1 - scores.alpha} tone="bg-persona-aviva" />
         <Meter label="Abi blend" value={0.5} tone="bg-persona-abi" />
       </dl>
-      <p className="mt-4 font-mono text-[11px] tracking-wide text-fg-subtle uppercase">{voice}</p>
+      <p className="mt-4 text-xs text-fg-subtle">{voice}</p>
       <p className="mt-2 font-display text-xl">α = {scores.alpha.toFixed(2)}</p>
     </div>
   );
@@ -37,7 +37,7 @@ export function PersonaRouter({ compact = false }: { compact?: boolean }) {
 function Meter({ label, value, tone }: { label: string; value: number; tone: string }) {
   return (
     <div>
-      <p className="font-mono text-[10px] tracking-wide text-fg-subtle uppercase">{label}</p>
+      <p className="text-xs text-fg-subtle">{label}</p>
       <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-bg-subtle">
         <div className={cn("h-full rounded-full", tone)} style={{ width: `${Math.round(value * 100)}%` }} />
       </div>

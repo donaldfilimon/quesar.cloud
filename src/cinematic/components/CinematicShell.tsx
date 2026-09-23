@@ -44,10 +44,10 @@ export function CinematicShell({
   background?: string;
 }) {
   useInertPageChrome();
-  // Portal to <body>: quesar's route wrapper (.page-enter) keeps a transform,
-  // which makes it the containing block for position:fixed and collapses the
-  // overlay to the wrapper's height. Rooms are client-only (ssr: false), so
-  // document exists here.
+  // Portal to <body> so the full-screen room never depends on its ancestors:
+  // any transform, filter or backdrop-filter above it would become the
+  // containing block for position:fixed and clip the overlay. Rooms are
+  // client-only (ssr: false), so document exists here.
   return createPortal(
     <div className="mlai-ds fixed inset-0 z-80" style={{ background }}>
       {children}

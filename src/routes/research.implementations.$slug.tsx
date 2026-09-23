@@ -34,7 +34,7 @@ function ImplementationPage() {
           { label: item.title },
         ]}
       />
-      <PageHero eyebrow="Research · implementation" title={item.title} lede={item.summary} atmosphere="none" compact />
+      <PageHero eyebrow="Research · implementation" title={item.title} lede={item.summary} compact />
       <Section className="!pt-10">
         <div className="grid gap-10 lg:grid-cols-[16rem_minmax(0,1fr)]">
           <ResearchSidebar current={item.slug} />

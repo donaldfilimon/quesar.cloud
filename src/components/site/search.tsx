@@ -163,7 +163,7 @@ export function SiteSearch() {
           aria-label="Search the site"
         >
           <SearchIcon className="size-4" strokeWidth={1.75} />
-          <span className="hidden font-mono text-[10px] tracking-[0.14em] uppercase xl:inline">Search</span>
+          <span className="hidden text-xs xl:inline">Search</span>
           <kbd className="hidden rounded-sm bg-bg-subtle px-1.5 py-0.5 font-mono text-[10px] text-fg-subtle xl:inline">
             ⌘K
           </kbd>
@@ -193,7 +193,7 @@ export function SiteSearch() {
                 onSelect={() => go(hit)}
                 className="flex cursor-pointer flex-col items-start gap-0.5 px-4 py-3 data-[selected=true]:bg-bg-subtle"
               >
-                <span className="font-mono text-[10px] tracking-[0.16em] text-fg-subtle uppercase">{hit.group}</span>
+                <span className="text-xs text-fg-subtle">{hit.group}</span>
                 <span className="text-sm font-medium text-fg">{hit.title}</span>
                 <span className="line-clamp-1 text-xs text-fg-muted">{hit.body}</span>
               </Command.Item>

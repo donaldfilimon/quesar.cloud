@@ -119,7 +119,7 @@ export function WorkspaceApp() {
     <div className="overflow-hidden rounded-xl border border-border bg-card lg:grid lg:min-h-[32rem] lg:grid-cols-[16rem_minmax(0,1fr)_18rem]">
       <aside className="border-b border-border lg:border-r lg:border-b-0">
         <div className="flex items-center justify-between gap-2 px-3 py-3">
-          <p className="font-mono text-[10px] tracking-[0.16em] text-accent uppercase">Documents</p>
+          <p className="text-xs text-accent">Documents</p>
           <Button type="button" size="sm" onClick={createDoc}>
             New
           </Button>
@@ -183,7 +183,7 @@ export function WorkspaceApp() {
         ) : null}
       </div>
       <aside className="p-4 sm:p-5">
-        <p className="font-mono text-[10px] tracking-[0.16em] text-accent uppercase">Assistant</p>
+        <p className="text-xs text-accent">Assistant</p>
         <p className="mt-2 text-xs text-fg-muted">
           {user ? "Signed in. Live model is user-initiated and capped." : "Local notes work offline. Sign in to ask Abbey."}
         </p>

@@ -1,49 +1,15 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useRef, useState, type MouseEvent } from "react";
-import { ArchitectureDiagram } from "@/components/diagram/architecture-diagram";
+import type { ReactNode } from "react";
 import { ChipCutaway } from "@/components/diagram/chip-cutaway";
-import { HeroField } from "@/components/diagram/hero-field";
-import { RepoList } from "@/components/github/repo-list";
-import { SourcePanel } from "@/components/github/source-panel";
 import { Backtrace } from "@/components/site/backtrace";
-import { Button } from "@/components/ui/button";
-import {
-  CopyGrid,
-  DataTable,
-  FaqList,
-  IntegrityList,
-  PersonaGrid,
-  ProjectRows,
-  Section,
-  Surface,
-  TruthList,
-} from "@/components/site";
-import { AtmosphereMedia, Readout, Ticks } from "@/components/site/instrument";
+import { HomeResearchPreview } from "@/components/site/home-sections";
 import { Trailer } from "@/components/site/trailer";
-import { StatusBadge } from "@/components/site/status-badge";
-import { ProvLegend, ProvTag } from "@/components/site/prov-tag";
-import { cn } from "@/lib/utils";
-import {
-  faqs,
-  homePrivacy,
-  homeProposition,
-  homeStart,
-  integrationApps,
-  integrityRules,
-  products,
-  site,
-  statusCopy,
-  type StatusKind,
-} from "@/lib/content";
-import { pageHead } from "@/lib/seo";
-import { jsonLdScript } from "@/lib/mlai/structured-data";
+import { Button } from "@/components/ui/button";
+import { homePrivacy, homeStart, site } from "@/lib/content";
 import { wdbxFacts } from "@/lib/mlai/pages";
-import {
-  HomeControlPlane,
-  HomeCta,
-  HomeProductBoundary,
-  HomeResearchPreview,
-} from "@/components/site/home-sections";
+import { jsonLdScript } from "@/lib/mlai/structured-data";
+import { pageHead } from "@/lib/seo";
+import { cn } from "@/lib/utils";
 
 const organizationLd = {
   "@context": "https://schema.org",
@@ -62,9 +28,13 @@ const organizationLd = {
   ],
 };
 
+const HOME_TITLE = `${site.name}: AI memory that can show its sources`;
+const HOME_DESCRIPTION =
+  "Quesar is MLAI's infrastructure for persistent AI. Every answer keeps a weighted chain back to the records it came from, on machines you own.";
+
 export const Route = createFileRoute("/")({
   head: () => ({
-    ...pageHead(`${site.name} — Private intelligence, built around you`, site.description),
+    ...pageHead(HOME_TITLE, HOME_DESCRIPTION),
     scripts: [jsonLdScript(organizationLd)],
   }),
   component: Home,
@@ -74,311 +44,88 @@ function Home() {
   return (
     <>
       <Hero />
-      <HomeJump />
-      <section id="origin" className="statement-band scroll-mt-32">
-        <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">
-          <p className="eyebrow">Origin</p>
-          <blockquote className="mt-8 max-w-4xl font-display text-[1.85rem] leading-[1.18] tracking-tight italic sm:text-4xl lg:text-[2.75rem]">
-            {site.origin}
-          </blockquote>
-        </div>
-      </section>
-      <Section
+      <Row id="problem" label="The problem" title="Sessions forget. A substrate keeps the record.">
+        <Transcripts />
+      </Row>
+      <Row
         id="stack"
-        className="scroll-mt-32"
-        eyebrow="Stack"
-        title="Abbey on ABI on WDBX."
-        lede="The M in the mark is a weighted directed graph. The stack is the same shape: application, compute, storage — inspectable at every node."
+        label="The stack"
+        title="Abbey runs on ABI, which runs on WDBX."
+        lede="Abbey is the assistant people talk to. ABI orchestrates the work. WDBX stores every episode with its provenance. Pick a layer to see what is in source today."
+        wide
       >
         <ChipCutaway />
-      </Section>
-      <HomeArchitecture />
-      <section id="trailer" className="scroll-mt-32 border-y border-border">
-        <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">
-          <p className="eyebrow">Trailer</p>
-          <div className="mt-6 flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
-            <div className="max-w-2xl">
-              <h2 className="section-title">Infrastructure first. Then the assistant.</h2>
-              <p className="mt-5 max-w-[66ch] text-lg leading-8 text-fg">
-                Three cuts, played here: the mark, the wafer, and the board. Labels, not a live runtime.
-              </p>
+      </Row>
+      <Row
+        id="retrieval"
+        label="Retrieval"
+        title="Configuration facts, read from the implementation."
+        lede="These are the active Rust crate's settings, not recall, throughput or latency claims."
+      >
+        <dl className="divide-y divide-border border-y border-border">
+          {wdbxFacts.map((row) => (
+            <div key={row.k} className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 py-3.5">
+              <dt className="text-sm text-fg-muted">{row.k}</dt>
+              <dd className="font-mono text-sm text-fg">{row.v}</dd>
             </div>
-            <div className="flex flex-wrap gap-3">
-              <Button asChild size="lg">
-                <Link to="/quesar">Explore Quesar</Link>
-              </Button>
-              <Button asChild variant="secondary" size="lg">
-                <Link to="/showcase/trailer">Full trailer</Link>
-              </Button>
-            </div>
-          </div>
-          <div className="mt-10">
-            <Trailer full />
-          </div>
-        </div>
-      </section>
-      <Section eyebrow="Orientation" title="Start simple. Then inspect the machinery.">
-        <TruthList items={homeProposition} />
-        <div className="mt-12">
-          <IntegrityList rules={integrityRules.slice(0, 3)} />
-        </div>
-      </Section>
-      <Section
-        eyebrow="Personas"
-        title="Abbey, Aviva, Abi."
-        lede="Three profiles share one core. Product accents and persona colors are different axes: the ABI product is violet; the Abi persona is cyan. A reader learns each color once."
-      >
-        <PersonaGrid />
-      </Section>
-      <Memory />
-      <HomeControlPlane />
-      <Section
-        id="products"
-        eyebrow="System"
-        title="Three layers. One chip."
-        lede="Abbey is the human-facing experience. ABI is orchestration. WDBX is the memory substrate. Quesar is the platform that makes the relationships obvious."
-      >
-        <ProjectRows items={products} />
-      </Section>
-      <Section
-        eyebrow="Active Rust substrate"
-        title="Retrieval facts, sourced from the implementation."
-        lede="The active crate — not a frozen documentation mirror — is authoritative. These are configuration facts, not benchmark claims."
-      >
-        <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
-          <Surface accent="wdbx" className="p-8">
-            <h3 className="font-display text-3xl tracking-tight">Inspectable nearest-neighbor retrieval.</h3>
-            <p className="mt-4 max-w-xl text-sm leading-relaxed text-fg-muted">
-              The substrate implements a layered HNSW graph, validates structure, rebuilds against real vectors in tests,
-              and pairs retrieval with MVCC. It does not claim production multi-host sharding.
-            </p>
-            <div className="mt-6">
-              <ProvTag tag="measured" />
-            </div>
-          </Surface>
-          <dl className="surface divide-y divide-border overflow-hidden">
-            {wdbxFacts.map((row) => (
-              <div key={row.k} className="flex items-baseline justify-between gap-4 px-5 py-3.5">
-                <dt className="font-mono text-[11px] tracking-wide text-fg-subtle uppercase">{row.k}</dt>
-                <dd className="font-mono text-sm text-fg">{row.v}</dd>
-              </div>
-            ))}
-          </dl>
-        </div>
-        <p className="mt-5 text-sm text-fg-subtle">
-          Graph defaults above are implementation configuration. They are not recall, QPS, or latency claims.
-        </p>
-      </Section>
-      <Section
-        eyebrow="GitHub"
-        title="The public tree is the source of truth."
-        lede="Live metadata from donaldfilimon when GitHub answers. Independent gates: a green web check is not mobile evidence."
-      >
-        <div className="mb-8">
-          <SourcePanel />
-        </div>
-        <div className="mb-8">
-          <DataTable
-            rows={integrationApps}
-            rowKey={(row) => row.path}
-            columns={[
-              { header: "Path", className: "font-mono text-[12px]", cell: (row) => row.path },
-              { header: "Purpose", className: "text-fg-muted", cell: (row) => row.purpose },
-              { header: "Gate", className: "font-mono text-[11px] text-fg-subtle", cell: (row) => row.gate },
-              { header: "Status", cell: (row) => <StatusBadge status={row.status} /> },
-            ]}
-          />
-        </div>
-        <RepoList compact />
-        <div className="mt-6">
-          <Button asChild variant="secondary">
-            <Link to="/developers">Open the source index</Link>
-          </Button>
-        </div>
-      </Section>
-      <HomeProductBoundary />
-      <HomeResearchPreview />
-      <Section
-        eyebrow="Start"
-        title="What would you like to do?"
-        lede="Orientation here. Setup in docs and apps. Each surface has its own gate — a green web check is not mobile evidence."
-      >
-        <CopyGrid items={homeStart} />
-      </Section>
-      <section className="relative overflow-hidden border-y border-border">
-        <AtmosphereMedia still="/media/atmosphere-lab.jpg" />
-        <div className="hero-vignette pointer-events-none absolute inset-0" />
-        <div className="relative mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">
-          <header className="mb-12 max-w-3xl">
-            <p className="eyebrow">Privacy</p>
-            <h2 className="section-title mt-4">Privacy is architecture, not a slogan.</h2>
-            <p className="mt-5 max-w-2xl text-base leading-relaxed text-fg-muted sm:text-lg">
-              Data ownership, local processing, controlled memory, and provenance are mechanisms. They have scope. The
-              scope is documented.
-            </p>
-          </header>
-          <CopyGrid items={homePrivacy} />
-          <p className="mt-8 max-w-2xl text-sm text-fg-subtle">{site.apple}</p>
-        </div>
-      </section>
-      <Section
-        eyebrow="FAQ"
-        title="Short answers. No borrowed benchmarks."
-        lede="Native disclosure. If a number is not in the public skill-creator master reference, it does not ship."
-      >
-        <FaqList items={faqs} />
-      </Section>
-      <Section
-        eyebrow="Status"
-        title="Labels are not interchangeable."
-        lede="Current, Partial, Experimental, In development, Planned, and Research mean different things. Planned functionality is never presented as shipping. Figures carry a separate provenance tag."
-      >
-        <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {(Object.keys(statusCopy) as StatusKind[]).map((key) => (
-            <li key={key} className="surface p-5">
-              <StatusBadge status={key} />
-              <p className="mt-2 text-sm text-fg-muted">{statusCopy[key].meaning}</p>
-            </li>
           ))}
-        </ul>
-        <ProvLegend className="mt-8" />
-      </Section>
-      <HomeCta />
-      <section className="border-t border-border">
-        <div className="mx-auto max-w-6xl px-4 py-24 sm:px-6">
-          <p className="eyebrow">Next</p>
-          <h2 className="section-title mt-4 max-w-2xl">Inspect the stack, or keep a note.</h2>
-          <div className="mt-9 flex flex-wrap gap-3">
-            <Button asChild size="lg">
-              <Link to="/architecture">Architecture</Link>
-            </Button>
-            <Button asChild variant="secondary" size="lg">
-              <Link to="/investors">Investors</Link>
-            </Button>
-            <Button asChild variant="ghost" size="lg">
-              <Link to="/developers">Developers</Link>
-            </Button>
-          </div>
-        </div>
-      </section>
+        </dl>
+      </Row>
+      <Row
+        id="film"
+        label="The film"
+        title="See the system before you read about it."
+        lede="A short cut of the mark, the wafer and the board. It plays when you press play, with labels rather than a live runtime."
+      >
+        <Trailer />
+        <p className="mt-4 text-sm">
+          <Link to="/showcase" className="text-accent underline-offset-4 hover:underline">
+            Open the showcase rooms
+          </Link>
+        </p>
+      </Row>
+      <HomeResearchPreview />
+      <Row
+        id="privacy"
+        label="Privacy"
+        title="Privacy is a mechanism, and every mechanism has a scope."
+      >
+        <dl className="grid gap-x-10 gap-y-8 sm:grid-cols-2">
+          {homePrivacy.map((item) => (
+            <div key={item.title}>
+              <dt className="font-display text-lg tracking-tight">{item.title}</dt>
+              <dd className="mt-2 text-[0.9375rem] leading-relaxed text-fg-muted">{item.body}</dd>
+            </div>
+          ))}
+        </dl>
+        <p className="mt-8 text-sm text-fg-subtle">{site.apple}</p>
+      </Row>
+      <StartHere />
     </>
   );
 }
 
-const HOME_JUMP = [
-  { href: "#origin", label: "Origin" },
-  { href: "#stack", label: "Stack" },
-  { href: "#architecture", label: "Architecture" },
-  { href: "#trailer", label: "Trailer" },
-] as const;
-
-function HomeJump() {
-  const [active, setActive] = useState<(typeof HOME_JUMP)[number]["href"]>("#origin");
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-        if (!visible?.target.id) return;
-        setActive(`#${visible.target.id}` as (typeof HOME_JUMP)[number]["href"]);
-      },
-      { rootMargin: "-28% 0px -58% 0px", threshold: [0.1, 0.35, 0.6] },
-    );
-    for (const item of HOME_JUMP) {
-      const el = document.getElementById(item.href.slice(1));
-      if (el) observer.observe(el);
-    }
-    return () => observer.disconnect();
-  }, []);
-
-  return (
-    <nav aria-label="On this page" className="sticky top-16 z-30 border-b border-border bg-bg/78 backdrop-blur-md">
-      <ul className="mx-auto flex max-w-6xl gap-1 overflow-x-auto px-4 sm:px-6">
-        {HOME_JUMP.map((item) => (
-          <li key={item.href}>
-            <a
-              href={item.href}
-              aria-current={active === item.href ? "location" : undefined}
-              className={cn(
-                "inline-flex h-11 items-center px-3 text-sm no-underline",
-                active === item.href ? "text-fg" : "text-fg-muted hover:text-fg",
-              )}
-            >
-              {item.label}
-            </a>
-          </li>
-        ))}
-      </ul>
-    </nav>
-  );
-}
-
-function HomeArchitecture() {
-  const [node, setNode] = useState("quesar");
-  return (
-    <Section
-      id="architecture"
-      className="scroll-mt-32"
-      eyebrow="Architecture"
-      title="The interface is a window into the system."
-      lede="Click a node. The inspector lists what is current in source versus what is not claimed. Select a component, then save a field note after you sign in."
-    >
-      <ArchitectureDiagram compact selectedId={node} onSelect={setNode} />
-    </Section>
-  );
-}
-
 function Hero() {
-  const stage = useRef<HTMLElement>(null);
-
-  function onMove(event: MouseEvent<HTMLElement>) {
-    const el = stage.current;
-    if (!el) return;
-    const rect = el.getBoundingClientRect();
-    el.style.setProperty("--spot-x", `${event.clientX - rect.left}px`);
-    el.style.setProperty("--spot-y", `${event.clientY - rect.top}px`);
-  }
-
   return (
-    <section ref={stage} onMouseMove={onMove} className="hero-grid relative overflow-hidden border-b border-border">
-      <AtmosphereMedia still="/media/atmosphere-wafer.jpg" video="/media/atmosphere-wafer.mp4" />
-      <HeroField />
-      <div className="hero-wash pointer-events-none absolute inset-0" />
-      <div className="hero-vignette pointer-events-none absolute inset-0" />
-      <div className="hero-spot pointer-events-none absolute inset-0" />
-      <div className="relative mx-auto grid min-h-[calc(100dvh-4rem)] max-w-6xl items-center gap-12 px-4 py-16 sm:px-6 lg:grid-cols-[minmax(0,1.08fr)_minmax(0,0.92fr)] lg:py-20">
-        <Ticks />
-        <div className="stagger-in relative">
+    <section className="border-b border-border">
+      <div className="mx-auto grid max-w-6xl gap-12 px-4 pt-14 pb-16 sm:px-6 sm:pt-20 sm:pb-24 lg:grid-cols-12 lg:items-end lg:gap-10">
+        <div className="lg:col-span-7">
           <p className="eyebrow">Quesar by MLAI</p>
-          <h1 className="display-title mt-6">
-            Private intelligence,
-            <br />
-            <em>built around you.</em>
-          </h1>
-          <p className="mt-7 max-w-xl text-base leading-relaxed text-fg-muted sm:text-lg">
-            Quesar is MLAI's infrastructure for persistent, adaptive AI — orchestration you can inspect, memory that
-            keeps a chain, compute that stays on machines you own.
+          <h1 className="display-title mt-6 max-w-[14ch]">AI memory that can show its sources.</h1>
+          <p className="mt-7 max-w-[54ch] text-lg leading-8 text-fg-muted">
+            Quesar is MLAI's infrastructure for persistent AI. Every answer keeps a weighted chain back to the records
+            it came from, and the whole stack runs on machines you own.
           </p>
           <div className="mt-9 flex flex-wrap gap-3">
             <Button asChild size="lg">
-              <Link to="/quesar">Explore Quesar</Link>
+              <Link to="/architecture">See how it works</Link>
             </Button>
             <Button asChild variant="secondary" size="lg">
-              <Link to="/architecture">Explore the architecture</Link>
-            </Button>
-            <Button asChild variant="ghost" size="lg">
               <Link to="/developers">Read the source</Link>
             </Button>
           </div>
-          <div className="mt-12 grid grid-cols-3 gap-3 border-t border-border pt-6 sm:gap-6">
-            <Readout k="Posture" v="Local-first" />
-            <Readout k="Memory" v="Provenance-aware" />
-            <Readout k="Source" v="Inspectable" />
-          </div>
         </div>
-        <div className="relative">
+        <div className="lg:col-span-5">
           <Backtrace />
         </div>
       </div>
@@ -386,53 +133,111 @@ function Hero() {
   );
 }
 
-function Memory() {
+/**
+ * Editorial row: the section's name and claim on the left five columns, the
+ * evidence on the right seven. `wide` puts the evidence full width below.
+ */
+function Row({
+  id,
+  label,
+  title,
+  lede,
+  wide = false,
+  children,
+}: {
+  id: string;
+  label: string;
+  title: string;
+  lede?: string;
+  wide?: boolean;
+  children: ReactNode;
+}) {
   return (
-    <Section
-      eyebrow="Memory"
-      title="Sessions forget. Substrates don't."
-      lede="The problem Quesar is built around is not model quality. It is that conventional assistants discard the record the moment the tab closes."
-    >
-      <div className="relative overflow-hidden rounded-3xl border border-border bg-card">
-        <AtmosphereMedia still="/media/atmosphere-board.jpg" video="/media/atmosphere-board.mp4" />
-        <div className="hero-vignette pointer-events-none absolute inset-0" />
-        <div className="relative p-5 sm:p-7">
-          <p className="font-mono text-[0.65rem] tracking-[0.14em] text-accent uppercase">The problem Quesar is built around</p>
-          <div className="mt-5 grid gap-3 sm:grid-cols-2">
-            <article className="rounded-lg border border-border bg-card/80 p-5 backdrop-blur-sm">
-              <p className="text-xs font-medium text-fg-subtle">Conventional session</p>
-              <p className="mt-3 font-mono text-[0.72rem] leading-7 text-fg-muted">
-                user: remember the deploy target
-                <br />
-                model: noted
-                <br />
-                <span className="text-status-partial">— session ends —</span>
-                <br />
-                user: what was the target
-                <br />
-                model: I don't have that
-              </p>
-            </article>
-            <article className="rounded-lg border border-border bg-card/80 p-5 backdrop-blur-sm">
-              <p className="text-xs font-medium text-fg-subtle">WDBX-backed context</p>
-              <p className="mt-3 font-mono text-[0.72rem] leading-7 text-fg-muted">
-                episode: deploy target recorded
-                <br />
-                provenance: signed, content-addressed
-                <br />
-                retrieval: causal + semantic
-                <br />
-                user: what was the target
-                <br />
-                <span className="text-status-current">context is still there</span>
-              </p>
-            </article>
-          </div>
-          <p className="mt-5 text-xs text-fg-subtle">
-            Memory here is a system capability — persistence, retrieval, provenance — not a claim of sentience.
-          </p>
+    <section id={id} aria-labelledby={`${id}-title`} className="scroll-mt-20 border-b border-border">
+      <div
+        className={cn(
+          "mx-auto grid max-w-6xl gap-10 px-4 py-16 sm:px-6 sm:py-24",
+          wide ? "" : "lg:grid-cols-12 lg:gap-10",
+        )}
+      >
+        <header className={cn(wide ? "max-w-3xl" : "lg:col-span-5")}>
+          <p className="eyebrow">{label}</p>
+          <h2 id={`${id}-title`} className="section-title mt-4">
+            {title}
+          </h2>
+          {lede ? <p className="mt-5 max-w-[52ch] text-base leading-relaxed text-fg-muted">{lede}</p> : null}
+        </header>
+        <div className={cn("min-w-0", wide ? "" : "lg:col-span-7")}>{children}</div>
+      </div>
+    </section>
+  );
+}
+
+function Transcripts() {
+  return (
+    <div className="grid gap-4 sm:grid-cols-2">
+      <figure className="rounded-lg bg-bg-elevated p-5 shadow-[var(--shadow-border)]">
+        <figcaption className="text-sm text-fg-muted">A conventional session</figcaption>
+        <p className="mt-3 font-mono text-[0.8125rem] leading-7 text-fg">
+          you: remember the deploy target
+          <br />
+          model: noted
+          <br />
+          <span className="text-status-partial">session ends</span>
+          <br />
+          you: what was the target?
+          <br />
+          model: I don't have that
+        </p>
+      </figure>
+      <figure className="rounded-lg bg-bg-elevated p-5 shadow-[var(--shadow-border)]">
+        <figcaption className="text-sm text-fg-muted">With WDBX underneath</figcaption>
+        <p className="mt-3 font-mono text-[0.8125rem] leading-7 text-fg">
+          episode: deploy target recorded
+          <br />
+          provenance: signed, content-addressed
+          <br />
+          retrieval: causal and semantic
+          <br />
+          you: what was the target?
+          <br />
+          <span className="text-status-current">answer cites the recorded episode</span>
+        </p>
+      </figure>
+      <p className="text-sm text-fg-subtle sm:col-span-2">
+        Memory here is a system capability: persistence, retrieval and provenance. It is not a claim of sentience.
+      </p>
+    </div>
+  );
+}
+
+function StartHere() {
+  return (
+    <section aria-labelledby="start-title">
+      <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24">
+        <p className="eyebrow">Start here</p>
+        <h2 id="start-title" className="section-title mt-4 max-w-[20ch]">
+          Pick the door that matches why you came.
+        </h2>
+        <ul className="mt-10 grid border-t border-border sm:grid-cols-2">
+          {homeStart.map((item) => (
+            <li key={item.href} className="border-b border-border sm:odd:border-r sm:odd:pr-8 sm:even:pl-8">
+              <Link to={item.href} className="group block py-6 no-underline">
+                <span className="font-display text-xl tracking-tight text-fg group-hover:text-accent">{item.title}</span>
+                <span className="mt-2 block text-[0.9375rem] leading-relaxed text-fg-muted">{item.body}</span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+        <div className="mt-10 flex flex-wrap gap-3">
+          <Button asChild size="lg">
+            <Link to="/get-started">Get started</Link>
+          </Button>
+          <Button asChild variant="secondary" size="lg">
+            <Link to="/contact">Start an inquiry</Link>
+          </Button>
         </div>
       </div>
-    </Section>
+    </section>
   );
 }

@@ -38,7 +38,7 @@ export function AdminPanels() {
   if (!status.admin) {
     return (
       <Surface className="max-w-2xl">
-        <p className="font-mono text-[0.68rem] tracking-[0.14em] text-accent uppercase">
+        <p className="text-xs text-accent">
           Not an admin
         </p>
         <p className="mt-3 text-sm text-fg">{REFUSAL[status.reason]}</p>

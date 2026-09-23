@@ -23,7 +23,7 @@ function StateRow({ label, ok, detail }: { label: string; ok: boolean; detail: s
   return (
     <div className="flex items-start justify-between gap-3 rounded-md bg-bg-subtle px-3 py-2">
       <div className="min-w-0">
-        <p className="font-mono text-[10px] tracking-[0.14em] text-fg-subtle uppercase">{label}</p>
+        <p className="text-xs text-fg-subtle">{label}</p>
         <p className="mt-0.5 break-words font-mono text-xs text-fg-muted">{detail}</p>
       </div>
       <span className={ok ? "text-xs text-status-current" : "text-xs text-status-partial"}>
@@ -151,7 +151,7 @@ export function ChatPanel({ onOpenAudits }: { onOpenAudits: () => void }) {
     <div className="grid gap-6 lg:grid-cols-[minmax(16rem,0.72fr)_minmax(0,1.28fr)]">
       <aside className="grid content-start gap-4">
         <Surface>
-          <p className="font-mono text-[0.68rem] tracking-[0.14em] text-accent uppercase">
+          <p className="text-xs text-accent">
             Generation boundary
           </p>
           <p className="mt-2 text-sm text-fg-muted">
@@ -185,7 +185,7 @@ export function ChatPanel({ onOpenAudits }: { onOpenAudits: () => void }) {
         </Surface>
 
         <Surface>
-          <p className="font-mono text-[0.68rem] tracking-[0.14em] text-accent uppercase">
+          <p className="text-xs text-accent">
             One-year audit policy
           </p>
           <p className="mt-2 text-sm text-fg-muted">
@@ -287,7 +287,7 @@ export function ChatPanel({ onOpenAudits }: { onOpenAudits: () => void }) {
           <ol className="grid gap-3" aria-label="This tab's conversation">
             {messages.slice(0, -1).map((message, index) => (
               <li key={index} className="rounded-lg bg-bg-subtle px-4 py-3 text-sm text-fg-muted">
-                <span className="font-mono text-[10px] tracking-[0.14em] text-fg-subtle uppercase">
+                <span className="text-xs text-fg-subtle">
                   {message.role}
                 </span>
                 <p className="mt-1 whitespace-pre-wrap">{message.content}</p>
@@ -299,7 +299,7 @@ export function ChatPanel({ onOpenAudits }: { onOpenAudits: () => void }) {
         {reply ? (
           <div className="rounded-xl bg-card p-5 shadow-[var(--shadow-border)]">
             <div className="flex items-center justify-between gap-3">
-              <span className="font-mono text-[10px] tracking-[0.2em] text-accent uppercase">
+              <span className="text-xs text-accent">
                 Quesar response
               </span>
               <div className="flex items-center gap-1">

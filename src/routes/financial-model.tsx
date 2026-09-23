@@ -42,7 +42,7 @@ function FinancialModelPage() {
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
           {investor.arr.map((row) => (
             <div key={row.year} className="surface p-4 text-center">
-              <p className="font-mono text-[10px] uppercase text-fg-subtle">{row.year}</p>
+              <p className="text-xs text-fg-subtle">{row.year}</p>
               <p className="mt-2 font-display text-2xl tabular">${row.v}M</p>
             </div>
           ))}

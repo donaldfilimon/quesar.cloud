@@ -14,7 +14,7 @@ export function NotFound() {
 
   return (
     <div className="mx-auto flex min-h-[60dvh] max-w-2xl flex-col justify-center px-4 py-24 text-center sm:px-6">
-      <p className="font-mono text-[0.7rem] tracking-[0.16em] text-accent uppercase">{recovery.eyebrow}</p>
+      <p className="text-xs text-accent">{recovery.eyebrow}</p>
       <h1 className="mt-3 font-display text-4xl tracking-tight sm:text-5xl">{recovery.title}</h1>
       <p className="mt-5 text-base leading-relaxed text-fg-muted sm:text-lg">{recovery.body}</p>
       <div className="mt-8 flex justify-center">
@@ -27,7 +27,7 @@ export function NotFound() {
         </Link>
       </div>
       <div className="mt-12 border-t border-border pt-8">
-        <p className="font-mono text-[0.68rem] tracking-[0.16em] text-fg-subtle uppercase">Or jump to</p>
+        <p className="text-xs text-fg-subtle">Or jump to</p>
         <ul className="mt-4 flex flex-wrap justify-center gap-3">
           {SUGGESTED_DESTINATIONS.map((item) => (
             <li key={item.to}>

@@ -1,14 +1,6 @@
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { Eyebrow } from "./lab";
-import { AtmosphereMedia, Ticks } from "./instrument";
-
-const atmospheres = {
-  wafer: { still: "/media/atmosphere-wafer.jpg" },
-  lab: { still: "/media/atmosphere-lab.jpg" },
-  plates: { still: "/media/atmosphere-plates.jpg" },
-  board: { still: "/media/atmosphere-board.jpg" },
-} as const;
 
 export function Section({
   id,
@@ -46,40 +38,34 @@ export function Section({
   );
 }
 
+/** Page opener for inner pages: label, title and lede on the plain page ground. */
 export function PageHero({
   eyebrow,
   title,
   lede,
   children,
-  atmosphere = "board",
   compact = false,
 }: {
   eyebrow: string;
   title: string;
   lede: string;
   children?: ReactNode;
-  atmosphere?: keyof typeof atmospheres | "none";
   compact?: boolean;
 }) {
-  const media = atmosphere === "none" ? null : atmospheres[atmosphere];
   return (
-    <div className="hero-grid relative overflow-hidden border-b border-border">
-      {media ? <AtmosphereMedia still={media.still} /> : null}
-      <div className="hero-wash pointer-events-none absolute inset-0" />
-      <div className="hero-vignette pointer-events-none absolute inset-0" />
-      <div className={compact ? "relative mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-14" : "relative mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28"}>
-        <Ticks />
+    <div className="border-b border-border">
+      <div className={compact ? "mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-14" : "mx-auto max-w-6xl px-4 pt-16 pb-14 sm:px-6 sm:pt-24 sm:pb-20"}>
         <Eyebrow>{eyebrow}</Eyebrow>
         <h1
           className={
             compact
               ? "mt-3 max-w-4xl font-display text-3xl leading-tight tracking-tight text-fg sm:text-4xl"
-              : "mt-5 max-w-4xl font-display text-4xl leading-[1.02] tracking-tight text-fg sm:text-5xl lg:text-[3.85rem]"
+              : "mt-5 max-w-4xl font-display text-4xl leading-[1.02] tracking-tight text-fg sm:text-5xl lg:text-6xl"
           }
         >
           {title}
         </h1>
-        <p className={compact ? "mt-4 max-w-[66ch] text-base leading-7 text-fg" : "mt-6 max-w-[66ch] text-lg leading-8 text-fg"}>
+        <p className={compact ? "mt-4 max-w-[66ch] text-base leading-7 text-fg-muted" : "mt-6 max-w-[62ch] text-lg leading-8 text-fg-muted"}>
           {lede}
         </p>
         {children}

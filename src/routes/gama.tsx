@@ -18,7 +18,6 @@ function GamaPage() {
         eyebrow="Gama"
         title="One tree. Many surfaces."
         lede="A modular declarative UI framework in Swift, organized around scenes and a retained render tree. Founder-owned. Not a Quesar product, not an Abbey runtime, and not evidence of a shipped spatial engine."
-        atmosphere="plates"
       >
         <HeroStatus status="research" />
       </PageHero>

@@ -60,13 +60,14 @@ describe("CSP policy (ported from mlai)", () => {
   });
 
   it("keeps the external origins the real runtime surface needs", () => {
-    // Kokoro neural voice, team avatars, Google Fonts.
+    // Kokoro neural voice and team avatars.
     expect(directive(prod, "script-src")).toContain("https://cdn.jsdelivr.net");
     expect(directive(prod, "connect-src")).toContain("https://cdn.jsdelivr.net");
     expect(directive(prod, "connect-src")).toContain("https://huggingface.co");
     expect(directive(prod, "img-src")).toContain("https://avatars.githubusercontent.com");
-    expect(directive(prod, "style-src")).toContain("https://fonts.googleapis.com");
-    expect(directive(prod, "font-src")).toContain("https://fonts.gstatic.com");
+    // Fonts are self-hosted: no third-party font origin.
+    expect(directive(prod, "style-src")).not.toContain("fonts.googleapis.com");
+    expect(directive(prod, "font-src")).toBe("font-src 'self' data:");
   });
 
   it("keeps the Cloudflare Turnstile challenge surface", () => {

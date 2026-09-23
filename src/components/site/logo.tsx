@@ -41,7 +41,7 @@ export function Logo({ compact = false }: { compact?: boolean }) {
       <span className="flex flex-col leading-none">
         <span className="font-display text-[1.05rem] font-bold tracking-tight">Quesar</span>
         {!compact ? (
-          <span className="mt-1 font-mono text-[0.62rem] font-medium tracking-[0.2em] text-fg-subtle uppercase">
+          <span className="mt-1 text-xs font-medium text-fg-subtle">
             by MLAI
           </span>
         ) : null}

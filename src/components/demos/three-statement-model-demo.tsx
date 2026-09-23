@@ -67,7 +67,7 @@ function SectionRow({ title, span }: { title: string; span: number }) {
     <tr>
       <td
         colSpan={span}
-        className="sticky left-0 bg-accent/10 px-2 py-1.5 text-left text-[11px] font-bold uppercase tracking-widest text-accent"
+        className="sticky left-0 bg-accent/10 px-2 py-1.5 text-left text-xs font-bold text-accent"
       >
         {title}
       </td>
@@ -129,7 +129,7 @@ export function ThreeStatementModelDemo() {
             <span className="text-sm font-semibold text-fg">
               Integrated 3-statement model — live recalc
             </span>
-            <span className="rounded-full border border-warn/40 bg-warn/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-warn">
+            <span className="rounded-full border border-warn/40 bg-warn/10 px-2 py-0.5 text-xs font-semibold text-warn">
               Illustrative
             </span>
           </div>
@@ -179,7 +179,7 @@ export function ThreeStatementModelDemo() {
 
       {/* Scenario assumptions — the inputs everything below is derived from */}
       <div className="mb-5 rounded-xl border border-border bg-bg-subtle p-3">
-        <div className="mb-2 text-[10px] font-semibold uppercase tracking-widest text-accent">
+        <div className="mb-2 text-xs font-semibold text-accent">
           Scenario drivers — inputs <span className="text-fg-subtle">(ramps shown Y1→Y5)</span>
         </div>
         <div className="grid grid-cols-2 gap-x-4 gap-y-1.5 sm:grid-cols-4 lg:grid-cols-6">
@@ -199,7 +199,7 @@ export function ThreeStatementModelDemo() {
         <table className="w-full min-w-[640px] border-collapse px-5 sm:px-6">
           <thead>
             <tr>
-              <th className="sticky left-0 z-10 bg-bg px-2 py-2 text-left text-[11px] font-semibold uppercase tracking-widest text-fg-subtle">
+              <th className="sticky left-0 z-10 bg-bg px-2 py-2 text-left text-xs font-semibold text-fg-subtle">
                 $ millions
               </th>
               {periods.map((p) => (
@@ -304,7 +304,7 @@ function Kpi({
     tone === "ok" ? "text-status-current" : tone === "bad" ? "text-destructive" : "text-fg";
   return (
     <div className="rounded-xl border border-border bg-bg-subtle px-3 py-2.5">
-      <div className="text-[10px] uppercase tracking-widest text-fg-subtle">{label}</div>
+      <div className="text-xs text-fg-subtle">{label}</div>
       <div className={`mt-0.5 flex items-center gap-1.5 text-lg font-bold tabular-nums ${toneCls}`}>
         {icon}
         {value}

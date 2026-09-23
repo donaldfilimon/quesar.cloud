@@ -54,7 +54,7 @@ export function EcosystemMap() {
             to={node.href}
             className={cn("surface accent-edge map-node z-[1] p-4 no-underline", node.className, node.edge)}
           >
-            <p className={cn("font-mono text-[10px] tracking-[0.16em] uppercase", node.accent)}>{node.kicker}</p>
+            <p className={cn("text-xs", node.accent)}>{node.kicker}</p>
             <h3 className="mt-1 font-display text-xl text-fg">{node.name}</h3>
             <p className="mt-1 text-xs leading-relaxed text-fg-muted">{node.body}</p>
           </Link>

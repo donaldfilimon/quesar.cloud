@@ -44,7 +44,7 @@ export function SessionsCard({
     state.kind === "ready" ? state.sessions.filter((s) => s.id !== currentSessionId) : [];
   return (
     <Surface>
-      <p className="font-mono text-[0.68rem] tracking-[0.16em] text-fg-subtle uppercase">
+      <p className="text-xs text-fg-subtle">
         Active sessions
       </p>
       {state.kind === "loading" ? (
@@ -79,7 +79,7 @@ export function SessionsCard({
                   </p>
                 </div>
                 {current ? (
-                  <span className="font-mono text-[10px] tracking-[0.14em] text-status-current uppercase">
+                  <span className="text-xs text-status-current">
                     This device
                   </span>
                 ) : (

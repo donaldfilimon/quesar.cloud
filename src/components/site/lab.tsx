@@ -24,7 +24,7 @@ export function Callout({
 }) {
   return (
     <aside className={cn("surface accent-edge p-5 [--edge:var(--accent)]", className)}>
-      <p className="font-mono text-[0.68rem] tracking-[0.16em] text-accent uppercase">{label}</p>
+      <p className="text-xs text-accent">{label}</p>
       <p className="mt-2 text-sm leading-relaxed text-fg-muted">{children}</p>
     </aside>
   );
@@ -74,7 +74,7 @@ export function NextUp({
     <div className="grid gap-3 sm:grid-cols-2">
       {items.map((item) => (
         <Link key={item.to} to={item.to} className="surface surface-hover p-5 no-underline">
-          <p className="font-mono text-[0.68rem] tracking-[0.16em] text-accent uppercase">Next</p>
+          <p className="text-xs text-accent">Next</p>
           <h3 className="mt-2 font-display text-xl text-fg">{item.label}</h3>
           <p className="mt-2 text-sm text-fg-muted">{item.body}</p>
         </Link>
@@ -99,7 +99,7 @@ export function CodeBlock({ code, label }: { code: string; label?: string }) {
   return (
     <div className="min-w-0 overflow-hidden rounded-lg bg-bg-elevated shadow-[var(--shadow-border)]">
       <div className="flex items-center justify-between border-b border-border px-4 py-2">
-        <span className="font-mono text-[10px] tracking-[0.16em] text-fg-subtle uppercase">
+        <span className="text-xs text-fg-subtle">
           {label ?? "source"}
         </span>
         <button
@@ -127,7 +127,7 @@ export function SpecList({
     <dl className="surface divide-y divide-border overflow-hidden">
       {rows.map((row) => (
         <div key={row.k} className="flex flex-wrap items-center justify-between gap-3 px-5 py-3">
-          <dt className="font-mono text-[11px] tracking-wide text-fg-subtle uppercase">{row.k}</dt>
+          <dt className="text-xs text-fg-subtle">{row.k}</dt>
           <dd className="flex items-center gap-2 font-mono text-sm text-fg tabular">
             <span>{row.v}</span>
             {row.tag ? <ProvTag tag={row.tag} /> : null}

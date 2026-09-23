@@ -29,14 +29,14 @@ function DocsPage() {
             {docs.map((doc) => (
               <div key={doc.slug} id={doc.slug === "getting-started" ? "intro" : doc.slug}>
                 <Surface>
-                  <p className="font-mono text-[0.68rem] tracking-[0.16em] text-accent uppercase">{doc.group}</p>
+                  <p className="text-xs text-accent">{doc.group}</p>
                   <h2 className="mt-2 font-display text-2xl">
                     <Link to="/docs/$slug" params={{ slug: doc.slug }} className="text-fg no-underline hover:underline">
                       {doc.title}
                     </Link>
                   </h2>
                   <p className="mt-3 max-w-[66ch] text-base leading-7 text-fg">{doc.description}</p>
-                  <p className="mt-3 font-mono text-[11px] tracking-[0.14em] text-fg-subtle uppercase">
+                  <p className="mt-3 text-xs text-fg-subtle">
                     {Math.max(
                       1,
                       Math.round(

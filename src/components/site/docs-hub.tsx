@@ -22,7 +22,7 @@ import { DOCS_HUB_ANCHORS } from "./docs-hub-anchors";
 function RefSection({ id, group, title, lede, children }: { id: string; group: string; title: string; lede?: string; children: ReactNode }) {
   return (
     <section id={`ref-${id}`} aria-labelledby={`ref-${id}-title`} className="mt-16 scroll-mt-28">
-      <p className="font-mono text-[0.68rem] tracking-[0.16em] text-accent uppercase">{group}</p>
+      <p className="text-xs text-accent">{group}</p>
       <h3 id={`ref-${id}-title`} className="mt-2 font-display text-2xl tracking-tight">
         {title}
       </h3>
@@ -36,7 +36,7 @@ function PaperLink({ to, children }: { to: string; children: string }) {
   return (
     <Link
       to={to}
-      className="mt-6 inline-flex items-center gap-1.5 font-mono text-xs tracking-widest text-accent uppercase no-underline hover:underline"
+      className="mt-6 inline-flex items-center gap-1.5 text-xs text-accent no-underline hover:underline"
     >
       {children}
       <ArrowRight className="size-3" aria-hidden="true" />

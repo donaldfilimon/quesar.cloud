@@ -36,13 +36,13 @@ function TeamPage() {
                     person.name
                   )}
                 </h2>
-                <p className="mt-1 font-mono text-[10px] tracking-[0.15em] text-accent uppercase">{person.role}</p>
+                <p className="mt-1 text-xs text-accent">{person.role}</p>
                 <p className="mt-3 text-sm leading-relaxed text-fg-muted">{person.bio}</p>
                 {person.slug ? (
                   <Link
                     to="/team/$slug"
                     params={{ slug: person.slug }}
-                    className="group mt-auto inline-flex items-center gap-2 pt-4 font-mono text-xs tracking-[0.15em] text-fg uppercase no-underline hover:text-accent"
+                    className="group mt-auto inline-flex items-center gap-2 pt-4 text-xs text-fg no-underline hover:text-accent"
                   >
                     Read profile
                     <ArrowRight className="size-3 transition-transform group-hover:translate-x-1 motion-reduce:transition-none" aria-hidden="true" />
@@ -58,7 +58,7 @@ function TeamPage() {
               </span>
               <h2 className="mt-5 font-display text-xl">{teamIntro.join.title}</h2>
               <p className="mt-2 text-sm text-fg-muted">{teamIntro.join.body}</p>
-              <a href={teamIntro.join.href} className="mt-5 font-mono text-xs tracking-[0.15em] text-accent uppercase">
+              <a href={teamIntro.join.href} className="mt-5 text-xs text-accent">
                 {teamIntro.join.label}
               </a>
             </div>

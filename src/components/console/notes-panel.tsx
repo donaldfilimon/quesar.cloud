@@ -182,13 +182,13 @@ export function NotesPanel({ initialNode }: { initialNode?: string }) {
         {node ? (
           <Surface>
             <div className="flex items-center justify-between gap-3">
-              <p className="font-mono text-[0.68rem] tracking-[0.14em] text-accent uppercase">
+              <p className="text-xs text-accent">
                 {node.name}
               </p>
               <StatusBadge status={node.status} />
             </div>
             <p className="mt-3 text-sm text-fg-muted">{node.detail}</p>
-            <p className="mt-4 font-mono text-[10px] tracking-[0.14em] text-status-current uppercase">
+            <p className="mt-4 text-xs text-status-current">
               Current
             </p>
             <ul className="mt-1 space-y-1 text-sm text-fg-muted">
@@ -197,7 +197,7 @@ export function NotesPanel({ initialNode }: { initialNode?: string }) {
               ))}
             </ul>
             <Separator />
-            <p className="font-mono text-[10px] tracking-[0.14em] text-fg-subtle uppercase">
+            <p className="text-xs text-fg-subtle">
               Not claimed
             </p>
             <ul className="mt-1 space-y-1 text-sm text-fg-muted">
@@ -266,7 +266,7 @@ export function NotesPanel({ initialNode }: { initialNode?: string }) {
             <li key={note.id} className="rounded-lg bg-card p-4 shadow-[var(--shadow-border)]">
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <p className="font-mono text-[0.7rem] tracking-[0.12em] text-accent uppercase">
+                  <p className="text-xs text-accent">
                     {named?.name ?? note.node_id}
                   </p>
                   {when ? <p className="mt-1 text-xs text-fg-subtle">{when}</p> : null}

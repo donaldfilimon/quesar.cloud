@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { research } from "@/lib/mlai";
+import { research } from "@/lib/mlai/categories/research";
 import { homeBoundaries, homeDocsDoors, homeProductBoundary, homeRequestPath } from "@/lib/mlai/pages";
 import { AppLink } from "./app-link";
 import { Section, Surface } from "./section";
@@ -110,30 +110,39 @@ export function HomeProductBoundary() {
 export function HomeResearchPreview() {
   const featured = research.publications.slice(0, 3);
   return (
-    <Section
-      id="research-preview"
-      eyebrow="Research notes"
-      title="Architecture before adjectives."
-      lede="Selected work on traceable retrieval, governed agents, and operational AI safety."
-    >
-      <div className="grid gap-4 lg:grid-cols-3">
-        {featured.map((item) => (
-          <Link key={item.slug} to="/research/$slug" params={{ slug: item.slug }} className="no-underline">
-            <Surface hover className="flex h-full min-h-60 flex-col">
-              <p className="font-mono text-[0.68rem] tracking-[0.16em] text-accent uppercase">
-                {item.tag} · {item.date}
-              </p>
-              <h3 className="mt-4 font-display text-xl leading-tight text-fg">{item.title}</h3>
-              <p className="mt-3 line-clamp-4 text-sm leading-relaxed text-fg-muted">{item.abstract}</p>
-              <span className="mt-auto pt-5 text-sm text-accent">Read note →</span>
-            </Surface>
+    <section id="research-preview" aria-labelledby="research-preview-title" className="scroll-mt-20 border-b border-border">
+      <div className="mx-auto grid max-w-6xl gap-10 px-4 py-16 sm:px-6 sm:py-24 lg:grid-cols-12">
+        <header className="lg:col-span-5">
+          <p className="eyebrow">Research</p>
+          <h2 id="research-preview-title" className="section-title mt-4">
+            Architecture before adjectives.
+          </h2>
+          <p className="mt-5 max-w-[52ch] text-base leading-relaxed text-fg-muted">
+            Selected work on traceable retrieval, governed agents and operational AI safety.
+          </p>
+          <Link to="/research" className="mt-6 inline-block text-sm text-accent underline-offset-4 hover:underline">
+            Open the research archive
           </Link>
-        ))}
+        </header>
+        <ol className="min-w-0 divide-y divide-border border-y border-border lg:col-span-7">
+          {featured.map((item) => (
+            <li key={item.slug}>
+              <Link to="/research/$slug" params={{ slug: item.slug }} className="group block py-6 no-underline">
+                <span className="text-sm text-fg-muted">
+                  {item.tag.charAt(0) + item.tag.slice(1).toLowerCase()}, {item.date}
+                </span>
+                <span className="mt-1.5 block font-display text-xl leading-tight tracking-tight text-fg group-hover:text-accent">
+                  {item.title}
+                </span>
+                <span className="mt-2 line-clamp-3 block text-[0.9375rem] leading-relaxed text-fg-muted">
+                  {item.abstract}
+                </span>
+              </Link>
+            </li>
+          ))}
+        </ol>
       </div>
-      <Button asChild variant="secondary" className="mt-8">
-        <Link to="/research">Open the research archive</Link>
-      </Button>
-    </Section>
+    </section>
   );
 }
 

@@ -8,7 +8,7 @@ export function DocSidebar({ current }: { current?: string }) {
     <nav aria-label="Docs" className="lg:sticky lg:top-24 lg:max-h-[calc(100dvh-7rem)] lg:overflow-y-auto">
       {docNav.map((group) => (
         <div key={group.group} className="mb-6">
-          <p className="font-mono text-[0.68rem] tracking-[0.16em] text-fg-subtle uppercase">{group.group}</p>
+          <p className="text-xs text-fg-subtle">{group.group}</p>
           <ul className="mt-2 space-y-0.5">
             {group.items.map((item) => {
               const slug = docHref(item.id);
@@ -40,7 +40,7 @@ export function DocOutline({ headings }: { headings: readonly string[] }) {
   if (!headings.length) return null;
   return (
     <nav aria-label="On this page" className="mt-8 hidden xl:block">
-      <p className="font-mono text-[0.68rem] tracking-[0.16em] text-fg-subtle uppercase">On this page</p>
+      <p className="text-xs text-fg-subtle">On this page</p>
       <ul className="mt-2 space-y-1">
         {headings.map((heading) => (
           <li key={heading}>

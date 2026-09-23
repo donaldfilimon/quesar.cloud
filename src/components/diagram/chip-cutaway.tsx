@@ -62,7 +62,7 @@ export function ChipCutaway() {
               style={{ marginTop: index === 0 ? 0 : -8, zIndex: layers.length - index }}
             >
               <span className="absolute top-1/2 left-[-0.55rem] size-2 -translate-y-1/2 rounded-full bg-accent" aria-hidden="true" />
-              <span className="font-mono text-[0.65rem] tracking-[0.18em] text-fg-subtle uppercase">
+              <span className="text-xs text-fg-subtle">
                 {String(index + 1).padStart(2, "0")} · {layer.kicker}
               </span>
               <span className="mt-1 block font-display text-2xl tracking-tight text-fg">{layer.name}</span>
@@ -71,7 +71,7 @@ export function ChipCutaway() {
         })}
       </RadioGroup>
       <div>
-        <p className="font-mono text-[0.68rem] tracking-[0.2em] text-accent uppercase">{selected.kicker}</p>
+        <p className="text-xs text-accent">{selected.kicker}</p>
         <h3 className="mt-2 font-display text-3xl tracking-tight">{selected.name}</h3>
         <p className="mt-3 max-w-sm text-sm leading-relaxed text-fg-muted">{selected.body}</p>
         <Link

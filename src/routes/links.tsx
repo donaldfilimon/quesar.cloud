@@ -40,7 +40,7 @@ function LinksPage() {
           {linkHub.map((section) => (
             <div key={section.title}>
               <div className="mb-6 flex items-baseline gap-4">
-                <span className="font-mono text-[0.68rem] tracking-[0.16em] text-accent uppercase">{section.kicker}</span>
+                <span className="text-xs text-accent">{section.kicker}</span>
                 <h2 className="font-display text-2xl tracking-tight">{section.title}</h2>
               </div>
               <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -53,7 +53,7 @@ function LinksPage() {
                   return (
                     <li key={item.title}>
                       <Card to={item.href} className="surface surface-hover flex h-full flex-col p-5 no-underline">
-                        <span className="font-mono text-[10px] tracking-[0.2em] text-fg-subtle uppercase">
+                        <span className="text-xs text-fg-subtle">
                           {external ? "External" : "On this site"}
                         </span>
                         <span className="mt-2 font-display text-lg text-fg">{item.title}</span>
@@ -74,7 +74,7 @@ function LinksPage() {
         <div className="grid gap-10 md:grid-cols-2">
           {[...groups.entries()].map(([group, items]) => (
             <div key={group}>
-              <p className="font-mono text-[0.68rem] tracking-[0.16em] text-fg-subtle uppercase">{group}</p>
+              <p className="text-xs text-fg-subtle">{group}</p>
               <ul className="mt-3 space-y-2">
                 {items.map((item) => (
                   <li key={item.href}>
@@ -87,7 +87,7 @@ function LinksPage() {
             </div>
           ))}
         </div>
-        <p className="mt-10 font-mono text-[0.68rem] tracking-[0.16em] text-fg-subtle uppercase">Apps</p>
+        <p className="mt-10 text-xs text-fg-subtle">Apps</p>
         <ul className="mt-3 flex flex-wrap gap-3">
           {appSurfaces.map((app) => (
             <li key={app.id}>

@@ -53,7 +53,7 @@ export function DeleteAccountCard({
 
   return (
     <Surface>
-      <p className="font-mono text-[0.68rem] tracking-[0.16em] text-status-partial uppercase">
+      <p className="text-xs text-status-partial">
         Delete account
       </p>
       <p className="mt-2 text-sm text-fg-muted">
