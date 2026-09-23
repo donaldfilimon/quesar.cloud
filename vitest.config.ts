@@ -1,13 +1,13 @@
 import { defineConfig } from "vitest/config";
 import { fileURLToPath } from "node:url";
 
-// App unit tests (`npm run test:app`). scripts/*.test.mjs still run on
-// node:test via `npm test` until phase 3 folds them in.
+// The one test runner (`bun run test`): app code under src/ and the build
+// scripts under scripts/. Runs on Node, never the Bun runtime.
 export default defineConfig({
   resolve: { alias: { "@": fileURLToPath(new URL("./src", import.meta.url)) } },
   test: {
     environment: "node",
-    include: ["src/**/*.test.{ts,tsx}"],
+    include: ["src/**/*.test.{ts,tsx}", "scripts/**/*.test.ts"],
     exclude: ["node_modules/**"],
   },
 });

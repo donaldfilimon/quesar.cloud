@@ -51,7 +51,7 @@ Spec: `notes/superpowers/specs/2026-09-22-mlai-merge-design.md`. Checklist: `not
   `user.deleteUser` with a `beforeDelete` hook that calls `purgeUserData`
   (`src/lib/server/account-deletion.server.ts`), which revokes workspace grants
   and deletes per-user rows. Inquiries are unlinked, not deleted.
-- **Static preview build** (`npm run build:static`, published from `docs/` by
+- **Static preview build** (`bun run build:static`, published from `docs/` by
   GitHub Pages): `VITE_STATIC_SITE=true` makes every server feature render
   `ServerOnlyNotice` instead of calling the server. The GitHub panels fetch
   GitHub's public API from the browser, and contact opens an email. `docs/`

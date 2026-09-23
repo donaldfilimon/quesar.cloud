@@ -1,0 +1,88 @@
+#!/usr/bin/env node
+/**
+ * Publish the static GitHub Pages build (`bun run build:static`).
+ *
+ * Copies the prerendered site from `.output/public` into `docs/` (the Pages
+ * source: branch `main`, folder `/docs`), then adds what Pages needs:
+ * `.nojekyll` (serve `_`-prefixed and `.md` paths verbatim), `CNAME`, and a
+ * self-contained `404.html`. `docs/` holds ONLY the built site; internal
+ * records live in `notes/`.
+ */
+import { copyFileSync, cpSync, existsSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
+import { join, relative } from "node:path";
+
+const root = process.cwd();
+const src = join(root, ".output", "public");
+const out = join(root, "docs");
+const DOMAIN = "quesar.cloud";
+
+if (!existsSync(join(src, "index.html"))) {
+  console.error("[publish-static] .output/public/index.html is missing; run the static build first.");
+  process.exit(1);
+}
+
+rmSync(out, { recursive: true, force: true });
+cpSync(src, out, { recursive: true });
+writeFileSync(join(out, ".nojekyll"), "");
+
+// Prerendered HTML links `styles.css?url` as the SSR build emitted it, which is
+// a different hash (and a superset) of the client copy. Publish every asset the
+// pages reference; fail loudly if one cannot be found anywhere.
+const SSR_ASSETS = join(root, "node_modules", ".nitro", "vite", "services", "ssr", "assets");
+function htmlFiles(dir: string): string[] {
+  return readdirSync(dir).flatMap((name) => {
+    const path = join(dir, name);
+    if (statSync(path).isDirectory()) return htmlFiles(path);
+    return name.endsWith(".html") ? [path] : [];
+  });
+}
+const missing = new Set<string>();
+for (const file of htmlFiles(out)) {
+  const html = readFileSync(file, "utf8");
+  for (const [, asset] of html.matchAll(/"\/assets\/([^"?#]+)"/g)) {
+    if (existsSync(join(out, "assets", asset))) continue;
+    if (existsSync(join(SSR_ASSETS, asset))) copyFileSync(join(SSR_ASSETS, asset), join(out, "assets", asset));
+    else missing.add(`${asset} (in ${relative(out, file)})`);
+  }
+}
+if (missing.size) {
+  console.error(`[publish-static] referenced assets not found:\n  ${[...missing].join("\n  ")}`);
+  process.exit(1);
+}
+writeFileSync(join(out, "CNAME"), `${DOMAIN}\n`);
+
+// Reuse the site's stylesheet so the 404 page looks like the site without
+// needing the app bundle (a prerendered route would hydrate as the wrong page).
+const index = readFileSync(join(out, "index.html"), "utf8");
+const css = [...index.matchAll(/<link[^>]+rel="stylesheet"[^>]*>/g)].map((m) => m[0]).join("\n    ");
+writeFileSync(
+  join(out, "404.html"),
+  `<!doctype html>
+<html lang="en" data-theme="dark" class="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Page not found — Quesar</title>
+    <link rel="icon" href="/favicon.svg" />
+    ${css}
+  </head>
+  <body class="antialiased">
+    <main class="mx-auto flex min-h-[70vh] max-w-xl flex-col justify-center px-6 py-24">
+      <p class="font-mono text-[0.68rem] tracking-[0.16em] text-accent uppercase">404</p>
+      <h1 class="mt-3 font-display text-4xl tracking-tight">This page is not in the catalog.</h1>
+      <p class="mt-4 text-sm leading-relaxed text-fg-muted">
+        Every public surface lives on this site. If a name moved, start from home, docs, or the source catalog.
+      </p>
+      <p class="mt-8 flex flex-wrap gap-4 text-sm">
+        <a href="/" class="text-accent">Home</a>
+        <a href="/docs" class="text-accent">Docs</a>
+        <a href="/developers" class="text-accent">Source</a>
+        <a href="/contact" class="text-accent">Contact</a>
+      </p>
+    </main>
+  </body>
+</html>
+`,
+);
+console.log(`[publish-static] docs/ ready for ${DOMAIN}`);
