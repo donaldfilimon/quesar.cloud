@@ -20,10 +20,12 @@ bun run lint         # eslint 10 + react-hooks 7 (React Compiler rules), --max-w
 bun run test         # vitest: src/**/*.test.{ts,tsx} and scripts/**/*.test.ts
 bun run build        # vite build (Vercel preset) + PGLite assets + migrations
 bun run build:static # GitHub Pages build into docs/
+bun run check        # the gate: format:check, typecheck, lint, test, build (stops at first failure)
+bun run format       # prettier --write . (.prettierignore skips docs/, notes/, sidecars/, native/, public/)
 ```
 
-- **Gate:** `typecheck`, `lint`, `test`, `build`, and `build:static` when a change can reach the static site. There is no `.github/` and no CI: the gate is local only. `.vercel/` and `.output/` are git-ignored build output.
-- **Prettier is configured but not enforced** (`.prettierrc`; `eslint-config-prettier` turns off lint's style rules). Most of the tree is not Prettier-formatted, so `bun run format` (`prettier --write .`) rewrites hundreds of files, `docs/` included. Format only the files you touch (`bunx prettier --write <files>`).
+- **Gate:** `bun run check`, plus `build:static` when a change can reach the static site. There is no `.github/` and no CI (a self-hosted runner on this public repo would run fork PRs on the host), so the gate is local only; `git config core.hooksPath scripts/git-hooks` opts into running it on every push. `.vercel/` and `.output/` are git-ignored build output.
+- **Prettier is enforced by `format:check`** (`.prettierrc`; `eslint-config-prettier` turns off lint's style rules, so lint never flags formatting). Run `bun run format` or `bunx prettier --write <files>` before committing. Prettier moves inline JSX spaces into `{" "}`, which changes compiled chunks without changing rendered text.
 - **Single test:** `bunx vitest run src/lib/server/crypto.server.test.ts`, or add `-t "<name>"` for one case. vitest is the only test runner.
 - **`scripts/*.ts` run directly on Node's type stripping** (`node scripts/migrate.ts`), so they may use only erasable TypeScript syntax (no enums, namespaces or parameter properties) and import each other with `.ts` extensions. The build runs them, so a violation fails the gate.
 - **Lint ignores `docs/**`, `sidecars/**`, `native/**` and `src/routeTree.gen.ts`**, so a green lint says nothing about those. react-refresh is off for `src/routes/**` (TanStack routes export `Route` beside their components); everywhere else, keep hooks, constants and helpers out of component files.
