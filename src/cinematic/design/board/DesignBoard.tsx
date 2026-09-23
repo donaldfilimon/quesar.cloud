@@ -44,7 +44,7 @@ const BOARD_CSS = `
   position: relative;
   min-height: 100vh;
   color: #fafafa;
-  font-family: "Inter", "Geist Variable", system-ui, sans-serif;
+  font-family: var(--font-sans);
   background:
     radial-gradient(130% 80% at 50% -10%, #0a1226 0%, #050813 46%, #030307 100%) fixed,
     var(--ds-canvas);
@@ -125,7 +125,7 @@ function Sidebar({ active }: { active: string }): ReactNode {
       <div className="flex items-center gap-2.5 mb-1">
         <Mark size={34} />
         <div>
-          <div className="font-bold tracking-[0.16em] text-white text-[15px] leading-none" style={{ fontFamily: "Outfit, sans-serif" }}>
+          <div className="font-bold tracking-[0.16em] text-white text-[15px] leading-none" style={{ fontFamily: "var(--font-display)" }}>
             MLAI
           </div>
           <Mono className="text-[9.5px] text-slate-500">design system</Mono>
@@ -139,7 +139,7 @@ function Sidebar({ active }: { active: string }): ReactNode {
             border: "1px solid rgba(255,255,255,0.08)",
             color: "var(--ds-accent)",
             letterSpacing: "0.14em",
-            fontFamily: "JetBrains Mono, monospace",
+            fontFamily: "var(--font-mono)",
           }}
         >
           Upgrade · v2.0
@@ -166,7 +166,7 @@ function Sidebar({ active }: { active: string }): ReactNode {
         ))}
       </nav>
       <div className="mt-auto pt-6 border-t border-white/6">
-        <Mono className="text-[10px] text-slate-600 leading-relaxed block">Outfit · Geist · JetBrains Mono</Mono>
+        <Mono className="text-[10px] text-slate-600 leading-relaxed block">Space Grotesk · IBM Plex Sans · IBM Plex Mono</Mono>
         <Mono className="text-[10px] text-slate-700 mt-1 block">© 2026 MLAI Corporation</Mono>
       </div>
     </aside>
@@ -280,7 +280,7 @@ export default function DesignBoard(): ReactNode {
             <Eyebrow color="#a855f7">Design System Upgrade · Response to spec</Eyebrow>
             <h1
               className="font-bold text-white tracking-tight"
-              style={{ fontFamily: "Outfit, sans-serif", fontSize: "clamp(40px,7vw,76px)", lineHeight: 1.0, letterSpacing: "-0.035em" }}
+              style={{ fontFamily: "var(--font-display)", fontSize: "clamp(40px,7vw,76px)", lineHeight: 1.0, letterSpacing: "-0.035em" }}
             >
               Not more glass.
               <br />A real <span className="t-grad">system</span> underneath.
@@ -319,7 +319,7 @@ export default function DesignBoard(): ReactNode {
             <div className="flex items-center gap-3">
               <Mark size={30} />
               <div>
-                <div className="text-white font-semibold text-sm" style={{ fontFamily: "Outfit, sans-serif" }}>MLAI Corporation</div>
+                <div className="text-white font-semibold text-sm" style={{ fontFamily: "var(--font-display)" }}>MLAI Corporation</div>
                 <Mono className="text-[11px] text-slate-500">Design System Upgrade · v2.0</Mono>
               </div>
             </div>

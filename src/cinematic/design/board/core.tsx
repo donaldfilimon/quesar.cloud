@@ -16,7 +16,7 @@ export function Mark({ size = 34 }: { size?: number }): ReactNode {
         boxShadow: "0 6px 18px -6px rgba(59,130,246,0.7), inset 0 1px 0 rgba(255,255,255,0.35)",
       }}
     >
-      <span className="text-white font-black" style={{ fontSize: size * 0.46, fontFamily: "Outfit", lineHeight: 1 }}>M</span>
+      <span className="text-white font-black" style={{ fontSize: size * 0.46, fontFamily: "var(--font-display)", lineHeight: 1 }}>M</span>
     </div>
   );
 }
@@ -24,7 +24,7 @@ export function Mark({ size = 34 }: { size?: number }): ReactNode {
 /* ─────────────── Section scaffolding ─────────────── */
 export function Eyebrow({ children, color = "#22d3ee" }: { children: ReactNode; color?: string }): ReactNode {
   return (
-    <div className="text-[11px] font-semibold uppercase mb-3" style={{ letterSpacing: "0.24em", color, fontFamily: "JetBrains Mono, monospace" }}>
+    <div className="text-[11px] font-semibold uppercase mb-3" style={{ letterSpacing: "0.24em", color, fontFamily: "var(--font-mono)" }}>
       {children}
     </div>
   );
@@ -41,7 +41,7 @@ export function SectionHead({
   return (
     <header className="mb-10 max-w-3xl">
       {kicker && <Eyebrow color={color}>{kicker}</Eyebrow>}
-      <h2 className="font-bold text-white tracking-tight" style={{ fontFamily: "Outfit, sans-serif", fontSize: "clamp(30px,4vw,46px)", lineHeight: 1.05, letterSpacing: "-0.02em" }}>{title}</h2>
+      <h2 className="font-bold text-white tracking-tight" style={{ fontFamily: "var(--font-display)", fontSize: "clamp(30px,4vw,46px)", lineHeight: 1.05, letterSpacing: "-0.02em" }}>{title}</h2>
       {lede && <p className="mt-4 text-[15px] sm:text-base leading-relaxed text-slate-400 text-pretty">{lede}</p>}
     </header>
   );
@@ -126,7 +126,7 @@ export function Mono({
   className?: string;
   style?: CSSProperties;
 }): ReactNode {
-  return <span className={className} style={{ fontFamily: "JetBrains Mono, monospace", ...style }}>{children}</span>;
+  return <span className={className} style={{ fontFamily: "var(--font-mono)", ...style }}>{children}</span>;
 }
 
 /* prefers-reduced-motion as an external store: false on the server and during
@@ -214,12 +214,12 @@ export function CodeBlock({ code, label }: { code: string; label?: string }): Re
           type="button"
           onClick={copy}
           className="text-[10px] font-semibold px-2.5 py-1 rounded-md transition-colors"
-          style={{ color: copied ? "#34d399" : "#94a3b8", background: copied ? "rgba(52,211,153,0.12)" : "rgba(255,255,255,0.05)", fontFamily: "JetBrains Mono, monospace" }}
+          style={{ color: copied ? "#34d399" : "#94a3b8", background: copied ? "rgba(52,211,153,0.12)" : "rgba(255,255,255,0.05)", fontFamily: "var(--font-mono)" }}
         >
           {copied ? "copied ✓" : "copy"}
         </button>
       </div>
-      <pre className="px-4 py-4 overflow-x-auto text-[12px] leading-relaxed" style={{ fontFamily: "JetBrains Mono, monospace", color: "#cbd5e1" }}><code>{code}</code></pre>
+      <pre className="px-4 py-4 overflow-x-auto text-[12px] leading-relaxed" style={{ fontFamily: "var(--font-mono)", color: "#cbd5e1" }}><code>{code}</code></pre>
     </div>
   );
 }

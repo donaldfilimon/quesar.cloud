@@ -1,5 +1,6 @@
 /* MLAI — Brand Guidelines board. Self-contained, typed React module. */
 import { useState, useRef, useEffect } from "react";
+import { attachFrameGate } from "../frame-gate";
 import type { ReactNode } from "react";
 
 /* ── board-specific CSS (from the prototype's inline <style>) ─────────────────
@@ -135,7 +136,7 @@ const Mark = ({ size = 32, radius }: { size?: number; radius?: number }): ReactN
     className="bg-linear-to-br from-cyan-400 via-blue-500 to-purple-600 flex items-center justify-center shrink-0"
     style={{ width: size, height: size, borderRadius: radius ?? size * 0.28 }}
   >
-    <span className="text-white font-black" style={{ fontSize: size * 0.46, lineHeight: 1, fontFamily: "Outfit" }}>
+    <span className="text-white font-black" style={{ fontSize: size * 0.46, lineHeight: 1, fontFamily: "var(--font-display)" }}>
       M
     </span>
   </div>
@@ -161,7 +162,6 @@ function NetworkCanvas(): ReactNode {
     if (!c) return;
     const ctx = c.getContext("2d");
     if (!ctx) return;
-    let raf = 0;
     let w = 0;
     let h = 0;
     let dpr = 1;
@@ -213,11 +213,10 @@ function NetworkCanvas(): ReactNode {
         ctx.arc(p.x, p.y, 1.6, 0, 7);
         ctx.fill();
       }
-      raf = requestAnimationFrame(draw);
     };
-    draw();
+    const gate = attachFrameGate(c, draw);
     return () => {
-      cancelAnimationFrame(raf);
+      gate.dispose();
       removeEventListener("resize", rs);
     };
   }, []);
@@ -289,7 +288,7 @@ function Section({
         <span className="text-xs font-mono text-slate-600">{n}</span>
         <div className="text-xs font-bold uppercase tracking-[0.2em] text-cyan-400">{kicker}</div>
       </div>
-      <h2 className="text-3xl sm:text-4xl font-bold text-white tracking-tight mb-8" style={{ fontFamily: "Outfit, sans-serif" }}>
+      <h2 className="text-3xl sm:text-4xl font-bold text-white tracking-tight mb-8" style={{ fontFamily: "var(--font-display)" }}>
         {title}
       </h2>
       {children}
@@ -382,18 +381,18 @@ interface TypeSpec {
 const TYPE: readonly TypeSpec[] = [
   {
     label: "Display / H1",
-    spec: "Outfit · 56–72px · tracking-tight",
+    spec: "Space Grotesk · 56–72px · tracking-tight",
     el: (
-      <span className="text-5xl font-bold text-white" style={{ fontFamily: "Outfit, sans-serif" }}>
+      <span className="text-5xl font-bold text-white" style={{ fontFamily: "var(--font-display)" }}>
         Private by default
       </span>
     ),
   },
   {
     label: "Heading / H2",
-    spec: "Outfit · 32–40px",
+    spec: "Space Grotesk · 32–40px",
     el: (
-      <span className="text-3xl font-bold text-white" style={{ fontFamily: "Outfit, sans-serif" }}>
+      <span className="text-3xl font-bold text-white" style={{ fontFamily: "var(--font-display)" }}>
         The infrastructure layer
       </span>
     ),
@@ -423,7 +422,7 @@ const TYPE: readonly TypeSpec[] = [
   },
   {
     label: "Mono / metrics",
-    spec: "JetBrains Mono · code, equations, data",
+    spec: "IBM Plex Mono · code, equations, data",
     el: <span className="font-mono text-cyan-200 text-base">L_shard = α + (β·S)/n</span>,
   },
 ];
@@ -431,9 +430,9 @@ const TYPE: readonly TypeSpec[] = [
 const NAV: readonly string[] = ["Logo", "Color", "Type", "Voice", "Visual", "Principles"];
 
 const TYPE_CARDS: readonly [string, string, string][] = [
-  ["Display", "Outfit", "Geometric sans. Headlines & hero."],
-  ["UI / Body", "System sans", "Interface, paragraphs, labels."],
-  ["Mono", "JetBrains Mono", "Equations, metrics, code."],
+  ["Display", "Space Grotesk", "Grotesque sans. Headlines & hero."],
+  ["UI / Body", "IBM Plex Sans", "Interface, paragraphs, labels."],
+  ["Mono", "IBM Plex Mono", "Equations, metrics, code."],
 ];
 
 interface MisuseItem {
@@ -533,14 +532,13 @@ export default function BrandBoard(): ReactNode {
         <div className="absolute inset-0 opacity-50">
           <NetworkCanvas />
         </div>
-        <div className="absolute top-0 right-0 w-96 h-96 bg-purple-600/20 rounded-full blur-3xl" />
         <div className="relative max-w-5xl mx-auto px-6 sm:px-10 pt-20 pb-14">
           <div className="flex items-center gap-3 mb-8">
             <Mark size={44} />
             <Wordmark size={26} />
           </div>
           <div className="text-xs font-bold uppercase tracking-[0.2em] text-cyan-400 mb-3">Brand Guidelines · v1.0</div>
-          <h1 className="text-4xl sm:text-6xl font-bold tracking-tight leading-[1.05]" style={{ fontFamily: "Outfit, sans-serif" }}>
+          <h1 className="text-4xl sm:text-6xl font-bold tracking-tight leading-[1.05]" style={{ fontFamily: "var(--font-display)" }}>
             The MLAI <span className="gtext">identity system</span>
           </h1>
           <p className="mt-5 text-lg text-slate-300 max-w-2xl">
@@ -690,7 +688,7 @@ export default function BrandBoard(): ReactNode {
               <div
                 className="text-3xl text-white mb-2"
                 style={{
-                  fontFamily: i === 0 ? "Outfit, sans-serif" : i === 1 ? "system-ui" : "JetBrains Mono, monospace",
+                  fontFamily: i === 0 ? "var(--font-display)" : i === 1 ? "var(--font-sans)" : "var(--font-mono)",
                 }}
               >
                 Aa

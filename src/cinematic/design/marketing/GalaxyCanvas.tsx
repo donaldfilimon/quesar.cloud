@@ -4,6 +4,7 @@
    a lattice constellation and a SHA-256 memory ribbon. Calm, weighty, cool.
    Adapted from the brand's hero canvas. */
 import { useEffect, useRef } from "react";
+import { attachFrameGate } from "../frame-gate";
 
 type RGB = readonly [number, number, number];
 
@@ -91,7 +92,6 @@ export default function GalaxyCanvas({
     if (!x) return;
     const ctx: CanvasRenderingContext2D = x;
 
-    let raf = 0;
     let w = 0;
     let h = 0;
     let dpr = 1;
@@ -307,12 +307,11 @@ export default function GalaxyCanvas({
       }
 
       ctx.globalCompositeOperation = "source-over";
-      raf = requestAnimationFrame(draw);
     };
 
-    raf = requestAnimationFrame(draw);
+    const gate = attachFrameGate(c, draw);
     return () => {
-      cancelAnimationFrame(raf);
+      gate.dispose();
       removeEventListener("resize", rs);
     };
   }, [speed, glow, chain]);

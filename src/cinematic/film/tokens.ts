@@ -31,9 +31,11 @@ export const C = {
 export type Palette = typeof C;
 
 export const FONT = {
-  display: "'Outfit', sans-serif",
-  sans: "'Inter', system-ui, sans-serif",
-  mono: "'JetBrains Mono', ui-monospace, monospace",
+  // The site's loaded families (src/styles.css): Space Grotesk, IBM Plex Sans,
+  // IBM Plex Mono. Used only in DOM/SVG styles, where var() resolves.
+  display: "var(--font-display)",
+  sans: "var(--font-sans)",
+  mono: "var(--font-mono)",
 } as const;
 
 // persona registry — single source of truth for the three minds.

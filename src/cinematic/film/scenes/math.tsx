@@ -34,7 +34,7 @@ function MotifVectors({ lt }: MotifProps) {
       <circle cx={B[0]} cy={B[1]} r={6} fill={AV} style={{ filter: `drop-shadow(0 0 8px ${AV})` }} />
       <circle cx={cx} cy={cy} r={4} fill="#fff" />
       <text x={cx} y={cy + 240} textAnchor="middle" fill={cosv > 0.4 ? C.green : cosv > -0.1 ? C.amber : C.red}
-        style={{ font: "600 38px JetBrains Mono, monospace" }}>cos θ = {cosv.toFixed(3)}</text>
+        style={{ font: "600 38px var(--font-mono)" }}>cos θ = {cosv.toFixed(3)}</text>
     </svg>
   );
 }
@@ -71,7 +71,7 @@ function MotifGraph({ lt }: MotifProps) {
       )))}
       <circle cx={dot[0]} cy={dot[1]} r={9} fill={AVC} style={{ filter: `drop-shadow(0 0 12px ${AVC})` }} />
       {[0, 1, 2].map((i) => (
-        <text key={i} x={20} y={130 + i * 130} fill={C.dim2} style={{ font: "500 18px JetBrains Mono, monospace" }}>L{2 - i}</text>
+        <text key={i} x={20} y={130 + i * 130} fill={C.dim2} style={{ font: "500 18px var(--font-mono)" }}>L{2 - i}</text>
       ))}
     </svg>
   );
@@ -94,8 +94,8 @@ function MotifCurve({ lt }: MotifProps) {
       <line x1={40} y1={60} x2={40} y2={420} stroke="rgba(255,255,255,0.12)" />
       <path d={d} fill="none" stroke={AVC} strokeWidth={3} style={{ filter: `drop-shadow(0 0 8px ${AVC})` }} />
       {shown > 2 && last && <circle cx={last[0]} cy={last[1]} r={6} fill={AV} />}
-      <text x={300} y={150} fill={C.dim} style={{ font: "500 24px JetBrains Mono, monospace" }}>e<tspan dy="-10" fontSize="16">−λΔt</tspan></text>
-      <text x={420} y={448} fill={C.dim2} style={{ font: "400 16px JetBrains Mono, monospace" }}>Δt →</text>
+      <text x={300} y={150} fill={C.dim} style={{ font: "500 24px var(--font-mono)" }}>e<tspan dy="-10" fontSize="16">−λΔt</tspan></text>
+      <text x={420} y={448} fill={C.dim2} style={{ font: "400 16px var(--font-mono)" }}>Δt →</text>
     </svg>
   );
 }
@@ -109,8 +109,8 @@ function MotifChain({ lt }: MotifProps) {
           <g key={i}>
             {i < 2 && <line x1={260} y1={y + 80} x2={260} y2={y + 140} stroke={AVC} strokeWidth={2} opacity={0.6 + 0.4 * Math.sin(lt * 3 + i)} />}
             <rect x={150} y={y} width={220} height={80} rx={12} fill="rgba(167,139,250,0.1)" stroke={AV} strokeWidth={1.5} />
-            <text x={170} y={y + 32} fill={C.dim2} style={{ font: "400 15px JetBrains Mono, monospace" }}>block {String(i).padStart(2, "0")}</text>
-            <text x={170} y={y + 58} fill={AVC} style={{ font: "500 18px JetBrains Mono, monospace" }}>{hexOf(i + 11, 10)}…</text>
+            <text x={170} y={y + 32} fill={C.dim2} style={{ font: "400 15px var(--font-mono)" }}>block {String(i).padStart(2, "0")}</text>
+            <text x={170} y={y + 58} fill={AVC} style={{ font: "500 18px var(--font-mono)" }}>{hexOf(i + 11, 10)}…</text>
           </g>
         );
       })}
@@ -125,8 +125,8 @@ function MotifBlend({ lt }: MotifProps) {
       <circle cx={180} cy={200} r={90 + a * 30} fill="#60a5fa" opacity={0.35 + a * 0.3} style={{ filter: "blur(2px)" }} />
       <circle cx={340} cy={200} r={90 + (1 - a) * 30} fill={AV} opacity={0.35 + (1 - a) * 0.3} style={{ filter: "blur(2px)" }} />
       <circle cx={260} cy={350} r={70} fill="none" stroke={AVC} strokeWidth={2} opacity={0.7} />
-      <text x={260} y={358} textAnchor="middle" fill={AVC} style={{ font: "700 26px Outfit, sans-serif" }}>Abi</text>
-      <text x={260} y={460} textAnchor="middle" fill={C.text} style={{ font: "500 30px JetBrains Mono, monospace" }}>α = {a.toFixed(2)}</text>
+      <text x={260} y={358} textAnchor="middle" fill={AVC} style={{ font: "700 26px var(--font-display)" }}>Abi</text>
+      <text x={260} y={460} textAnchor="middle" fill={C.text} style={{ font: "500 30px var(--font-mono)" }}>α = {a.toFixed(2)}</text>
     </svg>
   );
 }
