@@ -7,7 +7,9 @@ import { SITE_URL } from "./structured-data";
 // Ported from mlai src/__tests__/feed.test.ts.
 describe("feed", () => {
   it("escapes XML-sensitive characters", () => {
-    expect(escapeXml(`a & b < c > "d" 'e'`)).toBe("a &amp; b &lt; c &gt; &quot;d&quot; &apos;e&apos;");
+    expect(escapeXml(`a & b < c > "d" 'e'`)).toBe(
+      "a &amp; b &lt; c &gt; &quot;d&quot; &apos;e&apos;",
+    );
   });
 
   it("parses the human-readable content date formats", () => {
@@ -22,7 +24,8 @@ describe("feed", () => {
     const links = items.map((i) => i.link);
     expect(new Set(links).size).toBe(links.length);
     for (const post of blog) expect(links).toContain(`${SITE_URL}/blog/${post.slug}`);
-    for (const pub of research.publications) expect(links).toContain(`${SITE_URL}/research/${pub.slug}`);
+    for (const pub of research.publications)
+      expect(links).toContain(`${SITE_URL}/research/${pub.slug}`);
   });
 
   it("sorts newest-first by parsed date", () => {

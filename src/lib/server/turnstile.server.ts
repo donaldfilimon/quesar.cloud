@@ -53,7 +53,11 @@ function requesterIp(req: Request): string | undefined {
   return req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || undefined;
 }
 
-export async function verifyTurnstile(req: Request, token: string, expectedAction: string): Promise<boolean> {
+export async function verifyTurnstile(
+  req: Request,
+  token: string,
+  expectedAction: string,
+): Promise<boolean> {
   const secret = env("TURNSTILE_SECRET") ?? "";
   const hostnames = expectedHostnames();
   if (!secret || hostnames.size === 0 || token.length < 10 || token.length > 4096) return false;
@@ -79,7 +83,10 @@ export async function verifyTurnstile(req: Request, token: string, expectedActio
       hostnames.has(result.hostname.toLowerCase())
     );
   } catch (error) {
-    console.error("Turnstile verification failed closed:", error instanceof Error ? error.message : "unknown error");
+    console.error(
+      "Turnstile verification failed closed:",
+      error instanceof Error ? error.message : "unknown error",
+    );
     return false;
   }
 }

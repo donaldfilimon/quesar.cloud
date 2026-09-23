@@ -1,6 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ChipCutaway } from "@/components/diagram/chip-cutaway";
-import { DataTable, PageClose, PageHero, PersonaGrid, Section, SpecList, Surface } from "@/components/site";
+import {
+  DataTable,
+  PageClose,
+  PageHero,
+  PersonaGrid,
+  Section,
+  SpecList,
+  Surface,
+} from "@/components/site";
 import { StatusBadge } from "@/components/site/status-badge";
 import { HomeControlPlane, HomeProductBoundary } from "@/components/site/home-sections";
 import { integrationApps, layers, wdbxSpecs } from "@/lib/content";
@@ -31,7 +39,11 @@ function PlatformPage() {
         <div className="grid gap-4">
           {layers.map((layer) => (
             <Link key={layer.name} to={layer.href} className="no-underline">
-              <Surface hover accent={layer.accent} className="grid gap-3 sm:grid-cols-[8rem_1fr] sm:items-baseline">
+              <Surface
+                hover
+                accent={layer.accent}
+                className="grid gap-3 sm:grid-cols-[8rem_1fr] sm:items-baseline"
+              >
                 <p className="text-xs text-fg-subtle">{layer.layer}</p>
                 <div>
                   <h3 className="font-display text-2xl">{layer.name}</h3>
@@ -67,7 +79,11 @@ function PlatformPage() {
         <PersonaGrid />
       </Section>
 
-      <Section eyebrow="Configuration" title="What the active crate actually sets." lede="Sourced from the Rust substrate. Not a scoreboard.">
+      <Section
+        eyebrow="Configuration"
+        title="What the active crate actually sets."
+        lede="Sourced from the Rust substrate. Not a scoreboard."
+      >
         <SpecList rows={wdbxSpecs} />
       </Section>
 
@@ -75,11 +91,13 @@ function PlatformPage() {
         <Surface>
           <h3 className="font-display text-xl">Gama</h3>
           <p className="mt-2 max-w-2xl text-sm leading-relaxed text-fg-muted">
-            A modular declarative Swift UI framework with TUI, Apple, WebAssembly, and embed backends. It lives at{" "}
+            A modular declarative Swift UI framework with TUI, Apple, WebAssembly, and embed
+            backends. It lives at{" "}
             <Link to="/gama" className="text-accent">
               Gama
             </Link>
-            . It is not a Quesar product, not an Abbey runtime, and not evidence of a shipped spatial engine.
+            . It is not a Quesar product, not an Abbey runtime, and not evidence of a shipped
+            spatial engine.
           </p>
         </Surface>
       </Section>

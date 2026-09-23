@@ -80,8 +80,18 @@
   --spectrum-cyan: var(--mlai-cyan);
   --spectrum-blue: var(--mlai-blue-hi);
   --spectrum-violet: var(--mlai-violet);
-  --spectrum-grad: linear-gradient(100deg, var(--mlai-cyan-hi), var(--mlai-blue-hi), var(--mlai-violet-hi));
-  --spectrum-grad-135: linear-gradient(135deg, var(--mlai-cyan) 0%, var(--mlai-blue) 48%, var(--mlai-violet) 100%);
+  --spectrum-grad: linear-gradient(
+    100deg,
+    var(--mlai-cyan-hi),
+    var(--mlai-blue-hi),
+    var(--mlai-violet-hi)
+  );
+  --spectrum-grad-135: linear-gradient(
+    135deg,
+    var(--mlai-cyan) 0%,
+    var(--mlai-blue) 48%,
+    var(--mlai-violet) 100%
+  );
 
   /* persona ↔ color binding: the site's dark persona colors */
   --persona-abbey: var(--abbey);
@@ -129,11 +139,27 @@
   --glass-sheen: inset 0 1px 0 rgba(255, 255, 255, 0.08);
 
   /* one declared light direction */
-  --light-key: radial-gradient(55% 45% at 50% -8%, color-mix(in oklch, var(--primary) 16%, transparent), transparent 70%);
-  --light-fill: radial-gradient(40% 50% at 95% 108%, color-mix(in oklch, var(--abi) 14%, transparent), transparent 70%);
+  --light-key: radial-gradient(
+    55% 45% at 50% -8%,
+    color-mix(in oklch, var(--primary) 16%, transparent),
+    transparent 70%
+  );
+  --light-fill: radial-gradient(
+    40% 50% at 95% 108%,
+    color-mix(in oklch, var(--abi) 14%, transparent),
+    transparent 70%
+  );
   --light-ambient:
-    radial-gradient(50% 35% at 60% -5%, color-mix(in oklch, var(--primary) 7%, transparent), transparent 70%),
-    radial-gradient(40% 40% at 100% 100%, color-mix(in oklch, var(--abi) 6%, transparent), transparent 70%);
+    radial-gradient(
+      50% 35% at 60% -5%,
+      color-mix(in oklch, var(--primary) 7%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      40% 40% at 100% 100%,
+      color-mix(in oklch, var(--abi) 6%, transparent),
+      transparent 70%
+    );
 
   /* spacing — 4px base */
   --space-1: 0.25rem;

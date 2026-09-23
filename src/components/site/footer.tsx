@@ -62,9 +62,7 @@ export function SiteFooter() {
         <div className="grid grid-cols-2 gap-8 sm:grid-cols-3">
           {groups.map((group) => (
             <div key={group.title}>
-              <p className="text-xs font-medium text-fg-subtle">
-                {group.title}
-              </p>
+              <p className="text-xs font-medium text-fg-subtle">{group.title}</p>
               <ul className="mt-3 space-y-2">
                 {group.links.map((link) => (
                   <li key={link.label}>
@@ -81,7 +79,10 @@ export function SiteFooter() {
       <div className="border-t border-border">
         <div className="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-5 text-xs text-fg-subtle sm:flex-row sm:items-center sm:justify-between sm:px-6">
           <p>© {new Date().getFullYear()} MLAI Corporation. Apache-2.0 on core runtimes.</p>
-          <p>This site orients and offers a signed-in console for field notes. It does not host assistant sessions.</p>
+          <p>
+            This site orients and offers a signed-in console for field notes. It does not host
+            assistant sessions.
+          </p>
         </div>
       </div>
     </footer>

@@ -133,7 +133,13 @@ export class SceneSequencer implements Scene {
     this.integrated = 0;
     this.lastLocal = 0;
     if (cue) {
-      this.ctx = { random: createRandom(cue.seed), particles: this.particles, width, height, quality: this.quality };
+      this.ctx = {
+        random: createRandom(cue.seed),
+        particles: this.particles,
+        width,
+        height,
+        quality: this.quality,
+      };
       this.active = cue;
       cue.scene.enter(this.ctx);
     }

@@ -8,7 +8,11 @@ const Room = lazy(() => import("@/cinematic/rooms/film"));
 export const Route = createFileRoute("/showcase/film")({
   // Canvas, requestAnimationFrame and WebAudio only exist in the browser.
   ssr: false,
-  head: () => pageHead("Film — Showcase", "The full scene-library film on the shared timeline engine. Atmosphere, not a measured result."),
+  head: () =>
+    pageHead(
+      "Film — Showcase",
+      "The full scene-library film on the shared timeline engine. Atmosphere, not a measured result.",
+    ),
   component: ShowcaseFilmPage,
 });
 

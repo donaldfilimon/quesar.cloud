@@ -27,9 +27,18 @@ const STATUS_TEXT: Record<Exclude<Status, "error">, string> = {
 };
 
 const SKELETON: ReadonlyArray<readonly [number, number]> = [
-  [5, 7], [7, 9], [6, 8], [8, 10], // arms
-  [5, 6], [5, 11], [6, 12], [11, 12], // torso
-  [11, 13], [13, 15], [12, 14], [14, 16], // legs
+  [5, 7],
+  [7, 9],
+  [6, 8],
+  [8, 10], // arms
+  [5, 6],
+  [5, 11],
+  [6, 12],
+  [11, 12], // torso
+  [11, 13],
+  [13, 15],
+  [12, 14],
+  [14, 16], // legs
 ];
 
 const MIN_SCORE = 0.5;
@@ -248,18 +257,26 @@ const TFPoseDemo = () => {
       <div className="surface p-6">
         <h2 className="font-display text-xl text-fg">How it works</h2>
         <p className="mt-3 text-sm leading-relaxed text-fg-muted">
-          TensorFlow.js runs the PoseNet model (MobileNetV1) on your webcam feed. It estimates seventeen body
-          keypoints per frame, such as shoulders, elbows and knees, and draws the confident ones over the video.
+          TensorFlow.js runs the PoseNet model (MobileNetV1) on your webcam feed. It estimates
+          seventeen body keypoints per frame, such as shoulders, elbows and knees, and draws the
+          confident ones over the video.
         </p>
         <p className="mt-3 text-sm leading-relaxed text-fg-muted">
-          <strong className="text-fg">Privacy:</strong> no video or personal data leaves your browser. The model
-          weights are downloaded from Google&apos;s public model storage. The camera stops when you leave this page.
+          <strong className="text-fg">Privacy:</strong> no video or personal data leaves your
+          browser. The model weights are downloaded from Google&apos;s public model storage. The
+          camera stops when you leave this page.
         </p>
         <p className="mt-3 text-sm leading-relaxed text-fg-muted">
-          This is an isolated prototype, separate from the MLAI platform, not a production vision stack.
+          This is an isolated prototype, separate from the MLAI platform, not a production vision
+          stack.
         </p>
         <div className="mt-6">
-          <Button type="button" onClick={() => setAttempt((n) => n + 1)} variant="secondary" disabled={busy}>
+          <Button
+            type="button"
+            onClick={() => setAttempt((n) => n + 1)}
+            variant="secondary"
+            disabled={busy}
+          >
             {status === "idle" ? "Start camera" : status === "error" ? "Try again" : "Restart demo"}
           </Button>
         </div>

@@ -5,7 +5,11 @@ import { Trailer } from "@/components/site/trailer";
 import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/showcase")({
-  head: () => pageHead("Showcase — Quesar", "Quesar showcase: trailer, film, explainer, design lab, Abbey, mega board."),
+  head: () =>
+    pageHead(
+      "Showcase — Quesar",
+      "Quesar showcase: trailer, film, explainer, design lab, Abbey, mega board.",
+    ),
   component: ShowcasePage,
 });
 

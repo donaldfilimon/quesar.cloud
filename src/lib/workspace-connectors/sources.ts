@@ -117,7 +117,10 @@ function nonEmptyString(value: unknown): string | null {
  * rendered. Returning null (rather than throwing) keeps one malformed row from
  * blanking the whole source.
  */
-export function parseWorkspaceFile(input: unknown, source: WorkspaceSourceId): WorkspaceFile | null {
+export function parseWorkspaceFile(
+  input: unknown,
+  source: WorkspaceSourceId,
+): WorkspaceFile | null {
   if (!input || typeof input !== "object" || Array.isArray(input)) return null;
   const row = input as Record<string, unknown>;
 
@@ -276,7 +279,10 @@ export interface WorkspaceFilter {
   query: string;
 }
 
-export function filterFiles(files: readonly WorkspaceFile[], filter: WorkspaceFilter): WorkspaceFile[] {
+export function filterFiles(
+  files: readonly WorkspaceFile[],
+  filter: WorkspaceFilter,
+): WorkspaceFile[] {
   const query = filter.query.trim().toLowerCase();
   return files.filter((file) => {
     if (filter.kind && file.kind !== filter.kind) return false;
@@ -289,7 +295,8 @@ export function filterFiles(files: readonly WorkspaceFile[], filter: WorkspaceFi
 export function countByKind(files: readonly WorkspaceFile[]): Record<string, number> {
   const counts: Record<string, number> = { All: files.length };
   for (const kind of KINDS) counts[KIND_LABEL[kind]] = 0;
-  for (const file of files) counts[KIND_LABEL[file.kind]] = (counts[KIND_LABEL[file.kind]] ?? 0) + 1;
+  for (const file of files)
+    counts[KIND_LABEL[file.kind]] = (counts[KIND_LABEL[file.kind]] ?? 0) + 1;
   return counts;
 }
 

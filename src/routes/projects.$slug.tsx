@@ -15,7 +15,10 @@ export const Route = createFileRoute("/projects/$slug")({
     return { name: project.name, description: project.description, ld: projectLd(project) };
   },
   head: ({ loaderData }) => ({
-    ...pageHead(`${loaderData?.name ?? "Project"} — MLAI`, loaderData?.description ?? "MLAI project."),
+    ...pageHead(
+      `${loaderData?.name ?? "Project"} — MLAI`,
+      loaderData?.description ?? "MLAI project.",
+    ),
     scripts: loaderData ? [jsonLdScript(loaderData.ld)] : [],
   }),
   component: ProjectPage,
@@ -46,7 +49,13 @@ function ProjectPage() {
       <PageClose
         primary={{ to: project.docsHref, label: "Docs" }}
         secondary={[{ to: "/projects", label: "Directory" }]}
-        next={[{ to: "/architecture", label: "Architecture", body: "Where this project sits on the stack." }]}
+        next={[
+          {
+            to: "/architecture",
+            label: "Architecture",
+            body: "Where this project sits on the stack.",
+          },
+        ]}
       />
     </>
   );

@@ -62,7 +62,9 @@ describe("mapDriveFile", () => {
   });
 
   it("drops folders and rows missing anything the view renders", () => {
-    expect(mapDriveFile({ ...DRIVE_ROW, mimeType: "application/vnd.google-apps.folder" })).toBeNull();
+    expect(
+      mapDriveFile({ ...DRIVE_ROW, mimeType: "application/vnd.google-apps.folder" }),
+    ).toBeNull();
     for (const key of ["id", "name", "modifiedTime", "webViewLink"] as const) {
       const row: Record<string, unknown> = { ...DRIVE_ROW };
       delete row[key];

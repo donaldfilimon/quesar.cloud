@@ -56,7 +56,10 @@ function catalogHits(query: string): Hit[] {
         title: node.name,
         href: `/architecture?node=${node.id}`,
         excerpt,
-        score: overlap(query, `${node.name} ${node.summary} ${node.detail} ${node.implemented.join(" ")}`),
+        score: overlap(
+          query,
+          `${node.name} ${node.summary} ${node.detail} ${node.implemented.join(" ")}`,
+        ),
       };
     })
     .sort((a, b) => b.score - a.score)
@@ -68,8 +71,11 @@ function localReply(desk: DeskId, hits: Hit[]) {
     .filter((hit) => hit.score > 0)
     .map((hit) => `${hit.title}: ${hit.excerpt}`)
     .slice(0, 2);
-  const body = lines.length ? lines.join(" ") : "Nothing in the on-site catalog matched that wording.";
-  if (desk === "wdbx") return `Local retrieval. This is lexical overlap, not the Rust HNSW. ${body}`;
+  const body = lines.length
+    ? lines.join(" ")
+    : "Nothing in the on-site catalog matched that wording.";
+  if (desk === "wdbx")
+    return `Local retrieval. This is lexical overlap, not the Rust HNSW. ${body}`;
   if (desk === "quesar") return `Local inspect. The model endpoint is not configured. ${body}`;
   return `Local ${desk} desk. The model endpoint is not configured, so this stays on the catalog. ${body}`;
 }
@@ -79,7 +85,13 @@ export const askDesk = createServerFn({ method: "POST" })
   .validator((value: unknown) => input.parse(value))
   .handler(async ({ data, context }) => {
     const hits = catalogHits(data.prompt);
-    const local = { ok: true as const, mode: "local" as const, desk: data.desk, text: localReply(data.desk, hits), hits };
+    const local = {
+      ok: true as const,
+      mode: "local" as const,
+      desk: data.desk,
+      text: localReply(data.desk, hits),
+      hits,
+    };
     const { complete, status } = await import("@/lib/server/llm");
     // Unconfigured: the desk answers from the catalog and says so (localReply names it).
     if (!status().configured) return local;
@@ -95,6 +107,7 @@ export const askDesk = createServerFn({ method: "POST" })
         { role: "user", content: `Catalog hits:\n${catalog}\n\nOperator: ${data.prompt}` },
       ],
     });
-    if (!result.ok) return { ...local, text: `The model call failed (${result.message}). ${local.text}` };
+    if (!result.ok)
+      return { ...local, text: `The model call failed (${result.message}). ${local.text}` };
     return { ok: true as const, mode: "model" as const, desk: data.desk, text: result.text, hits };
   });

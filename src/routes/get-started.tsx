@@ -7,7 +7,10 @@ import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/get-started")({
   head: () =>
-    pageHead("Get started — Quesar", "Start journeys for research, Abbey, mobile, and Quasar without leaving this site."),
+    pageHead(
+      "Get started — Quesar",
+      "Start journeys for research, Abbey, mobile, and Quasar without leaving this site.",
+    ),
   component: GetStartedPage,
 });
 
@@ -53,7 +56,11 @@ function GetStartedPage() {
       <PageClose
         primary={{ to: "/docs/getting-started", label: "Docs: getting started" }}
         next={[
-          { to: "/architecture", label: "Architecture", body: "Click a node for current versus not claimed." },
+          {
+            to: "/architecture",
+            label: "Architecture",
+            body: "Click a node for current versus not claimed.",
+          },
           { to: "/apps", label: "Apps", body: "Working orientations of the shipping surfaces." },
         ]}
       />

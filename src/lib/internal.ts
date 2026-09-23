@@ -38,11 +38,17 @@ export function isExternal(href: string) {
 
 /** Path-only redirects after sign-in. Reject protocol-relative and off-site values. */
 export function safeInternalPath(path: string, fallback = "/console") {
-  if (!path.startsWith("/") || path.startsWith("//") || path.startsWith("/\\") || path.includes("://")) {
+  if (
+    !path.startsWith("/") ||
+    path.startsWith("//") ||
+    path.startsWith("/\\") ||
+    path.includes("://")
+  ) {
     return fallback;
   }
   if (path.startsWith("/api") || path.startsWith("/auth/")) return fallback;
   // Never bounce back into the sign-in page itself (a nested ?next= loop).
-  if (path === "/login" || path.startsWith("/login?") || path.startsWith("/login/")) return fallback;
+  if (path === "/login" || path.startsWith("/login?") || path.startsWith("/login/"))
+    return fallback;
   return path;
 }

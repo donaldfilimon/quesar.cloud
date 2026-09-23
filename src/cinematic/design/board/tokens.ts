@@ -13,7 +13,9 @@ export interface ColorEntry {
 
 const c = (token: string, value: string, note: string): ColorEntry => ({ token, value, note });
 
-export const COLOR: Readonly<Record<"action" | "spectrum" | "semantic" | "neutral", readonly ColorEntry[]>> = {
+export const COLOR: Readonly<
+  Record<"action" | "spectrum" | "semantic" | "neutral", readonly ColorEntry[]>
+> = {
   action: [
     c("--action", "#3B82F6", "Primary action · buttons, links, focus"),
     c("--action-hover", "#2563EB", "Hover / pressed action"),
@@ -61,19 +63,66 @@ export interface ElevationEntry {
   readonly border: string;
 }
 export const ELEVATION: readonly ElevationEntry[] = [
-  { n: "L0", name: "Canvas", token: "--surface-0", bg: "#050509", use: "Page background", shadow: "none", border: "transparent" },
-  { n: "L1", name: "Sunken", token: "--surface-1", bg: "#08090F", use: "Inset wells, code, inputs", shadow: "inset 0 2px 14px rgba(0,0,0,0.55)", border: "rgba(255,255,255,0.05)" },
-  { n: "L2", name: "Surface", token: "--surface-2", bg: "#0E0F18", use: "Default card / panel", shadow: "0 8px 32px rgba(0,0,0,0.35)", border: "rgba(255,255,255,0.08)" },
-  { n: "L3", name: "Raised", token: "--surface-3", bg: "#16172132", use: "Hover, nested card, popover", shadow: "0 14px 44px rgba(0,0,0,0.5)", border: "rgba(255,255,255,0.11)" },
-  { n: "L4", name: "Overlay", token: "--surface-4", bg: "#1D1E2A", use: "Modal, tooltip, command menu", shadow: "0 28px 80px rgba(0,0,0,0.7)", border: "rgba(255,255,255,0.14)" },
+  {
+    n: "L0",
+    name: "Canvas",
+    token: "--surface-0",
+    bg: "#050509",
+    use: "Page background",
+    shadow: "none",
+    border: "transparent",
+  },
+  {
+    n: "L1",
+    name: "Sunken",
+    token: "--surface-1",
+    bg: "#08090F",
+    use: "Inset wells, code, inputs",
+    shadow: "inset 0 2px 14px rgba(0,0,0,0.55)",
+    border: "rgba(255,255,255,0.05)",
+  },
+  {
+    n: "L2",
+    name: "Surface",
+    token: "--surface-2",
+    bg: "#0E0F18",
+    use: "Default card / panel",
+    shadow: "0 8px 32px rgba(0,0,0,0.35)",
+    border: "rgba(255,255,255,0.08)",
+  },
+  {
+    n: "L3",
+    name: "Raised",
+    token: "--surface-3",
+    bg: "#16172132",
+    use: "Hover, nested card, popover",
+    shadow: "0 14px 44px rgba(0,0,0,0.5)",
+    border: "rgba(255,255,255,0.11)",
+  },
+  {
+    n: "L4",
+    name: "Overlay",
+    token: "--surface-4",
+    bg: "#1D1E2A",
+    use: "Modal, tooltip, command menu",
+    shadow: "0 28px 80px rgba(0,0,0,0.7)",
+    border: "rgba(255,255,255,0.14)",
+  },
 ];
 
 /* spacing scale — 4px base. Tuple: [name, rem, px] */
 export type SpacingEntry = readonly [name: string, rem: string, px: number];
 export const SPACING: readonly SpacingEntry[] = [
-  ["1", "0.25rem", 4], ["2", "0.5rem", 8], ["3", "0.75rem", 12], ["4", "1rem", 16],
-  ["5", "1.5rem", 24], ["6", "2rem", 32], ["7", "3rem", 48], ["8", "4rem", 64],
-  ["9", "6rem", 96], ["10", "8rem", 128],
+  ["1", "0.25rem", 4],
+  ["2", "0.5rem", 8],
+  ["3", "0.75rem", 12],
+  ["4", "1rem", 16],
+  ["5", "1.5rem", 24],
+  ["6", "2rem", 32],
+  ["7", "3rem", 48],
+  ["8", "4rem", 64],
+  ["9", "6rem", 96],
+  ["10", "8rem", 128],
 ];
 
 /* rhythm tokens built on the scale. Tuple: [token, value, note] */

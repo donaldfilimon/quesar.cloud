@@ -168,7 +168,13 @@ export class WdbxEngine {
 
     return {
       hits: top,
-      stats: { ms, scanned: this.store.length, partitionsHit: partitionsTouched.size, snapshot, dim: DIM },
+      stats: {
+        ms,
+        scanned: this.store.length,
+        partitionsHit: partitionsTouched.size,
+        snapshot,
+        dim: DIM,
+      },
     };
   }
 }

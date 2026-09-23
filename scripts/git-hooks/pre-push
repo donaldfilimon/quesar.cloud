@@ -1,0 +1,5 @@
+#!/bin/sh
+# Opt-in gate before every push (the repo has no CI):
+#   git config core.hooksPath scripts/git-hooks
+# Skip once with `git push --no-verify`.
+exec bun run check

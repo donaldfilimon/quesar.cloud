@@ -31,23 +31,38 @@ function ProductsPage() {
               <Surface key={product.slug} accent={accent} className="flex h-full flex-col">
                 <p className="text-xs text-fg-subtle">{product.kicker}</p>
                 <h2 className="mt-1 font-display text-3xl tracking-tight">
-                  <Link to="/products/$slug" params={{ slug: product.slug }} className="text-fg no-underline hover:underline">
+                  <Link
+                    to="/products/$slug"
+                    params={{ slug: product.slug }}
+                    className="text-fg no-underline hover:underline"
+                  >
                     {product.name}
                   </Link>
                 </h2>
-                <p className="mt-3 text-base leading-relaxed text-fg">{journey?.purpose ?? product.intro}</p>
+                <p className="mt-3 text-base leading-relaxed text-fg">
+                  {journey?.purpose ?? product.intro}
+                </p>
                 {journey ? (
                   <>
                     <p className="mt-4 text-sm text-accent">{journey.availability}</p>
-                    <p className="mt-2 text-sm leading-relaxed text-fg-muted">{journey.limitation}</p>
+                    <p className="mt-2 text-sm leading-relaxed text-fg-muted">
+                      {journey.limitation}
+                    </p>
                   </>
                 ) : null}
                 <div className="mt-auto flex flex-wrap gap-5 pt-6 text-sm">
-                  <Link to="/products/$slug" params={{ slug: product.slug }} className="text-fg underline underline-offset-4">
+                  <Link
+                    to="/products/$slug"
+                    params={{ slug: product.slug }}
+                    className="text-fg underline underline-offset-4"
+                  >
                     Explore {product.name}
                   </Link>
                   {journey ? (
-                    <AppLink to={journey.setupHref} className="text-accent underline underline-offset-4">
+                    <AppLink
+                      to={journey.setupHref}
+                      className="text-accent underline underline-offset-4"
+                    >
                       Setup documentation
                     </AppLink>
                   ) : null}
@@ -57,14 +72,25 @@ function ProductsPage() {
           })}
         </div>
         <p className="mt-10 text-sm text-fg-muted">
-          Choose by what you want to do: <Link to="/get-started" className="text-accent">Get started</Link>. Inspect the
-          supporting <Link to="/research" className="text-accent">research collection</Link>.
+          Choose by what you want to do:{" "}
+          <Link to="/get-started" className="text-accent">
+            Get started
+          </Link>
+          . Inspect the supporting{" "}
+          <Link to="/research" className="text-accent">
+            research collection
+          </Link>
+          .
         </p>
       </Section>
       <PageClose
         primary={{ to: "/architecture", label: "Architecture" }}
         next={[
-          { to: "/quesar", label: "Quesar", body: "The platform that makes the relationships obvious." },
+          {
+            to: "/quesar",
+            label: "Quesar",
+            body: "The platform that makes the relationships obvious.",
+          },
           { to: "/apps", label: "Apps", body: "Working orientations of the shipping surfaces." },
         ]}
       />

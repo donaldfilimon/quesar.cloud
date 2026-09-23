@@ -16,7 +16,10 @@ export const Route = createFileRoute("/blog/$slug")({
     return { title: post.title, excerpt: post.excerpt, ld: blogPostingLd(post) };
   },
   head: ({ loaderData }) => ({
-    ...pageHead(`${loaderData?.title ?? "Note"} — Blog`, loaderData?.excerpt ?? "MLAI engineering note."),
+    ...pageHead(
+      `${loaderData?.title ?? "Note"} — Blog`,
+      loaderData?.excerpt ?? "MLAI engineering note.",
+    ),
     scripts: loaderData ? [jsonLdScript(loaderData.ld)] : [],
   }),
   component: BlogPost,
@@ -35,7 +38,9 @@ function BlogPost() {
         title={post.title}
         lede={post.excerpt}
       >
-        {post.author ? <p className="mt-5 font-mono text-xs tracking-wide text-fg-muted">By {post.author}</p> : null}
+        {post.author ? (
+          <p className="mt-5 font-mono text-xs tracking-wide text-fg-muted">By {post.author}</p>
+        ) : null}
       </PageHero>
       <Section>
         <MathArticleBody sections={post.body} />
@@ -46,7 +51,9 @@ function BlogPost() {
           {next && next.slug !== post.slug ? (
             <Link to="/blog/$slug" params={{ slug: next.slug }} className="text-right no-underline">
               <span className="block text-xs text-fg-subtle">Next note</span>
-              <span className="mt-1 block font-display text-lg text-fg hover:underline">{next.title}</span>
+              <span className="mt-1 block font-display text-lg text-fg hover:underline">
+                {next.title}
+              </span>
             </Link>
           ) : null}
         </div>

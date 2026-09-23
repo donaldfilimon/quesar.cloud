@@ -151,9 +151,7 @@ export function ChatPanel({ onOpenAudits }: { onOpenAudits: () => void }) {
     <div className="grid gap-6 lg:grid-cols-[minmax(16rem,0.72fr)_minmax(0,1.28fr)]">
       <aside className="grid content-start gap-4">
         <Surface>
-          <p className="text-xs text-accent">
-            Generation boundary
-          </p>
+          <p className="text-xs text-accent">Generation boundary</p>
           <p className="mt-2 text-sm text-fg-muted">
             No user email is sent to the model provider. Chat stays only in this tab&apos;s memory;
             the durable copy is the encrypted audit.
@@ -185,14 +183,12 @@ export function ChatPanel({ onOpenAudits }: { onOpenAudits: () => void }) {
         </Surface>
 
         <Surface>
-          <p className="text-xs text-accent">
-            One-year audit policy
-          </p>
+          <p className="text-xs text-accent">One-year audit policy</p>
           <p className="mt-2 text-sm text-fg-muted">
             Prompts and responses are sealed with AES-256-GCM, bound to your account, retained for{" "}
             {status?.policy.retentionDays ?? 365} days, and available to you and to allowlisted
-            administrators with a linked Google or Apple account. Every admin read and delete
-            is reason-logged.
+            administrators with a linked Google or Apple account. Every admin read and delete is
+            reason-logged.
           </p>
           <p className="mt-3 font-mono text-xs text-fg-subtle">
             policy {consent?.policyVersion ?? "loading"}
@@ -287,9 +283,7 @@ export function ChatPanel({ onOpenAudits }: { onOpenAudits: () => void }) {
           <ol className="grid gap-3" aria-label="This tab's conversation">
             {messages.slice(0, -1).map((message, index) => (
               <li key={index} className="rounded-lg bg-bg-subtle px-4 py-3 text-sm text-fg-muted">
-                <span className="text-xs text-fg-subtle">
-                  {message.role}
-                </span>
+                <span className="text-xs text-fg-subtle">{message.role}</span>
                 <p className="mt-1 whitespace-pre-wrap">{message.content}</p>
               </li>
             ))}
@@ -299,9 +293,7 @@ export function ChatPanel({ onOpenAudits }: { onOpenAudits: () => void }) {
         {reply ? (
           <div className="rounded-xl bg-card p-5 shadow-[var(--shadow-border)]">
             <div className="flex items-center justify-between gap-3">
-              <span className="text-xs text-accent">
-                Quesar response
-              </span>
+              <span className="text-xs text-accent">Quesar response</span>
               <div className="flex items-center gap-1">
                 <Button variant="ghost" size="sm" onClick={onOpenAudits}>
                   View audit

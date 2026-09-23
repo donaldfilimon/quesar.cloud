@@ -15,7 +15,8 @@ import { staticSite } from "@/lib/static-site";
 import { useEffect } from "react";
 import { useRouterState } from "@tanstack/react-router";
 
-export type TelemetryEvent = "page_view" | "inquiry_open" | "inquiry_submit" | "inquiry_success" | "inquiry_close";
+export type TelemetryEvent =
+  "page_view" | "inquiry_open" | "inquiry_submit" | "inquiry_success" | "inquiry_close";
 
 /** doNotTrack is "1" in Chromium; older Firefox/Safari report "yes". Honor both, plus GPC. */
 export function optedOut(): boolean {

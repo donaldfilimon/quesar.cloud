@@ -18,13 +18,22 @@ import { primeNeural, setSpeechPlaying, speak, stopSpeech, useVoiceReady } from 
 import { Grain, Vignette } from "../film/primitives";
 import { buildAbbeyTimeline, captionAt, type AbbeyTimeline } from "./scenes";
 
-const W = 1920, H = 1080;
+const W = 1920,
+  H = 1080;
 /** A jump larger than this between ticks is a scrub, not a stall. */
 const SCRUB_THRESHOLD = 0.5;
 
 function useAbbeyTimeline(): AbbeyTimeline {
   return useMemo(
-    () => buildAbbeyTimeline({ abi: PERSONAS.abi.color, aviva: PERSONAS.aviva.color, abbey: PERSONAS.abbey.color, ink: C.bg, text: C.text, dim: C.dim }),
+    () =>
+      buildAbbeyTimeline({
+        abi: PERSONAS.abi.color,
+        aviva: PERSONAS.aviva.color,
+        abbey: PERSONAS.abbey.color,
+        ink: C.bg,
+        text: C.text,
+        dim: C.dim,
+      }),
     [],
   );
 }
@@ -117,8 +126,13 @@ function AbbeyCanvas({ timeline }: { timeline: AbbeyTimeline }) {
   }, [time, reduced]);
 
   const style: CSSProperties = {
-    position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none",
-    opacity: settled ? 1 : 0, transition: reduced ? "opacity 400ms ease" : "none",
+    position: "absolute",
+    inset: 0,
+    width: "100%",
+    height: "100%",
+    pointerEvents: "none",
+    opacity: settled ? 1 : 0,
+    transition: reduced ? "opacity 400ms ease" : "none",
   };
   return <canvas ref={ref} style={style} aria-hidden="true" />;
 }
@@ -129,12 +143,51 @@ function AbbeyCaption({ timeline }: { timeline: AbbeyTimeline }) {
   const persona = line?.who ? PERSONAS[line.who] : null;
   const opacity = line ? fade(time - line.start, line.end - line.start, 0.25, 0.3) : 0;
   return (
-    <div aria-live="polite" style={{ position: "absolute", left: 0, right: 0, bottom: 72, display: "flex", justifyContent: "center", pointerEvents: "none" }}>
-      <div style={{ display: "flex", alignItems: "center", gap: 16, opacity, maxWidth: 1500, padding: "0 40px" }}>
+    <div
+      aria-live="polite"
+      style={{
+        position: "absolute",
+        left: 0,
+        right: 0,
+        bottom: 72,
+        display: "flex",
+        justifyContent: "center",
+        pointerEvents: "none",
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 16,
+          opacity,
+          maxWidth: 1500,
+          padding: "0 40px",
+        }}
+      >
         {persona && (
-          <span style={{ fontFamily: FONT.mono, fontSize: 13, letterSpacing: "0.28em", color: persona.color, flexShrink: 0 }}>{persona.name.toUpperCase()}</span>
+          <span
+            style={{
+              fontFamily: FONT.mono,
+              fontSize: 13,
+              letterSpacing: "0.28em",
+              color: persona.color,
+              flexShrink: 0,
+            }}
+          >
+            {persona.name.toUpperCase()}
+          </span>
         )}
-        <span style={{ fontFamily: FONT.display, fontWeight: 600, fontSize: 34, letterSpacing: "-0.01em", color: C.text, textShadow: "0 2px 24px rgba(0,0,0,0.85)" }}>
+        <span
+          style={{
+            fontFamily: FONT.display,
+            fontWeight: 600,
+            fontSize: 34,
+            letterSpacing: "-0.01em",
+            color: C.text,
+            textShadow: "0 2px 24px rgba(0,0,0,0.85)",
+          }}
+        >
           {line?.text ?? ""}
         </span>
       </div>
@@ -159,7 +212,9 @@ function AbbeyNarration({ timeline }: { timeline: AbbeyTimeline }) {
     prev.current = time;
     if (time < p - 0.35) {
       stopSpeech();
-      spoken.current = new Set(timeline.captions.filter((c) => c.start <= time + 0.05).map((c) => c.start));
+      spoken.current = new Set(
+        timeline.captions.filter((c) => c.start <= time + 0.05).map((c) => c.start),
+      );
       return;
     }
     if (!playing) return;
@@ -181,12 +236,54 @@ function AbbeyNarration({ timeline }: { timeline: AbbeyTimeline }) {
 // stays safe when copy later arrives from a CMS or a model.
 function AbbeyTranscript({ timeline }: { timeline: AbbeyTimeline }) {
   return (
-    <details style={{ position: "absolute", left: 24, bottom: 24, zIndex: 60, maxWidth: 520, color: C.dim, fontFamily: FONT.sans, fontSize: 14 }}>
-      <summary style={{ cursor: "pointer", fontFamily: FONT.mono, fontSize: 12, letterSpacing: "0.22em", color: C.dim2 }}>TRANSCRIPT</summary>
-      <ol style={{ margin: "10px 0 0", padding: "12px 16px 12px 32px", background: "rgba(4,4,6,0.82)", border: `1px solid ${C.line}`, borderRadius: 10, lineHeight: 1.5 }}>
+    <details
+      style={{
+        position: "absolute",
+        left: 24,
+        bottom: 24,
+        zIndex: 60,
+        maxWidth: 520,
+        color: C.dim,
+        fontFamily: FONT.sans,
+        fontSize: 14,
+      }}
+    >
+      <summary
+        style={{
+          cursor: "pointer",
+          fontFamily: FONT.mono,
+          fontSize: 12,
+          letterSpacing: "0.22em",
+          color: C.dim2,
+        }}
+      >
+        TRANSCRIPT
+      </summary>
+      <ol
+        style={{
+          margin: "10px 0 0",
+          padding: "12px 16px 12px 32px",
+          background: "rgba(4,4,6,0.82)",
+          border: `1px solid ${C.line}`,
+          borderRadius: 10,
+          lineHeight: 1.5,
+        }}
+      >
         {timeline.captions.map((c) => (
           <li key={c.start}>
-            {c.who ? <span style={{ color: PERSONAS[c.who].color, fontFamily: FONT.mono, fontSize: 12, letterSpacing: "0.18em", marginRight: 8 }}>{PERSONAS[c.who].name.toUpperCase()}</span> : null}
+            {c.who ? (
+              <span
+                style={{
+                  color: PERSONAS[c.who].color,
+                  fontFamily: FONT.mono,
+                  fontSize: 12,
+                  letterSpacing: "0.18em",
+                  marginRight: 8,
+                }}
+              >
+                {PERSONAS[c.who].name.toUpperCase()}
+              </span>
+            ) : null}
             {c.text}
           </li>
         ))}
@@ -199,7 +296,14 @@ export function AbbeyTrailer() {
   const timeline = useAbbeyTimeline();
   const ready = useVoiceReady();
   return (
-    <Stage width={W} height={H} duration={timeline.duration} background={C.bg} persistKey="mlai-abbey" ready={ready}>
+    <Stage
+      width={W}
+      height={H}
+      duration={timeline.duration}
+      background={C.bg}
+      persistKey="mlai-abbey"
+      ready={ready}
+    >
       <AbbeyCanvas timeline={timeline} />
       <Vignette />
       <AbbeyCaption timeline={timeline} />

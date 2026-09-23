@@ -59,7 +59,8 @@ function Desk({ name }: { name: string }) {
           <p className="text-xs text-primary">Signed-in desk</p>
           <h1 className="mt-2 font-display text-3xl tracking-tight sm:text-5xl">Hello, {name}.</h1>
           <p className="mt-3 max-w-[66ch] text-base leading-7 text-fg">
-            Abbey, Aviva, Abi, Quesar, and WDBX answer through one API. WDBX here is lexical catalog retrieval, not the Rust index.
+            Abbey, Aviva, Abi, Quesar, and WDBX answer through one API. WDBX here is lexical catalog
+            retrieval, not the Rust index.
           </p>
         </div>
         <Link to="/console" className="text-sm text-primary no-underline hover:underline">

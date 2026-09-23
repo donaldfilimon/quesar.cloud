@@ -9,7 +9,12 @@ export function ArrChart() {
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={data} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
           <CartesianGrid stroke="var(--border)" vertical={false} />
-          <XAxis dataKey="year" tick={{ fill: "var(--fg-subtle)", fontSize: 11 }} axisLine={false} tickLine={false} />
+          <XAxis
+            dataKey="year"
+            tick={{ fill: "var(--fg-subtle)", fontSize: 11 }}
+            axisLine={false}
+            tickLine={false}
+          />
           <YAxis
             tick={{ fill: "var(--fg-subtle)", fontSize: 11 }}
             axisLine={false}

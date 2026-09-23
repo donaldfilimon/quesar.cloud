@@ -38,9 +38,7 @@ export function AdminPanels() {
   if (!status.admin) {
     return (
       <Surface className="max-w-2xl">
-        <p className="text-xs text-accent">
-          Not an admin
-        </p>
+        <p className="text-xs text-accent">Not an admin</p>
         <p className="mt-3 text-sm text-fg">{REFUSAL[status.reason]}</p>
         <p className="mt-3 text-sm text-fg-muted">
           Administrator access needs both: an email on the{" "}

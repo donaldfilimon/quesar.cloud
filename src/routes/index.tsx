@@ -64,7 +64,10 @@ function Home() {
       >
         <dl className="divide-y divide-border border-y border-border">
           {wdbxFacts.map((row) => (
-            <div key={row.k} className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 py-3.5">
+            <div
+              key={row.k}
+              className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 py-3.5"
+            >
               <dt className="text-sm text-fg-muted">{row.k}</dt>
               <dd className="font-mono text-sm text-fg">{row.v}</dd>
             </div>
@@ -111,10 +114,12 @@ function Hero() {
       <div className="mx-auto grid max-w-6xl gap-12 px-4 pt-14 pb-16 sm:px-6 sm:pt-20 sm:pb-24 lg:grid-cols-12 lg:items-end lg:gap-10">
         <div className="lg:col-span-7">
           <p className="eyebrow">Quesar by MLAI</p>
-          <h1 className="display-title mt-6 lg:max-w-[14ch]">AI memory that can show its sources.</h1>
+          <h1 className="display-title mt-6 lg:max-w-[14ch]">
+            AI memory that can show its sources.
+          </h1>
           <p className="mt-7 max-w-[54ch] text-lg leading-8 text-fg-muted">
-            Quesar is MLAI's infrastructure for persistent AI. Every answer keeps a weighted chain back to the records
-            it came from, and the whole stack runs on machines you own.
+            Quesar is MLAI's infrastructure for persistent AI. Every answer keeps a weighted chain
+            back to the records it came from, and the whole stack runs on machines you own.
           </p>
           <div className="mt-9 flex flex-wrap gap-3">
             <Button asChild size="lg">
@@ -153,7 +158,11 @@ function Row({
   children: ReactNode;
 }) {
   return (
-    <section id={id} aria-labelledby={`${id}-title`} className="scroll-mt-20 border-b border-border">
+    <section
+      id={id}
+      aria-labelledby={`${id}-title`}
+      className="scroll-mt-20 border-b border-border"
+    >
       <div
         className={cn(
           "mx-auto grid max-w-6xl gap-10 px-4 py-16 sm:px-6 sm:py-24",
@@ -165,7 +174,9 @@ function Row({
           <h2 id={`${id}-title`} className="section-title mt-4">
             {title}
           </h2>
-          {lede ? <p className="mt-5 max-w-[52ch] text-base leading-relaxed text-fg-muted">{lede}</p> : null}
+          {lede ? (
+            <p className="mt-5 max-w-[52ch] text-base leading-relaxed text-fg-muted">{lede}</p>
+          ) : null}
         </header>
         <div className={cn("min-w-0", wide ? "" : "lg:col-span-7")}>{children}</div>
       </div>
@@ -205,7 +216,8 @@ function Transcripts() {
         </p>
       </figure>
       <p className="text-sm text-fg-subtle sm:col-span-2">
-        Memory here is a system capability: persistence, retrieval and provenance. It is not a claim of sentience.
+        Memory here is a system capability: persistence, retrieval and provenance. It is not a claim
+        of sentience.
       </p>
     </div>
   );
@@ -221,10 +233,17 @@ function StartHere() {
         </h2>
         <ul className="mt-10 grid border-t border-border sm:grid-cols-2">
           {homeStart.map((item) => (
-            <li key={item.href} className="border-b border-border sm:odd:border-r sm:odd:pr-8 sm:even:pl-8">
+            <li
+              key={item.href}
+              className="border-b border-border sm:odd:border-r sm:odd:pr-8 sm:even:pl-8"
+            >
               <Link to={item.href} className="group block py-6 no-underline">
-                <span className="font-display text-xl tracking-tight text-fg group-hover:text-accent">{item.title}</span>
-                <span className="mt-2 block text-[0.9375rem] leading-relaxed text-fg-muted">{item.body}</span>
+                <span className="font-display text-xl tracking-tight text-fg group-hover:text-accent">
+                  {item.title}
+                </span>
+                <span className="mt-2 block text-[0.9375rem] leading-relaxed text-fg-muted">
+                  {item.body}
+                </span>
               </Link>
             </li>
           ))}

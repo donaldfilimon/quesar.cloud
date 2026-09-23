@@ -19,7 +19,13 @@ import { normalizeTelemetryPath, type RoutePatterns } from "./telemetry-path";
  * mlai allowed only the four inquiry-dialog events. `page_view` is new here:
  * the task adds route-change page views, sent by `src/lib/telemetry.ts`.
  */
-export const TELEMETRY_EVENTS = new Set(["page_view", "inquiry_open", "inquiry_submit", "inquiry_success", "inquiry_close"]);
+export const TELEMETRY_EVENTS = new Set([
+  "page_view",
+  "inquiry_open",
+  "inquiry_submit",
+  "inquiry_success",
+  "inquiry_close",
+]);
 
 function noContent(): Response {
   return new Response(null, { status: 204 });
@@ -29,14 +35,21 @@ function tooMany(): Response {
   return Response.json({ error: "Too many requests. Try again shortly." }, { status: 429 });
 }
 
-export async function handleTelemetry(req: Request, patterns: RoutePatterns, now?: number): Promise<Response> {
+export async function handleTelemetry(
+  req: Request,
+  patterns: RoutePatterns,
+  now?: number,
+): Promise<Response> {
   if (req.headers.get("DNT") === "1" || req.headers.get("Sec-GPC") === "1") return noContent();
 
   try {
     const { allowed } = await hit("telemetry", clientSubject(req), LIMITS.telemetry, now);
     if (!allowed) return tooMany();
   } catch (error) {
-    console.error("Telemetry rate limit unavailable:", error instanceof Error ? error.message : "unknown error");
+    console.error(
+      "Telemetry rate limit unavailable:",
+      error instanceof Error ? error.message : "unknown error",
+    );
     return noContent();
   }
 
@@ -54,7 +67,10 @@ export async function handleTelemetry(req: Request, patterns: RoutePatterns, now
     const sql = await getSql();
     await sql`insert into telemetry_events (event, path) values (${event}, ${path})`;
   } catch (error) {
-    console.error("Database error saving telemetry event:", error instanceof Error ? error.message : "unknown error");
+    console.error(
+      "Database error saving telemetry event:",
+      error instanceof Error ? error.message : "unknown error",
+    );
   }
   return noContent();
 }

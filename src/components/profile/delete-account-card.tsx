@@ -53,9 +53,7 @@ export function DeleteAccountCard({
 
   return (
     <Surface>
-      <p className="text-xs text-status-partial">
-        Delete account
-      </p>
+      <p className="text-xs text-status-partial">Delete account</p>
       <p className="mt-2 text-sm text-fg-muted">
         Permanently deletes this account, its sessions, field notes, chat consents and encrypted
         audits, and any workspace connections (Google grants are revoked). Contact inquiries you

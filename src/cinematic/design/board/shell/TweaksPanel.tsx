@@ -6,8 +6,14 @@
    Converted from tweaks-panel.jsx — globals removed, fully typed.
    ════════════════════════════════════════════════════════════════ */
 import {
-  useState, useRef, useEffect, useLayoutEffect, useCallback,
-  type ReactNode, type PointerEvent as ReactPointerEvent, type MouseEvent as ReactMouseEvent,
+  useState,
+  useRef,
+  useEffect,
+  useLayoutEffect,
+  useCallback,
+  type ReactNode,
+  type PointerEvent as ReactPointerEvent,
+  type MouseEvent as ReactMouseEvent,
 } from "react";
 
 const TWEAKS_STYLE = `
@@ -125,7 +131,13 @@ interface EditModeMessage {
   type?: string;
 }
 
-export function TweaksPanel({ title = "Tweaks", children }: { title?: string; children?: ReactNode }): ReactNode {
+export function TweaksPanel({
+  title = "Tweaks",
+  children,
+}: {
+  title?: string;
+  children?: ReactNode;
+}): ReactNode {
   const [open, setOpen] = useState(false);
   const dragRef = useRef<HTMLDivElement>(null);
   const offsetRef = useRef<{ x: number; y: number }>({ x: 16, y: 16 });
@@ -207,11 +219,7 @@ export function TweaksPanel({ title = "Tweaks", children }: { title?: string; ch
   return (
     <>
       <style>{TWEAKS_STYLE}</style>
-      <div
-        ref={dragRef}
-        className="twk-panel"
-        data-omelette-chrome=""
-      >
+      <div ref={dragRef} className="twk-panel" data-omelette-chrome="">
         <div className="twk-hd" onMouseDown={onDragStart}>
           <b>{title}</b>
           <button
@@ -231,7 +239,13 @@ export function TweaksPanel({ title = "Tweaks", children }: { title?: string; ch
 }
 
 /* ── Layout helpers ────────────────────────────────────────────── */
-export function TweakSection({ label, children }: { label: string; children?: ReactNode }): ReactNode {
+export function TweakSection({
+  label,
+  children,
+}: {
+  label: string;
+  children?: ReactNode;
+}): ReactNode {
   return (
     <>
       <div className="twk-sect">{label}</div>
@@ -241,7 +255,10 @@ export function TweakSection({ label, children }: { label: string; children?: Re
 }
 
 export function TweakRow({
-  label, value, children, inline = false,
+  label,
+  value,
+  children,
+  inline = false,
 }: {
   label: string;
   value?: ReactNode;
@@ -261,7 +278,13 @@ export function TweakRow({
 
 /* ── Controls ──────────────────────────────────────────────────── */
 export function TweakSlider({
-  label, value, min = 0, max = 100, step = 1, unit = "", onChange,
+  label,
+  value,
+  min = 0,
+  max = 100,
+  step = 1,
+  unit = "",
+  onChange,
 }: {
   label: string;
   value: number;
@@ -287,7 +310,9 @@ export function TweakSlider({
 }
 
 export function TweakToggle({
-  label, value, onChange,
+  label,
+  value,
+  onChange,
 }: {
   label: string;
   value: boolean;
@@ -295,7 +320,9 @@ export function TweakToggle({
 }): ReactNode {
   return (
     <div className="twk-row twk-row-h">
-      <div className="twk-lbl"><span>{label}</span></div>
+      <div className="twk-lbl">
+        <span>{label}</span>
+      </div>
       <button
         type="button"
         className="twk-toggle"
@@ -313,7 +340,10 @@ export function TweakToggle({
 type TweakOption = string | { value: string; label: string };
 
 export function TweakRadio({
-  label, value, options, onChange,
+  label,
+  value,
+  options,
+  onChange,
 }: {
   label: string;
   value: string;
@@ -341,10 +371,22 @@ export function TweakRadio({
       if (m === undefined) return s;
       return typeof m === "object" ? m.value : m;
     };
-    return <TweakSelect label={label} value={value} options={options} onChange={(s) => onChange(resolve(s))} />;
+    return (
+      <TweakSelect
+        label={label}
+        value={value}
+        options={options}
+        onChange={(s) => onChange(resolve(s))}
+      />
+    );
   }
-  const opts = options.map((o): { value: string; label: string } => (typeof o === "object" ? o : { value: o, label: o }));
-  const idx = Math.max(0, opts.findIndex((o) => o.value === value));
+  const opts = options.map((o): { value: string; label: string } =>
+    typeof o === "object" ? o : { value: o, label: o },
+  );
+  const idx = Math.max(
+    0,
+    opts.findIndex((o) => o.value === value),
+  );
   const n = opts.length;
 
   const segAt = (clientX: number): string => {
@@ -386,7 +428,10 @@ export function TweakRadio({
       >
         <div
           className="twk-seg-thumb"
-          style={{ left: `calc(2px + ${idx} * (100% - 4px) / ${n})`, width: `calc((100% - 4px) / ${n})` }}
+          style={{
+            left: `calc(2px + ${idx} * (100% - 4px) / ${n})`,
+            width: `calc((100% - 4px) / ${n})`,
+          }}
         />
         {opts.map((o) => (
           <button key={o.value} type="button" role="radio" aria-checked={o.value === value}>
@@ -399,7 +444,10 @@ export function TweakRadio({
 }
 
 export function TweakSelect({
-  label, value, options, onChange,
+  label,
+  value,
+  options,
+  onChange,
 }: {
   label: string;
   value: string;
@@ -412,7 +460,11 @@ export function TweakSelect({
         {options.map((o) => {
           const v = typeof o === "object" ? o.value : o;
           const l = typeof o === "object" ? o.label : o;
-          return <option key={v} value={v}>{l}</option>;
+          return (
+            <option key={v} value={v}>
+              {l}
+            </option>
+          );
         })}
       </select>
     </TweakRow>
@@ -420,7 +472,10 @@ export function TweakSelect({
 }
 
 export function TweakText({
-  label, value, placeholder, onChange,
+  label,
+  value,
+  placeholder,
+  onChange,
 }: {
   label: string;
   value: string;
@@ -441,7 +496,13 @@ export function TweakText({
 }
 
 export function TweakNumber({
-  label, value, min, max, step = 1, unit = "", onChange,
+  label,
+  value,
+  min,
+  max,
+  step = 1,
+  unit = "",
+  onChange,
 }: {
   label: string;
   value: number;
@@ -476,7 +537,9 @@ export function TweakNumber({
   };
   return (
     <div className="twk-num">
-      <span className="twk-num-lbl" onPointerDown={onScrubStart}>{label}</span>
+      <span className="twk-num-lbl" onPointerDown={onScrubStart}>
+        {label}
+      </span>
       <input
         type="number"
         value={value}
@@ -523,7 +586,10 @@ type ColorOption = string | readonly string[];
 // hex string or an array of 1-5 hex strings. Without options it falls back to
 // the native color input for back-compat.
 export function TweakColor({
-  label, value, options, onChange,
+  label,
+  value,
+  options,
+  onChange,
 }: {
   label: string;
   value: ColorOption;
@@ -534,7 +600,9 @@ export function TweakColor({
     const single = typeof value === "string" ? value : (value[0] ?? "#000000");
     return (
       <div className="twk-row twk-row-h">
-        <div className="twk-lbl"><span>{label}</span></div>
+        <div className="twk-lbl">
+          <span>{label}</span>
+        </div>
         <input
           type="color"
           className="twk-swatch"
@@ -570,7 +638,9 @@ export function TweakColor({
             >
               {sup.length > 0 && (
                 <span>
-                  {sup.map((cc, j) => <i key={j} style={{ background: cc }} />)}
+                  {sup.map((cc, j) => (
+                    <i key={j} style={{ background: cc }} />
+                  ))}
                 </span>
               )}
               {on && <TwkCheck light={twkIsLight(hero)} />}
@@ -583,7 +653,9 @@ export function TweakColor({
 }
 
 export function TweakButton({
-  label, onClick, secondary = false,
+  label,
+  onClick,
+  secondary = false,
 }: {
   label: string;
   onClick: () => void;

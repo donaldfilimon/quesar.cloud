@@ -44,8 +44,7 @@ const MINDS: readonly Mind[] = [
     Icon: IFlow,
     line: "interactive · fast",
     traits: ["Neutral default", "Classifies intent", "Routes & blends"],
-    quote:
-      "Routing this to Abbey — it reads as a learning question with some frustration.",
+    quote: "Routing this to Abbey — it reads as a learning question with some frustration.",
   },
 ];
 
@@ -88,8 +87,8 @@ export default function Personas() {
             color: "var(--text-dim)",
           }}
         >
-          One model can&apos;t be everything at once. Abi classifies intent and routes —
-          to Abbey when you need scaffolding, to Aviva when you need density.
+          One model can&apos;t be everything at once. Abi classifies intent and routes — to Abbey
+          when you need scaffolding, to Aviva when you need density.
         </p>
       </div>
       <div
@@ -117,9 +116,7 @@ export default function Personas() {
                     ? `color-mix(in srgb, ${p.hex} 12%, var(--surface-2))`
                     : "var(--surface-2)",
                   border: `1px solid ${on ? p.hex + "66" : "var(--hair)"}`,
-                  boxShadow: on
-                    ? `0 0 0 1px ${p.hex}33, var(--shadow-2)`
-                    : "var(--shadow-2)",
+                  boxShadow: on ? `0 0 0 1px ${p.hex}33, var(--shadow-2)` : "var(--shadow-2)",
                   transition: "all var(--dur-base) var(--ease-out)",
                 }}
               >

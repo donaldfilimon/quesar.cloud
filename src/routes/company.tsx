@@ -1,5 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { FaqList, IntegrityList, PageClose, PageHero, PullQuote, Section, Surface } from "@/components/site";
+import {
+  FaqList,
+  IntegrityList,
+  PageClose,
+  PageHero,
+  PullQuote,
+  Section,
+  Surface,
+} from "@/components/site";
 import { StatusBadge } from "@/components/site/status-badge";
 import { ProvLegend } from "@/components/site/prov-tag";
 import { ProvTag } from "@/components/site/prov-tag";
@@ -18,22 +26,28 @@ export const Route = createFileRoute("/company")({
 function CompanyPage() {
   return (
     <>
-      <PageHero eyebrow="Company" title="Three voices. One substrate. Yours alone." lede={site.origin} />
+      <PageHero
+        eyebrow="Company"
+        title="Three voices. One substrate. Yours alone."
+        lede={site.origin}
+      />
 
       <Section eyebrow="Entity" title="Who ships this.">
         <div className="grid gap-4 md:grid-cols-2">
           <Surface>
             <h3 className="font-display text-xl">MLAI Corporation</h3>
             <p className="mt-2 text-sm leading-relaxed text-fg-muted">
-              Legal name: {site.legal}. {investor.entity}. Public orientation lives here. Integration source lives on
-              GitHub. This website does not host assistant sessions or generation.
+              Legal name: {site.legal}. {investor.entity}. Public orientation lives here.
+              Integration source lives on GitHub. This website does not host assistant sessions or
+              generation.
             </p>
           </Surface>
           <Surface>
             <h3 className="font-display text-xl">Donald Filimon</h3>
             <p className="mt-2 text-sm leading-relaxed text-fg-muted">
-              Founder and systems architect. Public work spans Rust, Swift, and TypeScript — ABI, WDBX, Abbey, Gama, and
-              the company site. Motto used in internal docs: care first, clarity always, competence throughout.
+              Founder and systems architect. Public work spans Rust, Swift, and TypeScript — ABI,
+              WDBX, Abbey, Gama, and the company site. Motto used in internal docs: care first,
+              clarity always, competence throughout.
             </p>
             <ul className="mt-4 space-y-2 text-sm text-fg-muted">
               {investor.founder.map((row) => (
@@ -79,8 +93,9 @@ function CompanyPage() {
       </Section>
       <Section eyebrow="Public work" title="Source is the contact path.">
         <p className="max-w-2xl text-sm leading-relaxed text-fg-muted">
-          Issues, setup questions, and patches belong on the pages that implement each surface. There is an inquiry form
-          on this site. It does not send mail; signed-in notes land in the field console.
+          Issues, setup questions, and patches belong on the pages that implement each surface.
+          There is an inquiry form on this site. It does not send mail; signed-in notes land in the
+          field console.
         </p>
       </Section>
       <PageClose

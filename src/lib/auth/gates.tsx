@@ -54,7 +54,9 @@ export function RedirectToSignIn({ to = SIGN_IN_PATH }: { to?: string }) {
   const router = useRouter();
   // Capture where the visitor was at mount. Reading the live location instead
   // picks up /login once the redirect starts, and nests ?next=/login?next=….
-  const [next] = useState(() => `${router.state.location.pathname}${router.state.location.searchStr ?? ""}`);
+  const [next] = useState(
+    () => `${router.state.location.pathname}${router.state.location.searchStr ?? ""}`,
+  );
   // Navigate exactly once. `<Navigate search={{ next }}>` re-fires navigate()
   // on every render (its props object is new each time), and a gated page
   // re-renders while that navigation is pending: "Maximum update depth".
@@ -66,7 +68,11 @@ export function RedirectToSignIn({ to = SIGN_IN_PATH }: { to?: string }) {
     if (to !== SIGN_IN_PATH) void navigate({ to, replace: true });
     else void navigate({ to: "/login", search: { next: next || "/console" }, replace: true });
   }, [navigate, next, router, to]);
-  return <div className="mx-auto max-w-3xl px-4 py-24 text-sm text-fg-muted">Redirecting to sign in…</div>;
+  return (
+    <div className="mx-auto max-w-3xl px-4 py-24 text-sm text-fg-muted">
+      Redirecting to sign in…
+    </div>
+  );
 }
 
 /** Wait out session load, then render with the signed-in user or send them to login. */
@@ -80,7 +86,9 @@ export function RequireSession({
   const { user, isPending } = useCurrentUserState();
   if (staticSite) return <ServerOnlyNotice feature={feature} className="my-24" />;
   if (isPending) {
-    return <div className="mx-auto max-w-3xl px-4 py-24 text-sm text-fg-muted">Loading session…</div>;
+    return (
+      <div className="mx-auto max-w-3xl px-4 py-24 text-sm text-fg-muted">Loading session…</div>
+    );
   }
   if (!user) return <RedirectToSignIn />;
   return <>{children(user)}</>;

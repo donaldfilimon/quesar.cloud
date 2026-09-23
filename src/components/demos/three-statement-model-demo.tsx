@@ -1,6 +1,14 @@
 import { useMemo, useState, type ReactNode } from "react";
 import { CircleCheck, CircleAlert } from "lucide-react";
-import { DRIVERS, balanceCheck, buildModel, cashTieCheck, type Drivers, type Period, type Scenario } from "./three-statement-model";
+import {
+  DRIVERS,
+  balanceCheck,
+  buildModel,
+  cashTieCheck,
+  type Drivers,
+  type Period,
+  type Scenario,
+} from "./three-statement-model";
 
 /** Renders the integrated three-statement model from `./three-statement-model`. Illustrative only. */
 // ---- Formatting ----
@@ -134,9 +142,9 @@ export function ThreeStatementModelDemo() {
             </span>
           </div>
           <p className="mt-1 max-w-xl text-xs text-fg-muted">
-            Sample figures for a fictional company (Meridian Analytics), $ in millions — not
-            MLAI financials. Every projected line is derived from the scenario drivers; cash is
-            the cash-flow plug, so the balance sheet ties out by construction.
+            Sample figures for a fictional company (Meridian Analytics), $ in millions — not MLAI
+            financials. Every projected line is derived from the scenario drivers; cash is the
+            cash-flow plug, so the balance sheet ties out by construction.
           </p>
         </div>
 
@@ -153,9 +161,7 @@ export function ThreeStatementModelDemo() {
               aria-checked={scenario === s.id}
               onClick={() => setScenario(s.id)}
               className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors ${
-                scenario === s.id
-                  ? "bg-accent/15 text-accent"
-                  : "text-fg-muted hover:text-fg"
+                scenario === s.id ? "bg-accent/15 text-accent" : "text-fg-muted hover:text-fg"
               }`}
             >
               {s.label}
@@ -173,7 +179,13 @@ export function ThreeStatementModelDemo() {
           label="Balance check"
           value={balanced ? "Balanced" : "Imbalanced"}
           tone={balanced ? "ok" : "bad"}
-          icon={balanced ? <CircleCheck className="h-3.5 w-3.5" /> : <CircleAlert className="h-3.5 w-3.5" />}
+          icon={
+            balanced ? (
+              <CircleCheck className="h-3.5 w-3.5" />
+            ) : (
+              <CircleAlert className="h-3.5 w-3.5" />
+            )
+          }
         />
       </div>
 
@@ -217,21 +229,69 @@ export function ThreeStatementModelDemo() {
             <SectionRow title="Income Statement" span={cols} />
             <DataRow label="Revenue" periods={periods} get={(p) => p.revenue} />
             <DataRow label="Cost of revenue" periods={periods} get={(p) => -p.cogs} indent />
-            <DataRow label="Gross profit" periods={periods} get={(p) => p.grossProfit} style="subtotal" />
-            <DataRow label="Gross margin" periods={periods} get={(p) => p.grossProfit / p.revenue} kind="pct" style="muted" indent />
+            <DataRow
+              label="Gross profit"
+              periods={periods}
+              get={(p) => p.grossProfit}
+              style="subtotal"
+            />
+            <DataRow
+              label="Gross margin"
+              periods={periods}
+              get={(p) => p.grossProfit / p.revenue}
+              kind="pct"
+              style="muted"
+              indent
+            />
             <DataRow label="Sales & marketing" periods={periods} get={(p) => -p.sm} indent />
             <DataRow label="Research & development" periods={periods} get={(p) => -p.rd} indent />
             <DataRow label="General & administrative" periods={periods} get={(p) => -p.ga} indent />
             <DataRow label="EBITDA" periods={periods} get={(p) => p.ebitda} style="subtotal" />
-            <DataRow label="EBITDA margin" periods={periods} get={(p) => p.ebitda / p.revenue} kind="pct" style="muted" indent />
-            <DataRow label="Depreciation & amortization" periods={periods} get={(p) => -p.da} indent />
+            <DataRow
+              label="EBITDA margin"
+              periods={periods}
+              get={(p) => p.ebitda / p.revenue}
+              kind="pct"
+              style="muted"
+              indent
+            />
+            <DataRow
+              label="Depreciation & amortization"
+              periods={periods}
+              get={(p) => -p.da}
+              indent
+            />
             <DataRow label="EBIT" periods={periods} get={(p) => p.ebit} style="subtotal" />
-            <DataRow label="EBIT margin" periods={periods} get={(p) => p.ebit / p.revenue} kind="pct" style="muted" indent />
+            <DataRow
+              label="EBIT margin"
+              periods={periods}
+              get={(p) => p.ebit / p.revenue}
+              kind="pct"
+              style="muted"
+              indent
+            />
             <DataRow label="Interest expense" periods={periods} get={(p) => -p.interest} indent />
-            <DataRow label="Pre-tax income (EBT)" periods={periods} get={(p) => p.ebt} style="subtotal" />
+            <DataRow
+              label="Pre-tax income (EBT)"
+              periods={periods}
+              get={(p) => p.ebt}
+              style="subtotal"
+            />
             <DataRow label="Income taxes" periods={periods} get={(p) => -p.tax} indent />
-            <DataRow label="Net income" periods={periods} get={(p) => p.netIncome} style="subtotal" />
-            <DataRow label="Net income margin" periods={periods} get={(p) => p.netIncome / p.revenue} kind="pct" style="muted" indent />
+            <DataRow
+              label="Net income"
+              periods={periods}
+              get={(p) => p.netIncome}
+              style="subtotal"
+            />
+            <DataRow
+              label="Net income margin"
+              periods={periods}
+              get={(p) => p.netIncome / p.revenue}
+              kind="pct"
+              style="muted"
+              indent
+            />
 
             {/* Balance sheet */}
             <SectionRow title="Balance Sheet" span={cols} />
@@ -240,42 +300,174 @@ export function ThreeStatementModelDemo() {
             <DataRow label="Inventory" periods={periods} get={(p) => p.inventory} indent />
             <DataRow label="PP&E, net" periods={periods} get={(p) => p.ppe} indent />
             <DataRow label="Deferred tax asset (NOL)" periods={periods} get={(p) => p.dta} indent />
-            <DataRow label="Total assets" periods={periods} get={(p) => p.totalAssets} style="subtotal" />
+            <DataRow
+              label="Total assets"
+              periods={periods}
+              get={(p) => p.totalAssets}
+              style="subtotal"
+            />
             <DataRow label="Accounts payable" periods={periods} get={(p) => p.ap} indent />
             <DataRow label="Accrued liabilities" periods={periods} get={(p) => p.accrued} indent />
             <DataRow label="Debt" periods={periods} get={(p) => p.debt} indent />
-            <DataRow label="Total liabilities" periods={periods} get={(p) => p.totalLiabilities} style="subtotal" />
-            <DataRow label="Common stock & APIC" periods={periods} get={(p) => p.commonStock} indent />
-            <DataRow label="Retained earnings" periods={periods} get={(p) => p.retainedEarnings} indent />
-            <DataRow label="Total equity" periods={periods} get={(p) => p.totalEquity} style="subtotal" />
-            <DataRow label="Check: Assets − Liab − Equity" periods={periods} get={balanceCheck} style="muted" indent />
-            <DataRow label="Memo — NOL carryforward" periods={periods} get={(p) => p.nolBalance} style="muted" indent />
+            <DataRow
+              label="Total liabilities"
+              periods={periods}
+              get={(p) => p.totalLiabilities}
+              style="subtotal"
+            />
+            <DataRow
+              label="Common stock & APIC"
+              periods={periods}
+              get={(p) => p.commonStock}
+              indent
+            />
+            <DataRow
+              label="Retained earnings"
+              periods={periods}
+              get={(p) => p.retainedEarnings}
+              indent
+            />
+            <DataRow
+              label="Total equity"
+              periods={periods}
+              get={(p) => p.totalEquity}
+              style="subtotal"
+            />
+            <DataRow
+              label="Check: Assets − Liab − Equity"
+              periods={periods}
+              get={balanceCheck}
+              style="muted"
+              indent
+            />
+            <DataRow
+              label="Memo — NOL carryforward"
+              periods={periods}
+              get={(p) => p.nolBalance}
+              style="muted"
+              indent
+            />
 
             {/* Cash flow */}
             <SectionRow title="Cash Flow Statement" span={cols} />
             <DataRow label="Net income" periods={periods} get={(p) => p.netIncome} indent />
-            <DataRow label="(+) D&A" periods={periods} get={(p) => (p.isActual ? null : p.da)} indent />
-            <DataRow label="(+) Deferred taxes" periods={periods} get={(p) => p.deferredTax} indent />
-            <DataRow label="(−) Δ working capital" periods={periods} get={(p) => (p.cfo === null ? null : p.cfo - p.netIncome - p.da - (p.deferredTax ?? 0))} indent />
-            <DataRow label="Cash from operations" periods={periods} get={(p) => p.cfo} style="subtotal" />
-            <DataRow label="(−) CapEx" periods={periods} get={(p) => (p.capex === null ? null : -p.capex)} indent />
-            <DataRow label="Cash from investing" periods={periods} get={(p) => p.cfi} style="subtotal" />
-            <DataRow label="(−) Dividends" periods={periods} get={(p) => (p.dividends === null ? null : -p.dividends)} indent />
-            <DataRow label="Cash from financing" periods={periods} get={(p) => p.cff} style="subtotal" />
+            <DataRow
+              label="(+) D&A"
+              periods={periods}
+              get={(p) => (p.isActual ? null : p.da)}
+              indent
+            />
+            <DataRow
+              label="(+) Deferred taxes"
+              periods={periods}
+              get={(p) => p.deferredTax}
+              indent
+            />
+            <DataRow
+              label="(−) Δ working capital"
+              periods={periods}
+              get={(p) =>
+                p.cfo === null ? null : p.cfo - p.netIncome - p.da - (p.deferredTax ?? 0)
+              }
+              indent
+            />
+            <DataRow
+              label="Cash from operations"
+              periods={periods}
+              get={(p) => p.cfo}
+              style="subtotal"
+            />
+            <DataRow
+              label="(−) CapEx"
+              periods={periods}
+              get={(p) => (p.capex === null ? null : -p.capex)}
+              indent
+            />
+            <DataRow
+              label="Cash from investing"
+              periods={periods}
+              get={(p) => p.cfi}
+              style="subtotal"
+            />
+            <DataRow
+              label="(−) Dividends"
+              periods={periods}
+              get={(p) => (p.dividends === null ? null : -p.dividends)}
+              indent
+            />
+            <DataRow
+              label="Cash from financing"
+              periods={periods}
+              get={(p) => p.cff}
+              style="subtotal"
+            />
             <DataRow label="Net change in cash" periods={periods} get={(p) => p.netChangeCash} />
             <DataRow label="Beginning cash" periods={periods} get={(p) => p.beginningCash} indent />
-            <DataRow label="Ending cash" periods={periods} get={(p) => (p.netChangeCash === null ? null : p.cash)} style="subtotal" />
-            <DataRow label="Check: CF cash − BS cash" periods={periods} get={cashTieCheck} style="muted" indent />
+            <DataRow
+              label="Ending cash"
+              periods={periods}
+              get={(p) => (p.netChangeCash === null ? null : p.cash)}
+              style="subtotal"
+            />
+            <DataRow
+              label="Check: CF cash − BS cash"
+              periods={periods}
+              get={cashTieCheck}
+              style="muted"
+              indent
+            />
 
             {/* Credit metrics */}
             <SectionRow title="Credit & Liquidity Metrics" span={cols} />
-            <DataRow label="Debt / EBITDA" periods={periods} get={(p) => p.debt / p.ebitda} kind="mult" indent />
-            <DataRow label="Net debt / EBITDA" periods={periods} get={(p) => (p.debt - p.cash) / p.ebitda} kind="mult" indent />
-            <DataRow label="EBITDA / interest (coverage)" periods={periods} get={(p) => p.ebitda / p.interest} kind="mult" indent />
-            <DataRow label="Debt / total capital" periods={periods} get={(p) => p.debt / (p.debt + p.totalEquity)} kind="pct" indent />
-            <DataRow label="Debt / equity" periods={periods} get={(p) => p.debt / p.totalEquity} kind="mult" indent />
-            <DataRow label="Current ratio" periods={periods} get={(p) => (p.cash + p.ar + p.inventory) / (p.ap + p.accrued)} kind="mult" indent />
-            <DataRow label="Quick ratio" periods={periods} get={(p) => (p.cash + p.ar) / (p.ap + p.accrued)} kind="mult" indent />
+            <DataRow
+              label="Debt / EBITDA"
+              periods={periods}
+              get={(p) => p.debt / p.ebitda}
+              kind="mult"
+              indent
+            />
+            <DataRow
+              label="Net debt / EBITDA"
+              periods={periods}
+              get={(p) => (p.debt - p.cash) / p.ebitda}
+              kind="mult"
+              indent
+            />
+            <DataRow
+              label="EBITDA / interest (coverage)"
+              periods={periods}
+              get={(p) => p.ebitda / p.interest}
+              kind="mult"
+              indent
+            />
+            <DataRow
+              label="Debt / total capital"
+              periods={periods}
+              get={(p) => p.debt / (p.debt + p.totalEquity)}
+              kind="pct"
+              indent
+            />
+            <DataRow
+              label="Debt / equity"
+              periods={periods}
+              get={(p) => p.debt / p.totalEquity}
+              kind="mult"
+              indent
+            />
+            <DataRow
+              label="Current ratio"
+              periods={periods}
+              get={(p) => (p.cash + p.ar + p.inventory) / (p.ap + p.accrued)}
+              kind="mult"
+              indent
+            />
+            <DataRow
+              label="Quick ratio"
+              periods={periods}
+              get={(p) => (p.cash + p.ar) / (p.ap + p.accrued)}
+              kind="mult"
+              indent
+            />
           </tbody>
         </table>
       </div>

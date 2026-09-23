@@ -32,7 +32,8 @@ let ortFilterInstalled = false;
 function installOrtLogFilter(): void {
   if (ortFilterInstalled || typeof console === "undefined") return;
   ortFilterInstalled = true;
-  const BENIGN = /onnxruntime|VerifyEachNodeIsAssignedToAnEp|nodes were not assigned to the preferred/i;
+  const BENIGN =
+    /onnxruntime|VerifyEachNodeIsAssignedToAnEp|nodes were not assigned to the preferred/i;
   for (const level of ["warn", "error"] as const) {
     const orig = console[level].bind(console);
     console[level] = (...args: unknown[]) => {

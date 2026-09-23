@@ -40,11 +40,15 @@ export interface ValidInquiry {
   message: string;
 }
 
-export type InquiryValidation = { ok: true; value: ValidInquiry } | { ok: false; field: InquiryField; error: string };
+export type InquiryValidation =
+  { ok: true; value: ValidInquiry } | { ok: false; field: InquiryField; error: string };
 
 /** Coerce an untrusted payload into string fields. Never throws. */
 export function coerceInquiryInput(input: unknown): InquiryInput {
-  const record = typeof input === "object" && input !== null && !Array.isArray(input) ? (input as Record<string, unknown>) : {};
+  const record =
+    typeof input === "object" && input !== null && !Array.isArray(input)
+      ? (input as Record<string, unknown>)
+      : {};
   const text = (key: string) => (typeof record[key] === "string" ? (record[key] as string) : "");
   return {
     name: text("name"),
@@ -71,19 +75,28 @@ export function validateInquiry(input: InquiryInput): InquiryValidation {
   const L = INQUIRY_LIMITS;
 
   if (name.length < L.nameMin) return { ok: false, field: "name", error: "Enter your full name." };
-  if (name.length > L.nameMax) return { ok: false, field: "name", error: `Keep your name under ${L.nameMax} characters.` };
+  if (name.length > L.nameMax)
+    return { ok: false, field: "name", error: `Keep your name under ${L.nameMax} characters.` };
   if (!EMAIL.test(email) || email.length > L.emailMax) {
     return { ok: false, field: "email", error: "Enter an email address we can reply to." };
   }
   if (company.length > L.companyMax) {
-    return { ok: false, field: "company", error: `Keep the organization under ${L.companyMax} characters.` };
+    return {
+      ok: false,
+      field: "company",
+      error: `Keep the organization under ${L.companyMax} characters.`,
+    };
   }
   if (!isTopic(topic)) return { ok: false, field: "topic", error: "Choose a topic." };
   if (message.length < L.messageMin) {
     return { ok: false, field: "message", error: "Add a bit more detail: at least 10 characters." };
   }
   if (message.length > L.messageMax) {
-    return { ok: false, field: "message", error: `Keep the message under ${L.messageMax} characters.` };
+    return {
+      ok: false,
+      field: "message",
+      error: `Keep the message under ${L.messageMax} characters.`,
+    };
   }
   return { ok: true, value: { name, email, company, topic, message } };
 }

@@ -24,7 +24,9 @@ function input(overrides: Partial<InquiryInput> = {}): InquiryInput {
 function request(): Request {
   return new Request("https://quesar.cloud/_serverFn/x", {
     method: "POST",
-    headers: { "x-forwarded-for": `198.51.100.${Math.floor(Math.random() * 250)}-${Math.random()}` },
+    headers: {
+      "x-forwarded-for": `198.51.100.${Math.floor(Math.random() * 250)}-${Math.random()}`,
+    },
   });
 }
 
@@ -39,7 +41,13 @@ describe("validateInquiry (mlai minimums plus /contact caps)", () => {
     const result = validateInquiry(input({ name: "  Ada  ", message: "  a real message here  " }));
     expect(result).toEqual({
       ok: true,
-      value: { name: "Ada", email: "ada@example.com", company: "", topic: "Quesar", message: "a real message here" },
+      value: {
+        name: "Ada",
+        email: "ada@example.com",
+        company: "",
+        topic: "Quesar",
+        message: "a real message here",
+      },
     });
   });
 
@@ -72,10 +80,17 @@ describe("submitInquiry", () => {
     vi.stubEnv("TURNSTILE_SITE_KEY", "");
     vi.stubEnv("TURNSTILE_SECRET", "");
     const email = `anon-${Math.random().toString(36).slice(2)}@example.com`;
-    expect(await submitInquiry(input({ email, topic: "Services" }), { request: request(), userId: null })).toEqual({
+    expect(
+      await submitInquiry(input({ email, topic: "Services" }), {
+        request: request(),
+        userId: null,
+      }),
+    ).toEqual({
       ok: true,
     });
-    expect(await rowsFor(email)).toEqual([{ user_id: null, name: "Ada Lovelace", project_type: "Services", company: "" }]);
+    expect(await rowsFor(email)).toEqual([
+      { user_id: null, name: "Ada Lovelace", project_type: "Services", company: "" },
+    ]);
   }, 30_000);
 
   it("records the user id when the caller had a session", async () => {
@@ -86,7 +101,10 @@ describe("submitInquiry", () => {
 
   it("returns the field error and stores nothing for an invalid inquiry", async () => {
     const email = `bad-${Math.random().toString(36).slice(2)}@example.com`;
-    const result = await submitInquiry(input({ email, message: "short" }), { request: request(), userId: null });
+    const result = await submitInquiry(input({ email, message: "short" }), {
+      request: request(),
+      userId: null,
+    });
     expect(result).toMatchObject({ ok: false, code: "invalid", field: "message" });
     expect(await rowsFor(email)).toEqual([]);
   }, 30_000);
@@ -96,7 +114,13 @@ describe("submitInquiry", () => {
     const now = 1_950_000_000_000;
     const results = [];
     for (let i = 0; i < 6; i += 1) {
-      results.push(await submitInquiry(input({ email: `rl-${i}-${Math.random()}@example.com` }), { request: req, userId: null, now }));
+      results.push(
+        await submitInquiry(input({ email: `rl-${i}-${Math.random()}@example.com` }), {
+          request: req,
+          userId: null,
+          now,
+        }),
+      );
     }
     expect(results.slice(0, 5).every((r) => r.ok)).toBe(true);
     expect(results[5]).toMatchObject({ ok: false, code: "rate_limited" });
@@ -105,8 +129,11 @@ describe("submitInquiry", () => {
   it("counts invalid submissions against the limit too", async () => {
     const req = request();
     const now = 1_960_000_000_000;
-    for (let i = 0; i < 5; i += 1) await submitInquiry(input({ name: "" }), { request: req, userId: null, now });
-    expect(await submitInquiry(input(), { request: req, userId: null, now })).toMatchObject({ code: "rate_limited" });
+    for (let i = 0; i < 5; i += 1)
+      await submitInquiry(input({ name: "" }), { request: req, userId: null, now });
+    expect(await submitInquiry(input(), { request: req, userId: null, now })).toMatchObject({
+      code: "rate_limited",
+    });
   }, 30_000);
 
   it("requires a verified Turnstile token when Turnstile is configured", async () => {
@@ -115,16 +142,23 @@ describe("submitInquiry", () => {
     vi.stubEnv("TURNSTILE_HOSTNAMES", "quesar.cloud");
     const email = `ts-${Math.random().toString(36).slice(2)}@example.com`;
 
-    expect(await submitInquiry(input({ email }), { request: request(), userId: null })).toMatchObject({
+    expect(
+      await submitInquiry(input({ email }), { request: request(), userId: null }),
+    ).toMatchObject({
       ok: false,
       code: "verification",
     });
 
     const fetchMock = vi
       .spyOn(globalThis, "fetch")
-      .mockResolvedValue(Response.json({ success: true, action: "inquiry", hostname: "quesar.cloud" }));
+      .mockResolvedValue(
+        Response.json({ success: true, action: "inquiry", hostname: "quesar.cloud" }),
+      );
     expect(
-      await submitInquiry(input({ email, turnstileToken: "token-long-enough" }), { request: request(), userId: null }),
+      await submitInquiry(input({ email, turnstileToken: "token-long-enough" }), {
+        request: request(),
+        userId: null,
+      }),
     ).toEqual({ ok: true });
     expect(fetchMock).toHaveBeenCalledOnce();
     expect(await rowsFor(email)).toHaveLength(1);
@@ -137,7 +171,10 @@ describe("submitInquiry", () => {
     vi.spyOn(console, "error").mockImplementation(() => {});
     const email = `mis-${Math.random().toString(36).slice(2)}@example.com`;
     expect(
-      await submitInquiry(input({ email, turnstileToken: "token-long-enough" }), { request: request(), userId: null }),
+      await submitInquiry(input({ email, turnstileToken: "token-long-enough" }), {
+        request: request(),
+        userId: null,
+      }),
     ).toMatchObject({ ok: false, code: "misconfigured" });
     expect(await rowsFor(email)).toEqual([]);
   }, 30_000);

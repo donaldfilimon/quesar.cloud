@@ -45,14 +45,16 @@ export function status(): LlmStatus {
 }
 
 function extractText(data: unknown): string {
-  const choices = (data as { choices?: Array<{ message?: { content?: unknown } }> } | null)?.choices;
+  const choices = (data as { choices?: Array<{ message?: { content?: unknown } }> } | null)
+    ?.choices;
   const content = Array.isArray(choices) ? choices[0]?.message?.content : undefined;
   return typeof content === "string" ? content.trim() : "";
 }
 
 async function completeXai(req: CompleteRequest): Promise<CompleteResult> {
   const apiKey = env("XAI_API_KEY");
-  if (!apiKey) return { ok: false, reason: "not_configured", message: "The xAI key is not configured." };
+  if (!apiKey)
+    return { ok: false, reason: "not_configured", message: "The xAI key is not configured." };
   const res = await fetch("https://api.x.ai/v1/chat/completions", {
     method: "POST",
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },
@@ -64,16 +66,36 @@ async function completeXai(req: CompleteRequest): Promise<CompleteResult> {
       messages: req.messages,
     }),
   });
-  if (!res.ok) return { ok: false, reason: "provider_error", provider: "xai", message: `Model error ${res.status}` };
+  if (!res.ok)
+    return {
+      ok: false,
+      reason: "provider_error",
+      provider: "xai",
+      message: `Model error ${res.status}`,
+    };
   const text = extractText(await res.json());
-  if (!text) return { ok: false, reason: "provider_error", provider: "xai", message: "The model returned no text." };
+  if (!text)
+    return {
+      ok: false,
+      reason: "provider_error",
+      provider: "xai",
+      message: "The model returned no text.",
+    };
   return { ok: true, provider: "xai", model: XAI_MODEL, text };
 }
 
 async function completeGemini(req: CompleteRequest): Promise<CompleteResult> {
   const gateway = gatewayConfig();
-  if (!gateway) return { ok: false, reason: "not_configured", message: "The Cloudflare AI Gateway is not configured." };
-  const system = req.messages.filter((m) => m.role === "system").map((m) => m.content).join("\n\n");
+  if (!gateway)
+    return {
+      ok: false,
+      reason: "not_configured",
+      message: "The Cloudflare AI Gateway is not configured.",
+    };
+  const system = req.messages
+    .filter((m) => m.role === "system")
+    .map((m) => m.content)
+    .join("\n\n");
   const turns = req.messages.filter((m) => m.role !== "system");
   const res = await fetch(gateway.url, {
     method: "POST",
@@ -96,10 +118,21 @@ async function completeGemini(req: CompleteRequest): Promise<CompleteResult> {
     }),
   });
   if (!res.ok) {
-    return { ok: false, reason: "provider_error", provider: "gemini", message: `Gateway error ${res.status}` };
+    return {
+      ok: false,
+      reason: "provider_error",
+      provider: "gemini",
+      message: `Gateway error ${res.status}`,
+    };
   }
   const text = extractText(await res.json());
-  if (!text) return { ok: false, reason: "provider_error", provider: "gemini", message: "The model returned no text." };
+  if (!text)
+    return {
+      ok: false,
+      reason: "provider_error",
+      provider: "gemini",
+      message: "The model returned no text.",
+    };
   return { ok: true, provider: "gemini", model: GEMINI_MODEL, text };
 }
 
@@ -114,7 +147,11 @@ export async function complete(req: CompleteRequest): Promise<CompleteResult> {
     return { ok: false, reason: "not_configured", message: (error as Error).message };
   }
   if (provider === null) {
-    return { ok: false, reason: "not_configured", message: "No model provider is configured in this environment." };
+    return {
+      ok: false,
+      reason: "not_configured",
+      message: "No model provider is configured in this environment.",
+    };
   }
   try {
     return provider === "xai" ? await completeXai(req) : await completeGemini(req);

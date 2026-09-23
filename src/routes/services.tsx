@@ -32,7 +32,9 @@ function ServicesPage() {
           {services.map((service) => (
             <Surface key={service.title} className="flex h-full flex-col">
               <h3 className="font-display text-xl">{service.title}</h3>
-              <p className="mt-2 flex-1 text-sm leading-relaxed text-fg-muted">{service.description}</p>
+              <p className="mt-2 flex-1 text-sm leading-relaxed text-fg-muted">
+                {service.description}
+              </p>
               <ul className="mt-4 space-y-1.5">
                 {service.outcomes.map((outcome) => (
                   <li key={outcome} className="font-mono text-[11px] text-fg-subtle">
@@ -79,7 +81,11 @@ function ServicesPage() {
       <PageClose
         primary={{ to: "/contact", label: "Contact" }}
         next={[
-          { to: "/developers", label: "Developers", body: "What you can run without an engagement." },
+          {
+            to: "/developers",
+            label: "Developers",
+            body: "What you can run without an engagement.",
+          },
           { to: "/company", label: "Company", body: "Who ships this, and under which rules." },
         ]}
       />

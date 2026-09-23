@@ -9,11 +9,23 @@ export const AlertDialogTitle = AlertDialogPrimitive.Title;
 export const AlertDialogDescription = AlertDialogPrimitive.Description;
 export const AlertDialogPortal = AlertDialogPrimitive.Portal;
 
-export function AlertDialogOverlay({ className, ...props }: ComponentProps<typeof AlertDialogPrimitive.Overlay>) {
-  return <AlertDialogPrimitive.Overlay className={cn("fixed inset-0 z-[80] bg-bg/70", className)} {...props} />;
+export function AlertDialogOverlay({
+  className,
+  ...props
+}: ComponentProps<typeof AlertDialogPrimitive.Overlay>) {
+  return (
+    <AlertDialogPrimitive.Overlay
+      className={cn("fixed inset-0 z-[80] bg-bg/70", className)}
+      {...props}
+    />
+  );
 }
 
-export function AlertDialogContent({ className, children, ...props }: ComponentProps<typeof AlertDialogPrimitive.Content>) {
+export function AlertDialogContent({
+  className,
+  children,
+  ...props
+}: ComponentProps<typeof AlertDialogPrimitive.Content>) {
   return (
     <AlertDialogPortal>
       <AlertDialogOverlay />
@@ -38,10 +50,26 @@ export function AlertDialogFooter({ className, ...props }: ComponentProps<"div">
   return <div className={cn("mt-6 flex flex-wrap justify-end gap-2", className)} {...props} />;
 }
 
-export function AlertDialogCancel({ className, ...props }: ComponentProps<typeof AlertDialogPrimitive.Cancel>) {
-  return <AlertDialogPrimitive.Cancel className={cn(buttonVariants({ variant: "ghost" }), className)} {...props} />;
+export function AlertDialogCancel({
+  className,
+  ...props
+}: ComponentProps<typeof AlertDialogPrimitive.Cancel>) {
+  return (
+    <AlertDialogPrimitive.Cancel
+      className={cn(buttonVariants({ variant: "ghost" }), className)}
+      {...props}
+    />
+  );
 }
 
-export function AlertDialogAction({ className, ...props }: ComponentProps<typeof AlertDialogPrimitive.Action>) {
-  return <AlertDialogPrimitive.Action className={cn(buttonVariants({ variant: "primary" }), className)} {...props} />;
+export function AlertDialogAction({
+  className,
+  ...props
+}: ComponentProps<typeof AlertDialogPrimitive.Action>) {
+  return (
+    <AlertDialogPrimitive.Action
+      className={cn(buttonVariants({ variant: "primary" }), className)}
+      {...props}
+    />
+  );
 }

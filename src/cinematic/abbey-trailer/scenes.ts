@@ -12,7 +12,14 @@
 // the app); this module never imports brand data itself. Caption copy carries
 // no figures: the latency line is written as words, by decision.
 
-import { Easing, clamp, type DrawContext, type LifecycleScene, type SceneContext, type SceneCue } from "@/lib/trailer-engine";
+import {
+  Easing,
+  clamp,
+  type DrawContext,
+  type LifecycleScene,
+  type SceneContext,
+  type SceneCue,
+} from "@/lib/trailer-engine";
 
 export interface PersonaPalette {
   abi: string;
@@ -37,13 +44,15 @@ export interface Caption {
 export const ABBEY_DURATION = 38;
 export const PARTICLE_COUNT = 1400;
 export const MIN_PARTICLES = 400;
-const CX = 960, CY = 540;
+const CX = 960,
+  CY = 540;
 
 /* ───────────────────────── shared integration ───────────────────────── */
 
 /** Damped spring toward targetX/targetY. Frame-rate independent for the clamped dt this engine feeds it. */
 function springStep(ctx: SceneContext, dt: number, stiffness: number, damping: number): void {
-  const p = ctx.particles, n = p.count;
+  const p = ctx.particles,
+    n = p.count;
   const drag = Math.exp(-damping * dt);
   for (let i = 0; i < n; i++) {
     const ax = ((p.targetX[i] ?? 0) - (p.x[i] ?? 0)) * stiffness;
@@ -90,7 +99,13 @@ function paintBase(ctx: DrawContext, w: number, h: number, ink: string): void {
   ctx.fillRect(0, 0, w, h);
 }
 
-function paintParticles(ctx: DrawContext, p: SceneContext["particles"], colorOf: (i: number) => string, alpha: number, scale = 1): void {
+function paintParticles(
+  ctx: DrawContext,
+  p: SceneContext["particles"],
+  colorOf: (i: number) => string,
+  alpha: number,
+  scale = 1,
+): void {
   ctx.globalCompositeOperation = "lighter";
   for (let i = 0; i < p.count; i++) {
     ctx.fillStyle = colorOf(i);
@@ -145,7 +160,8 @@ export class ShatterScene implements LifecycleScene {
       // once here, never in update, so the burst is reviewable frame by frame.
       p.x[i] = p.targetX[i] ?? CX;
       p.y[i] = p.targetY[i] ?? CY;
-      const dx = (p.x[i] ?? CX) - CX, dy = (p.y[i] ?? CY) - CY;
+      const dx = (p.x[i] ?? CX) - CX,
+        dy = (p.y[i] ?? CY) - CY;
       const len = Math.hypot(dx, dy) || 1;
       const speed = 380 + ctx.random() * 720;
       const wobble = (ctx.random() - 0.5) * 0.9;
@@ -156,7 +172,8 @@ export class ShatterScene implements LifecycleScene {
   update(dt: number): void {
     const c = this.ctx;
     if (!c) return;
-    const p = c.particles, drag = Math.exp(-1.6 * dt);
+    const p = c.particles,
+      drag = Math.exp(-1.6 * dt);
     for (let i = 0; i < p.count; i++) {
       p.vx[i] = (p.vx[i] ?? 0) * drag;
       p.vy[i] = (p.vy[i] ?? 0) * drag;
@@ -170,7 +187,15 @@ export class ShatterScene implements LifecycleScene {
     const mix = Easing.easeInOutCubic(clamp(local / 3, 0, 1));
     const byGroup = [this.pal.abi, this.pal.aviva, this.pal.abbey];
     const p = this.ctx.particles;
-    paintParticles(ctx, p, (i) => (mix > (p.seed[i] ?? 0) ? rgba(byGroup[p.group[i] ?? 0] ?? this.pal.text, 0.8) : rgba(this.pal.text, 0.75)), 1);
+    paintParticles(
+      ctx,
+      p,
+      (i) =>
+        mix > (p.seed[i] ?? 0)
+          ? rgba(byGroup[p.group[i] ?? 0] ?? this.pal.text, 0.8)
+          : rgba(this.pal.text, 0.75),
+      1,
+    );
   }
   exit(): void {
     this.ctx = null;
@@ -181,7 +206,11 @@ export class ShatterScene implements LifecycleScene {
 export class PersonaRingScene implements LifecycleScene {
   private ctx: SceneContext | null = null;
   private angle0: Float32Array | null = null;
-  constructor(private readonly pal: TrailerPalette, private readonly who: keyof PersonaPalette, private readonly radius = 300) {}
+  constructor(
+    private readonly pal: TrailerPalette,
+    private readonly who: keyof PersonaPalette,
+    private readonly radius = 300,
+  ) {}
   enter(ctx: SceneContext): void {
     this.ctx = ctx;
     scatter(ctx);
@@ -194,9 +223,11 @@ export class PersonaRingScene implements LifecycleScene {
     this.layout(0);
   }
   private layout(local: number): void {
-    const c = this.ctx, a0 = this.angle0;
+    const c = this.ctx,
+      a0 = this.angle0;
     if (!c || !a0) return;
-    const p = c.particles, turn = local * 0.25;
+    const p = c.particles,
+      turn = local * 0.25;
     for (let i = 0; i < p.count; i++) {
       const r = this.radius + ((p.seed[i] ?? 0) - 0.5) * 70;
       const ang = (a0[i] ?? 0) + turn;
@@ -243,7 +274,8 @@ export class ConvergenceScene implements LifecycleScene {
     }
   }
   update(dt: number, local: number): void {
-    const c = this.ctx, a0 = this.angle0;
+    const c = this.ctx,
+      a0 = this.angle0;
     if (!c || !a0) return;
     const p = c.particles;
     const k = Easing.easeInOutCubic(clamp(local / 4.5, 0, 1));
@@ -285,8 +317,11 @@ export class FinalMarkScene implements LifecycleScene {
       const ang = ctx.random() * Math.PI * 2;
       p.x[i] = CX + Math.cos(ang) * 210;
       p.y[i] = CY + Math.sin(ang) * 130;
-      const side = Math.floor(ctx.random() * 6), t = ctx.random();
-      const a1 = (side / 6) * Math.PI * 2, a2 = ((side + 1) / 6) * Math.PI * 2, R = 250;
+      const side = Math.floor(ctx.random() * 6),
+        t = ctx.random();
+      const a1 = (side / 6) * Math.PI * 2,
+        a2 = ((side + 1) / 6) * Math.PI * 2,
+        R = 250;
       const jitter = ((p.seed[i] ?? 0) - 0.5) * 14;
       p.targetX[i] = CX + (Math.cos(a1) * (1 - t) + Math.cos(a2) * t) * R + jitter;
       p.targetY[i] = CY + (Math.sin(a1) * (1 - t) + Math.sin(a2) * t) * R + jitter;
@@ -302,7 +337,13 @@ export class FinalMarkScene implements LifecycleScene {
     const byGroup = [this.pal.abi, this.pal.aviva, this.pal.abbey];
     const p = this.ctx.particles;
     const settle = Easing.easeOutCubic(clamp(local / 2.5, 0, 1));
-    paintParticles(ctx, p, (i) => rgba(byGroup[p.group[i] ?? 0] ?? this.pal.text, 0.55 + 0.4 * settle), 1, 1 + 0.4 * settle);
+    paintParticles(
+      ctx,
+      p,
+      (i) => rgba(byGroup[p.group[i] ?? 0] ?? this.pal.text, 0.55 + 0.4 * settle),
+      1,
+      1 + 0.4 * settle,
+    );
   }
   exit(): void {
     this.ctx = null;

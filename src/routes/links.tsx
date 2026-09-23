@@ -9,11 +9,23 @@ import { linkHub } from "@/lib/mlai/pages";
 import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/links")({
-  head: () => pageHead("Links — Quesar directory", "Link hub and internal directory of Quesar pages and apps."),
+  head: () =>
+    pageHead(
+      "Links — Quesar directory",
+      "Link hub and internal directory of Quesar pages and apps.",
+    ),
   component: LinksPage,
 });
 
-function PlainLink({ to, className, children }: { to: string; className?: string; children: ReactNode }) {
+function PlainLink({
+  to,
+  className,
+  children,
+}: {
+  to: string;
+  className?: string;
+  children: ReactNode;
+}) {
   return (
     <a href={to} className={className}>
       {children}
@@ -52,12 +64,17 @@ function LinksPage() {
                   const Card = fileLink ? PlainLink : AppLink;
                   return (
                     <li key={item.title}>
-                      <Card to={item.href} className="surface surface-hover flex h-full flex-col p-5 no-underline">
+                      <Card
+                        to={item.href}
+                        className="surface surface-hover flex h-full flex-col p-5 no-underline"
+                      >
                         <span className="text-xs text-fg-subtle">
                           {external ? "External" : "On this site"}
                         </span>
                         <span className="mt-2 font-display text-lg text-fg">{item.title}</span>
-                        <span className="mt-2 text-sm leading-relaxed text-fg-muted">{item.body}</span>
+                        <span className="mt-2 text-sm leading-relaxed text-fg-muted">
+                          {item.body}
+                        </span>
                         <span className="mt-auto pt-4 font-mono text-xs text-accent">
                           {external ? `${href.replace(/^https?:\/\//, "")} ↗` : `${href} →`}
                         </span>
@@ -78,7 +95,10 @@ function LinksPage() {
               <ul className="mt-3 space-y-2">
                 {items.map((item) => (
                   <li key={item.href}>
-                    <AppLink to={item.href} className="text-sm text-fg-muted no-underline hover:text-fg">
+                    <AppLink
+                      to={item.href}
+                      className="text-sm text-fg-muted no-underline hover:text-fg"
+                    >
                       {item.title}
                     </AppLink>
                   </li>

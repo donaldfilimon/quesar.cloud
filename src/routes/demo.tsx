@@ -58,9 +58,16 @@ function DemoPage() {
         </div>
       </Section>
       <PageClose
-        primary={{ to: "/research/wdbx-weighted-backtrace-memory-store", label: "Read the WDBX paper" }}
+        primary={{
+          to: "/research/wdbx-weighted-backtrace-memory-store",
+          label: "Read the WDBX paper",
+        }}
         next={[
-          { to: "/wdbx", label: "WDBX", body: "What the substrate is, and what it does not claim." },
+          {
+            to: "/wdbx",
+            label: "WDBX",
+            body: "What the substrate is, and what it does not claim.",
+          },
           { to: "/abbey-bot", label: "Companion thread", body: "Where the personas talk." },
           { to: "/architecture", label: "Architecture", body: "Where routing is named as a node." },
         ]}

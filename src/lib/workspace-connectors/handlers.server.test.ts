@@ -67,7 +67,9 @@ describe("startConnect is disabled when unconfigured", () => {
   it("redirects back with provider_not_configured and sets no state cookie", () => {
     const response = startConnect(request, "google");
     expect(response.status).toBe(302);
-    expect(response.headers.get("location")).toBe(`${ORIGIN}/console/workspace?error=provider_not_configured`);
+    expect(response.headers.get("location")).toBe(
+      `${ORIGIN}/console/workspace?error=provider_not_configured`,
+    );
     expect(response.headers.get("set-cookie")).toBeNull();
   });
 
@@ -89,7 +91,9 @@ describe("startConnect is disabled when unconfigured", () => {
 
   it("rejects an unknown provider slug", () => {
     configureGoogle();
-    expect(startConnect(request, "dropbox").headers.get("location")).toContain("error=unknown_provider");
+    expect(startConnect(request, "dropbox").headers.get("location")).toContain(
+      "error=unknown_provider",
+    );
   });
 
   it("when configured, redirects to consent with PKCE and a __Host- state cookie", () => {
@@ -97,9 +101,13 @@ describe("startConnect is disabled when unconfigured", () => {
     const response = startConnect(request, "google");
     const location = new URL(response.headers.get("location")!);
     expect(location.origin).toBe("https://accounts.google.com");
-    expect(location.searchParams.get("redirect_uri")).toBe(`${ORIGIN}/api/workspace/callback/google`);
+    expect(location.searchParams.get("redirect_uri")).toBe(
+      `${ORIGIN}/api/workspace/callback/google`,
+    );
     expect(location.searchParams.get("code_challenge_method")).toBe("S256");
-    expect(response.headers.get("set-cookie")).toMatch(/^__Host-quesar_workspace_state=.+; Path=\/; HttpOnly; Secure/);
+    expect(response.headers.get("set-cookie")).toMatch(
+      /^__Host-quesar_workspace_state=.+; Path=\/; HttpOnly; Secure/,
+    );
     expect(response.headers.get("location")).not.toContain("google-secret");
   });
 });
@@ -114,7 +122,9 @@ describe("finishCallback rejects a bad state before spending the code", () => {
     const { calls, fetchImpl } = spyFetch();
     const response = await finishCallback(request, provider, userId, fetchImpl);
     expect(response.status).toBe(302);
-    expect(response.headers.get("location")).toBe(`${ORIGIN}/console/workspace?error=invalid_state`);
+    expect(response.headers.get("location")).toBe(
+      `${ORIGIN}/console/workspace?error=invalid_state`,
+    );
     // Single-use nonce: the pending flow is cleared on the failure path too.
     expect(response.headers.get("set-cookie")).toContain("Max-Age=0");
     // The code was never exchanged.
@@ -131,12 +141,17 @@ describe("finishCallback rejects a bad state before spending the code", () => {
   });
 
   it("with no pending-flow cookie at all", async () => {
-    await expectRejected(callbackRequest({ state: encodeWorkspaceState("n", "google"), cookie: null }));
+    await expectRejected(
+      callbackRequest({ state: encodeWorkspaceState("n", "google"), cookie: null }),
+    );
   });
 
   it("with no state parameter", async () => {
     await expectRejected(
-      callbackRequest({ state: null, cookie: encodePendingFlow({ nonce: "n", verifier: "v", provider: "google" }) }),
+      callbackRequest({
+        state: null,
+        cookie: encodePendingFlow({ nonce: "n", verifier: "v", provider: "google" }),
+      }),
     );
   });
 
@@ -165,7 +180,12 @@ describe("finishCallback success", () => {
         return {
           ok: true,
           status: 200,
-          json: async () => ({ access_token: accessToken, refresh_token: refreshToken, expires_in: 3600, scope: "drive.metadata.readonly" }),
+          json: async () => ({
+            access_token: accessToken,
+            refresh_token: refreshToken,
+            expires_in: 3600,
+            scope: "drive.metadata.readonly",
+          }),
         };
       }
       return { ok: true, status: 200, json: async () => ({ email: "ada@example.test" }) };
@@ -212,7 +232,9 @@ describe("finishCallback success", () => {
     );
     expect(response.headers.get("location")).toContain("error=no_refresh_token");
     const sql = await getSql();
-    expect(await sql`select 1 from workspace_connections where user_id = ${userId}`).toHaveLength(0);
+    expect(await sql`select 1 from workspace_connections where user_id = ${userId}`).toHaveLength(
+      0,
+    );
   }, 30_000);
 });
 
@@ -221,11 +243,28 @@ describe("listConnections", () => {
     configureGoogle();
     vi.stubEnv("APP_ENCRYPTION_KEY", "");
     const response = await listConnections(uid("list"));
-    const body = (await response.json()) as { providers: { provider: string; configured: boolean; reason: string | null; connected: boolean }[] };
+    const body = (await response.json()) as {
+      providers: {
+        provider: string;
+        configured: boolean;
+        reason: string | null;
+        connected: boolean;
+      }[];
+    };
     expect(response.headers.get("cache-control")).toBe("private, no-store");
     expect(body.providers).toEqual([
-      expect.objectContaining({ provider: "google", configured: false, reason: "encryption_not_configured", connected: false }),
-      expect.objectContaining({ provider: "microsoft", configured: false, reason: "provider_not_configured", connected: false }),
+      expect.objectContaining({
+        provider: "google",
+        configured: false,
+        reason: "encryption_not_configured",
+        connected: false,
+      }),
+      expect.objectContaining({
+        provider: "microsoft",
+        configured: false,
+        reason: "provider_not_configured",
+        connected: false,
+      }),
     ]);
   }, 30_000);
 });
@@ -233,18 +272,32 @@ describe("listConnections", () => {
 describe("listSourceFiles", () => {
   it("answers 200 connected:false when unconfigured, without calling the provider", async () => {
     let called = false;
-    const response = await listSourceFiles(new Request(`${ORIGIN}/api/workspace/drive`), "google", uid("files"), async () => {
-      called = true;
-      return [];
-    });
+    const response = await listSourceFiles(
+      new Request(`${ORIGIN}/api/workspace/drive`),
+      "google",
+      uid("files"),
+      async () => {
+        called = true;
+        return [];
+      },
+    );
     expect(response.status).toBe(200);
-    expect(await response.json()).toMatchObject({ connected: false, reason: "provider_not_configured", files: [] });
+    expect(await response.json()).toMatchObject({
+      connected: false,
+      reason: "provider_not_configured",
+      files: [],
+    });
     expect(called).toBe(false);
   });
 
   it("answers not_connected for a configured provider this user never linked", async () => {
     configureGoogle();
-    const response = await listSourceFiles(new Request(`${ORIGIN}/api/workspace/drive`), "google", uid("unlinked"), async () => []);
+    const response = await listSourceFiles(
+      new Request(`${ORIGIN}/api/workspace/drive`),
+      "google",
+      uid("unlinked"),
+      async () => [],
+    );
     expect(await response.json()).toMatchObject({ connected: false, reason: "not_connected" });
   }, 30_000);
 
@@ -259,11 +312,23 @@ describe("reauth_required after a key rotation", () => {
   it("lists the provider as reauth_required, answers files the same way, and disconnect still deletes", async () => {
     configureGoogle();
     const userId = uid("reauth");
-    await saveWorkspaceConnection({ userId, provider: "google", refreshToken: "rt", accountEmail: "a@x.test", scope: null });
+    await saveWorkspaceConnection({
+      userId,
+      provider: "google",
+      refreshToken: "rt",
+      accountEmail: "a@x.test",
+      scope: null,
+    });
     vi.stubEnv("APP_ENCRYPTION_KEY", randomBytes(32).toString("base64"));
 
     const listed = (await (await listConnections(userId)).json()) as {
-      providers: { provider: string; configured: boolean; reason: string | null; connected: boolean; stored: boolean }[];
+      providers: {
+        provider: string;
+        configured: boolean;
+        reason: string | null;
+        connected: boolean;
+        stored: boolean;
+      }[];
     };
     expect(listed.providers[0]).toMatchObject({
       provider: "google",
@@ -274,12 +339,21 @@ describe("reauth_required after a key rotation", () => {
     });
 
     let called = false;
-    const files = await listSourceFiles(new Request(`${ORIGIN}/api/workspace/drive`), "google", userId, async () => {
-      called = true;
-      return [];
-    });
+    const files = await listSourceFiles(
+      new Request(`${ORIGIN}/api/workspace/drive`),
+      "google",
+      userId,
+      async () => {
+        called = true;
+        return [];
+      },
+    );
     expect(files.status).toBe(200);
-    expect(await files.json()).toMatchObject({ connected: false, reason: "reauth_required", files: [] });
+    expect(await files.json()).toMatchObject({
+      connected: false,
+      reason: "reauth_required",
+      files: [],
+    });
     expect(called).toBe(false);
 
     const { calls, fetchImpl } = spyFetch();
@@ -288,6 +362,8 @@ describe("reauth_required after a key rotation", () => {
     // The token could not be opened, so nothing was sent to the provider.
     expect(calls).toEqual([]);
     const sql = await getSql();
-    expect(await sql`select 1 from workspace_connections where user_id = ${userId}`).toHaveLength(0);
+    expect(await sql`select 1 from workspace_connections where user_id = ${userId}`).toHaveLength(
+      0,
+    );
   }, 30_000);
 });

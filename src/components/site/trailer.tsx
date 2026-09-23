@@ -22,7 +22,12 @@ export function Trailer({
   const cuts = full ? filmCuts : filmCuts.filter((cut) => cut.id === "mark");
   const videoRef = useRef<HTMLVideoElement>(null);
   const resume = useRef(false);
-  const [index, setIndex] = useState(() => Math.max(0, cuts.findIndex((cut) => cut.id === start)));
+  const [index, setIndex] = useState(() =>
+    Math.max(
+      0,
+      cuts.findIndex((cut) => cut.id === start),
+    ),
+  );
   const [playing, setPlaying] = useState(false);
   const [muted, setMuted] = useState(true);
   const [time, setTime] = useState(0);
@@ -83,7 +88,13 @@ export function Trailer({
           }}
         >
           <source src={cut.src} type="video/mp4" />
-          <track kind="captions" srcLang="en" label="English" src={`/media/${cut.id}.vtt`} default />
+          <track
+            kind="captions"
+            srcLang="en"
+            label="English"
+            src={`/media/${cut.id}.vtt`}
+            default
+          />
         </video>
         <button
           type="button"
@@ -91,7 +102,12 @@ export function Trailer({
           className="absolute inset-0 grid place-items-center text-white"
           aria-label={playing ? "Pause trailer" : "Play trailer"}
         >
-          <span className={cn("grid size-12 place-items-center rounded-full bg-black/55 backdrop-blur-sm sm:size-16", playing && "opacity-0 transition-opacity hover:opacity-100")}>
+          <span
+            className={cn(
+              "grid size-12 place-items-center rounded-full bg-black/55 backdrop-blur-sm sm:size-16",
+              playing && "opacity-0 transition-opacity hover:opacity-100",
+            )}
+          >
             {playing ? <Pause className="size-6" /> : <Play className="size-6 translate-x-0.5" />}
           </span>
         </button>
@@ -113,7 +129,12 @@ export function Trailer({
             }}
             className="h-1 flex-1 accent-primary"
           />
-          <button type="button" className="grid size-8 place-items-center" aria-label={muted ? "Unmute" : "Mute"} onClick={() => setMuted((value) => !value)}>
+          <button
+            type="button"
+            className="grid size-8 place-items-center"
+            aria-label={muted ? "Unmute" : "Mute"}
+            onClick={() => setMuted((value) => !value)}
+          >
             {muted ? <VolumeX className="size-4" /> : <Volume2 className="size-4" />}
           </button>
         </div>
@@ -134,7 +155,9 @@ export function Trailer({
                 onClick={() => choose(itemIndex)}
                 className={cn(
                   "rounded-md px-3 py-2 text-sm",
-                  itemIndex === index ? "bg-primary/15 text-fg" : "text-fg-muted hover:bg-muted hover:text-fg",
+                  itemIndex === index
+                    ? "bg-primary/15 text-fg"
+                    : "text-fg-muted hover:bg-muted hover:text-fg",
                 )}
               >
                 {itemIndex + 1}. {item.title}
@@ -142,7 +165,10 @@ export function Trailer({
             ))}
           </div>
         ) : (
-          <Link to="/showcase/trailer" className="text-sm text-primary no-underline hover:underline">
+          <Link
+            to="/showcase/trailer"
+            className="text-sm text-primary no-underline hover:underline"
+          >
             Watch the full trailer
           </Link>
         )}

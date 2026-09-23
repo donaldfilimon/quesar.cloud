@@ -30,7 +30,9 @@ export const Route = createFileRoute("/profile")({
 const SESSIONS_FAILED = "Sessions could not be loaded. Try again in a moment.";
 
 function ProfilePage() {
-  return <RequireSession feature="Your profile">{(user) => <ProfileInner user={user} />}</RequireSession>;
+  return (
+    <RequireSession feature="Your profile">{(user) => <ProfileInner user={user} />}</RequireSession>
+  );
 }
 
 function ProfileInner({ user }: { user: AppUser }) {
@@ -80,9 +82,7 @@ function ProfileInner({ user }: { user: AppUser }) {
           <AccountCard account={account} />
           {user.isDevFallback ? (
             <Surface>
-              <p className="text-xs text-fg-subtle">
-                Session
-              </p>
+              <p className="text-xs text-fg-subtle">Session</p>
               <p className="mt-2 text-sm text-fg-muted">
                 Auth is off in this build, so notes use the local fallback account. There is no name
                 to edit and no session to manage.
@@ -96,9 +96,7 @@ function ProfileInner({ user }: { user: AppUser }) {
           <div className="mt-4 grid gap-4 md:grid-cols-2">
             <SessionsPanel canSignOut={canSignOut} />
             <Surface>
-              <p className="text-xs text-fg-subtle">
-                This device
-              </p>
+              <p className="text-xs text-fg-subtle">This device</p>
               <p className="mt-2 text-sm text-fg-muted">
                 Signed in. Notes are queried with your account id, not a client-supplied one.
               </p>

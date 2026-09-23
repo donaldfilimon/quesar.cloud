@@ -104,9 +104,7 @@ function FeatureCard({ icon: Icon, name, tint, tag, desc }: Feature) {
       >
         {name}
       </h3>
-      <p style={{ fontSize: 14, lineHeight: 1.55, color: "var(--text-dim)", margin: 0 }}>
-        {desc}
-      </p>
+      <p style={{ fontSize: 14, lineHeight: 1.55, color: "var(--text-dim)", margin: 0 }}>{desc}</p>
     </div>
   );
 }
@@ -146,8 +144,8 @@ export default function Features() {
             color: "var(--text-dim)",
           }}
         >
-          Each layer earns its place — the runtime that remembers, the framework that
-          orchestrates, and the minds you talk to.
+          Each layer earns its place — the runtime that remembers, the framework that orchestrates,
+          and the minds you talk to.
         </p>
       </div>
       <div
@@ -229,9 +227,7 @@ export function Footer() {
         margin: "0 auto",
       }}
     >
-      <div
-        style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}
-      >
+      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
         <img src="/mlai-mark.svg" width="26" height="26" alt="MLAI" />
         <span
           style={{
@@ -253,8 +249,8 @@ export function Footer() {
           lineHeight: 1.6,
         }}
       >
-        Machine Learning Advanced Innovations, Inc. · Disciplined Secrecy · Mission
-        Stewardship · Operational Velocity
+        Machine Learning Advanced Innovations, Inc. · Disciplined Secrecy · Mission Stewardship ·
+        Operational Velocity
       </p>
     </footer>
   );

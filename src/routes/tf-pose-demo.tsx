@@ -13,7 +13,8 @@ export const Route = createFileRoute("/tf-pose-demo")({
       { title: "Pose detection demo — Quesar by MLAI" },
       {
         name: "description",
-        content: "An isolated TensorFlow.js pose-detection prototype, separate from the MLAI platform.",
+        content:
+          "An isolated TensorFlow.js pose-detection prototype, separate from the MLAI platform.",
       },
       { name: "robots", content: "noindex" },
     ],

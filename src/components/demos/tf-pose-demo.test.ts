@@ -64,7 +64,9 @@ describe("TFPoseDemo render order", () => {
   });
 
   it("stops every track and disposes the model on unmount", () => {
-    expect(src).toMatch(/return \(\) => \{\s*cancelled = true;[\s\S]*stream\?\.getTracks\(\)\.forEach\(\(track\) => track\.stop\(\)\);[\s\S]*disposeNet\?\.\(\);/);
+    expect(src).toMatch(
+      /return \(\) => \{\s*cancelled = true;[\s\S]*stream\?\.getTracks\(\)\.forEach\(\(track\) => track\.stop\(\)\);[\s\S]*disposeNet\?\.\(\);/,
+    );
   });
 
   it("does not request the camera until the visitor opts in", () => {

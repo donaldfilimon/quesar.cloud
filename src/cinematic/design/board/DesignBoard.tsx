@@ -7,14 +7,30 @@
    ════════════════════════════════════════════════════════════════ */
 import { useState, useEffect, type ReactNode } from "react";
 import { Mark, Eyebrow, Mono, Reveal } from "./core.tsx";
-import { ReviewSection, ColorSection, ElevationSection, SpacingSection, TypeSection } from "./foundations.tsx";
+import {
+  ReviewSection,
+  ColorSection,
+  ElevationSection,
+  SpacingSection,
+  TypeSection,
+} from "./foundations.tsx";
 import { LightSection, ComponentsSection, AppliedSection, TokensSection } from "./depth.tsx";
 import {
-  TweaksPanel, TweakSection, TweakRadio, TweakSelect, TweakSlider, TweakToggle,
+  TweaksPanel,
+  TweakSection,
+  TweakRadio,
+  TweakSelect,
+  TweakSlider,
+  TweakToggle,
 } from "./shell/TweaksPanel.tsx";
 import { useTweaks } from "./shell/use-tweaks.ts";
 import {
-  NAV, THEMES, CANVASES, TWEAK_DEFAULTS, type ThemeTriple, type TweakState,
+  NAV,
+  THEMES,
+  CANVASES,
+  TWEAK_DEFAULTS,
+  type ThemeTriple,
+  type TweakState,
 } from "./tokens.ts";
 
 /** Section ids for the scroll spy; module-level so the effect subscribes once. */
@@ -125,7 +141,10 @@ function Sidebar({ active }: { active: string }): ReactNode {
       <div className="flex items-center gap-2.5 mb-1">
         <Mark size={34} />
         <div>
-          <div className="font-bold tracking-[0.16em] text-white text-[15px] leading-none" style={{ fontFamily: "var(--font-display)" }}>
+          <div
+            className="font-bold tracking-[0.16em] text-white text-[15px] leading-none"
+            style={{ fontFamily: "var(--font-display)" }}
+          >
             MLAI
           </div>
           <Mono className="text-[9.5px] text-slate-500">design system</Mono>
@@ -135,7 +154,8 @@ function Sidebar({ active }: { active: string }): ReactNode {
         <span
           className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[10px] font-semibold uppercase"
           style={{
-            background: "linear-gradient(90deg,color-mix(in srgb,var(--ds-accent) 14%,transparent),color-mix(in srgb,var(--ds-accent3) 14%,transparent))",
+            background:
+              "linear-gradient(90deg,color-mix(in srgb,var(--ds-accent) 14%,transparent),color-mix(in srgb,var(--ds-accent3) 14%,transparent))",
             border: "1px solid rgba(255,255,255,0.08)",
             color: "var(--ds-accent)",
             letterSpacing: "0.14em",
@@ -166,7 +186,9 @@ function Sidebar({ active }: { active: string }): ReactNode {
         ))}
       </nav>
       <div className="mt-auto pt-6 border-t border-white/6">
-        <Mono className="text-[10px] text-slate-600 leading-relaxed block">Space Grotesk · IBM Plex Sans · IBM Plex Mono</Mono>
+        <Mono className="text-[10px] text-slate-600 leading-relaxed block">
+          Space Grotesk · IBM Plex Sans · IBM Plex Mono
+        </Mono>
         <Mono className="text-[10px] text-slate-700 mt-1 block">© 2026 MLAI Corporation</Mono>
       </div>
     </aside>
@@ -174,7 +196,11 @@ function Sidebar({ active }: { active: string }): ReactNode {
 }
 
 const HERO_CHIPS: readonly string[] = [
-  "4-tier elevation", "Reconciled color", "Spacing rhythm", "One light source", "Before / after",
+  "4-tier elevation",
+  "Reconciled color",
+  "Spacing rhythm",
+  "One light source",
+  "Before / after",
 ];
 
 /* ── Board ─────────────────────────────────────────────────────── */
@@ -214,7 +240,11 @@ export default function DesignBoard(): ReactNode {
   }, []);
 
   return (
-    <div className="ds-board" data-screen-label="MLAI Design Upgrade v2" style={{ background: "var(--ds-canvas)" }}>
+    <div
+      className="ds-board"
+      data-screen-label="MLAI Design Upgrade v2"
+      style={{ background: "var(--ds-canvas)" }}
+    >
       <style>{BOARD_CSS}</style>
       <div id="ds-scroll-progress" className="ds-scroll-progress" />
       <div className="ds-grain" />
@@ -280,22 +310,30 @@ export default function DesignBoard(): ReactNode {
             <Eyebrow color="#a855f7">Design System Upgrade · Response to spec</Eyebrow>
             <h1
               className="font-bold text-white tracking-tight"
-              style={{ fontFamily: "var(--font-display)", fontSize: "clamp(40px,7vw,76px)", lineHeight: 1.0, letterSpacing: "-0.035em" }}
+              style={{
+                fontFamily: "var(--font-display)",
+                fontSize: "clamp(40px,7vw,76px)",
+                lineHeight: 1.0,
+                letterSpacing: "-0.035em",
+              }}
             >
               Not more glass.
               <br />A real <span className="t-grad">system</span> underneath.
             </h1>
             <p className="mt-6 text-base sm:text-lg text-slate-400 leading-relaxed text-pretty">
-              The upgrade spec asks for things MLAI already ships. This is the version that actually moves the needle:
-              a reconciled palette, a four-tier elevation ramp, one declared light direction, formal spacing rhythm, and
-              the whole thing applied to a live page.
+              The upgrade spec asks for things MLAI already ships. This is the version that actually
+              moves the needle: a reconciled palette, a four-tier elevation ramp, one declared light
+              direction, formal spacing rhythm, and the whole thing applied to a live page.
             </p>
             <div className="flex flex-wrap gap-2.5 mt-8">
               {HERO_CHIPS.map((chip) => (
                 <span
                   key={chip}
                   className="px-3.5 py-1.5 rounded-full text-[11px] font-medium text-slate-300"
-                  style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)" }}
+                  style={{
+                    background: "rgba(255,255,255,0.04)",
+                    border: "1px solid rgba(255,255,255,0.1)",
+                  }}
                 >
                   {chip}
                 </span>
@@ -304,26 +342,69 @@ export default function DesignBoard(): ReactNode {
           </header>
 
           <div className="space-y-28 pb-32">
-            <div id="review"><Reveal><ReviewSection /></Reveal></div>
-            <div id="color"><Reveal><ColorSection /></Reveal></div>
-            <div id="elevation"><Reveal><ElevationSection /></Reveal></div>
-            <div id="spacing"><Reveal><SpacingSection /></Reveal></div>
-            <div id="type"><Reveal><TypeSection /></Reveal></div>
-            <div id="light"><Reveal><LightSection /></Reveal></div>
-            <div id="components"><Reveal><ComponentsSection /></Reveal></div>
-            <div id="applied"><Reveal><AppliedSection /></Reveal></div>
-            <div id="tokens"><Reveal><TokensSection /></Reveal></div>
+            <div id="review">
+              <Reveal>
+                <ReviewSection />
+              </Reveal>
+            </div>
+            <div id="color">
+              <Reveal>
+                <ColorSection />
+              </Reveal>
+            </div>
+            <div id="elevation">
+              <Reveal>
+                <ElevationSection />
+              </Reveal>
+            </div>
+            <div id="spacing">
+              <Reveal>
+                <SpacingSection />
+              </Reveal>
+            </div>
+            <div id="type">
+              <Reveal>
+                <TypeSection />
+              </Reveal>
+            </div>
+            <div id="light">
+              <Reveal>
+                <LightSection />
+              </Reveal>
+            </div>
+            <div id="components">
+              <Reveal>
+                <ComponentsSection />
+              </Reveal>
+            </div>
+            <div id="applied">
+              <Reveal>
+                <AppliedSection />
+              </Reveal>
+            </div>
+            <div id="tokens">
+              <Reveal>
+                <TokensSection />
+              </Reveal>
+            </div>
           </div>
 
           <footer className="border-t border-white/7 py-12 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
             <div className="flex items-center gap-3">
               <Mark size={30} />
               <div>
-                <div className="text-white font-semibold text-sm" style={{ fontFamily: "var(--font-display)" }}>MLAI Corporation</div>
+                <div
+                  className="text-white font-semibold text-sm"
+                  style={{ fontFamily: "var(--font-display)" }}
+                >
+                  MLAI Corporation
+                </div>
                 <Mono className="text-[11px] text-slate-500">Design System Upgrade · v2.0</Mono>
               </div>
             </div>
-            <Mono className="text-[11px] text-slate-600">Infrastructure for resilient intelligence</Mono>
+            <Mono className="text-[11px] text-slate-600">
+              Infrastructure for resilient intelligence
+            </Mono>
           </footer>
         </div>
       </main>

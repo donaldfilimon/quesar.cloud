@@ -32,7 +32,14 @@ export type {
 export { AudioEngine, chunkText } from "./audio";
 export type { DrawContext, RenderTarget, Renderer, Scene } from "./renderer";
 export { Canvas2DRenderer } from "./renderer";
-export type { Net, NetEdge, NetNode, NetStar, NeuralModePreset, NeuralSceneOptions } from "./neural-scene";
+export type {
+  Net,
+  NetEdge,
+  NetNode,
+  NetStar,
+  NeuralModePreset,
+  NeuralSceneOptions,
+} from "./neural-scene";
 export { NL_LAYERS, NeuralScene, buildNet3D } from "./neural-scene";
 export type { LifecycleScene, SceneContext, SceneCue, SequencerOptions } from "./sequencer";
 export { SceneSequencer } from "./sequencer";

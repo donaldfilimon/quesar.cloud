@@ -4,7 +4,10 @@ import { cn } from "@/lib/utils";
 
 export const Accordion = AccordionPrimitive.Root;
 
-export function AccordionItem({ className, ...props }: ComponentProps<typeof AccordionPrimitive.Item>) {
+export function AccordionItem({
+  className,
+  ...props
+}: ComponentProps<typeof AccordionPrimitive.Item>) {
   return <AccordionPrimitive.Item className={cn("group bg-bg-elevated", className)} {...props} />;
 }
 

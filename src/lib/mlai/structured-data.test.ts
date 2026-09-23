@@ -31,7 +31,9 @@ describe("structured-data", () => {
   });
 
   it("researchArticleLd splits a real middle-dot byline into separate Organizations", () => {
-    const paper = research.publications.find((p) => p.slug === "wdbx-weighted-backtrace-memory-store");
+    const paper = research.publications.find(
+      (p) => p.slug === "wdbx-weighted-backtrace-memory-store",
+    );
     if (!paper) throw new Error("fixture: wdbx-weighted-backtrace-memory-store is missing");
     expect(paper.authors).toBe("MLAI Research · WDBX Core");
     expect(researchArticleLd(paper).author).toEqual([
@@ -72,7 +74,9 @@ describe("structured-data", () => {
     const post = blog.find((p) => p.author?.includes("·"));
     if (!post) throw new Error("fixture: no blog post with a multi-unit byline");
     const expected = post.author!.split("·").map((name) => name.trim());
-    expect(blogPostingLd(post).author).toEqual(expected.map((name) => ({ "@type": "Organization", name })));
+    expect(blogPostingLd(post).author).toEqual(
+      expected.map((name) => ({ "@type": "Organization", name })),
+    );
   });
 
   it("personLd includes sameAs links only for socials the member actually has", () => {
@@ -101,7 +105,10 @@ describe("structured-data", () => {
 
   it("projectLd names the source repository", () => {
     const project = projects[0]!;
-    expect(projectLd(project)).toMatchObject({ "@type": "SoftwareSourceCode", codeRepository: project.source.url });
+    expect(projectLd(project)).toMatchObject({
+      "@type": "SoftwareSourceCode",
+      codeRepository: project.source.url,
+    });
   });
 
   it("serializeJsonLd cannot close its script tag and round-trips", () => {

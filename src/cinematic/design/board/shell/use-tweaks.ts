@@ -10,15 +10,18 @@ export type SetTweak<T> = {
   (edits: Partial<T>): void;
 };
 
-export function useTweaks<T extends Record<string, unknown>>(defaults: T): readonly [T, SetTweak<T>] {
+export function useTweaks<T extends Record<string, unknown>>(
+  defaults: T,
+): readonly [T, SetTweak<T>] {
   const [values, setValues] = useState<T>(defaults);
   // Accepts either setTweak('key', value) or setTweak({ key: value, ... }) so a
   // useState-style call doesn't write a "[object Object]" key into the persisted
   // JSON block.
   const setTweak = useCallback((keyOrEdits: keyof T | Partial<T>, val?: unknown): void => {
-    const edits: Partial<T> = typeof keyOrEdits === "object" && keyOrEdits !== null
-      ? keyOrEdits
-      : ({ [keyOrEdits as keyof T]: val } as Partial<T>);
+    const edits: Partial<T> =
+      typeof keyOrEdits === "object" && keyOrEdits !== null
+        ? keyOrEdits
+        : ({ [keyOrEdits as keyof T]: val } as Partial<T>);
     setValues((prev) => ({ ...prev, ...edits }));
     window.parent.postMessage({ type: "__edit_mode_set_keys", edits }, "*");
     // Same-window signal so in-page listeners can react — the parent message

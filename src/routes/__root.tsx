@@ -38,7 +38,12 @@ export const Route = createRootRoute({
       { rel: "stylesheet", href: appCss },
       { rel: "manifest", href: "/manifest.webmanifest" },
       { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
-      { rel: "alternate", type: "application/rss+xml", title: "Quesar lab notes and research", href: "/feed.xml" },
+      {
+        rel: "alternate",
+        type: "application/rss+xml",
+        title: "Quesar lab notes and research",
+        href: "/feed.xml",
+      },
     ],
   }),
   component: RootDocument,

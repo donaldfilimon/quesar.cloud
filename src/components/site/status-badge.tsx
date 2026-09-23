@@ -10,13 +10,7 @@ const tone: Record<StatusKind, string> = {
   research: "text-status-planned",
 };
 
-export function StatusBadge({
-  status,
-  className,
-}: {
-  status: StatusKind;
-  className?: string;
-}) {
+export function StatusBadge({ status, className }: { status: StatusKind; className?: string }) {
   const copy = statusCopy[status];
   return (
     <span

@@ -10,7 +10,11 @@
  */
 import { randomBytes } from "node:crypto";
 import { features } from "@/lib/server/config.server";
-import { EncryptionUnavailableError, SealedDataError, encryptionConfigured } from "@/lib/server/crypto.server";
+import {
+  EncryptionUnavailableError,
+  SealedDataError,
+  encryptionConfigured,
+} from "@/lib/server/crypto.server";
 import {
   WORKSPACE_PROVIDERS,
   buildAuthorizeUrl,
@@ -80,7 +84,8 @@ function redirect(request: Request, query: string, clearState: boolean): Respons
  * database until the callback succeeds.
  */
 export function startConnect(request: Request, providerParam: string): Response {
-  if (!isWorkspaceProvider(providerParam)) return redirect(request, "?error=unknown_provider", false);
+  if (!isWorkspaceProvider(providerParam))
+    return redirect(request, "?error=unknown_provider", false);
   const provider = providerParam;
 
   const blocker = connectBlocker(provider);
@@ -97,7 +102,13 @@ export function startConnect(request: Request, providerParam: string): Response 
   return new Response(null, {
     status: 302,
     headers: {
-      Location: buildAuthorizeUrl(provider, credentials, state, pkceChallenge(verifier), redirectUri),
+      Location: buildAuthorizeUrl(
+        provider,
+        credentials,
+        state,
+        pkceChallenge(verifier),
+        redirectUri,
+      ),
       "Set-Cookie": workspaceStateCookie(encodePendingFlow({ nonce, verifier, provider })),
       "Cache-Control": "no-store",
     },
@@ -154,7 +165,14 @@ export async function finishCallback(
 
   try {
     const redirectUri = workspaceRedirectUri(requestOrigin(request), provider);
-    const tokens = await exchangeAuthorizationCode(provider, credentials, code, pending.verifier, redirectUri, fetchImpl);
+    const tokens = await exchangeAuthorizationCode(
+      provider,
+      credentials,
+      code,
+      pending.verifier,
+      redirectUri,
+      fetchImpl,
+    );
     if (!tokens.refreshToken) {
       // Without a refresh token the connection dies when the access token
       // expires. Say so rather than storing something that stops working.
@@ -175,7 +193,8 @@ export async function finishCallback(
     });
     return finish(`?connected=${provider}`);
   } catch (error) {
-    if (error instanceof EncryptionUnavailableError) return finish("?error=encryption_not_configured");
+    if (error instanceof EncryptionUnavailableError)
+      return finish("?error=encryption_not_configured");
     // Message only, never the response body, which can echo the code.
     console.error("[Workspace] Connection failed:", error instanceof Error ? error.message : error);
     return finish("?error=connection_failed");
@@ -230,8 +249,14 @@ export async function listConnections(userId: string): Promise<Response> {
     });
     return Response.json({ ok: true, providers }, { headers: PRIVATE_NO_STORE });
   } catch (error) {
-    console.error("[Workspace] Connection list failed:", error instanceof Error ? error.message : error);
-    return Response.json({ error: "Connections unavailable" }, { status: 503, headers: PRIVATE_NO_STORE });
+    console.error(
+      "[Workspace] Connection list failed:",
+      error instanceof Error ? error.message : error,
+    );
+    return Response.json(
+      { error: "Connections unavailable" },
+      { status: 503, headers: PRIVATE_NO_STORE },
+    );
   }
 }
 
@@ -251,7 +276,10 @@ export async function disconnect(
     return Response.json({ ok: true, ...result }, { headers: PRIVATE_NO_STORE });
   } catch (error) {
     console.error("[Workspace] Disconnect failed:", error instanceof Error ? error.message : error);
-    return Response.json({ error: "Could not disconnect" }, { status: 503, headers: PRIVATE_NO_STORE });
+    return Response.json(
+      { error: "Could not disconnect" },
+      { status: 503, headers: PRIVATE_NO_STORE },
+    );
   }
 }
 
@@ -281,7 +309,10 @@ export async function listSourceFiles(
 ): Promise<Response> {
   const blocker = connectBlocker(provider);
   if (blocker) {
-    return Response.json({ ok: true, connected: false, reason: blocker, files: [] }, { headers: PRIVATE_NO_STORE });
+    return Response.json(
+      { ok: true, connected: false, reason: blocker, files: [] },
+      { headers: PRIVATE_NO_STORE },
+    );
   }
 
   const controller = new AbortController();
@@ -307,8 +338,14 @@ export async function listSourceFiles(
       );
     }
     // Message only: provider error bodies can echo the query or the token.
-    console.error(`[Workspace] ${provider} listing failed:`, error instanceof Error ? error.message : error);
-    return Response.json({ error: "Source unavailable" }, { status: 502, headers: PRIVATE_NO_STORE });
+    console.error(
+      `[Workspace] ${provider} listing failed:`,
+      error instanceof Error ? error.message : error,
+    );
+    return Response.json(
+      { error: "Source unavailable" },
+      { status: 502, headers: PRIVATE_NO_STORE },
+    );
   } finally {
     clearTimeout(timeout);
   }

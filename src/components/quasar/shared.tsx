@@ -166,10 +166,7 @@ const statusTone: Record<SiteStatus, string> = {
 export function SiteStatusBadge({ status }: { status: SiteStatus }) {
   return (
     <span
-      className={cn(
-        "inline-flex items-center gap-1.5 text-xs font-medium",
-        statusTone[status],
-      )}
+      className={cn("inline-flex items-center gap-1.5 text-xs font-medium", statusTone[status])}
     >
       <span
         aria-hidden="true"

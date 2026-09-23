@@ -98,23 +98,20 @@ function Field() {
       c.width = w * dpr;
       c.height = h * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      pts = Array.from(
-        { length: Math.min(420, Math.floor((w * h) / 4200)) },
-        (): FieldPoint => {
-          const u = Math.random();
-          const v = Math.random();
-          const th = u * 6.28;
-          const ph = Math.acos(2 * v - 1);
-          const r = 0.55 + Math.random() * 0.45;
-          const col = COLS[Math.floor(Math.random() * 3)]!;
-          return {
-            x: r * Math.sin(ph) * Math.cos(th),
-            y: r * Math.cos(ph),
-            z: r * Math.sin(ph) * Math.sin(th),
-            c: col,
-          };
-        },
-      );
+      pts = Array.from({ length: Math.min(420, Math.floor((w * h) / 4200)) }, (): FieldPoint => {
+        const u = Math.random();
+        const v = Math.random();
+        const th = u * 6.28;
+        const ph = Math.acos(2 * v - 1);
+        const r = 0.55 + Math.random() * 0.45;
+        const col = COLS[Math.floor(Math.random() * 3)]!;
+        return {
+          x: r * Math.sin(ph) * Math.cos(th),
+          y: r * Math.cos(ph),
+          z: r * Math.sin(ph) * Math.sin(th),
+          c: col,
+        };
+      });
     };
 
     rs();
@@ -191,15 +188,11 @@ function Poster() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <Mark size={40} />
-              <span className="font-bold tracking-[0.18em] text-white text-xl">
-                MLAI
-              </span>
+              <span className="font-bold tracking-[0.18em] text-white text-xl">MLAI</span>
             </div>
             <div className="text-right text-xs font-mono text-slate-400">
               <div>Brand board · v1.0</div>
-              <div className="text-slate-600">
-                Machine Learning Advanced Innovations
-              </div>
+              <div className="text-slate-600">Machine Learning Advanced Innovations</div>
             </div>
           </div>
           <div className="flex-1 flex flex-col justify-center">
@@ -223,10 +216,7 @@ function Poster() {
             </h1>
             <div className="mt-8 flex gap-3 flex-wrap">
               {PERSONAS.map(([n, r, col]) => (
-                <div
-                  key={n}
-                  className="glass rounded-2xl px-5 py-3 flex items-center gap-3"
-                >
+                <div key={n} className="glass rounded-2xl px-5 py-3 flex items-center gap-3">
                   <span
                     className="w-3 h-3 rounded-full"
                     style={{ background: col, boxShadow: `0 0 10px ${col}` }}
@@ -251,9 +241,7 @@ function Poster() {
                 >
                   <span
                     className={`absolute inset-0 flex items-center justify-center text-[10px] font-mono ${
-                      ["#0c0c09", "#a855f7"].includes(hex)
-                        ? "text-white"
-                        : "text-slate-900"
+                      ["#0c0c09", "#a855f7"].includes(hex) ? "text-white" : "text-slate-900"
                     } ${hover === hex ? "opacity-100" : "opacity-0"}`}
                   >
                     {hex}
@@ -269,9 +257,7 @@ function Poster() {
                   </span>
                 ))}
               </div>
-              <div className="font-mono">
-                Space Grotesk · IBM Plex Sans · IBM Plex Mono
-              </div>
+              <div className="font-mono">Space Grotesk · IBM Plex Sans · IBM Plex Mono</div>
             </div>
           </div>
         </div>
@@ -281,12 +267,7 @@ function Poster() {
 }
 
 /* ════ GENERATIVE STUDIO ════ */
-const MODES = [
-  "Flow field",
-  "Embedding galaxy",
-  "De Jong",
-  "Phyllotaxis",
-] as const;
+const MODES = ["Flow field", "Embedding galaxy", "De Jong", "Phyllotaxis"] as const;
 type Mode = (typeof MODES)[number];
 
 interface GenParams {
@@ -338,9 +319,7 @@ function GenSlider({
         min={min}
         max={max}
         value={p[k]}
-        onChange={(e) =>
-          setP((s) => ({ ...s, [k]: +e.target.value }))
-        }
+        onChange={(e) => setP((s) => ({ ...s, [k]: +e.target.value }))}
         className="w-full"
       />
     </label>
@@ -388,10 +367,10 @@ function Generative() {
       ctx.fillRect(0, 0, w, h);
       const num = Math.floor(120 + pr.current.count * 12);
       if (mode === "Flow field") {
-        flow = Array.from(
-          { length: num },
-          (): FlowPoint => ({ x: Math.random() * w, y: Math.random() * h }),
-        );
+        flow = Array.from({ length: num }, (): FlowPoint => ({
+          x: Math.random() * w,
+          y: Math.random() * h,
+        }));
       } else if (mode === "Embedding galaxy") {
         galaxy = Array.from({ length: num }, (): GalaxyPoint => {
           const u = Math.random();
@@ -412,9 +391,7 @@ function Generative() {
     addEventListener("resize", rs);
 
     const ang = (px: number, py: number, tt: number): number =>
-      (Math.sin(px * 0.008 + tt) +
-        Math.cos(py * 0.008 - tt * 0.7) +
-        Math.sin((px + py) * 0.004)) *
+      (Math.sin(px * 0.008 + tt) + Math.cos(py * 0.008 - tt * 0.7) + Math.sin((px + py) * 0.004)) *
       1.7;
 
     const d = () => {
@@ -625,9 +602,7 @@ function OGCard() {
           <div className="relative h-full flex flex-col justify-between p-[5%]">
             <div className="flex items-center gap-3">
               <Mark size={48} />
-              <span className="font-bold tracking-[0.18em] text-white text-2xl">
-                MLAI
-              </span>
+              <span className="font-bold tracking-[0.18em] text-white text-2xl">MLAI</span>
             </div>
             <div>
               <div
@@ -645,10 +620,7 @@ function OGCard() {
               >
                 {d.title}
               </div>
-              <div
-                className="mt-4 text-slate-300"
-                style={{ fontSize: "clamp(13px, 1.8vw, 22px)" }}
-              >
+              <div className="mt-4 text-slate-300" style={{ fontSize: "clamp(13px, 1.8vw, 22px)" }}>
                 {d.sub}
               </div>
             </div>
@@ -666,9 +638,8 @@ function OGCard() {
         </div>
       </div>
       <p className="text-xs text-slate-500 mt-4 text-center">
-        True 1200×630 ratio. Export: screenshot the card region, or open the
-        standalone card and use a browser screenshot to PNG. (I can wire an
-        html-to-image download button on request.)
+        True 1200×630 ratio. Export: screenshot the card region, or open the standalone card and use
+        a browser screenshot to PNG. (I can wire an html-to-image download button on request.)
       </p>
     </div>
   );
@@ -700,12 +671,8 @@ export default function ShowcaseBoard(): ReactNode {
       <header className="sticky top-0 z-30 bg-[#0c0c09]/85 backdrop-blur border-b border-white/10 px-6 py-3 flex items-center justify-between">
         <div className="flex items-center gap-2.5">
           <Mark size={30} />
-          <span className="font-bold tracking-widest text-white text-sm">
-            MLAI
-          </span>
-          <span className="text-slate-600 text-xs hidden sm:inline">
-            · design extras
-          </span>
+          <span className="font-bold tracking-widest text-white text-sm">MLAI</span>
+          <span className="text-slate-600 text-xs hidden sm:inline">· design extras</span>
         </div>
         <div className="flex gap-2">
           {TABS.map((t) => (

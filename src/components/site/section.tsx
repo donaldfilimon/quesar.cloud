@@ -30,7 +30,11 @@ export function Section({
         <header className="mb-12 max-w-3xl">
           {eyebrow ? <Eyebrow>{eyebrow}</Eyebrow> : null}
           {title ? <h2 className="section-title mt-4 text-fg">{title}</h2> : null}
-          {lede ? <p className="mt-5 max-w-2xl text-base leading-relaxed text-fg-muted sm:text-lg">{lede}</p> : null}
+          {lede ? (
+            <p className="mt-5 max-w-2xl text-base leading-relaxed text-fg-muted sm:text-lg">
+              {lede}
+            </p>
+          ) : null}
         </header>
       ) : null}
       {children}
@@ -54,7 +58,13 @@ export function PageHero({
 }) {
   return (
     <div className="border-b border-border">
-      <div className={compact ? "mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-14" : "mx-auto max-w-6xl px-4 pt-16 pb-14 sm:px-6 sm:pt-24 sm:pb-20"}>
+      <div
+        className={
+          compact
+            ? "mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-14"
+            : "mx-auto max-w-6xl px-4 pt-16 pb-14 sm:px-6 sm:pt-24 sm:pb-20"
+        }
+      >
         <Eyebrow>{eyebrow}</Eyebrow>
         <h1
           className={
@@ -65,7 +75,13 @@ export function PageHero({
         >
           {title}
         </h1>
-        <p className={compact ? "mt-4 max-w-[66ch] text-base leading-7 text-fg-muted" : "mt-6 max-w-[62ch] text-lg leading-8 text-fg-muted"}>
+        <p
+          className={
+            compact
+              ? "mt-4 max-w-[66ch] text-base leading-7 text-fg-muted"
+              : "mt-6 max-w-[62ch] text-lg leading-8 text-fg-muted"
+          }
+        >
           {lede}
         </p>
         {children}
@@ -96,7 +112,9 @@ export function Surface({
             ? "[--edge:var(--aviva)]"
             : "[--edge:var(--accent)]";
   return (
-    <article className={cn("surface accent-edge p-6", hover && "surface-hover", accent && edge, className)}>
+    <article
+      className={cn("surface accent-edge p-6", hover && "surface-hover", accent && edge, className)}
+    >
       {children}
     </article>
   );

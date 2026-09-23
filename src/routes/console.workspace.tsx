@@ -32,7 +32,13 @@ function ConsoleWorkspacePage() {
           </Section>
           <PageClose
             primary={{ to: "/console", label: "Console" }}
-            next={[{ to: "/workspace", label: "Public workspace", body: "The same loop, without the console chrome." }]}
+            next={[
+              {
+                to: "/workspace",
+                label: "Public workspace",
+                body: "The same loop, without the console chrome.",
+              },
+            ]}
           />
         </>
       )}

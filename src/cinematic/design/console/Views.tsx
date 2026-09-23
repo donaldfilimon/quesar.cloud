@@ -35,7 +35,18 @@ function StatCard({ value, label, tint, sub }: StatCardProps) {
         {value}
       </div>
       <div style={{ fontSize: 13, color: "var(--text-dim)", marginTop: 8 }}>{label}</div>
-      {sub && <div style={{ fontFamily: "var(--font-mono)", fontSize: 11, color: "var(--text-faint)", marginTop: 3 }}>{sub}</div>}
+      {sub && (
+        <div
+          style={{
+            fontFamily: "var(--font-mono)",
+            fontSize: 11,
+            color: "var(--text-faint)",
+            marginTop: 3,
+          }}
+        >
+          {sub}
+        </div>
+      )}
     </div>
   );
 }
@@ -58,7 +69,10 @@ export function Overview() {
   ];
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 14 }} className="cn-stat-grid">
+      <div
+        style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 14 }}
+        className="cn-stat-grid"
+      >
         {/* Deliberately unitless, unnamed placeholders. The previous tiles used
             performance and scale figures without a reproducible harness.
             Substituting different numbers would preserve the same problem: a
@@ -68,7 +82,10 @@ export function Overview() {
         <StatCard value="78" label="Sample count" tint="#34d399" sub="sample data" />
         <StatCard value="3" label="Personas online" tint="#a855f7" sub="Abi · Abbey · Aviva" />
       </div>
-      <div style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 16 }} className="cn-overview-grid">
+      <div
+        style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 16 }}
+        className="cn-overview-grid"
+      >
         <div
           style={{
             background: "var(--surface-2)",
@@ -120,9 +137,25 @@ export function Overview() {
                 />
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ fontSize: 13.5, color: "var(--text)" }}>{t}</div>
-                  <div style={{ fontFamily: "var(--font-mono)", fontSize: 11, color: "var(--text-faint)" }}>{d}</div>
+                  <div
+                    style={{
+                      fontFamily: "var(--font-mono)",
+                      fontSize: 11,
+                      color: "var(--text-faint)",
+                    }}
+                  >
+                    {d}
+                  </div>
                 </div>
-                <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, color: "var(--text-faint)" }}>{ago}</span>
+                <span
+                  style={{
+                    fontFamily: "var(--font-mono)",
+                    fontSize: 11,
+                    color: "var(--text-faint)",
+                  }}
+                >
+                  {ago}
+                </span>
               </div>
             ))}
           </div>
@@ -149,10 +182,17 @@ export function Memory() {
   return (
     <div style={{ maxWidth: 760 }}>
       <p style={{ fontSize: 15, color: "var(--text-dim)", lineHeight: 1.6, margin: "0 0 8px" }}>
-        Every write is hashed and linked to the previous block. Tamper with one and the chain rejects it on the next read —
-        memory that defends itself.
+        Every write is hashed and linked to the previous block. Tamper with one and the chain
+        rejects it on the next read — memory that defends itself.
       </p>
-      <div style={{ fontFamily: "var(--font-mono)", fontSize: 11, color: "var(--text-faint)", marginBottom: 22 }}>
+      <div
+        style={{
+          fontFamily: "var(--font-mono)",
+          fontSize: 11,
+          color: "var(--text-faint)",
+          marginBottom: 22,
+        }}
+      >
         Click a block to simulate a tamper.
       </div>
       <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
@@ -188,8 +228,18 @@ export function Memory() {
                   }}
                 />
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontFamily: "var(--font-mono)", fontSize: 12, color: "var(--text)" }}>block #{142882 + i}</div>
-                  <div style={{ fontFamily: "var(--font-mono)", fontSize: 11, color: bad ? "var(--danger)" : "var(--text-faint)" }}>
+                  <div
+                    style={{ fontFamily: "var(--font-mono)", fontSize: 12, color: "var(--text)" }}
+                  >
+                    block #{142882 + i}
+                  </div>
+                  <div
+                    style={{
+                      fontFamily: "var(--font-mono)",
+                      fontSize: 11,
+                      color: bad ? "var(--danger)" : "var(--text-faint)",
+                    }}
+                  >
                     sha256: {bad ? "fa11ed…" + hexOf(i + 99, 6) : hexOf(i, 12)}
                   </div>
                 </div>
@@ -213,7 +263,10 @@ export function Memory() {
                     width: 1,
                     height: 14,
                     marginLeft: 36,
-                    background: broken && tampered !== null && i + 1 > tampered ? "var(--danger)" : "var(--hair-strong)",
+                    background:
+                      broken && tampered !== null && i + 1 > tampered
+                        ? "var(--danger)"
+                        : "var(--hair-strong)",
                   }}
                 />
               )}
@@ -265,7 +318,12 @@ type SettingsState = Record<SettingKey, boolean>;
 type SettingRow = readonly [key: SettingKey, title: string, detail: string];
 
 export function Settings() {
-  const [s, setS] = useState<SettingsState>({ local: true, telemetry: false, chain: true, dense: false });
+  const [s, setS] = useState<SettingsState>({
+    local: true,
+    telemetry: false,
+    chain: true,
+    dense: false,
+  });
   const rows: SettingRow[] = [
     ["local", "Local-first execution", "Keep all inference and storage on this device."],
     ["chain", "Verifiable memory", "SHA-256-chain every write; verify on read."],

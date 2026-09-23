@@ -18,7 +18,11 @@ type Status = { status: StatusKind };
 
 /* ------------------------------------------------------------------ Home */
 
-export const homeBoundaries: readonly ({ title: string; body: string; accent: "abi" | "abbey" | "wdbx" } & Status)[] = [
+export const homeBoundaries: readonly ({
+  title: string;
+  body: string;
+  accent: "abi" | "abbey" | "wdbx";
+} & Status)[] = [
   {
     title: "Account-scoped access",
     body: "Sign-in is Google, Apple, X, a passkey, or email and password, on Better Auth. Every server function runs behind the session middleware and scopes its queries by your user id. Admin rights need an allowlisted email and a linked Google or Apple account; an allowlisted email/password account is refused.",
@@ -40,11 +44,36 @@ export const homeBoundaries: readonly ({ title: string; body: string; accent: "a
 ];
 
 export const homeRequestPath: readonly ({ n: string; title: string; body: string } & Status)[] = [
-  { n: "01", title: "Authenticate", body: "A Better Auth session establishes who is asking. No session, no server function.", status: "current" },
-  { n: "02", title: "Consent", body: "The current audit policy must be accepted before content leaves the application.", status: "current" },
-  { n: "03", title: "Generate", body: "The configured provider answers through the server interface, rate-limited per user. User email is not sent.", status: "current" },
-  { n: "04", title: "Encrypt", body: "Prompt and response are sealed with AES-256-GCM, bound to the owner. No key, no seal: the request refuses.", status: "current" },
-  { n: "05", title: "Commit", body: "The sealed audit is written before the response returns. Fail closed.", status: "current" },
+  {
+    n: "01",
+    title: "Authenticate",
+    body: "A Better Auth session establishes who is asking. No session, no server function.",
+    status: "current",
+  },
+  {
+    n: "02",
+    title: "Consent",
+    body: "The current audit policy must be accepted before content leaves the application.",
+    status: "current",
+  },
+  {
+    n: "03",
+    title: "Generate",
+    body: "The configured provider answers through the server interface, rate-limited per user. User email is not sent.",
+    status: "current",
+  },
+  {
+    n: "04",
+    title: "Encrypt",
+    body: "Prompt and response are sealed with AES-256-GCM, bound to the owner. No key, no seal: the request refuses.",
+    status: "current",
+  },
+  {
+    n: "05",
+    title: "Commit",
+    body: "The sealed audit is written before the response returns. Fail closed.",
+    status: "current",
+  },
 ];
 
 export const homeProductBoundary = [
@@ -59,9 +88,21 @@ export const homeProductBoundary = [
 ] as const;
 
 export const homeDocsDoors = [
-  { href: "/docs/getting-started", title: "Getting started", body: "Console entry, what a scoped evaluation requires, and where setup lives." },
-  { href: "/security", title: "Security & trust", body: "Identity, provider boundary, sealing, retention, and disclosure." },
-  { href: "/docs/architecture", title: "Architecture", body: "Control-plane framing and the inspectable WDBX substrate: facts, not a scoreboard." },
+  {
+    href: "/docs/getting-started",
+    title: "Getting started",
+    body: "Console entry, what a scoped evaluation requires, and where setup lives.",
+  },
+  {
+    href: "/security",
+    title: "Security & trust",
+    body: "Identity, provider boundary, sealing, retention, and disclosure.",
+  },
+  {
+    href: "/docs/architecture",
+    title: "Architecture",
+    body: "Control-plane framing and the inspectable WDBX substrate: facts, not a scoreboard.",
+  },
 ] as const;
 
 /** WDBX graph defaults; defined in `./wdbx-facts` so the home route can import it alone. */
@@ -106,17 +147,35 @@ export const teamIntro = {
 /* ------------------------------------------------------------------ Blog */
 
 export const blogRubrics = [
-  { title: "Architecture memos", body: "Practical context, patterns, and decision notes for production-minded AI teams." },
-  { title: "Safety drills", body: "Practical context, patterns, and decision notes for production-minded AI teams." },
-  { title: "Operator UX", body: "Practical context, patterns, and decision notes for production-minded AI teams." },
+  {
+    title: "Architecture memos",
+    body: "Practical context, patterns, and decision notes for production-minded AI teams.",
+  },
+  {
+    title: "Safety drills",
+    body: "Practical context, patterns, and decision notes for production-minded AI teams.",
+  },
+  {
+    title: "Operator UX",
+    body: "Practical context, patterns, and decision notes for production-minded AI teams.",
+  },
 ] as const;
 
 /* ------------------------------------------------------------ Benchmarks */
 
 export const benchmarkFraming = [
-  { title: "Repeatable", body: "Figures state workload shape, hardware target, and where the number came from." },
-  { title: "Operational", body: "Metrics are chosen for release decisions, not vanity dashboards." },
-  { title: "Private-first", body: "Benchmark paths support local, VPC, and edge deployment constraints." },
+  {
+    title: "Repeatable",
+    body: "Figures state workload shape, hardware target, and where the number came from.",
+  },
+  {
+    title: "Operational",
+    body: "Metrics are chosen for release decisions, not vanity dashboards.",
+  },
+  {
+    title: "Private-first",
+    body: "Benchmark paths support local, VPC, and edge deployment constraints.",
+  },
 ] as const;
 
 /** Structural facts verifiable from the WDBX sources. Not performance figures. */
@@ -134,10 +193,22 @@ export const docsHub = {
   title: "Quesar developer platform",
   lede: "Build private, traceable AI workflows on the ABI runtime: retrieval provenance through WDBX, policy-gated agents, evaluation suites, and operator-ready audit trails, exposed over a local CLI and an MCP server.",
   capabilities: [
-    { title: "Traceable retrieval", body: "Index records with source metadata, confidence signals, and weighted backtrace paths so every claim has provenance and a rollback point." },
-    { title: "Agent policy gates", body: "Bind tools to explicit permissions, approval thresholds, and review roles before execution reaches production data." },
-    { title: "Evaluation mesh", body: "Run regression suites for retrieval faithfulness, prompt-injection resilience, latency, and operator review burden as a release gate." },
-    { title: "Private runtime", body: "Package orchestration, retrieval, audit logs, and controls for cloud, VPC, on-premise, and offline-first deployments." },
+    {
+      title: "Traceable retrieval",
+      body: "Index records with source metadata, confidence signals, and weighted backtrace paths so every claim has provenance and a rollback point.",
+    },
+    {
+      title: "Agent policy gates",
+      body: "Bind tools to explicit permissions, approval thresholds, and review roles before execution reaches production data.",
+    },
+    {
+      title: "Evaluation mesh",
+      body: "Run regression suites for retrieval faithfulness, prompt-injection resilience, latency, and operator review burden as a release gate.",
+    },
+    {
+      title: "Private runtime",
+      body: "Package orchestration, retrieval, audit logs, and controls for cloud, VPC, on-premise, and offline-first deployments.",
+    },
   ],
   runtimeCommands:
     "# Validate the Rust workspace\n./tools/check.sh\n# Build the CLI and MCP server\n./tools/cargo.sh build -p abi-cli -p abi-mcp\n\n# Inspect capabilities and terminal surfaces\n./target/debug/abi backends\n./target/debug/abi dashboard --pane system --once --json\n./target/debug/abi agent tui",
@@ -155,32 +226,91 @@ export const docsHub = {
     { name: "abi-cli", body: "Commands, agent REPL, and diagnostics dashboard." },
   ],
   designDecisions: [
-    { title: "Inspectable capabilities", body: "Report the selected backend and whether acceleration is active. Capability detection alone is not evidence of accelerated execution." },
-    { title: "Bounded evidence", body: "SEA selects evidence within record, token, cluster, and prompt-byte budgets. Retrieval is distinct from model training." },
-    { title: "Explicit runtime boundaries", body: "Local completion is deterministic persona-template generation. Live HTTP completion requires an explicitly configured provider." },
+    {
+      title: "Inspectable capabilities",
+      body: "Report the selected backend and whether acceleration is active. Capability detection alone is not evidence of accelerated execution.",
+    },
+    {
+      title: "Bounded evidence",
+      body: "SEA selects evidence within record, token, cluster, and prompt-byte budgets. Retrieval is distinct from model training.",
+    },
+    {
+      title: "Explicit runtime boundaries",
+      body: "Local completion is deterministic persona-template generation. Live HTTP completion requires an explicitly configured provider.",
+    },
   ],
   routingSignals: [
-    { title: "Explicit address", body: "A leading Abbey, Aviva, or Abi name selects that profile; mentioning a name later in prose does not." },
-    { title: "Token-prefix signals", body: "Without an explicit address, keyword stems at the start of whitespace-separated tokens adjust an Abbey-favoring prior." },
-    { title: "Normalized selection", body: "The largest normalized weight selects the primary profile. A routing share is not a calibrated confidence in correctness." },
+    {
+      title: "Explicit address",
+      body: "A leading Abbey, Aviva, or Abi name selects that profile; mentioning a name later in prose does not.",
+    },
+    {
+      title: "Token-prefix signals",
+      body: "Without an explicit address, keyword stems at the start of whitespace-separated tokens adjust an Abbey-favoring prior.",
+    },
+    {
+      title: "Normalized selection",
+      body: "The largest normalized weight selects the primary profile. A routing share is not a calibrated confidence in correctness.",
+    },
   ],
   abbeyPrinciples: [
-    { title: "Care first", body: "Read the person's goal and state before reaching for the answer; meet them where they are, never condescending." },
-    { title: "Clarity always", body: "Explain the why, not just the what; teach rather than dictate, and keep jargon in service of understanding." },
-    { title: "Competence throughout", body: "Broad technical range, paired with the honesty to name uncertainty and defer to review instead of bluffing." },
+    {
+      title: "Care first",
+      body: "Read the person's goal and state before reaching for the answer; meet them where they are, never condescending.",
+    },
+    {
+      title: "Clarity always",
+      body: "Explain the why, not just the what; teach rather than dictate, and keep jargon in service of understanding.",
+    },
+    {
+      title: "Competence throughout",
+      body: "Broad technical range, paired with the honesty to name uncertainty and defer to review instead of bluffing.",
+    },
   ],
   wdbxCapabilities: [
-    { title: "Weighted backtrace paths", body: "Inspect which sources were used and where confidence dropped." },
-    { title: "SIMD vector search", body: "Cosine nearest-neighbor through the active Rust substrate's layered HNSW index (M=16, EF_CONSTRUCTION=40, EF_SEARCH=32)." },
-    { title: "Durable snapshots", body: "JSONL serialize/restore with integrity checks and tamper rejection." },
-    { title: "Opt-in persistence", body: "Completions persist only when store_result is set on the request." },
+    {
+      title: "Weighted backtrace paths",
+      body: "Inspect which sources were used and where confidence dropped.",
+    },
+    {
+      title: "SIMD vector search",
+      body: "Cosine nearest-neighbor through the active Rust substrate's layered HNSW index (M=16, EF_CONSTRUCTION=40, EF_SEARCH=32).",
+    },
+    {
+      title: "Durable snapshots",
+      body: "JSONL serialize/restore with integrity checks and tamper rejection.",
+    },
+    {
+      title: "Opt-in persistence",
+      body: "Completions persist only when store_result is set on the request.",
+    },
   ],
   wdbxV2Docs: [
-    { file: "getting-started.md", label: "Getting Started", body: "Install, first run, and the snapshot workflow." },
-    { file: "architecture.md", label: "Architecture", body: "Personas, pipeline shape, and main modules." },
-    { file: "persistence.md", label: "Persistence", body: "Snapshots and SHA-256-linked block-chain memory." },
-    { file: "acceleration.md", label: "Acceleration", body: "CPU kernels today; WGSL/WebGPU scaffolding labeled as such." },
-    { file: "api.md", label: "HTTP API", body: "Historical status and dashboard routes from the frozen Zig-era snapshot." },
+    {
+      file: "getting-started.md",
+      label: "Getting Started",
+      body: "Install, first run, and the snapshot workflow.",
+    },
+    {
+      file: "architecture.md",
+      label: "Architecture",
+      body: "Personas, pipeline shape, and main modules.",
+    },
+    {
+      file: "persistence.md",
+      label: "Persistence",
+      body: "Snapshots and SHA-256-linked block-chain memory.",
+    },
+    {
+      file: "acceleration.md",
+      label: "Acceleration",
+      body: "CPU kernels today; WGSL/WebGPU scaffolding labeled as such.",
+    },
+    {
+      file: "api.md",
+      label: "HTTP API",
+      body: "Historical status and dashboard routes from the frozen Zig-era snapshot.",
+    },
     { file: "cli.md", label: "CLI & TUI", body: "Commands, chat interface, and teaching flow." },
     { file: "protocols.md", label: "Protocols", body: "MCP / LSP / ACP JSON-RPC surfaces." },
     { file: "limitations.md", label: "Limitations", body: "What V2 explicitly does not claim." },
@@ -200,31 +330,83 @@ export const docsHub = {
     { name: "ai_complete", body: "Run a single completion through the selected persona profile." },
     { name: "ai_run", body: "Run completion with local profile routing." },
     { name: "ai_train", body: "Train the selected local profile against WDBX." },
-    { name: "wdbx_query", body: "Vector / block retrieval against the WDBX store with ordered results." },
+    {
+      name: "wdbx_query",
+      body: "Vector / block retrieval against the WDBX store with ordered results.",
+    },
     { name: "wdbx_stats", body: "Report store size, index health, and snapshot metadata." },
-    { name: "gpu_status", body: "Report GPU capability and backend, with deterministic CPU fallback." },
+    {
+      name: "gpu_status",
+      body: "Report GPU capability and backend, with deterministic CPU fallback.",
+    },
     { name: "scheduler_stats", body: "Report scheduler task counts." },
-    { name: "connector_test", body: "Run local connector validation; does not prove live credentials work." },
+    {
+      name: "connector_test",
+      body: "Run local connector validation; does not prove live credentials work.",
+    },
     { name: "plugin_list", body: "Enumerate registered plugins and their target features." },
     { name: "plugin_run", body: "Invoke a registered plugin entry point." },
   ],
   /** Deployment of this site, from the env table in AGENTS.md. Each missing value is a "not configured" state, never a crash. */
   deploymentSteps: [
-    { title: "Database", body: "Set DATABASE_URL for Postgres. Without it the app runs on in-memory PGLite, and data does not survive a restart or a serverless instance." },
-    { title: "Encryption key", body: "Set APP_ENCRYPTION_KEY (32 bytes, openssl rand -base64 32). Without it, sealed features refuse instead of storing plaintext." },
-    { title: "Server-only provider keys", body: "Set XAI_API_KEY, or the Cloudflare AI Gateway URL, token and id, plus LLM_PROVIDER. Never expose them to browser bundles." },
-    { title: "Administrators", body: "Set ADMIN_EMAILS. Only an allowlisted address with a linked Google or Apple account becomes an admin." },
-    { title: "Evaluation gates", body: "Run evaluation gates before allowing autonomous write actions or external tool calls." },
+    {
+      title: "Database",
+      body: "Set DATABASE_URL for Postgres. Without it the app runs on in-memory PGLite, and data does not survive a restart or a serverless instance.",
+    },
+    {
+      title: "Encryption key",
+      body: "Set APP_ENCRYPTION_KEY (32 bytes, openssl rand -base64 32). Without it, sealed features refuse instead of storing plaintext.",
+    },
+    {
+      title: "Server-only provider keys",
+      body: "Set XAI_API_KEY, or the Cloudflare AI Gateway URL, token and id, plus LLM_PROVIDER. Never expose them to browser bundles.",
+    },
+    {
+      title: "Administrators",
+      body: "Set ADMIN_EMAILS. Only an allowlisted address with a linked Google or Apple account becomes an admin.",
+    },
+    {
+      title: "Evaluation gates",
+      body: "Run evaluation gates before allowing autonomous write actions or external tool calls.",
+    },
   ],
   /** What this site exposes today. Surfaces still being built are labeled, not listed as shipping. */
   apiSurfaces: [
-    { name: "/api/auth/*", body: "Better Auth: Google, Apple and X sign-in, passkeys, email and password, session.", status: "current" },
-    { name: "askPersona", body: "Server function behind the session: one persona reply through the model interface, rate-limited per user.", status: "current" },
-    { name: "askDesk", body: "Server function behind the session: a desk answer from the catalog and, when configured, the model.", status: "current" },
-    { name: "Console notes", body: "Per-user field notes on architecture nodes, scoped by user id.", status: "current" },
-    { name: "GET /feed.xml", body: "RSS 2.0 for lab notes and research publications. Public.", status: "current" },
-    { name: "Consent, audits, admin review", body: "Consent-gated chat with sealed audits you can read and delete; admin review with a stated reason.", status: "current" },
-    { name: "Workspace connectors, billing, inquiries", body: "Drive and SharePoint connectors, profile billing, and the public inquiry form with a rate limit.", status: "current" },
+    {
+      name: "/api/auth/*",
+      body: "Better Auth: Google, Apple and X sign-in, passkeys, email and password, session.",
+      status: "current",
+    },
+    {
+      name: "askPersona",
+      body: "Server function behind the session: one persona reply through the model interface, rate-limited per user.",
+      status: "current",
+    },
+    {
+      name: "askDesk",
+      body: "Server function behind the session: a desk answer from the catalog and, when configured, the model.",
+      status: "current",
+    },
+    {
+      name: "Console notes",
+      body: "Per-user field notes on architecture nodes, scoped by user id.",
+      status: "current",
+    },
+    {
+      name: "GET /feed.xml",
+      body: "RSS 2.0 for lab notes and research publications. Public.",
+      status: "current",
+    },
+    {
+      name: "Consent, audits, admin review",
+      body: "Consent-gated chat with sealed audits you can read and delete; admin review with a stated reason.",
+      status: "current",
+    },
+    {
+      name: "Workspace connectors, billing, inquiries",
+      body: "Drive and SharePoint connectors, profile billing, and the public inquiry form with a rate limit.",
+      status: "current",
+    },
   ] satisfies readonly ({ name: string; body: string } & Status)[],
 } as const;
 
@@ -233,64 +415,185 @@ export const docsHub = {
 export type LinkHubItem = { title: string; body: string; href: string };
 
 /** mlai's link hub. Hrefs go through `AppLink`, which keeps GitHub links on this site's source pages. */
-export const linkHub: readonly { kicker: string; title: string; items: readonly LinkHubItem[] }[] = [
-  {
-    kicker: "Source",
-    title: "Build from the source",
-    items: [
-      { title: "abi — runtime + WDBX", body: "The nightly Rust runtime and weighted-backtrace substrate this site documents: local AI orchestration with inspectable memory. CLI, MCP server, and CI gates live here.", href: "https://github.com/donaldfilimon/abi" },
-      { title: "Abbey Bot", body: "Intelligence Without Limits, with a claims ledger: a Discord companion for routing, memory, and calm ops help.", href: "https://github.com/donaldfilimon/abbey-bot" },
-      { title: "This site's source", body: "quesar.cloud: the TanStack Start app serving these pages, content layer and server routes included.", href: "https://github.com/donaldfilimon/quesar.cloud" },
-      { title: "Founder on GitHub", body: "The wider project family: WDBX implementations, Gama, and the rest of the public footprint.", href: "https://github.com/donaldfilimon" },
-    ],
-  },
-  {
-    kicker: "Read",
-    title: "Read and evaluate",
-    items: [
-      { title: "Research archive", body: "The WDBX and Sparse Evidence Attention papers, with sources and limitations on the page.", href: "/research" },
-      { title: "Developer docs", body: "ABI runtime, MCP tools, WDBX retrieval, and the Abbey–Aviva–Abi persona routing contract.", href: "/docs" },
-      { title: "Projects", body: "ABI, WDBX, Abbey and Gama: what each one is, the scope it claims, and the source it rests on.", href: "/projects" },
-      { title: "Benchmarks", body: "Configuration facts with operating context. No borrowed numbers.", href: "/benchmarks" },
-      { title: "Lab notes", body: "Shorter field notes: the hybrid ranker, SEA selection, persona weights, and Abbey in her own voice.", href: "/blog" },
-      { title: "RSS feed", body: "Lab notes and research publications, newest first.", href: "/feed.xml" },
-      { title: "Changelog", body: "Release history across the runtime, storage engine, and training stack: milestone markers, evidence-first.", href: "/changelog" },
-      { title: "Hosted abi docs", body: "The documentation for the abi repository, oriented on this site.", href: "https://donaldfilimon.github.io/abi/" },
-    ],
-  },
-  {
-    kicker: "Explore",
-    title: "Explore the product",
-    items: [
-      { title: "ABI Framework", body: "Local AI orchestration with inspectable memory: runtime and WDBX on the Abbey/ABI surface.", href: "/products/abi" },
-      { title: "Abbey", body: "Intelligence Without Limits, with a claims ledger. A companion that will not claim what the ledger cannot prove.", href: "/products/abbey" },
-      { title: "Live demo", body: "An illustrative browser query model: cosine search, local partition labels, and a hash-chained query log.", href: "/demo" },
-      { title: "3-statement model", body: "An interactive financial model on illustrative sample data.", href: "/financial-model" },
-      { title: "Showcase", body: "The cinematic surfaces: film, trailers, explainer, and design lab.", href: "/showcase" },
-      { title: "Services", body: "Audit, architecture, and deployment engagements for teams shipping governed AI.", href: "/services" },
-    ],
-  },
-  {
-    kicker: "People",
-    title: "The person behind it",
-    items: [
-      { title: "Founder profile", body: "Donald Filimon: focus areas, signature work, and the engineering philosophy.", href: "/team/donald-filimon" },
-      { title: "donaldfilimon.com", body: "The founder's personal site.", href: "https://donaldfilimon.com" },
-      { title: "On X", body: "Updates and engineering notes in shorter form.", href: "https://x.com/donaldfilimonx" },
-    ],
-  },
-];
+export const linkHub: readonly { kicker: string; title: string; items: readonly LinkHubItem[] }[] =
+  [
+    {
+      kicker: "Source",
+      title: "Build from the source",
+      items: [
+        {
+          title: "abi — runtime + WDBX",
+          body: "The nightly Rust runtime and weighted-backtrace substrate this site documents: local AI orchestration with inspectable memory. CLI, MCP server, and CI gates live here.",
+          href: "https://github.com/donaldfilimon/abi",
+        },
+        {
+          title: "Abbey Bot",
+          body: "Intelligence Without Limits, with a claims ledger: a Discord companion for routing, memory, and calm ops help.",
+          href: "https://github.com/donaldfilimon/abbey-bot",
+        },
+        {
+          title: "This site's source",
+          body: "quesar.cloud: the TanStack Start app serving these pages, content layer and server routes included.",
+          href: "https://github.com/donaldfilimon/quesar.cloud",
+        },
+        {
+          title: "Founder on GitHub",
+          body: "The wider project family: WDBX implementations, Gama, and the rest of the public footprint.",
+          href: "https://github.com/donaldfilimon",
+        },
+      ],
+    },
+    {
+      kicker: "Read",
+      title: "Read and evaluate",
+      items: [
+        {
+          title: "Research archive",
+          body: "The WDBX and Sparse Evidence Attention papers, with sources and limitations on the page.",
+          href: "/research",
+        },
+        {
+          title: "Developer docs",
+          body: "ABI runtime, MCP tools, WDBX retrieval, and the Abbey–Aviva–Abi persona routing contract.",
+          href: "/docs",
+        },
+        {
+          title: "Projects",
+          body: "ABI, WDBX, Abbey and Gama: what each one is, the scope it claims, and the source it rests on.",
+          href: "/projects",
+        },
+        {
+          title: "Benchmarks",
+          body: "Configuration facts with operating context. No borrowed numbers.",
+          href: "/benchmarks",
+        },
+        {
+          title: "Lab notes",
+          body: "Shorter field notes: the hybrid ranker, SEA selection, persona weights, and Abbey in her own voice.",
+          href: "/blog",
+        },
+        {
+          title: "RSS feed",
+          body: "Lab notes and research publications, newest first.",
+          href: "/feed.xml",
+        },
+        {
+          title: "Changelog",
+          body: "Release history across the runtime, storage engine, and training stack: milestone markers, evidence-first.",
+          href: "/changelog",
+        },
+        {
+          title: "Hosted abi docs",
+          body: "The documentation for the abi repository, oriented on this site.",
+          href: "https://donaldfilimon.github.io/abi/",
+        },
+      ],
+    },
+    {
+      kicker: "Explore",
+      title: "Explore the product",
+      items: [
+        {
+          title: "ABI Framework",
+          body: "Local AI orchestration with inspectable memory: runtime and WDBX on the Abbey/ABI surface.",
+          href: "/products/abi",
+        },
+        {
+          title: "Abbey",
+          body: "Intelligence Without Limits, with a claims ledger. A companion that will not claim what the ledger cannot prove.",
+          href: "/products/abbey",
+        },
+        {
+          title: "Live demo",
+          body: "An illustrative browser query model: cosine search, local partition labels, and a hash-chained query log.",
+          href: "/demo",
+        },
+        {
+          title: "3-statement model",
+          body: "An interactive financial model on illustrative sample data.",
+          href: "/financial-model",
+        },
+        {
+          title: "Showcase",
+          body: "The cinematic surfaces: film, trailers, explainer, and design lab.",
+          href: "/showcase",
+        },
+        {
+          title: "Services",
+          body: "Audit, architecture, and deployment engagements for teams shipping governed AI.",
+          href: "/services",
+        },
+      ],
+    },
+    {
+      kicker: "People",
+      title: "The person behind it",
+      items: [
+        {
+          title: "Founder profile",
+          body: "Donald Filimon: focus areas, signature work, and the engineering philosophy.",
+          href: "/team/donald-filimon",
+        },
+        {
+          title: "donaldfilimon.com",
+          body: "The founder's personal site.",
+          href: "https://donaldfilimon.com",
+        },
+        {
+          title: "On X",
+          body: "Updates and engineering notes in shorter form.",
+          href: "https://x.com/donaldfilimonx",
+        },
+      ],
+    },
+  ];
 
 /* -------------------------------------------------------------- Showcase */
 
 /** Durations read from `src/cinematic/*` (`DURATION` constants) and the design hub's board list on 2026-09-22. */
 export const showcaseReels = [
-  { href: "/showcase/film", reel: "01", title: "Brand film", duration: "69s · six scenes", body: "The Quesar story (persona routing, verifiable memory, and governance) hosted by Abbey, Aviva, and Abi with on-device neural narration." },
-  { href: "/showcase/trailer", reel: "02", title: "Vision trailer", duration: "62s · high-octane cut", body: "A faster, sharper cut of the vision: the spectrum identity, the three minds, and the architecture in motion." },
-  { href: "/showcase/mega", reel: "03", title: "Mega-trailer", duration: "282s · the longest cut", body: "Every scene, a camera rig, and a neural background: the full-length cinematic treatment of the platform." },
-  { href: "/showcase/explainer", reel: "04", title: "Explainer film", duration: "132s · narrated", body: "The deep-dive explainer: storage, routing, math, and the north star, with captions synced to the voices." },
-  { href: "/showcase/design", reel: "05", title: "Design lab", duration: "8 boards", body: "The design-system boards behind the films: brand, system, hero, lab, marketing and console kits, and docs." },
-  { href: "/showcase/abbey", reel: "06", title: "MLAI & Abbey", duration: "38s · seven cues", body: "A monolith gathers and shatters, three minds draw the shards into their own orbits, and they converge on one mark." },
+  {
+    href: "/showcase/film",
+    reel: "01",
+    title: "Brand film",
+    duration: "69s · six scenes",
+    body: "The Quesar story (persona routing, verifiable memory, and governance) hosted by Abbey, Aviva, and Abi with on-device neural narration.",
+  },
+  {
+    href: "/showcase/trailer",
+    reel: "02",
+    title: "Vision trailer",
+    duration: "62s · high-octane cut",
+    body: "A faster, sharper cut of the vision: the spectrum identity, the three minds, and the architecture in motion.",
+  },
+  {
+    href: "/showcase/mega",
+    reel: "03",
+    title: "Mega-trailer",
+    duration: "282s · the longest cut",
+    body: "Every scene, a camera rig, and a neural background: the full-length cinematic treatment of the platform.",
+  },
+  {
+    href: "/showcase/explainer",
+    reel: "04",
+    title: "Explainer film",
+    duration: "132s · narrated",
+    body: "The deep-dive explainer: storage, routing, math, and the north star, with captions synced to the voices.",
+  },
+  {
+    href: "/showcase/design",
+    reel: "05",
+    title: "Design lab",
+    duration: "8 boards",
+    body: "The design-system boards behind the films: brand, system, hero, lab, marketing and console kits, and docs.",
+  },
+  {
+    href: "/showcase/abbey",
+    reel: "06",
+    title: "MLAI & Abbey",
+    duration: "38s · seven cues",
+    body: "A monolith gathers and shatters, three minds draw the shards into their own orbits, and they converge on one mark.",
+  },
 ] as const;
 
 export const showcaseProgram = [

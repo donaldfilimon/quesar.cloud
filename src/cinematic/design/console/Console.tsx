@@ -70,7 +70,15 @@ export default function Console() {
       <style>{KIT_CSS}</style>
       <div className="cn-light" />
       <Sidebar route={route} setRoute={setRoute} />
-      <div style={{ flex: 1, display: "flex", flexDirection: "column", minWidth: 0, position: "relative" }}>
+      <div
+        style={{
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          minWidth: 0,
+          position: "relative",
+        }}
+      >
         <Topbar route={route} onCmd={() => setCmd(true)} />
         <main
           style={{

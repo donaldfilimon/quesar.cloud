@@ -60,7 +60,16 @@ describe("telemetry optedOut: privacy gate (ported from mlai)", () => {
 describe("routePatternsFromFiles: TanStack file-route conventions", () => {
   it("maps flat, directory, index, pathless and group names to paths", () => {
     expect([...fixture.staticPaths].sort()).toEqual(
-      ["/", "/about", "/console", "/console/workspace", "/pricing", "/quasar", "/settings", "/showcase/film"].sort(),
+      [
+        "/",
+        "/about",
+        "/console",
+        "/console/workspace",
+        "/pricing",
+        "/quasar",
+        "/settings",
+        "/showcase/film",
+      ].sort(),
     );
   });
 
@@ -169,23 +178,34 @@ function post(body: unknown, headers: Record<string, string> = {}): Request {
 
 async function countEvents(event: string, path: string): Promise<number> {
   const sql = await getSql();
-  const rows = await sql<{ n: number }>`select count(*) as n from telemetry_events where event = ${event} and path = ${path}`;
+  const rows = await sql<{
+    n: number;
+  }>`select count(*) as n from telemetry_events where event = ${event} and path = ${path}`;
   return Number(rows[0]?.n ?? 0);
 }
 
 describe("handleTelemetry", () => {
-  const patterns = routePatternsFromFiles(["/src/routes/index.tsx", "/src/routes/telemetry-probe-page.tsx"]);
+  const patterns = routePatternsFromFiles([
+    "/src/routes/index.tsx",
+    "/src/routes/telemetry-probe-page.tsx",
+  ]);
 
   it("stores an allowlisted event with an allowlisted path and answers 204", async () => {
     const before = await countEvents("page_view", "/telemetry-probe-page");
-    const res = await handleTelemetry(post({ event: "page_view", path: "/telemetry-probe-page" }), patterns);
+    const res = await handleTelemetry(
+      post({ event: "page_view", path: "/telemetry-probe-page" }),
+      patterns,
+    );
     expect(res.status).toBe(204);
     expect(await countEvents("page_view", "/telemetry-probe-page")).toBe(before + 1);
   }, 30_000);
 
   it("stores an unknown path as the empty string, never verbatim", async () => {
     const sql = await getSql();
-    const res = await handleTelemetry(post({ event: "inquiry_open", path: "/u/victim@example.com" }), patterns);
+    const res = await handleTelemetry(
+      post({ event: "inquiry_open", path: "/u/victim@example.com" }),
+      patterns,
+    );
     expect(res.status).toBe(204);
     const leaked = await sql`select 1 from telemetry_events where path like ${"%victim%"}`;
     expect(leaked).toEqual([]);
@@ -198,13 +218,22 @@ describe("handleTelemetry", () => {
 
   it("rejects non-object JSON with 400 and oversize bodies with 413", async () => {
     expect((await handleTelemetry(post("[]"), patterns)).status).toBe(400);
-    expect((await handleTelemetry(post({ event: "page_view", path: "x".repeat(5000) }), patterns)).status).toBe(413);
+    expect(
+      (await handleTelemetry(post({ event: "page_view", path: "x".repeat(5000) }), patterns))
+        .status,
+    ).toBe(413);
   });
 
   it("honors DNT and Sec-GPC without storing or counting anything", async () => {
     const before = await countEvents("page_view", "/");
-    expect((await handleTelemetry(post({ event: "page_view", path: "/" }, { DNT: "1" }), patterns)).status).toBe(204);
-    expect((await handleTelemetry(post({ event: "page_view", path: "/" }, { "Sec-GPC": "1" }), patterns)).status).toBe(204);
+    expect(
+      (await handleTelemetry(post({ event: "page_view", path: "/" }, { DNT: "1" }), patterns))
+        .status,
+    ).toBe(204);
+    expect(
+      (await handleTelemetry(post({ event: "page_view", path: "/" }, { "Sec-GPC": "1" }), patterns))
+        .status,
+    ).toBe(204);
     expect(await countEvents("page_view", "/")).toBe(before);
   }, 30_000);
 
@@ -213,7 +242,11 @@ describe("handleTelemetry", () => {
     const now = 1_970_000_000_000;
     const statuses: number[] = [];
     for (let i = 0; i < 121; i += 1) {
-      const res = await handleTelemetry(post({ event: "bogus" }, { "x-forwarded-for": ip }), patterns, now);
+      const res = await handleTelemetry(
+        post({ event: "bogus" }, { "x-forwarded-for": ip }),
+        patterns,
+        now,
+      );
       statuses.push(res.status);
     }
     expect(statuses.slice(0, 120).every((status) => status === 400)).toBe(true);

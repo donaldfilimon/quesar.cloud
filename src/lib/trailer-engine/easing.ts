@@ -37,15 +37,18 @@ export const Easing = {
   easeInOutSine: (t: number) => -(Math.cos(Math.PI * t) - 1) / 2,
 
   easeOutBack: (t: number) => {
-    const c1 = 1.70158, c3 = c1 + 1;
+    const c1 = 1.70158,
+      c3 = c1 + 1;
     return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2);
   },
   easeInBack: (t: number) => {
-    const c1 = 1.70158, c3 = c1 + 1;
+    const c1 = 1.70158,
+      c3 = c1 + 1;
     return c3 * t * t * t - c1 * t * t;
   },
   easeInOutBack: (t: number) => {
-    const c1 = 1.70158, c2 = c1 * 1.525;
+    const c1 = 1.70158,
+      c2 = c1 * 1.525;
     return t < 0.5
       ? (Math.pow(2 * t, 2) * ((c2 + 1) * 2 * t - c2)) / 2
       : (Math.pow(2 * t - 2, 2) * ((c2 + 1) * (t * 2 - 2) + c2) + 2) / 2;
@@ -62,7 +65,12 @@ export const Easing = {
 export const clamp = (v: number, min = 0, max = 1) => Math.max(min, Math.min(max, v));
 
 // progress 0..1 of a window [start, start+dur], eased
-export function step(lt: number, start: number, dur: number, ease: EaseFn = Easing.easeOutCubic): number {
+export function step(
+  lt: number,
+  start: number,
+  dur: number,
+  ease: EaseFn = Easing.easeOutCubic,
+): number {
   return ease(clamp((lt - start) / dur, 0, 1));
 }
 
@@ -74,13 +82,20 @@ export function fade(lt: number, dur: number, inDur = 0.5, outDur = 0.5): number
 }
 
 // interpolate([0,0.5,1],[0,100,50], ease?) → fn(t). Easing may be one fn or per-segment array.
-export function interpolate(input: number[], output: number[], ease: EaseFn | EaseFn[] = Easing.linear) {
+export function interpolate(
+  input: number[],
+  output: number[],
+  ease: EaseFn | EaseFn[] = Easing.linear,
+) {
   const last = output[output.length - 1] ?? 0;
   return (t: number): number => {
     if (t <= (input[0] ?? 0)) return output[0] ?? 0;
     if (t >= (input[input.length - 1] ?? 0)) return last;
     for (let i = 0; i < input.length - 1; i++) {
-      const a = input[i]!, b = input[i + 1]!, oa = output[i]!, ob = output[i + 1]!;
+      const a = input[i]!,
+        b = input[i + 1]!,
+        oa = output[i]!,
+        ob = output[i + 1]!;
       if (t >= a && t <= b) {
         const span = b - a;
         const local = span === 0 ? 0 : (t - a) / span;
@@ -93,8 +108,18 @@ export function interpolate(input: number[], output: number[], ease: EaseFn | Ea
 }
 
 // animate({from,to,start,end,ease})(t) — single-segment tween.
-export function animate({ from = 0, to = 1, start = 0, end = 1, ease = Easing.easeInOutCubic }: {
-  from?: number; to?: number; start?: number; end?: number; ease?: EaseFn;
+export function animate({
+  from = 0,
+  to = 1,
+  start = 0,
+  end = 1,
+  ease = Easing.easeInOutCubic,
+}: {
+  from?: number;
+  to?: number;
+  start?: number;
+  end?: number;
+  ease?: EaseFn;
 }) {
   return (t: number): number => {
     if (t <= start) return from;

@@ -26,7 +26,10 @@ export function DropdownMenuContent({
   );
 }
 
-export function DropdownMenuItem({ className, ...props }: ComponentProps<typeof DropdownMenuPrimitive.Item>) {
+export function DropdownMenuItem({
+  className,
+  ...props
+}: ComponentProps<typeof DropdownMenuPrimitive.Item>) {
   return (
     <DropdownMenuPrimitive.Item
       className={cn(
@@ -39,7 +42,10 @@ export function DropdownMenuItem({ className, ...props }: ComponentProps<typeof 
   );
 }
 
-export function DropdownMenuLabel({ className, ...props }: ComponentProps<typeof DropdownMenuPrimitive.Label>) {
+export function DropdownMenuLabel({
+  className,
+  ...props
+}: ComponentProps<typeof DropdownMenuPrimitive.Label>) {
   return (
     <DropdownMenuPrimitive.Label
       className={cn("px-3 py-2 text-xs text-fg-subtle", className)}
@@ -48,6 +54,14 @@ export function DropdownMenuLabel({ className, ...props }: ComponentProps<typeof
   );
 }
 
-export function DropdownMenuSeparator({ className, ...props }: ComponentProps<typeof DropdownMenuPrimitive.Separator>) {
-  return <DropdownMenuPrimitive.Separator className={cn("-mx-1 my-1 h-px bg-border", className)} {...props} />;
+export function DropdownMenuSeparator({
+  className,
+  ...props
+}: ComponentProps<typeof DropdownMenuPrimitive.Separator>) {
+  return (
+    <DropdownMenuPrimitive.Separator
+      className={cn("-mx-1 my-1 h-px bg-border", className)}
+      {...props}
+    />
+  );
 }

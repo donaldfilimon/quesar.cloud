@@ -27,12 +27,7 @@ export interface AdvanceResult {
  * `dt` is expected to be pre-clamped by `frameDelta`; this function does not
  * clamp it, so passing a raw timestamp difference will skip content.
  */
-export function advance(
-  time: number,
-  dt: number,
-  duration: number,
-  loop: boolean,
-): AdvanceResult {
+export function advance(time: number, dt: number, duration: number, loop: boolean): AdvanceResult {
   const next = time + dt;
   if (next < duration) return { time: next, ended: false };
   if (loop) return { time: next % duration, ended: false };

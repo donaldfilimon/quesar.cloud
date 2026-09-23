@@ -8,7 +8,11 @@ const Room = lazy(() => import("@/cinematic/rooms/trailer"));
 export const Route = createFileRoute("/showcase/trailer")({
   // Canvas, requestAnimationFrame and WebAudio only exist in the browser.
   ssr: false,
-  head: () => pageHead("Trailer — Showcase", "The 62-second MLAI vision trailer, rendered live in the browser. Orientation, not a benchmark."),
+  head: () =>
+    pageHead(
+      "Trailer — Showcase",
+      "The 62-second MLAI vision trailer, rendered live in the browser. Orientation, not a benchmark.",
+    ),
   component: ShowcaseTrailerPage,
 });
 

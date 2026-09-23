@@ -23,7 +23,12 @@ function ImplementationsPage() {
       <Section>
         <div className="grid gap-4">
           {researchContext.map((item) => (
-            <Link key={item.slug} to="/research/implementations/$slug" params={{ slug: item.slug }} className="no-underline">
+            <Link
+              key={item.slug}
+              to="/research/implementations/$slug"
+              params={{ slug: item.slug }}
+              className="no-underline"
+            >
               <Surface hover>
                 <p className="text-xs text-accent">
                   {item.relatedTopics.join(" · ")} · {item.sources.length} sources

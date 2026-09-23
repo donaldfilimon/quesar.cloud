@@ -40,25 +40,44 @@ function ImplementationPage() {
           { label: item.title },
         ]}
       />
-      <PageHero eyebrow="Research · implementation" title={item.title} lede={item.summary} compact />
+      <PageHero
+        eyebrow="Research · implementation"
+        title={item.title}
+        lede={item.summary}
+        compact
+      />
       <Section className="!pt-10">
         <div className="grid gap-10 lg:grid-cols-[16rem_minmax(0,1fr)]">
           <ResearchSidebar current={item.slug} />
           <div>
-        <ChipRow items={item.relatedTopics.map((topic) => topic.toUpperCase())} />
-        <div className="mt-8">
-          <ArticleBody sections={item.sections} />
-        </div>
-        <h3 className="mt-10 font-display text-xl">Limitations</h3>
-        <div className="mt-3">
-          <BulletSurface items={item.limitations} />
-        </div>
-        <SourceChips sources={item.sources.map((source) => ({ title: source.title, url: source.url, scope: source.revision }))} />
-        <Pager
-          index={{ to: "/research/implementations", label: "All implementations" }}
-          prev={prev ? { to: `/research/implementations/${prev.slug}`, label: prev.title } : undefined}
-          next={next ? { to: `/research/implementations/${next.slug}`, label: next.title } : undefined}
-        />
+            <ChipRow items={item.relatedTopics.map((topic) => topic.toUpperCase())} />
+            <div className="mt-8">
+              <ArticleBody sections={item.sections} />
+            </div>
+            <h3 className="mt-10 font-display text-xl">Limitations</h3>
+            <div className="mt-3">
+              <BulletSurface items={item.limitations} />
+            </div>
+            <SourceChips
+              sources={item.sources.map((source) => ({
+                title: source.title,
+                url: source.url,
+                scope: source.revision,
+              }))}
+            />
+            <Pager
+              index={{ to: "/research/implementations", label: "All implementations" }}
+              prev={
+                prev
+                  ? { to: `/research/implementations/${prev.slug}`, label: prev.title }
+                  : undefined
+              }
+              next={
+                next
+                  ? { to: `/research/implementations/${next.slug}`, label: next.title }
+                  : undefined
+              }
+            />
           </div>
         </div>
       </Section>
@@ -73,7 +92,11 @@ function ImplementationPage() {
             mcp: "mcp-overview",
             tui: "tui-overview",
           }[topic];
-          return { to: `/research/${overview}`, label: `${topic.toUpperCase()} overview`, body: "The track note this case sits under." };
+          return {
+            to: `/research/${overview}`,
+            label: `${topic.toUpperCase()} overview`,
+            body: "The track note this case sits under.",
+          };
         })}
       />
     </>

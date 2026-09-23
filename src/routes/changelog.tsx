@@ -6,7 +6,11 @@ export const Route = createFileRoute("/changelog")({
   head: () => ({
     meta: [
       { title: "Changelog — Quesar" },
-      { name: "description", content: "Release history for Quesar and the MLAI stack. Presentation-layer markers aligned to documented milestones." },
+      {
+        name: "description",
+        content:
+          "Release history for Quesar and the MLAI stack. Presentation-layer markers aligned to documented milestones.",
+      },
     ],
   }),
   component: ChangelogPage,
@@ -45,7 +49,9 @@ function ChangelogPage() {
       </Section>
       <PageClose
         primary={{ to: "/docs", label: "Docs" }}
-        next={[{ to: "/developers", label: "Developers", body: "The tree these milestones describe." }]}
+        next={[
+          { to: "/developers", label: "Developers", body: "The tree these milestones describe." },
+        ]}
       />
     </>
   );
