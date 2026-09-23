@@ -66,7 +66,7 @@ The new text should appear in the route's `index.html` (and its chunk); the old 
 1. The `src/` change, with its own conventional message.
 2. `git add -A docs` (deletions included), message **`build(docs): rebuild the static site for <change>`**, where `<change>` names what changed (e.g. `for the WDBX V2 post edit`).
 
-Both end with the repo's `Co-Authored-By` line. `git fetch` first, push the branch, open a PR to `main`; never push to `main` directly, never force-push. If `main` moves before merge, rebase, rebuild (step 2) and redo commit 2 so `docs/` matches the merged source.
+Both end with the repo's `Co-Authored-By` line. `git fetch` first, push the branch, open a PR to `main`; never push to `main` directly, never force-push. If `main` moves before merge, merge `origin/main` into the branch (never rebase a pushed branch: that needs a force-push), rebuild (step 2) and commit the new `docs/` so it matches the merged source.
 
 ## Common mistakes
 
