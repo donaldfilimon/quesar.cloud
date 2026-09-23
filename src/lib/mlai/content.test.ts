@@ -3,7 +3,6 @@ import { about } from "./categories/about";
 import { blog } from "./categories/blog";
 import { changelog } from "./categories/changelog";
 import { docs } from "./categories/docs";
-import { faq } from "./categories/faq";
 import { industries } from "./categories/industries";
 import { platform, runtime } from "./categories/platform";
 import { productJourneys, startJourneys } from "./categories/product-journeys";
@@ -21,7 +20,7 @@ import { ContentSchema, DocsSchema, ProductsSchema, ProjectsSchema } from "./sch
 // difference are adapted and say so.
 
 const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
-const content = { about, platform, industries, services, refusals, runtime, research, blog, team, stats, faq, products, changelog, docs, projects };
+const content = { about, platform, industries, services, refusals, runtime, research, blog, team, stats, products, changelog, docs, projects };
 
 describe("content data layer", () => {
   it("validates against ContentSchema (no malformed entries)", () => {
@@ -37,7 +36,6 @@ describe("content data layer", () => {
     expect(blog.length).toBeGreaterThan(0);
     expect(team.length).toBeGreaterThan(0);
     expect(stats.length).toBeGreaterThan(0);
-    expect(faq.length).toBeGreaterThan(0);
   });
 
   it("gives blog posts and papers unique, URL-safe slugs and renderable bodies", () => {

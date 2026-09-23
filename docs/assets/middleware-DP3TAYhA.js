@@ -1,1 +1,0 @@
-import{ft as e}from"./index-CxB6tlCN.js";var t=e({type:`function`});export{t};

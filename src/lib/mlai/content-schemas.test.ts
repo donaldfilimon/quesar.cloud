@@ -4,7 +4,6 @@ import { about } from "./categories/about";
 import { blog } from "./categories/blog";
 import { changelog } from "./categories/changelog";
 import { docs } from "./categories/docs";
-import { faq } from "./categories/faq";
 import { industries } from "./categories/industries";
 import { platform, runtime } from "./categories/platform";
 import { products } from "./categories/products";
@@ -18,7 +17,6 @@ import {
   BlogSchema,
   ChangelogSchema,
   DocsSchema,
-  FAQSchema,
   IndustriesSchema,
   PlatformSchema,
   ProductsSchema,
@@ -47,7 +45,6 @@ const datasets: [string, ZodType, unknown][] = [
   ["blog", BlogSchema, blog],
   ["team", TeamSchema, team],
   ["stats", StatsSchema, stats],
-  ["faq", FAQSchema, faq],
   ["products", ProductsSchema, products],
   ["changelog", ChangelogSchema, changelog],
   ["docs", DocsSchema, docs],
