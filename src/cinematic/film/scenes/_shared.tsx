@@ -1,7 +1,7 @@
 // scenes/_shared.tsx — helpers shared across scene modules.
 
 import { fade } from "../easing";
-import { useSprite } from "../engine";
+import { useSprite } from "../timeline-context";
 import type { ReactNode } from "react";
 
 // Fades a scene in/out at its edges based on the sprite's local time.

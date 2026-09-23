@@ -11,8 +11,10 @@ import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react"
 import { Canvas2DRenderer, ParticleBuffer, SceneSequencer } from "@/lib/trailer-engine";
 import { C, FONT, PERSONAS } from "../film/tokens";
 import { fade } from "../film/easing";
-import { Stage, useTimeline } from "../film/engine";
-import { primeNeural, setSpeechPlaying, speak, stopSpeech, useVoiceReady, VoiceToggle } from "../film/narration";
+import { Stage } from "../film/engine";
+import { useTimeline } from "../film/timeline-context";
+import { VoiceToggle } from "../film/narration";
+import { primeNeural, setSpeechPlaying, speak, stopSpeech, useVoiceReady } from "../film/speech";
 import { Grain, Vignette } from "../film/primitives";
 import { buildAbbeyTimeline, captionAt, type AbbeyTimeline } from "./scenes";
 

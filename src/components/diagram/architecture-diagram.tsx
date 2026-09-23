@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { useEffect, useId, useMemo, useState } from "react";
+import { useCallback, useEffect, useId, useMemo, useState } from "react";
 import { toast } from "sonner";
 import {
   architectureNodes,
@@ -69,10 +69,13 @@ export function ArchitectureDiagram({
     if (selectedId) setInternal(selectedId);
   }, [selectedId]);
 
-  function select(id: string) {
-    setInternal(id);
-    onSelect?.(id);
-  }
+  const select = useCallback(
+    (id: string) => {
+      setInternal(id);
+      onSelect?.(id);
+    },
+    [onSelect],
+  );
 
   useEffect(() => {
     function onKey(event: KeyboardEvent) {
@@ -92,7 +95,7 @@ export function ArchitectureDiagram({
     }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [onSelect]);
+  }, [select]);
 
   return (
     <div className="grid gap-6 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">

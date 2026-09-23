@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { QuasarStudio } from "@/components/apps/quasar-studio";
-import { CodeBlock, CopyGrid, DataTable, PageClose, PageHero, Section, StepList, Surface } from "@/components/site";
+import { CodeBlock, CopyGrid, DataTable, PageClose, PageHero, Section, StepList } from "@/components/site";
 import { StatusBadge } from "@/components/site/status-badge";
 import { Button } from "@/components/ui/button";
 import { quesarSurfaces, quesarWhat } from "@/lib/content";

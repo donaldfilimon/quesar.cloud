@@ -3,8 +3,9 @@
 
 import { C, FONT } from "../tokens";
 import { Easing, step, fade } from "../easing";
-import { useSprite } from "../engine";
-import { DiagramSVG, Wire, PulseRing, SignalDots, SignalPolyline, Rotor, hexOf } from "../fx";
+import { useSprite } from "../timeline-context";
+import { DiagramSVG, Wire, PulseRing, SignalDots, SignalPolyline, Rotor } from "../fx";
+import { hexOf } from "../fx-utils";
 import { Orb } from "../primitives";
 import { SceneTag, StatusBadge } from "../chrome";
 import { SceneBox } from "./_shared";

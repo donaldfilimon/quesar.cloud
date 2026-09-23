@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 // that screen readers read. It rides with this component, so any page that
 // renders an equation gets it.
 import "katex/dist/katex.min.css";
+import { renderTex, type Katex } from "./render-tex";
 
 /** Renders a display-mode (block) LaTeX equation via KaTeX.
  *
@@ -13,7 +14,6 @@ import "katex/dist/katex.min.css";
  *  (throwOnError: false) instead of crashing the page.
  */
 
-type Katex = Pick<typeof import("katex"), "renderToString">;
 let katexModule: Katex | null = null;
 let katexPromise: Promise<Katex> | null = null;
 
@@ -25,18 +25,6 @@ function loadKatex(): Promise<Katex> {
     });
   }
   return katexPromise;
-}
-
-/** KaTeX options shared by every equation: MathML for assistive tech, never throw. */
-export function renderTex(katex: Katex, tex: string): string {
-  // htmlAndMathml: the visible HTML is aria-hidden and screen readers get the
-  // MathML copy, which katex.min.css hides visually. Plain "html" gave
-  // assistive tech nothing but glyph soup.
-  return katex.renderToString(tex, {
-    displayMode: true,
-    throwOnError: false,
-    output: "htmlAndMathml",
-  });
 }
 
 export function BlockMath({ tex }: { tex: string }) {

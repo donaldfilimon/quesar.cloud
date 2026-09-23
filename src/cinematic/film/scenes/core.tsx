@@ -2,10 +2,11 @@
 // Ported from scenes_core.jsx into the typed import graph.
 
 import { C, FONT } from "../tokens";
-import { step, Easing, clamp } from "../easing";
-import { useSprite } from "../engine";
+import { step, Easing } from "../easing";
+import { useSprite } from "../timeline-context";
 import { Orb } from "../primitives";
-import { DiagramSVG, Wire, PulseRing, SignalDots, SignalPolyline, Elbow, hexOf } from "../fx";
+import { DiagramSVG, Wire, PulseRing, SignalDots, SignalPolyline, Elbow } from "../fx";
+import { hexOf } from "../fx-utils";
 import { SceneTag, StatusBadge, FlowNode } from "../chrome";
 import { SceneBox } from "./_shared";
 

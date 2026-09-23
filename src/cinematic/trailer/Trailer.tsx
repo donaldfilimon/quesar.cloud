@@ -9,10 +9,11 @@
 import { useRef, useEffect, useMemo, type ReactNode } from "react";
 import { C, FONT, clamp } from "../film/tokens";
 import { step, fade, Easing } from "../film/easing";
-import { Stage, Sprite, useSprite, useTimeline } from "../film/engine";
+import { Stage, Sprite } from "../film/engine";
+import { useSprite, useTimeline } from "../film/timeline-context";
 import { Grain, Vignette, GridBG, Orb } from "../film/primitives";
 import { DiagramSVG, PulseRing, SignalDots } from "../film/fx";
-import { speak, lineSpeechDur, stopSpeech, setSpeechPlaying, primeNeural, useVoiceReady } from "../film/narration";
+import { speak, lineSpeechDur, stopSpeech, setSpeechPlaying, primeNeural, useVoiceReady } from "../film/speech";
 import { VoiceToggle } from "../film/narration";
 
 const DURATION = 62;

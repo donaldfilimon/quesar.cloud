@@ -4,7 +4,7 @@
 
 import { C, FONT } from "../tokens";
 import { step, Easing } from "../easing";
-import { useSprite } from "../engine";
+import { useSprite } from "../timeline-context";
 import { Orb } from "../primitives";
 import { DiagramSVG, Wire, PulseRing, SignalDots, Rotor } from "../fx";
 import { SceneTag, StatusBadge } from "../chrome";

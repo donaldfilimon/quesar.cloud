@@ -1,38 +1,19 @@
 // engine.tsx — timeline engine (ported from animations.jsx). Imports easing.
-// Exports: Stage, Sprite, useTime, useTimeline, useSprite, PlaybackBar,
-// TextSprite, RectSprite. Depended on by main.tsx + every scene.
+// Exports: Stage, Sprite, PlaybackBar, TextSprite, RectSprite (hooks live in
+// timeline-context.ts). Depended on by main.tsx + every scene.
 
 import {
-  createContext, useContext, useState, useRef, useEffect, useMemo, useCallback,
+  useState, useRef, useEffect, useMemo, useCallback,
   type ReactNode, type CSSProperties,
 } from "react";
 import { advance, frameDelta } from "@/lib/trailer-engine";
 import { Easing, clamp } from "./easing";
-
-/* ── timeline context ─────────────────────────────────────────── */
-
-interface TimelineValue {
-  // `time` is the displayed playhead (follows scrubber-hover preview) — render off it.
-  // `clock` is the true playhead (ignores hover) — fire side effects (speech) off it.
-  time: number; clock: number; duration: number; playing: boolean;
-  setTime: (t: number | ((t: number) => number)) => void;
-  setPlaying: (p: boolean | ((p: boolean) => boolean)) => void;
-  // The Stage's unscaled root. Chrome that must keep its real pixel size (the
-  // voice toggle) portals here instead of rendering inside the scaled picture,
-  // which shrinks a 90×28 button to 22×7 at a 320 px viewport.
-  chrome: HTMLElement | null;
-}
-const TimelineContext = createContext<TimelineValue>({
-  time: 0, clock: 0, duration: 10, playing: false, setTime: () => {}, setPlaying: () => {}, chrome: null,
-});
-export const useTime = () => useContext(TimelineContext).time;
-export const useTimeline = () => useContext(TimelineContext);
+import { TimelineContext, SpriteContext, useTimeline, useSprite, type TimelineValue, type SpriteValue } from "./timeline-context";
+import { prefersReducedMotion, resolveSeek } from "./engine-utils";
 
 /* ── sprite ───────────────────────────────────────────────────── */
-
-interface SpriteValue { localTime: number; progress: number; duration: number; visible: boolean; }
-const SpriteContext = createContext<SpriteValue>({ localTime: 0, progress: 0, duration: 0, visible: true });
-export const useSprite = () => useContext(SpriteContext);
+// Timeline/sprite contexts and hooks live in timeline-context.ts; pure helpers
+// in engine-utils.ts.
 
 export function Sprite({ start = 0, end = Infinity, children, keepMounted = false }: {
   start?: number; end?: number; keepMounted?: boolean;
@@ -87,46 +68,6 @@ export function RectSprite({ x = 0, y = 0, width = 100, height = 100, color = "#
   else if (localTime > exitStart) { const t = Easing.easeInQuad(clamp((localTime - exitStart) / exitDur, 0, 1)); opacity = 1 - t; scale = 1 - 0.15 * t; }
   return <div style={{ position: "absolute", left: x, top: y, width, height, background: color, borderRadius: radius,
     opacity, transform: `scale(${scale})`, transformOrigin: "center", ...(render ? render(ctx) : {}) }} />;
-}
-
-/* ── reduced motion ───────────────────────────────────────────── */
-
-export const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
-
-type MatchMediaLike = (query: string) => { matches: boolean };
-
-/**
- * True when the environment asks for reduced motion, in which case the Stage
- * clock holds instead of advancing. Takes the matchMedia function as a
- * parameter so the gating is testable in the Node-only Vitest setup; the
- * default reads `window.matchMedia` and answers false with no DOM or when the
- * browser lacks matchMedia.
- */
-export function prefersReducedMotion(
-  matchMedia: MatchMediaLike | undefined = typeof window !== "undefined" && typeof window.matchMedia === "function"
-    ? window.matchMedia.bind(window)
-    : undefined,
-): boolean {
-  if (!matchMedia) return false;
-  try {
-    return matchMedia(REDUCED_MOTION_QUERY).matches === true;
-  } catch {
-    return false;
-  }
-}
-
-/* ── seeking ──────────────────────────────────────────────────── */
-
-/**
- * Where a seek lands. A seek onto the end pauses: the clock's next frame would
- * otherwise wrap a looping film to 0, so End on the scrubber (and dragging it
- * to the far right) read as "jump to start". Resuming from the end still wraps,
- * exactly as reaching it by playback does. `atEnd` is never true for a
- * zero-length film, which has no last frame to hold.
- */
-export function resolveSeek(t: number, duration: number): { time: number; atEnd: boolean } {
-  const time = clamp(t, 0, duration);
-  return { time, atEnd: duration > 0 && time >= duration };
 }
 
 /* ── stage ────────────────────────────────────────────────────── */

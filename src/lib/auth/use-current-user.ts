@@ -60,7 +60,6 @@ export function useCurrentUserState(): CurrentUserState {
   // (and no dev fallback user either: nothing on the static site is per-user).
   if (staticSite) return { user: null, isPending: false };
   if (!authEnabled) return { user: DEV_USER, isPending: false };
-  // eslint-disable-next-line react-hooks/rules-of-hooks -- authEnabled is constant for the app's lifetime
   const { data, isPending: sessionPending } = authClient.useSession();
   // The server always renders the pending state. Report pending until
   // hydration completes so the first client render matches it; otherwise a

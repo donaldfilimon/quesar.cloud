@@ -1,7 +1,7 @@
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join, relative, resolve } from "node:path";
 import { describe, expect, it } from "vitest";
-import { describeCameraError } from "./tf-pose-demo";
+import { describeCameraError } from "./camera-error";
 
 /**
  * `/tf-pose-demo` source guards, ported from mlai
