@@ -502,7 +502,7 @@ export async function deleteOwnAudit(
 
 /**
  * Client-visible admin status. "Not on the allowlist" and "on the allowlist
- * but not broker-verified" collapse to one answer: sign-up is open, so the
+ * but not provider-verified" collapse to one answer: sign-up is open, so the
  * finer reason would let anyone probe which addresses are admins.
  */
 export type AdminStatus = { admin: true } | { admin: false; reason: "no_allowlist" | "not_admin" };

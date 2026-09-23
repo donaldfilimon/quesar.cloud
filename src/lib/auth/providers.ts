@@ -1,31 +1,29 @@
 /**
- * The upstream identity providers this app offers for sign-in (via the broker).
+ * The social sign-in providers this app can offer, first-party through Better
+ * Auth's `socialProviders` (no broker). Dependency-free so both the server
+ * (`server.ts`, `methods.server.ts`) and the client (sign-in buttons) import it.
  *
- * Source of truth for BOTH the server (`server.ts`, one `genericOAuth` provider
- * per entry) and the client (`client.ts` / sign-in buttons). Kept in its own
- * dependency-free module so the client can import it without pulling the
- * server-only Better Auth instance (and `pg`) into the browser bundle.
- *
- * Each app federates to the shared **auth broker** (`GROK_AUTH_ISSUER`), which
- * holds the real Google/X secrets. The app never sees them — it only knows its
- * own per-app client id/secret and which upstream to ask the broker for (`idp`).
- *
- * To add an upstream (e.g. GitHub) once the broker supports it: add one entry
- * here (`{ providerId: "grok-github", idp: "github", label: "GitHub" }`). The
- * `providerId` is this app's local id and the OAuth callback path segment
- * (`/api/auth/oauth2/callback/<providerId>`); `idp` is the hint the broker reads
- * to pick the upstream (Better Auth's id for X is still `twitter`).
+ * A provider only appears on the sign-in page once its credentials are set
+ * (see `methods.server.ts`); the ids are Better Auth's own, and each one's
+ * OAuth callback is `/api/auth/callback/<id>`.
  */
-export type GrokProvider = {
-  /** This app's local provider id; also the callback path segment. */
-  providerId: string;
-  /** Upstream hint the broker forwards to (Better Auth social id). */
-  idp: string;
+export type SocialProviderId = "google" | "apple" | "twitter";
+
+export interface SocialProvider {
+  id: SocialProviderId;
   /** Human label for the sign-in button. */
   label: string;
-};
+}
 
-export const GROK_PROVIDERS: readonly GrokProvider[] = [
-  { providerId: "grok-google", idp: "google", label: "Google" },
-  { providerId: "grok-x", idp: "twitter", label: "X" },
+export const SOCIAL_PROVIDERS: readonly SocialProvider[] = [
+  { id: "google", label: "Google" },
+  { id: "apple", label: "Apple" },
+  { id: "twitter", label: "X" },
 ];
+
+/** Which sign-in methods the server has credentials for. */
+export interface SignInMethods {
+  email: boolean;
+  passkey: boolean;
+  social: SocialProviderId[];
+}

@@ -45,7 +45,7 @@ export function AdminPanels() {
         <p className="mt-3 text-sm text-fg-muted">
           Administrator access needs both: an email on the{" "}
           <code className="font-mono text-xs">ADMIN_EMAILS</code> allowlist, and a Google or X
-          account linked through the sign-in broker. Every admin read and delete is reason-logged.
+          linked Google or Apple account. Every admin read and delete is reason-logged.
         </p>
         <Link to="/console" className="mt-4 inline-flex min-h-11 items-center text-sm text-accent">
           Back to the console

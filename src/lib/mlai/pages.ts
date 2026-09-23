@@ -7,7 +7,7 @@
  * invite-only beta. Quesar retired all of those (see AGENTS.md), so each
  * block below is rewritten to what this repository actually implements:
  * Better Auth sessions, `src/lib/server/crypto.server.ts` (AES-256-GCM),
- * `admin.server.ts` (allowlist plus a broker-linked account), the database
+ * `admin.server.ts` (allowlist plus a linked Google or Apple account), the database
  * rate limit, and the `src/lib/server/llm` interface. Anything still being
  * built carries `status: "development"` and is rendered with a status badge,
  * never as shipping.
@@ -21,7 +21,7 @@ type Status = { status: StatusKind };
 export const homeBoundaries: readonly ({ title: string; body: string; accent: "abi" | "abbey" | "wdbx" } & Status)[] = [
   {
     title: "Account-scoped access",
-    body: "Sign-in is the Grok broker (Google or X) or email and password, on Better Auth. Every server function runs behind the session middleware and scopes its queries by your user id. Admin rights need an allowlisted email and a broker-linked account; an allowlisted email/password account is refused.",
+    body: "Sign-in is Google, Apple, X, a passkey, or email and password, on Better Auth. Every server function runs behind the session middleware and scopes its queries by your user id. Admin rights need an allowlisted email and a linked Google or Apple account; an allowlisted email/password account is refused.",
     accent: "abi",
     status: "current",
   },
@@ -50,7 +50,7 @@ export const homeRequestPath: readonly ({ n: string; title: string; body: string
 export const homeProductBoundary = [
   {
     title: "What it is",
-    body: "A governed generation path: account-scoped sessions, one server-side provider interface, sealed records, and an admin model that needs a broker-verified identity. Surfaces that are still being built say so.",
+    body: "A governed generation path: account-scoped sessions, one server-side provider interface, sealed records, and an admin model that needs a provider-verified identity. Surfaces that are still being built say so.",
   },
   {
     title: "What it is not",
@@ -224,12 +224,12 @@ export const docsHub = {
     { title: "Database", body: "Set DATABASE_URL for Postgres. Without it the app runs on in-memory PGLite, and data does not survive a restart or a serverless instance." },
     { title: "Encryption key", body: "Set APP_ENCRYPTION_KEY (32 bytes, openssl rand -base64 32). Without it, sealed features refuse instead of storing plaintext." },
     { title: "Server-only provider keys", body: "Set XAI_API_KEY, or the Cloudflare AI Gateway URL, token and id, plus LLM_PROVIDER. Never expose them to browser bundles." },
-    { title: "Administrators", body: "Set ADMIN_EMAILS. Only an allowlisted address with a broker-linked account (Google or X) becomes an admin." },
+    { title: "Administrators", body: "Set ADMIN_EMAILS. Only an allowlisted address with a linked Google or Apple account becomes an admin." },
     { title: "Evaluation gates", body: "Run evaluation gates before allowing autonomous write actions or external tool calls." },
   ],
   /** What this site exposes today. Surfaces still being built are labeled, not listed as shipping. */
   apiSurfaces: [
-    { name: "/api/auth/*", body: "Better Auth: broker sign-in (Google, X), email and password, session.", status: "current" },
+    { name: "/api/auth/*", body: "Better Auth: Google, Apple and X sign-in, passkeys, email and password, session.", status: "current" },
     { name: "askPersona", body: "Server function behind the session: one persona reply through the model interface, rate-limited per user.", status: "current" },
     { name: "askDesk", body: "Server function behind the session: a desk answer from the catalog and, when configured, the model.", status: "current" },
     { name: "Console notes", body: "Per-user field notes on architecture nodes, scoped by user id.", status: "current" },
@@ -326,12 +326,12 @@ export const securitySections = [
   },
   {
     title: "Identity, provider, and sealing controls",
-    body: "Sessions are Better Auth. Sign-in is limited to the Grok broker (Google, X) and email and password. Admin rights require an allowlisted email plus a broker-linked account, and an allowlisted email/password account is refused. Model calls cross one server-side interface that never sends your account email. Data at rest is sealed with AES-256-GCM under APP_ENCRYPTION_KEY, and without the key sealed features refuse. These are implemented controls, not a certification claim.",
+    body: "Sessions are Better Auth. Sign-in is limited to Google, Apple, X, passkeys and email and password. Admin rights require an allowlisted email plus a linked Google or Apple account, and an allowlisted email/password account is refused. Model calls cross one server-side interface that never sends your account email. Data at rest is sealed with AES-256-GCM under APP_ENCRYPTION_KEY, and without the key sealed features refuse. These are implemented controls, not a certification claim.",
     status: "current",
   },
   {
     title: "Conversation audits and admin review",
-    body: "Console chat requires consent to the current audit policy. Each exchange is sealed with AES-256-GCM, bound to its owner, before the reply returns, and kept for 365 days. You can list, read, export and delete your own audits. Admin decryption requires an allowlisted, broker-verified identity and a stated reason, and every access is logged.",
+    body: "Console chat requires consent to the current audit policy. Each exchange is sealed with AES-256-GCM, bound to its owner, before the reply returns, and kept for 365 days. You can list, read, export and delete your own audits. Admin decryption requires an allowlisted, provider-verified identity and a stated reason, and every access is logged.",
     status: "current",
   },
   {
@@ -352,7 +352,7 @@ export const privacyPolicy = [
   },
   {
     title: "Account and authentication data",
-    body: "Authentication is Better Auth, through the Grok broker (Google or X) or email and password. Session tokens stay server-side in an HttpOnly cookie. Your account email is not sent to a model provider.",
+    body: "Authentication is Better Auth: Google, Apple, X, a passkey, or email and password. Session tokens stay server-side in an HttpOnly cookie. Your account email is not sent to a model provider.",
   },
   {
     title: "Model calls",

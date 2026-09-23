@@ -268,7 +268,7 @@ describe("my audits", () => {
 describe("admin", () => {
   it("rejects a non-admin and an allowlisted email/password account", async () => {
     const credential = await createUser("credential");
-    const stranger = await createUser("grok-google");
+    const stranger = await createUser("google");
     process.env.ADMIN_EMAILS = credential.email;
     for (const user of [credential, stranger]) {
       expect((await adminStatus(user.id)).admin).toBe(false);
@@ -297,7 +297,7 @@ describe("admin", () => {
   });
 
   it("requires a reason to read, logs it as admin, and opens another user's audit", async () => {
-    const admin = await createUser("grok-google");
+    const admin = await createUser("google");
     process.env.ADMIN_EMAILS = admin.email;
     const owner = newUserId();
     await acceptChatConsent(owner, CHAT_AUDIT_POLICY_VERSION);
@@ -338,7 +338,7 @@ describe("admin", () => {
   });
 
   it("summarizes telemetry and pages inquiries newest first", async () => {
-    const admin = await createUser("grok-x");
+    const admin = await createUser("apple");
     process.env.ADMIN_EMAILS = admin.email;
     const sql = await getSql();
     await sql`insert into telemetry_events (event, path) values ('inquiry_open', '/contact'), ('inquiry_open', '/contact'), ('inquiry_success', '/contact')`;

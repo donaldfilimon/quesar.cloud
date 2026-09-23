@@ -184,7 +184,7 @@ export function httpWorkspaceAdapter(config: {
   label: string;
   endpoint: string;
   fetchImpl?: typeof fetch;
-  /** Extra request headers (the live preview forwards its bearer token here). */
+  /** Extra request headers for the adapter's fetch. */
   headers?: () => Record<string, string>;
 }): WorkspaceAdapter {
   return {

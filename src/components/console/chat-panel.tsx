@@ -180,7 +180,7 @@ export function ChatPanel({ onOpenAudits }: { onOpenAudits: () => void }) {
           <p className="mt-2 text-sm text-fg-muted">
             Prompts and responses are sealed with AES-256-GCM, bound to your account, retained for{" "}
             {status?.policy.retentionDays ?? 365} days, and available to you and to allowlisted
-            administrators who signed in through the Google or X broker. Every admin read and delete
+            administrators with a linked Google or Apple account. Every admin read and delete
             is reason-logged.
           </p>
           <p className="mt-3 font-mono text-xs text-fg-subtle">

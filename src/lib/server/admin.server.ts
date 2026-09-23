@@ -2,16 +2,18 @@
  * Admin authorization, replacing mlai's WorkOS `checkAdminAccess` + MFA.
  *
  * An admin is a signed-in user whose email is on the `ADMIN_EMAILS` allowlist
- * AND whose identity was verified by the sign-in broker. Email/password sign-up
- * is open and sends no verification mail, so an allowlisted address on its own
- * proves nothing: anyone could register it. Broker identities (Google / X via
- * the Grok broker) carry a provider-verified email.
+ * AND who has linked an identity provider that verifies email addresses.
+ * Email/password sign-up is open and sends no verification mail, so an
+ * allowlisted address on its own proves nothing: anyone could register it.
+ * Google and Apple return a provider-verified email. X and passkeys do not
+ * count: X may return no email or an unverified one, and a passkey proves
+ * possession of a device, not of the address.
  */
 import { getSql } from "@/lib/db";
 import { adminEmails } from "./config.server";
 
 /** Providers whose sign-in proves control of the email address. */
-export const VERIFIED_PROVIDERS = new Set(["grok-google", "grok-x"]);
+export const VERIFIED_PROVIDERS = new Set(["google", "apple"]);
 
 export interface AdminCandidate {
   email: string;
@@ -28,11 +30,11 @@ export type AdminDecision =
 export function decideAdmin(user: AdminCandidate, allowlist: Set<string>): AdminDecision {
   if (allowlist.size === 0) return { admin: false, reason: "no_allowlist" };
   if (!allowlist.has(user.email.trim().toLowerCase())) return { admin: false, reason: "not_allowlisted" };
-  // Require a linked broker account. `emailVerified` is deliberately not
+  // Require a linked verifying provider. `emailVerified` is deliberately not
   // sufficient on its own: it is a mutable column and nothing in this app
   // verifies email/password addresses, so it is not proof of control.
-  const brokerLinked = user.providers.some((provider) => VERIFIED_PROVIDERS.has(provider));
-  if (!brokerLinked) return { admin: false, reason: "unverified_identity" };
+  const verifiedLinked = user.providers.some((provider) => VERIFIED_PROVIDERS.has(provider));
+  if (!verifiedLinked) return { admin: false, reason: "unverified_identity" };
   return { admin: true };
 }
 

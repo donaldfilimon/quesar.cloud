@@ -3,7 +3,7 @@
  *
  * Every value is optional. A missing value never crashes a request: callers ask
  * `features()` and render an honest "not configured" state instead. Never
- * create `.env` (Grok contract); values come from the deploy environment.
+ * commit `.env` files; values come from the deploy environment (`.env.local` is git-ignored for local use).
  */
 import { env } from "@/lib/env.server";
 import { readBillingConfig } from "@/lib/billing";

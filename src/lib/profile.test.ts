@@ -29,8 +29,9 @@ describe("validateDisplayName", () => {
 
 describe("providerLabel", () => {
   it("names the sign-in methods this app supports", () => {
-    expect(providerLabel("grok-google")).toBe("Google");
-    expect(providerLabel("grok-x")).toBe("X");
+    expect(providerLabel("google")).toBe("Google");
+    expect(providerLabel("apple")).toBe("Apple");
+    expect(providerLabel("twitter")).toBe("X");
     expect(providerLabel("credential")).toBe("Email and password");
   });
 

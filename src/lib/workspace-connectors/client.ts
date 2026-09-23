@@ -2,18 +2,7 @@
  * Browser-side calls to the `/api/workspace/*` server routes. Client-safe: no
  * server imports, and no provider token ever passes through here.
  */
-import { getBearerToken } from "@/lib/auth/client";
 import type { WorkspaceProviderSlug } from "./sources";
-
-/**
- * The live preview runs in a partitioned iframe whose session cookie does not
- * reach the server, so fetches forward the session as a bearer token (the same
- * thing `authMiddleware` does for server functions). Deployed, this is empty.
- */
-export function sessionHeaders(): Record<string, string> {
-  const token = getBearerToken();
-  return token ? { Authorization: `Bearer ${token}` } : {};
-}
 
 /** One row of `/api/workspace/connections`. */
 export interface ProviderConnection {
@@ -38,7 +27,7 @@ export type ConnectionsResult =
 export async function fetchConnections(signal?: AbortSignal): Promise<ConnectionsResult> {
   const response = await fetch("/api/workspace/connections", {
     signal,
-    headers: { accept: "application/json", ...sessionHeaders() },
+    headers: { accept: "application/json" },
   });
   if (!response.ok) return { ok: false, status: response.status };
   const body: unknown = await response.json();
@@ -57,7 +46,7 @@ export async function disconnectProvider(
 ): Promise<{ ok: boolean; revoked: boolean }> {
   const response = await fetch(`/api/workspace/disconnect/${provider}`, {
     method: "POST",
-    headers: { accept: "application/json", ...sessionHeaders() },
+    headers: { accept: "application/json" },
   });
   if (!response.ok) return { ok: false, revoked: false };
   const body = (await response.json()) as { revoked?: unknown };
