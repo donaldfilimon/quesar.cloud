@@ -42,6 +42,11 @@ const extra = [
   { to: "/developers", label: "Developers" },
 ] as const;
 
+/** Primary nav, then the "More" destinations, then contact: each path once. */
+const mobileLinks = [...nav, ...extra, { to: "/contact", label: "Contact" }].filter(
+  (item, index, all) => all.findIndex((other) => other.to === item.to) === index,
+);
+
 export function SiteHeader() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const [open, setOpen] = useState(false);
@@ -95,10 +100,10 @@ export function SiteHeader() {
             </DropdownMenuContent>
           </DropdownMenu>
         </nav>
-        <div className="flex items-center gap-1">
+        <div className="flex shrink-0 items-center sm:gap-1">
           <SiteSearch />
           <AuthSlot />
-          <ThemeToggle />
+          <ThemeToggle className="hidden sm:inline-flex" />
           <Sheet.Root open={open} onOpenChange={setOpen}>
             <Sheet.Trigger className="inline-flex size-11 items-center justify-center rounded-md text-fg lg:hidden">
               <span className="sr-only">Open menu</span>
@@ -119,7 +124,7 @@ export function SiteHeader() {
                 </div>
                 <nav className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-2 py-3" aria-label="Mobile">
                   <ul className="flex flex-col">
-                    {[...nav, ...extra, { to: "/contact", label: "Contact" } as const].map((item) => (
+                    {mobileLinks.map((item) => (
                       <li key={item.to}>
                         <Link
                           to={item.to}
@@ -136,6 +141,10 @@ export function SiteHeader() {
                     ))}
                   </ul>
                 </nav>
+                <div className="flex shrink-0 items-center justify-between border-t border-border px-4 py-2 sm:hidden">
+                  <span className="text-sm text-fg-muted">Theme</span>
+                  <ThemeToggle />
+                </div>
               </Sheet.Content>
             </Sheet.Portal>
           </Sheet.Root>

@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { PageClose, PageHero, Section } from "@/components/site";
 import { AppLink } from "@/components/site/app-link";
 import { Button } from "@/components/ui/button";
-import { startJourneys } from "@/lib/mlai";
+import { startJourneys } from "@/lib/mlai/categories/product-journeys";
 import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/get-started")({

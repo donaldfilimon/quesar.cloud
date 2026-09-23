@@ -173,8 +173,10 @@ export type Doc = Docs[number];
  * `glyph` is a closed enum (not a bare string) so the icon map in the view can
  * be a `Record<Project["glyph"], LucideIcon>` — exhaustive at the type level,
  * which is stronger than the `never`-checked switch Ruling D described: an
- * unrecognized glyph value fails at data-load time (`ProjectsSchema.parse`
- * throws) rather than silently rendering nothing.
+ * unrecognized glyph value fails the type check on `projects.ts` and
+ * `content-schemas.test.ts` (which parses every dataset) rather than
+ * silently rendering nothing. Content modules do not parse at runtime, so
+ * zod never reaches the client bundle.
  */
 export const ProjectsSchema = z.array(z.object({
   slug: z.string(),

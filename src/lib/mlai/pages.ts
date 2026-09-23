@@ -64,19 +64,8 @@ export const homeDocsDoors = [
   { href: "/docs/architecture", title: "Architecture", body: "Control-plane framing and the inspectable WDBX substrate: facts, not a scoreboard." },
 ] as const;
 
-/**
- * WDBX graph defaults, verified against `wdbx/crates/abi-wdbx/src/hnsw.rs`
- * (M = 16, EF_CONSTRUCTION = 40, EF_SEARCH = 32) on 2026-09-22. Configuration
- * facts, not recall, QPS or latency claims.
- */
-export const wdbxFacts = [
-  { k: "Active implementation", v: "Rust · abi-wdbx" },
-  { k: "Index", v: "Layered HNSW" },
-  { k: "Graph degree", v: "M = 16" },
-  { k: "Construction breadth", v: "EF_CONSTRUCTION = 40" },
-  { k: "Search breadth", v: "EF_SEARCH = 32" },
-  { k: "Transactions", v: "MVCC" },
-] as const;
+/** WDBX graph defaults; defined in `./wdbx-facts` so the home route can import it alone. */
+export { wdbxFacts } from "./wdbx-facts";
 
 /* ----------------------------------------------------------------- About */
 

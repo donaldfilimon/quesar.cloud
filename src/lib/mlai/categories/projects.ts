@@ -1,4 +1,4 @@
-import { ProjectsSchema, type Projects } from '../schemas';
+import type { Projects } from '../schemas';
 
 /**
  * Ported from `vendor/mlai-review/lib/content.ts`'s `projects[]` (task 4 of
@@ -29,7 +29,7 @@ import { ProjectsSchema, type Projects } from '../schemas';
  * Rewritten below to keep the disclaimer's substance without the
  * review-site framing. The other three `limit` fields are verbatim.
  */
-const raw = [
+const raw: Projects = [
   {
     slug: 'abi',
     name: 'ABI',
@@ -118,4 +118,4 @@ const raw = [
   },
 ];
 
-export const projects: Projects = ProjectsSchema.parse(raw);
+export const projects: Projects = raw;

@@ -107,6 +107,11 @@ export function HomeProductBoundary() {
   );
 }
 
+/** Record tags and dates are stored uppercase; the page sets them as prose. */
+function sentenceCase(value: string): string {
+  return value.charAt(0) + value.slice(1).toLowerCase();
+}
+
 export function HomeResearchPreview() {
   const featured = research.publications.slice(0, 3);
   return (
@@ -129,7 +134,7 @@ export function HomeResearchPreview() {
             <li key={item.slug}>
               <Link to="/research/$slug" params={{ slug: item.slug }} className="group block py-6 no-underline">
                 <span className="text-sm text-fg-muted">
-                  {item.tag.charAt(0) + item.tag.slice(1).toLowerCase()}, {item.date}
+                  {sentenceCase(item.tag)}, {sentenceCase(item.date)}
                 </span>
                 <span className="mt-1.5 block font-display text-xl leading-tight tracking-tight text-fg group-hover:text-accent">
                   {item.title}

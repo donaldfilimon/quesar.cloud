@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
-import { research } from "@/lib/mlai";
+import { research } from "@/lib/mlai/categories/research";
 import { docsHub } from "@/lib/mlai/pages";
 import { CopyGrid, NamedGrid } from "./catalog";
 import { Callout, CodeBlock, PullQuote, SpecList, StepList } from "./lab";

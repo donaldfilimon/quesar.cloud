@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { PageClose, PageHero, RouteFrame, Section, Surface } from "@/components/site";
-import { researchContext } from "@/lib/mlai";
+import { researchContext } from "@/lib/mlai/categories/research-context";
 import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/research/implementations")({

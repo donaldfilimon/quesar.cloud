@@ -13,7 +13,9 @@ import {
   TruthList,
 } from "@/components/site";
 import { NextUp } from "@/components/site/lab";
-import { productJourneys, productPages, research } from "@/lib/mlai";
+import { productJourneys } from "@/lib/mlai/categories/product-journeys";
+import { products as productPages } from "@/lib/mlai/categories/products";
+import { research } from "@/lib/mlai/categories/research";
 import { jsonLdScript, softwareApplicationLd } from "@/lib/mlai/structured-data";
 import { pageHead } from "@/lib/seo";
 

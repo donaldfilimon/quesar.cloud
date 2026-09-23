@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { docNav } from "@/lib/mlai";
+import { docNav } from "@/lib/mlai/categories/docs-nav";
 import { cn } from "@/lib/utils";
 import { docHref } from "./doc-href";
 

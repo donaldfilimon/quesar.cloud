@@ -1,4 +1,4 @@
-import { ChangelogSchema, type Changelog } from '../schemas';
+import type { Changelog } from '../schemas';
 
 /**
  * Release history, ported from the mlai-vite iteration. Versions/dates are
@@ -6,7 +6,7 @@ import { ChangelogSchema, type Changelog } from '../schemas';
  * (Zig migrations, WDBX storage engine, Abbey training stack) — the page
  * states this framing explicitly; edit freely as releases formalize.
  */
-export const changelog: Changelog = ChangelogSchema.parse([
+export const changelog: Changelog = [
   {
     version: "v0.9.0",
     date: "2026-05-14",
@@ -97,4 +97,4 @@ export const changelog: Changelog = ChangelogSchema.parse([
       { cat: "added", text: "Multi-provider LLM module: OpenAI, Anthropic, and local Ollama endpoints." },
     ],
   },
-]);
+];
