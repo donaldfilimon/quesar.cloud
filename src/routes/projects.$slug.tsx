@@ -32,7 +32,7 @@ function ProjectPage() {
           <BulletSurface items={project.scope} />
         </div>
         <Surface className="mt-6">
-          <p className="font-mono text-[0.68rem] tracking-[0.16em] text-accent uppercase">Limit</p>
+          <p className="text-xs text-accent">Limit</p>
           <p className="mt-2 text-sm leading-relaxed text-fg-muted">{project.limit}</p>
         </Surface>
         <p className="mt-8 text-sm">

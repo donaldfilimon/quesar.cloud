@@ -59,7 +59,7 @@ export function GithubStatusLine() {
   }, []);
 
   return (
-    <p className="mt-6 font-mono text-[11px] tracking-[0.14em] text-fg-subtle uppercase" role="status">
+    <p className="mt-6 text-xs text-fg-subtle" role="status">
       {status === "loading"
         ? "Asking GitHub…"
         : status === "live"
@@ -99,7 +99,7 @@ export function SourcePanel() {
   return (
     <div className="min-w-0 overflow-hidden rounded-[18px] bg-bg-elevated shadow-[var(--shadow-border)]">
       <div className="flex items-center justify-between gap-3 border-b border-border px-4 py-3">
-        <p className="font-mono text-[10px] tracking-[0.16em] text-accent uppercase">
+        <p className="text-xs text-accent">
           {status === "loading" ? "asking GitHub…" : live ? "live README" : "local excerpt"}
         </p>
         <p className="font-mono text-[10px] text-fg-subtle">

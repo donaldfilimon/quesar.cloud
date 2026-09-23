@@ -262,7 +262,7 @@ export function QuasarSiteDetail({ id }: { id: string }) {
               <h2 id="quasar-preview" className="font-display text-xl">
                 Preview
               </h2>
-              <span className="font-mono text-[0.68rem] tracking-wide text-fg-subtle uppercase">
+              <span className="text-xs text-fg-subtle">
                 {preview ? preview.state : "unknown"}
                 {preview?.port ? ` · port ${preview.port}` : ""}
               </span>

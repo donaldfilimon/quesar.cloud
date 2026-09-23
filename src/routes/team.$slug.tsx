@@ -30,7 +30,7 @@ function TeamProfile() {
   const web = socials.web ? (socials.web.startsWith("http") ? socials.web : `https://${socials.web}`) : null;
   return (
     <>
-      <PageHero eyebrow={person.role} title={person.name} lede={person.tagline ?? person.bio} atmosphere="lab" />
+      <PageHero eyebrow={person.role} title={person.name} lede={person.tagline ?? person.bio} />
       <Section>
         <div className="grid gap-10 md:grid-cols-[18rem_minmax(0,1fr)] md:items-start">
           <div className="md:sticky md:top-28">
@@ -81,7 +81,7 @@ function TeamProfile() {
           </div>
           <div>
             {person.location ? (
-              <p className="flex items-center gap-2 font-mono text-xs tracking-widest text-fg-subtle uppercase">
+              <p className="flex items-center gap-2 text-xs text-fg-subtle">
                 <MapPin className="size-3" aria-hidden="true" /> {person.location}
               </p>
             ) : null}
@@ -116,7 +116,7 @@ function TeamProfile() {
             ) : null}
             <div className="mt-14 flex flex-wrap items-center justify-between gap-6 border-t border-border pt-8">
               <div>
-                <p className="font-mono text-xs tracking-widest text-fg-subtle uppercase">Building something aligned?</p>
+                <p className="text-xs text-fg-subtle">Building something aligned?</p>
                 <Button asChild className="mt-3">
                   <Link to="/contact">Start an inquiry</Link>
                 </Button>

@@ -3,7 +3,7 @@ import { Surface } from "@/components/site";
 import { Button } from "@/components/ui/button";
 import type { BillingPlansResult } from "@/lib/billing";
 
-const kicker = "font-mono text-[0.68rem] tracking-[0.16em] text-fg-subtle uppercase";
+const kicker = "text-xs text-fg-subtle";
 
 export type BillingState =
   { kind: "loading" } | { kind: "error" } | { kind: "loaded"; result: BillingPlansResult };

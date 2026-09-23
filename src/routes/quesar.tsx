@@ -22,7 +22,6 @@ function QuesarPage() {
         eyebrow="Quesar"
         title="Infrastructure for private, persistent, adaptive AI."
         lede="Quesar is the product experience that connects ABI, WDBX, and Abbey. It is not a chatbot, not a vector database, and not a hosted wrapper around a public model."
-        atmosphere="wafer"
       >
         <div className="mt-6 flex flex-wrap items-center gap-3">
           <StatusBadge status="partial" />

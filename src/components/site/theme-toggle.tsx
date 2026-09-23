@@ -21,7 +21,7 @@ export function ThemeToggle({ className }: { className?: string }) {
           applyTheme(value);
         }}
         className={className}
-        aria-label={dark ? "Switch to light theme" : "Switch to dark theme"}
+        aria-label="Dark theme"
       >
         <span className="relative size-4">
           <Sun

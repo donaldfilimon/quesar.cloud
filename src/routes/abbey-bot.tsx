@@ -75,7 +75,7 @@ function AbbeyBotPage() {
             {turns.length === 0 ? <li className="text-sm text-fg-muted">No turns yet. {user ? "Signed in." : "Local fallback if you are signed out."}</li> : null}
             {turns.map((turn, index) => (
               <li key={`${turn.role}-${index}`} className="rounded-md bg-bg px-4 py-3">
-                <p className="font-mono text-[10px] tracking-wide text-fg-subtle uppercase">
+                <p className="text-xs text-fg-subtle">
                   {turn.role} · {turn.persona}
                 </p>
                 <p className="mt-1 text-sm leading-relaxed text-fg">{turn.text}</p>

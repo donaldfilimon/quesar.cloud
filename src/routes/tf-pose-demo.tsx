@@ -35,7 +35,7 @@ function PosePage() {
           fallback={
             <div
               role="status"
-              className="flex aspect-[4/3] items-center justify-center rounded-[18px] border border-border bg-bg-elevated font-mono text-xs uppercase tracking-[0.3em] text-fg-subtle lg:aspect-[8/3]"
+              className="flex aspect-[4/3] items-center justify-center rounded-[18px] border border-border bg-bg-elevated text-xs text-fg-subtle lg:aspect-[8/3]"
             >
               Loading
             </div>

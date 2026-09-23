@@ -59,7 +59,7 @@ export function VaultApp() {
     <div className="overflow-hidden rounded-[18px] bg-bg-elevated shadow-[var(--shadow-border)] lg:grid lg:grid-cols-[16rem_minmax(0,1fr)]">
       <aside className="border-b border-border lg:border-r lg:border-b-0">
         <div className="flex items-center justify-between px-4 py-3">
-          <p className="font-mono text-[10px] tracking-[0.16em] text-accent uppercase">Vault</p>
+          <p className="text-xs text-accent">Vault</p>
           <Button type="button" size="sm" onClick={createNote}>
             New
           </Button>

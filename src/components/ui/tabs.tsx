@@ -17,7 +17,7 @@ export function TabsTrigger({ className, ...props }: ComponentProps<typeof TabsP
   return (
     <TabsPrimitive.Trigger
       className={cn(
-        "h-10 shrink-0 rounded-md px-3 font-mono text-[11px] tracking-wide uppercase text-fg-muted",
+        "h-10 shrink-0 rounded-md px-3 text-xs text-fg-muted",
         "hover:text-fg data-[state=active]:bg-bg-subtle data-[state=active]:text-fg",
         className,
       )}

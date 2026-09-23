@@ -40,7 +40,7 @@ function DocArticle() {
           { label: doc.title },
         ]}
       />
-      <PageHero eyebrow={doc.group} title={doc.title} lede={doc.description} atmosphere="none" compact />
+      <PageHero eyebrow={doc.group} title={doc.title} lede={doc.description} compact />
       <Section className="!pt-8">
         <div className="grid gap-10 lg:grid-cols-[16rem_minmax(0,1fr)] xl:grid-cols-[16rem_minmax(0,1fr)_14rem]">
           <DocSidebar current={resolved} />

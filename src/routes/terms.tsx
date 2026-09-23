@@ -19,7 +19,6 @@ function TermsPage() {
         eyebrow="Terms"
         title="This site orients. It does not host your sessions."
         lede="Last updated 22 September 2026. These terms cover the public website and in-browser app orientations."
-        atmosphere="none"
       />
       <Section>
         <div className="max-w-3xl space-y-6 text-sm leading-relaxed text-fg-muted">

@@ -21,7 +21,6 @@ function WdbxPage() {
         eyebrow="WDBX"
         title="Memory is not a lookup."
         lede="A vector database can retrieve similar content. An episodic substrate must also preserve context, causal dependencies, outcomes, versions, constraints, and evidence — so a later query can ask what happened, what was predicted, what was done, what followed, and why this record is trusted."
-        atmosphere="board"
       >
         <div className="mt-6 flex flex-wrap gap-3">
           <StatusBadge status="current" />

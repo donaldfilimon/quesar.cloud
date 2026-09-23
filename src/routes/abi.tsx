@@ -29,7 +29,6 @@ function AbiPage() {
         eyebrow="ABI"
         title="Orchestration you can inspect on your machine."
         lede="ABI routes requests, assembles context, and coordinates tools. The public GitHub tree is nightly Rust. The Zig tree has been removed. WDBX is a required sibling. Follow the repository README — do not mix toolchains. Local template completion does not establish model quality."
-        atmosphere="wafer"
       >
         <div className="mt-6 flex flex-wrap gap-3">
           <StatusBadge status="current" />

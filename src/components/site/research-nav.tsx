@@ -5,12 +5,12 @@ import { cn } from "@/lib/utils";
 export function ResearchSidebar({ current }: { current?: string }) {
   return (
     <nav aria-label="Research" className="lg:sticky lg:top-24 lg:max-h-[calc(100dvh-7rem)] lg:overflow-y-auto">
-      <Link to="/research" className="font-mono text-[0.68rem] tracking-[0.16em] text-fg-subtle uppercase no-underline hover:text-fg">
+      <Link to="/research" className="text-xs text-fg-subtle no-underline hover:text-fg">
         All research
       </Link>
       {research.tracks.map((track) => (
         <div key={track.id} className="mt-5">
-          <p className="font-mono text-[0.68rem] tracking-[0.16em] text-fg-subtle uppercase">{track.name}</p>
+          <p className="text-xs text-fg-subtle">{track.name}</p>
           <ul className="mt-2 space-y-0.5">
             {research.publications
               .filter((paper) => paper.topic === track.id)
@@ -38,7 +38,7 @@ export function ResearchSidebar({ current }: { current?: string }) {
       <div className="mt-6">
         <Link
           to="/research/implementations"
-          className="font-mono text-[0.68rem] tracking-[0.16em] text-fg-subtle uppercase no-underline hover:text-fg"
+          className="text-xs text-fg-subtle no-underline hover:text-fg"
         >
           Implementations
         </Link>

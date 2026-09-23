@@ -10,7 +10,7 @@ import {
   verificationCopy,
 } from "@/lib/profile";
 
-const kicker = "font-mono text-[0.68rem] tracking-[0.16em] text-fg-subtle uppercase";
+const kicker = "text-xs text-fg-subtle";
 
 export interface AccountView {
   name: string | null;

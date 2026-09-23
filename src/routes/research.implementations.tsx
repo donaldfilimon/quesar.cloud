@@ -19,14 +19,13 @@ function ImplementationsPage() {
         eyebrow="Research · implementations"
         title="What the repositories actually contain."
         lede="Seven nested readings. Each one stays inside a source revision and says what that source does not prove."
-        atmosphere="board"
       />
       <Section>
         <div className="grid gap-4">
           {researchContext.map((item) => (
             <Link key={item.slug} to="/research/implementations/$slug" params={{ slug: item.slug }} className="no-underline">
               <Surface hover>
-                <p className="font-mono text-[0.68rem] tracking-[0.16em] text-accent uppercase">
+                <p className="text-xs text-accent">
                   {item.relatedTopics.join(" · ")} · {item.sources.length} sources
                 </p>
                 <h2 className="mt-2 font-display text-2xl">{item.title}</h2>

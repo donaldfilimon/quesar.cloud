@@ -24,14 +24,14 @@ export function AuditView({ audit, onClose }: { audit: AuditRecord; onClose: () 
       <ol className="mt-4 grid gap-2">
         {audit.content.messages.map((message, index) => (
           <li key={index} className="rounded-md bg-bg-subtle px-3 py-2 text-sm text-fg-muted">
-            <span className="font-mono text-[10px] tracking-[0.14em] text-fg-subtle uppercase">
+            <span className="text-xs text-fg-subtle">
               {message.role}
             </span>
             <p className="mt-1 whitespace-pre-wrap">{message.content}</p>
           </li>
         ))}
         <li className="rounded-md bg-bg-subtle px-3 py-2 text-sm text-fg">
-          <span className="font-mono text-[10px] tracking-[0.14em] text-accent uppercase">
+          <span className="text-xs text-accent">
             reply
           </span>
           <p className="mt-1 whitespace-pre-wrap">{audit.content.reply}</p>

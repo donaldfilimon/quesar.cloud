@@ -34,7 +34,7 @@ export function CopyGrid({
             <div className="flex items-start justify-between gap-3">
               <div>
                 {item.kicker ? (
-                  <p className="font-mono text-[0.68rem] tracking-[0.16em] text-fg-subtle uppercase">{item.kicker}</p>
+                  <p className="text-xs text-fg-subtle">{item.kicker}</p>
                 ) : null}
                 <h3 className={cn("font-display text-xl", item.kicker && "mt-1")}>{item.title}</h3>
               </div>
@@ -151,7 +151,7 @@ export function PersonaGrid({
             <span className={cn("size-2.5 rounded-full", personaDot[item.id])} aria-hidden="true" />
             {item.name}
           </h3>
-          <p className="mt-1 font-mono text-[11px] tracking-wide text-fg-subtle uppercase">{item.role}</p>
+          <p className="mt-1 text-xs text-fg-subtle">{item.role}</p>
           <p className="mt-4 text-sm leading-relaxed text-fg-muted">{item.body}</p>
         </Surface>
       ))}
@@ -171,7 +171,7 @@ export function StatGrid({
       {cells.map((cell) => (
         <div key={cell.k} className="surface p-4 text-center">
           <p className="font-display text-3xl tabular">{cell.v}</p>
-          <p className="mt-1 font-mono text-[10px] tracking-wide text-fg-subtle uppercase">{cell.k}</p>
+          <p className="mt-1 text-xs text-fg-subtle">{cell.k}</p>
           {cell.tag ? (
             <div className="mt-2 flex justify-center">
               <ProvTag tag={cell.tag} />
@@ -207,7 +207,7 @@ export function IntegrityList({
     <ul className="grid gap-3 md:grid-cols-2">
       {rules.map((rule) => (
         <li key={rule.title} className="surface p-4">
-          <p className="font-mono text-[0.68rem] tracking-[0.16em] text-accent uppercase">{rule.title}</p>
+          <p className="text-xs text-accent">{rule.title}</p>
           <p className="mt-2 text-sm text-fg-muted">{rule.body}</p>
         </li>
       ))}
@@ -269,7 +269,7 @@ export function MetricCard({
 }) {
   return (
     <Surface>
-      <p className="font-mono text-[11px] tracking-wide text-fg-subtle uppercase">{k}</p>
+      <p className="text-xs text-fg-subtle">{k}</p>
       <p className="mt-2 font-display text-3xl tabular">{v}</p>
       {sub ? <p className="mt-1 font-mono text-sm text-fg-muted">{sub}</p> : null}
       {note ? <p className="mt-2 text-sm text-fg-muted">{note}</p> : null}

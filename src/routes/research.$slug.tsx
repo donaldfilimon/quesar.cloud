@@ -55,7 +55,6 @@ function ResearchPaper() {
         eyebrow={`${paper.tag} · ${paper.status}`}
         title={paper.title}
         lede={paper.abstract}
-        atmosphere="none"
         compact
       >
         <p className="mt-4 font-mono text-xs tracking-wide text-fg-muted">
@@ -68,11 +67,11 @@ function ResearchPaper() {
           <div>
             <div className="mb-8 grid gap-4 md:grid-cols-2">
               <Surface>
-                <p className="font-mono text-[0.68rem] tracking-[0.16em] text-accent uppercase">Practical summary</p>
+                <p className="text-xs text-accent">Practical summary</p>
                 <p className="mt-2 text-sm text-fg-muted">{paper.practicalSummary}</p>
               </Surface>
               <Surface>
-                <p className="font-mono text-[0.68rem] tracking-[0.16em] text-accent uppercase">Status</p>
+                <p className="text-xs text-accent">Status</p>
                 <p className="mt-2 text-sm text-fg-muted">{paper.statusNote}</p>
                 <p className="mt-2 font-mono text-[11px] text-fg-subtle">Reviewed {paper.reviewedAt}</p>
               </Surface>
@@ -100,7 +99,7 @@ function ResearchPaper() {
               </Button>
               {next && next.slug !== paper.slug ? (
                 <Link to="/research/$slug" params={{ slug: next.slug }} className="text-right no-underline">
-                  <span className="block font-mono text-[0.68rem] tracking-[0.16em] text-fg-subtle uppercase">
+                  <span className="block text-xs text-fg-subtle">
                     Next article
                   </span>
                   <span className="mt-1 block font-display text-lg text-fg hover:underline">{next.title}</span>

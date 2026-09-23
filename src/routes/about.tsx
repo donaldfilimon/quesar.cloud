@@ -15,11 +15,11 @@ export const Route = createFileRoute("/about")({
 function AboutPage() {
   return (
     <>
-      <PageHero eyebrow="About" title="Safety before scale." lede={site.origin} atmosphere="lab" />
+      <PageHero eyebrow="About" title="Safety before scale." lede={site.origin} />
       <Section eyebrow="Who we are" title={aboutWhoWeAre.title} lede={aboutWhoWeAre.body}>
         <ul className="grid gap-3 font-mono text-sm text-accent sm:grid-cols-2">
           {aboutWhoWeAre.identity.map((fact) => (
-            <li key={fact} className="flex items-center gap-3 uppercase tracking-wide">
+            <li key={fact} className="flex items-center gap-3">
               <span className="size-1.5 shrink-0 rounded-full bg-accent" aria-hidden="true" />
               {fact}
             </li>

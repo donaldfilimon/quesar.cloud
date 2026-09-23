@@ -115,7 +115,7 @@ export function ArchitectureDiagram({
           </p>
           <div className="mb-4 flex flex-wrap gap-x-4 gap-y-1 px-1">
             {(Object.keys(layerCopy) as Array<keyof typeof layerCopy>).map((layer) => (
-              <span key={layer} className="font-mono text-[0.62rem] tracking-[0.12em] text-fg-subtle uppercase">
+              <span key={layer} className="text-xs text-fg-subtle">
                 {layerCopy[layer]}
               </span>
             ))}
@@ -155,7 +155,7 @@ export function ArchitectureDiagram({
       </Instrument>
 
       <aside className="rounded-[28px] bg-bg-elevated p-6 shadow-[var(--shadow-border)] sm:p-7" aria-live="polite">
-        <p className="font-mono text-[0.68rem] tracking-[0.14em] text-fg-subtle uppercase">
+        <p className="text-xs text-fg-subtle">
           {layerCopy[node.layer]}
         </p>
         <div className="mt-2 flex flex-wrap items-center gap-3">
@@ -166,7 +166,7 @@ export function ArchitectureDiagram({
         <CapabilityList title="Current in source" items={node.implemented} positive />
         <Separator className="my-5" />
         <CapabilityList title="Not claimed" items={node.notClaimed} className="mt-0" />
-        <p className="mt-5 font-mono text-[10px] tracking-[0.14em] text-fg-subtle uppercase">
+        <p className="mt-5 text-xs text-fg-subtle">
           Arrow keys move between nodes
         </p>
         <div className="mt-3 flex flex-wrap items-center gap-2">
@@ -270,7 +270,7 @@ function CapabilityList({
 }) {
   return (
     <div className={cn("mt-5", className)}>
-      <p className="font-mono text-[0.65rem] tracking-[0.14em] text-fg-subtle uppercase">{title}</p>
+      <p className="text-xs text-fg-subtle">{title}</p>
       <ul className="mt-2 space-y-1.5">
         {items.map((item) => (
           <li key={item} className="flex gap-2 text-sm text-fg-muted">

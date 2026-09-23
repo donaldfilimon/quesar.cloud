@@ -25,14 +25,14 @@ function ChangelogPage() {
           {changelog.map((entry) => (
             <li key={entry.version}>
               <Surface>
-                <p className="font-mono text-[0.68rem] tracking-[0.16em] text-accent uppercase">
+                <p className="text-xs text-accent">
                   {entry.version} · {entry.date}
                 </p>
                 <h2 className="mt-2 font-display text-2xl">{entry.title}</h2>
                 <ul className="mt-4 space-y-2">
                   {entry.items.map((item) => (
                     <li key={item.text} className="text-sm text-fg-muted">
-                      <span className="font-mono text-[10px] tracking-wide text-fg-subtle uppercase">{item.cat}</span>
+                      <span className="text-xs text-fg-subtle">{item.cat}</span>
                       {" — "}
                       {item.text}
                     </li>

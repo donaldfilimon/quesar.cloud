@@ -28,7 +28,7 @@ export function AppErrorComponent({ error, reset }: ErrorComponentProps) {
       aria-labelledby="route-error-heading"
       className="mx-auto flex min-h-[60vh] max-w-xl flex-col justify-center px-6 py-24"
     >
-      <p className="flex items-center gap-2 font-mono text-[0.68rem] tracking-[0.16em] text-accent uppercase">
+      <p className="flex items-center gap-2 text-xs text-accent">
         <TriangleAlert className="size-3.5" aria-hidden="true" /> 500: something failed
       </p>
       <h1 id="route-error-heading" className="mt-3 font-display text-4xl tracking-tight">
@@ -65,7 +65,7 @@ export function AppErrorComponent({ error, reset }: ErrorComponentProps) {
 export function AppNotFoundComponent() {
   return (
     <main className="mx-auto flex min-h-[60vh] max-w-xl flex-col justify-center px-6 py-24">
-      <p className="font-mono text-[0.68rem] tracking-[0.16em] text-accent uppercase">404</p>
+      <p className="text-xs text-accent">404</p>
       <h1 className="mt-3 font-display text-4xl tracking-tight">This page is not in the catalog.</h1>
       <p className="mt-4 text-sm leading-relaxed text-fg-muted">
         Every public surface lives on this site. If a name moved, start from docs, apps, or the source catalog.

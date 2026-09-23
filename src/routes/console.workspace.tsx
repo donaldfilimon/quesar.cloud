@@ -23,7 +23,6 @@ function ConsoleWorkspacePage() {
             eyebrow="Console workspace"
             title={`Documents for ${user.displayName ?? user.primaryEmail ?? "operator"}`}
             lede="Signed in. Documents in this panel stay in the browser. Architecture field notes live in the console and are scoped to your account."
-            atmosphere="none"
           />
           <Section>
             <WorkspaceApp />

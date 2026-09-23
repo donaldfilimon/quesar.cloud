@@ -29,7 +29,6 @@ function AdminPage() {
               title="Administrator review."
               lede="Conversation audits across accounts, anonymous usage counts and contact inquiries. Every audit list, read and delete requires a reason and is written to the access log."
               compact
-              atmosphere="none"
             />
             <Section>
               <AdminPanels />

@@ -64,7 +64,7 @@ export function TelemetrySummaryPanel() {
               ],
             ].map(([label, value]) => (
               <div key={label} className="rounded-lg bg-card p-4 shadow-[var(--shadow-border)]">
-                <dt className="font-mono text-[10px] tracking-[0.14em] text-fg-subtle uppercase">
+                <dt className="text-xs text-fg-subtle">
                   {label}
                 </dt>
                 <dd className="mt-2 font-display text-2xl text-fg tabular-nums">{value}</dd>
@@ -77,7 +77,7 @@ export function TelemetrySummaryPanel() {
             <table className="w-full max-w-xl text-sm">
               <caption className="sr-only">Events by name</caption>
               <thead>
-                <tr className="border-b border-border text-left font-mono text-[10px] tracking-[0.14em] text-fg-subtle uppercase">
+                <tr className="border-b border-border text-left text-xs text-fg-subtle">
                   <th scope="col" className="py-2">
                     Event
                   </th>

@@ -69,7 +69,6 @@ function ProfileInner({ user }: { user: AppUser }) {
         eyebrow="Profile"
         title={account.name ?? account.email ?? "Operator"}
         lede="Your account, the devices signed in to it, and billing. Field notes live under this account; workspace documents stay in this browser."
-        atmosphere="none"
       />
       <Section>
         {profile === "error" ? (
@@ -81,7 +80,7 @@ function ProfileInner({ user }: { user: AppUser }) {
           <AccountCard account={account} />
           {user.isDevFallback ? (
             <Surface>
-              <p className="font-mono text-[0.68rem] tracking-[0.16em] text-fg-subtle uppercase">
+              <p className="text-xs text-fg-subtle">
                 Session
               </p>
               <p className="mt-2 text-sm text-fg-muted">
@@ -97,7 +96,7 @@ function ProfileInner({ user }: { user: AppUser }) {
           <div className="mt-4 grid gap-4 md:grid-cols-2">
             <SessionsPanel canSignOut={canSignOut} />
             <Surface>
-              <p className="font-mono text-[0.68rem] tracking-[0.16em] text-fg-subtle uppercase">
+              <p className="text-xs text-fg-subtle">
                 This device
               </p>
               <p className="mt-2 text-sm text-fg-muted">

@@ -34,7 +34,6 @@ function ArchitecturePage() {
         eyebrow="Architecture"
         title="From request to record, with every layer named."
         lede="Select a component to see what is current in source versus what is not claimed. Motion on the connectors is a reminder that work flows; it is not a performance graph."
-        atmosphere="board"
       />
       <JourneyRail current="architecture" />
       <Section lede="Click a node. The inspector lists implemented scope and the claims this site refuses. Save a field note on the same node after you sign in.">

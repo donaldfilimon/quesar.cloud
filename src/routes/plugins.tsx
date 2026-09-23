@@ -31,7 +31,7 @@ function PluginsPage() {
       </PageHero>
       <Section>
         <NamedGrid items={packs} nameClass="text-abi" />
-        <p className="mt-10 font-mono text-[0.68rem] tracking-[0.16em] text-fg-subtle uppercase">Frozen CLI surface</p>
+        <p className="mt-10 text-xs text-fg-subtle">Frozen CLI surface</p>
         <div className="mt-3">
           <ChipRow items={frozenCli} />
         </div>

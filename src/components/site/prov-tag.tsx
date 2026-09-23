@@ -28,7 +28,7 @@ export function ProvTag({ tag, className }: { tag: Provenance; className?: strin
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 font-mono text-[10px] font-semibold tracking-[0.14em] uppercase",
+        "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-semibold",
         chip,
         className,
       )}

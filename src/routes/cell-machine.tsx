@@ -19,7 +19,6 @@ function CellMachinePage() {
         eyebrow="Cell machine"
         title="A grid that keeps its own time."
         lede="Conway-style cellular automaton, playable here. Research experiment. Not a Quesar product, not a hosted world, and not evidence of a shipped simulation engine."
-        atmosphere="plates"
       >
         <HeroStatus status="research" />
       </PageHero>

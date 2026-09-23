@@ -120,7 +120,7 @@ export function Trailer({
       </div>
       <figcaption className="flex flex-col gap-4 px-4 py-4 sm:px-5">
         <div>
-          <p className="font-mono text-[0.68rem] tracking-[0.16em] text-primary uppercase">{cut.title}</p>
+          <p className="text-xs text-primary">{cut.title}</p>
           <p className="mt-2 max-w-[66ch] text-base leading-7 text-fg">{cut.caption}</p>
         </div>
         {cuts.length > 1 ? (

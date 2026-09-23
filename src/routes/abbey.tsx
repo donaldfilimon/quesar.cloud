@@ -39,7 +39,6 @@ function AbbeyPage() {
         eyebrow="Abbey"
         title="Intelligence Without Limits — with a claims ledger."
         lede="Abbey is the human-facing surface on MLAI architecture. Simple picture first: a local workspace with assistant context. Technical picture: a claims-honest companion over ABI and WDBX. That line belongs to Abbey, not to Quesar. This website does not provision an assistant session."
-        atmosphere="lab"
       >
         <div className="mt-6">
           <StatusBadge status="current" />

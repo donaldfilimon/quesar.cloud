@@ -118,7 +118,7 @@ export function WdbxLiveDemo() {
                     style={{ width: `${Math.max(4, (h.score / topScore) * 100)}%` }}
                   />
                 </div>
-                <div className="mt-2 flex gap-4 font-mono text-[10px] uppercase tracking-widest text-fg-subtle">
+                <div className="mt-2 flex gap-4 text-xs text-fg-subtle">
                   <span>modeled partition {h.partition}</span>
                   <span>{h.doc.tag}</span>
                   <span>cosine</span>
@@ -136,7 +136,7 @@ export function WdbxLiveDemo() {
             ].map((s) => (
               <div key={s.k} className="rounded-xl border border-border bg-bg-subtle p-3.5">
                 <div className="font-mono text-lg font-semibold text-fg tabular">{s.v}</div>
-                <div className="mt-1 font-mono text-[10px] uppercase tracking-widest text-fg-subtle">{s.k}</div>
+                <div className="mt-1 text-xs text-fg-subtle">{s.k}</div>
               </div>
             ))}
           </div>
@@ -144,7 +144,7 @@ export function WdbxLiveDemo() {
 
         {/* block chain */}
         <div className="mt-6 border-t border-border pt-5">
-          <div className="mb-3 font-mono text-[10px] uppercase tracking-widest text-fg-subtle">
+          <div className="mb-3 text-xs text-fg-subtle">
             query block chain — each block hashes its parent
           </div>
           <div className="flex flex-wrap items-center gap-2">

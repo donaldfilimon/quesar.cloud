@@ -28,7 +28,7 @@ function ProductsPage() {
             const accent = product.accent === "aviva" ? "abi" : product.accent;
             return (
               <Surface key={product.slug} accent={accent} className="flex h-full flex-col">
-                <p className="font-mono text-[0.68rem] tracking-[0.16em] text-fg-subtle uppercase">{product.kicker}</p>
+                <p className="text-xs text-fg-subtle">{product.kicker}</p>
                 <h2 className="mt-1 font-display text-3xl tracking-tight">
                   <Link to="/products/$slug" params={{ slug: product.slug }} className="text-fg no-underline hover:underline">
                     {product.name}

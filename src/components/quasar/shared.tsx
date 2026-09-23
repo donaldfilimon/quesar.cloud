@@ -47,7 +47,7 @@ export function QuasarFrame({
           ))}
         </nav>
       </div>
-      <p className="mt-3 font-mono text-[0.68rem] tracking-[0.12em] text-fg-subtle uppercase">
+      <p className="mt-3 text-xs text-fg-subtle">
         Service <span className="normal-case">{origin ?? "…"}</span> · reached from this browser
       </p>
       <div className="mt-8">{children}</div>
@@ -79,7 +79,7 @@ export function Notice({
       role={tone === "error" ? "alert" : undefined}
       className={cn("surface accent-edge p-5", edge, className)}
     >
-      <p className={cn("font-mono text-[0.68rem] tracking-[0.16em] uppercase", label)}>{title}</p>
+      <p className={cn("text-xs", label)}>{title}</p>
       <div className="mt-2 space-y-2 text-sm leading-relaxed text-fg-muted">{children}</div>
     </aside>
   );
@@ -167,7 +167,7 @@ export function SiteStatusBadge({ status }: { status: SiteStatus }) {
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1.5 font-mono text-[0.68rem] font-medium tracking-wide uppercase",
+        "inline-flex items-center gap-1.5 text-xs font-medium",
         statusTone[status],
       )}
     >

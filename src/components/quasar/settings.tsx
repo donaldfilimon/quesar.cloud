@@ -178,7 +178,7 @@ export function QuasarSettings() {
             <dd className="flex flex-wrap items-center gap-3">
               <span
                 className={cn(
-                  "font-mono text-xs uppercase",
+                  "text-xs",
                   health === "available" && "text-status-current",
                   health === "unavailable" && "text-destructive",
                   (health === "unknown" || health === "checking") && "text-fg-subtle",

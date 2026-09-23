@@ -22,7 +22,7 @@ export function ShowcaseWall() {
       <dl className="surface grid grid-cols-3 divide-x divide-border overflow-hidden">
         {showcaseProgram.map((row) => (
           <div key={row.k} className="px-4 py-3">
-            <dt className="font-mono text-[10px] tracking-wide text-fg-subtle uppercase">{row.k}</dt>
+            <dt className="text-xs text-fg-subtle">{row.k}</dt>
             <dd className="mt-1 font-mono text-sm text-fg">{row.v}</dd>
           </div>
         ))}
@@ -54,10 +54,10 @@ export function ShowcaseWall() {
                 <div className="flex flex-1 flex-col gap-3 p-5">
                   <div className="flex flex-wrap items-baseline justify-between gap-2">
                     <h2 className="font-display text-2xl tracking-tight text-fg">{reel.title}</h2>
-                    <span className="font-mono text-[10px] tracking-[0.18em] text-fg-subtle uppercase">{reel.duration}</span>
+                    <span className="text-xs text-fg-subtle">{reel.duration}</span>
                   </div>
                   <p className="text-sm leading-relaxed text-fg-muted">{reel.body}</p>
-                  <span className="mt-auto inline-flex items-center gap-2 pt-3 font-mono text-[10px] tracking-[0.18em] text-accent uppercase">
+                  <span className="mt-auto inline-flex items-center gap-2 pt-3 text-xs text-accent">
                     Enter room
                     <Play className="size-3 transition-transform group-hover:translate-x-1 motion-reduce:transition-none" aria-hidden="true" />
                   </span>

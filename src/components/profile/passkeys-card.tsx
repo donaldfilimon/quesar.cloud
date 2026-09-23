@@ -69,7 +69,7 @@ export function PasskeysCard() {
 
   return (
     <Surface>
-      <p className="font-mono text-[0.68rem] tracking-[0.16em] text-fg-subtle uppercase">
+      <p className="text-xs text-fg-subtle">
         Passkeys
       </p>
       <p className="mt-2 text-sm text-fg-muted">

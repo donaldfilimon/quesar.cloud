@@ -21,7 +21,7 @@
  *   (`src/cinematic/film/kokoro-loader.ts`) imports kokoro.web.js from jsDelivr
  *   and pulls ONNX weights from Hugging Face.
  * - avatars.githubusercontent.com: team avatars (`src/lib/mlai/categories/team.ts`).
- * - fonts.googleapis.com / fonts.gstatic.com: the JetBrains Mono stylesheet.
+ * - fonts: all self-hosted (fontsource), so no font origin is allowed.
  * - challenges.cloudflare.com (script, frame, connect): the Turnstile widget.
  *
  * Extend the specific directive when a surface gains a new external origin;
@@ -58,8 +58,6 @@ export function buildCsp({ dev }: { dev: boolean }): string {
     "https://*.hf.co",
     // PoseNet weights for /tf-pose-demo (@tensorflow-models/posenet default model URL).
     "https://storage.googleapis.com",
-    "https://fonts.gstatic.com",
-    "https://fonts.googleapis.com",
     TURNSTILE,
     ...(dev ? ["ws:", "wss:"] : []),
   ].join(" ");
@@ -67,8 +65,8 @@ export function buildCsp({ dev }: { dev: boolean }): string {
   return [
     "default-src 'self'",
     scriptSrc,
-    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-    "font-src 'self' data: https://fonts.gstatic.com",
+    "style-src 'self' 'unsafe-inline'",
+    "font-src 'self' data:",
     "img-src 'self' data: blob: https://avatars.githubusercontent.com",
     connectSrc,
     "media-src 'self' blob:",

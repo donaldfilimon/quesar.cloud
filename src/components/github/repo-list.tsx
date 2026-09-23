@@ -74,7 +74,7 @@ export function RepoList({ compact = false }: { compact?: boolean }) {
   return (
     <div>
       {state === "ready" ? (
-        <p className="mb-4 font-mono text-[11px] tracking-[0.14em] text-fg-subtle uppercase" role="status">
+        <p className="mb-4 text-xs text-fg-subtle" role="status">
           Live repository metadata from donaldfilimon
         </p>
       ) : null}
@@ -125,7 +125,7 @@ export function RepoList({ compact = false }: { compact?: boolean }) {
                   {repo.owner}/{repo.name}
                 </p>
                 {row?.archived || repo.name === "mlai-website-app" ? (
-                  <span className="font-mono text-[10px] tracking-wide text-fg-subtle uppercase">archived</span>
+                  <span className="text-xs text-fg-subtle">archived</span>
                 ) : null}
               </div>
               <p className="mt-2 text-sm font-medium text-fg">{row?.description || repo.summary}</p>
@@ -158,7 +158,7 @@ export function RepoList({ compact = false }: { compact?: boolean }) {
 
       {!compact && extras.length ? (
         <div className="mt-10">
-          <p className="font-mono text-[0.7rem] tracking-[0.16em] text-fg-subtle uppercase">Also public</p>
+          <p className="text-xs text-fg-subtle">Also public</p>
           <ul className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
             {extras.map((row) => (
               <li key={row.name}>
@@ -177,7 +177,7 @@ export function RepoList({ compact = false }: { compact?: boolean }) {
 
       {!compact && events.length ? (
         <div className="mt-10">
-          <p className="font-mono text-[0.7rem] tracking-[0.16em] text-fg-subtle uppercase">
+          <p className="text-xs text-fg-subtle">
             Recent public activity
           </p>
           <ul className="mt-3 divide-y divide-border overflow-hidden rounded-lg shadow-[var(--shadow-border)]">

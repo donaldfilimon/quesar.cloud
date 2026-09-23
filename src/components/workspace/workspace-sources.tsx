@@ -71,7 +71,7 @@ const FILTERS: readonly (readonly [string, WorkspaceFileKind | null])[] = [
   [KIND_LABEL.pdf, "pdf"],
 ];
 
-const EYEBROW = "font-mono text-[10px] tracking-[0.16em] text-fg-subtle uppercase";
+const EYEBROW = "text-xs text-fg-subtle";
 
 export function WorkspaceSources() {
   const [view, setView] = useState<"rows" | "grid">("rows");
@@ -196,7 +196,7 @@ export function WorkspaceSources() {
             onChange={(event) => setQuery(event.target.value)}
             placeholder="Search files"
             aria-label="Search connected files"
-            className="h-9 w-48 rounded-md border border-input bg-background px-2 text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring/30"
+            className="h-9 w-48 rounded-md border border-input bg-background px-2 text-sm focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-ring"
           />
           <div className="flex rounded-md border border-border" role="group" aria-label="Layout">
             {(
@@ -253,7 +253,7 @@ export function WorkspaceSources() {
               onClick={() => setKind(value)}
               aria-pressed={on}
               className={cn(
-                "rounded-full border px-3 py-1 font-mono text-[10.5px] tracking-[0.08em] uppercase transition-colors",
+                "rounded-full border px-3 py-1 text-xs transition-colors",
                 on ? "border-primary/50 bg-primary/10 text-fg" : "border-border text-fg-muted hover:bg-muted",
               )}
             >

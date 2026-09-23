@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ChipCutaway } from "@/components/diagram/chip-cutaway";
 import { DataTable, PageClose, PageHero, PersonaGrid, Section, SpecList, Surface } from "@/components/site";
 import { StatusBadge } from "@/components/site/status-badge";
+import { HomeControlPlane, HomeProductBoundary } from "@/components/site/home-sections";
 import { integrationApps, layers, wdbxSpecs } from "@/lib/content";
 import { pageHead } from "@/lib/seo";
 
@@ -21,7 +22,6 @@ function PlatformPage() {
         eyebrow="Platform"
         title="Inference, index, and data on machines you own."
         lede="Three layers on one chip: WDBX stores, ABI coordinates, Abbey speaks. Quesar is the product envelope that makes those relationships obvious. Gama is a founder-owned Swift framework — related by author, not claimed as a Quesar surface."
-        atmosphere="plates"
       />
 
       <Section eyebrow="Stack" title="Bottom to top.">
@@ -32,7 +32,7 @@ function PlatformPage() {
           {layers.map((layer) => (
             <Link key={layer.name} to={layer.href} className="no-underline">
               <Surface hover accent={layer.accent} className="grid gap-3 sm:grid-cols-[8rem_1fr] sm:items-baseline">
-                <p className="font-mono text-[0.68rem] tracking-[0.16em] text-fg-subtle uppercase">{layer.layer}</p>
+                <p className="text-xs text-fg-subtle">{layer.layer}</p>
                 <div>
                   <h3 className="font-display text-2xl">{layer.name}</h3>
                   <p className="mt-2 text-sm leading-relaxed text-fg-muted">{layer.body}</p>
@@ -83,6 +83,8 @@ function PlatformPage() {
           </p>
         </Surface>
       </Section>
+      <HomeControlPlane />
+      <HomeProductBoundary />
       <PageClose
         primary={{ to: "/architecture", label: "Architecture" }}
         secondary={[{ to: "/quesar", label: "Quesar" }]}
