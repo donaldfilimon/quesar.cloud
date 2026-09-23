@@ -1,4 +1,4 @@
-import type { Refusals, Services } from '../schemas';
+import type { Refusals } from '../schemas';
 
 /**
  * "What we say no to" — the refusal copy, ported verbatim from the design
@@ -6,7 +6,7 @@ import type { Refusals, Services } from '../schemas';
  * Rendered as `site/Callout` asides on the Services view; `accent` is the
  * product accent axis the handoff assigned each callout.
  */
-export const refusals: Refusals = [
+export const refusals = [
   {
     label: "Scope discipline",
     accent: "abbey",
@@ -17,52 +17,87 @@ export const refusals: Refusals = [
     accent: "wdbx",
     body: "Deliverables ship with provenance-tagged numbers. Targets are framed as targets; nothing is reported as measured until it reproduces on your hardware.",
   },
-];
+] as const satisfies readonly Refusals[number][];
 
-export const services: Services = ([
+/**
+ * The nine engagements rendered on /services. Single source since the
+ * content.ts copy was removed: this is the text the page rendered (the
+ * trimmed wording, without the earlier port's "at scale" / "GPU kernels"
+ * phrasing). Validated by `ServicesSchema` in the content tests.
+ */
+export const services = [
   {
     title: "Autonomy Readiness Audit",
-    description: "Map workflows, prompt surfaces, data paths, and approval gates to determine which tasks are safe to automate and which need human review.",
-    outcomes: ["Risk register", "Control-map", "90-day rollout plan"]
+    description:
+      "Map workflows, prompt surfaces, data paths, and approval gates to determine which tasks are safe to automate.",
+    outcomes: ["Risk register", "Control-map", "90-day rollout plan"],
   },
   {
     title: "WDBX Retrieval Architecture",
-    description: "Design weighted backtrace retrieval pipelines that preserve source context, reduce hallucination surfaces, and support fast vector search at scale.",
-    outcomes: ["Index strategy", "Recall benchmarks", "Trace schema"]
+    description:
+      "Design weighted backtrace retrieval pipelines that preserve source context and support inspectable vector search.",
+    outcomes: ["Index strategy", "Recall benchmarks", "Trace schema"],
   },
   {
     title: "Multi-Agent Orchestration",
-    description: "Implement agent roles, tool permissions, task handoffs, and conflict-resolution policies for complex operational workflows.",
-    outcomes: ["Agent graph", "Tool policy", "Evaluation harness"]
+    description:
+      "Implement agent roles, tool permissions, task handoffs, and conflict-resolution policies.",
+    outcomes: ["Agent graph", "Tool policy", "Evaluation harness"],
   },
   {
     title: "Model & Runtime Optimization",
-    description: "Profile inference paths, memory pressure, GPU kernels, batching behavior, and edge constraints to improve real-world latency and cost.",
-    outcomes: ["Latency profile", "Optimization backlog", "Capacity model"]
+    description:
+      "Profile inference paths, memory pressure, batching, and edge constraints for real-world latency.",
+    outcomes: ["Latency profile", "Optimization backlog", "Capacity model"],
   },
   {
     title: "Safety & Compliance Layering",
-    description: "Embed policy checks, audit trails, red-team scenarios, and evidence capture into AI systems that operate in regulated or high-trust contexts.",
-    outcomes: ["Policy matrix", "Audit events", "Red-team scripts"]
+    description:
+      "Embed policy checks, audit trails, and red-team scenarios into high-trust systems.",
+    outcomes: ["Policy matrix", "Audit events", "Red-team scripts"],
   },
   {
     title: "Private AI Deployment",
-    description: "Package AI workflows for VPC, on-premise, offline, and hybrid environments with secret management, observability, and update paths.",
-    outcomes: ["Deployment topology", "Runbook", "Rollback plan"]
+    description:
+      "Package workflows for VPC, on-premise, offline, and hybrid environments.",
+    outcomes: ["Deployment topology", "Runbook", "Rollback plan"],
   },
   {
     title: "Research Translation",
-    description: "Turn promising papers, prototypes, and notebooks into constrained, documented, production-aware services your engineers can maintain.",
-    outcomes: ["Prototype hardening", "API contract", "Test plan"]
+    description:
+      "Turn papers and notebooks into constrained, documented services engineers can maintain.",
+    outcomes: ["Prototype hardening", "API contract", "Test plan"],
   },
   {
     title: "Executive & Engineering Workshops",
-    description: "Align leadership, security, product, and engineering teams around practical autonomy strategy, risk boundaries, and delivery milestones.",
-    outcomes: ["Decision memo", "Team training", "Architecture review"]
+    description:
+      "Align leadership, security, product, and engineering around autonomy strategy and risk boundaries.",
+    outcomes: ["Decision memo", "Team training", "Architecture review"],
   },
   {
     title: "Continuous Evaluation Systems",
-    description: "Build test suites that evaluate tool use, retrieval faithfulness, safety behavior, regression drift, and user-facing quality over time.",
-    outcomes: ["Eval suite", "Scorecards", "Release gates"]
-  }
-]);
+    description:
+      "Build suites for tool use, retrieval faithfulness, safety behavior, and regression drift.",
+    outcomes: ["Eval suite", "Scorecards", "Release gates"],
+  },
+] as const;
+
+/** The four engagement phases on /services ("How an engagement runs"). */
+export const engagement = [
+  {
+    title: "Audit",
+    body: "Inventory workflows, data, tools, and failure modes. Ends with a risk register the next phase is not allowed to ignore.",
+  },
+  {
+    title: "Design",
+    body: "Bounded architecture: retrieval, policy, personas, deployment topology. Ends with a harness, not a slide.",
+  },
+  {
+    title: "Build",
+    body: "Implement against the harness on hardware you own. Ends with a baseline you can re-run.",
+  },
+  {
+    title: "Harden",
+    body: "Red-team, rollback, observability, and operator training. Ends with a gate, not a demo day.",
+  },
+] as const;

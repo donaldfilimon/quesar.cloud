@@ -5,7 +5,8 @@ import { NextUp } from "./lab";
 import { Surface } from "./section";
 import { StatusBadge } from "./status-badge";
 import { ProvTag, type Provenance } from "./prov-tag";
-import { personas, integrityRules, type StatusKind } from "@/lib/content";
+import { integrityRules, type StatusKind } from "@/lib/content";
+import { personas } from "@/lib/mlai/categories/personas";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
