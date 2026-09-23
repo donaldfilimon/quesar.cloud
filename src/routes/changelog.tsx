@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { PageClose, PageHero, Section, Surface } from "@/components/site";
-import { changelog } from "@/lib/mlai";
+import { changelog } from "@/lib/mlai/categories/changelog";
 
 export const Route = createFileRoute("/changelog")({
   head: () => ({

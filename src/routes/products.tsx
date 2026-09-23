@@ -1,7 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { PageClose, PageHero, RouteFrame, Section, Surface } from "@/components/site";
 import { AppLink } from "@/components/site/app-link";
-import { productJourneys, productPages } from "@/lib/mlai";
+import { productJourneys } from "@/lib/mlai/categories/product-journeys";
+import { products as productPages } from "@/lib/mlai/categories/products";
 import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/products")({

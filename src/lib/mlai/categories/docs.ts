@@ -1,10 +1,10 @@
-import { DocsSchema, type Docs } from '../schemas';
+import type { Docs } from '../schemas';
 
 /**
  * Provenance sources, ported verbatim from the vendored review site's own
  * `sources` lookup map (`vendor/mlai-review/lib/content.ts`). Each document's
  * `sources` array below is a set of keys into this map. They are resolved to
- * objects before `DocsSchema.parse` so the page can link them, matching how
+ * objects below so the page can link them, matching how
  * `projects.ts` inlines its resolved `source` (Ruling B).
  *
  * Only the five keys the ported documents actually use are carried. The
@@ -415,15 +415,13 @@ const raw = [
   },
 ];
 
-export const docs: Docs = DocsSchema.parse(
-  raw.map((doc) => ({
-    ...doc,
-    sources: doc.sources.map((key) => {
-      const source = DOC_SOURCES[key as keyof typeof DOC_SOURCES];
-      // Fail at module load rather than rendering a document with a silently
-      // missing provenance entry.
-      if (!source) throw new Error(`docs.ts: unknown source key "${key}"`);
-      return source;
-    }),
-  })),
-);
+export const docs: Docs = raw.map((doc) => ({
+  ...doc,
+  sources: doc.sources.map((key) => {
+    const source = DOC_SOURCES[key as keyof typeof DOC_SOURCES];
+    // Fail at module load rather than rendering a document with a silently
+    // missing provenance entry.
+    if (!source) throw new Error(`docs.ts: unknown source key "${key}"`);
+    return source;
+  }),
+}));

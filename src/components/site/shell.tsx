@@ -5,10 +5,8 @@ import { SiteHeader } from "./header";
 import { AppToaster } from "./toaster";
 
 /**
- * Site chrome. Route changes animate through the router's view transitions
- * (`defaultViewTransition` in `src/router.tsx`, skipped under reduced motion)
- * and scroll position is the router's `scrollRestoration`; the route tree is
- * never remounted here.
+ * Site chrome. Scroll position is the router's `scrollRestoration`; the route
+ * tree is never remounted here, so state and focus survive navigation.
  */
 export function SiteShell({ children }: { children: ReactNode }) {
   return (

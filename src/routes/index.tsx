@@ -6,7 +6,7 @@ import { HomeResearchPreview } from "@/components/site/home-sections";
 import { Trailer } from "@/components/site/trailer";
 import { Button } from "@/components/ui/button";
 import { homePrivacy, homeStart, site } from "@/lib/content";
-import { wdbxFacts } from "@/lib/mlai/pages";
+import { wdbxFacts } from "@/lib/mlai/wdbx-facts";
 import { jsonLdScript } from "@/lib/mlai/structured-data";
 import { pageHead } from "@/lib/seo";
 import { cn } from "@/lib/utils";
@@ -111,7 +111,7 @@ function Hero() {
       <div className="mx-auto grid max-w-6xl gap-12 px-4 pt-14 pb-16 sm:px-6 sm:pt-20 sm:pb-24 lg:grid-cols-12 lg:items-end lg:gap-10">
         <div className="lg:col-span-7">
           <p className="eyebrow">Quesar by MLAI</p>
-          <h1 className="display-title mt-6 max-w-[14ch]">AI memory that can show its sources.</h1>
+          <h1 className="display-title mt-6 lg:max-w-[14ch]">AI memory that can show its sources.</h1>
           <p className="mt-7 max-w-[54ch] text-lg leading-8 text-fg-muted">
             Quesar is MLAI's infrastructure for persistent AI. Every answer keeps a weighted chain back to the records
             it came from, and the whole stack runs on machines you own.

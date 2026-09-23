@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
-import { research, researchContext } from "@/lib/mlai";
+import { research } from "@/lib/mlai/categories/research";
+import { researchContext } from "@/lib/mlai/categories/research-context";
 import { cn } from "@/lib/utils";
 
 export function ResearchSidebar({ current }: { current?: string }) {

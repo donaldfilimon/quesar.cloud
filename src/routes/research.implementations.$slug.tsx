@@ -3,7 +3,7 @@ import { ArticleBody, SourceChips } from "@/components/site/article";
 import { Crumbs } from "@/components/site/crumbs";
 import { ResearchSidebar } from "@/components/site/research-nav";
 import { BulletSurface, ChipRow, PageClose, PageHero, Pager, Section } from "@/components/site";
-import { researchContext } from "@/lib/mlai";
+import { researchContext } from "@/lib/mlai/categories/research-context";
 import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/research/implementations/$slug")({

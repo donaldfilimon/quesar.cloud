@@ -8,7 +8,7 @@ export function AuthSlot() {
   if (staticSite) {
     return (
       <span
-        className="inline-flex h-11 items-center px-3 text-xs text-fg-subtle"
+        className="hidden h-11 items-center px-3 text-xs whitespace-nowrap text-fg-subtle sm:inline-flex"
         title="Static preview: sign-in runs on the server deployment"
       >
         Static preview
@@ -16,14 +16,14 @@ export function AuthSlot() {
     );
   }
   if (isPending) {
-    return <div className="h-11 w-24 animate-pulse rounded-md bg-bg-subtle" aria-hidden="true" />;
+    return <div className="h-11 w-16 animate-pulse rounded-md bg-bg-subtle sm:w-20" aria-hidden="true" />;
   }
   return (
     <>
       <SignedOut>
         <Link
           to="/login"
-          className="inline-flex h-11 items-center rounded-md px-3 text-sm font-medium text-fg-muted no-underline hover:text-fg"
+          className="inline-flex h-11 items-center rounded-md px-2.5 text-sm font-medium whitespace-nowrap text-fg-muted no-underline hover:text-fg"
         >
           Sign in
         </Link>

@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { CopyGrid, FilterChips, PageClose, PageHero, RouteFrame, Section } from "@/components/site";
-import { blog } from "@/lib/mlai";
+import { blog } from "@/lib/mlai/categories/blog";
 import { blogRubrics } from "@/lib/mlai/pages";
 import { pageHead } from "@/lib/seo";
 

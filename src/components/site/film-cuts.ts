@@ -11,14 +11,14 @@ export const filmCuts = [
     id: "wafer",
     title: "The wafer",
     src: "/media/atmosphere-wafer.mp4",
-    poster: "/media/atmosphere-wafer.jpg",
+    poster: "/media/atmosphere-wafer.webp",
     caption: "Compute is pictured here. It is not a measured result.",
   },
   {
     id: "board",
     title: "The board",
     src: "/media/atmosphere-board.mp4",
-    poster: "/media/atmosphere-board.jpg",
+    poster: "/media/atmosphere-board.webp",
     caption: "Storage you can inspect. A film is orientation, not a benchmark.",
   },
 ] as const;

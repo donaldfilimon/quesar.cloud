@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { CopyGrid, PageClose, PageHero, RouteFrame, Section } from "@/components/site";
-import { projects } from "@/lib/mlai";
+import { projects } from "@/lib/mlai/categories/projects";
 import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/projects")({

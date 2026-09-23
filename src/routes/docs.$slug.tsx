@@ -4,7 +4,7 @@ import { MathArticleBody } from "@/components/site/math-article";
 import { DocOutline, DocSidebar } from "@/components/site/doc-nav";
 import { Crumbs } from "@/components/site/crumbs";
 import { PageClose, PageHero, Pager, Section } from "@/components/site";
-import { docs } from "@/lib/mlai";
+import { docs } from "@/lib/mlai/categories/docs";
 import { docLd, jsonLdScript } from "@/lib/mlai/structured-data";
 import { pageHead } from "@/lib/seo";
 

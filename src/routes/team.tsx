@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Users } from "lucide-react";
 import { PageClose, PageHero, RouteFrame, Section, Surface } from "@/components/site";
 import { ProfilePhoto } from "@/components/site/profile-photo";
-import { team } from "@/lib/mlai";
+import { team } from "@/lib/mlai/categories/team";
 import { teamIntro } from "@/lib/mlai/pages";
 import { pageHead } from "@/lib/seo";
 

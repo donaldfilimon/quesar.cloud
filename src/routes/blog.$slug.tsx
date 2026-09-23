@@ -2,7 +2,7 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { MathArticleBody } from "@/components/site/math-article";
 import { PageClose, PageHero, Section } from "@/components/site";
 import { Button } from "@/components/ui/button";
-import { blog } from "@/lib/mlai";
+import { blog } from "@/lib/mlai/categories/blog";
 import { blogPostingLd, jsonLdScript } from "@/lib/mlai/structured-data";
 import { pageHead } from "@/lib/seo";
 

@@ -4,7 +4,7 @@ import { MathArticleBody } from "@/components/site/math-article";
 import { CopyGrid, PageClose, PageHero, Section } from "@/components/site";
 import { ProfilePhoto } from "@/components/site/profile-photo";
 import { Button } from "@/components/ui/button";
-import { team } from "@/lib/mlai";
+import { team } from "@/lib/mlai/categories/team";
 import { jsonLdScript, personLd } from "@/lib/mlai/structured-data";
 import { pageHead } from "@/lib/seo";
 

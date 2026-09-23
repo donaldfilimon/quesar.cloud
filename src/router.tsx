@@ -9,8 +9,8 @@ export function getRouter() {
     defaultNotFoundComponent: AppNotFoundComponent,
     defaultPreload: "intent",
     scrollRestoration: true,
-    // Cross-fade between routes where the browser supports view transitions;
-    // styles.css turns the animation off under prefers-reduced-motion.
-    defaultViewTransition: true,
+    // No defaultViewTransition: the router leaves the "Transition was skipped"
+    // rejection unhandled whenever navigations overlap or the tab is hidden,
+    // which floods the console. Route changes are instant by design.
   });
 }
