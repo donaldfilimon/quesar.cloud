@@ -8,20 +8,30 @@ export function TelemetrySummaryPanel() {
   const [summary, setSummary] = useState<TelemetrySummary | null>(null);
   const [error, setError] = useState("");
 
-  const load = useCallback(async () => {
+  // State is only set from the settled promise, so the mount effect below
+  // never updates state synchronously.
+  const fetchSummary = useCallback(
+    () =>
+      adminTelemetry().then(
+        (result) => {
+          if (!result.ok) setError(result.message);
+          else setSummary(result.summary);
+        },
+        (cause: unknown) => {
+          setError(unexpected("Couldn't load usage data. Refresh to retry.", cause));
+        },
+      ),
+    [],
+  );
+
+  const load = () => {
     setError("");
-    try {
-      const result = await adminTelemetry();
-      if (!result.ok) setError(result.message);
-      else setSummary(result.summary);
-    } catch (cause) {
-      setError(unexpected("Couldn't load usage data. Refresh to retry.", cause));
-    }
-  }, []);
+    void fetchSummary();
+  };
 
   useEffect(() => {
-    void load();
-  }, [load]);
+    void fetchSummary();
+  }, [fetchSummary]);
 
   const entries = summary ? Object.entries(summary.events) : [];
   return (
@@ -34,7 +44,7 @@ export function TelemetrySummaryPanel() {
       {error ? (
         <p role="alert" className="text-sm text-status-partial">
           {error}{" "}
-          <button type="button" className="underline" onClick={() => void load()}>
+          <button type="button" className="underline" onClick={load}>
             Retry
           </button>
         </p>
@@ -86,7 +96,7 @@ export function TelemetrySummaryPanel() {
               </tbody>
             </table>
           )}
-          <Button variant="secondary" className="w-fit" onClick={() => void load()}>
+          <Button variant="secondary" className="w-fit" onClick={load}>
             Refresh
           </Button>
         </>

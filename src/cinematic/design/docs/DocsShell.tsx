@@ -15,9 +15,13 @@ export function SearchPalette({
   setRoute: (id: string) => void;
 }): ReactNode {
   const [q, setQ] = useState("");
-  useEffect(() => {
+  // Clear the query each time the palette opens (adjust state on prop change
+  // during render, per react.dev "storing information from previous renders").
+  const [prevOpen, setPrevOpen] = useState(open);
+  if (open !== prevOpen) {
+    setPrevOpen(open);
     if (open) setQ("");
-  }, [open]);
+  }
   useEffect(() => {
     const h = (e: KeyboardEvent): void => {
       if (open && e.key === "Escape") onClose();

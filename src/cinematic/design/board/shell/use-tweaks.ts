@@ -15,7 +15,7 @@ export function useTweaks<T extends Record<string, unknown>>(defaults: T): reado
   // Accepts either setTweak('key', value) or setTweak({ key: value, ... }) so a
   // useState-style call doesn't write a "[object Object]" key into the persisted
   // JSON block.
-  const setTweak = useCallback(((keyOrEdits: keyof T | Partial<T>, val?: unknown): void => {
+  const setTweak = useCallback((keyOrEdits: keyof T | Partial<T>, val?: unknown): void => {
     const edits: Partial<T> = typeof keyOrEdits === "object" && keyOrEdits !== null
       ? keyOrEdits
       : ({ [keyOrEdits as keyof T]: val } as Partial<T>);
@@ -24,6 +24,6 @@ export function useTweaks<T extends Record<string, unknown>>(defaults: T): reado
     // Same-window signal so in-page listeners can react — the parent message
     // only reaches the host, not peers.
     window.dispatchEvent(new CustomEvent("tweakchange", { detail: edits }));
-  }) as SetTweak<T>, []);
+  }, []) as SetTweak<T>;
   return [values, setTweak] as const;
 }

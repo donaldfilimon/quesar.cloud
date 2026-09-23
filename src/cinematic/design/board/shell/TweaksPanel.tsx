@@ -6,7 +6,7 @@
    Converted from tweaks-panel.jsx — globals removed, fully typed.
    ════════════════════════════════════════════════════════════════ */
 import {
-  useState, useRef, useEffect, useCallback,
+  useState, useRef, useEffect, useLayoutEffect, useCallback,
   type ReactNode, type PointerEvent as ReactPointerEvent, type MouseEvent as ReactMouseEvent,
 } from "react";
 
@@ -146,9 +146,15 @@ export function TweaksPanel({ title = "Tweaks", children }: { title?: string; ch
     panel.style.bottom = `${offsetRef.current.y}px`;
   }, []);
 
+  // Position the panel from the drag offset before it paints. The offset lives
+  // in a ref (drags write the panel's style directly), so it is applied here
+  // rather than read during render.
+  useLayoutEffect(() => {
+    if (open) clampToViewport();
+  }, [open, clampToViewport]);
+
   useEffect(() => {
     if (!open) return;
-    clampToViewport();
     if (typeof ResizeObserver === "undefined") {
       window.addEventListener("resize", clampToViewport);
       return () => window.removeEventListener("resize", clampToViewport);
@@ -205,7 +211,6 @@ export function TweaksPanel({ title = "Tweaks", children }: { title?: string; ch
         ref={dragRef}
         className="twk-panel"
         data-omelette-chrome=""
-        style={{ right: offsetRef.current.x, bottom: offsetRef.current.y }}
       >
         <div className="twk-hd" onMouseDown={onDragStart}>
           <b>{title}</b>
@@ -320,7 +325,9 @@ export function TweakRadio({
   // The active value is read by pointer-move handlers attached for the lifetime
   // of a drag — ref it so a stale closure doesn't fire onChange for every move.
   const valueRef = useRef(value);
-  valueRef.current = value;
+  useLayoutEffect(() => {
+    valueRef.current = value;
+  }, [value]);
 
   const labelLen = (o: TweakOption): number => String(typeof o === "object" ? o.label : o).length;
   const maxLen = options.reduce((m, o) => Math.max(m, labelLen(o)), 0);

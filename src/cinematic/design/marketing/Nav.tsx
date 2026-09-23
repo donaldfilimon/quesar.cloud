@@ -23,9 +23,13 @@ interface CommandPaletteProps {
 function CommandPalette({ open, onClose }: CommandPaletteProps) {
   const [q, setQ] = useState("");
 
-  useEffect(() => {
+  // Clear the query each time the palette opens (adjust state on prop change
+  // during render, per react.dev "storing information from previous renders").
+  const [prevOpen, setPrevOpen] = useState(open);
+  if (open !== prevOpen) {
+    setPrevOpen(open);
     if (open) setQ("");
-  }, [open]);
+  }
 
   useEffect(() => {
     const h = (e: KeyboardEvent) => {

@@ -8,6 +8,7 @@
    only; this view never holds one. A source the user has not linked comes back
    as `unconfigured` and renders a Connect link rather than an error. Files open
    at the provider in a new tab, exactly as in mlai. */
+import { useHydrated } from "@tanstack/react-router";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Cloud,
@@ -84,22 +85,33 @@ export function WorkspaceSources() {
   const [busy, setBusy] = useState<WorkspaceProviderSlug | null>(null);
 
   /* The OAuth callback returns here with ?connected=<provider> or ?error=<code>.
-     Show it once, then drop it from the address bar. */
-  useEffect(() => {
+     Show it once, then drop it from the address bar. The URL is read on the
+     first client render after hydration (the server can't see it, and the
+     hydration pass must match the server HTML); the address bar is rewritten
+     in the effect once that read has happened. */
+  const hydrated = useHydrated();
+  const [callbackRead, setCallbackRead] = useState(false);
+  if (hydrated && !callbackRead) {
+    setCallbackRead(true);
     const params = new URLSearchParams(window.location.search);
     const connected = params.get("connected");
     const error = params.get("error");
-    if (!connected && !error) return;
     if (connected === "google" || connected === "microsoft") {
       setNotice({ tone: "ok", text: `${connected === "google" ? "Google Drive" : "SharePoint / OneDrive"} connected.` });
     } else if (error) {
       setNotice({ tone: "error", text: describeCallbackError(error) });
     }
+  }
+
+  useEffect(() => {
+    if (!callbackRead) return;
+    const params = new URLSearchParams(window.location.search);
+    if (!params.get("connected") && !params.get("error")) return;
     params.delete("connected");
     params.delete("error");
     const rest = params.toString();
     window.history.replaceState(window.history.state, "", `${window.location.pathname}${rest ? `?${rest}` : ""}`);
-  }, []);
+  }, [callbackRead]);
 
   useEffect(() => {
     const controller = new AbortController();

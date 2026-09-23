@@ -16,6 +16,10 @@ const QUERY_TOKENS = [
   { t: "Compare ", hot: true }, { t: "these two designs and " }, { t: "flag ", hot: true },
   { t: "the ", hot: false }, { t: "risks", hot: true }, { t: ".", hot: false },
 ];
+/* Character offset of each query token within the full query text. */
+const TOKEN_STARTS: readonly number[] = QUERY_TOKENS.map((_, i) =>
+  QUERY_TOKENS.slice(0, i).reduce((n, tok) => n + tok.t.length, 0),
+);
 const ROUTE_PERSONAS = [
   { name: "Abbey", role: "Analytical · supportive", w: 0.62, accent: "#34d399" },
   { name: "Aviva", role: "Creative · exploratory", w: 0.14, accent: "#a78bfa" },
@@ -42,9 +46,8 @@ export function ScenePersonaRouting() {
   const winnerIdx = 0;
   const winnerCY = cardTop + cardH / 2;
 
-  let acc = 0;
   const tokenEls = QUERY_TOKENS.map((tok, i) => {
-    const start = acc; acc += tok.t.length;
+    const start = TOKEN_STARTS[i] ?? 0;
     const vis = Math.max(0, Math.min(tok.t.length, showChars - start));
     const shown = tok.t.slice(0, vis);
     const isHot = tok.hot && hot > 0.1;

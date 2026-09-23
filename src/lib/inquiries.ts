@@ -19,7 +19,7 @@ export { INQUIRY_LIMITS, TOPICS, type InquiryResult, type InquiryTopic } from "@
 const optionalSession = createMiddleware({ type: "function" }).server(async ({ next }) => {
   const { assertSameSiteRequest } = await import("@/lib/auth/isolation.server");
   assertSameSiteRequest();
-  let userId: string | null = null;
+  let userId: string | null;
   try {
     const { getSessionUser } = await import("@/lib/auth/verify.server");
     userId = (await getSessionUser())?.id ?? null;

@@ -11,6 +11,16 @@ export function readStoredTheme(): Theme | null {
   return null;
 }
 
+const themeListeners = new Set<() => void>();
+
+/** Subscribe to `applyTheme` calls (for `useSyncExternalStore`). */
+export function subscribeTheme(listener: () => void): () => void {
+  themeListeners.add(listener);
+  return () => {
+    themeListeners.delete(listener);
+  };
+}
+
 export function applyTheme(theme: Theme) {
   document.documentElement.dataset.theme = theme;
   document.documentElement.classList.toggle("dark", theme === "dark");
@@ -19,6 +29,17 @@ export function applyTheme(theme: Theme) {
   } catch {
     /* private mode */
   }
+  for (const listener of themeListeners) listener();
+}
+
+/**
+ * The theme the page is showing: the one the boot script or `applyTheme` put on
+ * `<html data-theme>`, else the stored/system preference. Client only.
+ */
+export function currentTheme(): Theme {
+  const applied = document.documentElement.dataset.theme;
+  if (applied === "dark" || applied === "light") return applied;
+  return resolveTheme();
 }
 
 export function resolveTheme(): Theme {

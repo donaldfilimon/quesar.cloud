@@ -1,3 +1,4 @@
+import { useHydrated } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { readStore, writeStore } from "@/lib/local-store";
@@ -12,7 +13,13 @@ export function VaultApp() {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
 
-  useEffect(() => {
+  // Notes live in localStorage, which the server can't read: the server render
+  // and the hydration pass show the empty list, then the first client render
+  // after hydration loads the stored notes (once, adjusted during render).
+  const hydrated = useHydrated();
+  const [loaded, setLoaded] = useState(false);
+  if (hydrated && !loaded) {
+    setLoaded(true);
     const stored = readStore<Note[]>(KEY, []);
     setNotes(stored);
     const first = stored[0];
@@ -21,11 +28,13 @@ export function VaultApp() {
       setTitle(first.title);
       setBody(first.body);
     }
-  }, []);
+  }
 
   useEffect(() => {
-    writeStore(KEY, notes);
-  }, [notes]);
+    // Never write before the stored notes are loaded, or the empty initial list
+    // would overwrite them.
+    if (loaded) writeStore(KEY, notes);
+  }, [loaded, notes]);
 
   const current = useMemo(() => notes.find((n) => n.id === active) ?? null, [notes, active]);
 

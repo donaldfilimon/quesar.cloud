@@ -65,9 +65,13 @@ export function ArchitectureDiagram({
   const selected = selectedId ?? internal;
   const node = useMemo(() => nodeById(selected), [selected]);
 
-  useEffect(() => {
+  // Remember the last controlled selection so the diagram keeps it if the
+  // parent stops controlling (adjusted during render, not in an effect).
+  const [prevSelectedId, setPrevSelectedId] = useState(selectedId);
+  if (selectedId !== prevSelectedId) {
+    setPrevSelectedId(selectedId);
     if (selectedId) setInternal(selectedId);
-  }, [selectedId]);
+  }
 
   const select = useCallback(
     (id: string) => {

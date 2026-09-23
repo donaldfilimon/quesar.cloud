@@ -40,9 +40,17 @@ const navBtn: CSSProperties = {
 export default function Docs(): ReactNode {
   const [route, setRoute] = useState("quickstart");
   const [search, setSearch] = useState(false);
-  const [active, setActive] = useState<string | null>(null);
   const mainRef = useRef<HTMLElement>(null);
   const page = PAGES[route];
+  // Active heading starts at the page's first entry and resets to it whenever the
+  // route changes (adjusted during render, not in an effect).
+  const firstHeading = (id: string): string | null => PAGES[id]?.toc[0]?.[0] ?? null;
+  const [active, setActive] = useState<string | null>(() => firstHeading(route));
+  const [prevRoute, setPrevRoute] = useState(route);
+  if (route !== prevRoute) {
+    setPrevRoute(route);
+    setActive(firstHeading(route));
+  }
 
   useEffect(() => {
     const h = (e: KeyboardEvent): void => {
@@ -55,11 +63,9 @@ export default function Docs(): ReactNode {
     return () => removeEventListener("keydown", h);
   }, []);
 
-  // reset scroll + active heading on route change
+  // reset scroll on route change (the active heading resets during render above)
   useEffect(() => {
     if (mainRef.current) mainRef.current.scrollTop = 0;
-    const first = page?.toc[0];
-    setActive(first ? first[0] : null);
   }, [route, page]);
 
   // scroll-spy

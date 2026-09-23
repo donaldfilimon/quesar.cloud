@@ -32,11 +32,27 @@ export function WdbxLiveDemo() {
     setBlocks([...engine.blocks].slice(-5));
   };
 
-  // Mount-only by design: seeds the demo with the first preset once. `run` is
-  // recreated every render, so listing it would re-run the seed query on every
-  // keystroke and clobber whatever the user typed.
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => run(PRESETS[0] ?? ""), []);
+  // Seed the demo with the first preset once, on the client only (the query
+  // stats carry timings and timestamps, so the server render stays empty).
+  // The search mutates the engine's query log, so it runs in the effect, never
+  // during render; its result is committed on the next microtask. Mount-only
+  // on purpose: re-running would clobber whatever the visitor typed.
+  useEffect(() => {
+    let cancelled = false;
+    const seed = (PRESETS[0] ?? "").trim();
+    if (!seed) return;
+    const { hits: h, stats: s } = engine.search(seed, 5);
+    const recent = [...engine.blocks].slice(-5);
+    queueMicrotask(() => {
+      if (cancelled) return;
+      setHits(h);
+      setStats(s);
+      setBlocks(recent);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [engine]);
 
   const topScore = hits.length ? Math.max(hits[0]?.score ?? 1e-6, 1e-6) : 1;
 

@@ -1,9 +1,12 @@
 import {
   useState,
   useEffect,
+  useLayoutEffect,
   useRef,
-  type ReactNode,
   type CSSProperties,
+  type Dispatch,
+  type ReactNode,
+  type SetStateAction,
 } from "react";
 
 /* ──────────────────────────────────────────────────────────────────────────
@@ -307,6 +310,44 @@ interface GalaxyPoint {
   z: number;
 }
 
+/* One knob of the generative studio. Module-level so its identity is stable
+   across renders (a component created inside Generative would remount, and
+   drop the range input's focus, on every change). */
+function GenSlider({
+  k,
+  label,
+  min,
+  max,
+  p,
+  setP,
+}: {
+  k: GenParamKey;
+  label: string;
+  min: number;
+  max: number;
+  p: GenParams;
+  setP: Dispatch<SetStateAction<GenParams>>;
+}) {
+  return (
+    <label className="block mb-3">
+      <div className="flex justify-between text-xs mb-1">
+        <span className="text-slate-300">{label}</span>
+        <span className="text-cyan-400 font-mono">{p[k]}</span>
+      </div>
+      <input
+        type="range"
+        min={min}
+        max={max}
+        value={p[k]}
+        onChange={(e) =>
+          setP((s) => ({ ...s, [k]: +e.target.value }))
+        }
+        className="w-full"
+      />
+    </label>
+  );
+}
+
 function Generative() {
   const [mode, setMode] = useState<Mode>("Flow field");
   const [p, setP] = useState<GenParams>({
@@ -315,8 +356,11 @@ function Generative() {
     hue: 190,
     trail: 50,
   });
+  // Latest knobs for the animation loop, synced after each commit (not during render).
   const pr = useRef<GenParams>(p);
-  pr.current = p;
+  useLayoutEffect(() => {
+    pr.current = p;
+  }, [p]);
   const ref = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -472,35 +516,6 @@ function Generative() {
     // slider move — a visible hitch, not a correctness gain.
   }, [mode, p.count]);
 
-  const Slider = ({
-    k,
-    label,
-    min,
-    max,
-  }: {
-    k: GenParamKey;
-    label: string;
-    min: number;
-    max: number;
-  }) => (
-    <label className="block mb-3">
-      <div className="flex justify-between text-xs mb-1">
-        <span className="text-slate-300">{label}</span>
-        <span className="text-cyan-400 font-mono">{p[k]}</span>
-      </div>
-      <input
-        type="range"
-        min={min}
-        max={max}
-        value={p[k]}
-        onChange={(e) =>
-          setP((s) => ({ ...s, [k]: +e.target.value }))
-        }
-        className="w-full"
-      />
-    </label>
-  );
-
   return (
     <div
       className="relative rounded-3xl overflow-hidden border border-white/10"
@@ -526,10 +541,10 @@ function Generative() {
             </button>
           ))}
         </div>
-        <Slider k="count" label="Count" min={1} max={100} />
-        <Slider k="speed" label="Speed" min={5} max={150} />
-        <Slider k="hue" label="Hue" min={0} max={360} />
-        <Slider k="trail" label="Trail" min={0} max={100} />
+        <GenSlider k="count" label="Count" min={1} max={100} p={p} setP={setP} />
+        <GenSlider k="speed" label="Speed" min={5} max={150} p={p} setP={setP} />
+        <GenSlider k="hue" label="Hue" min={0} max={360} p={p} setP={setP} />
+        <GenSlider k="trail" label="Trail" min={0} max={100} p={p} setP={setP} />
         <button
           onClick={() =>
             setP({

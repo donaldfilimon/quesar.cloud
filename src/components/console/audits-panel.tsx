@@ -30,18 +30,29 @@ export function AuditsPanel() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
 
+  // State is only set from the settled promise, so the mount effect below
+  // never updates state synchronously.
+  const fetchAudits = useCallback(
+    () =>
+      listMyAudits().then(
+        (rows) => {
+          setAudits(rows);
+        },
+        (cause: unknown) => {
+          setError(unexpected("Your audit history could not be loaded right now.", cause));
+        },
+      ),
+    [],
+  );
+
   const refresh = useCallback(async () => {
     setError("");
-    try {
-      setAudits(await listMyAudits());
-    } catch (cause) {
-      setError(unexpected("Your audit history could not be loaded right now.", cause));
-    }
-  }, []);
+    await fetchAudits();
+  }, [fetchAudits]);
 
   useEffect(() => {
-    void refresh();
-  }, [refresh]);
+    void fetchAudits();
+  }, [fetchAudits]);
 
   async function open(id: string, download = false) {
     setBusy(true);

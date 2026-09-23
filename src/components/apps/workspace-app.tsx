@@ -1,3 +1,4 @@
+import { useHydrated } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { askPersonaFromClient } from "@/lib/ai";
@@ -20,24 +21,40 @@ export function WorkspaceApp() {
   const [answer, setAnswer] = useState("");
   const [status, setStatus] = useState<"idle" | "asking" | "error">("idle");
 
-  useEffect(() => {
+  // Documents live in localStorage, which the server can't read: the server
+  // render and the hydration pass show the welcome draft, then the first client
+  // render after hydration loads the stored documents (or seeds the welcome
+  // document) once, adjusted during render.
+  const hydrated = useHydrated();
+  const [loaded, setLoaded] = useState(false);
+  // The welcome document used when nothing is stored yet. Created once per mount
+  // (lazy initializer); it is only rendered after the load below adopts it.
+  const [seed] = useState<Doc>(() => ({
+    id: crypto.randomUUID(),
+    title: "Welcome",
+    body: WELCOME_BODY,
+    updated: Date.now(),
+  }));
+  if (hydrated && !loaded) {
+    setLoaded(true);
     const stored = readStore<Doc[]>(KEY, []);
-    if (stored.length) {
+    const first = stored[0];
+    if (first) {
       setDocs(stored);
-      const first = stored[0];
       setActive(first.id);
       setTitle(first.title);
       setBody(first.body);
-      return;
+    } else {
+      setDocs([seed]);
+      setActive(seed.id);
     }
-    const seed: Doc = { id: crypto.randomUUID(), title: "Welcome", body: WELCOME_BODY, updated: Date.now() };
-    setDocs([seed]);
-    setActive(seed.id);
-  }, []);
+  }
 
   useEffect(() => {
-    writeStore(KEY, docs);
-  }, [docs]);
+    // Never write before the stored documents are loaded, or the empty initial
+    // list would overwrite them.
+    if (loaded) writeStore(KEY, docs);
+  }, [loaded, docs]);
 
   const current = docs.find((doc) => doc.id === active) ?? null;
   const [query, setQuery] = useState("");

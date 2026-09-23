@@ -1,5 +1,5 @@
 import { type FormEvent, useCallback, useEffect, useRef, useState } from "react";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useHydrated } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { NextUp, PageHero, Section, Surface } from "@/components/site";
 import { Button } from "@/components/ui/button";
@@ -48,19 +48,34 @@ function ContactPage() {
   const [saved, setSaved] = useState<Inquiry[]>([]);
   const [status, setStatus] = useState<"idle" | "saving" | "done" | "error">("idle");
   const [error, setError] = useState("");
-  const [turnstile, setTurnstile] = useState<TurnstileConfig | "loading" | "unreachable">("loading");
+  // The static build has no server to ask: Turnstile is off from the start.
+  const [turnstile, setTurnstile] = useState<TurnstileConfig | "loading" | "unreachable">(() =>
+    staticSite ? { state: "off" } : "loading",
+  );
   const [turnstileToken, setTurnstileToken] = useState("");
   const [turnstileFailed, setTurnstileFailed] = useState(false);
   const turnstileRef = useRef<TurnstileHandle>(null);
   const onTurnstileError = useCallback(() => setTurnstileFailed(true), []);
 
-  useEffect(() => {
+  // Local receipts and the signed-in user's name/email are client-only: the
+  // server render and the hydration pass leave them empty, then the first
+  // client render after hydration fills them in (adjusted during render).
+  const hydrated = useHydrated();
+  const [receiptsLoaded, setReceiptsLoaded] = useState(false);
+  if (hydrated && !receiptsLoaded) {
+    setReceiptsLoaded(true);
     setSaved(readStore<Inquiry[]>(KEY, []));
+  }
+  // Prefill from the account while a field is empty (as before, a field cleared
+  // while signed in refills).
+  if (hydrated && user) {
+    if (!name && user.displayName) setName(user.displayName);
+    if (!email && user.primaryEmail) setEmail(user.primaryEmail);
+  }
+
+  useEffect(() => {
+    if (staticSite) return;
     let cancelled = false;
-    if (staticSite) {
-      setTurnstile({ state: "off" });
-      return;
-    }
     getTurnstileConfig()
       .then((config) => {
         if (!cancelled) setTurnstile(config);
@@ -73,14 +88,11 @@ function ContactPage() {
     };
   }, []);
 
-  useEffect(() => {
-    if (!user) return;
-    if (!name && user.displayName) setName(user.displayName);
-    if (!email && user.primaryEmail) setEmail(user.primaryEmail);
-  }, [user, name, email]);
-
   const needsToken = typeof turnstile === "object" && turnstile.state === "ready";
+  // Also blocked until hydration: the prerendered static page must not offer a
+  // live submit button before the form handler is attached.
   const blocked =
+    !hydrated ||
     turnstile === "loading" ||
     turnstile === "unreachable" ||
     (typeof turnstile === "object" && turnstile.state === "misconfigured") ||

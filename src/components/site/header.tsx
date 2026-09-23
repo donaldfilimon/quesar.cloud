@@ -1,6 +1,6 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { Menu, X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { nav } from "@/lib/content";
 import { cn } from "@/lib/utils";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
@@ -49,9 +49,12 @@ export function SiteHeader() {
   const { user } = useCurrentUserState();
   const [open, setOpen] = useState(false);
 
-  useEffect(() => {
+  // Close the mobile menu on navigation (adjusted during render, not in an effect).
+  const [prevPathname, setPrevPathname] = useState(pathname);
+  if (pathname !== prevPathname) {
+    setPrevPathname(pathname);
     setOpen(false);
-  }, [pathname]);
+  }
 
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-bg/78 backdrop-blur-md">
