@@ -11,10 +11,12 @@
 import { useRef, useEffect, useMemo } from "react";
 import { C, FONT, clamp } from "../film/tokens";
 import { fade } from "../film/easing";
-import { Stage, Sprite, useTime, useTimeline } from "../film/engine";
+import { Stage, Sprite } from "../film/engine";
+import { useTime, useTimeline } from "../film/timeline-context";
 import { Grain, Vignette, GridBG } from "../film/primitives";
 import { NeuralLayer } from "../film/neural";
-import { speak, lineSpeechDur, VoiceToggle, stopSpeech, setSpeechPlaying, primeNeural, useVoiceReady } from "../film/narration";
+import { VoiceToggle } from "../film/narration";
+import { speak, lineSpeechDur, stopSpeech, setSpeechPlaying, primeNeural, useVoiceReady } from "../film/speech";
 import { SceneOpen, SceneClose } from "../film/scenes/title";
 import { Scene3 } from "../film/scenes/intro";
 import { SceneStorage } from "../film/scenes/extra";

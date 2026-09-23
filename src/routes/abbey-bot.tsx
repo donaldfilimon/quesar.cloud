@@ -1,6 +1,7 @@
 import { type FormEvent, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { PersonaRouter, scoreMessage } from "@/components/apps/persona-router";
+import { PersonaRouter } from "@/components/apps/persona-router";
+import { scoreMessage } from "@/components/apps/persona-score";
 import { PageClose, PageHero, Section } from "@/components/site";
 import { Button } from "@/components/ui/button";
 import { askPersonaFromClient } from "@/lib/ai";

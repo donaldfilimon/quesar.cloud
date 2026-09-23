@@ -1,10 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { docNav } from "@/lib/mlai";
 import { cn } from "@/lib/utils";
-
-export function docHref(id: string) {
-  return id === "intro" ? "getting-started" : id;
-}
+import { docHref } from "./doc-href";
 
 export function DocSidebar({ current }: { current?: string }) {
   return (

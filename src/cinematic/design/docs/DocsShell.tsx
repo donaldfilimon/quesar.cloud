@@ -3,25 +3,7 @@ import { useState, useEffect } from "react";
 import type { ReactNode } from "react";
 import { ISearch, IBook, IExternal } from "./Icons";
 import type { TocEntry } from "./DocsContent";
-
-/** A leaf nav entry: [route id, label]. */
-export type TreeLeaf = readonly [string, string];
-/** A nav group: [group label, leaves]. */
-export type TreeGroup = readonly [string, readonly TreeLeaf[]];
-
-export const TREE: readonly TreeGroup[] = [
-  ["Getting started", [["quickstart", "Quickstart"]]],
-  [
-    "WDBX",
-    [
-      ["wdbx", "The vector runtime"],
-      ["hnsw", "HNSW parameters"],
-    ],
-  ],
-  ["ABI · Personas", [["personas", "Three minds, one system"]]],
-];
-
-export const FLAT: readonly TreeLeaf[] = TREE.flatMap(([, items]) => items);
+import { FLAT, TREE } from "./tree";
 
 export function SearchPalette({
   open,

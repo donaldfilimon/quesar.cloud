@@ -7,28 +7,13 @@
 import { type ReactNode } from "react";
 import { C, FONT, clamp } from "../tokens";
 import { Easing } from "../easing";
-import { useTime, useSprite } from "../engine";
+import { useTime, useSprite } from "../timeline-context";
 import { DiagramSVG } from "../fx";
+import { IMPACTS, impactK, impactKick } from "./impacts";
 
 // runtime tweaks object (set by the Tweaks panel); typed safely, never crashes.
 const readTw = (): Record<string, number> =>
   (window as unknown as { __tw?: Record<string, number> }).__tw ?? {};
-
-// Global cut/impact beats (seconds) for the 59s cut. Camera + flash react to these.
-export const IMPACTS = [0, 3.5, 7, 11, 14, 17, 21, 22.6, 24.2, 26, 29.4, 32, 35.4, 38, 43, 47, 51, 55, 59];
-
-// impact envelope: 1 right after an impact, decays over `dur`.
-export function impactK(t: number, dur = 0.42): number {
-  let k = 0;
-  for (let i = 0; i < IMPACTS.length; i++) { const im = IMPACTS[i]!; const dt = t - im; if (dt >= 0 && dt < dur) k = Math.max(k, 1 - dt / dur); }
-  return k;
-}
-// alternating directional bias per impact index (for a kick)
-export function impactKick(t: number, dur = 0.42): number {
-  let best = 0, sign = 1;
-  IMPACTS.forEach((im, i) => { const dt = t - im; if (dt >= 0 && dt < dur && (1 - dt / dur) > best) { best = 1 - dt / dur; sign = i % 2 ? 1 : -1; } });
-  return best * sign;
-}
 
 // Camera: continuous handheld drift + shake + zoom punch on impacts.
 export function Camera({ children }: { children: ReactNode }) {

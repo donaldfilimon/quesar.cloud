@@ -1,35 +1,7 @@
 /* Console shell — sidebar nav, top bar, and ⌘K command palette. */
 import { useEffect, useState } from "react";
-import {
-  IActivity,
-  IChevron,
-  IDb,
-  ILayers,
-  IMsg,
-  ISearch,
-  ISettings,
-  type IconComponent,
-} from "./Icons.tsx";
-
-export type Route = "overview" | "telemetry" | "personas" | "memory" | "settings";
-
-type NavItem = readonly [route: Route, label: string, Icon: IconComponent];
-
-export const NAV: NavItem[] = [
-  ["overview", "Overview", IActivity],
-  ["telemetry", "WDBX Telemetry", IDb],
-  ["personas", "Personas", IMsg],
-  ["memory", "Memory", ILayers],
-  ["settings", "Settings", ISettings],
-];
-
-export const TITLES: Record<Route, string> = {
-  overview: "Overview",
-  telemetry: "WDBX Telemetry",
-  personas: "Personas",
-  memory: "Verifiable Memory",
-  settings: "Settings",
-};
+import { IChevron, ISearch } from "./Icons.tsx";
+import { NAV, TITLES, type Route } from "./nav.ts";
 
 interface CmdPaletteProps {
   open: boolean;

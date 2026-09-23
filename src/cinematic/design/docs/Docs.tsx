@@ -1,8 +1,9 @@
 /* Quesar — Docs UI Kit. Self-contained: DocsShell wrapping DocsContent. */
 import { useState, useEffect, useRef } from "react";
 import type { CSSProperties, ReactNode } from "react";
-import { PAGES } from "./DocsContent";
-import { SearchPalette, TopNav, SideTree, OnThisPage, FLAT } from "./DocsShell";
+import { PAGES } from "./pages";
+import { SearchPalette, TopNav, SideTree, OnThisPage } from "./DocsShell";
+import { FLAT } from "./tree";
 
 /* Kit-specific CSS not already in src/index.css: scrollbar styling, the
    responsive hide rules for the tree / on-this-page rails, the docs

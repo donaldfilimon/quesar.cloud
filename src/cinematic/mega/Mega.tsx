@@ -12,10 +12,12 @@
 import { useRef, useEffect, useMemo } from "react";
 import { C, FONT } from "../film/tokens";
 import { clamp, fade } from "../film/easing";
-import { Stage, Sprite, useTime, useTimeline } from "../film/engine";
+import { Stage, Sprite } from "../film/engine";
+import { useTime, useTimeline } from "../film/timeline-context";
 import { Grain, Vignette, GridBG } from "../film/primitives";
 import { NeuralLayer } from "../film/neural";
-import { speak, lineSpeechDur, VoiceToggle, stopSpeech, setSpeechPlaying, primeNeural, useVoiceReady } from "../film/narration";
+import { VoiceToggle } from "../film/narration";
+import { speak, lineSpeechDur, stopSpeech, setSpeechPlaying, primeNeural, useVoiceReady } from "../film/speech";
 import type { ReactNode } from "react";
 
 // trailer fx + kinetic beats
@@ -26,7 +28,8 @@ import { Scene3 } from "../film/scenes/intro";
 import { SceneStorage, SceneTemporal, ScenePersonaDeep, SceneClaims, SceneManifesto, SceneRoadmap } from "../film/scenes/extra";
 import { ScenePersonaRouting as Scene4, SceneVerifiableMemory as Scene5 } from "../film/scenes/core";
 import { SceneGovernance as Scene6, SceneNorthStar as Scene7 } from "../film/scenes/outro";
-import { MathScene, MATH } from "../film/scenes/math";
+import { MathScene } from "../film/scenes/math";
+import { MATH } from "../film/scenes/math-data";
 
 /* ── timeline (seconds). Each entry [start, end]; scenes keep their length. ── */
 const M: Record<string, [number, number]> = {

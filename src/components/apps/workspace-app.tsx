@@ -7,15 +7,15 @@ import { readStore, writeStore } from "@/lib/local-store";
 type Doc = { id: string; title: string; body: string; updated: number };
 
 const KEY = "mlai-abbey-workspace";
+const WELCOME_BODY =
+  "Abbey workspace orientation.\n\nThis page is the in-browser loop: documents stay in this browser. The shipping app uses SQLite, a Python worker, and an optional local model.\n\nWrite a brief, then ask Abbey for a pass.";
 
 export function WorkspaceApp() {
   const { user } = useCurrentUserState();
   const [docs, setDocs] = useState<Doc[]>([]);
   const [active, setActive] = useState<string | null>(null);
   const [title, setTitle] = useState("Welcome");
-  const [body, setBody] = useState(
-    "Abbey workspace orientation.\n\nThis page is the in-browser loop: documents stay in this browser. The shipping app uses SQLite, a Python worker, and an optional local model.\n\nWrite a brief, then ask Abbey for a pass.",
-  );
+  const [body, setBody] = useState(WELCOME_BODY);
   const [question, setQuestion] = useState("Summarize this document and name one risk.");
   const [answer, setAnswer] = useState("");
   const [status, setStatus] = useState<"idle" | "asking" | "error">("idle");
@@ -30,7 +30,7 @@ export function WorkspaceApp() {
       setBody(first.body);
       return;
     }
-    const seed: Doc = { id: crypto.randomUUID(), title: "Welcome", body, updated: Date.now() };
+    const seed: Doc = { id: crypto.randomUUID(), title: "Welcome", body: WELCOME_BODY, updated: Date.now() };
     setDocs([seed]);
     setActive(seed.id);
   }, []);

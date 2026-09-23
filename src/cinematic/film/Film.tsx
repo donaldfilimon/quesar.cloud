@@ -17,7 +17,8 @@ import { Stage, Sprite } from "./engine";
 import { SceneOpen, SceneClose } from "./scenes/title";
 import { ScenePersonaRouting, SceneVerifiableMemory } from "./scenes/core";
 import { SceneGovernance, SceneNorthStar } from "./scenes/outro";
-import { NarrationController, Narrator, VoiceToggle, useVoiceReady } from "./narration";
+import { NarrationController, Narrator, VoiceToggle } from "./narration";
+import { useVoiceReady } from "./speech";
 
 // Scene slots [start, end] in seconds — must match the narration script.
 const T = {

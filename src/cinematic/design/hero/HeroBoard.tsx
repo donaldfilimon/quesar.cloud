@@ -24,8 +24,8 @@ import {
   TweakSlider,
   TweakToggle,
   TweakColor,
-  useTweaks,
 } from "../board/shell/TweaksPanel.tsx";
+import { useTweaks } from "../board/shell/use-tweaks.ts";
 
 /* ─────────────── icons (inline) ─────────────── */
 type IcoProps = { d: ReactNode; s?: number };

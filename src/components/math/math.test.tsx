@@ -3,16 +3,18 @@ import { resolve } from "node:path";
 import katex from "katex";
 import { renderToString } from "react-dom/server";
 import { describe, expect, it } from "vitest";
-import { BlockMath, renderTex } from "./math";
+import { BlockMath } from "./math";
+import { renderTex } from "./render-tex";
 
 // Source guards ported from mlai `src/__tests__/{a11y-source,reflow}.test.ts`
 // (b6f3686), pointed at this file.
 const src = readFileSync(resolve(__dirname, "math.tsx"), "utf8");
+const texSrc = readFileSync(resolve(__dirname, "render-tex.ts"), "utf8");
 
 describe("BlockMath source guards", () => {
   it("emits MathML for screen readers, with the stylesheet that hides it visually", () => {
-    expect(src).toContain('output: "htmlAndMathml"');
-    expect(src).not.toContain('output: "html",');
+    expect(texSrc).toContain('output: "htmlAndMathml"');
+    expect(texSrc).not.toContain('output: "html",');
     expect(src).toContain('import "katex/dist/katex.min.css";');
   });
 
@@ -27,6 +29,7 @@ describe("BlockMath source guards", () => {
   it("loads KaTeX only through a dynamic import", () => {
     expect(src).toContain('import("katex")');
     expect(src).not.toMatch(/^import[^;]*from\s+["']katex["']/m);
+    expect(texSrc).not.toMatch(/^import[^;]*from\s+["']katex["']/m);
   });
 });
 

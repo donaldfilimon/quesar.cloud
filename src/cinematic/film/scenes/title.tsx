@@ -4,7 +4,7 @@
 
 import { C, FONT } from "../tokens";
 import { step, fade, Easing } from "../easing";
-import { useSprite } from "../engine";
+import { useSprite } from "../timeline-context";
 import { Orb } from "../primitives";
 import { DiagramSVG, PulseRing, SignalDots } from "../fx";
 import type { ReactNode } from "react";

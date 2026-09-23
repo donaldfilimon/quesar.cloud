@@ -3,12 +3,14 @@
 // no window globals for module wiring. Visuals/geometry/timings unchanged.
 // Uses brand (C, FONT, step), fx, and trailer_fx primitives.
 
-import { type CSSProperties, type ReactNode } from "react";
+import { type CSSProperties } from "react";
 import { C, FONT, clamp } from "../tokens";
 import { Easing, step } from "../easing";
-import { useTime, useSprite } from "../engine";
-import { DiagramSVG, Wire, PulseRing, SignalDots, Rotor, hexOf } from "../fx";
-import { Beat, SpeedLines, Shockwave, impactK } from "./trailer_fx";
+import { useTime, useSprite } from "../timeline-context";
+import { DiagramSVG, Wire, PulseRing, SignalDots, Rotor } from "../fx";
+import { hexOf } from "../fx-utils";
+import { Beat, SpeedLines, Shockwave } from "./trailer_fx";
+import { impactK } from "./impacts";
 
 // Moving-shimmer text style: returns a style object for a sweeping highlight on
 // gradient text. Module-private helper (not part of the shared fx surface).

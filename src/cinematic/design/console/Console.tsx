@@ -8,7 +8,8 @@
    here via a module-scoped <style>. Shared tokens/classes (.glass, surfaces,
    .eyebrow, fonts, --hair-strong) live in src/index.css and are reused. */
 import { useEffect, useState, type CSSProperties, type ReactNode } from "react";
-import { CmdPalette, Sidebar, Topbar, TITLES, type Route } from "./Shell.tsx";
+import { CmdPalette, Sidebar, Topbar } from "./Shell.tsx";
+import { TITLES, type Route } from "./nav.ts";
 import { Chat } from "./Chat.tsx";
 import { Telemetry } from "./Telemetry.tsx";
 import { Memory, Overview, Settings } from "./Views.tsx";

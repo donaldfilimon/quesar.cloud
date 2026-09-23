@@ -10,11 +10,15 @@ import { Mark, Eyebrow, Mono, Reveal } from "./core.tsx";
 import { ReviewSection, ColorSection, ElevationSection, SpacingSection, TypeSection } from "./foundations.tsx";
 import { LightSection, ComponentsSection, AppliedSection, TokensSection } from "./depth.tsx";
 import {
-  TweaksPanel, TweakSection, TweakRadio, TweakSelect, TweakSlider, TweakToggle, useTweaks,
+  TweaksPanel, TweakSection, TweakRadio, TweakSelect, TweakSlider, TweakToggle,
 } from "./shell/TweaksPanel.tsx";
+import { useTweaks } from "./shell/use-tweaks.ts";
 import {
   NAV, THEMES, CANVASES, TWEAK_DEFAULTS, type ThemeTriple, type TweakState,
 } from "./tokens.ts";
+
+/** Section ids for the scroll spy; module-level so the effect subscribes once. */
+const NAV_IDS: readonly string[] = NAV.map((n) => n[0]);
 
 /* ── Board-specific CSS ────────────────────────────────────────────
    Everything here is NOT already present in src/index.css. It is the
@@ -107,8 +111,7 @@ function useActiveSection(ids: readonly string[]): string {
       if (el) obs.observe(el);
     });
     return () => obs.disconnect();
-    // ids is module-constant; observe once on mount.
-  }, []);
+  }, [ids]);
   return active;
 }
 
@@ -176,7 +179,7 @@ const HERO_CHIPS: readonly string[] = [
 
 /* ── Board ─────────────────────────────────────────────────────── */
 export default function DesignBoard(): ReactNode {
-  const active = useActiveSection(NAV.map((n) => n[0]));
+  const active = useActiveSection(NAV_IDS);
   const [t, setTweak] = useTweaks<TweakState>(TWEAK_DEFAULTS);
 
   // drive the theme through CSS custom properties on the board root —
