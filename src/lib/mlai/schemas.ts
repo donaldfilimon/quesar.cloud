@@ -237,11 +237,6 @@ export const StatsSchema = z.array(z.object({
   detail: z.string(),
 }));
 
-export const FAQSchema = z.array(z.object({
-  question: z.string(),
-  answer: z.string(),
-}));
-
 // Product deep-dive pages (/products/:slug) — structured narrative content
 // ported from the MLAI mega-site. Equations are LaTeX (KaTeX block render);
 // accents bind to the persona palette already used by the Docs persona dots.
@@ -306,7 +301,6 @@ export const ContentSchema = z.object({
   blog: BlogSchema,
   team: TeamSchema,
   stats: StatsSchema,
-  faq: FAQSchema,
   products: ProductsSchema,
   changelog: ChangelogSchema,
   docs: DocsSchema,
@@ -323,7 +317,6 @@ export type Research = z.infer<typeof ResearchSchema>;
 export type Blog = z.infer<typeof BlogSchema>;
 export type Team = z.infer<typeof TeamSchema>;
 export type Stats = z.infer<typeof StatsSchema>;
-export type FAQ = z.infer<typeof FAQSchema>;
 export type Products = z.infer<typeof ProductsSchema>;
 export type Changelog = z.infer<typeof ChangelogSchema>;
 export type Content = z.infer<typeof ContentSchema>;

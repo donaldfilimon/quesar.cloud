@@ -1,0 +1,1 @@
+import{gt as e}from"./index-7KlcUt2t.js";var t=e({type:`function`});export{t};
