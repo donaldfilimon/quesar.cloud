@@ -21,6 +21,9 @@ export default tseslint.config(
       // outside the npm build. See their READMEs.
       "sidecars/**",
       "native/**",
+      // Session-plugin state (git-ignored by its own .gitignore). Flat config
+      // does not read .gitignore, and it writes a timestamp file named `*.ts`.
+      ".remember/**",
     ],
   },
   js.configs.recommended,
