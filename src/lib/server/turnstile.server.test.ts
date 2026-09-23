@@ -24,7 +24,9 @@ describe("verifyTurnstile (ported from mlai)", () => {
     vi.stubEnv("TURNSTILE_HOSTNAMES", "quesar.cloud,www.quesar.cloud");
     const fetchMock = vi
       .spyOn(globalThis, "fetch")
-      .mockResolvedValue(Response.json({ success: true, action: "inquiry", hostname: "quesar.cloud" }));
+      .mockResolvedValue(
+        Response.json({ success: true, action: "inquiry", hostname: "quesar.cloud" }),
+      );
 
     expect(await verifyTurnstile(request(), "token-long-enough", "inquiry")).toBe(true);
     const init = fetchMock.mock.calls[0]?.[1];

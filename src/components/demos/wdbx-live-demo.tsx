@@ -129,7 +129,10 @@ export function WdbxLiveDemo() {
 
           <div className="grid grid-cols-2 gap-3 lg:grid-cols-1 lg:content-start">
             {[
-              { v: stats ? stats.ms.toFixed(2) + "ms" : "—", k: "scan latency · measured in this tab" },
+              {
+                v: stats ? stats.ms.toFixed(2) + "ms" : "—",
+                k: "scan latency · measured in this tab",
+              },
               { v: String(stats?.scanned ?? "—"), k: "vectors scanned" },
               { v: `${stats?.partitionsHit ?? "—"}/4`, k: "modeled partitions" },
               { v: `#${stats?.snapshot ?? "—"}`, k: "mvcc snapshot" },
@@ -159,7 +162,9 @@ export function WdbxLiveDemo() {
                   <span className="block font-mono text-[10px] text-accent">
                     #{b.height} · 0x{b.hash}
                   </span>
-                  <span className="block max-w-40 truncate font-mono text-[10px] text-fg-subtle">{b.query}</span>
+                  <span className="block max-w-40 truncate font-mono text-[10px] text-fg-subtle">
+                    {b.query}
+                  </span>
                 </span>
               </span>
             ))}

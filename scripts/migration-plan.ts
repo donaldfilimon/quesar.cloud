@@ -29,7 +29,10 @@ export interface PendingMigration {
  * Migrations in `paths` that are not yet in `applied`, in apply order.
  * Non-`.sql` entries (a `readdir` also yields `migrations/auth/`) are dropped.
  */
-export function pendingMigrations(paths: Iterable<string>, applied: Iterable<string>): PendingMigration[] {
+export function pendingMigrations(
+  paths: Iterable<string>,
+  applied: Iterable<string>,
+): PendingMigration[] {
   const done = new Set(applied);
   return [...paths]
     .filter(isMigrationFile)

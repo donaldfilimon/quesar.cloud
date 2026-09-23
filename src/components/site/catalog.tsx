@@ -34,9 +34,7 @@ export function CopyGrid({
           <Surface hover={Boolean(item.href)} accent={item.accent} className="h-full">
             <div className="flex items-start justify-between gap-3">
               <div>
-                {item.kicker ? (
-                  <p className="text-xs text-fg-subtle">{item.kicker}</p>
-                ) : null}
+                {item.kicker ? <p className="text-xs text-fg-subtle">{item.kicker}</p> : null}
                 <h3 className={cn("font-display text-xl", item.kicker && "mt-1")}>{item.title}</h3>
               </div>
               {item.status ? <StatusBadge status={item.status} /> : null}
@@ -142,7 +140,13 @@ const personaDot: Record<string, string> = {
 export function PersonaGrid({
   items = personas,
 }: {
-  items?: readonly { id: string; name: string; role: string; color: "abbey" | "aviva" | "abi"; body: string }[];
+  items?: readonly {
+    id: string;
+    name: string;
+    role: string;
+    color: "abbey" | "aviva" | "abi";
+    body: string;
+  }[];
 }) {
   return (
     <div className="grid gap-4 md:grid-cols-3">
@@ -225,9 +229,13 @@ export function ProjectRows({
     <div>
       {items.map((item, index) => (
         <Link key={item.href} to={item.href} className="project-row">
-          <span className="font-mono text-[11px] text-fg-subtle">{String(index + 1).padStart(2, "0")}</span>
+          <span className="font-mono text-[11px] text-fg-subtle">
+            {String(index + 1).padStart(2, "0")}
+          </span>
           <span className="project-row-name font-display text-3xl tracking-tight">{item.name}</span>
-          <span className="project-row-copy text-sm leading-relaxed text-fg-muted">{item.oneLiner}</span>
+          <span className="project-row-copy text-sm leading-relaxed text-fg-muted">
+            {item.oneLiner}
+          </span>
           <span className="project-row-status">
             <StatusBadge status={item.status} />
           </span>
@@ -237,7 +245,11 @@ export function ProjectRows({
   );
 }
 
-export function TruthList({ items }: { items: readonly { n?: string; title: string; body: string }[] }) {
+export function TruthList({
+  items,
+}: {
+  items: readonly { n?: string; title: string; body: string }[];
+}) {
   return (
     <div>
       {items.map((item, index) => (
@@ -247,7 +259,9 @@ export function TruthList({ items }: { items: readonly { n?: string; title: stri
           </span>
           <div>
             <h3 className="font-display text-2xl tracking-tight">{item.title}</h3>
-            <p className="mt-2 max-w-2xl text-sm leading-relaxed text-fg-muted sm:text-base">{item.body}</p>
+            <p className="mt-2 max-w-2xl text-sm leading-relaxed text-fg-muted sm:text-base">
+              {item.body}
+            </p>
           </div>
         </article>
       ))}
@@ -342,7 +356,10 @@ export function ChipRow({ items }: { items: readonly string[] }) {
   return (
     <div className="flex flex-wrap gap-2">
       {items.map((item) => (
-        <span key={item} className="rounded-full bg-muted px-3 py-1 font-mono text-[11px] text-muted-foreground">
+        <span
+          key={item}
+          className="rounded-full bg-muted px-3 py-1 font-mono text-[11px] text-muted-foreground"
+        >
           {item}
         </span>
       ))}
@@ -373,7 +390,9 @@ export function FilterChips<T extends string>({
             onClick={() => onChange(option.value)}
             className={cn(
               "h-9 rounded-full px-3 font-mono text-[11px] tracking-wide",
-              active ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:text-foreground",
+              active
+                ? "bg-primary text-primary-foreground"
+                : "bg-muted text-muted-foreground hover:text-foreground",
             )}
           >
             {option.label}

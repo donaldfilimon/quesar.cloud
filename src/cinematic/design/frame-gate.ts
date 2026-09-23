@@ -23,7 +23,8 @@ interface Activity {
 function watchActivity(el: Element, onChange: () => void): Activity {
   // Without IntersectionObserver (old engines) treat the element as visible.
   let visible = typeof IntersectionObserver !== "function";
-  const mq = typeof window.matchMedia === "function" ? window.matchMedia(REDUCED_MOTION_QUERY) : null;
+  const mq =
+    typeof window.matchMedia === "function" ? window.matchMedia(REDUCED_MOTION_QUERY) : null;
   let reduce = mq?.matches ?? false;
 
   const io =

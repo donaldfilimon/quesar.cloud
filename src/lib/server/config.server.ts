@@ -31,7 +31,9 @@ export function gatewayConfig(): GatewayConfig | null {
     url.search ||
     url.hash
   ) {
-    throw new Error("CLOUDFLARE_AI_GATEWAY_URL must be the Cloudflare AI REST chat-completions endpoint");
+    throw new Error(
+      "CLOUDFLARE_AI_GATEWAY_URL must be the Cloudflare AI REST chat-completions endpoint",
+    );
   }
   return { url: url.toString(), token, gatewayId };
 }

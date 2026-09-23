@@ -18,7 +18,10 @@ export function Crumbs({ items }: { items: readonly { to?: string; label: string
                   {item.label}
                 </Link>
               ) : (
-                <span className={last ? "text-fg" : "text-fg-muted"} aria-current={last ? "page" : undefined}>
+                <span
+                  className={last ? "text-fg" : "text-fg-muted"}
+                  aria-current={last ? "page" : undefined}
+                >
                   {item.label}
                 </span>
               )}

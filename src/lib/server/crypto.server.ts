@@ -64,21 +64,31 @@ export function sealWithKey(key: Buffer, plaintext: string, aad: string): string
   cipher.setAAD(Buffer.from(aad, "utf8"));
   const ciphertext = Buffer.concat([cipher.update(plaintext, "utf8"), cipher.final()]);
   const tag = cipher.getAuthTag();
-  return [VERSION, iv.toString("base64url"), ciphertext.toString("base64url"), tag.toString("base64url")].join(".");
+  return [
+    VERSION,
+    iv.toString("base64url"),
+    ciphertext.toString("base64url"),
+    tag.toString("base64url"),
+  ].join(".");
 }
 
 export function openWithKey(key: Buffer, envelope: string, aad: string): string {
   const parts = envelope.split(".");
-  if (parts.length !== 4 || parts[0] !== VERSION) throw new SealedDataError("unknown envelope format");
+  if (parts.length !== 4 || parts[0] !== VERSION)
+    throw new SealedDataError("unknown envelope format");
   const [, ivPart, ctPart, tagPart] = parts;
   const iv = Buffer.from(ivPart, "base64url");
   const tag = Buffer.from(tagPart, "base64url");
-  if (iv.length !== IV_BYTES || tag.length !== TAG_BYTES) throw new SealedDataError("malformed envelope");
+  if (iv.length !== IV_BYTES || tag.length !== TAG_BYTES)
+    throw new SealedDataError("malformed envelope");
   try {
     const decipher = createDecipheriv("aes-256-gcm", subkey(key, "seal"), iv);
     decipher.setAAD(Buffer.from(aad, "utf8"));
     decipher.setAuthTag(tag);
-    return Buffer.concat([decipher.update(Buffer.from(ctPart, "base64url")), decipher.final()]).toString("utf8");
+    return Buffer.concat([
+      decipher.update(Buffer.from(ctPart, "base64url")),
+      decipher.final(),
+    ]).toString("utf8");
   } catch {
     throw new SealedDataError();
   }
@@ -103,7 +113,10 @@ function previousKey(): Buffer | null {
  * Open with the active key, falling back to `APP_ENCRYPTION_KEY_PREVIOUS`.
  * `rotated` is true when only the previous key worked: re-seal and store.
  */
-export function openWithRotation(envelope: string, aad: string): { plaintext: string; rotated: boolean } {
+export function openWithRotation(
+  envelope: string,
+  aad: string,
+): { plaintext: string; rotated: boolean } {
   const active = activeKey();
   try {
     return { plaintext: openWithKey(active, envelope, aad), rotated: false };
@@ -121,7 +134,9 @@ export function open(envelope: string, aad: string): string {
 
 /** Keyed, non-reversible identifier (replaces mlai's AUDIT_SUBJECT_PEPPER hash). */
 export function keyedHash(value: string, purpose = "subject"): string {
-  return createHmac("sha256", subkey(activeKey(), `hash:${purpose}`)).update(value).digest("base64url");
+  return createHmac("sha256", subkey(activeKey(), `hash:${purpose}`))
+    .update(value)
+    .digest("base64url");
 }
 
 /** Unkeyed SHA-256 digest (integrity fingerprint of plaintext content). */

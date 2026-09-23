@@ -58,7 +58,9 @@ export function WorkspaceApp() {
 
   const current = docs.find((doc) => doc.id === active) ?? null;
   const [query, setQuery] = useState("");
-  const visible = docs.filter((doc) => `${doc.title} ${doc.body}`.toLowerCase().includes(query.trim().toLowerCase()));
+  const visible = docs.filter((doc) =>
+    `${doc.title} ${doc.body}`.toLowerCase().includes(query.trim().toLowerCase()),
+  );
   const words = body.trim() ? body.trim().split(/\s+/).length : 0;
 
   function openDoc(doc: Doc) {
@@ -88,7 +90,9 @@ export function WorkspaceApp() {
   function persist(nextTitle: string, nextBody: string) {
     if (!active) return;
     setDocs((rows) =>
-      rows.map((row) => (row.id === active ? { ...row, title: nextTitle, body: nextBody, updated: Date.now() } : row)),
+      rows.map((row) =>
+        row.id === active ? { ...row, title: nextTitle, body: nextBody, updated: Date.now() } : row,
+      ),
     );
   }
 
@@ -156,7 +160,9 @@ export function WorkspaceApp() {
               </button>
             </li>
           ))}
-          {visible.length === 0 ? <li className="px-3 py-4 text-sm text-fg-muted">No documents match.</li> : null}
+          {visible.length === 0 ? (
+            <li className="px-3 py-4 text-sm text-fg-muted">No documents match.</li>
+          ) : null}
         </ul>
       </aside>
       <div className="border-b border-border p-4 sm:p-5 lg:border-b-0 lg:border-r">
@@ -170,7 +176,9 @@ export function WorkspaceApp() {
               }}
               className="w-full bg-transparent font-display text-2xl outline-none"
             />
-            <p className="mt-2 font-mono text-[10px] text-fg-subtle">{words} words · saved in this browser</p>
+            <p className="mt-2 font-mono text-[10px] text-fg-subtle">
+              {words} words · saved in this browser
+            </p>
             <textarea
               value={body}
               onChange={(event) => {
@@ -185,14 +193,21 @@ export function WorkspaceApp() {
       <aside className="p-4 sm:p-5">
         <p className="text-xs text-accent">Assistant</p>
         <p className="mt-2 text-xs text-fg-muted">
-          {user ? "Signed in. Live model is user-initiated and capped." : "Local notes work offline. Sign in to ask Abbey."}
+          {user
+            ? "Signed in. Live model is user-initiated and capped."
+            : "Local notes work offline. Sign in to ask Abbey."}
         </p>
         <textarea
           value={question}
           onChange={(event) => setQuestion(event.target.value.slice(0, 400))}
           className="mt-3 min-h-24 w-full rounded-md bg-bg px-3 py-2 text-sm shadow-[var(--shadow-border)] outline-none"
         />
-        <Button type="button" className="mt-3" onClick={() => void ask()} disabled={status === "asking"}>
+        <Button
+          type="button"
+          className="mt-3"
+          onClick={() => void ask()}
+          disabled={status === "asking"}
+        >
           {status === "asking" ? "Asking…" : "Ask Abbey"}
         </Button>
         {answer ? <p className="mt-4 text-sm leading-relaxed text-fg-muted">{answer}</p> : null}

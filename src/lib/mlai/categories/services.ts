@@ -1,4 +1,4 @@
-import type { Refusals } from '../schemas';
+import type { Refusals } from "../schemas";
 
 /**
  * "What we say no to" — the refusal copy, ported verbatim from the design
@@ -58,8 +58,7 @@ export const services = [
   },
   {
     title: "Private AI Deployment",
-    description:
-      "Package workflows for VPC, on-premise, offline, and hybrid environments.",
+    description: "Package workflows for VPC, on-premise, offline, and hybrid environments.",
     outcomes: ["Deployment topology", "Runbook", "Rollback plan"],
   },
   {

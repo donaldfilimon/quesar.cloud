@@ -8,7 +8,11 @@ const Room = lazy(() => import("@/cinematic/rooms/abbey"));
 export const Route = createFileRoute("/showcase/abbey")({
   // Canvas, requestAnimationFrame and WebAudio only exist in the browser.
   ssr: false,
-  head: () => pageHead("Abbey — Showcase", "The Abbey companion trailer. Persona language, not a capability claim."),
+  head: () =>
+    pageHead(
+      "Abbey — Showcase",
+      "The Abbey companion trailer. Persona language, not a capability claim.",
+    ),
   component: ShowcaseAbbeyPage,
 });
 

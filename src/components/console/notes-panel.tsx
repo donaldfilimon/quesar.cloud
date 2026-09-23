@@ -182,24 +182,18 @@ export function NotesPanel({ initialNode }: { initialNode?: string }) {
         {node ? (
           <Surface>
             <div className="flex items-center justify-between gap-3">
-              <p className="text-xs text-accent">
-                {node.name}
-              </p>
+              <p className="text-xs text-accent">{node.name}</p>
               <StatusBadge status={node.status} />
             </div>
             <p className="mt-3 text-sm text-fg-muted">{node.detail}</p>
-            <p className="mt-4 text-xs text-status-current">
-              Current
-            </p>
+            <p className="mt-4 text-xs text-status-current">Current</p>
             <ul className="mt-1 space-y-1 text-sm text-fg-muted">
               {node.implemented.map((item) => (
                 <li key={item}>{item}</li>
               ))}
             </ul>
             <Separator />
-            <p className="text-xs text-fg-subtle">
-              Not claimed
-            </p>
+            <p className="text-xs text-fg-subtle">Not claimed</p>
             <ul className="mt-1 space-y-1 text-sm text-fg-muted">
               {node.notClaimed.map((item) => (
                 <li key={item}>{item}</li>
@@ -266,9 +260,7 @@ export function NotesPanel({ initialNode }: { initialNode?: string }) {
             <li key={note.id} className="rounded-lg bg-card p-4 shadow-[var(--shadow-border)]">
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <p className="text-xs text-accent">
-                    {named?.name ?? note.node_id}
-                  </p>
+                  <p className="text-xs text-accent">{named?.name ?? note.node_id}</p>
                   {when ? <p className="mt-1 text-xs text-fg-subtle">{when}</p> : null}
                 </div>
                 <div className="flex items-center gap-3">

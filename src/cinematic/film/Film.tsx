@@ -34,17 +34,36 @@ const DURATION = 69;
 export function Film() {
   const ready = useVoiceReady();
   return (
-    <Stage width={1920} height={1080} duration={DURATION} background="#040406" persistKey="mlai-film" ready={ready}>
+    <Stage
+      width={1920}
+      height={1080}
+      duration={DURATION}
+      background="#040406"
+      persistKey="mlai-film"
+      ready={ready}
+    >
       {/* persistent ambient substrate */}
       <GridBG opacity={0.4} />
       <Vignette />
 
-      <Sprite start={T.open[0]} end={T.open[1]}><SceneOpen /></Sprite>
-      <Sprite start={T.routing[0]} end={T.routing[1]}><ScenePersonaRouting /></Sprite>
-      <Sprite start={T.memory[0]} end={T.memory[1]}><SceneVerifiableMemory /></Sprite>
-      <Sprite start={T.governance[0]} end={T.governance[1]}><SceneGovernance /></Sprite>
-      <Sprite start={T.northStar[0]} end={T.northStar[1]}><SceneNorthStar /></Sprite>
-      <Sprite start={T.close[0]} end={T.close[1]}><SceneClose /></Sprite>
+      <Sprite start={T.open[0]} end={T.open[1]}>
+        <SceneOpen />
+      </Sprite>
+      <Sprite start={T.routing[0]} end={T.routing[1]}>
+        <ScenePersonaRouting />
+      </Sprite>
+      <Sprite start={T.memory[0]} end={T.memory[1]}>
+        <SceneVerifiableMemory />
+      </Sprite>
+      <Sprite start={T.governance[0]} end={T.governance[1]}>
+        <SceneGovernance />
+      </Sprite>
+      <Sprite start={T.northStar[0]} end={T.northStar[1]}>
+        <SceneNorthStar />
+      </Sprite>
+      <Sprite start={T.close[0]} end={T.close[1]}>
+        <SceneClose />
+      </Sprite>
 
       {/* agent voiceover — controller fires speech, Narrator draws the caption */}
       <NarrationController />

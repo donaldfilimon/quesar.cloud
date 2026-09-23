@@ -1,7 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ArrChart } from "@/components/charts/arr-chart";
 import { TamChart } from "@/components/charts/tam-chart";
-import { JourneyRail, MetricCard, PageClose, PageHero, Section, SpecList, StatGrid } from "@/components/site";
+import {
+  JourneyRail,
+  MetricCard,
+  PageClose,
+  PageHero,
+  Section,
+  SpecList,
+  StatGrid,
+} from "@/components/site";
 import { ProvTag } from "@/components/site/prov-tag";
 import { investor } from "@/lib/content";
 import { pageHead } from "@/lib/seo";
@@ -31,7 +39,11 @@ function InvestorsPage() {
       </PageHero>
       <JourneyRail current="investors" />
 
-      <Section eyebrow="Entity" title={investor.entity} lede="TAM, SAM, and SOM are category sizing. None of them is a booking.">
+      <Section
+        eyebrow="Entity"
+        title={investor.entity}
+        lede="TAM, SAM, and SOM are category sizing. None of them is a booking."
+      >
         <div className="mb-4 flex flex-wrap gap-2">
           <ProvTag tag="target" />
         </div>
@@ -45,7 +57,11 @@ function InvestorsPage() {
         </div>
       </Section>
 
-      <Section eyebrow="Raise" title={`${investor.raise.round} ${investor.raise.amount}`} lede="Use of funds is a plan, not a spend record.">
+      <Section
+        eyebrow="Raise"
+        title={`${investor.raise.round} ${investor.raise.amount}`}
+        lede="Use of funds is a plan, not a spend record."
+      >
         <div className="mb-4">
           <ProvTag tag="target" />
         </div>
@@ -56,7 +72,11 @@ function InvestorsPage() {
         </div>
       </Section>
 
-      <Section eyebrow="Unit economics" title="All four are targets." lede="Nothing here is a measured operating result.">
+      <Section
+        eyebrow="Unit economics"
+        title="All four are targets."
+        lede="Nothing here is a measured operating result."
+      >
         <div className="mb-4">
           <ProvTag tag="target" />
         </div>
@@ -72,10 +92,16 @@ function InvestorsPage() {
           <ProvTag tag="target" />
         </div>
         <ArrChart />
-        <p className="mt-3 text-xs text-fg-subtle">Million-dollar ARR figures on this chart are targets, not results.</p>
+        <p className="mt-3 text-xs text-fg-subtle">
+          Million-dollar ARR figures on this chart are targets, not results.
+        </p>
         <div className="mt-4">
           <StatGrid
-            cells={investor.arr.map((row) => ({ k: row.year, v: `$${row.v}M`, tag: "target" as const }))}
+            cells={investor.arr.map((row) => ({
+              k: row.year,
+              v: `$${row.v}M`,
+              tag: "target" as const,
+            }))}
             columns="grid-cols-2 sm:grid-cols-5"
           />
         </div>
@@ -84,7 +110,10 @@ function InvestorsPage() {
       <Section eyebrow="Founder" title="What is measured.">
         <ul className="space-y-3">
           {investor.founder.map((row) => (
-            <li key={row.k} className="surface flex flex-wrap items-center justify-between gap-3 p-4">
+            <li
+              key={row.k}
+              className="surface flex flex-wrap items-center justify-between gap-3 p-4"
+            >
               <span className="text-sm text-fg">{row.k}</span>
               <ProvTag tag={row.tag} />
             </li>

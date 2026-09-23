@@ -66,12 +66,8 @@ const ISearch = (p: GlyphProps): ReactNode => (
     }
   />
 );
-const ICheck = (p: GlyphProps): ReactNode => (
-  <Ico {...p} d={<path d="M20 6 9 17l-5-5" />} />
-);
-const IChevron = (p: GlyphProps): ReactNode => (
-  <Ico {...p} d={<path d="m9 18 6-6-6-6" />} />
-);
+const ICheck = (p: GlyphProps): ReactNode => <Ico {...p} d={<path d="M20 6 9 17l-5-5" />} />;
+const IChevron = (p: GlyphProps): ReactNode => <Ico {...p} d={<path d="m9 18 6-6-6-6" />} />;
 
 /* ─────────────── theme ─────────────── */
 type ThemeKey = "aurora" | "violet" | "emerald" | "sunset" | "mono";
@@ -310,7 +306,13 @@ function ArcGauge({ label, value, max, unit, color, decimals = 0 }: ArcGaugeProp
   return (
     <div className="glass p-4 flex flex-col items-center">
       <svg width="140" height="120" viewBox="0 0 140 120">
-        <path d={arc} fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="9" strokeLinecap="round" />
+        <path
+          d={arc}
+          fill="none"
+          stroke="rgba(255,255,255,0.1)"
+          strokeWidth="9"
+          strokeLinecap="round"
+        />
         <path
           d={arc}
           fill="none"
@@ -403,22 +405,26 @@ function WDBXDashboard(): ReactNode {
   useEffect(() => {
     const el = rootRef.current;
     if (!el) return;
-    return attachIntervalGate(el, () => {
-      setG((p) => ({
-        thru: Math.max(60, Math.min(96, p.thru + (Math.random() - 0.5) * 7)),
-        p99: Math.max(6, Math.min(16, p.p99 + (Math.random() - 0.5) * 1.6)),
-        recall: Math.max(91, Math.min(97, p.recall + (Math.random() - 0.5) * 0.8)),
-        mem: Math.max(1.2, Math.min(1.9, p.mem + (Math.random() - 0.5) * 0.08)),
-      }));
-      setThruHist((h) => [...h.slice(1), 70 + Math.random() * 22]);
-      setLatHist((h) => [...h.slice(1), 7 + Math.random() * 6]);
-      setShards((s) =>
-        s.map(() => {
-          const rnd = Math.random();
-          return rnd > 0.97 ? "warn" : rnd > 0.995 ? "down" : "ok";
-        }),
-      );
-    }, 900);
+    return attachIntervalGate(
+      el,
+      () => {
+        setG((p) => ({
+          thru: Math.max(60, Math.min(96, p.thru + (Math.random() - 0.5) * 7)),
+          p99: Math.max(6, Math.min(16, p.p99 + (Math.random() - 0.5) * 1.6)),
+          recall: Math.max(91, Math.min(97, p.recall + (Math.random() - 0.5) * 0.8)),
+          mem: Math.max(1.2, Math.min(1.9, p.mem + (Math.random() - 0.5) * 0.08)),
+        }));
+        setThruHist((h) => [...h.slice(1), 70 + Math.random() * 22]);
+        setLatHist((h) => [...h.slice(1), 7 + Math.random() * 6]);
+        setShards((s) =>
+          s.map(() => {
+            const rnd = Math.random();
+            return rnd > 0.97 ? "warn" : rnd > 0.995 ? "down" : "ok";
+          }),
+        );
+      },
+      900,
+    );
   }, []);
   const shardColor: Record<ShardStatus, string> = {
     ok: "#34d399",
@@ -442,8 +448,22 @@ function WDBXDashboard(): ReactNode {
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
         <ArcGauge label="Throughput" value={g.thru} max={100} unit="req/s" color="#22d3ee" />
-        <ArcGauge label="p99 latency" value={g.p99} max={20} unit="ms" color="#a855f7" decimals={1} />
-        <ArcGauge label="Recall@10" value={g.recall} max={100} unit="%" color="#34d399" decimals={1} />
+        <ArcGauge
+          label="p99 latency"
+          value={g.p99}
+          max={20}
+          unit="ms"
+          color="#a855f7"
+          decimals={1}
+        />
+        <ArcGauge
+          label="Recall@10"
+          value={g.recall}
+          max={100}
+          unit="%"
+          color="#34d399"
+          decimals={1}
+        />
         <ArcGauge label="Memory" value={g.mem} max={2} unit="GB" color="#fbbf24" decimals={2} />
       </div>
       <div className="grid sm:grid-cols-2 gap-3 mb-4">
@@ -571,10 +591,8 @@ const Harmonograph = (): ReactNode => {
     for (let i = 0; i < 380; i++) {
       const tt = t * 0.01 + i * 0.05;
       const decay = Math.exp(-d * tt * 60);
-      const x =
-        cx + A * Math.sin(tt * p0 + ph0) * decay + A * Math.sin(tt * p2 + ph2) * decay;
-      const y =
-        cy + A * Math.sin(tt * p1 + ph1) * decay + A * Math.sin(tt * p3 + ph3) * decay;
+      const x = cx + A * Math.sin(tt * p0 + ph0) * decay + A * Math.sin(tt * p2 + ph2) * decay;
+      const y = cy + A * Math.sin(tt * p1 + ph1) * decay + A * Math.sin(tt * p3 + ph3) * decay;
       if (i) ctx.lineTo(x, y);
       else ctx.moveTo(x, y);
     }
@@ -686,10 +704,7 @@ const Tesseract = (): ReactNode => {
       y *= k;
       z *= k;
       const k2 = 2.6 / (3.4 - z);
-      return [
-        w / 2 + x * Math.min(w, h) * 0.18 * k2,
-        h / 2 + y * Math.min(w, h) * 0.18 * k2,
-      ];
+      return [w / 2 + x * Math.min(w, h) * 0.18 * k2, h / 2 + y * Math.min(w, h) * 0.18 * k2];
     };
     const pr = verts.map(rot);
     ctx.strokeStyle = "rgba(34,211,238,0.55)";
@@ -730,15 +745,12 @@ const NetworkCanvas = (): ReactNode => {
     const s = rawState as NetworkState;
     if (!s.init) {
       s.init = true;
-      s.nodes = Array.from(
-        { length: Math.min(60, Math.floor((w * h) / 18000)) },
-        () => ({
-          x: Math.random() * w,
-          y: Math.random() * h,
-          vx: (Math.random() - 0.5) * 0.3,
-          vy: (Math.random() - 0.5) * 0.3,
-        }),
-      );
+      s.nodes = Array.from({ length: Math.min(60, Math.floor((w * h) / 18000)) }, () => ({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: (Math.random() - 0.5) * 0.3,
+      }));
     }
     ctx.clearRect(0, 0, w, h);
     const n = s.nodes ?? [];
@@ -818,8 +830,7 @@ const LAB_CSS = `
 `;
 
 const PAGE_BG: CSSProperties = {
-  background:
-    "#0c0c09",
+  background: "#0c0c09",
 };
 
 const EQUALIZER_BARS = [0, 1, 2, 3, 4, 5] as const;
@@ -850,9 +861,8 @@ function Lab(): ReactNode {
             Design & Animation Lab
           </h1>
           <p className="mt-3 text-slate-400 max-w-2xl">
-            A live WDBX telemetry panel and a gallery of generative canvases — every
-            tile is real, running code. Recolor the whole page from the palette switcher
-            in the nav.
+            A live WDBX telemetry panel and a gallery of generative canvases — every tile is real,
+            running code. Recolor the whole page from the palette switcher in the nav.
           </p>
         </div>
       </div>
@@ -921,9 +931,7 @@ function Lab(): ReactNode {
       <footer className="border-t border-white/10 px-6 sm:px-10 py-10 text-slate-500 text-xs">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between gap-2">
           <span>© {year} Machine Learning Advanced Innovations, Inc.</span>
-          <span>
-            Dashboard figures are simulated for demonstration — not benchmark claims.
-          </span>
+          <span>Dashboard figures are simulated for demonstration — not benchmark claims.</span>
         </div>
       </footer>
     </div>

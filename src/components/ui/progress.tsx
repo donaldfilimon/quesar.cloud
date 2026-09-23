@@ -2,7 +2,11 @@ import * as ProgressPrimitive from "@radix-ui/react-progress";
 import type { ComponentProps } from "react";
 import { cn } from "@/lib/utils";
 
-export function Progress({ className, value = 0, ...props }: ComponentProps<typeof ProgressPrimitive.Root>) {
+export function Progress({
+  className,
+  value = 0,
+  ...props
+}: ComponentProps<typeof ProgressPrimitive.Root>) {
   const clamped = Math.min(100, Math.max(0, value ?? 0));
   return (
     <ProgressPrimitive.Root

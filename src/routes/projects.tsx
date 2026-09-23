@@ -5,7 +5,10 @@ import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/projects")({
   head: () =>
-    pageHead("Projects — MLAI", "Public project directory: ABI, WDBX, Abbey, and Gama with limits named."),
+    pageHead(
+      "Projects — MLAI",
+      "Public project directory: ABI, WDBX, Abbey, and Gama with limits named.",
+    ),
   component: ProjectsPage,
 });
 

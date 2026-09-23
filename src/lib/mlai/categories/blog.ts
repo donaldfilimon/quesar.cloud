@@ -1,6 +1,6 @@
-import type { Blog } from '../schemas';
+import type { Blog } from "../schemas";
 
-export const blog: Blog = ([
+export const blog: Blog = [
   {
     slug: "wdbx-v2-release",
     tag: "RELEASE",
@@ -44,7 +44,7 @@ export const blog: Blog = ([
           "The V2 telemetry layer reports an ethical-compliance score alongside operational metrics on every pipeline turn, decomposed across four named principles:",
         ],
         math: [
-          "S_{align} = \\alpha \\cdot \\mathrm{Autonomy} + \\beta \\cdot \\mathrm{NonMaleficence} + \\gamma \\cdot \\mathrm{Beneficence} + \\delta \\cdot \\mathrm{Justice}"
+          "S_{align} = \\alpha \\cdot \\mathrm{Autonomy} + \\beta \\cdot \\mathrm{NonMaleficence} + \\gamma \\cdot \\mathrm{Beneficence} + \\delta \\cdot \\mathrm{Justice}",
         ],
       },
       {
@@ -130,7 +130,9 @@ export const blog: Blog = ([
         paragraphs: [
           "Every candidate j is ranked by the product of four terms, each living in the unit interval. Because they multiply, any one factor collapsing toward zero pulls the whole score down — there is no averaging away a fatal weakness:",
         ],
-        math: ["s_{ij} \\;=\\; \\sigma_j \\,\\cdot\\, \\tau_j \\,\\cdot\\, \\gamma_j \\,\\cdot\\, \\pi_j"],
+        math: [
+          "s_{ij} \\;=\\; \\sigma_j \\,\\cdot\\, \\tau_j \\,\\cdot\\, \\gamma_j \\,\\cdot\\, \\pi_j",
+        ],
         list: [
           "σ — semantic similarity (cosine distance between query and candidate, via a SIMD path with a deterministic CPU fallback).",
           "τ — temporal weight (exponential recency decay).",
@@ -235,7 +237,7 @@ export const blog: Blog = ([
       {
         heading: "Policy wins, always",
         paragraphs: [
-          "Signals nudge the weights; policy overrides them. When the control plane flags risk, weight shifts hard toward Abi, the moderating profile — and a disallowed action collapses the distribution to Abi outright, regardless of how the keywords scored. \"No autonomous write without an observable policy boundary\" is enforced here as arithmetic, not etiquette.",
+          'Signals nudge the weights; policy overrides them. When the control plane flags risk, weight shifts hard toward Abi, the moderating profile — and a disallowed action collapses the distribution to Abi outright, regardless of how the keywords scored. "No autonomous write without an observable policy boundary" is enforced here as arithmetic, not etiquette.',
         ],
       },
     ],
@@ -252,7 +254,7 @@ export const blog: Blog = ([
     body: [
       {
         paragraphs: [
-          "When an autonomous workflow does something surprising in production, the first question is never \"what is the model?\" It is \"what just happened?\" Most AI stacks cannot answer that question, because the only durable artifact they keep is the final response. The retrieval that fed it, the policy checks that passed, the tool calls that fired, and the operator who approved the run are all gone by the time anyone goes looking.",
+          'When an autonomous workflow does something surprising in production, the first question is never "what is the model?" It is "what just happened?" Most AI stacks cannot answer that question, because the only durable artifact they keep is the final response. The retrieval that fed it, the policy checks that passed, the tool calls that fired, and the operator who approved the run are all gone by the time anyone goes looking.',
           "Quesar's Trace Layer is built around the opposite default: every orchestration step emits an inspectable event before it is allowed to change state. The trace is the system of record, not a debug log you remember to turn on.",
         ],
       },
@@ -279,7 +281,7 @@ export const blog: Blog = ([
       {
         heading: "Designing for the review you will eventually run",
         paragraphs: [
-          "The practical discipline is to treat the post-incident review as a first-class consumer of your architecture from day one. If you cannot answer \"why did the agent take its last move\" from durable artifacts alone — without re-prompting the model and hoping for the same output — the trace is incomplete.",
+          'The practical discipline is to treat the post-incident review as a first-class consumer of your architecture from day one. If you cannot answer "why did the agent take its last move" from durable artifacts alone — without re-prompting the model and hoping for the same output — the trace is incomplete.',
           "Our operating principle here is blunt: no autonomous write action without an observable policy boundary, and no retrieval claim without a traceable source or confidence signal. Everything in the Trace Layer exists to keep those two promises auditable months after the run.",
         ],
       },
@@ -310,7 +312,7 @@ export const blog: Blog = ([
           "Tool-boundary violations — did the agent attempt an action outside its granted permissions, even if the attempt was blocked?",
           "Source coverage — what fraction of factual claims trace back to a retrieved record versus model memory?",
           "Rollback paths — for every write action, can we reconstruct and reverse it from trace artifacts alone?",
-          "Abstention quality — when the agent should have said \"I don't know\" or escalated, did it? Confident wrong answers are scored worse than honest abstentions.",
+          'Abstention quality — when the agent should have said "I don\'t know" or escalated, did it? Confident wrong answers are scored worse than honest abstentions.',
           "Prompt-injection resilience — does adversarial content in retrieved documents or user input change the agent's permissions or goals?",
           "Human-review burden — how many runs require an operator, and is that number trending toward fatigue?",
         ],
@@ -349,7 +351,7 @@ export const blog: Blog = ([
       {
         heading: "What ranking cannot tell you",
         paragraphs: [
-          "A ranked list gives you the top-k records and a similarity score. It does not tell you whether two of those records contradict each other, whether the third was only retrieved because it shares boilerplate with the query, or whether the answer actually depended on the record ranked seventh. In an audit, \"the model saw these ten documents\" is not the same claim as \"the answer rests on these two.\"",
+          'A ranked list gives you the top-k records and a similarity score. It does not tell you whether two of those records contradict each other, whether the third was only retrieved because it shares boilerplate with the query, or whether the answer actually depended on the record ranked seventh. In an audit, "the model saw these ten documents" is not the same claim as "the answer rests on these two."',
           "Backtrace graphs make the dependency explicit. Each retrieved record is a node; edges carry weights that reflect how strongly a record contributed to the generated answer, and the graph preserves the path from query to claim.",
         ],
       },
@@ -404,7 +406,7 @@ export const blog: Blog = ([
       {
         heading: "Checks and balances as code",
         paragraphs: [
-          "The point of role separation is not ceremony — it is that intervention points become explicit. There is a defined moment where review happens before execution, a defined boundary an action cannot cross without approval, and a defined place an operator can step in. \"No autonomous write action without an observable policy boundary\" is much easier to keep when the boundary is a different agent with a different mandate.",
+          'The point of role separation is not ceremony — it is that intervention points become explicit. There is a defined moment where review happens before execution, a defined boundary an action cannot cross without approval, and a defined place an operator can step in. "No autonomous write action without an observable policy boundary" is much easier to keep when the boundary is a different agent with a different mandate.',
         ],
       },
     ],
@@ -432,9 +434,7 @@ export const blog: Blog = ([
       },
       {
         heading: "Confidence bands, decision diffs, and a real stop button",
-        paragraphs: [
-          "Three affordances do most of the work of keeping operators in control:",
-        ],
+        paragraphs: ["Three affordances do most of the work of keeping operators in control:"],
         list: [
           "Confidence bands — surface the retrieval confidence and source coverage behind a decision so the operator can calibrate trust at a glance instead of treating every output as equally certain.",
           "Decision diffs — show what changed between the proposed action and the last approved state, so review is a focused comparison rather than a re-read of everything.",
@@ -516,7 +516,7 @@ export const blog: Blog = ([
         heading: "Why teams choose this path",
         paragraphs: [
           "Private deployment is shaped for environments where data residency, network isolation, or customer policy make unmanaged infrastructure a non-starter: regulated software teams, research organizations with sensitive corpora, security and compliance teams evaluating tool-using agents, and infrastructure teams running near the edge.",
-          "For those teams, \"private\" and \"auditable\" are not in tension — they are the same requirement seen from two sides. The runtime is built so you never have to choose between keeping your data and seeing what your AI did with it.",
+          'For those teams, "private" and "auditable" are not in tension — they are the same requirement seen from two sides. The runtime is built so you never have to choose between keeping your data and seeing what your AI did with it.',
         ],
       },
     ],
@@ -702,4 +702,4 @@ pub fn CosineKernel(comptime dim: usize) type {
       },
     ],
   },
-]);
+];

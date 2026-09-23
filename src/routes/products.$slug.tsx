@@ -29,7 +29,10 @@ export const Route = createFileRoute("/products/$slug")({
     return { name: product.name, intro: product.intro, ld: softwareApplicationLd(product) };
   },
   head: ({ loaderData }) => ({
-    ...pageHead(`${loaderData?.name ?? "Product"} — Quesar`, loaderData?.intro ?? "Quesar product."),
+    ...pageHead(
+      `${loaderData?.name ?? "Product"} — Quesar`,
+      loaderData?.intro ?? "Quesar product.",
+    ),
     scripts: loaderData ? [jsonLdScript(loaderData.ld)] : [],
   }),
   component: ProductPage,
@@ -47,7 +50,8 @@ function ProductPage() {
           { to: journey.setupHref, label: "Setup documentation", body: journey.prerequisites },
           ...journey.researchSlugs.map((paperSlug) => ({
             to: `/research/${paperSlug}`,
-            label: research.publications.find((paper) => paper.slug === paperSlug)?.title ?? paperSlug,
+            label:
+              research.publications.find((paper) => paper.slug === paperSlug)?.title ?? paperSlug,
             body: "Read the supporting research and its limitations.",
           })),
         ]
@@ -56,7 +60,11 @@ function ProductPage() {
     ...productPages
       .filter((item) => item.slug !== product.slug)
       .map((item) => ({ to: `/products/${item.slug}`, label: item.name, body: item.kicker })),
-    { to: "/benchmarks", label: "WDBX benchmarks", body: "Configuration facts and interactive models, not a scoreboard." },
+    {
+      to: "/benchmarks",
+      label: "WDBX benchmarks",
+      body: "Configuration facts and interactive models, not a scoreboard.",
+    },
     { to: "/docs", label: "Documentation", body: "Platform and WDBX documentation." },
     { to: "/showcase", label: "The projection room", body: "The cinematic showcase surfaces." },
   ];
@@ -64,9 +72,17 @@ function ProductPage() {
     <>
       <PageHero eyebrow={product.kicker} title={product.name} lede={product.intro} />
       {product.sections.map((section) => (
-        <Section key={section.title} eyebrow={section.eyebrow} title={section.title} lede={section.sub}>
+        <Section
+          key={section.title}
+          eyebrow={section.eyebrow}
+          title={section.title}
+          lede={section.sub}
+        >
           {section.paragraphs.map((p) => (
-            <p key={p.slice(0, 40)} className="mt-3 max-w-3xl text-sm leading-relaxed text-fg-muted sm:text-base">
+            <p
+              key={p.slice(0, 40)}
+              className="mt-3 max-w-3xl text-sm leading-relaxed text-fg-muted sm:text-base"
+            >
               {p}
             </p>
           ))}
@@ -91,11 +107,21 @@ function ProductPage() {
             </div>
           ) : null}
           {section.pillars ? (
-            <div className={section.pillars.length === 4 ? "mt-6 grid gap-4 sm:grid-cols-2" : "mt-6 grid gap-4 md:grid-cols-3"}>
+            <div
+              className={
+                section.pillars.length === 4
+                  ? "mt-6 grid gap-4 sm:grid-cols-2"
+                  : "mt-6 grid gap-4 md:grid-cols-3"
+              }
+            >
               {section.pillars.map((pillar) => (
                 <Surface
                   key={pillar.title}
-                  accent={(pillar.accent ?? product.accent) === "aviva" ? "abi" : (pillar.accent ?? product.accent)}
+                  accent={
+                    (pillar.accent ?? product.accent) === "aviva"
+                      ? "abi"
+                      : (pillar.accent ?? product.accent)
+                  }
                   className="flex h-full flex-col"
                 >
                   <h3 className="font-display text-xl">{pillar.title}</h3>
@@ -111,7 +137,13 @@ function ProductPage() {
           ) : null}
           {section.steps ? (
             <div className="mt-6">
-              <TruthList items={section.steps.map((step) => ({ n: step.n, title: step.title, body: step.description }))} />
+              <TruthList
+                items={section.steps.map((step) => ({
+                  n: step.n,
+                  title: step.title,
+                  body: step.description,
+                }))}
+              />
             </div>
           ) : null}
           {section.demo === "persona-router" ? (

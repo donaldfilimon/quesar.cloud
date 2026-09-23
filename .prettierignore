@@ -1,0 +1,17 @@
+# Build output and generated files: never hand-formatted.
+docs/
+.output/
+.vercel/
+.tanstack/
+src/routeTree.gen.ts
+bun.lock
+# Standalone projects with their own toolchains (see their READMEs).
+sidecars/
+native/
+# Vendored assets.
+public/
+# Dated records (some imported from mlai): kept byte-for-byte.
+notes/
+# Session-plugin state.
+.remember/
+.claude/

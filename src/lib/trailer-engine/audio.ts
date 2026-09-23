@@ -15,14 +15,7 @@
 /* ─────────────────────────── injected shapes ─────────────────────────── */
 
 export type EqBandType =
-  | "lowshelf"
-  | "highshelf"
-  | "peaking"
-  | "highpass"
-  | "lowpass"
-  | "notch"
-  | "bandpass"
-  | "allpass";
+  "lowshelf" | "highshelf" | "peaking" | "highpass" | "lowpass" | "notch" | "bandpass" | "allpass";
 
 export interface EqBand {
   type: EqBandType;
@@ -67,7 +60,9 @@ export interface TTSHandle {
  * download progress in 0..1 and resolves with the synthesizer and the device
  * it landed on ("webgpu" | "wasm" | anything the adapter reports).
  */
-export type LoadTTS = (reportProgress: (p01: number) => void) => Promise<{ tts: TTSHandle; device: string }>;
+export type LoadTTS = (
+  reportProgress: (p01: number) => void,
+) => Promise<{ tts: TTSHandle; device: string }>;
 
 export interface Scheduler {
   setTimeout(fn: () => void, ms: number): unknown;
@@ -268,7 +263,8 @@ export class AudioEngine {
     this.crossfadeSec = opts.crossfadeSec ?? 0.06;
     this.sampleRateFallback = opts.sampleRateFallback ?? 24000;
     this.voices = {};
-    for (const [who, persona] of Object.entries(opts.registry.speakers)) this.voices[who] = persona.voice;
+    for (const [who, persona] of Object.entries(opts.registry.speakers))
+      this.voices[who] = persona.voice;
   }
 
   /* ── snapshot store ── */
@@ -430,7 +426,10 @@ export class AudioEngine {
     }
   }
 
-  private personaChain(ctx: AudioContextLike, eq: EqBand[]): { input: AudioNodeLike; output: AudioNodeLike } {
+  private personaChain(
+    ctx: AudioContextLike,
+    eq: EqBand[],
+  ): { input: AudioNodeLike; output: AudioNodeLike } {
     if (!eq.length) {
       const g = ctx.createGain();
       return { input: g, output: g };
@@ -443,7 +442,8 @@ export class AudioEngine {
       if (band.freq != null) f.frequency.value = band.freq;
       if (band.q != null) f.Q.value = band.q;
       // highpass/lowpass use Q, not gain; only shelves and peaking take gain.
-      if (band.gain != null && band.type !== "highpass" && band.type !== "lowpass") f.gain.value = band.gain;
+      if (band.gain != null && band.type !== "highpass" && band.type !== "lowpass")
+        f.gain.value = band.gain;
       if (prev) prev.connect(f);
       else first = f;
       prev = f;
@@ -451,10 +451,16 @@ export class AudioEngine {
     return { input: first as BiquadNodeLike, output: prev as BiquadNodeLike };
   }
 
-  private buildBuffer(ctx: AudioContextLike, parts: Float32Array[], sr: number, gapSec: number): AudioBufferLike {
+  private buildBuffer(
+    ctx: AudioContextLike,
+    parts: Float32Array[],
+    sr: number,
+    gapSec: number,
+  ): AudioBufferLike {
     const gapN = Math.max(0, Math.round(gapSec * sr));
     let total = 0;
-    for (let i = 0; i < parts.length; i++) total += (parts[i] as Float32Array).length + (i < parts.length - 1 ? gapN : 0);
+    for (let i = 0; i < parts.length; i++)
+      total += (parts[i] as Float32Array).length + (i < parts.length - 1 ? gapN : 0);
     const buf = ctx.createBuffer(1, Math.max(1, total), sr);
     const out = buf.getChannelData(0);
     const fadeN = Math.max(1, Math.round(this.fadeSec * sr));
@@ -560,7 +566,10 @@ export class AudioEngine {
         const parts: Float32Array[] = [];
         let sr = this.sampleRateFallback;
         for (const chunk of chunkText(norm)) {
-          const audio = await this.tts.generate(chunk, { voice: speaker.voice, speed: speaker.speed });
+          const audio = await this.tts.generate(chunk, {
+            voice: speaker.voice,
+            speed: speaker.speed,
+          });
           if (gen !== this.generation) return null;
           const pcm = audio.audio ?? audio.data;
           sr = audio.sampling_rate ?? audio.sr ?? sr;
@@ -606,7 +615,9 @@ export class AudioEngine {
 
   async warm(lines: { who?: string; text: string }[]): Promise<void> {
     if (!Array.isArray(lines) || !lines.length || this.disposed) return;
-    for (const l of lines) if (l && l.text) this.warmQueue.push({ who: l.who || this.registry.defaultSpeaker, text: l.text });
+    for (const l of lines)
+      if (l && l.text)
+        this.warmQueue.push({ who: l.who || this.registry.defaultSpeaker, text: l.text });
     if (this.status_ === "ready") void this.drainWarm();
     else {
       const gen = this.generation;

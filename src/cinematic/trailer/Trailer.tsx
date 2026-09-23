@@ -13,14 +13,25 @@ import { Stage, Sprite } from "../film/engine";
 import { useSprite, useTimeline } from "../film/timeline-context";
 import { Grain, Vignette, GridBG, Orb } from "../film/primitives";
 import { DiagramSVG, PulseRing, SignalDots } from "../film/fx";
-import { speak, lineSpeechDur, stopSpeech, setSpeechPlaying, primeNeural, useVoiceReady } from "../film/speech";
+import {
+  speak,
+  lineSpeechDur,
+  stopSpeech,
+  setSpeechPlaying,
+  primeNeural,
+  useVoiceReady,
+} from "../film/speech";
 import { VoiceToggle } from "../film/narration";
 
 const DURATION = 62;
 
 /* ── trailer VO (Abbey, trailer cadence) ──────────────────────────── */
 
-interface TLine { t: number; text: string; dur: number }
+interface TLine {
+  t: number;
+  text: string;
+  dur: number;
+}
 const RAW: Array<Omit<TLine, "dur">> = [
   { t: 0.9, text: "They gave you an answer." },
   { t: 4.0, text: "But could it ever prove it?" },
@@ -42,7 +53,10 @@ const RAW: Array<Omit<TLine, "dur">> = [
   { t: 55.6, text: "This is MLAI." },
   { t: 57.8, text: "Infrastructure for resilient intelligence." },
 ];
-const TRAILER_SCRIPT: TLine[] = RAW.map((l) => ({ ...l, dur: clamp(l.text.length / 16 + 0.8, 2.0, 4.4) }));
+const TRAILER_SCRIPT: TLine[] = RAW.map((l) => ({
+  ...l,
+  dur: clamp(l.text.length / 16 + 0.8, 2.0, 4.4),
+}));
 
 function activeLine(time: number): TLine | null {
   let cur: TLine | null = null;
@@ -55,9 +69,13 @@ function TrailerNarration() {
   const { clock: time, playing } = useTimeline();
   const prev = useRef(0);
   const spoken = useRef<Set<number>>(new Set());
-  useEffect(() => { primeNeural(TRAILER_SCRIPT); return () => stopSpeech(); }, []);
   useEffect(() => {
-    const p = prev.current; prev.current = time;
+    primeNeural(TRAILER_SCRIPT);
+    return () => stopSpeech();
+  }, []);
+  useEffect(() => {
+    const p = prev.current;
+    prev.current = time;
     if (time < p - 0.35) {
       stopSpeech();
       spoken.current = new Set(TRAILER_SCRIPT.filter((l) => l.t <= time + 0.05).map((l) => l.t));
@@ -71,7 +89,9 @@ function TrailerNarration() {
       }
     }
   }, [time, playing]);
-  useEffect(() => { setSpeechPlaying(playing); }, [playing]);
+  useEffect(() => {
+    setSpeechPlaying(playing);
+  }, [playing]);
   return null;
 }
 
@@ -90,15 +110,71 @@ function TrailerCaption() {
   const spokenCount = Math.floor(frac * wordIdx.length);
   let seen = 0;
   return (
-    <div style={{ position: "absolute", left: 0, right: 0, bottom: 64, zIndex: 42, display: "flex", justifyContent: "center", pointerEvents: "none" }}>
-      <div style={{ display: "flex", alignItems: "center", gap: 16, opacity: op, maxWidth: 1500, padding: "0 40px" }}>
-        <span style={{ width: 8, height: 8, borderRadius: "50%", background: C.cyan, boxShadow: `0 0 12px ${C.cyan}`, opacity: playing ? 0.5 + 0.5 * Math.sin(time * 7) : 0.4, flexShrink: 0 }} />
-        <span style={{ fontFamily: FONT.mono, fontSize: 13, letterSpacing: "0.28em", color: C.blueHi, flexShrink: 0 }}>ABBEY</span>
-        <span style={{ fontFamily: FONT.display, fontWeight: 600, fontSize: 34, letterSpacing: "-0.01em", textShadow: "0 2px 24px rgba(0,0,0,0.85)" }}>
+    <div
+      style={{
+        position: "absolute",
+        left: 0,
+        right: 0,
+        bottom: 64,
+        zIndex: 42,
+        display: "flex",
+        justifyContent: "center",
+        pointerEvents: "none",
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 16,
+          opacity: op,
+          maxWidth: 1500,
+          padding: "0 40px",
+        }}
+      >
+        <span
+          style={{
+            width: 8,
+            height: 8,
+            borderRadius: "50%",
+            background: C.cyan,
+            boxShadow: `0 0 12px ${C.cyan}`,
+            opacity: playing ? 0.5 + 0.5 * Math.sin(time * 7) : 0.4,
+            flexShrink: 0,
+          }}
+        />
+        <span
+          style={{
+            fontFamily: FONT.mono,
+            fontSize: 13,
+            letterSpacing: "0.28em",
+            color: C.blueHi,
+            flexShrink: 0,
+          }}
+        >
+          ABBEY
+        </span>
+        <span
+          style={{
+            fontFamily: FONT.display,
+            fontWeight: 600,
+            fontSize: 34,
+            letterSpacing: "-0.01em",
+            textShadow: "0 2px 24px rgba(0,0,0,0.85)",
+          }}
+        >
           {tokens.map((tk, i) => {
             if (!/\S/.test(tk)) return tk;
-            const lit = seen < spokenCount; seen++;
-            return <span key={i} style={{ color: lit ? C.text : C.dim, transition: "color 90ms linear" }}>{tk}</span>;
+            const lit = seen < spokenCount;
+            seen++;
+            return (
+              <span
+                key={i}
+                style={{ color: lit ? C.text : C.dim, transition: "color 90ms linear" }}
+              >
+                {tk}
+              </span>
+            );
           })}
         </span>
       </div>
@@ -109,8 +185,18 @@ function TrailerCaption() {
 /* ── kinetic primitives ───────────────────────────────────────────── */
 
 // A word/phrase that slams in (scale + de-blur), holds, then snaps away.
-function Kinetic({ text, size = 150, color = C.text, gradient, weight = 800 }: {
-  text: string; size?: number; color?: string; gradient?: string; weight?: number;
+function Kinetic({
+  text,
+  size = 150,
+  color = C.text,
+  gradient,
+  weight = 800,
+}: {
+  text: string;
+  size?: number;
+  color?: string;
+  gradient?: string;
+  weight?: number;
 }) {
   const { localTime: lt, duration } = useSprite();
   const inT = step(lt, 0, 0.32, Easing.easeOutExpo);
@@ -119,12 +205,40 @@ function Kinetic({ text, size = 150, color = C.text, gradient, weight = 800 }: {
   const scale = 0.7 + 0.3 * inT + 0.06 * outT;
   const blur = (1 - inT) * 16;
   const grad = gradient
-    ? { background: gradient, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent", color: "transparent" }
+    ? {
+        background: gradient,
+        WebkitBackgroundClip: "text",
+        backgroundClip: "text",
+        WebkitTextFillColor: "transparent",
+        color: "transparent",
+      }
     : { color };
   return (
-    <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", zIndex: 20 }}>
-      <div style={{ fontFamily: FONT.display, fontWeight: weight, fontSize: size, letterSpacing: "-0.03em", textAlign: "center", lineHeight: 0.98,
-        opacity: inT * (1 - outT), transform: `scale(${scale})`, filter: `blur(${blur}px)`, textShadow: "0 8px 50px rgba(0,0,0,0.7)", ...grad }}>
+    <div
+      style={{
+        position: "absolute",
+        inset: 0,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        zIndex: 20,
+      }}
+    >
+      <div
+        style={{
+          fontFamily: FONT.display,
+          fontWeight: weight,
+          fontSize: size,
+          letterSpacing: "-0.03em",
+          textAlign: "center",
+          lineHeight: 0.98,
+          opacity: inT * (1 - outT),
+          transform: `scale(${scale})`,
+          filter: `blur(${blur}px)`,
+          textShadow: "0 8px 50px rgba(0,0,0,0.7)",
+          ...grad,
+        }}
+      >
         {text}
       </div>
     </div>
@@ -132,15 +246,45 @@ function Kinetic({ text, size = 150, color = C.text, gradient, weight = 800 }: {
 }
 
 // A rotated stamp that punches in with overshoot.
-function Stamp({ text, x, y, rot = -8, color = C.cyan, delay = 0 }: {
-  text: string; x: number; y: number; rot?: number; color?: string; delay?: number;
+function Stamp({
+  text,
+  x,
+  y,
+  rot = -8,
+  color = C.cyan,
+  delay = 0,
+}: {
+  text: string;
+  x: number;
+  y: number;
+  rot?: number;
+  color?: string;
+  delay?: number;
 }) {
   const { localTime: lt } = useSprite();
   const p = step(lt, delay, 0.34, Easing.easeOutBack);
   return (
-    <div style={{ position: "absolute", left: x, top: y, zIndex: 24, opacity: p, transform: `translate(-50%,-50%) rotate(${rot}deg) scale(${0.6 + 0.4 * p})`,
-      fontFamily: FONT.mono, fontSize: 30, fontWeight: 500, letterSpacing: "0.12em", color, padding: "10px 22px", borderRadius: 8,
-      border: `2px solid ${color}`, boxShadow: `0 0 30px ${color}55`, background: `${color}10`, whiteSpace: "nowrap" }}>
+    <div
+      style={{
+        position: "absolute",
+        left: x,
+        top: y,
+        zIndex: 24,
+        opacity: p,
+        transform: `translate(-50%,-50%) rotate(${rot}deg) scale(${0.6 + 0.4 * p})`,
+        fontFamily: FONT.mono,
+        fontSize: 30,
+        fontWeight: 500,
+        letterSpacing: "0.12em",
+        color,
+        padding: "10px 22px",
+        borderRadius: 8,
+        border: `2px solid ${color}`,
+        boxShadow: `0 0 30px ${color}55`,
+        background: `${color}10`,
+        whiteSpace: "nowrap",
+      }}
+    >
       {text}
     </div>
   );
@@ -152,12 +296,22 @@ function ShakeRig({ beats, children }: { beats: number[]; children: ReactNode })
   let amp = 0;
   for (const b of beats) {
     const d = time - b;
-    if (d >= 0 && d < 0.32) amp = Math.max(amp, (1 - d / 0.32));
+    if (d >= 0 && d < 0.32) amp = Math.max(amp, 1 - d / 0.32);
   }
   const dx = amp * Math.sin(time * 90) * 7;
   const dy = amp * Math.cos(time * 78) * 7;
   const sc = 1 + amp * 0.025;
-  return <div style={{ position: "absolute", inset: 0, transform: `translate(${dx}px, ${dy}px) scale(${sc})` }}>{children}</div>;
+  return (
+    <div
+      style={{
+        position: "absolute",
+        inset: 0,
+        transform: `translate(${dx}px, ${dy}px) scale(${sc})`,
+      }}
+    >
+      {children}
+    </div>
+  );
 }
 
 function SpeedLines() {
@@ -166,9 +320,20 @@ function SpeedLines() {
     <DiagramSVG>
       {Array.from({ length: 14 }, (_, i) => {
         const y = 60 + i * 72;
-        const t = ((time * 0.9 + i * 0.13) % 1);
+        const t = (time * 0.9 + i * 0.13) % 1;
         const x = -400 + t * 2700;
-        return <line key={i} x1={x} y1={y} x2={x + 320} y2={y} stroke={i % 2 ? C.cyan : C.blueHi} strokeWidth={2} opacity={0.10 + 0.10 * Math.sin(time * 3 + i)} />;
+        return (
+          <line
+            key={i}
+            x1={x}
+            y1={y}
+            x2={x + 320}
+            y2={y}
+            stroke={i % 2 ? C.cyan : C.blueHi}
+            strokeWidth={2}
+            opacity={0.1 + 0.1 * Math.sin(time * 3 + i)}
+          />
+        );
       })}
     </DiagramSVG>
   );
@@ -185,17 +350,69 @@ const TRIAD = [
 function TriadBeat() {
   const { localTime: lt } = useSprite();
   return (
-    <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", gap: 56, zIndex: 20 }}>
+    <div
+      style={{
+        position: "absolute",
+        inset: 0,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: 56,
+        zIndex: 20,
+      }}
+    >
       {TRIAD.map((p, i) => {
         const r = step(lt, 0.2 + i * 0.28, 0.5, Easing.easeOutBack);
         return (
-          <div key={p.name} style={{ width: 380, height: 460, borderRadius: 26, opacity: r, transform: `translateY(${(1 - r) * 50}px) scale(${0.9 + 0.1 * r})`,
-            border: `1px solid ${p.color}66`, background: `linear-gradient(160deg, ${p.color}1c, rgba(8,8,14,0.92))`, boxShadow: `0 30px 80px rgba(0,0,0,0.6), inset 0 0 40px ${p.color}12`,
-            display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 22 }}>
-            <div style={{ width: 130, height: 130, borderRadius: "50%", background: `radial-gradient(circle at 35% 30%, ${p.color}, ${p.color}55)`, display: "flex", alignItems: "center", justifyContent: "center",
-              fontFamily: FONT.display, fontWeight: 700, fontSize: 64, color: "#06120c", boxShadow: `0 0 50px ${p.color}aa` }}>{p.name[0]}</div>
-            <div style={{ fontFamily: FONT.display, fontWeight: 700, fontSize: 52, color: C.text }}>{p.name}</div>
-            <div style={{ fontFamily: FONT.mono, fontSize: 16, letterSpacing: "0.18em", color: p.color }}>{p.role}</div>
+          <div
+            key={p.name}
+            style={{
+              width: 380,
+              height: 460,
+              borderRadius: 26,
+              opacity: r,
+              transform: `translateY(${(1 - r) * 50}px) scale(${0.9 + 0.1 * r})`,
+              border: `1px solid ${p.color}66`,
+              background: `linear-gradient(160deg, ${p.color}1c, rgba(8,8,14,0.92))`,
+              boxShadow: `0 30px 80px rgba(0,0,0,0.6), inset 0 0 40px ${p.color}12`,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 22,
+            }}
+          >
+            <div
+              style={{
+                width: 130,
+                height: 130,
+                borderRadius: "50%",
+                background: `radial-gradient(circle at 35% 30%, ${p.color}, ${p.color}55)`,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontFamily: FONT.display,
+                fontWeight: 700,
+                fontSize: 64,
+                color: "#06120c",
+                boxShadow: `0 0 50px ${p.color}aa`,
+              }}
+            >
+              {p.name[0]}
+            </div>
+            <div style={{ fontFamily: FONT.display, fontWeight: 700, fontSize: 52, color: C.text }}>
+              {p.name}
+            </div>
+            <div
+              style={{
+                fontFamily: FONT.mono,
+                fontSize: 16,
+                letterSpacing: "0.18em",
+                color: p.color,
+              }}
+            >
+              {p.role}
+            </div>
           </div>
         );
       })}
@@ -207,7 +424,9 @@ function TriadBeat() {
 
 function FabricBeat() {
   const { localTime: lt } = useSprite();
-  const cx = 960, cy = 540, R = 250;
+  const cx = 960,
+    cy = 540,
+    R = 250;
   const n = 6;
   const pts = Array.from({ length: n }, (_, i) => {
     const a = -Math.PI / 2 + (i / n) * Math.PI * 2;
@@ -218,18 +437,87 @@ function FabricBeat() {
     <>
       <Orb x={cx} y={cy} size={760} color={C.violet} opacity={0.16} />
       <DiagramSVG>
-        {pts.map((p, i) => pts.map((q, j) => (j > i ? (
-          <line key={`${i}-${j}`} x1={p.x} y1={p.y} x2={q.x} y2={q.y} stroke={C.violet} strokeWidth={1.2} strokeDasharray="3 9" opacity={0.4 * build} />
-        ) : null)))}
+        {pts.map((p, i) =>
+          pts.map((q, j) =>
+            j > i ? (
+              <line
+                key={`${i}-${j}`}
+                x1={p.x}
+                y1={p.y}
+                x2={q.x}
+                y2={q.y}
+                stroke={C.violet}
+                strokeWidth={1.2}
+                strokeDasharray="3 9"
+                opacity={0.4 * build}
+              />
+            ) : null,
+          ),
+        )}
         {pts.map((p, i) => (
-          <SignalDots key={i} x1={cx} y1={cy} x2={p.x} y2={p.y} lt={lt + i * 0.4} count={1} speed={0.6} color={C.violet} r={4} on={build > 0.4} />
+          <SignalDots
+            key={i}
+            x1={cx}
+            y1={cy}
+            x2={p.x}
+            y2={p.y}
+            lt={lt + i * 0.4}
+            count={1}
+            speed={0.6}
+            color={C.violet}
+            r={4}
+            on={build > 0.4}
+          />
         ))}
-        <PulseRing cx={cx} cy={cy} lt={lt} period={2.0} maxR={180} minR={70} color={C.violet} width={1.8} opacity={0.6} />
+        <PulseRing
+          cx={cx}
+          cy={cy}
+          lt={lt}
+          period={2.0}
+          maxR={180}
+          minR={70}
+          color={C.violet}
+          width={1.8}
+          opacity={0.6}
+        />
       </DiagramSVG>
-      <div style={{ position: "absolute", left: 0, right: 0, top: 150, display: "flex", justifyContent: "center", zIndex: 24 }}>
-        <div style={{ display: "inline-flex", alignItems: "center", gap: 14, padding: "12px 26px", borderRadius: 999, border: `1px solid ${C.violet}77`, background: `${C.violet}16`, opacity: build }}>
-          <span style={{ width: 9, height: 9, borderRadius: "50%", background: C.violet, boxShadow: `0 0 12px ${C.violet}` }} />
-          <span style={{ fontFamily: FONT.mono, fontSize: 18, letterSpacing: "0.3em", color: C.violet }}>VISION · ROADMAP</span>
+      <div
+        style={{
+          position: "absolute",
+          left: 0,
+          right: 0,
+          top: 150,
+          display: "flex",
+          justifyContent: "center",
+          zIndex: 24,
+        }}
+      >
+        <div
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 14,
+            padding: "12px 26px",
+            borderRadius: 999,
+            border: `1px solid ${C.violet}77`,
+            background: `${C.violet}16`,
+            opacity: build,
+          }}
+        >
+          <span
+            style={{
+              width: 9,
+              height: 9,
+              borderRadius: "50%",
+              background: C.violet,
+              boxShadow: `0 0 12px ${C.violet}`,
+            }}
+          />
+          <span
+            style={{ fontFamily: FONT.mono, fontSize: 18, letterSpacing: "0.3em", color: C.violet }}
+          >
+            VISION · ROADMAP
+          </span>
         </div>
       </div>
     </>
@@ -246,16 +534,62 @@ function TitleDrop() {
   return (
     <>
       <Orb x={960} y={520} size={680} color={C.blue} opacity={0.14} />
-      <div style={{ position: "absolute", inset: 0, zIndex: 20, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center" }}>
-        <div style={{ fontFamily: FONT.display, fontWeight: 800, fontSize: 220, letterSpacing: "-0.04em", lineHeight: 0.9,
-          opacity: mark, transform: `scale(${0.8 + 0.2 * mark})`, filter: `blur(${(1 - mark) * 14}px)`,
-          background: `linear-gradient(110deg, ${C.text}, ${C.blueHi} 55%, ${C.cyan})`, WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent", paddingBottom: "0.06em" }}>
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          zIndex: 20,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          textAlign: "center",
+        }}
+      >
+        <div
+          style={{
+            fontFamily: FONT.display,
+            fontWeight: 800,
+            fontSize: 220,
+            letterSpacing: "-0.04em",
+            lineHeight: 0.9,
+            opacity: mark,
+            transform: `scale(${0.8 + 0.2 * mark})`,
+            filter: `blur(${(1 - mark) * 14}px)`,
+            background: `linear-gradient(110deg, ${C.text}, ${C.blueHi} 55%, ${C.cyan})`,
+            WebkitBackgroundClip: "text",
+            backgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            paddingBottom: "0.06em",
+          }}
+        >
           MLAI
         </div>
-        <div style={{ fontFamily: FONT.display, fontWeight: 500, fontSize: 46, color: C.text, letterSpacing: "-0.01em", opacity: tag, transform: `translateY(${(1 - tag) * 14}px)`, marginTop: 4 }}>
+        <div
+          style={{
+            fontFamily: FONT.display,
+            fontWeight: 500,
+            fontSize: 46,
+            color: C.text,
+            letterSpacing: "-0.01em",
+            opacity: tag,
+            transform: `translateY(${(1 - tag) * 14}px)`,
+            marginTop: 4,
+          }}
+        >
           Infrastructure for <span style={{ color: C.cyan }}>resilient intelligence.</span>
         </div>
-        <div style={{ fontFamily: FONT.mono, fontSize: 20, letterSpacing: "0.34em", color: C.dim, marginTop: 40, opacity: prod, transform: `translateY(${(1 - prod) * 10}px)` }}>
+        <div
+          style={{
+            fontFamily: FONT.mono,
+            fontSize: 20,
+            letterSpacing: "0.34em",
+            color: C.dim,
+            marginTop: 40,
+            opacity: prod,
+            transform: `translateY(${(1 - prod) * 10}px)`,
+          }}
+        >
           WDBX&nbsp;&nbsp;·&nbsp;&nbsp;ABBEY&nbsp;&nbsp;·&nbsp;&nbsp;AVIVA&nbsp;&nbsp;·&nbsp;&nbsp;ABI
         </div>
       </div>
@@ -271,22 +605,43 @@ const BEATS = [0.9, 4.0, 7.4, 11.4, 14.6, 20.2, 29.6, 35.6, 40.6, 47.2, 55.6];
 export function Trailer() {
   const ready = useVoiceReady();
   return (
-    <Stage width={1920} height={1080} duration={DURATION} background="#040406" persistKey="mlai-trailer" ready={ready}>
+    <Stage
+      width={1920}
+      height={1080}
+      duration={DURATION}
+      background="#040406"
+      persistKey="mlai-trailer"
+      ready={ready}
+    >
       <GridBG opacity={0.5} />
       <Vignette />
       <SpeedLines />
 
       <ShakeRig beats={BEATS}>
         {/* opening provocation */}
-        <Sprite start={0.6} end={3.9}><Kinetic text={"They gave you\nan answer."} size={120} /></Sprite>
-        <Sprite start={3.9} end={7.3}><Kinetic text="But could it prove it?" size={104} gradient={`linear-gradient(100deg, ${C.red}, ${C.amber})`} /></Sprite>
+        <Sprite start={0.6} end={3.9}>
+          <Kinetic text={"They gave you\nan answer."} size={120} />
+        </Sprite>
+        <Sprite start={3.9} end={7.3}>
+          <Kinetic
+            text="But could it prove it?"
+            size={104}
+            gradient={`linear-gradient(100deg, ${C.red}, ${C.amber})`}
+          />
+        </Sprite>
 
         {/* rebuild */}
-        <Sprite start={7.3} end={11.3}><Kinetic text={"Rebuilt.\nFrom the substrate up."} size={92} /></Sprite>
+        <Sprite start={7.3} end={11.3}>
+          <Kinetic text={"Rebuilt.\nFrom the substrate up."} size={92} />
+        </Sprite>
 
         {/* stamps */}
         <Sprite start={11.3} end={17.3}>
-          <Kinetic text="One runtime." size={120} gradient={`linear-gradient(100deg, ${C.cyan}, ${C.blue})`} />
+          <Kinetic
+            text="One runtime."
+            size={120}
+            gradient={`linear-gradient(100deg, ${C.cyan}, ${C.blue})`}
+          />
           <Stamp text="MEMORY" x={520} y={760} rot={-7} color={C.cyan} delay={0.4} />
           <Stamp text="COMPUTE" x={960} y={820} rot={4} color={C.blueHi} delay={0.9} />
           <Stamp text="SECURITY" x={1410} y={760} rot={-5} color={C.green} delay={1.4} />
@@ -294,28 +649,48 @@ export function Trailer() {
         </Sprite>
 
         {/* three minds */}
-        <Sprite start={17.3} end={26.3}><TriadBeat /></Sprite>
+        <Sprite start={17.3} end={26.3}>
+          <TriadBeat />
+        </Sprite>
 
         {/* verifiable memory */}
         <Sprite start={26.3} end={32.3}>
-          <Kinetic text={"A memory you\ncan verify."} size={104} gradient={`linear-gradient(100deg, ${C.cyanHi}, ${C.cyan})`} />
+          <Kinetic
+            text={"A memory you\ncan verify."}
+            size={104}
+            gradient={`linear-gradient(100deg, ${C.cyanHi}, ${C.cyan})`}
+          />
           <Stamp text="TAMPER-PROOF" x={960} y={300} rot={-4} color={C.cyan} delay={2.6} />
         </Sprite>
 
         {/* governance */}
         <Sprite start={32.3} end={38.3}>
-          <Kinetic text="Six principles." size={120} gradient={`linear-gradient(100deg, ${C.green}, ${C.cyan})`} />
+          <Kinetic
+            text="Six principles."
+            size={120}
+            gradient={`linear-gradient(100deg, ${C.green}, ${C.cyan})`}
+          />
           <Stamp text="GOVERNED" x={960} y={300} rot={3} color={C.green} delay={2.4} />
         </Sprite>
 
         {/* it reasons */}
-        <Sprite start={38.3} end={43.3}><Kinetic text="It reasons." size={150} gradient={`linear-gradient(100deg, ${C.blueHi}, ${C.cyan} 60%, ${C.violet})`} /></Sprite>
+        <Sprite start={38.3} end={43.3}>
+          <Kinetic
+            text="It reasons."
+            size={150}
+            gradient={`linear-gradient(100deg, ${C.blueHi}, ${C.cyan} 60%, ${C.violet})`}
+          />
+        </Sprite>
 
         {/* fabric / vision */}
-        <Sprite start={43.3} end={55.4}><FabricBeat /></Sprite>
+        <Sprite start={43.3} end={55.4}>
+          <FabricBeat />
+        </Sprite>
 
         {/* title drop */}
-        <Sprite start={55.4} end={DURATION}><TitleDrop /></Sprite>
+        <Sprite start={55.4} end={DURATION}>
+          <TitleDrop />
+        </Sprite>
       </ShakeRig>
 
       <TrailerNarration />

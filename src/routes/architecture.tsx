@@ -58,9 +58,21 @@ function ArchitecturePage() {
         primary={{ to: "/developers", label: "Developers" }}
         secondary={[{ to: "/investors", label: "Investors" }]}
         next={[
-          { to: "/console", label: "Console", body: "Sign in and save what is current versus not claimed." },
-          { to: "/developers", label: "Developers", body: "Live GitHub READMEs when GitHub answers." },
-          { to: "/investors", label: "Investors", body: "TAM and ARR tagged as targets, not results." },
+          {
+            to: "/console",
+            label: "Console",
+            body: "Sign in and save what is current versus not claimed.",
+          },
+          {
+            to: "/developers",
+            label: "Developers",
+            body: "Live GitHub READMEs when GitHub answers.",
+          },
+          {
+            to: "/investors",
+            label: "Investors",
+            body: "TAM and ARR tagged as targets, not results.",
+          },
         ]}
       />
     </>

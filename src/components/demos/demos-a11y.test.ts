@@ -10,7 +10,8 @@ describe("demo accessibility (source)", () => {
     for (const file of ["cosine-sim-demo.tsx", "sharding-latency-demo.tsx"]) {
       const inputs = read(file).match(/<input[\s\S]*?\/>/g) ?? [];
       expect(inputs.length, file).toBeGreaterThan(0);
-      for (const input of inputs) expect(input, file).toMatch(/\b(id=|aria-label=|aria-labelledby=)/);
+      for (const input of inputs)
+        expect(input, file).toMatch(/\b(id=|aria-label=|aria-labelledby=)/);
     }
   });
 

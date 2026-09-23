@@ -11,7 +11,9 @@ const KEYS = [
 ];
 
 function reply(text: string, statusCode = 200) {
-  return new Response(JSON.stringify({ choices: [{ message: { content: text } }] }), { status: statusCode });
+  return new Response(JSON.stringify({ choices: [{ message: { content: text } }] }), {
+    status: statusCode,
+  });
 }
 
 const user = [{ role: "user" as const, content: "hi" }];
@@ -70,7 +72,14 @@ describe("llm", () => {
 
   it("surfaces a provider error instead of a fake answer", async () => {
     process.env.XAI_API_KEY = "k";
-    vi.stubGlobal("fetch", vi.fn(async () => reply("", 503)));
-    expect(await complete({ messages: user })).toMatchObject({ ok: false, reason: "provider_error", provider: "xai" });
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => reply("", 503)),
+    );
+    expect(await complete({ messages: user })).toMatchObject({
+      ok: false,
+      reason: "provider_error",
+      provider: "xai",
+    });
   });
 });

@@ -20,7 +20,22 @@ import { ContentSchema, DocsSchema, ProductsSchema, ProjectsSchema } from "./sch
 // difference are adapted and say so.
 
 const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
-const content = { about, platform, industries, services, refusals, runtime, research, blog, team, stats, products, changelog, docs, projects };
+const content = {
+  about,
+  platform,
+  industries,
+  services,
+  refusals,
+  runtime,
+  research,
+  blog,
+  team,
+  stats,
+  products,
+  changelog,
+  docs,
+  projects,
+};
 
 describe("content data layer", () => {
   it("validates against ContentSchema (no malformed entries)", () => {
@@ -75,14 +90,18 @@ describe("docs corpus", () => {
   it("contains mlai's five ported subjects plus quesar's own, uniquely", () => {
     const slugs = docs.map((d) => d.slug);
     expect(new Set(slugs).size).toBe(slugs.length);
-    for (const slug of ["getting-started", "architecture", "identity", "gama", "evidence"]) expect(slugs).toContain(slug);
+    for (const slug of ["getting-started", "architecture", "identity", "gama", "evidence"])
+      expect(slugs).toContain(slug);
   });
 
   it("gives every section a heading and some content", () => {
     for (const doc of docs) {
       for (const section of doc.body) {
         expect(section.heading, `${doc.slug} section heading`).toBeTruthy();
-        expect(section.paragraphs.length + (section.list?.length ?? 0), `${doc.slug} content`).toBeGreaterThan(0);
+        expect(
+          section.paragraphs.length + (section.list?.length ?? 0),
+          `${doc.slug} content`,
+        ).toBeGreaterThan(0);
       }
     }
   });
@@ -103,7 +122,8 @@ describe("product journeys", () => {
       expect(product.prerequisites.length).toBeGreaterThan(30);
       expect(product.limitation.length).toBeGreaterThan(30);
       expect(product.researchSlugs.length).toBeGreaterThan(0);
-      for (const slug of product.researchSlugs) expect(research.publications.some((paper) => paper.slug === slug)).toBe(true);
+      for (const slug of product.researchSlugs)
+        expect(research.publications.some((paper) => paper.slug === slug)).toBe(true);
     }
   });
 
@@ -112,16 +132,28 @@ describe("product journeys", () => {
     expect(abi).toContain("deterministic rules");
     expect(abi).toContain("CUDA and Vulkan dispatch are not linked");
     expect(abi).not.toContain("production router uses a learned classifier");
-    expect(productJourneys.find((product) => product.slug === "quasar")?.limitation).toContain("without authentication");
+    expect(productJourneys.find((product) => product.slug === "quasar")?.limitation).toContain(
+      "without authentication",
+    );
   });
 
   // Adapted: quesar deliberately points setup at its own pages (/workspace, /wdbx, /quesar) instead of GitHub READMEs.
   it("offers intent paths without pretending to launch a hosted session", () => {
-    expect(startJourneys.map((journey) => journey.id)).toEqual(["research", "abbey", "mobile", "quasar"]);
-    for (const href of [...productJourneys.map((product) => product.setupHref), ...startJourneys.map((j) => j.href)]) {
+    expect(startJourneys.map((journey) => journey.id)).toEqual([
+      "research",
+      "abbey",
+      "mobile",
+      "quasar",
+    ]);
+    for (const href of [
+      ...productJourneys.map((product) => product.setupHref),
+      ...startJourneys.map((j) => j.href),
+    ]) {
       expect(href).not.toMatch(/localhost|127\.0\.0\.1|\/login|\/console/);
     }
-    expect(startJourneys.find((journey) => journey.id === "mobile")?.description).toContain("signed-device acceptance");
+    expect(startJourneys.find((journey) => journey.id === "mobile")?.description).toContain(
+      "signed-device acceptance",
+    );
   });
 });
 

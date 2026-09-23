@@ -23,16 +23,24 @@ function TermsPage() {
       <Section>
         <div className="max-w-3xl space-y-6 text-sm leading-relaxed text-fg-muted">
           <p>
-            Machine Learning Advanced Innovations, Inc. (“MLAI”) provides this website as orientation for Quesar, ABI, WDBX, Abbey, and related public work. It is not a hosted assistant, not a production API, and not a substitute for the local applications described on the app pages.
+            Machine Learning Advanced Innovations, Inc. (“MLAI”) provides this website as
+            orientation for Quesar, ABI, WDBX, Abbey, and related public work. It is not a hosted
+            assistant, not a production API, and not a substitute for the local applications
+            described on the app pages.
           </p>
           <p>
-            In-browser workspaces, vaults, and studios store data in your browser unless you sign in to the field console, in which case notes are scoped to your account. Do not place secrets, regulated corpora, or production credentials here.
+            In-browser workspaces, vaults, and studios store data in your browser unless you sign in
+            to the field console, in which case notes are scoped to your account. Do not place
+            secrets, regulated corpora, or production credentials here.
           </p>
           <p>
-            Public source is described on this site. Core runtimes are Apache-2.0 as stated in each tree. Status labels (Current, Partial, Experimental, Planned, Research) mean what the status page says they mean.
+            Public source is described on this site. Core runtimes are Apache-2.0 as stated in each
+            tree. Status labels (Current, Partial, Experimental, Planned, Research) mean what the
+            status page says they mean.
           </p>
           <p>
-            MLAI software is independent and is not affiliated with, endorsed by, or sponsored by Apple Inc.
+            MLAI software is independent and is not affiliated with, endorsed by, or sponsored by
+            Apple Inc.
           </p>
         </div>
       </Section>

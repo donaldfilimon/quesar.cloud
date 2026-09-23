@@ -61,11 +61,16 @@ export function ChipCutaway() {
               )}
               style={{ marginTop: index === 0 ? 0 : -8, zIndex: layers.length - index }}
             >
-              <span className="absolute top-1/2 left-[-0.55rem] size-2 -translate-y-1/2 rounded-full bg-accent" aria-hidden="true" />
+              <span
+                className="absolute top-1/2 left-[-0.55rem] size-2 -translate-y-1/2 rounded-full bg-accent"
+                aria-hidden="true"
+              />
               <span className="text-xs text-fg-subtle">
                 {String(index + 1).padStart(2, "0")} · {layer.kicker}
               </span>
-              <span className="mt-1 block font-display text-2xl tracking-tight text-fg">{layer.name}</span>
+              <span className="mt-1 block font-display text-2xl tracking-tight text-fg">
+                {layer.name}
+              </span>
             </RadioGroupItem>
           );
         })}

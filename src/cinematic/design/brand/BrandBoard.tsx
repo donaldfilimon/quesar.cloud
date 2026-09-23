@@ -136,7 +136,10 @@ const Mark = ({ size = 32, radius }: { size?: number; radius?: number }): ReactN
     className="bg-linear-to-br from-cyan-400 via-blue-500 to-purple-600 flex items-center justify-center shrink-0"
     style={{ width: size, height: size, borderRadius: radius ?? size * 0.28 }}
   >
-    <span className="text-white font-black" style={{ fontSize: size * 0.46, lineHeight: 1, fontFamily: "var(--font-display)" }}>
+    <span
+      className="text-white font-black"
+      style={{ fontSize: size * 0.46, lineHeight: 1, fontFamily: "var(--font-display)" }}
+    >
       M
     </span>
   </div>
@@ -244,7 +247,10 @@ function Swatch({ name, hex, sub, ink }: SwatchData): ReactNode {
   };
   return (
     <button onClick={copy} className="group text-left w-full">
-      <div className="h-20 rounded-xl border border-white/10 relative overflow-hidden" style={{ background: hex }}>
+      <div
+        className="h-20 rounded-xl border border-white/10 relative overflow-hidden"
+        style={{ background: hex }}
+      >
         <div
           className={`absolute inset-0 flex items-center justify-center text-xs font-medium transition-opacity ${
             c ? "opacity-100" : "opacity-0 group-hover:opacity-100"
@@ -283,12 +289,18 @@ function Section({
   children: ReactNode;
 }): ReactNode {
   return (
-    <section className="px-6 sm:px-10 py-16 max-w-5xl mx-auto scroll-mt-20" id={kicker.toLowerCase()}>
+    <section
+      className="px-6 sm:px-10 py-16 max-w-5xl mx-auto scroll-mt-20"
+      id={kicker.toLowerCase()}
+    >
       <div className="flex items-baseline gap-3 mb-1">
         <span className="text-xs font-mono text-slate-600">{n}</span>
         <div className="text-xs font-bold uppercase tracking-[0.2em] text-cyan-400">{kicker}</div>
       </div>
-      <h2 className="text-3xl sm:text-4xl font-bold text-white tracking-tight mb-8" style={{ fontFamily: "var(--font-display)" }}>
+      <h2
+        className="text-3xl sm:text-4xl font-bold text-white tracking-tight mb-8"
+        style={{ fontFamily: "var(--font-display)" }}
+      >
         {title}
       </h2>
       {children}
@@ -296,9 +308,13 @@ function Section({
   );
 }
 
-const Card = ({ children, className = "" }: { children: ReactNode; className?: string }): ReactNode => (
-  <div className={`glass p-6 ${className}`}>{children}</div>
-);
+const Card = ({
+  children,
+  className = "",
+}: {
+  children: ReactNode;
+  className?: string;
+}): ReactNode => <div className={`glass p-6 ${className}`}>{children}</div>;
 
 /* ── data ────────────────────────────────────────────────────────────────── */
 const CORE: readonly SwatchData[] = [
@@ -368,9 +384,24 @@ interface Principle {
   d: string;
 }
 const PRINCIPLES: readonly Principle[] = [
-  { icon: IEye, t: "Disciplined Secrecy", m: "Apple-style", d: "Protect what we build. Restraint is how we keep an edge and earn trust." },
-  { icon: IShield, t: "Mission Stewardship", m: "Frontier-lab-style", d: "Privacy-first AI is a responsibility, governed with long-term seriousness." },
-  { icon: IZap, t: "Operational Velocity", m: "NVIDIA-style", d: "Move with intent, ship with momentum. Velocity as discipline." },
+  {
+    icon: IEye,
+    t: "Disciplined Secrecy",
+    m: "Apple-style",
+    d: "Protect what we build. Restraint is how we keep an edge and earn trust.",
+  },
+  {
+    icon: IShield,
+    t: "Mission Stewardship",
+    m: "Frontier-lab-style",
+    d: "Privacy-first AI is a responsibility, governed with long-term seriousness.",
+  },
+  {
+    icon: IZap,
+    t: "Operational Velocity",
+    m: "NVIDIA-style",
+    d: "Move with intent, ship with momentum. Velocity as discipline.",
+  },
 ];
 
 interface TypeSpec {
@@ -418,7 +449,9 @@ const TYPE: readonly TypeSpec[] = [
   {
     label: "Eyebrow",
     spec: "System sans · 12px · uppercase · tracking-widest · cyan",
-    el: <span className="text-xs font-bold uppercase tracking-[0.2em] text-cyan-400">Technology</span>,
+    el: (
+      <span className="text-xs font-bold uppercase tracking-[0.2em] text-cyan-400">Technology</span>
+    ),
   },
   {
     label: "Mono / metrics",
@@ -475,7 +508,10 @@ const MISUSE: readonly MisuseItem[] = [
     el: (
       <div
         className="w-8 h-8 rounded-lg flex items-center justify-center"
-        style={{ backgroundImage: "repeating-linear-gradient(45deg,#f59e0b,#f59e0b 4px,#ef4444 4px,#ef4444 8px)" }}
+        style={{
+          backgroundImage:
+            "repeating-linear-gradient(45deg,#f59e0b,#f59e0b 4px,#ef4444 4px,#ef4444 8px)",
+        }}
       >
         <span className="text-white font-black text-sm">M</span>
       </div>
@@ -537,13 +573,18 @@ export default function BrandBoard(): ReactNode {
             <Mark size={44} />
             <Wordmark size={26} />
           </div>
-          <div className="text-xs font-bold uppercase tracking-[0.2em] text-cyan-400 mb-3">Brand Guidelines · v1.0</div>
-          <h1 className="text-4xl sm:text-6xl font-bold tracking-tight leading-[1.05]" style={{ fontFamily: "var(--font-display)" }}>
+          <div className="text-xs font-bold uppercase tracking-[0.2em] text-cyan-400 mb-3">
+            Brand Guidelines · v1.0
+          </div>
+          <h1
+            className="text-4xl sm:text-6xl font-bold tracking-tight leading-[1.05]"
+            style={{ fontFamily: "var(--font-display)" }}
+          >
             The MLAI <span className="gtext">identity system</span>
           </h1>
           <p className="mt-5 text-lg text-slate-300 max-w-2xl">
-            How we look, sound, and hold ourselves — privacy-first, precise, and quietly premium. Click any color to
-            copy its value.
+            How we look, sound, and hold ourselves — privacy-first, precise, and quietly premium.
+            Click any color to copy its value.
           </p>
         </div>
       </header>
@@ -563,7 +604,9 @@ export default function BrandBoard(): ReactNode {
       <Section n="01" kicker="Logo" title="The mark & wordmark">
         <div className="grid md:grid-cols-3 gap-5 mb-8">
           <Card>
-            <div className="text-xs text-slate-500 mb-4 uppercase tracking-wider">Primary lockup</div>
+            <div className="text-xs text-slate-500 mb-4 uppercase tracking-wider">
+              Primary lockup
+            </div>
             <div className="flex items-center gap-3 h-20">
               <Mark size={40} />
               <Wordmark size={24} />
@@ -585,7 +628,9 @@ export default function BrandBoard(): ReactNode {
         </div>
         <div className="grid md:grid-cols-2 gap-5 mb-8">
           <Card>
-            <div className="text-xs text-slate-500 mb-4 uppercase tracking-wider">On dark (preferred)</div>
+            <div className="text-xs text-slate-500 mb-4 uppercase tracking-wider">
+              On dark (preferred)
+            </div>
             <div className="rounded-xl bg-slate-950 border border-white/10 flex items-center gap-3 h-24 px-6">
               <Mark size={36} />
               <Wordmark size={22} />
@@ -603,7 +648,9 @@ export default function BrandBoard(): ReactNode {
         </div>
         <div className="grid md:grid-cols-2 gap-5">
           <Card>
-            <div className="text-xs text-slate-500 mb-4 uppercase tracking-wider">Clear space & min size</div>
+            <div className="text-xs text-slate-500 mb-4 uppercase tracking-wider">
+              Clear space & min size
+            </div>
             <div className="rounded-xl border border-dashed border-cyan-400/40 p-6 flex items-center justify-center">
               <div className="border border-dashed border-white/15 p-5">
                 <div className="flex items-center gap-3">
@@ -613,11 +660,14 @@ export default function BrandBoard(): ReactNode {
               </div>
             </div>
             <p className="text-xs text-slate-400 mt-3 leading-relaxed">
-              Keep clear space ≥ the height of the “M” on all sides. Minimum mark size: 24px digital, 8mm print.
+              Keep clear space ≥ the height of the “M” on all sides. Minimum mark size: 24px
+              digital, 8mm print.
             </p>
           </Card>
           <Card>
-            <div className="text-xs text-slate-500 mb-4 uppercase tracking-wider">Misuse — never</div>
+            <div className="text-xs text-slate-500 mb-4 uppercase tracking-wider">
+              Misuse — never
+            </div>
             <div className="grid grid-cols-2 gap-3">
               {MISUSE.map((m) => (
                 <div
@@ -640,7 +690,9 @@ export default function BrandBoard(): ReactNode {
         <div className="mb-8">
           <div className="text-sm font-semibold text-white mb-3">Signature gradient</div>
           <div className="h-16 rounded-2xl bg-linear-to-r from-cyan-300 via-blue-400 to-purple-400 border border-white/10" />
-          <div className="text-xs text-slate-500 font-mono mt-2">linear-gradient(90deg, #67e8f9, #60a5fa, #c084fc)</div>
+          <div className="text-xs text-slate-500 font-mono mt-2">
+            linear-gradient(90deg, #67e8f9, #60a5fa, #c084fc)
+          </div>
         </div>
         <div className="space-y-8">
           <div>
@@ -688,7 +740,12 @@ export default function BrandBoard(): ReactNode {
               <div
                 className="text-3xl text-white mb-2"
                 style={{
-                  fontFamily: i === 0 ? "var(--font-display)" : i === 1 ? "var(--font-sans)" : "var(--font-mono)",
+                  fontFamily:
+                    i === 0
+                      ? "var(--font-display)"
+                      : i === 1
+                        ? "var(--font-sans)"
+                        : "var(--font-mono)",
                 }}
               >
                 Aa
@@ -722,9 +779,10 @@ export default function BrandBoard(): ReactNode {
         <Card className="mb-6">
           <div className="text-sm font-semibold text-white mb-2">Brand register</div>
           <p className="text-slate-300 leading-relaxed text-sm">
-            Terse, precise, and privacy-forward. We state what's true and useful without hype or hedging. Confident,
-            not loud. Technical depth delivered with clarity. Default to <span className="text-cyan-300">Abi's</span>{" "}
-            neutral register; shift toward Abbey or Aviva to match the audience.
+            Terse, precise, and privacy-forward. We state what's true and useful without hype or
+            hedging. Confident, not loud. Technical depth delivered with clarity. Default to{" "}
+            <span className="text-cyan-300">Abi's</span> neutral register; shift toward Abbey or
+            Aviva to match the audience.
           </p>
         </Card>
         <div className="grid md:grid-cols-3 gap-5">
@@ -733,7 +791,9 @@ export default function BrandBoard(): ReactNode {
             return (
               <div key={v.name} className={`glass p-5 border-l-4 ${borderLeftClass[v.c]}`}>
                 <div className="flex items-center gap-3 mb-3">
-                  <div className={`w-10 h-10 rounded-xl bg-linear-to-br ${ramp[v.c]} flex items-center justify-center text-white`}>
+                  <div
+                    className={`w-10 h-10 rounded-xl bg-linear-to-br ${ramp[v.c]} flex items-center justify-center text-white`}
+                  >
                     <Icon s={20} />
                   </div>
                   <div>
@@ -742,7 +802,9 @@ export default function BrandBoard(): ReactNode {
                   </div>
                 </div>
                 <p className="text-slate-400 text-sm leading-relaxed mb-3">{v.desc}</p>
-                <p className="text-slate-300 text-xs italic leading-relaxed border-t border-white/5 pt-3">{v.sample}</p>
+                <p className="text-slate-300 text-xs italic leading-relaxed border-t border-white/5 pt-3">
+                  {v.sample}
+                </p>
               </div>
             );
           })}
@@ -755,7 +817,9 @@ export default function BrandBoard(): ReactNode {
             <div className="text-sm font-semibold text-white mb-1">Glassmorphism</div>
             <p className="text-xs text-slate-400 mb-4">
               Frosted panels on near-black:{" "}
-              <span className="font-mono text-cyan-300/80">bg-white/4 · border-white/10 · blur</span>
+              <span className="font-mono text-cyan-300/80">
+                bg-white/4 · border-white/10 · blur
+              </span>
             </p>
             <div className="grid grid-cols-2 gap-3">
               <div className="glass h-20" />
@@ -766,7 +830,9 @@ export default function BrandBoard(): ReactNode {
             <NetworkCanvas />
             <div className="absolute bottom-4 left-4">
               <div className="text-sm font-semibold text-white">Particle networks</div>
-              <p className="text-xs text-slate-400">vectors, nodes, embedding space — the recurring motif</p>
+              <p className="text-xs text-slate-400">
+                vectors, nodes, embedding space — the recurring motif
+              </p>
             </div>
           </div>
         </div>
@@ -775,7 +841,9 @@ export default function BrandBoard(): ReactNode {
             const Icon = p.i;
             return (
               <Card key={p.t}>
-                <div className={`w-11 h-11 rounded-xl bg-linear-to-br ${ramp[p.c]} flex items-center justify-center mb-3 text-white`}>
+                <div
+                  className={`w-11 h-11 rounded-xl bg-linear-to-br ${ramp[p.c]} flex items-center justify-center mb-3 text-white`}
+                >
                   <Icon s={20} />
                 </div>
                 <div className="text-sm font-semibold text-white">{p.t}</div>
@@ -787,7 +855,9 @@ export default function BrandBoard(): ReactNode {
         <Card>
           <div className="text-xs text-slate-500 mb-4 uppercase tracking-wider">UI elements</div>
           <div className="flex flex-wrap items-center gap-3">
-            <button className="px-5 py-2.5 rounded-full bg-white text-slate-950 text-sm font-semibold">Primary</button>
+            <button className="px-5 py-2.5 rounded-full bg-white text-slate-950 text-sm font-semibold">
+              Primary
+            </button>
             <button className="px-5 py-2.5 rounded-full border border-white/20 text-white text-sm font-medium">
               Secondary
             </button>
@@ -797,10 +867,14 @@ export default function BrandBoard(): ReactNode {
             <span className="text-[10px] px-2 py-0.5 rounded-full border bg-emerald-500/15 text-emerald-300 border-emerald-500/25">
               success
             </span>
-            <kbd className="text-xs px-2 py-1 rounded-lg border border-white/10 text-slate-400">⌘K</kbd>
+            <kbd className="text-xs px-2 py-1 rounded-lg border border-white/10 text-slate-400">
+              ⌘K
+            </kbd>
             {/* Mono-inline sample. The previous performance value had no
                 reproducible harness; a layout board must use sample data. */}
-            <span className="font-mono text-cyan-200 text-sm bg-black/30 rounded-lg px-3 py-1.5">1,234</span>
+            <span className="font-mono text-cyan-200 text-sm bg-black/30 rounded-lg px-3 py-1.5">
+              1,234
+            </span>
           </div>
         </Card>
       </Section>
@@ -831,8 +905,8 @@ export default function BrandBoard(): ReactNode {
           <Wordmark size={18} />
         </div>
         <p className="mt-3 text-xs text-slate-500">
-          Machine Learning Advanced Innovations, Inc. · Brand Guidelines v1.0 · Disciplined Secrecy · Mission
-          Stewardship · Operational Velocity
+          Machine Learning Advanced Innovations, Inc. · Brand Guidelines v1.0 · Disciplined Secrecy
+          · Mission Stewardship · Operational Velocity
         </p>
       </footer>
     </div>

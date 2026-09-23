@@ -20,14 +20,21 @@ export interface PurgeReport {
   inquiriesUnlinked: number;
 }
 
-type RevokeFn = (userId: string, provider: "google" | "microsoft") => Promise<{ removed: boolean; revoked: boolean }>;
+type RevokeFn = (
+  userId: string,
+  provider: "google" | "microsoft",
+) => Promise<{ removed: boolean; revoked: boolean }>;
 
 async function defaultRevoke(userId: string, provider: "google" | "microsoft") {
-  const { revokeAndDeleteWorkspaceConnection } = await import("@/lib/workspace-connectors/tokens.server");
+  const { revokeAndDeleteWorkspaceConnection } =
+    await import("@/lib/workspace-connectors/tokens.server");
   return revokeAndDeleteWorkspaceConnection(userId, provider);
 }
 
-export async function purgeUserData(userId: string, revoke: RevokeFn = defaultRevoke): Promise<PurgeReport> {
+export async function purgeUserData(
+  userId: string,
+  revoke: RevokeFn = defaultRevoke,
+): Promise<PurgeReport> {
   const sql = await getSql();
   const connected = await sql<{ provider: "google" | "microsoft" }>`
     select provider from workspace_connections where user_id = ${userId}`;
@@ -48,10 +55,18 @@ export async function purgeUserData(userId: string, revoke: RevokeFn = defaultRe
          or audit_id in (select id from conversation_audits where user_id = ${userId})
       returning 1`,
   );
-  deleted.conversation_audits = count(await sql`delete from conversation_audits where user_id = ${userId} returning 1`);
-  deleted.chat_consents = count(await sql`delete from chat_consents where user_id = ${userId} returning 1`);
-  deleted.field_notes = count(await sql`delete from field_notes where user_id = ${userId} returning 1`);
-  deleted.rate_limits = count(await sql`delete from rate_limits where subject = ${userId} returning 1`);
+  deleted.conversation_audits = count(
+    await sql`delete from conversation_audits where user_id = ${userId} returning 1`,
+  );
+  deleted.chat_consents = count(
+    await sql`delete from chat_consents where user_id = ${userId} returning 1`,
+  );
+  deleted.field_notes = count(
+    await sql`delete from field_notes where user_id = ${userId} returning 1`,
+  );
+  deleted.rate_limits = count(
+    await sql`delete from rate_limits where subject = ${userId} returning 1`,
+  );
   const inquiriesUnlinked = count(
     await sql`update inquiries set user_id = null where user_id = ${userId} returning 1`,
   );

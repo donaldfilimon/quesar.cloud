@@ -80,21 +80,11 @@ export function InquiriesList() {
         </ul>
       ) : null}
       <div className="flex items-center gap-3">
-        <Button
-          variant="secondary"
-          size="sm"
-          disabled={page <= 1}
-          onClick={() => load(page - 1)}
-        >
+        <Button variant="secondary" size="sm" disabled={page <= 1} onClick={() => load(page - 1)}>
           Newer
         </Button>
         <span className="font-mono text-xs text-fg-subtle">page {page}</span>
-        <Button
-          variant="secondary"
-          size="sm"
-          disabled={!hasMore}
-          onClick={() => load(page + 1)}
-        >
+        <Button variant="secondary" size="sm" disabled={!hasMore} onClick={() => load(page + 1)}>
           Older
         </Button>
       </div>

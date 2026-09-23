@@ -108,7 +108,8 @@ export function SourcePanel() {
       </div>
       {status === "local" ? (
         <p className="border-b border-border px-4 py-2 text-xs text-fg-muted">
-          GitHub did not answer. Showing the last verified excerpts. Product pages stay on this site.
+          GitHub did not answer. Showing the last verified excerpts. Product pages stay on this
+          site.
         </p>
       ) : null}
       <Tabs defaultValue={first} key={first}>

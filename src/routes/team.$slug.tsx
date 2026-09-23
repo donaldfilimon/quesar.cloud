@@ -29,14 +29,22 @@ function TeamProfile() {
   const person = team.find((item) => item.slug === slug);
   if (!person) throw notFound();
   const socials = person.socials ?? {};
-  const web = socials.web ? (socials.web.startsWith("http") ? socials.web : `https://${socials.web}`) : null;
+  const web = socials.web
+    ? socials.web.startsWith("http")
+      ? socials.web
+      : `https://${socials.web}`
+    : null;
   return (
     <>
       <PageHero eyebrow={person.role} title={person.name} lede={person.tagline ?? person.bio} />
       <Section>
         <div className="grid gap-10 md:grid-cols-[18rem_minmax(0,1fr)] md:items-start">
           <div className="md:sticky md:top-28">
-            <ProfilePhoto name={person.name} image={person.image} className="aspect-square w-full" />
+            <ProfilePhoto
+              name={person.name}
+              image={person.image}
+              className="aspect-square w-full"
+            />
             {socials.github || socials.x || web ? (
               <ul className="mt-5 flex flex-wrap gap-2 text-sm">
                 {socials.github ? (
@@ -92,7 +100,12 @@ function TeamProfile() {
               <div className="mt-12">
                 <h2 className="font-display text-2xl tracking-tight">Focus areas</h2>
                 <div className="mt-5">
-                  <CopyGrid items={person.focusAreas.map((area) => ({ title: area.title, body: area.description }))} />
+                  <CopyGrid
+                    items={person.focusAreas.map((area) => ({
+                      title: area.title,
+                      body: area.description,
+                    }))}
+                  />
                 </div>
               </div>
             ) : null}

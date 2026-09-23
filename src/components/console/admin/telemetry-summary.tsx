@@ -64,9 +64,7 @@ export function TelemetrySummaryPanel() {
               ],
             ].map(([label, value]) => (
               <div key={label} className="rounded-lg bg-card p-4 shadow-[var(--shadow-border)]">
-                <dt className="text-xs text-fg-subtle">
-                  {label}
-                </dt>
+                <dt className="text-xs text-fg-subtle">{label}</dt>
                 <dd className="mt-2 font-display text-2xl text-fg tabular-nums">{value}</dd>
               </div>
             ))}

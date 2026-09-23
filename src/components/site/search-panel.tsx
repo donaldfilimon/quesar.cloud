@@ -155,7 +155,9 @@ export function SearchPanel({
         />
       </div>
       <Command.List className="max-h-[min(24rem,50vh)] overflow-y-auto py-2">
-        <Command.Empty className="px-4 py-6 text-sm text-fg-muted">No pages match that query.</Command.Empty>
+        <Command.Empty className="px-4 py-6 text-sm text-fg-muted">
+          No pages match that query.
+        </Command.Empty>
         {hits.map((hit) => (
           <Command.Item
             key={`${hit.group}-${hit.href}-${hit.search?.node ?? ""}`}

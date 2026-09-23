@@ -271,10 +271,12 @@ function parseTokenResponse(body: unknown): TokenResponse {
   const row = body as Record<string, unknown>;
   const accessToken = typeof row.access_token === "string" ? row.access_token : "";
   if (!accessToken) throw new Error("Token endpoint returned no access token");
-  const expiresIn = typeof row.expires_in === "number" && row.expires_in > 0 ? row.expires_in : 3600;
+  const expiresIn =
+    typeof row.expires_in === "number" && row.expires_in > 0 ? row.expires_in : 3600;
   return {
     accessToken,
-    refreshToken: typeof row.refresh_token === "string" && row.refresh_token ? row.refresh_token : null,
+    refreshToken:
+      typeof row.refresh_token === "string" && row.refresh_token ? row.refresh_token : null,
     expiresAt: Date.now() + expiresIn * 1000 - EXPIRY_SKEW_MS,
     scope: typeof row.scope === "string" ? row.scope : null,
   };
@@ -307,7 +309,9 @@ async function postToken(
     body = await response.json();
   } catch {
     // Status only: a JSON parse error message quotes the body it choked on.
-    throw new Error(`${provider} token endpoint responded ${response.status} with an unreadable body`);
+    throw new Error(
+      `${provider} token endpoint responded ${response.status} with an unreadable body`,
+    );
   }
   return parseTokenResponse(body);
 }

@@ -32,7 +32,10 @@ export function ArticleBody({
             </h2>
           ) : null}
           {section.paragraphs?.map((p) => (
-            <p key={p.slice(0, 48)} className="mt-4 max-w-[66ch] text-[1.0625rem] leading-8 text-fg">
+            <p
+              key={p.slice(0, 48)}
+              className="mt-4 max-w-[66ch] text-[1.0625rem] leading-8 text-fg"
+            >
               {p}
             </p>
           ))}
@@ -40,7 +43,10 @@ export function ArticleBody({
             <ul className="mt-5 max-w-[66ch] space-y-3">
               {section.list.map((item) => (
                 <li key={item} className="flex gap-3 text-[1.0625rem] leading-8 text-fg">
-                  <span className="mt-3 size-1.5 shrink-0 rounded-full bg-primary" aria-hidden="true" />
+                  <span
+                    className="mt-3 size-1.5 shrink-0 rounded-full bg-primary"
+                    aria-hidden="true"
+                  />
                   {item}
                 </li>
               ))}
@@ -81,7 +87,10 @@ export function SourceChips({
     <ul className="mt-8 space-y-3">
       {sources.map((source) => (
         <li key={source.title} className="surface p-4">
-          <AppLink to={source.url} className="text-sm font-medium text-accent no-underline hover:underline">
+          <AppLink
+            to={source.url}
+            className="text-sm font-medium text-accent no-underline hover:underline"
+          >
             {source.title}
           </AppLink>
           {source.scope ? <p className="mt-1 text-xs text-fg-muted">{source.scope}</p> : null}

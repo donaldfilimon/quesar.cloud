@@ -60,7 +60,10 @@ const TTL_MS = 5 * 60 * 1000;
 
 async function readJson(url: string, browser = false) {
   // In the browser, keep the request CORS-simple (no custom User-Agent).
-  const response = await fetch(url, browser ? { headers: { Accept: HEADERS.Accept } } : { headers: HEADERS });
+  const response = await fetch(
+    url,
+    browser ? { headers: { Accept: HEADERS.Accept } } : { headers: HEADERS },
+  );
   if (!response.ok) throw new Error(`github ${response.status}`);
   return response.json();
 }
@@ -113,7 +116,10 @@ async function fetchGithubPayload(browser: boolean): Promise<GithubPayload> {
   if (cache && Date.now() - cache.at < TTL_MS) return cache.data;
   try {
     const [repoJson, eventJson, readmeResults] = await Promise.all([
-      readJson("https://api.github.com/users/donaldfilimon/repos?per_page=100&sort=updated", browser),
+      readJson(
+        "https://api.github.com/users/donaldfilimon/repos?per_page=100&sort=updated",
+        browser,
+      ),
       readJson("https://api.github.com/users/donaldfilimon/events/public?per_page=12", browser),
       Promise.all(FEATURED_READMES.map((name) => readReadme(name, browser))),
     ]);
@@ -129,7 +135,9 @@ async function fetchGithubPayload(browser: boolean): Promise<GithubPayload> {
         homepage: typeof item.homepage === "string" ? item.homepage : null,
         htmlUrl: String(item.html_url),
         archived: Boolean(item.archived),
-        topics: Array.isArray(item.topics) ? item.topics.filter((t): t is string => typeof t === "string") : [],
+        topics: Array.isArray(item.topics)
+          ? item.topics.filter((t): t is string => typeof t === "string")
+          : [],
       }));
     const events: EventItem[] = (Array.isArray(eventJson) ? eventJson : [])
       .filter((e: { id?: string; repo?: { name?: string } }) => e.id && e.repo?.name)
@@ -155,8 +163,8 @@ async function fetchGithubPayload(browser: boolean): Promise<GithubPayload> {
   }
 }
 
-export const loadGithub = createServerFn({ method: "GET" }).handler(async (): Promise<GithubPayload> =>
-  fetchGithubPayload(false),
+export const loadGithub = createServerFn({ method: "GET" }).handler(
+  async (): Promise<GithubPayload> => fetchGithubPayload(false),
 );
 
 /**

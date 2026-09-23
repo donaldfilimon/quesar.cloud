@@ -97,7 +97,10 @@ export function WorkspaceSources() {
     const connected = params.get("connected");
     const error = params.get("error");
     if (connected === "google" || connected === "microsoft") {
-      setNotice({ tone: "ok", text: `${connected === "google" ? "Google Drive" : "SharePoint / OneDrive"} connected.` });
+      setNotice({
+        tone: "ok",
+        text: `${connected === "google" ? "Google Drive" : "SharePoint / OneDrive"} connected.`,
+      });
     } else if (error) {
       setNotice({ tone: "error", text: describeCallbackError(error) });
     }
@@ -110,7 +113,11 @@ export function WorkspaceSources() {
     params.delete("connected");
     params.delete("error");
     const rest = params.toString();
-    window.history.replaceState(window.history.state, "", `${window.location.pathname}${rest ? `?${rest}` : ""}`);
+    window.history.replaceState(
+      window.history.state,
+      "",
+      `${window.location.pathname}${rest ? `?${rest}` : ""}`,
+    );
   }, [callbackRead]);
 
   useEffect(() => {
@@ -157,8 +164,10 @@ export function WorkspaceSources() {
     try {
       const result = await disconnectProvider(provider);
       const label = provider === "google" ? "Google Drive" : "SharePoint / OneDrive";
-      if (!result.ok) setNotice({ tone: "error", text: `${label} could not be disconnected. Try again.` });
-      else if (result.revoked) setNotice({ tone: "ok", text: `${label} disconnected and the grant revoked.` });
+      if (!result.ok)
+        setNotice({ tone: "error", text: `${label} could not be disconnected. Try again.` });
+      else if (result.revoked)
+        setNotice({ tone: "ok", text: `${label} disconnected and the grant revoked.` });
       else
         setNotice({
           tone: "ok",
@@ -187,7 +196,8 @@ export function WorkspaceSources() {
           <p className={cn(EYEBROW, "text-accent")}>Connected sources</p>
           <h2 className="mt-1 font-display text-2xl">Files</h2>
           <p className="mt-1 font-mono text-[11px] text-fg-muted">
-            {sources === null ? "Loading" : `${matched.length} shown`} · last {DEFAULT_WINDOW.days} days · read-only
+            {sources === null ? "Loading" : `${matched.length} shown`} · last {DEFAULT_WINDOW.days}{" "}
+            days · read-only
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -228,7 +238,9 @@ export function WorkspaceSources() {
           role="status"
           className={cn(
             "mt-4 rounded-md border px-3 py-2 text-sm",
-            notice.tone === "ok" ? "border-border text-fg" : "border-destructive/40 text-destructive",
+            notice.tone === "ok"
+              ? "border-border text-fg"
+              : "border-destructive/40 text-destructive",
           )}
         >
           {notice.text}
@@ -254,7 +266,9 @@ export function WorkspaceSources() {
               aria-pressed={on}
               className={cn(
                 "rounded-full border px-3 py-1 text-xs transition-colors",
-                on ? "border-primary/50 bg-primary/10 text-fg" : "border-border text-fg-muted hover:bg-muted",
+                on
+                  ? "border-primary/50 bg-primary/10 text-fg"
+                  : "border-border text-fg-muted hover:bg-muted",
               )}
             >
               {label} <span className="opacity-60">{counts[label] ?? 0}</span>
@@ -323,9 +337,17 @@ function SourceSection({
         {connection?.stored ? (
           <>
             {connection.accountEmail ? (
-              <span className="font-mono text-[10.5px] text-fg-muted">{connection.accountEmail}</span>
+              <span className="font-mono text-[10.5px] text-fg-muted">
+                {connection.accountEmail}
+              </span>
             ) : null}
-            <Button type="button" size="sm" variant="secondary" disabled={busy} onClick={() => onDisconnect(provider)}>
+            <Button
+              type="button"
+              size="sm"
+              variant="secondary"
+              disabled={busy}
+              onClick={() => onDisconnect(provider)}
+            >
               {busy ? "Disconnecting…" : "Disconnect"}
             </Button>
           </>
@@ -333,14 +355,13 @@ function SourceSection({
       </div>
 
       {source.status === "error" ? (
-        <EmptyPanel title={`${source.label} could not be reached.`} detail={source.message ?? "The source returned an error."} />
+        <EmptyPanel
+          title={`${source.label} could not be reached.`}
+          detail={source.message ?? "The source returned an error."}
+        />
       ) : source.status === "unconfigured" ? (
         source.message === "reauth_required" || connection?.reason === "reauth_required" ? (
-          <ConnectPanel
-            label={source.label}
-            provider={provider}
-            reconnect
-          />
+          <ConnectPanel label={source.label} provider={provider} reconnect />
         ) : connection && !connection.configured ? (
           <EmptyPanel
             title={`${source.label} is not available on this deployment.`}
@@ -379,7 +400,12 @@ function SourceSection({
 function FileRows({ files }: { files: WorkspaceFile[] }) {
   return (
     <div className="overflow-hidden rounded-lg border border-border">
-      <div className={cn(EYEBROW, "hidden grid-cols-[minmax(0,3fr)_110px_130px_90px] gap-3 border-b border-border px-4 py-2 sm:grid")}>
+      <div
+        className={cn(
+          EYEBROW,
+          "hidden grid-cols-[minmax(0,3fr)_110px_130px_90px] gap-3 border-b border-border px-4 py-2 sm:grid",
+        )}
+      >
         <span>Name</span>
         <span>Type</span>
         <span>Modified</span>
@@ -399,7 +425,9 @@ function FileRows({ files }: { files: WorkspaceFile[] }) {
               <Icon size={14} aria-hidden className="shrink-0 text-accent" />
               <span className="truncate text-fg">{file.title}</span>
             </span>
-            <span className="hidden font-mono text-[11px] text-fg-muted sm:block">{KIND_LABEL[file.kind]}</span>
+            <span className="hidden font-mono text-[11px] text-fg-muted sm:block">
+              {KIND_LABEL[file.kind]}
+            </span>
             <span className="text-xs text-fg-muted">{formatModified(file.modified)}</span>
             <span className="hidden text-right font-mono text-[11px] text-fg-muted sm:block">
               {formatFileSize(file.sizeBytes)}
@@ -428,7 +456,8 @@ function FileGrid({ files }: { files: WorkspaceFile[] }) {
             <span className="min-w-0">
               <span className="block truncate text-sm text-fg">{file.title}</span>
               <span className="mt-1 block font-mono text-[10.5px] text-fg-muted">
-                {KIND_LABEL[file.kind]} · {formatModified(file.modified)} · {formatFileSize(file.sizeBytes)}
+                {KIND_LABEL[file.kind]} · {formatModified(file.modified)} ·{" "}
+                {formatFileSize(file.sizeBytes)}
               </span>
             </span>
           </a>

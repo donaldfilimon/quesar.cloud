@@ -212,21 +212,33 @@ export const repoDocs: Record<
     lede: "Founder hydrology experiment. Related by author, not a Quesar surface.",
     status: "research",
     language: "TypeScript",
-    sections: [{ title: "Boundary", body: "Listed because it is public. Not part of the Quesar stack." }],
+    sections: [
+      { title: "Boundary", body: "Listed because it is public. Not part of the Quesar stack." },
+    ],
   },
   paint: {
     title: "paint",
     lede: "winit + wgpu + kurbo graphics app on Rust nightly.",
     status: "research",
     language: "Rust",
-    sections: [{ title: "Boundary", body: "A drawing surface. Not an Abbey canvas and not a hosted editor." }],
+    sections: [
+      {
+        title: "Boundary",
+        body: "A drawing surface. Not an Abbey canvas and not a hosted editor.",
+      },
+    ],
   },
   invasion3d: {
     title: "Invasion3D",
     lede: "Metal 4 renderer with SwiftUI and SwiftData. Founder graphics work.",
     status: "research",
     language: "Swift",
-    sections: [{ title: "Boundary", body: "Not a Quesar product. Native Apple stack, not this website's runtime." }],
+    sections: [
+      {
+        title: "Boundary",
+        body: "Not a Quesar product. Native Apple stack, not this website's runtime.",
+      },
+    ],
   },
   wdnx: {
     title: "wdnx",
@@ -254,14 +266,18 @@ export const repoDocs: Record<
     lede: "Personal portfolio experiment. Not the company site.",
     status: "research",
     language: "TypeScript",
-    sections: [{ title: "Boundary", body: "Donald Filimon personal work, not Quesar orientation." }],
+    sections: [
+      { title: "Boundary", body: "Donald Filimon personal work, not Quesar orientation." },
+    ],
   },
   donaldfilimon: {
     title: "donaldfilimon",
     lede: "Profile and miscellaneous public work.",
     status: "research",
     language: "Rust",
-    sections: [{ title: "Boundary", body: "Author namespace. Product facts live on the product pages." }],
+    sections: [
+      { title: "Boundary", body: "Author namespace. Product facts live on the product pages." },
+    ],
   },
   portfolio: {
     title: "donaldfilimon.github.io",

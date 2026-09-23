@@ -16,7 +16,8 @@ type MatchMediaLike = (query: string) => { matches: boolean };
  * browser lacks matchMedia.
  */
 export function prefersReducedMotion(
-  matchMedia: MatchMediaLike | undefined = typeof window !== "undefined" && typeof window.matchMedia === "function"
+  matchMedia: MatchMediaLike | undefined = typeof window !== "undefined" &&
+  typeof window.matchMedia === "function"
     ? window.matchMedia.bind(window)
     : undefined,
 ): boolean {

@@ -2,7 +2,12 @@ import { Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { research } from "@/lib/mlai/categories/research";
-import { homeBoundaries, homeDocsDoors, homeProductBoundary, homeRequestPath } from "@/lib/mlai/pages";
+import {
+  homeBoundaries,
+  homeDocsDoors,
+  homeProductBoundary,
+  homeRequestPath,
+} from "@/lib/mlai/pages";
 import { AppLink } from "./app-link";
 import { Section, Surface } from "./section";
 import { StatusBadge } from "./status-badge";
@@ -34,7 +39,11 @@ export function HomeControlPlane() {
           ))}
         </div>
       </Section>
-      <section id="request-path" aria-labelledby="request-path-heading" className="scroll-mt-32 border-y border-border">
+      <section
+        id="request-path"
+        aria-labelledby="request-path-heading"
+        className="scroll-mt-32 border-y border-border"
+      >
         <div className="mx-auto grid max-w-6xl gap-10 px-4 py-20 sm:px-6 sm:py-28 lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)] lg:items-start">
           <div className="min-w-0 lg:sticky lg:top-32">
             <p className="eyebrow">One request</p>
@@ -42,9 +51,9 @@ export function HomeControlPlane() {
               Five control points. One return condition.
             </h2>
             <p className="mt-5 max-w-xl text-base leading-relaxed text-fg-muted sm:text-lg">
-              Authenticate, consent, generate, encrypt, commit. The design: if a control point fails, no unaudited
-              response is returned. Three of the five are still being built and are labeled; until they ship, replies
-              are not audited.
+              Authenticate, consent, generate, encrypt, commit. The design: if a control point
+              fails, no unaudited response is returned. Three of the five are still being built and
+              are labeled; until they ship, replies are not audited.
             </p>
             <Button asChild variant="secondary" className="mt-7">
               <Link to="/security">
@@ -90,7 +99,9 @@ export function HomeProductBoundary() {
       </div>
       <div className="mt-12">
         <p className="eyebrow">Docs</p>
-        <h3 className="mt-3 font-display text-2xl tracking-tight">Start with the trust boundary.</h3>
+        <h3 className="mt-3 font-display text-2xl tracking-tight">
+          Start with the trust boundary.
+        </h3>
         <div className="mt-6 grid gap-4 lg:grid-cols-3">
           {homeDocsDoors.map((door) => (
             <AppLink key={door.href} to={door.href} className="no-underline">
@@ -115,7 +126,11 @@ function sentenceCase(value: string): string {
 export function HomeResearchPreview() {
   const featured = research.publications.slice(0, 3);
   return (
-    <section id="research-preview" aria-labelledby="research-preview-title" className="scroll-mt-20 border-b border-border">
+    <section
+      id="research-preview"
+      aria-labelledby="research-preview-title"
+      className="scroll-mt-20 border-b border-border"
+    >
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-16 sm:px-6 sm:py-24 lg:grid-cols-12">
         <header className="lg:col-span-5">
           <p className="eyebrow">Research</p>
@@ -125,14 +140,21 @@ export function HomeResearchPreview() {
           <p className="mt-5 max-w-[52ch] text-base leading-relaxed text-fg-muted">
             Selected work on traceable retrieval, governed agents and operational AI safety.
           </p>
-          <Link to="/research" className="mt-6 inline-block text-sm text-accent underline-offset-4 hover:underline">
+          <Link
+            to="/research"
+            className="mt-6 inline-block text-sm text-accent underline-offset-4 hover:underline"
+          >
             Open the research archive
           </Link>
         </header>
         <ol className="min-w-0 divide-y divide-border border-y border-border lg:col-span-7">
           {featured.map((item) => (
             <li key={item.slug}>
-              <Link to="/research/$slug" params={{ slug: item.slug }} className="group block py-6 no-underline">
+              <Link
+                to="/research/$slug"
+                params={{ slug: item.slug }}
+                className="group block py-6 no-underline"
+              >
                 <span className="text-sm text-fg-muted">
                   {sentenceCase(item.tag)}, {sentenceCase(item.date)}
                 </span>
@@ -163,8 +185,8 @@ export function HomeCta() {
                 Put one governed workflow through Quesar.
               </h2>
               <p className="mt-5 text-lg leading-relaxed text-fg-muted">
-                Signed-in accounts can enter the console. Teams can request a scoped evaluation with the workflow,
-                failure modes, and data boundary made explicit.
+                Signed-in accounts can enter the console. Teams can request a scoped evaluation with
+                the workflow, failure modes, and data boundary made explicit.
               </p>
             </div>
             <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">

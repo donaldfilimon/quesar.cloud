@@ -2,7 +2,15 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 
 /** Portrait with an initials fallback if the image fails to load. Ported from mlai Team/FounderProfile. */
-export function ProfilePhoto({ name, image, className }: { name: string; image: string; className?: string }) {
+export function ProfilePhoto({
+  name,
+  image,
+  className,
+}: {
+  name: string;
+  image: string;
+  className?: string;
+}) {
   const [failed, setFailed] = useState(false);
   const initials = name
     .split(" ")
@@ -11,9 +19,18 @@ export function ProfilePhoto({ name, image, className }: { name: string; image: 
     .join("");
 
   return (
-    <div className={cn("relative overflow-hidden rounded-2xl shadow-[var(--shadow-border)]", className)}>
+    <div
+      className={cn(
+        "relative overflow-hidden rounded-2xl shadow-[var(--shadow-border)]",
+        className,
+      )}
+    >
       {failed ? (
-        <div className="flex h-full w-full items-center justify-center bg-bg-elevated" role="img" aria-label={name}>
+        <div
+          className="flex h-full w-full items-center justify-center bg-bg-elevated"
+          role="img"
+          aria-label={name}
+        >
           <span className="font-display text-4xl text-fg-muted">{initials}</span>
         </div>
       ) : (

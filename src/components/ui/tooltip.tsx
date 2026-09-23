@@ -6,7 +6,11 @@ export const TooltipProvider = TooltipPrimitive.Provider;
 export const Tooltip = TooltipPrimitive.Root;
 export const TooltipTrigger = TooltipPrimitive.Trigger;
 
-export function TooltipContent({ className, sideOffset = 6, ...props }: ComponentProps<typeof TooltipPrimitive.Content>) {
+export function TooltipContent({
+  className,
+  sideOffset = 6,
+  ...props
+}: ComponentProps<typeof TooltipPrimitive.Content>) {
   return (
     <TooltipPrimitive.Portal>
       <TooltipPrimitive.Content
@@ -21,7 +25,15 @@ export function TooltipContent({ className, sideOffset = 6, ...props }: Componen
   );
 }
 
-export function Hint({ label, children, side = "bottom" }: { label: string; children: ReactNode; side?: "top" | "bottom" | "left" | "right" }) {
+export function Hint({
+  label,
+  children,
+  side = "bottom",
+}: {
+  label: string;
+  children: ReactNode;
+  side?: "top" | "bottom" | "left" | "right";
+}) {
   return (
     <Tooltip>
       <TooltipTrigger asChild>{children}</TooltipTrigger>

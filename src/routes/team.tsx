@@ -21,15 +21,31 @@ function TeamPage() {
             <li key={person.name}>
               <Surface hover={Boolean(person.slug)} className="flex h-full flex-col">
                 {person.slug ? (
-                  <Link to="/team/$slug" params={{ slug: person.slug }} aria-label={`Read ${person.name}'s profile`}>
-                    <ProfilePhoto name={person.name} image={person.image} className="mb-5 aspect-[3/4]" />
+                  <Link
+                    to="/team/$slug"
+                    params={{ slug: person.slug }}
+                    aria-label={`Read ${person.name}'s profile`}
+                  >
+                    <ProfilePhoto
+                      name={person.name}
+                      image={person.image}
+                      className="mb-5 aspect-[3/4]"
+                    />
                   </Link>
                 ) : (
-                  <ProfilePhoto name={person.name} image={person.image} className="mb-5 aspect-[3/4]" />
+                  <ProfilePhoto
+                    name={person.name}
+                    image={person.image}
+                    className="mb-5 aspect-[3/4]"
+                  />
                 )}
                 <h2 className="font-display text-xl">
                   {person.slug ? (
-                    <Link to="/team/$slug" params={{ slug: person.slug }} className="text-fg no-underline hover:underline">
+                    <Link
+                      to="/team/$slug"
+                      params={{ slug: person.slug }}
+                      className="text-fg no-underline hover:underline"
+                    >
                       {person.name}
                     </Link>
                   ) : (
@@ -45,7 +61,10 @@ function TeamPage() {
                     className="group mt-auto inline-flex items-center gap-2 pt-4 text-xs text-fg no-underline hover:text-accent"
                   >
                     Read profile
-                    <ArrowRight className="size-3 transition-transform group-hover:translate-x-1 motion-reduce:transition-none" aria-hidden="true" />
+                    <ArrowRight
+                      className="size-3 transition-transform group-hover:translate-x-1 motion-reduce:transition-none"
+                      aria-hidden="true"
+                    />
                   </Link>
                 ) : null}
               </Surface>

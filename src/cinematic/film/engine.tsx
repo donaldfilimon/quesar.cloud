@@ -3,20 +3,40 @@
 // timeline-context.ts). Depended on by main.tsx + every scene.
 
 import {
-  useState, useRef, useEffect, useLayoutEffect, useMemo, useCallback,
-  type ReactNode, type CSSProperties,
+  useState,
+  useRef,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useCallback,
+  type ReactNode,
+  type CSSProperties,
 } from "react";
 import { advance, frameDelta } from "@/lib/trailer-engine";
 import { Easing, clamp } from "./easing";
-import { TimelineContext, SpriteContext, useTimeline, useSprite, type TimelineValue, type SpriteValue } from "./timeline-context";
+import {
+  TimelineContext,
+  SpriteContext,
+  useTimeline,
+  useSprite,
+  type TimelineValue,
+  type SpriteValue,
+} from "./timeline-context";
 import { prefersReducedMotion, resolveSeek } from "./engine-utils";
 
 /* ── sprite ───────────────────────────────────────────────────── */
 // Timeline/sprite contexts and hooks live in timeline-context.ts; pure helpers
 // in engine-utils.ts.
 
-export function Sprite({ start = 0, end = Infinity, children, keepMounted = false }: {
-  start?: number; end?: number; keepMounted?: boolean;
+export function Sprite({
+  start = 0,
+  end = Infinity,
+  children,
+  keepMounted = false,
+}: {
+  start?: number;
+  end?: number;
+  keepMounted?: boolean;
   children: ReactNode | ((v: SpriteValue) => ReactNode);
 }) {
   const { time } = useTimeline();
@@ -35,58 +55,161 @@ export function Sprite({ start = 0, end = Infinity, children, keepMounted = fals
 
 /* ── text / rect sprites (handy primitives) ───────────────────── */
 
-export function TextSprite({ text, x = 0, y = 0, size = 48, color = "#fff",
-  font = "var(--font-sans)", weight = 600, entryDur = 0.45, exitDur = 0.35,
-  align = "left", letterSpacing = "-0.01em" }: {
-  text: string; x?: number; y?: number; size?: number; color?: string; font?: string;
-  weight?: number; entryDur?: number; exitDur?: number; align?: "left" | "center" | "right"; letterSpacing?: string;
+export function TextSprite({
+  text,
+  x = 0,
+  y = 0,
+  size = 48,
+  color = "#fff",
+  font = "var(--font-sans)",
+  weight = 600,
+  entryDur = 0.45,
+  exitDur = 0.35,
+  align = "left",
+  letterSpacing = "-0.01em",
+}: {
+  text: string;
+  x?: number;
+  y?: number;
+  size?: number;
+  color?: string;
+  font?: string;
+  weight?: number;
+  entryDur?: number;
+  exitDur?: number;
+  align?: "left" | "center" | "right";
+  letterSpacing?: string;
 }) {
   const { localTime, duration } = useSprite();
   const exitStart = Math.max(0, duration - exitDur);
-  let opacity = 1, ty = 0;
-  if (localTime < entryDur) { const t = Easing.easeOutBack(clamp(localTime / entryDur, 0, 1)); opacity = t; ty = (1 - t) * 16; }
-  else if (localTime > exitStart) { const t = Easing.easeInCubic(clamp((localTime - exitStart) / exitDur, 0, 1)); opacity = 1 - t; ty = -t * 8; }
+  let opacity = 1,
+    ty = 0;
+  if (localTime < entryDur) {
+    const t = Easing.easeOutBack(clamp(localTime / entryDur, 0, 1));
+    opacity = t;
+    ty = (1 - t) * 16;
+  } else if (localTime > exitStart) {
+    const t = Easing.easeInCubic(clamp((localTime - exitStart) / exitDur, 0, 1));
+    opacity = 1 - t;
+    ty = -t * 8;
+  }
   const tx = align === "center" ? "-50%" : align === "right" ? "-100%" : "0";
   return (
-    <div style={{ position: "absolute", left: x, top: y, transform: `translate(${tx}, ${ty}px)`, opacity,
-      fontFamily: font, fontSize: size, fontWeight: weight, color, letterSpacing, whiteSpace: "pre", lineHeight: 1.1 }}>
+    <div
+      style={{
+        position: "absolute",
+        left: x,
+        top: y,
+        transform: `translate(${tx}, ${ty}px)`,
+        opacity,
+        fontFamily: font,
+        fontSize: size,
+        fontWeight: weight,
+        color,
+        letterSpacing,
+        whiteSpace: "pre",
+        lineHeight: 1.1,
+      }}
+    >
       {text}
     </div>
   );
 }
 
-export function RectSprite({ x = 0, y = 0, width = 100, height = 100, color = "#fff", radius = 8,
-  entryDur = 0.4, exitDur = 0.3, render }: {
-  x?: number; y?: number; width?: number; height?: number; color?: string; radius?: number;
-  entryDur?: number; exitDur?: number; render?: (ctx: SpriteValue) => CSSProperties;
+export function RectSprite({
+  x = 0,
+  y = 0,
+  width = 100,
+  height = 100,
+  color = "#fff",
+  radius = 8,
+  entryDur = 0.4,
+  exitDur = 0.3,
+  render,
+}: {
+  x?: number;
+  y?: number;
+  width?: number;
+  height?: number;
+  color?: string;
+  radius?: number;
+  entryDur?: number;
+  exitDur?: number;
+  render?: (ctx: SpriteValue) => CSSProperties;
 }) {
   const ctx = useSprite();
   const { localTime, duration } = ctx;
   const exitStart = Math.max(0, duration - exitDur);
-  let opacity = 1, scale = 1;
-  if (localTime < entryDur) { const t = Easing.easeOutBack(clamp(localTime / entryDur, 0, 1)); opacity = clamp(localTime / entryDur, 0, 1); scale = 0.4 + 0.6 * t; }
-  else if (localTime > exitStart) { const t = Easing.easeInQuad(clamp((localTime - exitStart) / exitDur, 0, 1)); opacity = 1 - t; scale = 1 - 0.15 * t; }
-  return <div style={{ position: "absolute", left: x, top: y, width, height, background: color, borderRadius: radius,
-    opacity, transform: `scale(${scale})`, transformOrigin: "center", ...(render ? render(ctx) : {}) }} />;
+  let opacity = 1,
+    scale = 1;
+  if (localTime < entryDur) {
+    const t = Easing.easeOutBack(clamp(localTime / entryDur, 0, 1));
+    opacity = clamp(localTime / entryDur, 0, 1);
+    scale = 0.4 + 0.6 * t;
+  } else if (localTime > exitStart) {
+    const t = Easing.easeInQuad(clamp((localTime - exitStart) / exitDur, 0, 1));
+    opacity = 1 - t;
+    scale = 1 - 0.15 * t;
+  }
+  return (
+    <div
+      style={{
+        position: "absolute",
+        left: x,
+        top: y,
+        width,
+        height,
+        background: color,
+        borderRadius: radius,
+        opacity,
+        transform: `scale(${scale})`,
+        transformOrigin: "center",
+        ...(render ? render(ctx) : {}),
+      }}
+    />
+  );
 }
 
 /* ── stage ────────────────────────────────────────────────────── */
 
-export function Stage({ width = 1920, height = 1080, duration = 10, background = "#040406",
-  loop = true, autoplay = true, persistKey = "animstage", ready = true, children }: {
-  width?: number; height?: number; duration?: number; background?: string;
-  loop?: boolean; autoplay?: boolean; persistKey?: string; ready?: boolean; children: ReactNode;
+export function Stage({
+  width = 1920,
+  height = 1080,
+  duration = 10,
+  background = "#040406",
+  loop = true,
+  autoplay = true,
+  persistKey = "animstage",
+  ready = true,
+  children,
+}: {
+  width?: number;
+  height?: number;
+  duration?: number;
+  background?: string;
+  loop?: boolean;
+  autoplay?: boolean;
+  persistKey?: string;
+  ready?: boolean;
+  children: ReactNode;
 }) {
   const [time, setTime] = useState<number>(() => {
-    try { const v = parseFloat(localStorage.getItem(persistKey + ":t") || "0"); return isFinite(v) ? clamp(v, 0, duration) : 0; }
-    catch { return 0; }
+    try {
+      const v = parseFloat(localStorage.getItem(persistKey + ":t") || "0");
+      return isFinite(v) ? clamp(v, 0, duration) : 0;
+    } catch {
+      return 0;
+    }
   });
   const [playing, setPlaying] = useState(autoplay);
   const [hoverTime, setHoverTime] = useState<number | null>(null);
   const [scale, setScale] = useState(1);
   const [chrome, setChrome] = useState<HTMLElement | null>(null);
   const stageRef = useRef<HTMLDivElement>(null);
-  const stageRefCb = useCallback((el: HTMLDivElement | null) => { stageRef.current = el; setChrome(el); }, []);
+  const stageRefCb = useCallback((el: HTMLDivElement | null) => {
+    stageRef.current = el;
+    setChrome(el);
+  }, []);
   const rafRef = useRef(0);
   const lastTsRef = useRef<number | null>(null);
   // Latest playhead for the key handler and the unmount flush, synced after
@@ -104,29 +227,48 @@ export function Stage({ width = 1920, height = 1080, duration = 10, background =
     const now = performance.now();
     if (now - lastSaveRef.current >= 1000) {
       lastSaveRef.current = now;
-      try { localStorage.setItem(persistKey + ":t", String(time)); } catch { /* ignore */ }
+      try {
+        localStorage.setItem(persistKey + ":t", String(time));
+      } catch {
+        /* ignore */
+      }
     }
   }, [time, persistKey]);
-  useEffect(() => () => {
-    try { localStorage.setItem(persistKey + ":t", String(timeRef.current)); } catch { /* ignore */ }
-  }, [persistKey]);
+  useEffect(
+    () => () => {
+      try {
+        localStorage.setItem(persistKey + ":t", String(timeRef.current));
+      } catch {
+        /* ignore */
+      }
+    },
+    [persistKey],
+  );
 
   useEffect(() => {
-    const el = stageRef.current; if (!el) return;
+    const el = stageRef.current;
+    if (!el) return;
     const measure = () => {
       const barH = 44;
       setScale(Math.max(0.05, Math.min(el.clientWidth / width, (el.clientHeight - barH) / height)));
     };
     measure();
-    const ro = new ResizeObserver(measure); ro.observe(el);
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
     window.addEventListener("resize", measure);
-    return () => { ro.disconnect(); window.removeEventListener("resize", measure); };
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", measure);
+    };
   }, [width, height]);
 
   useEffect(() => {
     // Hold the clock until the voice is ready, so no line is crossed before the
     // model can speak it (autoplay stays armed; it simply doesn't advance yet).
-    if (!playing || !ready) { lastTsRef.current = null; return; }
+    if (!playing || !ready) {
+      lastTsRef.current = null;
+      return;
+    }
     const stepFrame = (ts: number) => {
       if (lastTsRef.current == null) lastTsRef.current = ts;
       // reduced-motion check: if enabled, hold the clock (keep polling so a
@@ -138,7 +280,8 @@ export function Stage({ width = 1920, height = 1080, duration = 10, background =
       }
       // frameDelta clamps the step — see MAX_FRAME_DT in easing.ts for why a
       // backgrounded tab would otherwise jump the playhead by the time away.
-      const dt = frameDelta(ts, lastTsRef.current); lastTsRef.current = ts;
+      const dt = frameDelta(ts, lastTsRef.current);
+      lastTsRef.current = ts;
       setTime((t) => {
         const r = advance(t, dt, duration, loop);
         if (r.time >= duration && loop) return 0;
@@ -148,7 +291,10 @@ export function Stage({ width = 1920, height = 1080, duration = 10, background =
       rafRef.current = requestAnimationFrame(stepFrame);
     };
     rafRef.current = requestAnimationFrame(stepFrame);
-    return () => { if (rafRef.current) cancelAnimationFrame(rafRef.current); lastTsRef.current = null; };
+    return () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      lastTsRef.current = null;
+    };
   }, [playing, ready, duration, loop]);
 
   // Pause when the tab goes away. rAF stops in a background tab but the
@@ -158,16 +304,22 @@ export function Stage({ width = 1920, height = 1080, duration = 10, background =
   // clock and voice together. Deliberately does NOT auto-resume: audio should
   // not restart at a tab nobody is looking at.
   useEffect(() => {
-    const onVisibility = () => { if (document.hidden) setPlaying(false); };
+    const onVisibility = () => {
+      if (document.hidden) setPlaying(false);
+    };
     document.addEventListener("visibilitychange", onVisibility);
     return () => document.removeEventListener("visibilitychange", onVisibility);
   }, []);
 
-  const seekTo = useCallback((t: number) => {
-    const r = resolveSeek(t, duration);
-    setHoverTime(null); setTime(r.time);
-    if (r.atEnd) setPlaying(false);
-  }, [duration]);
+  const seekTo = useCallback(
+    (t: number) => {
+      const r = resolveSeek(t, duration);
+      setHoverTime(null);
+      setTime(r.time);
+      if (r.atEnd) setPlaying(false);
+    },
+    [duration],
+  );
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -179,35 +331,96 @@ export function Stage({ width = 1920, height = 1080, duration = 10, background =
       if (e.code === "Space" && target?.closest("button, [role=button]")) return;
       // Clear any scrubber-hover preview so keyboard control isn't frozen at the
       // hovered frame when the pointer is resting on the track (mouseleave never fires).
-      if (e.code === "Space") { e.preventDefault(); setHoverTime(null); setPlaying((p) => !p); }
-      else if (e.code === "ArrowLeft") { setHoverTime(null); setTime((t) => clamp(t - (e.shiftKey ? 1 : 0.1), 0, duration)); }
-      else if (e.code === "ArrowRight") { seekTo(timeRef.current + (e.shiftKey ? 1 : 0.1)); }
-      else if (e.key === "0" || e.code === "Home") { setHoverTime(null); setTime(0); }
+      if (e.code === "Space") {
+        e.preventDefault();
+        setHoverTime(null);
+        setPlaying((p) => !p);
+      } else if (e.code === "ArrowLeft") {
+        setHoverTime(null);
+        setTime((t) => clamp(t - (e.shiftKey ? 1 : 0.1), 0, duration));
+      } else if (e.code === "ArrowRight") {
+        seekTo(timeRef.current + (e.shiftKey ? 1 : 0.1));
+      } else if (e.key === "0" || e.code === "Home") {
+        setHoverTime(null);
+        setTime(0);
+      }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [duration, seekTo]);
 
   const displayTime = hoverTime != null ? hoverTime : time;
-  const ctxValue = useMemo<TimelineValue>(() => ({ time: displayTime, clock: time, duration, playing, setTime, setPlaying, chrome }),
-    [displayTime, time, duration, playing, chrome]);
+  const ctxValue = useMemo<TimelineValue>(
+    () => ({ time: displayTime, clock: time, duration, playing, setTime, setPlaying, chrome }),
+    [displayTime, time, duration, playing, chrome],
+  );
 
   return (
-    <div ref={stageRefCb} style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column",
-      alignItems: "center", background: "#0a0a0a", fontFamily: "var(--font-sans)" }}>
-      <div style={{ flex: 1, width: "100%", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", minHeight: 0 }}>
-        <div style={{ width, height, background, position: "relative", transform: `scale(${scale})`, transformOrigin: "center",
-          flexShrink: 0, boxShadow: "0 20px 60px rgba(0,0,0,0.4)", overflow: "hidden" }}>
+    <div
+      ref={stageRefCb}
+      style={{
+        position: "absolute",
+        inset: 0,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        background: "#0a0a0a",
+        fontFamily: "var(--font-sans)",
+      }}
+    >
+      <div
+        style={{
+          flex: 1,
+          width: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          overflow: "hidden",
+          minHeight: 0,
+        }}
+      >
+        <div
+          style={{
+            width,
+            height,
+            background,
+            position: "relative",
+            transform: `scale(${scale})`,
+            transformOrigin: "center",
+            flexShrink: 0,
+            boxShadow: "0 20px 60px rgba(0,0,0,0.4)",
+            overflow: "hidden",
+          }}
+        >
           <TimelineContext.Provider value={ctxValue}>{children}</TimelineContext.Provider>
         </div>
       </div>
-      <PlaybackBar time={displayTime} duration={duration} playing={playing}
-        onPlayPause={() => setPlaying((p) => !p)} onReset={() => setTime(0)}
-        onSeek={seekTo} onHover={(t) => setHoverTime(t)} />
+      <PlaybackBar
+        time={displayTime}
+        duration={duration}
+        playing={playing}
+        onPlayPause={() => setPlaying((p) => !p)}
+        onReset={() => setTime(0)}
+        onSeek={seekTo}
+        onHover={(t) => setHoverTime(t)}
+      />
       {!ready && (
-        <div style={{ position: "absolute", inset: 0, zIndex: 50, display: "flex", alignItems: "center", justifyContent: "center",
-          background: "rgba(4,4,6,0.5)", backdropFilter: "blur(2px)", color: "rgba(220,220,228,0.85)",
-          fontFamily: "var(--font-mono)", fontSize: 13, letterSpacing: "0.34em" }}>
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            zIndex: 50,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            background: "rgba(4,4,6,0.5)",
+            backdropFilter: "blur(2px)",
+            color: "rgba(220,220,228,0.85)",
+            fontFamily: "var(--font-mono)",
+            fontSize: 13,
+            letterSpacing: "0.34em",
+          }}
+        >
           <span className="mlai-voice-pulse">PREPARING&nbsp;VOICE…</span>
           {/* The only animation that runs while the clock holds, so it too must honor reduced motion. */}
           <style>{`@keyframes mlaiVoicePulse{0%,100%{opacity:.4}50%{opacity:1}}.mlai-voice-pulse{animation:mlaiVoicePulse 1.2s ease-in-out infinite}@media (prefers-reduced-motion: reduce){.mlai-voice-pulse{animation:none;opacity:.8}}`}</style>
@@ -219,76 +432,235 @@ export function Stage({ width = 1920, height = 1080, duration = 10, background =
 
 /* ── playback bar ─────────────────────────────────────────────── */
 
-function PlaybackBar({ time, duration, playing, onPlayPause, onReset, onSeek, onHover }: {
-  time: number; duration: number; playing: boolean;
-  onPlayPause: () => void; onReset: () => void; onSeek: (t: number) => void; onHover: (t: number | null) => void;
+function PlaybackBar({
+  time,
+  duration,
+  playing,
+  onPlayPause,
+  onReset,
+  onSeek,
+  onHover,
+}: {
+  time: number;
+  duration: number;
+  playing: boolean;
+  onPlayPause: () => void;
+  onReset: () => void;
+  onSeek: (t: number) => void;
+  onHover: (t: number | null) => void;
 }) {
   const trackRef = useRef<HTMLDivElement>(null);
   const [dragging, setDragging] = useState(false);
-  const timeFromEvent = useCallback((e: { clientX: number }) => {
-    const rect = trackRef.current!.getBoundingClientRect();
-    return clamp((e.clientX - rect.left) / rect.width, 0, 1) * duration;
-  }, [duration]);
+  const timeFromEvent = useCallback(
+    (e: { clientX: number }) => {
+      const rect = trackRef.current!.getBoundingClientRect();
+      return clamp((e.clientX - rect.left) / rect.width, 0, 1) * duration;
+    },
+    [duration],
+  );
 
   useEffect(() => {
     if (!dragging) return;
     const onUp = () => setDragging(false);
-    const onMove = (e: MouseEvent) => { if (trackRef.current) onSeek(timeFromEvent(e)); };
-    window.addEventListener("mouseup", onUp); window.addEventListener("mousemove", onMove);
-    return () => { window.removeEventListener("mouseup", onUp); window.removeEventListener("mousemove", onMove); };
+    const onMove = (e: MouseEvent) => {
+      if (trackRef.current) onSeek(timeFromEvent(e));
+    };
+    window.addEventListener("mouseup", onUp);
+    window.addEventListener("mousemove", onMove);
+    return () => {
+      window.removeEventListener("mouseup", onUp);
+      window.removeEventListener("mousemove", onMove);
+    };
   }, [dragging, timeFromEvent, onSeek]);
 
   const pct = duration > 0 ? (time / duration) * 100 : 0;
   const fmt = (t: number) => {
-    const total = Math.max(0, t), m = Math.floor(total / 60), s = Math.floor(total % 60), cs = Math.floor((total * 100) % 100);
+    const total = Math.max(0, t),
+      m = Math.floor(total / 60),
+      s = Math.floor(total % 60),
+      cs = Math.floor((total * 100) % 100);
     return `${m}:${String(s).padStart(2, "0")}.${String(cs).padStart(2, "0")}`;
   };
   const mono = "var(--font-mono)";
 
   return (
-    <div className="mlai-transport" style={{ display: "flex", alignItems: "center", gap: 12, padding: "8px 16px", background: "rgba(20,20,20,0.92)",
-      borderTop: "1px solid rgba(255,255,255,0.08)", width: "100%", maxWidth: 680, alignSelf: "center", borderRadius: 8,
-      color: "#f6f4ef", userSelect: "none", flexShrink: 0 }}>
+    <div
+      className="mlai-transport"
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: 12,
+        padding: "8px 16px",
+        background: "rgba(20,20,20,0.92)",
+        borderTop: "1px solid rgba(255,255,255,0.08)",
+        width: "100%",
+        maxWidth: 680,
+        alignSelf: "center",
+        borderRadius: 8,
+        color: "#f6f4ef",
+        userSelect: "none",
+        flexShrink: 0,
+      }}
+    >
       {/* Inline styles cannot express :focus-visible, so the transport's keyboard
           focus ring lives here, scoped to this bar. Pointer clicks show nothing. */}
       <style>{`.mlai-transport button:focus-visible,.mlai-transport [role="slider"]:focus-visible{outline:2px solid #7cb0ff;outline-offset:2px;border-radius:6px}`}</style>
       <IconButton onClick={onReset} title="Return to start (0)">
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 2v10M12 2L5 7l7 5V2z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" strokeLinecap="round" /></svg>
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path
+            d="M3 2v10M12 2L5 7l7 5V2z"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinejoin="round"
+            strokeLinecap="round"
+          />
+        </svg>
       </IconButton>
       <IconButton onClick={onPlayPause} title="Play/pause (space)">
-        {playing
-          ? <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="3" y="2" width="3" height="10" fill="currentColor" /><rect x="8" y="2" width="3" height="10" fill="currentColor" /></svg>
-          : <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 2l9 5-9 5V2z" fill="currentColor" /></svg>}
+        {playing ? (
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <rect x="3" y="2" width="3" height="10" fill="currentColor" />
+            <rect x="8" y="2" width="3" height="10" fill="currentColor" />
+          </svg>
+        ) : (
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M3 2l9 5-9 5V2z" fill="currentColor" />
+          </svg>
+        )}
       </IconButton>
-      <div style={{ fontFamily: mono, fontSize: 12, fontVariantNumeric: "tabular-nums", width: 64, textAlign: "right" }}>{fmt(time)}</div>
-      <div ref={trackRef}
-        role="slider" tabIndex={0} aria-label="Playhead" aria-valuemin={0} aria-valuemax={Math.round(duration)} aria-valuenow={Math.round(time)} aria-valuetext={fmt(time)}
+      <div
+        style={{
+          fontFamily: mono,
+          fontSize: 12,
+          fontVariantNumeric: "tabular-nums",
+          width: 64,
+          textAlign: "right",
+        }}
+      >
+        {fmt(time)}
+      </div>
+      <div
+        ref={trackRef}
+        role="slider"
+        tabIndex={0}
+        aria-label="Playhead"
+        aria-valuemin={0}
+        aria-valuemax={Math.round(duration)}
+        aria-valuenow={Math.round(time)}
+        aria-valuetext={fmt(time)}
         onKeyDown={(e) => {
           // The window handler already scrubs on arrows; this makes the track a
           // real slider for assistive tech, with Home/End as well.
-          if (e.key === "Home") { e.preventDefault(); onSeek(0); }
-          else if (e.key === "End") { e.preventDefault(); onSeek(duration); }
+          if (e.key === "Home") {
+            e.preventDefault();
+            onSeek(0);
+          } else if (e.key === "End") {
+            e.preventDefault();
+            onSeek(duration);
+          }
         }}
         onMouseMove={(e) => (dragging ? onSeek(timeFromEvent(e)) : onHover(timeFromEvent(e)))}
-        onMouseLeave={() => { if (!dragging) onHover(null); }}
-        onMouseDown={(e) => { setDragging(true); onSeek(timeFromEvent(e)); onHover(null); }}
-        style={{ flex: 1, height: 22, position: "relative", cursor: "pointer", display: "flex", alignItems: "center" }}>
-        <div style={{ position: "absolute", left: 0, right: 0, height: 4, background: "rgba(255,255,255,0.12)", borderRadius: 2 }} />
-        <div style={{ position: "absolute", left: 0, width: `${pct}%`, height: 4, background: "oklch(72% 0.12 250)", borderRadius: 2 }} />
-        <div style={{ position: "absolute", left: `${pct}%`, top: "50%", width: 12, height: 12, marginLeft: -6, marginTop: -6, background: "#fff", borderRadius: 6, boxShadow: "0 2px 4px rgba(0,0,0,0.4)" }} />
+        onMouseLeave={() => {
+          if (!dragging) onHover(null);
+        }}
+        onMouseDown={(e) => {
+          setDragging(true);
+          onSeek(timeFromEvent(e));
+          onHover(null);
+        }}
+        style={{
+          flex: 1,
+          height: 22,
+          position: "relative",
+          cursor: "pointer",
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <div
+          style={{
+            position: "absolute",
+            left: 0,
+            right: 0,
+            height: 4,
+            background: "rgba(255,255,255,0.12)",
+            borderRadius: 2,
+          }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            left: 0,
+            width: `${pct}%`,
+            height: 4,
+            background: "oklch(72% 0.12 250)",
+            borderRadius: 2,
+          }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            left: `${pct}%`,
+            top: "50%",
+            width: 12,
+            height: 12,
+            marginLeft: -6,
+            marginTop: -6,
+            background: "#fff",
+            borderRadius: 6,
+            boxShadow: "0 2px 4px rgba(0,0,0,0.4)",
+          }}
+        />
       </div>
-      <div style={{ fontFamily: mono, fontSize: 12, fontVariantNumeric: "tabular-nums", width: 64, textAlign: "left", color: "rgba(246,244,239,0.55)" }}>{fmt(duration)}</div>
+      <div
+        style={{
+          fontFamily: mono,
+          fontSize: 12,
+          fontVariantNumeric: "tabular-nums",
+          width: 64,
+          textAlign: "left",
+          color: "rgba(246,244,239,0.55)",
+        }}
+      >
+        {fmt(duration)}
+      </div>
     </div>
   );
 }
 
-function IconButton({ children, onClick, title }: { children: ReactNode; onClick: () => void; title: string }) {
+function IconButton({
+  children,
+  onClick,
+  title,
+}: {
+  children: ReactNode;
+  onClick: () => void;
+  title: string;
+}) {
   const [hover, setHover] = useState(false);
   return (
-    <button type="button" onClick={onClick} title={title} aria-label={title} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}
-      style={{ width: 28, height: 28, display: "flex", alignItems: "center", justifyContent: "center",
-        background: hover ? "rgba(255,255,255,0.12)" : "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)",
-        borderRadius: 6, color: "#f6f4ef", cursor: "pointer", padding: 0, transition: "background 120ms" }}>
+    <button
+      type="button"
+      onClick={onClick}
+      title={title}
+      aria-label={title}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      style={{
+        width: 28,
+        height: 28,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: hover ? "rgba(255,255,255,0.12)" : "rgba(255,255,255,0.04)",
+        border: "1px solid rgba(255,255,255,0.1)",
+        borderRadius: 6,
+        color: "#f6f4ef",
+        cursor: "pointer",
+        padding: 0,
+        transition: "background 120ms",
+      }}
+    >
       {children}
     </button>
   );

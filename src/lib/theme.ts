@@ -43,5 +43,8 @@ export function currentTheme(): Theme {
 }
 
 export function resolveTheme(): Theme {
-  return readStoredTheme() ?? (window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
+  return (
+    readStoredTheme() ??
+    (window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark")
+  );
 }

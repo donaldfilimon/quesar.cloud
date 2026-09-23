@@ -14,7 +14,9 @@ function report(body: string, ip = `203.0.113.${Math.random()}`): Request {
 describe("handleCspReport", () => {
   it("logs a legacy report-uri body to stdout and answers 204", async () => {
     const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
-    const body = JSON.stringify({ "csp-report": { "violated-directive": "script-src", "blocked-uri": "https://x.test" } });
+    const body = JSON.stringify({
+      "csp-report": { "violated-directive": "script-src", "blocked-uri": "https://x.test" },
+    });
     const res = await handleCspReport(report(body));
     expect(res.status).toBe(204);
     expect(warn).toHaveBeenCalledWith("[CSP] violation report:", body);
@@ -22,7 +24,9 @@ describe("handleCspReport", () => {
 
   it("accepts a Reporting API batch (an array) and truncates the log line", async () => {
     const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
-    const body = JSON.stringify([{ type: "csp-violation", body: { blockedURL: "x".repeat(5000) } }]);
+    const body = JSON.stringify([
+      { type: "csp-violation", body: { blockedURL: "x".repeat(5000) } },
+    ]);
     expect((await handleCspReport(report(body))).status).toBe(204);
     expect((warn.mock.calls[0]?.[1] as string).length).toBe(CSP_LOG_LIMIT);
   }, 30_000);
@@ -37,7 +41,8 @@ describe("handleCspReport", () => {
     const ip = `203.0.113.${Math.random()}`;
     const now = 1_980_000_000_000;
     const statuses: number[] = [];
-    for (let i = 0; i < 61; i += 1) statuses.push((await handleCspReport(report("{}", ip), now)).status);
+    for (let i = 0; i < 61; i += 1)
+      statuses.push((await handleCspReport(report("{}", ip), now)).status);
     expect(statuses.slice(0, 60).every((status) => status === 204)).toBe(true);
     expect(statuses[60]).toBe(429);
     expect(warn).toHaveBeenCalledTimes(60);

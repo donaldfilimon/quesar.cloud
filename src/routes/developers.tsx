@@ -1,7 +1,16 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { RepoList } from "@/components/github/repo-list";
 import { GithubStatusLine, SourcePanel } from "@/components/github/source-panel";
-import { CodeBlock, CopyGrid, IntegrityList, JourneyRail, PageClose, PageHero, Section, Surface } from "@/components/site";
+import {
+  CodeBlock,
+  CopyGrid,
+  IntegrityList,
+  JourneyRail,
+  PageClose,
+  PageHero,
+  Section,
+  Surface,
+} from "@/components/site";
 import { setups } from "@/lib/content";
 import { pageHead } from "@/lib/seo";
 
@@ -43,7 +52,10 @@ function DevelopersPage() {
               <div className="mt-4">
                 <CodeBlock code={item.code} label={item.title} />
               </div>
-              <Link to={item.href as never} className="mt-3 inline-flex min-h-11 items-center text-sm font-medium text-accent">
+              <Link
+                to={item.href as never}
+                className="mt-3 inline-flex min-h-11 items-center text-sm font-medium text-accent"
+              >
                 Setup notes
               </Link>
             </Surface>
@@ -51,7 +63,10 @@ function DevelopersPage() {
         </div>
       </Section>
 
-      <Section eyebrow="API direction" title="What you can call today vs. what is not a product yet.">
+      <Section
+        eyebrow="API direction"
+        title="What you can call today vs. what is not a product yet."
+      >
         <CopyGrid
           items={[
             {
@@ -71,9 +86,10 @@ function DevelopersPage() {
           <Link to="/skill-creator" className="text-accent">
             skill-creator
           </Link>{" "}
-          is the public agent skill for creating skills and shipping the company site without breaking Apple framing,
-          provenance tags, Apache-2.0, or toolchain facts. New numbers that are not in that skill's master reference do
-          not ship. Toolchain claims follow each repository README — ABI is nightly Rust, not Zig.
+          is the public agent skill for creating skills and shipping the company site without
+          breaking Apple framing, provenance tags, Apache-2.0, or toolchain facts. New numbers that
+          are not in that skill's master reference do not ship. Toolchain claims follow each
+          repository README — ABI is nightly Rust, not Zig.
         </p>
         <div className="mt-6">
           <IntegrityList />
@@ -86,7 +102,11 @@ function DevelopersPage() {
           { to: "/skill-creator", label: "skill-creator" },
         ]}
         next={[
-          { to: "/console", label: "Console", body: "Sign in and save what you observed on a node." },
+          {
+            to: "/console",
+            label: "Console",
+            body: "Sign in and save what you observed on a node.",
+          },
           { to: "/services", label: "Services", body: "Audit, design, build, harden." },
           { to: "/contact", label: "Contact", body: "The public path is source." },
         ]}

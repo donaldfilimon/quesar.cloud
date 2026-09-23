@@ -37,7 +37,9 @@ export function ShowcaseWall() {
                 className="surface surface-hover group flex h-full flex-col overflow-hidden no-underline"
               >
                 <div className="flex items-center justify-between border-b border-border px-5 py-2.5">
-                  <span className="font-mono text-[10px] tracking-[0.3em] text-fg-subtle">REEL {reel.reel}</span>
+                  <span className="font-mono text-[10px] tracking-[0.3em] text-fg-subtle">
+                    REEL {reel.reel}
+                  </span>
                   <span aria-hidden="true" className="flex gap-1.5">
                     {[0, 1, 2, 3].map((d) => (
                       <span key={d} className="h-1.5 w-2.5 rounded-[2px] bg-fg/12" />
@@ -59,7 +61,10 @@ export function ShowcaseWall() {
                   <p className="text-sm leading-relaxed text-fg-muted">{reel.body}</p>
                   <span className="mt-auto inline-flex items-center gap-2 pt-3 text-xs text-accent">
                     Enter room
-                    <Play className="size-3 transition-transform group-hover:translate-x-1 motion-reduce:transition-none" aria-hidden="true" />
+                    <Play
+                      className="size-3 transition-transform group-hover:translate-x-1 motion-reduce:transition-none"
+                      aria-hidden="true"
+                    />
                   </span>
                 </div>
               </Link>
@@ -69,11 +74,15 @@ export function ShowcaseWall() {
         <li>
           <div className="surface flex h-full flex-col overflow-hidden">
             <div className="flex items-center justify-between border-b border-border px-5 py-2.5">
-              <span className="font-mono text-[10px] tracking-[0.3em] text-accent">VOICE SYSTEM</span>
+              <span className="font-mono text-[10px] tracking-[0.3em] text-accent">
+                VOICE SYSTEM
+              </span>
               <Mic className="size-3.5 text-accent" aria-hidden="true" />
             </div>
             <div className="flex flex-1 flex-col gap-3 p-5">
-              <h2 className="font-display text-2xl tracking-tight text-fg">{showcaseVoice.title}</h2>
+              <h2 className="font-display text-2xl tracking-tight text-fg">
+                {showcaseVoice.title}
+              </h2>
               <p className="text-sm leading-relaxed text-fg-muted">{showcaseVoice.body}</p>
               <p className="mt-auto border-t border-border pt-4 font-mono text-[11px] leading-relaxed text-fg-subtle">
                 {showcaseVoice.keys}

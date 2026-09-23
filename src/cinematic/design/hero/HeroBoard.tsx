@@ -218,16 +218,13 @@ function HeroCanvas({ tweaks }: { tweaks: TweakState }): ReactNode {
       const dens = tRef.current.density;
       cloud = sphere(Math.min(720, Math.floor(((w * h) / 4200) * dens)), true);
       lat = sphere(46, false);
-      dust = Array.from(
-        { length: Math.floor(((w * h) / 13000) * dens) },
-        (): Dust => ({
-          x: Math.random() * w,
-          y: Math.random() * h,
-          r: Math.random() * 1.1 + 0.3,
-          p: Math.random() * 6.28,
-          vy: 0.04 + Math.random() * 0.08,
-        }),
-      );
+      dust = Array.from({ length: Math.floor(((w * h) / 13000) * dens) }, (): Dust => ({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        r: Math.random() * 1.1 + 0.3,
+        p: Math.random() * 6.28,
+        vy: 0.04 + Math.random() * 0.08,
+      }));
       curDensity = dens;
     };
     const resize = (): void => {
@@ -463,12 +460,19 @@ function PersonaDot({
         style={{ background: color, boxShadow: `0 0 10px ${color}` }}
       />
       <div className="leading-tight">
-        <div className="text-[13px] font-semibold text-white" style={{ fontFamily: "var(--font-display)" }}>
+        <div
+          className="text-[13px] font-semibold text-white"
+          style={{ fontFamily: "var(--font-display)" }}
+        >
           {name}
         </div>
         <div
           className="text-[11px]"
-          style={{ color: "var(--text-faint)", fontFamily: "var(--font-mono)", letterSpacing: "0.04em" }}
+          style={{
+            color: "var(--text-faint)",
+            fontFamily: "var(--font-mono)",
+            letterSpacing: "0.04em",
+          }}
         >
           {role}
         </div>
@@ -536,7 +540,10 @@ export default function HeroBoard(): ReactNode {
               boxShadow: `0 6px 18px -6px ${t.accent}`,
             }}
           >
-            <span className="text-white font-bold text-[13px]" style={{ fontFamily: "var(--font-display)" }}>
+            <span
+              className="text-white font-bold text-[13px]"
+              style={{ fontFamily: "var(--font-display)" }}
+            >
               M
             </span>
           </div>
@@ -547,7 +554,10 @@ export default function HeroBoard(): ReactNode {
             MLAI
           </span>
         </div>
-        <div className="hidden sm:flex items-center gap-7 text-[13px]" style={{ color: "var(--text-dim)" }}>
+        <div
+          className="hidden sm:flex items-center gap-7 text-[13px]"
+          style={{ color: "var(--text-dim)" }}
+        >
           <span className="hover:text-white transition-colors cursor-default">WDBX</span>
           <span className="hover:text-white transition-colors cursor-default">ABI Framework</span>
           <span className="hover:text-white transition-colors cursor-default">Personas</span>
@@ -586,12 +596,17 @@ export default function HeroBoard(): ReactNode {
             </span>
             Privacy-first AI infrastructure
             <span className="w-1 h-1 rounded-full" style={{ background: "var(--text-faint)" }} />
-            <span style={{ fontFamily: "var(--font-mono)", letterSpacing: "0.04em" }}>Zig · local-first</span>
+            <span style={{ fontFamily: "var(--font-mono)", letterSpacing: "0.04em" }}>
+              Zig · local-first
+            </span>
           </div>
 
           <h1
             className="text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight leading-[1.04] text-white max-w-4xl"
-            style={{ fontFamily: "var(--font-display)", animation: "hero-rise .7s ease-out .1s both" }}
+            style={{
+              fontFamily: "var(--font-display)",
+              animation: "hero-rise .7s ease-out .1s both",
+            }}
           >
             The infrastructure layer for
             <span
@@ -609,10 +624,13 @@ export default function HeroBoard(): ReactNode {
 
           <p
             className="mt-7 text-lg sm:text-xl max-w-2xl leading-relaxed"
-            style={{ color: "rgba(226,232,240,0.85)", animation: "hero-rise .7s ease-out .2s both" }}
+            style={{
+              color: "rgba(226,232,240,0.85)",
+              animation: "hero-rise .7s ease-out .2s both",
+            }}
           >
-            From the vector engine up — WDBX, the ABI framework, and three minds in one system. Fast by design,
-            private by default, verifiable by architecture.
+            From the vector engine up — WDBX, the ABI framework, and three minds in one system. Fast
+            by design, private by default, verifiable by architecture.
           </p>
 
           <div
@@ -621,7 +639,11 @@ export default function HeroBoard(): ReactNode {
           >
             <button
               className="group inline-flex items-center gap-2 px-6 py-3 rounded-full font-semibold transition-all hover:-translate-y-0.5"
-              style={{ background: "#fff", color: "#050509", boxShadow: `0 10px 30px -8px ${t.accent}66` }}
+              style={{
+                background: "#fff",
+                color: "#050509",
+                boxShadow: `0 10px 30px -8px ${t.accent}66`,
+              }}
             >
               Explore the stack{" "}
               <span className="transition-transform group-hover:translate-x-0.5">
@@ -679,7 +701,11 @@ export default function HeroBoard(): ReactNode {
       {/* ── Tweaks ── */}
       <TweaksPanel>
         <TweakSection label="Headline" />
-        <TweakText label="Gradient line" value={t.headline} onChange={(v) => setTweak("headline", v)} />
+        <TweakText
+          label="Gradient line"
+          value={t.headline}
+          onChange={(v) => setTweak("headline", v)}
+        />
 
         <TweakSection label="Motion" />
         <TweakSlider
@@ -709,12 +735,24 @@ export default function HeroBoard(): ReactNode {
           unit="×"
           onChange={(v) => setTweak("glow", v)}
         />
-        <TweakToggle label="Mouse parallax" value={t.parallax} onChange={(v) => setTweak("parallax", v)} />
+        <TweakToggle
+          label="Mouse parallax"
+          value={t.parallax}
+          onChange={(v) => setTweak("parallax", v)}
+        />
 
         <TweakSection label="Scene" />
         <TweakToggle label="Memory chain" value={t.chain} onChange={(v) => setTweak("chain", v)} />
-        <TweakToggle label="Persona legend" value={t.personas} onChange={(v) => setTweak("personas", v)} />
-        <TweakToggle label="Show content" value={t.content} onChange={(v) => setTweak("content", v)} />
+        <TweakToggle
+          label="Persona legend"
+          value={t.personas}
+          onChange={(v) => setTweak("personas", v)}
+        />
+        <TweakToggle
+          label="Show content"
+          value={t.content}
+          onChange={(v) => setTweak("content", v)}
+        />
 
         <TweakSection label="Color" />
         <TweakColor

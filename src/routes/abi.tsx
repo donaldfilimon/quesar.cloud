@@ -55,8 +55,9 @@ cd abi
 ./tools/cargo.sh build -p abi-cli`}
         />
         <p className="mt-4 text-sm text-fg-muted">
-          GPU reporting returns <code className="font-mono">accelerated=false</code> when native kernels are not linked.
-          Persistence defaults to <code className="font-mono">$HOME/.abi/wdbx</code>. Disable with{" "}
+          GPU reporting returns <code className="font-mono">accelerated=false</code> when native
+          kernels are not linked. Persistence defaults to{" "}
+          <code className="font-mono">$HOME/.abi/wdbx</code>. Disable with{" "}
           <code className="font-mono">ABI_WDBX_PERSIST=0</code>. License: Apache-2.0.
         </p>
       </Section>

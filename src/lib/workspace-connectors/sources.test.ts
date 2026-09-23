@@ -205,7 +205,11 @@ describe("httpWorkspaceAdapter", () => {
       identity: "google",
       label: "Google Drive",
       endpoint: "/api/workspace/drive",
-      fetchImpl: (async () => ({ ok: false, status: 503, json: async () => ({}) })) as unknown as typeof fetch,
+      fetchImpl: (async () => ({
+        ok: false,
+        status: 503,
+        json: async () => ({}),
+      })) as unknown as typeof fetch,
     });
     await expect(adapter.list({ days: 30 })).rejects.toThrow("Google Drive responded 503");
   });

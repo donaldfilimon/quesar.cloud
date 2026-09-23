@@ -31,9 +31,15 @@ function MobilePage() {
         <div className="mt-10">
           <CopyGrid
             items={[
-              { title: "Tabs", body: "Home, products, platform, company, vault — the Expo app mirrors this site's orientation." },
+              {
+                title: "Tabs",
+                body: "Home, products, platform, company, vault — the Expo app mirrors this site's orientation.",
+              },
               { title: "CloudKit", body: "Private vault on a signed Apple build. Not this page." },
-              { title: "Fallback", body: "Encrypted-local store when iCloud is unavailable. Web uses localStorage only." },
+              {
+                title: "Fallback",
+                body: "Encrypted-local store when iCloud is unavailable. Web uses localStorage only.",
+              },
             ]}
             columns="md:grid-cols-3"
           />

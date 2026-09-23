@@ -29,7 +29,8 @@ export type AdminDecision =
 /** Pure decision, unit-tested. */
 export function decideAdmin(user: AdminCandidate, allowlist: Set<string>): AdminDecision {
   if (allowlist.size === 0) return { admin: false, reason: "no_allowlist" };
-  if (!allowlist.has(user.email.trim().toLowerCase())) return { admin: false, reason: "not_allowlisted" };
+  if (!allowlist.has(user.email.trim().toLowerCase()))
+    return { admin: false, reason: "not_allowlisted" };
   // Require a linked verifying provider. `emailVerified` is deliberately not
   // sufficient on its own: it is a mutable column and nothing in this app
   // verifies email/password addresses, so it is not proof of control.

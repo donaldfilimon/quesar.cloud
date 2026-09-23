@@ -28,7 +28,9 @@ function scaffold(prompt: string) {
 }
 
 export function QuasarStudio() {
-  const [prompt, setPrompt] = useState("A lab notebook for private retrieval experiments, with a claims legend.");
+  const [prompt, setPrompt] = useState(
+    "A lab notebook for private retrieval experiments, with a claims legend.",
+  );
   const html = useMemo(() => scaffold(prompt), [prompt]);
   const src = useMemo(() => `data:text/html;charset=utf-8,${encodeURIComponent(html)}`, [html]);
 
@@ -38,7 +40,8 @@ export function QuasarStudio() {
         <p className="text-xs text-accent">Studio</p>
         <h3 className="mt-2 font-display text-2xl">Prompt to a preview.</h3>
         <p className="mt-2 text-sm text-fg-muted">
-          Browser scaffold only. Real generation needs the local Bun service and Anthropic credentials.
+          Browser scaffold only. Real generation needs the local Bun service and Anthropic
+          credentials.
         </p>
         <textarea
           value={prompt}
@@ -50,9 +53,7 @@ export function QuasarStudio() {
         </Button>
       </div>
       <div className="overflow-hidden rounded-[18px] bg-bg shadow-[var(--shadow-border)]">
-        <p className="border-b border-border px-4 py-2 text-xs text-fg-subtle">
-          next dev · local
-        </p>
+        <p className="border-b border-border px-4 py-2 text-xs text-fg-subtle">next dev · local</p>
         <iframe title="Quasar preview" src={src} className="h-[28rem] w-full bg-bg" />
       </div>
     </div>

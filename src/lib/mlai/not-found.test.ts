@@ -14,11 +14,14 @@ const sections = [
 ] as const;
 
 describe("not-found recovery", () => {
-  it.each(sections)("offers section-specific recovery for $pathname", ({ pathname, heading, href }) => {
-    const recovery = recoveryForPathname(pathname);
-    expect(recovery.eyebrow).toContain(heading);
-    expect(recovery.backTo).toBe(href);
-  });
+  it.each(sections)(
+    "offers section-specific recovery for $pathname",
+    ({ pathname, heading, href }) => {
+      const recovery = recoveryForPathname(pathname);
+      expect(recovery.eyebrow).toContain(heading);
+      expect(recovery.backTo).toBe(href);
+    },
+  );
 
   it("keeps the generic recovery for an unrelated or inherited-property path", () => {
     for (const path of ["/", "/nope", "/toString/x", "/constructor"]) {

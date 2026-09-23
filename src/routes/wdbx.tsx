@@ -40,7 +40,10 @@ function WdbxPage() {
           rows={wdbxCapabilities}
           rowKey={(row) => row.concern}
           columns={[
-            { header: "Concern", cell: (row) => <span className="font-medium">{row.concern}</span> },
+            {
+              header: "Concern",
+              cell: (row) => <span className="font-medium">{row.concern}</span>,
+            },
             { header: "What exists", className: "text-fg-muted", cell: (row) => row.what },
             { header: "Status", cell: (row) => <StatusBadge status={row.status} /> },
           ]}
@@ -61,10 +64,11 @@ function WdbxPage() {
       <Section eyebrow="Crates" title="The substrate ABI owns.">
         <NamedGrid items={wdbxCrates} accent="wdbx" nameClass="text-wdbx" />
         <p className="mt-4 text-sm text-fg-subtle">
-          Crate names keep the <code className="font-mono">abi-</code> prefix deliberately. ABI owns this layer. The
-          repository provides source, not a hosted database. Extracted from donaldfilimon/abi on 2026-08-22 with history
-          preserved. A Python witness encoder at <code className="font-mono">tools/abbey_cbor_episode_v1.py</code>{" "}
-          agrees on golden vectors for <code className="font-mono">abbey-cbor-episode-v1</code>.
+          Crate names keep the <code className="font-mono">abi-</code> prefix deliberately. ABI owns
+          this layer. The repository provides source, not a hosted database. Extracted from
+          donaldfilimon/abi on 2026-08-22 with history preserved. A Python witness encoder at{" "}
+          <code className="font-mono">tools/abbey_cbor_episode_v1.py</code> agrees on golden vectors
+          for <code className="font-mono">abbey-cbor-episode-v1</code>.
         </p>
       </Section>
 

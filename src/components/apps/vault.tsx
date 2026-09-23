@@ -48,7 +48,12 @@ export function VaultApp() {
   }
 
   function createNote() {
-    const note: Note = { id: crypto.randomUUID(), title: "Untitled", body: "", updated: Date.now() };
+    const note: Note = {
+      id: crypto.randomUUID(),
+      title: "Untitled",
+      body: "",
+      updated: Date.now(),
+    };
     setNotes((rows) => [note, ...rows]);
     setActive(note.id);
     setTitle(note.title);
@@ -80,7 +85,9 @@ export function VaultApp() {
                   className={`block w-full px-4 py-3 text-left ${note.id === active ? "bg-bg-subtle" : "hover:bg-bg-subtle"}`}
                 >
                   <p className="truncate text-sm font-medium">{note.title || "Untitled"}</p>
-                  <p className="truncate text-xs text-fg-subtle">{new Date(note.updated).toLocaleString()}</p>
+                  <p className="truncate text-xs text-fg-subtle">
+                    {new Date(note.updated).toLocaleString()}
+                  </p>
                 </button>
               </li>
             ))

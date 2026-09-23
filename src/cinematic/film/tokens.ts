@@ -45,9 +45,27 @@ export const FONT = {
 // Casting one male (Abi · am_michael) among two women keeps each mind
 // identifiable by ear alone. Mirrors the mlai-design-com tokens.js persona map.
 export const PERSONAS = {
-  abbey: { name: "Abbey", role: "proof · verified", color: C.green, voice: "af_heart", prosody: { speed: 1.0, gap: 0.2 } },
-  aviva: { name: "Aviva", role: "research · vision", color: C.violet, voice: "bf_emma", prosody: { speed: 1.12, gap: 0.14 } },
-  abi: { name: "Abi", role: "interactive · fast", color: C.cyan, voice: "am_michael", prosody: { speed: 1.04, gap: 0.17 } },
+  abbey: {
+    name: "Abbey",
+    role: "proof · verified",
+    color: C.green,
+    voice: "af_heart",
+    prosody: { speed: 1.0, gap: 0.2 },
+  },
+  aviva: {
+    name: "Aviva",
+    role: "research · vision",
+    color: C.violet,
+    voice: "bf_emma",
+    prosody: { speed: 1.12, gap: 0.14 },
+  },
+  abi: {
+    name: "Abi",
+    role: "interactive · fast",
+    color: C.cyan,
+    voice: "am_michael",
+    prosody: { speed: 1.04, gap: 0.17 },
+  },
 } as const;
 
 export type PersonaKey = keyof typeof PERSONAS;

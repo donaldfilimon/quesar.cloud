@@ -12,7 +12,11 @@ export const Route = createFileRoute("/abbey-bot")({
   head: () => ({
     meta: [
       { title: "Abbey bot — Quesar" },
-      { name: "description", content: "Companion bot surface: watch Abi route Abbey and Aviva, then ask a signed-in live model." },
+      {
+        name: "description",
+        content:
+          "Companion bot surface: watch Abi route Abbey and Aviva, then ask a signed-in live model.",
+      },
     ],
   }),
   component: AbbeyBotPage,
@@ -72,7 +76,11 @@ function AbbeyBotPage() {
       <Section eyebrow="Thread" title="One conversation. Three voices.">
         <div className="surface p-5">
           <ul className="space-y-3">
-            {turns.length === 0 ? <li className="text-sm text-fg-muted">No turns yet. {user ? "Signed in." : "Local fallback if you are signed out."}</li> : null}
+            {turns.length === 0 ? (
+              <li className="text-sm text-fg-muted">
+                No turns yet. {user ? "Signed in." : "Local fallback if you are signed out."}
+              </li>
+            ) : null}
             {turns.map((turn, index) => (
               <li key={`${turn.role}-${index}`} className="rounded-md bg-bg px-4 py-3">
                 <p className="text-xs text-fg-subtle">
@@ -98,7 +106,9 @@ function AbbeyBotPage() {
       <PageClose
         primary={{ to: "/abbey", label: "Abbey product" }}
         secondary={[{ to: "/companion", label: "macOS companion" }]}
-        next={[{ to: "/demo", label: "Persona demo", body: "Watch Abi score α without a live model." }]}
+        next={[
+          { to: "/demo", label: "Persona demo", body: "Watch Abi score α without a live model." },
+        ]}
       />
     </>
   );

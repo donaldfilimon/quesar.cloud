@@ -1,7 +1,12 @@
 import { useState, type ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import { Check, Copy } from "lucide-react";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
 import { ProvTag, type Provenance } from "./prov-tag";
 
@@ -30,11 +35,7 @@ export function Callout({
   );
 }
 
-export function StepList({
-  steps,
-}: {
-  steps: readonly { title: string; body: string }[];
-}) {
+export function StepList({ steps }: { steps: readonly { title: string; body: string }[] }) {
   return (
     <ol className="grid gap-4 md:grid-cols-2">
       {steps.map((step, index) => (
@@ -54,7 +55,10 @@ export function StepList({
 
 export function FaqList({ items }: { items: readonly { q: string; a: string }[] }) {
   return (
-    <Accordion type="multiple" className="divide-y divide-border overflow-hidden rounded-xl shadow-[var(--shadow-border)]">
+    <Accordion
+      type="multiple"
+      className="divide-y divide-border overflow-hidden rounded-xl shadow-[var(--shadow-border)]"
+    >
       {items.map((item) => (
         <AccordionItem key={item.q} value={item.q}>
           <AccordionTrigger>{item.q}</AccordionTrigger>
@@ -65,11 +69,7 @@ export function FaqList({ items }: { items: readonly { q: string; a: string }[] 
   );
 }
 
-export function NextUp({
-  items,
-}: {
-  items: { to: string; label: string; body: string }[];
-}) {
+export function NextUp({ items }: { items: { to: string; label: string; body: string }[] }) {
   return (
     <div className="grid gap-3 sm:grid-cols-2">
       {items.map((item) => (
@@ -99,15 +99,17 @@ export function CodeBlock({ code, label }: { code: string; label?: string }) {
   return (
     <div className="min-w-0 overflow-hidden rounded-lg bg-bg-elevated shadow-[var(--shadow-border)]">
       <div className="flex items-center justify-between border-b border-border px-4 py-2">
-        <span className="text-xs text-fg-subtle">
-          {label ?? "source"}
-        </span>
+        <span className="text-xs text-fg-subtle">{label ?? "source"}</span>
         <button
           type="button"
           onClick={() => void copy()}
           className="inline-flex h-9 items-center gap-1.5 rounded-md px-2 text-[11px] text-fg-muted hover:bg-bg-subtle hover:text-fg"
         >
-          {copied ? <Check className="size-3.5" strokeWidth={1.75} /> : <Copy className="size-3.5" strokeWidth={1.75} />}
+          {copied ? (
+            <Check className="size-3.5" strokeWidth={1.75} />
+          ) : (
+            <Copy className="size-3.5" strokeWidth={1.75} />
+          )}
           {copied ? "Copied" : "Copy"}
         </button>
       </div>

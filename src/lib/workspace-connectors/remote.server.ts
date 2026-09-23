@@ -12,11 +12,7 @@
  * A row the provider returns that we cannot render (no id, no link, a folder)
  * is dropped rather than half-rendered — one odd item must not blank a source.
  */
-import {
-  kindFromMimeType,
-  type WorkspaceFile,
-  type WorkspaceSourceId,
-} from "./sources";
+import { kindFromMimeType, type WorkspaceFile, type WorkspaceSourceId } from "./sources";
 
 /** Bounded so a large Drive cannot turn one console load into a slow page. */
 const PAGE_SIZE = 100;
@@ -90,7 +86,7 @@ export function mapDriveFile(input: unknown): WorkspaceFile | null {
     modified,
     sizeBytes: bytes(row.size),
     url,
-    owner: firstOwner ? text(firstOwner.displayName) ?? text(firstOwner.emailAddress) : null,
+    owner: firstOwner ? (text(firstOwner.displayName) ?? text(firstOwner.emailAddress)) : null,
   };
 }
 
@@ -129,9 +125,10 @@ export function mapGraphItem(input: unknown): WorkspaceFile | null {
 
   // `/me/drive/recent` returns shared items as a remoteItem wrapper; the real
   // metadata lives inside it.
-  const remote = row.remoteItem && typeof row.remoteItem === "object"
-    ? (row.remoteItem as Record<string, unknown>)
-    : null;
+  const remote =
+    row.remoteItem && typeof row.remoteItem === "object"
+      ? (row.remoteItem as Record<string, unknown>)
+      : null;
   const item = remote ?? row;
 
   if (item.folder) return null;
@@ -142,10 +139,12 @@ export function mapGraphItem(input: unknown): WorkspaceFile | null {
   const url = text(item.webUrl) ?? text(row.webUrl);
   if (!id || !title || !modified || !url) return null;
 
-  const file = item.file && typeof item.file === "object" ? (item.file as Record<string, unknown>) : null;
+  const file =
+    item.file && typeof item.file === "object" ? (item.file as Record<string, unknown>) : null;
   const modifiedBy =
     item.lastModifiedBy && typeof item.lastModifiedBy === "object"
-      ? ((item.lastModifiedBy as Record<string, unknown>).user as Record<string, unknown> | undefined)
+      ? ((item.lastModifiedBy as Record<string, unknown>).user as
+          Record<string, unknown> | undefined)
       : undefined;
 
   return {

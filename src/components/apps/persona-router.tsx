@@ -3,16 +3,23 @@ import { cn } from "@/lib/utils";
 import { scoreMessage } from "./persona-score";
 
 export function PersonaRouter({ compact = false }: { compact?: boolean }) {
-  const [text, setText] = useState("I'm stuck on the deploy target and also need the exact schema.");
+  const [text, setText] = useState(
+    "I'm stuck on the deploy target and also need the exact schema.",
+  );
   const scores = useMemo(() => scoreMessage(text), [text]);
   const voice =
-    scores.alpha > 0.8 ? "Abbey — empathetic, scaffolded" : scores.alpha < 0.2 ? "Aviva — concise, unfiltered" : "Blend — Aviva's facts, Abbey's voice, mixed by Abi";
+    scores.alpha > 0.8
+      ? "Abbey — empathetic, scaffolded"
+      : scores.alpha < 0.2
+        ? "Aviva — concise, unfiltered"
+        : "Blend — Aviva's facts, Abbey's voice, mixed by Abi";
 
   return (
     <div className="surface p-5 sm:p-6">
       <p className="text-xs text-accent">Persona router</p>
       <p className="mt-2 text-sm text-fg-muted">
-        Illustrative keyword-sentiment heuristic. The inspected local router uses deterministic rules; this is not evidence of a learned classifier.
+        Illustrative keyword-sentiment heuristic. The inspected local router uses deterministic
+        rules; this is not evidence of a learned classifier.
       </p>
       <label className="mt-4 block">
         <span className="sr-only">Message</span>
@@ -39,7 +46,10 @@ function Meter({ label, value, tone }: { label: string; value: number; tone: str
     <div>
       <p className="text-xs text-fg-subtle">{label}</p>
       <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-bg-subtle">
-        <div className={cn("h-full rounded-full", tone)} style={{ width: `${Math.round(value * 100)}%` }} />
+        <div
+          className={cn("h-full rounded-full", tone)}
+          style={{ width: `${Math.round(value * 100)}%` }}
+        />
       </div>
       <p className="mt-1 font-mono text-xs tabular text-fg">{value.toFixed(2)}</p>
     </div>
