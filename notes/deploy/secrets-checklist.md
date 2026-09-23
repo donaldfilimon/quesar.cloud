@@ -2,11 +2,11 @@
 
 This checklist is for Donald. Claude sets no secret values.
 
-The static preview on GitHub Pages needs **none** of these. They are for the server deployment, planned as a Vercel project linked to `donaldfilimon/quesar.cloud`, which runs `npm run build` (Vercel preset, cron included). Each value goes in with `vercel env add <NAME> production`, or in the Vercel dashboard under Project → Settings → Environment Variables.
+The static preview on GitHub Pages needs **none** of these. They are for the server deployment, planned as a Vercel project linked to `donaldfilimon/quesar.cloud`, which runs `bun run build` (Vercel preset, cron included). Each value goes in with `vercel env add <NAME> production`, or in the Vercel dashboard under Project → Settings → Environment Variables.
 
 | Variable | Needed for | How to get it |
 |---|---|---|
-| `DATABASE_URL` | all persistence (without it data is in-memory and lost) | Vercel Marketplace → Neon Postgres, which injects it. Migrations run during `npm run build`. |
+| `DATABASE_URL` | all persistence (without it data is in-memory and lost) | Vercel Marketplace → Neon Postgres, which injects it. Migrations run during `bun run build`. |
 | `BETTER_AUTH_SECRET` | signing sessions | `openssl rand -base64 32` |
 | `BETTER_AUTH_URL` | auth origin and passkey relying party | `https://quesar.cloud`, the production origin. Passkeys bind to this host name, so passkeys registered under one host do not work under another. |
 | `APP_ENCRYPTION_KEY` | sealed audits and workspace tokens | `openssl rand -base64 32`. **Back it up.** Losing it strands every sealed value. |
@@ -26,3 +26,17 @@ The static preview on GitHub Pages needs **none** of these. They are for the ser
 Sign-in methods appear only when their credentials exist: email/password and passkeys are always on (with a server); each of Google, Apple and X shows up once its variables are set, so a partly configured deployment never shows a button that fails.
 
 **Order when the server deployment goes live:** create the Vercel project, add Neon, set the variables above, deploy, and check `/login`, `/console` and `/admin`. Then move the `quesar.cloud` domain from GitHub Pages to Vercel.
+
+## Local build check (2026-09-23)
+
+Run locally on branch `docs/records-and-go-live-check` (from `origin/main` at `a6acc2f`), with `DATABASE_URL` unset and no Vercel or Neon resources created. `vercel.json` sets `installCommand` to `bun install --frozen-lockfile` and `buildCommand` to `bun run build`, and those are the two commands run here.
+
+- `bun install --frozen-lockfile` exited 0 (735 packages).
+- `bun run build >| /tmp/qc-build.log 2>&1; echo EXIT:$?` printed `EXIT:0`. The script is `vite build && node scripts/copy-pglite-assets.ts && node scripts/migrate.ts`. With no `DATABASE_URL`, the migrate step logged that `DATABASE_URL` was not set and it was skipping, because the PGLite fallback migrates itself at startup, and applied nothing, so migrations against Neon were not exercised.
+- `.vercel/output/config.json` exists (Build Output API `version: 3`, framework `nitro`). It routes `/assets/(.*)` with `cache-control: public, max-age=31536000, immutable`, then the filesystem, then everything else to `/__server`, and lists one cron: `{"path": "/api/cron/audits-expire", "schedule": "17 3 * * *"}`.
+- `.vercel/output/functions/` holds one function, `__server.func` (262 files), whose `.vc-config.json` sets handler `index.mjs`, launcher `Nodejs`, runtime `nodejs24.x`, response streaming on. `pglite.wasm`, `initdb.wasm` and `pglite.data` are present in its `_libs/`.
+- `.vercel/output/static/` holds 296 files, 265 of them under `assets/`, plus `favicon.svg`, `apple-touch-icon.png`, `manifest.webmanifest`, `og.jpg`, `x-banner.jpg`, `robots.txt`, `sitemap.xml`, `media/`, `docs/` and `research/`.
+
+This shows the build produces a deployable Vercel output locally. It does not show that the deployment runs: nothing was deployed, no request was served, and no route was checked against a real database.
+
+What remains for Donald: create the Vercel project linked to `donaldfilimon/quesar.cloud`, add the Neon database, set the variables above, deploy, and check `/login`, `/console` and `/admin` on the deployment. Then move the `quesar.cloud` domain from GitHub Pages to Vercel.

@@ -56,7 +56,7 @@ A row is closed only when its **Status** reads `ported` (with the commit) or `re
 | `telemetry` POST | `/api/telemetry` | G | ported `859aa6d` |
 | `csp-report` POST | `/api/csp-report` + a CSP header | G | ported `859aa6d`: report-only CSP set in `src/start.ts` (CSRF middleware kept first); PoseNet host added in `2f11e3f` |
 | `workspace/{connect,callback,disconnect}/[provider]`, `connections`, `drive`, `sharepoint` | `/api/workspace/*` server routes | B | ported `21608b0` |
-| per-route `opengraph-image.tsx` | — | — | retired: Grok PWA middleware owns og metas |
+| per-route `opengraph-image.tsx` | — | — | retired: site-wide OG/Twitter defaults (image, card, site name) and per-route canonical + `og:url` in `src/routes/__root.tsx`; per-page title and description tags from `pageHead` in `src/lib/seo.ts` |
 
 ## Server modules
 
