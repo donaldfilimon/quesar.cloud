@@ -1,0 +1,1 @@
+var e=[{k:`Active implementation`,v:`Rust · abi-wdbx`},{k:`Index`,v:`Layered HNSW`},{k:`Graph degree`,v:`M = 16`},{k:`Construction breadth`,v:`EF_CONSTRUCTION = 40`},{k:`Search breadth`,v:`EF_SEARCH = 32`},{k:`Transactions`,v:`MVCC`}];export{e as t};
