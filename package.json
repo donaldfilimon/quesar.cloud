@@ -1,5 +1,5 @@
 {
-  "name": "app-builder-workspace",
+  "name": "quesar-cloud",
   "private": true,
   "sideEffects": false,
   "type": "module",
@@ -7,17 +7,14 @@
     "nf3": "0.3.17"
   },
   "scripts": {
-    "dev": "node scripts/with-app-env.mjs vite dev --host 0.0.0.0 --port 8080",
-    "build": "node scripts/with-app-env.mjs vite build && node scripts/copy-pglite-assets.mjs && npm run db:migrate",
-    "build:static": "VITE_STATIC_SITE=true VITE_AUTH_ENABLED=false node scripts/with-app-env.mjs vite build --mode static && node scripts/publish-static.mjs",
+    "dev": "vite dev --host 0.0.0.0 --port 8080",
+    "build": "vite build && node scripts/copy-pglite-assets.mjs && node scripts/migrate.mjs",
+    "build:static": "VITE_STATIC_SITE=true VITE_AUTH_ENABLED=false vite build --mode static && node scripts/publish-static.mjs",
     "db:migrate": "node scripts/migrate.mjs",
-    "build:dev": "node scripts/with-app-env.mjs vite build --mode development",
-    "preview": "node scripts/with-app-env.mjs vite preview",
-    "preview:restart": "node scripts/preview.mjs restart",
-    "preview:stop": "node scripts/preview.mjs stop",
+    "build:dev": "vite build --mode development",
+    "preview": "vite preview",
     "typecheck": "tsc --noEmit",
-    "check:auth": "node scripts/check-auth-invariant.mjs",
-    "test": "node --test 'scripts/**/*.test.mjs' && node --experimental-strip-types --test src/lib/app-data/app-data.test.ts src/lib/app-data/readiness-schedule.test.ts src/lib/auth/gate-identity.test.ts src/lib/auth/sign-in-gate.test.ts",
+    "test": "node --test 'scripts/**/*.test.mjs' && node --experimental-strip-types --test src/lib/auth/gate-identity.test.ts src/lib/auth/sign-in-gate.test.ts",
     "test:app": "vitest run",
     "lint": "eslint .",
     "format": "prettier --write ."
@@ -97,7 +94,6 @@
     "globals": "^15.15.0",
     "lightningcss": "^1.28.0",
     "nitro": "3.0.260610-beta",
-    "playwright": "^1.62.0",
     "prettier": "^3.4.0",
     "typescript": "^5.7.0",
     "typescript-eslint": "^8.56.1",

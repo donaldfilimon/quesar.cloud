@@ -1,7 +1,10 @@
 node_modules/
-.project_id
-.github_repo
 .env
 .env.*
 .output/
 dist/
+# Build output (Nitro Vercel preset); Vercel regenerates it from source.
+.vercel/
+# Local QA scratch.
+screenshots/
+artifacts/

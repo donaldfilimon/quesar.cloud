@@ -31,7 +31,7 @@ export const ORG_REF = {
   "@type": "Organization" as const,
   name: "MLAI Corporation",
   url: SITE_URL,
-  logo: `${SITE_URL}/__grok/icon-180.png`,
+  logo: `${SITE_URL}/apple-touch-icon.png`,
 };
 
 function bylineOrganizations(byline: string | undefined) {

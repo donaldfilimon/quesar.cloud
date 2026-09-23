@@ -1,2 +1,0 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/client-HmbBsfvO.js","assets/rolldown-runtime-hePW80VL.js","assets/react-CwJFpaho.js"])))=>i.map(i=>d[i]);
-import{t as e}from"./preload-helper-Czpn1I53.js";import{P as t}from"./index-CRN1DY1N.js";var n=t({type:`function`}).client(async({next:t})=>{let{getBearerToken:n}=await e(async()=>{let{getBearerToken:e}=await import(`./client-HmbBsfvO.js`).then(e=>e.n);return{getBearerToken:e}},__vite__mapDeps([0,1,2]));return t({sendContext:{bearerToken:n()??void 0}})});export{n as t};

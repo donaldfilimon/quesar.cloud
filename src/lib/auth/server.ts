@@ -213,7 +213,7 @@ export const auth = betterAuth({
   session: { cookieCache: { enabled: true, maxAge: 300 } },
 
   // Account deletion. Additive edit authorized by Donald on 2026-09-22 (see
-  // AGENTS.project.md). Purge per-user app data first; a DB failure there
+  // AGENTS.md). Purge per-user app data first; a DB failure there
   // throws, so Better Auth aborts rather than leaving orphaned data behind.
   user: {
     deleteUser: {
