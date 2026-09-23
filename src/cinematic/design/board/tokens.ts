@@ -98,16 +98,22 @@ export type TypeEntry = readonly [
   weight: number,
   use: string,
 ];
+/** Display name in TYPE → the site's CSS variable for that family. */
+export const FONT_VAR: Readonly<Record<string, string>> = {
+  "Space Grotesk": "var(--font-display)",
+  "IBM Plex Sans": "var(--font-sans)",
+  "IBM Plex Mono": "var(--font-mono)",
+};
 export const TYPE: readonly TypeEntry[] = [
-  ["Display", "--text-h00", "4.768rem", 1.02, "-0.03em", "Outfit", 700, "Hero headline"],
-  ["H0", "--text-h0", "3.815rem", 1.05, "-0.025em", "Outfit", 700, "Page title"],
-  ["H1", "--text-h1", "3.052rem", 1.08, "-0.02em", "Outfit", 700, "Section title"],
-  ["H2", "--text-h2", "2.441rem", 1.1, "-0.015em", "Outfit", 600, "Subsection"],
-  ["H3", "--text-h3", "1.953rem", 1.15, "-0.01em", "Outfit", 600, "Card heading"],
-  ["H4", "--text-h4", "1.563rem", 1.25, "0", "Inter", 600, "Lead / large body"],
-  ["H5", "--text-h5", "1.25rem", 1.4, "0", "Inter", 600, "Emphasis"],
-  ["Body", "--text-base", "1rem", 1.6, "0", "Inter", 400, "Paragraph text"],
-  ["Mono", "--text-mono", "0.75rem", 1.5, "0.18em", "JetBrains Mono", 500, "Labels, code, eyebrows"],
+  ["Display", "--text-h00", "4.768rem", 1.02, "-0.03em", "Space Grotesk", 700, "Hero headline"],
+  ["H0", "--text-h0", "3.815rem", 1.05, "-0.025em", "Space Grotesk", 700, "Page title"],
+  ["H1", "--text-h1", "3.052rem", 1.08, "-0.02em", "Space Grotesk", 700, "Section title"],
+  ["H2", "--text-h2", "2.441rem", 1.1, "-0.015em", "Space Grotesk", 600, "Subsection"],
+  ["H3", "--text-h3", "1.953rem", 1.15, "-0.01em", "Space Grotesk", 600, "Card heading"],
+  ["H4", "--text-h4", "1.563rem", 1.25, "0", "IBM Plex Sans", 600, "Lead / large body"],
+  ["H5", "--text-h5", "1.25rem", 1.4, "0", "IBM Plex Sans", 600, "Emphasis"],
+  ["Body", "--text-base", "1rem", 1.6, "0", "IBM Plex Sans", 400, "Paragraph text"],
+  ["Mono", "--text-mono", "0.75rem", 1.5, "0.18em", "IBM Plex Mono", 500, "Labels, code, eyebrows"],
 ];
 
 /* ════════════════════════════════════════════════════════════════
@@ -148,9 +154,9 @@ export const CSS_TABS: Readonly<Record<string, string>> = {
 --space-block:   3rem;     --space-card:  2rem;
 --space-stack:   1.5rem;   --space-inline:.75rem;`,
 
-  Type: `--font-display:'Outfit',sans-serif;
---font-sans:'Inter','Geist Variable',system-ui,sans-serif;
---font-mono:'JetBrains Mono',ui-monospace,monospace;
+  Type: `--font-display:"Space Grotesk Variable",ui-sans-serif,system-ui,sans-serif;
+--font-sans:"IBM Plex Sans Variable",ui-sans-serif,system-ui,sans-serif;
+--font-mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
 
 /* Major-Third scale (1.25) */
 --text-h00:4.768rem; --text-h1:3.052rem; --text-h3:1.953rem;

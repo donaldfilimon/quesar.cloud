@@ -8,6 +8,7 @@ import {
   type ReactNode,
   type SetStateAction,
 } from "react";
+import { attachFrameGate } from "../frame-gate";
 
 /* ──────────────────────────────────────────────────────────────────────────
    MLAI — Poster · Generative · OG Cards
@@ -51,7 +52,7 @@ function Mark({ size = 36 }: { size?: number }) {
     >
       <span
         className="text-white font-black"
-        style={{ fontSize: size * 0.46, fontFamily: "Outfit" }}
+        style={{ fontSize: size * 0.46, fontFamily: "var(--font-display)" }}
       >
         M
       </span>
@@ -78,7 +79,6 @@ function Field() {
     const ctx = c.getContext("2d");
     if (!ctx) return;
 
-    let raf = 0;
     let w = 0;
     let h = 0;
     let dpr = 1;
@@ -159,13 +159,12 @@ function Field() {
       }
 
       ctx.globalCompositeOperation = "source-over";
-      raf = requestAnimationFrame(d);
     };
 
-    d();
+    const gate = attachFrameGate(c, d);
 
     return () => {
-      cancelAnimationFrame(raf);
+      gate.dispose();
       removeEventListener("resize", rs);
     };
   }, []);
@@ -209,7 +208,7 @@ function Poster() {
             </div>
             <h1
               className="text-5xl sm:text-7xl font-bold tracking-tight leading-[1.02]"
-              style={{ fontFamily: "Outfit, sans-serif" }}
+              style={{ fontFamily: "var(--font-display)" }}
             >
               Infrastructure for
               <br />
@@ -271,7 +270,7 @@ function Poster() {
                 ))}
               </div>
               <div className="font-mono">
-                Outfit · System sans · JetBrains Mono
+                Space Grotesk · IBM Plex Sans · IBM Plex Mono
               </div>
             </div>
           </div>
@@ -369,7 +368,6 @@ function Generative() {
     const ctx = c.getContext("2d");
     if (!ctx) return;
 
-    let raf = 0;
     let w = 0;
     let h = 0;
     let dpr = 1;
@@ -501,13 +499,12 @@ function Generative() {
       }
 
       ctx.globalCompositeOperation = "source-over";
-      raf = requestAnimationFrame(d);
     };
 
-    d();
+    const gate = attachFrameGate(c, d);
 
     return () => {
-      cancelAnimationFrame(raf);
+      gate.dispose();
       removeEventListener("resize", rs);
     };
     // Deps are deliberately narrow: only `mode` and `p.count` change the loop's
@@ -642,7 +639,7 @@ function OGCard() {
               <div
                 className="font-bold text-white leading-[1.05]"
                 style={{
-                  fontFamily: "Outfit, sans-serif",
+                  fontFamily: "var(--font-display)",
                   fontSize: "clamp(28px, 5.2vw, 64px)",
                 }}
               >

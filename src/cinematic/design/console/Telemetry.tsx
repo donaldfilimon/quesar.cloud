@@ -1,6 +1,7 @@
 /* WDBX Telemetry — arc gauges, sparkline streams, shard health.
    Simulated / illustrative live data. Adapted from the brand's lab. */
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { attachIntervalGate } from "../frame-gate";
 
 interface ArcGaugeProps {
   label: string;
@@ -47,10 +48,10 @@ function ArcGauge({ label, value, max, unit, color, decimals = 0 }: ArcGaugeProp
           strokeDashoffset={circ * (1 - pct)}
           style={{ filter: `drop-shadow(0 0 6px ${color})`, transition: "stroke-dashoffset .6s var(--ease-out)" }}
         />
-        <text x={cx} y={cy + 4} textAnchor="middle" fill="#fafafa" style={{ font: "700 26px JetBrains Mono, monospace" }}>
+        <text x={cx} y={cy + 4} textAnchor="middle" fill="#fafafa" style={{ font: "700 26px var(--font-mono)" }}>
           {value.toFixed(decimals)}
         </text>
-        <text x={cx} y={cy + 24} textAnchor="middle" fill="#71717a" style={{ font: "400 11px JetBrains Mono, monospace" }}>
+        <text x={cx} y={cy + 24} textAnchor="middle" fill="#71717a" style={{ font: "400 11px var(--font-mono)" }}>
           {unit}
         </text>
       </svg>
@@ -125,8 +126,11 @@ export function Telemetry() {
   const [latHist, setLatHist] = useState<number[]>(() => Array.from({ length: 30 }, () => 8 + Math.random() * 3));
   const [shards, setShards] = useState<ShardState[]>(() => Array.from({ length: 12 }, (): ShardState => "ok"));
 
+  const rootRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    const iv = setInterval(() => {
+    const el = rootRef.current;
+    if (!el) return;
+    return attachIntervalGate(el, () => {
       setG((p) => ({
         thru: Math.max(60, Math.min(96, p.thru + (Math.random() - 0.5) * 7)),
         p99: Math.max(6, Math.min(16, p.p99 + (Math.random() - 0.5) * 1.6)),
@@ -142,11 +146,10 @@ export function Telemetry() {
         }),
       );
     }, 900);
-    return () => clearInterval(iv);
   }, []);
 
   return (
-    <div>
+    <div ref={rootRef}>
       <div
         style={{
           display: "flex",

@@ -36,7 +36,7 @@ export function Sprite({ start = 0, end = Infinity, children, keepMounted = fals
 /* ── text / rect sprites (handy primitives) ───────────────────── */
 
 export function TextSprite({ text, x = 0, y = 0, size = 48, color = "#fff",
-  font = "Inter, 'Geist Variable', system-ui, sans-serif", weight = 600, entryDur = 0.45, exitDur = 0.35,
+  font = "var(--font-sans)", weight = 600, entryDur = 0.45, exitDur = 0.35,
   align = "left", letterSpacing = "-0.01em" }: {
   text: string; x?: number; y?: number; size?: number; color?: string; font?: string;
   weight?: number; entryDur?: number; exitDur?: number; align?: "left" | "center" | "right"; letterSpacing?: string;
@@ -194,7 +194,7 @@ export function Stage({ width = 1920, height = 1080, duration = 10, background =
 
   return (
     <div ref={stageRefCb} style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column",
-      alignItems: "center", background: "#0a0a0a", fontFamily: "Inter, 'Geist Variable', system-ui, sans-serif" }}>
+      alignItems: "center", background: "#0a0a0a", fontFamily: "var(--font-sans)" }}>
       <div style={{ flex: 1, width: "100%", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", minHeight: 0 }}>
         <div style={{ width, height, background, position: "relative", transform: `scale(${scale})`, transformOrigin: "center",
           flexShrink: 0, boxShadow: "0 20px 60px rgba(0,0,0,0.4)", overflow: "hidden" }}>
@@ -207,7 +207,7 @@ export function Stage({ width = 1920, height = 1080, duration = 10, background =
       {!ready && (
         <div style={{ position: "absolute", inset: 0, zIndex: 50, display: "flex", alignItems: "center", justifyContent: "center",
           background: "rgba(4,4,6,0.5)", backdropFilter: "blur(2px)", color: "rgba(220,220,228,0.85)",
-          fontFamily: "JetBrains Mono, ui-monospace, monospace", fontSize: 13, letterSpacing: "0.34em" }}>
+          fontFamily: "var(--font-mono)", fontSize: 13, letterSpacing: "0.34em" }}>
           <span className="mlai-voice-pulse">PREPARING&nbsp;VOICE…</span>
           {/* The only animation that runs while the clock holds, so it too must honor reduced motion. */}
           <style>{`@keyframes mlaiVoicePulse{0%,100%{opacity:.4}50%{opacity:1}}.mlai-voice-pulse{animation:mlaiVoicePulse 1.2s ease-in-out infinite}@media (prefers-reduced-motion: reduce){.mlai-voice-pulse{animation:none;opacity:.8}}`}</style>
@@ -243,7 +243,7 @@ function PlaybackBar({ time, duration, playing, onPlayPause, onReset, onSeek, on
     const total = Math.max(0, t), m = Math.floor(total / 60), s = Math.floor(total % 60), cs = Math.floor((total * 100) % 100);
     return `${m}:${String(s).padStart(2, "0")}.${String(cs).padStart(2, "0")}`;
   };
-  const mono = "JetBrains Mono, ui-monospace, monospace";
+  const mono = "var(--font-mono)";
 
   return (
     <div className="mlai-transport" style={{ display: "flex", alignItems: "center", gap: 12, padding: "8px 16px", background: "rgba(20,20,20,0.92)",

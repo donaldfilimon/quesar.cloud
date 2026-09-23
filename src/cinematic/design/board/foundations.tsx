@@ -4,7 +4,7 @@
    ════════════════════════════════════════════════════════════════ */
 import { useState, type ReactNode } from "react";
 import { Eyebrow, SectionHead, Glass, Mono } from "./core.tsx";
-import { COLOR, PERSONA, ELEVATION, SPACING, RHYTHM, TYPE, type ColorEntry } from "./tokens.ts";
+import { COLOR, PERSONA, ELEVATION, SPACING, RHYTHM, TYPE, FONT_VAR, type ColorEntry } from "./tokens.ts";
 
 /* ──────────────────────── 1 · REVIEW ──────────────────────── */
 type Verdict = "already-strong" | "real-gap";
@@ -12,7 +12,7 @@ type VerdictRow = readonly [title: string, verdict: Verdict, detail: string];
 type TagSpec = readonly [label: string, fg: string, bg: string];
 
 const VERDICTS: readonly VerdictRow[] = [
-  ["Typography refresh", "already-strong", "A Major-Third modular scale (h00→h5) and an Outfit / Inter / JetBrains split already ship. We tune leading & tracking rather than rebuild."],
+  ["Typography refresh", "already-strong", "A Major-Third modular scale (h00→h5) and a Space Grotesk / IBM Plex Sans / IBM Plex Mono split already ship. We tune leading & tracking rather than rebuild."],
   ["Visual depth / glass", "already-strong", "glass-card, layered noise and blur are in place. The gap isn't more glass — it's consistent light direction and a real elevation ramp."],
   ["Premium noise globally", "already-strong", "Shipping at opacity 0.015 with mix-blend overlay. Keep as-is; no change needed."],
   ["Inconsistent spacing", "real-gap", "The most honest line in the spec. Solved with a spacing scale + rhythm tokens, not utility-by-utility guesswork."],
@@ -44,8 +44,8 @@ export function ReviewSection(): ReactNode {
           return (
             <Glass key={t} level={2} className="p-6">
               <div className="flex items-start justify-between gap-4 mb-3">
-                <h3 className="font-semibold text-white text-[17px]" style={{ fontFamily: "Outfit, sans-serif" }}>{t}</h3>
-                <span className="shrink-0 text-[10px] font-bold uppercase px-2.5 py-1 rounded-full" style={{ color: fg, background: bg, letterSpacing: "0.08em", fontFamily: "JetBrains Mono, monospace" }}>{label}</span>
+                <h3 className="font-semibold text-white text-[17px]" style={{ fontFamily: "var(--font-display)" }}>{t}</h3>
+                <span className="shrink-0 text-[10px] font-bold uppercase px-2.5 py-1 rounded-full" style={{ color: fg, background: bg, letterSpacing: "0.08em", fontFamily: "var(--font-mono)" }}>{label}</span>
               </div>
               <p className="text-[13.5px] leading-relaxed text-slate-400">{d}</p>
             </Glass>
@@ -135,11 +135,10 @@ export function ColorSection(): ReactNode {
         <div className="grid sm:grid-cols-3 gap-4">
           {PERSONA.map((p) => (
             <Glass key={p.name} level={2} className="p-5 relative overflow-hidden">
-              <div className="absolute -top-10 -right-10 w-32 h-32 rounded-full blur-3xl opacity-30" style={{ background: p.color }} />
               <div className="relative flex items-center gap-3">
                 <span className="w-9 h-9 rounded-xl flex items-center justify-center font-bold text-black/80" style={{ background: p.color, boxShadow: `0 0 18px -2px ${p.color}` }}>{p.name[0]}</span>
                 <div>
-                  <div className="text-white font-semibold" style={{ fontFamily: "Outfit, sans-serif" }}>{p.name}</div>
+                  <div className="text-white font-semibold" style={{ fontFamily: "var(--font-display)" }}>{p.name}</div>
                   <div className="text-[12px] text-slate-400">{p.role}</div>
                 </div>
               </div>
@@ -188,7 +187,7 @@ export function ElevationSection(): ReactNode {
               <div className="w-14 h-14 rounded-xl shrink-0" style={{ background: e.bg.length > 7 ? e.bg.slice(0, 7) : e.bg, border: `1px solid ${e.border}`, boxShadow: e.shadow }} />
               <div className="flex-1 min-w-0">
                 <div className="flex items-baseline gap-2">
-                  <span className="text-white font-semibold text-[15px]" style={{ fontFamily: "Outfit, sans-serif" }}>{e.name}</span>
+                  <span className="text-white font-semibold text-[15px]" style={{ fontFamily: "var(--font-display)" }}>{e.name}</span>
                   <Mono className="text-[11px] text-slate-500">{e.n}</Mono>
                 </div>
                 <div className="text-[12.5px] text-slate-400">{e.use}</div>
@@ -249,7 +248,7 @@ export function TypeSection(): ReactNode {
     <section>
       <SectionHead kicker="04 · Typography" color="var(--ds-accent)"
         title="The scale was right — the leading and tracking weren't"
-        lede="Outfit for display, Inter for text, JetBrains Mono for labels and code. We keep the Major-Third scale and fix what was missing: negative tracking that tightens as size grows, and leading that loosens as size shrinks." />
+        lede="Space Grotesk for display, IBM Plex Sans for text, IBM Plex Mono for labels and code. We keep the Major-Third scale and fix what was missing: negative tracking that tightens as size grows, and leading that loosens as size shrinks." />
       <Glass level={1} className="divide-y divide-white/6 overflow-hidden">
         {TYPE.map(([label, , size, lh, ls, font, weight, use]) => (
           <div key={label} className="flex items-center gap-6 px-6 py-5 hover:bg-white/1.5 transition-colors">
@@ -258,8 +257,8 @@ export function TypeSection(): ReactNode {
               <Mono className="text-[10px] text-slate-600">{size}</Mono>
             </div>
             <div className="flex-1 min-w-0 overflow-hidden">
-              <div className="text-white truncate" style={{ fontFamily: font + ", sans-serif", fontSize: `min(${size}, 7vw)`, lineHeight: lh, letterSpacing: ls, fontWeight: weight }}>
-                {font === "JetBrains Mono" ? "MLAI · resilient intelligence" : "Resilient intelligence"}
+              <div className="text-white truncate" style={{ fontFamily: FONT_VAR[font] ?? "var(--font-sans)", fontSize: `min(${size}, 7vw)`, lineHeight: lh, letterSpacing: ls, fontWeight: weight }}>
+                {font === "IBM Plex Mono" ? "MLAI · resilient intelligence" : "Resilient intelligence"}
               </div>
             </div>
             <div className="hidden md:block w-44 shrink-0 text-right">

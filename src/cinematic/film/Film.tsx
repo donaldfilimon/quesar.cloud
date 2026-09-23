@@ -1,6 +1,6 @@
 // Film.tsx — the MLAI brand film. A ~69s, six-scene explainer in the MLAI
-// visual system (near-black substrate, electric cyan→blue→violet, Outfit /
-// Inter / JetBrains Mono), hosted by the three agent voices.
+// visual system (near-black substrate, electric cyan→blue→violet, Space
+// Grotesk / IBM Plex Sans / IBM Plex Mono), hosted by the three agent voices.
 //
 //   Dependency graph (each module imports only what it needs):
 //     tokens.ts ─► primitives.tsx ─► scenes/* ─► Film.tsx

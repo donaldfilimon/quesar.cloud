@@ -116,7 +116,7 @@ export function ComponentsSection(): ReactNode {
         <CompShell after={after} label="Label chips">
           <div className="flex flex-wrap gap-2.5">
             {CHIPS.map(([t, c]) => (
-              <span key={t} className="inline-flex items-center gap-2 px-3.5 py-1.5 text-[11px] font-semibold uppercase transition-all duration-500" style={{ borderRadius: after ? 999 : 6, letterSpacing: "0.1em", color: after ? c : "#94a3b8", background: after ? "rgba(255,255,255,0.04)" : "rgba(255,255,255,0.08)", border: `1px solid ${after ? "rgba(255,255,255,0.1)" : "rgba(255,255,255,0.14)"}`, fontFamily: "JetBrains Mono, monospace" }}>
+              <span key={t} className="inline-flex items-center gap-2 px-3.5 py-1.5 text-[11px] font-semibold uppercase transition-all duration-500" style={{ borderRadius: after ? 999 : 6, letterSpacing: "0.1em", color: after ? c : "#94a3b8", background: after ? "rgba(255,255,255,0.04)" : "rgba(255,255,255,0.08)", border: `1px solid ${after ? "rgba(255,255,255,0.1)" : "rgba(255,255,255,0.14)"}`, fontFamily: "var(--font-mono)" }}>
                 <span className="w-1.5 h-1.5 rounded-full" style={{ background: after ? c : "#64748b" }} />{t}
               </span>
             ))}
@@ -127,7 +127,7 @@ export function ComponentsSection(): ReactNode {
         <CompShell after={after} label="Feature card">
           <div className="rounded-2xl p-5 transition-all duration-500" style={{ background: after ? "linear-gradient(145deg,rgba(255,255,255,0.05),rgba(255,255,255,0.012))" : "rgba(255,255,255,0.04)", border: `1px solid ${after ? "rgba(255,255,255,0.09)" : "rgba(255,255,255,0.1)"}`, boxShadow: after ? "0 14px 40px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.08)" : "0 4px 16px rgba(0,0,0,0.3)", backdropFilter: "blur(12px)" }}>
             <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-3" style={{ background: after ? "linear-gradient(135deg,#22d3ee,#3b82f6)" : "#3b82f6" }}><span className="text-white font-bold">◆</span></div>
-            <h4 className="text-white font-semibold mb-1" style={{ fontFamily: "Outfit, sans-serif" }}>Trace Layer</h4>
+            <h4 className="text-white font-semibold mb-1" style={{ fontFamily: "var(--font-display)" }}>Trace Layer</h4>
             <p className="text-[13px] text-slate-400 leading-relaxed">Every retrieval path and policy check captured as an inspectable event.</p>
           </div>
         </CompShell>
@@ -137,7 +137,7 @@ export function ComponentsSection(): ReactNode {
           <div className="grid grid-cols-3 gap-3">
             {STATS.map(([v, l, c]) => (
               <div key={l} className="rounded-xl p-4 text-center transition-all duration-500" style={{ background: after ? "rgba(255,255,255,0.025)" : "rgba(255,255,255,0.05)", border: `1px solid ${after ? "rgba(255,255,255,0.07)" : "rgba(255,255,255,0.1)"}` }}>
-                <div className="font-bold text-[22px]" style={{ fontFamily: "Outfit, sans-serif", color: after ? "#fff" : c, background: after ? `linear-gradient(135deg,#fff,${c})` : "none", WebkitBackgroundClip: after ? "text" : "border-box", WebkitTextFillColor: after ? "transparent" : c }}>{v}</div>
+                <div className="font-bold text-[22px]" style={{ fontFamily: "var(--font-display)", color: after ? "#fff" : c, background: after ? `linear-gradient(135deg,#fff,${c})` : "none", WebkitBackgroundClip: after ? "text" : "border-box", WebkitTextFillColor: after ? "transparent" : c }}>{v}</div>
                 <Mono className="text-[10px] text-slate-500 mt-1 block">{l}</Mono>
               </div>
             ))}
@@ -181,7 +181,7 @@ function HeroApplied({ after }: { after: boolean }): ReactNode {
             <span className="w-1.5 h-1.5 rounded-full" style={{ background: "#22d3ee", boxShadow: after ? "0 0 8px #22d3ee" : "none" }} />
             <Mono className="text-[10.5px] uppercase" style={{ letterSpacing: "0.18em", color: after ? "#22d3ee" : "#94a3b8" }}>Privacy-first AI infrastructure</Mono>
           </div>
-          <h1 className="font-bold text-white" style={{ fontFamily: "Outfit, sans-serif", fontSize: "clamp(34px,5.6vw,64px)", lineHeight: after ? 1.02 : 1.12, letterSpacing: after ? "-0.03em" : "-0.01em" }}>
+          <h1 className="font-bold text-white" style={{ fontFamily: "var(--font-display)", fontSize: "clamp(34px,5.6vw,64px)", lineHeight: after ? 1.02 : 1.12, letterSpacing: after ? "-0.03em" : "-0.01em" }}>
             Infrastructure for{after ? <br /> : " "}
             <span style={after ? { background: "linear-gradient(100deg,#67e8f9,#60a5fa,#c084fc)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" } : { color: "#60a5fa" }}>resilient intelligence</span>
           </h1>
@@ -248,7 +248,7 @@ export function TokensSection(): ReactNode {
             <span className="text-[12.5px] text-slate-400">≈190 custom properties · color · elevation · spacing · type · motion</span>
           </div>
         </div>
-        <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[11px] font-semibold" style={{ background: "rgba(52,211,153,0.12)", color: "#34d399", fontFamily: "JetBrains Mono, monospace" }}>
+        <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[11px] font-semibold" style={{ background: "rgba(52,211,153,0.12)", color: "#34d399", fontFamily: "var(--font-mono)" }}>
           <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />ready to ship
         </span>
       </Glass>

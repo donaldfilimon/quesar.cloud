@@ -20,6 +20,7 @@ import {
   type ReactNode,
   type CSSProperties,
 } from "react";
+import { attachFrameGate, attachIntervalGate } from "../frame-gate";
 
 /* ─────────────── icons (inline) ─────────────── */
 type IcoProps = { d: ReactNode; s?: number };
@@ -328,7 +329,7 @@ function ArcGauge({ label, value, max, unit, color, decimals = 0 }: ArcGaugeProp
           y={cy + 4}
           textAnchor="middle"
           fill="#fff"
-          style={{ font: "700 26px JetBrains Mono, monospace" }}
+          style={{ font: "700 26px var(--font-mono)" }}
         >
           {value.toFixed(decimals)}
         </text>
@@ -337,7 +338,7 @@ function ArcGauge({ label, value, max, unit, color, decimals = 0 }: ArcGaugeProp
           y={cy + 24}
           textAnchor="middle"
           fill="#64748b"
-          style={{ font: "400 11px JetBrains Mono, monospace" }}
+          style={{ font: "400 11px var(--font-mono)" }}
         >
           {unit}
         </text>
@@ -398,8 +399,11 @@ function WDBXDashboard(): ReactNode {
   const [shards, setShards] = useState<ShardStatus[]>(() =>
     Array.from({ length: 12 }, () => "ok" as ShardStatus),
   );
+  const rootRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    const iv = setInterval(() => {
+    const el = rootRef.current;
+    if (!el) return;
+    return attachIntervalGate(el, () => {
       setG((p) => ({
         thru: Math.max(60, Math.min(96, p.thru + (Math.random() - 0.5) * 7)),
         p99: Math.max(6, Math.min(16, p.p99 + (Math.random() - 0.5) * 1.6)),
@@ -415,7 +419,6 @@ function WDBXDashboard(): ReactNode {
         }),
       );
     }, 900);
-    return () => clearInterval(iv);
   }, []);
   const shardColor: Record<ShardStatus, string> = {
     ok: "#34d399",
@@ -423,7 +426,7 @@ function WDBXDashboard(): ReactNode {
     down: "#f87171",
   };
   return (
-    <div className="glass p-6">
+    <div ref={rootRef} className="glass p-6">
       <div className="flex items-center justify-between mb-5 flex-wrap gap-2">
         <div className="flex items-center gap-3">
           <span className="relative flex h-2.5 w-2.5">
@@ -491,7 +494,6 @@ function useCanvas(draw: CanvasDraw) {
     if (!c) return;
     const ctx = c.getContext("2d");
     if (!ctx) return;
-    let raf = 0;
     let w = 0;
     let h = 0;
     let dpr = 1;
@@ -511,11 +513,10 @@ function useCanvas(draw: CanvasDraw) {
     const loop = () => {
       t += 1;
       drawRef.current(ctx, w, h, t, state);
-      raf = requestAnimationFrame(loop);
     };
-    loop();
+    const gate = attachFrameGate(c, loop);
     return () => {
-      cancelAnimationFrame(raf);
+      gate.dispose();
       removeEventListener("resize", resize);
     };
   }, []);
@@ -835,7 +836,6 @@ function Lab(): ReactNode {
         <div className="absolute inset-0 opacity-40">
           <NetworkCanvas />
         </div>
-        <div className="absolute top-0 right-0 w-96 h-96 bg-purple-600/20 rounded-full blur-3xl pointer-events-none" />
         <div className="relative max-w-6xl mx-auto">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/15 bg-white/5 text-xs text-slate-300 mb-4">
             <span className="text-purple-400">
@@ -845,7 +845,7 @@ function Lab(): ReactNode {
           </div>
           <h1
             className="text-4xl sm:text-5xl font-black tracking-tight"
-            style={{ fontFamily: "Outfit, sans-serif" }}
+            style={{ fontFamily: "var(--font-display)" }}
           >
             Design & Animation Lab
           </h1>

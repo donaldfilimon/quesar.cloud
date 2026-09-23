@@ -18,6 +18,7 @@ import {
   type ReactNode,
   type CSSProperties,
 } from "react";
+import { attachFrameGate } from "../frame-gate";
 import {
   TweaksPanel,
   TweakSection,
@@ -203,7 +204,6 @@ function HeroCanvas({ tweaks }: { tweaks: TweakState }): ReactNode {
     const ctx = c.getContext("2d") as CanvasRenderingContext2D | null;
     if (!ctx) return;
 
-    let raf = 0;
     let w = 0;
     let h = 0;
     let dpr = 1;
@@ -436,11 +436,10 @@ function HeroCanvas({ tweaks }: { tweaks: TweakState }): ReactNode {
       }
 
       ctx.globalCompositeOperation = "source-over";
-      raf = requestAnimationFrame(draw);
     };
-    raf = requestAnimationFrame(draw);
+    const gate = attachFrameGate(c, draw);
     return () => {
-      cancelAnimationFrame(raf);
+      gate.dispose();
       window.removeEventListener("resize", resize);
     };
   }, []);

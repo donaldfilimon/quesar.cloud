@@ -1,71 +1,116 @@
 /* ══════════════════════════════════════════════════════════════════════════
    MLAI DESIGN-SYSTEM TOKENS · scoped port from the brand-site design system
    ──────────────────────────────────────────────────────────────────────────
-   Scoped under .mlai-ds (NOT :root) so these variables never collide with
-   the site's own tokens (--font-sans/--font-mono/--text-h* already exist at
-   :root with different values). Wrap any ported design board or cinematic
-   surface in <div className="mlai-ds"> and the boards' module-level <style>
-   blocks resolve these via inheritance.
+   Scoped under .mlai-ds (NOT :root). The rooms are dark-first on every page
+   theme, so this scope first pins the site's editorial-instrument tokens to
+   their DARK values (a mirror of [data-theme="dark"] in src/styles.css; keep
+   the two in sync), then maps the ported design-system roles onto them:
+   accent → the one "chain" accent (--primary), text/muted/border → the dark
+   ink ramp, persona/product/status → the site's identity colors. Wrap any
+   ported design board or cinematic surface in <div className="mlai-ds"> and
+   the boards' module-level <style> blocks resolve these via inheritance.
 
-   Fonts: the site self-hosts Geist and async-loads Outfit + JetBrains Mono;
-   no render-blocking @import here (site policy).
+   Fonts: the site loads Space Grotesk (display), IBM Plex Sans (text) and
+   IBM Plex Mono through @fontsource in src/styles.css. This scope does NOT
+   redeclare --font-display/--font-sans/--font-mono; they inherit from :root.
+   No render-blocking @import here (site policy).
    ══════════════════════════════════════════════════════════════════════════ */
 
 .mlai-ds {
-  /* raw brand palette */
+  /* ── site tokens pinned to the dark theme (mirror of src/styles.css) ── */
+  color-scheme: dark;
+  --background: #111410;
+  --foreground: #eef0e8;
+  --card: #181c16;
+  --card-foreground: #eef0e8;
+  --popover: #181c16;
+  --popover-foreground: #eef0e8;
+  --primary: #6cc3d9;
+  --primary-foreground: #0e1a1f;
+  --secondary: #20251e;
+  --secondary-foreground: #eef0e8;
+  --muted: #20251e;
+  --muted-foreground: #a9b1a0;
+  --destructive: #f08070;
+  --border: #2a2f27;
+  --input: #353b31;
+  --ring: #6cc3d9;
+  --bg: var(--background);
+  --bg-elevated: var(--card);
+  --bg-subtle: var(--muted);
+  --fg: var(--foreground);
+  --fg-muted: var(--muted-foreground);
+  --fg-subtle: #8f9885;
+  --accent: var(--primary);
+  --accent-fg: var(--primary-foreground);
+  --abi: #b49ad6;
+  --wdbx: var(--primary);
+  --abbey: #7fc49b;
+  --aviva: #e08aad;
+  --warn: #e0b060;
+  --border-strong: #3a4035;
+  --status-current: #7fc49b;
+  --status-partial: #e0b060;
+  --status-planned: var(--fg-subtle);
+  --grad: linear-gradient(92deg, var(--primary), var(--abi));
+
+  /* raw brand palette. Cyan is the chain accent, violet the ABI identity
+     color; amber/red/green follow the site's status colors. Blue has no site
+     equivalent (the site keeps one accent) and stays literal. */
   --mlai-blue: #3b82f6;
   --mlai-blue-lo: #1d4ed8;
   --mlai-blue-hi: #60a5fa;
-  --mlai-cyan: #22d3ee;
-  --mlai-cyan-hi: #67e8f9;
-  --mlai-violet: #a855f7;
-  --mlai-violet-hi: #c084fc;
-  --mlai-green: #34d399;
-  --mlai-amber: #fbbf24;
-  --mlai-red: #f87171;
+  --mlai-cyan: var(--primary);
+  --mlai-cyan-hi: color-mix(in oklch, var(--primary) 70%, white);
+  --mlai-violet: var(--abi);
+  --mlai-violet-hi: color-mix(in oklch, var(--abi) 75%, white);
+  --mlai-green: var(--status-current);
+  --mlai-amber: var(--warn);
+  --mlai-red: var(--destructive);
 
-  /* action (interaction only) */
-  --action: var(--mlai-blue);
-  --action-hover: #2563eb;
-  --action-press: var(--mlai-blue-lo);
-  --action-soft: rgba(59, 130, 246, 0.14);
-  --action-ring: rgba(59, 130, 246, 0.45);
-  --action-grad: linear-gradient(180deg, #3b82f6, #2563eb);
+  /* action (interaction only): the chain accent, as on the site */
+  --action: var(--primary);
+  --action-hover: color-mix(in oklch, var(--primary) 85%, white);
+  --action-press: color-mix(in oklch, var(--primary) 80%, black);
+  --action-soft: color-mix(in oklch, var(--primary) 14%, transparent);
+  --action-ring: color-mix(in oklch, var(--primary) 45%, transparent);
+  --action-grad: linear-gradient(180deg, var(--action-hover), var(--primary));
 
   /* spectrum (identity & data) */
   --spectrum-cyan: var(--mlai-cyan);
   --spectrum-blue: var(--mlai-blue-hi);
   --spectrum-violet: var(--mlai-violet);
-  --spectrum-grad: linear-gradient(100deg, #67e8f9, #60a5fa, #c084fc);
-  --spectrum-grad-135: linear-gradient(135deg, #22d3ee 0%, #3b82f6 48%, #a855f7 100%);
+  --spectrum-grad: linear-gradient(100deg, var(--mlai-cyan-hi), var(--mlai-blue-hi), var(--mlai-violet-hi));
+  --spectrum-grad-135: linear-gradient(135deg, var(--mlai-cyan) 0%, var(--mlai-blue) 48%, var(--mlai-violet) 100%);
 
-  /* persona ↔ color binding */
-  --persona-abbey: var(--mlai-green);
-  --persona-aviva: var(--mlai-violet);
-  --persona-abi: var(--mlai-cyan);
+  /* persona ↔ color binding: the site's dark persona colors */
+  --persona-abbey: var(--abbey);
+  --persona-aviva: var(--aviva);
+  --persona-abi: var(--primary);
 
   /* semantic */
-  --proof: var(--mlai-green);
-  --proof-soft: rgba(52, 211, 153, 0.12);
-  --signal: var(--mlai-amber);
-  --signal-soft: rgba(251, 191, 36, 0.12);
-  --danger: var(--mlai-red);
-  --danger-soft: rgba(248, 113, 113, 0.12);
+  --proof: var(--status-current);
+  --proof-soft: color-mix(in oklch, var(--status-current) 12%, transparent);
+  --signal: var(--warn);
+  --signal-soft: color-mix(in oklch, var(--warn) 12%, transparent);
+  --danger: var(--destructive);
+  --danger-soft: color-mix(in oklch, var(--destructive) 12%, transparent);
 
-  /* neutral */
-  --text: #fafafa;
-  --text-dim: #a1a1aa;
-  --text-faint: #6b6b76;
-  --hair: rgba(255, 255, 255, 0.08);
-  --hair-hi: rgba(255, 255, 255, 0.14);
+  /* neutral: the dark ink ramp */
+  --text: var(--foreground);
+  --text-dim: var(--muted-foreground);
+  --text-faint: var(--fg-subtle);
+  --hair: var(--border);
+  --hair-hi: var(--border-strong);
   --hair-strong: var(--hair-hi);
 
-  /* elevation — 4-tier surface ramp */
-  --surface-0: #050509;
-  --surface-1: #08090f;
-  --surface-2: #0e0f18;
-  --surface-3: #161721; /* source had a stray 8-digit hex (#16172124); spec value restored */
-  --surface-4: #1d1e2a;
+  /* elevation — 4-tier surface ramp on the olive dark ground. Tier 0 stays
+     deeper than the site background so the rooms keep their darker stage. */
+  --surface-0: #0b0d0a;
+  --surface-1: var(--background);
+  --surface-2: var(--card);
+  --surface-3: var(--muted);
+  --surface-4: color-mix(in oklch, var(--muted) 70%, var(--input));
 
   --border-1: rgba(255, 255, 255, 0.05);
   --border-2: rgba(255, 255, 255, 0.08);
@@ -84,11 +129,11 @@
   --glass-sheen: inset 0 1px 0 rgba(255, 255, 255, 0.08);
 
   /* one declared light direction */
-  --light-key: radial-gradient(55% 45% at 50% -8%, rgba(34, 211, 238, 0.16), transparent 70%);
-  --light-fill: radial-gradient(40% 50% at 95% 108%, rgba(168, 85, 247, 0.14), transparent 70%);
+  --light-key: radial-gradient(55% 45% at 50% -8%, color-mix(in oklch, var(--primary) 16%, transparent), transparent 70%);
+  --light-fill: radial-gradient(40% 50% at 95% 108%, color-mix(in oklch, var(--abi) 14%, transparent), transparent 70%);
   --light-ambient:
-    radial-gradient(50% 35% at 60% -5%, rgba(34, 211, 238, 0.07), transparent 70%),
-    radial-gradient(40% 40% at 100% 100%, rgba(168, 85, 247, 0.06), transparent 70%);
+    radial-gradient(50% 35% at 60% -5%, color-mix(in oklch, var(--primary) 7%, transparent), transparent 70%),
+    radial-gradient(40% 40% at 100% 100%, color-mix(in oklch, var(--abi) 6%, transparent), transparent 70%);
 
   /* spacing — 4px base */
   --space-1: 0.25rem;
@@ -116,10 +161,10 @@
   --radius-xl: 28px;
   --radius-pill: 999px;
 
-  /* type — families (Inter falls back to the site's self-hosted Geist) */
-  --font-display: "Outfit", system-ui, sans-serif;
-  --font-sans: "Inter", "Geist Variable", system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  /* type — families: inherited from the site (--font-display Space Grotesk,
+     --font-sans IBM Plex Sans, --font-mono IBM Plex Mono). Redeclaring them
+     here as var(--font-*) would be a self-reference cycle, so they are left
+     out on purpose. */
 
   /* type — Major-Third scale (1.25) */
   --text-h00: 4.768rem;
