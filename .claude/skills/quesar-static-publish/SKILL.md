@@ -20,19 +20,17 @@ Run from the repo root. Each command on its own line; read the exit code from th
 **2. Gate**, each line separately:
 
 ```bash
-bun run typecheck >| /tmp/qs-typecheck.log 2>&1; echo EXIT:$?
-bun run lint >| /tmp/qs-lint.log 2>&1; echo EXIT:$?
-bun run test >| /tmp/qs-test.log 2>&1; echo EXIT:$?
-bun run build:static >| /tmp/qs-static.log 2>&1; echo EXIT:$?
+bun run check >| "${TMPDIR:-/tmp}"/qs-check.log 2>&1; echo EXIT:$?
+bun run build:static >| "${TMPDIR:-/tmp}"/qs-static.log 2>&1; echo EXIT:$?
 ```
 
-All four `EXIT:0`, and the static log ends with `[publish-static] docs/ ready for quesar.cloud`. If `test` fails only with `Test timed out` in PGLite-backed tests, check `uptime`; under heavy load re-run the full `bun run test` and publish only after a clean full run. Any other failure stops the publish. `bun run build` (server/Vercel) is part of the full gate when server code changed.
+`check` runs format:check, typecheck, lint, test and the server build, stopping at the first failure. Both must print `EXIT:0`, and the static log ends with `[publish-static] docs/ ready for quesar.cloud`. If `check` fails only with `Test timed out` in PGLite-backed tests, check `uptime`; under heavy load re-run `bun run check` and publish only after a clean full run. Any other failure stops the publish.
 
 **3. Classify the docs/ change.**
 
 ```bash
-git status --porcelain --untracked-files=all -- docs >| /tmp/qs-status.txt
-grep -v '^ M' /tmp/qs-status.txt
+git status --porcelain --untracked-files=all -- docs >| "${TMPDIR:-/tmp}"/qs-status.txt
+grep -v '^ M' "${TMPDIR:-/tmp}"/qs-status.txt
 ```
 
 | Result | Meaning | Action |
@@ -43,8 +41,8 @@ grep -v '^ M' /tmp/qs-status.txt
 Noise confirmation (prints `REAL:` for any file that differs beyond timestamps):
 
 ```bash
-git diff --name-only -- docs >| /tmp/qs-changed.txt
-while IFS= read -r f; do git show "HEAD:$f" | sed -E 's/u:[0-9]+/u:T/g; s#<lastBuildDate>[^<]*#<lastBuildDate>#' >| /tmp/qs-old; sed -E 's/u:[0-9]+/u:T/g; s#<lastBuildDate>[^<]*#<lastBuildDate>#' "$f" >| /tmp/qs-new; cmp -s /tmp/qs-old /tmp/qs-new || echo "REAL: $f"; done < /tmp/qs-changed.txt
+git diff --name-only -- docs >| "${TMPDIR:-/tmp}"/qs-changed.txt
+while IFS= read -r f; do git show "HEAD:$f" | sed -E 's/u:[0-9]+/u:T/g; s#<lastBuildDate>[^<]*#<lastBuildDate>#' >| "${TMPDIR:-/tmp}"/qs-old; sed -E 's/u:[0-9]+/u:T/g; s#<lastBuildDate>[^<]*#<lastBuildDate>#' "$f" >| "${TMPDIR:-/tmp}"/qs-new; cmp -s "${TMPDIR:-/tmp}"/qs-old "${TMPDIR:-/tmp}"/qs-new || echo "REAL: $f"; done < "${TMPDIR:-/tmp}"/qs-changed.txt
 ```
 
 Zero `REAL:` lines means nothing user-visible changed: run `git checkout -- docs` and commit no docs/. A noise-only rebuild is never worth a commit.
@@ -54,8 +52,8 @@ Zero `REAL:` lines means nothing user-visible changed: run `git checkout -- docs
 ```bash
 grep -ralc 'your new sentence' docs
 grep -ralc 'the old sentence' docs
-git show HEAD:docs/index.html >| /tmp/qs-index-head.html
-grep -ao 'rel="modulepreload"' /tmp/qs-index-head.html | wc -l
+git show HEAD:docs/index.html >| "${TMPDIR:-/tmp}"/qs-index-head.html
+grep -ao 'rel="modulepreload"' "${TMPDIR:-/tmp}"/qs-index-head.html | wc -l
 grep -ao 'rel="modulepreload"' docs/index.html | wc -l
 ```
 
