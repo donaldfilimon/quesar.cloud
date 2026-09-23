@@ -1,1 +1,26 @@
 @import "tailwindcss";
+
+/* Default palette shared with quesar.cloud (paper, ink, moss, rule, chain).
+   Generated sites may restyle freely; these keep an unstyled site legible in
+   light and dark, and every text pair meets WCAG AA. */
+@theme {
+  --color-paper: #f6f7f2;
+  --color-ink: #171b15;
+  --color-moss: #555d4f;
+  --color-rule: #d8dcd0;
+  --color-chain: #1c6f8a;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-paper: #111410;
+    --color-ink: #eef0e8;
+    --color-moss: #a9b1a0;
+    --color-rule: #2a2f27;
+    --color-chain: #6cc3d9;
+  }
+}
+
+:root {
+  color-scheme: light dark;
+}
