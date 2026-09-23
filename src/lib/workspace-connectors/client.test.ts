@@ -1,9 +1,5 @@
-import { describe, expect, it, vi } from "vitest";
-
-// The Better Auth browser client is irrelevant here; keep it out of the node run.
-vi.mock("@/lib/auth/client", () => ({ getBearerToken: () => null }));
-
-const { describeCallbackError } = await import("./client");
+import { describe, expect, it } from "vitest";
+import { describeCallbackError } from "./client";
 
 describe("describeCallbackError", () => {
   it("maps known callback codes", () => {

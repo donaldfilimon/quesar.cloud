@@ -9,7 +9,15 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { GROK_PROVIDERS, authClient, authEnabled, signIn } from "@/lib/auth/client";
+import {
+  SOCIAL_PROVIDERS,
+  authClient,
+  authEnabled,
+  signInWithPasskey,
+  signInWithProvider,
+} from "@/lib/auth/client";
+import { getSignInMethods } from "@/lib/auth/methods";
+import type { SignInMethods, SocialProviderId } from "@/lib/auth/providers";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { safeInternalPath } from "@/lib/internal";
 import { pageHead } from "@/lib/seo";
@@ -21,8 +29,12 @@ function parseNext(search: Record<string, unknown>): LoginSearch {
   return { next: safeInternalPath(search.next) };
 }
 
+const NO_METHODS: SignInMethods = { email: false, passkey: false, social: [] };
+
 export const Route = createFileRoute("/login")({
   validateSearch: (search: Record<string, unknown>): LoginSearch => parseNext(search),
+  // The static build has no server to ask; the page shows ServerOnlyNotice there.
+  loader: async () => (staticSite || !authEnabled ? NO_METHODS : getSignInMethods()),
   head: () => pageHead("Sign in — Quesar", "Sign in to the desk for Abbey, Aviva, Abi, Quesar, and WDBX."),
   component: Login,
 });
@@ -44,7 +56,31 @@ function Login() {
 function LoginForm() {
   const { user, isPending } = useCurrentUserState();
   const { next = "/dashboard" } = Route.useSearch();
+  const methods = Route.useLoaderData();
   const [mode, setMode] = useState<"signin" | "signup">("signin");
+  const [pending, setPending] = useState<SocialProviderId | "passkey" | null>(null);
+  const offeredProviders = SOCIAL_PROVIDERS.filter((provider) => methods.social.includes(provider.id));
+
+  async function continueWith(provider: SocialProviderId) {
+    setPending(provider);
+    try {
+      await signInWithProvider(provider, { callbackURL: next });
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Sign-in failed.");
+      setPending(null);
+    }
+  }
+
+  async function continueWithPasskey() {
+    setPending("passkey");
+    try {
+      await signInWithPasskey();
+      window.location.assign(next);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Passkey sign-in failed.");
+      setPending(null);
+    }
+  }
   const [showPassword, setShowPassword] = useState(false);
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
@@ -116,20 +152,35 @@ function LoginForm() {
         <p className="text-sm text-fg-muted">Sign-in is disabled.</p>
       ) : (
         <>
-          <div className="flex flex-col gap-2">
-            {GROK_PROVIDERS.map((provider) => (
-              <Button
-                key={provider.providerId}
-                type="button"
-                variant="secondary"
-                onClick={() => signIn(provider.providerId, { callbackURL: next })}
-              >
-                Continue with {provider.label}
-              </Button>
-            ))}
-          </div>
+          {methods.passkey || offeredProviders.length > 0 ? (
+            <>
+              <div className="flex flex-col gap-2">
+                {methods.passkey && mode === "signin" ? (
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    disabled={pending !== null}
+                    onClick={() => void continueWithPasskey()}
+                  >
+                    {pending === "passkey" ? "Waiting for your passkey…" : "Sign in with a passkey"}
+                  </Button>
+                ) : null}
+                {offeredProviders.map((provider) => (
+                  <Button
+                    key={provider.id}
+                    type="button"
+                    variant="secondary"
+                    disabled={pending !== null}
+                    onClick={() => void continueWith(provider.id)}
+                  >
+                    {pending === provider.id ? `Opening ${provider.label}…` : `Continue with ${provider.label}`}
+                  </Button>
+                ))}
+              </div>
 
-          <p className="text-center font-mono text-[0.68rem] tracking-[0.14em] text-fg-subtle uppercase">or email</p>
+              <p className="text-center font-mono text-[0.68rem] tracking-[0.14em] text-fg-subtle uppercase">or email</p>
+            </>
+          ) : null}
 
           <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-3">
             {mode === "signup" ? (
@@ -140,9 +191,20 @@ function LoginForm() {
             ) : null}
             <div>
               <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" required autoComplete="email" className="mt-1" {...form.register("email")} />
+              <Input
+                id="email"
+                type="email"
+                required
+                autoComplete="username webauthn"
+                className="mt-1"
+                aria-invalid={form.formState.errors.email ? true : undefined}
+                aria-describedby={form.formState.errors.email ? "email-error" : undefined}
+                {...form.register("email")}
+              />
               {form.formState.errors.email ? (
-                <p className="mt-1 text-sm text-status-partial">{form.formState.errors.email.message}</p>
+                <p id="email-error" className="mt-1 text-sm text-destructive">
+                  {form.formState.errors.email.message}
+                </p>
               ) : null}
             </div>
             <div>
@@ -151,6 +213,8 @@ function LoginForm() {
                 <button
                   type="button"
                   className="text-xs text-fg-subtle hover:text-fg"
+                  aria-controls="password"
+                  aria-pressed={showPassword}
                   onClick={() => setShowPassword((value) => !value)}
                 >
                   {showPassword ? "Hide" : "Show"}
@@ -163,16 +227,20 @@ function LoginForm() {
                 minLength={8}
                 autoComplete={mode === "signup" ? "new-password" : "current-password"}
                 className="mt-1"
+                aria-invalid={form.formState.errors.password ? true : undefined}
+                aria-describedby={form.formState.errors.password ? "password-error" : undefined}
                 {...form.register("password")}
               />
               {form.formState.errors.password ? (
-                <p className="mt-1 text-sm text-status-partial">{form.formState.errors.password.message}</p>
+                <p id="password-error" className="mt-1 text-sm text-destructive">
+                  {form.formState.errors.password.message}
+                </p>
               ) : mode === "signup" ? (
                 <p className="mt-1 text-xs text-fg-subtle">At least 8 characters. Stored as a hash, not the password itself.</p>
               ) : null}
             </div>
             {form.formState.errors.root ? (
-              <p className="text-sm text-status-partial" role="alert">
+              <p className="text-sm text-destructive" role="alert">
                 {form.formState.errors.root.message}
               </p>
             ) : null}

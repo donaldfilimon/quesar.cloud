@@ -35,7 +35,7 @@ describe("AccountCard", () => {
           email: "ada@example.com",
           image: null,
           emailVerified: true,
-          providers: ["grok-google", "credential"],
+          providers: ["google", "credential"],
         }}
       />,
     );
@@ -48,7 +48,7 @@ describe("AccountCard", () => {
     expect(verificationCopy(false, ["credential"])).toBe(
       "Not verified (email/password sign-up sends no verification mail)",
     );
-    expect(verificationCopy(false, ["grok-x"])).toBe("Not verified");
+    expect(verificationCopy(false, ["twitter"])).toBe("Not verified");
     expect(verificationCopy(null, null)).toBe("Unknown");
   });
 });
@@ -166,7 +166,7 @@ describe("SessionsCard", () => {
     expect(html).not.toMatch(/<button[^>]*disabled=""[^>]*>Sign out other sessions/);
   });
 
-  it("hides sign out everywhere behind a gate session", () => {
+  it("hides sign out everywhere when there is no session to end (dev user)", () => {
     const html = renderToStaticMarkup(
       <SessionsCard
         state={{ kind: "ready", sessions }}

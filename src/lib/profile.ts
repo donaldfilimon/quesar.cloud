@@ -33,14 +33,14 @@ export function validateDisplayName(input: string): NameCheck {
 /** Human label for a Better Auth `account.providerId`. */
 export function providerLabel(providerId: string): string {
   switch (providerId) {
-    case "grok-google":
+    case "google":
       return "Google";
-    case "grok-x":
+    case "apple":
+      return "Apple";
+    case "twitter":
       return "X";
     case "credential":
       return "Email and password";
-    case "grok-gate":
-      return "Grok";
     default:
       return providerId;
   }

@@ -4,7 +4,7 @@ import { getAdminStatus } from "@/lib/console";
 
 /**
  * Entry point to /admin, shown only when the server says this user is an
- * admin (allowlist + broker-verified identity). Renders nothing otherwise, so
+ * admin (allowlist + a linked Google or Apple account). Renders nothing otherwise, so
  * the console never advertises who can administer it.
  */
 export function AdminLink() {

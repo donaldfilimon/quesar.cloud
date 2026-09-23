@@ -1,0 +1,1 @@
+import{I as e}from"./index-CSFAXy1E.js";var t=e({type:`function`});export{t};

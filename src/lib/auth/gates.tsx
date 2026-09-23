@@ -1,5 +1,5 @@
 import { Link, useNavigate, useRouter } from "@tanstack/react-router";
-import { useEffect, useRef, useState, useSyncExternalStore, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,27 +8,21 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { GROK_PROVIDERS, authEnabled, signIn, signOut } from "./client";
-import { hasGateSessionMarker } from "./gate-session-marker";
-import { resolveSignInGateState } from "./sign-in-gate";
+import { authEnabled, signOut } from "./client";
 import { ServerOnlyNotice } from "@/components/site/server-only-notice";
 import { staticSite } from "@/lib/static-site";
 import { useCurrentUser, useCurrentUserState, type AppUser } from "./use-current-user";
 
-const subscribeToNothing = () => () => {};
-const noGateSessionOnServer = () => false;
-
 /**
  * Auth state components — plain wrappers around `useCurrentUserState()`.
  *
- * With auth on, visitors are signed out until they authenticate — in the sandbox
- * live preview too, which does real sign-in. The shared dev user appears only
- * when auth is disabled (`VITE_AUTH_ENABLED=false`, the shipped default).
+ * With auth on, visitors are signed out until they authenticate. The shared dev
+ * user appears only when auth is disabled (`VITE_AUTH_ENABLED=false`).
  * While the session is still resolving, gates that care about signed-out state
  * render nothing so there's no signed-out flash on hard reload.
  */
 
-/** Where `RedirectToSignIn` sends signed-out visitors. Create this route. */
+/** Where `RedirectToSignIn` sends signed-out visitors. */
 export const SIGN_IN_PATH = "/login";
 
 /** Render children only when a user is present (real session, or the disabled-auth dev user). */
@@ -92,54 +86,15 @@ export function RequireSession({
   return <>{children(user)}</>;
 }
 
-export function SignInGate({
-  children,
-  fallback,
-}: {
-  children: ReactNode;
-  fallback?: ReactNode;
-}) {
-  const { user, isPending } = useCurrentUserState();
-  const state = resolveSignInGateState({ isPending, hasUser: user !== null });
-  if (state === "pending") return null;
-  if (state === "signed_in") return <>{children}</>;
-  return <>{fallback ?? <SignInButtons />}</>;
-}
-
-export function SignInButtons() {
-  return (
-    <div className="flex w-full max-w-sm flex-col gap-2">
-      {GROK_PROVIDERS.map((provider) => (
-        <button
-          key={provider.providerId}
-          type="button"
-          onClick={() => signIn(provider.providerId, { callbackURL: "/" })}
-          className="h-11 w-full cursor-pointer rounded-md border border-border bg-card px-4 text-sm text-foreground hover:bg-muted"
-        >
-          Continue with {provider.label}
-        </button>
-      ))}
-    </div>
-  );
-}
-
 /**
- * Minimal signed-in identity chip + sign-out. Restyle freely (see the
- * `design-ui` skill). Sign-out is only shown when auth is enabled (the
- * disabled-auth dev user has nothing to sign out of) and the session is not
- * gate-materialized — behind the gate the next request signs the viewer
- * straight back in, so a sign-out control there is a broken loop.
+ * Signed-in identity chip + sign-out. Sign-out is only shown when auth is
+ * enabled: the disabled-auth dev user has nothing to sign out of.
  */
 export function UserButton() {
   const user = useCurrentUser();
   // Sign-out can take a moment (and can fail when deployed), so the control
   // shows it is working and cannot be fired twice.
   const [signingOut, setSigningOut] = useState(false);
-  const gateSession = useSyncExternalStore(
-    subscribeToNothing,
-    hasGateSessionMarker,
-    noGateSessionOnServer,
-  );
   if (!user) return null;
   const label = user.displayName ?? user.primaryEmail ?? "Account";
   const initial = label.charAt(0).toUpperCase();
@@ -179,7 +134,7 @@ export function UserButton() {
             Profile
           </Link>
         </DropdownMenuItem>
-        {authEnabled && !gateSession ? (
+        {authEnabled && !user.isDevFallback ? (
           <>
             <DropdownMenuSeparator />
             <DropdownMenuItem

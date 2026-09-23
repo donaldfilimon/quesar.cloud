@@ -16,19 +16,13 @@ export { INQUIRY_LIMITS, TOPICS, type InquiryResult, type InquiryTopic } from "@
  * `requireUserId`) on purpose: with auth disabled `requireUserId` returns the
  * shared dev user, which would stamp every anonymous inquiry with it.
  */
-const optionalSession = createMiddleware({ type: "function" })
-  .client(async ({ next }) => {
-    // Live preview: the session rides a bearer token, not a cookie.
-    const { getBearerToken } = await import("@/lib/auth/client");
-    return next({ sendContext: { bearerToken: getBearerToken() ?? undefined } });
-  })
-  .server(async ({ next, context }) => {
+const optionalSession = createMiddleware({ type: "function" }).server(async ({ next }) => {
     const { assertSameSiteRequest } = await import("@/lib/auth/isolation.server");
     assertSameSiteRequest();
     let userId: string | null = null;
     try {
       const { getSessionUser } = await import("@/lib/auth/verify.server");
-      userId = (await getSessionUser(context.bearerToken))?.id ?? null;
+      userId = (await getSessionUser())?.id ?? null;
     } catch {
       userId = null;
     }

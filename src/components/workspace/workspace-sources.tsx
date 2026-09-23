@@ -27,7 +27,6 @@ import {
   describeCallbackError,
   disconnectProvider,
   fetchConnections,
-  sessionHeaders,
   type ProviderConnection,
 } from "@/lib/workspace-connectors/client";
 import {
@@ -105,7 +104,7 @@ export function WorkspaceSources() {
   useEffect(() => {
     const controller = new AbortController();
     let live = true;
-    void loadWorkspaceSources(liveWorkspaceAdapters(sessionHeaders), DEFAULT_WINDOW, controller.signal).then(
+    void loadWorkspaceSources(liveWorkspaceAdapters(), DEFAULT_WINDOW, controller.signal).then(
       (result) => {
         if (live) setSources(result);
       },

@@ -1,8 +1,9 @@
-import { useCallback, useEffect, useState, useSyncExternalStore } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { PageClose, PageHero, Section, Surface } from "@/components/site";
 import { AccountCard, NameForm, type SaveName } from "@/components/profile/account-card";
 import { DeleteAccountCard } from "@/components/profile/delete-account-card";
+import { PasskeysCard } from "@/components/profile/passkeys-card";
 import { BillingCard, type BillingState } from "@/components/profile/billing-card";
 import {
   SessionsCard,
@@ -12,7 +13,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { RequireSession } from "@/lib/auth/gates";
 import { authClient, signOut } from "@/lib/auth/client";
-import { hasGateSessionMarker } from "@/lib/auth/gate-session-marker";
 import type { AppUser } from "@/lib/auth/use-current-user";
 import { createCheckout, getBillingPlans } from "@/lib/billing";
 import { getProfile, type ProfileRecord } from "@/lib/profile";
@@ -27,8 +27,6 @@ export const Route = createFileRoute("/profile")({
   component: ProfilePage,
 });
 
-const subscribeToNothing = () => () => {};
-const noGateSessionOnServer = () => false;
 const SESSIONS_FAILED = "Sessions could not be loaded. Try again in a moment.";
 
 function ProfilePage() {
@@ -37,12 +35,7 @@ function ProfilePage() {
 
 function ProfileInner({ user }: { user: AppUser }) {
   const [profile, setProfile] = useState<ProfileRecord | null | "error">(null);
-  const gateSession = useSyncExternalStore(
-    subscribeToNothing,
-    hasGateSessionMarker,
-    noGateSessionOnServer,
-  );
-  const canSignOut = !user.isDevFallback && !gateSession;
+  const canSignOut = !user.isDevFallback;
 
   const loadProfile = useCallback(() => {
     // The disabled-auth dev user has no row by construction.
@@ -108,12 +101,11 @@ function ProfileInner({ user }: { user: AppUser }) {
                 This device
               </p>
               <p className="mt-2 text-sm text-fg-muted">
-                {gateSession
-                  ? "Signed in through Grok. The next request signs you straight back in, so there is no sign-out here."
-                  : "Signed in. Notes are queried with your account id, not a client-supplied one."}
+                Signed in. Notes are queried with your account id, not a client-supplied one.
               </p>
               {canSignOut ? <SignOutButton /> : null}
             </Surface>
+            <PasskeysCard />
           </div>
         )}
       </Section>
@@ -198,7 +190,7 @@ function SessionsPanel({ canSignOut }: { canSignOut: boolean }) {
     setBusy(true);
     setNotice(null);
     // Revoke the others, then end this session through `signOut`, which also
-    // clears the preview bearer token (a raw `revokeSessions` would leave it).
+    // reports a sign-out only once the server confirms it.
     let revoked = false;
     try {
       const { error } = await authClient.revokeOtherSessions();

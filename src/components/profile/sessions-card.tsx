@@ -34,7 +34,7 @@ export function SessionsCard({
   state: SessionsState;
   currentSessionId: string | null;
   busy: boolean;
-  /** False behind a gate session: signing out there is a loop (see `UserButton`). */
+  /** False for the disabled-auth dev user, who has no session to end. */
   canSignOut: boolean;
   onRevoke: (token: string) => void;
   onRevokeOthers: () => void;

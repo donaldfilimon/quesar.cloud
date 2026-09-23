@@ -13,8 +13,8 @@ const databaseUrl =
 
 /**
  * Active backend: real **Neon** when `DATABASE_URL` is set (deployed / configured
- * sandbox), otherwise a local embedded **PGLite** (Postgres compiled to WASM) so
- * the app has a working database even with nothing configured — the live preview
+ * database), otherwise a local embedded **PGLite** (Postgres compiled to WASM) so
+ * the app has a working database even with nothing configured — local dev
  * included. Swap in Neon later by just setting `DATABASE_URL`; no code changes.
  */
 export const dbSource: DbSource = databaseUrl ? "neon" : "pglite";
