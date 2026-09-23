@@ -7,13 +7,19 @@ import { researchContext } from "@/lib/mlai/categories/research-context";
 import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/research/implementations/$slug")({
-  beforeLoad: ({ params }) => {
-    if (!researchContext.some((item) => item.slug === params.slug)) throw notFound();
-  },
-  head: ({ params }) => {
+  // `researchContext` is only referenced from `loader` and `component`, which share
+  // one lazy chunk; `head` reads loaderData so the dataset stays out of the main bundle.
+  codeSplitGroupings: [["loader", "component"]],
+  loader: ({ params }) => {
     const item = researchContext.find((entry) => entry.slug === params.slug);
-    return pageHead(`${item?.title ?? "Implementation"} — MLAI research`, item?.summary ?? "MLAI implementation case.");
+    if (!item) throw notFound();
+    return { title: item.title, summary: item.summary };
   },
+  head: ({ loaderData }) =>
+    pageHead(
+      `${loaderData?.title ?? "Implementation"} — MLAI research`,
+      loaderData?.summary ?? "MLAI implementation case.",
+    ),
   component: ImplementationPage,
 });
 

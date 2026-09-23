@@ -9,7 +9,9 @@ import { Button } from "@/components/ui/button";
  */
 export const Route = createFileRoute("/unauthorized")({
   validateSearch: (search: Record<string, unknown>): { next?: string } =>
-    typeof search.next === "string" ? { next: safeInternalPath(search.next) } : {},
+    // Always return the key: the root route's raw search is merged in, so an
+    // omitted key would let a non-string `next` through unsanitized.
+    ({ next: typeof search.next === "string" ? safeInternalPath(search.next) : undefined }),
   head: () => ({
     meta: [
       { title: "Sign in required — Quesar" },

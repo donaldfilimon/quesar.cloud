@@ -1,18 +1,21 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { ArchitectureDiagram } from "@/components/diagram/architecture-diagram";
 import { JourneyRail, PageClose, PageHero, Section, StepList } from "@/components/site";
-import { architectureNodes, architectureSteps } from "@/lib/content";
+import { architectureSteps } from "@/lib/content";
+import { isArchitectureNodeId } from "@/lib/architecture-node-ids";
 import { pageHead } from "@/lib/seo";
 
 type NodeSearch = { node?: string };
 
 function parseNode(value: unknown) {
-  return typeof value === "string" && architectureNodes.some((node) => node.id === value) ? value : undefined;
+  return isArchitectureNodeId(value) ? value : undefined;
 }
 
+// Always return the key: the root route has no validateSearch, so its search is
+// the raw query, and the router merges it into this route's result. Omitting
+// `node` would let an unknown `?node=` through; an explicit undefined overrides it.
 function nodeSearch(search: Record<string, unknown>): NodeSearch {
-  const node = parseNode(search.node);
-  return node ? { node } : {};
+  return { node: parseNode(search.node) };
 }
 
 export const Route = createFileRoute("/architecture")({

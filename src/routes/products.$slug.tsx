@@ -20,16 +20,18 @@ import { jsonLdScript, softwareApplicationLd } from "@/lib/mlai/structured-data"
 import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/products/$slug")({
-  beforeLoad: ({ params }) => {
-    if (!productPages.some((item) => item.slug === params.slug)) throw notFound();
-  },
-  head: ({ params }) => {
+  // The datasets are only referenced from `loader` and `component`, which share one
+  // lazy chunk; `head` reads loaderData so they stay out of the main bundle.
+  codeSplitGroupings: [["loader", "component"]],
+  loader: ({ params }) => {
     const product = productPages.find((item) => item.slug === params.slug);
-    return {
-      ...pageHead(`${product?.name ?? "Product"} — Quesar`, product?.intro ?? "Quesar product."),
-      scripts: product ? [jsonLdScript(softwareApplicationLd(product))] : [],
-    };
+    if (!product) throw notFound();
+    return { name: product.name, intro: product.intro, ld: softwareApplicationLd(product) };
   },
+  head: ({ loaderData }) => ({
+    ...pageHead(`${loaderData?.name ?? "Product"} — Quesar`, loaderData?.intro ?? "Quesar product."),
+    scripts: loaderData ? [jsonLdScript(loaderData.ld)] : [],
+  }),
   component: ProductPage,
 });
 

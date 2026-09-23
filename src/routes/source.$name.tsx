@@ -8,11 +8,23 @@ import { loadGithubData, type LiveRepo } from "@/lib/github";
 import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/source/$name")({
-  head: ({ params }) => {
+  // `repoDocs` is only referenced from `loader` and `component`, which share one
+  // lazy chunk; `head` reads loaderData so the catalog stays out of the main bundle.
+  // Unknown names are not a 404 (the page falls back to live GitHub data).
+  codeSplitGroupings: [["loader", "component"]],
+  loader: ({ params }) => {
     const name = params.name;
     const doc = repoDocs[name] ?? repoDocs[name.toLowerCase()];
-    return pageHead(`${doc?.title ?? name} — Source`, doc?.lede ?? `Public repository ${name}, described on this site.`);
+    return {
+      title: doc?.title ?? name,
+      description: doc?.lede ?? `Public repository ${name}, described on this site.`,
+    };
   },
+  head: ({ loaderData, params }) =>
+    pageHead(
+      `${loaderData?.title ?? params.name} — Source`,
+      loaderData?.description ?? `Public repository ${params.name}, described on this site.`,
+    ),
   component: SourceRepoPage,
 });
 

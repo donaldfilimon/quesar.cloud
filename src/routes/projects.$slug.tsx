@@ -6,16 +6,18 @@ import { jsonLdScript, projectLd } from "@/lib/mlai/structured-data";
 import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/projects/$slug")({
-  beforeLoad: ({ params }) => {
-    if (!projects.some((item) => item.slug === params.slug)) throw notFound();
-  },
-  head: ({ params }) => {
+  // `projects` is only referenced from `loader` and `component`, which share one
+  // lazy chunk; `head` reads loaderData so the dataset stays out of the main bundle.
+  codeSplitGroupings: [["loader", "component"]],
+  loader: ({ params }) => {
     const project = projects.find((item) => item.slug === params.slug);
-    return {
-      ...pageHead(`${project?.name ?? "Project"} — MLAI`, project?.description ?? "MLAI project."),
-      scripts: project ? [jsonLdScript(projectLd(project))] : [],
-    };
+    if (!project) throw notFound();
+    return { name: project.name, description: project.description, ld: projectLd(project) };
   },
+  head: ({ loaderData }) => ({
+    ...pageHead(`${loaderData?.name ?? "Project"} — MLAI`, loaderData?.description ?? "MLAI project."),
+    scripts: loaderData ? [jsonLdScript(loaderData.ld)] : [],
+  }),
   component: ProjectPage,
 });
 

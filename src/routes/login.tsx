@@ -24,9 +24,11 @@ import { pageHead } from "@/lib/seo";
 
 type LoginSearch = { next?: string };
 
+// Always return the key: the root route's raw search is merged into this
+// route's result, so an omitted key would let a non-string `next` through
+// unsanitized (the router JSON-parses query values).
 function parseNext(search: Record<string, unknown>): LoginSearch {
-  if (typeof search.next !== "string") return {};
-  return { next: safeInternalPath(search.next) };
+  return { next: typeof search.next === "string" ? safeInternalPath(search.next) : undefined };
 }
 
 const NO_METHODS: SignInMethods = { email: false, passkey: false, social: [] };

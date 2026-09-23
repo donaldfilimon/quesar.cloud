@@ -12,16 +12,18 @@ import { Button } from "@/components/ui/button";
 import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/research/$slug")({
-  beforeLoad: ({ params }) => {
-    if (!research.publications.some((item) => item.slug === params.slug)) throw notFound();
-  },
-  head: ({ params }) => {
+  // The datasets are only referenced from `loader` and `component`, which share one
+  // lazy chunk; `head` reads loaderData so they stay out of the main bundle.
+  codeSplitGroupings: [["loader", "component"]],
+  loader: ({ params }) => {
     const paper = research.publications.find((item) => item.slug === params.slug);
-    return {
-      ...pageHead(`${paper?.title ?? "Research"} — MLAI`, paper?.abstract ?? "MLAI research note."),
-      scripts: paper ? [jsonLdScript(researchArticleLd(paper))] : [],
-    };
+    if (!paper) throw notFound();
+    return { title: paper.title, abstract: paper.abstract, ld: researchArticleLd(paper) };
   },
+  head: ({ loaderData }) => ({
+    ...pageHead(`${loaderData?.title ?? "Research"} — MLAI`, loaderData?.abstract ?? "MLAI research note."),
+    scripts: loaderData ? [jsonLdScript(loaderData.ld)] : [],
+  }),
   component: ResearchPaper,
 });
 

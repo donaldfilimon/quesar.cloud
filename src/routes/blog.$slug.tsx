@@ -7,16 +7,18 @@ import { blogPostingLd, jsonLdScript } from "@/lib/mlai/structured-data";
 import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/blog/$slug")({
-  beforeLoad: ({ params }) => {
-    if (!blog.some((item) => item.slug === params.slug)) throw notFound();
-  },
-  head: ({ params }) => {
+  // `blog` is only referenced from `loader` and `component`, which share one lazy
+  // chunk; `head` reads loaderData so the dataset stays out of the main bundle.
+  codeSplitGroupings: [["loader", "component"]],
+  loader: ({ params }) => {
     const post = blog.find((item) => item.slug === params.slug);
-    return {
-      ...pageHead(`${post?.title ?? "Note"} — Blog`, post?.excerpt ?? "MLAI engineering note."),
-      scripts: post ? [jsonLdScript(blogPostingLd(post))] : [],
-    };
+    if (!post) throw notFound();
+    return { title: post.title, excerpt: post.excerpt, ld: blogPostingLd(post) };
   },
+  head: ({ loaderData }) => ({
+    ...pageHead(`${loaderData?.title ?? "Note"} — Blog`, loaderData?.excerpt ?? "MLAI engineering note."),
+    scripts: loaderData ? [jsonLdScript(loaderData.ld)] : [],
+  }),
   component: BlogPost,
 });
 
