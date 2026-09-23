@@ -9,16 +9,18 @@ import { jsonLdScript, personLd } from "@/lib/mlai/structured-data";
 import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/team/$slug")({
-  beforeLoad: ({ params }) => {
-    if (!team.some((item) => item.slug === params.slug)) throw notFound();
-  },
-  head: ({ params }) => {
+  // `team` is only referenced from `loader` and `component`, which share one lazy
+  // chunk; `head` reads loaderData so the dataset stays out of the main bundle.
+  codeSplitGroupings: [["loader", "component"]],
+  loader: ({ params }) => {
     const person = team.find((item) => item.slug === params.slug);
-    return {
-      ...pageHead(`${person?.name ?? "Team"} — MLAI`, person?.tagline ?? person?.bio ?? "MLAI team."),
-      scripts: person ? [jsonLdScript(personLd(person))] : [],
-    };
+    if (!person) throw notFound();
+    return { name: person.name, description: person.tagline ?? person.bio, ld: personLd(person) };
   },
+  head: ({ loaderData }) => ({
+    ...pageHead(`${loaderData?.name ?? "Team"} — MLAI`, loaderData?.description ?? "MLAI team."),
+    scripts: loaderData ? [jsonLdScript(loaderData.ld)] : [],
+  }),
   component: TeamProfile,
 });
 

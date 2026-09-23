@@ -6,15 +6,13 @@ import { ChatPanel } from "@/components/console/chat-panel";
 import { NotesPanel } from "@/components/console/notes-panel";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { RequireSession } from "@/lib/auth/gates";
-import { architectureNodes } from "@/lib/content";
+import { isArchitectureNodeId } from "@/lib/architecture-node-ids";
 
 const TABS = ["notes", "chat", "audits"] as const;
 type ConsoleTab = (typeof TABS)[number];
 
 function parseNode(value: unknown) {
-  return typeof value === "string" && architectureNodes.some((node) => node.id === value)
-    ? value
-    : undefined;
+  return isArchitectureNodeId(value) ? value : undefined;
 }
 
 function parseTab(value: unknown): ConsoleTab | undefined {
@@ -29,7 +27,9 @@ export const Route = createFileRoute("/console")({
   validateSearch: (search: Record<string, unknown>): ConsoleSearch => {
     const node = parseNode(search.node);
     const tab = parseTab(search.tab);
-    return { ...(node ? { node } : {}), ...(tab && tab !== "notes" ? { tab } : {}) };
+    // Explicit keys: the root route's raw search is merged in, so omitting one
+    // would let an unknown value through.
+    return { node, tab: tab && tab !== "notes" ? tab : undefined };
   },
   head: () => ({
     meta: [
