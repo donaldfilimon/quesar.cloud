@@ -10,11 +10,7 @@ function directive(csp: string, name: string): string {
   return found;
 }
 
-function has(csp: string, name: string): boolean {
-  return csp.split("; ").some((d) => d === name || d.startsWith(`${name} `));
-}
-
-describe("CSP policy (ported from mlai, adapted for the framed Grok preview)", () => {
+describe("CSP policy (ported from mlai)", () => {
   it("ships as Report-Only", () => {
     expect(CSP_HEADER).toBe("Content-Security-Policy-Report-Only");
   });
@@ -37,8 +33,8 @@ describe("CSP policy (ported from mlai, adapted for the framed Grok preview)", (
     expect(directive(prod, "script-src")).toContain("'wasm-unsafe-eval'");
   });
 
-  it("never sets frame-ancestors, so the Grok preview can frame the app", () => {
-    for (const csp of [prod, dev]) expect(has(csp, "frame-ancestors")).toBe(false);
+  it("allows framing only by the site itself", () => {
+    for (const csp of [prod, dev]) expect(directive(csp, "frame-ancestors")).toBe("frame-ancestors 'self'");
   });
 
   it("locks down the object, base and form surface", () => {
@@ -59,11 +55,8 @@ describe("CSP policy (ported from mlai, adapted for the framed Grok preview)", (
     }
   });
 
-  it("allows grok.com, which injects the platform extensions script (AGENTS.md rule 2)", () => {
-    for (const csp of [prod, dev]) {
-      expect(directive(csp, "script-src")).toContain("https://grok.com");
-      expect(directive(csp, "connect-src")).toContain("https://grok.com");
-    }
+  it("no longer allows the Grok App Builder origins", () => {
+    for (const csp of [prod, dev]) expect(csp).not.toContain("grok.com");
   });
 
   it("keeps the external origins the real runtime surface needs", () => {

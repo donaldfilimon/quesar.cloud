@@ -4,7 +4,7 @@
  * inlining it, so the copy stays reviewable in one place.
  *
  * Claim discipline: mlai described WorkOS, Cloud KMS, Cloud Run, MFA and an
- * invite-only beta. Quesar retired all of those (see AGENTS.project.md), so each
+ * invite-only beta. Quesar retired all of those (see AGENTS.md), so each
  * block below is rewritten to what this repository actually implements:
  * Better Auth sessions, `src/lib/server/crypto.server.ts` (AES-256-GCM),
  * `admin.server.ts` (allowlist plus a broker-linked account), the database
@@ -219,7 +219,7 @@ export const docsHub = {
     { name: "plugin_list", body: "Enumerate registered plugins and their target features." },
     { name: "plugin_run", body: "Invoke a registered plugin entry point." },
   ],
-  /** Deployment of this site, from the env table in AGENTS.project.md. Each missing value is a "not configured" state, never a crash. */
+  /** Deployment of this site, from the env table in AGENTS.md. Each missing value is a "not configured" state, never a crash. */
   deploymentSteps: [
     { title: "Database", body: "Set DATABASE_URL for Postgres. Without it the app runs on in-memory PGLite, and data does not survive a restart or a serverless instance." },
     { title: "Encryption key", body: "Set APP_ENCRYPTION_KEY (32 bytes, openssl rand -base64 32). Without it, sealed features refuse instead of storing plaintext." },

@@ -3,13 +3,14 @@ import {
   HeadContent,
   Outlet,
   Scripts,
+  useRouterState,
 } from "@tanstack/react-router";
 import { AuthProvider } from "@/lib/auth/provider";
-import { PreviewHostBridge } from "@/components/preview-host-bridge";
 import { SiteShell } from "@/components/site/shell";
 import { NotFound } from "@/components/site/not-found";
 import { site } from "@/lib/content";
 import { usePageViewTelemetry } from "@/lib/telemetry";
+import { canonicalUrl, SITE_ORIGIN } from "@/lib/seo";
 import appCss from "../styles.css?url";
 
 const THEME_BOOT = `(function(){try{var t=localStorage.getItem("mlai-theme");var theme=t==="light"||t==="dark"?t:(window.matchMedia("(prefers-color-scheme: light)").matches?"light":"dark");document.documentElement.dataset.theme=theme;document.documentElement.classList.toggle("dark",theme==="dark");}catch(e){document.documentElement.dataset.theme="dark";document.documentElement.classList.add("dark");}})();`;
@@ -23,13 +24,19 @@ export const Route = createRootRoute({
       { name: "description", content: site.description },
       { name: "theme-color", content: "oklch(0.153 0.006 107.1)" },
       { name: "color-scheme", content: "dark light" },
+      { property: "og:site_name", content: site.name },
+      { property: "og:type", content: "website" },
+      { property: "og:title", content: `${site.name} — ${site.company}` },
+      { property: "og:description", content: site.description },
+      { property: "og:image", content: `${SITE_ORIGIN}/og.jpg` },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:image", content: `${SITE_ORIGIN}/og.jpg` },
     ],
     links: [
       { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
       { rel: "stylesheet", href: appCss },
-      { rel: "manifest", href: "/__grok/manifest.webmanifest" },
-      { rel: "apple-touch-icon", href: "/__grok/icon-180.png" },
-      { rel: "canonical", href: "https://quesar.cloud/" },
+      { rel: "manifest", href: "/manifest.webmanifest" },
+      { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
       { rel: "alternate", type: "application/rss+xml", title: "Quesar lab notes and research", href: "/feed.xml" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
@@ -48,15 +55,27 @@ function PageViewTelemetry() {
   return null;
 }
 
+/** Canonical and og:url follow the current route, so each page names itself. */
+function CanonicalLinks() {
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const href = canonicalUrl(pathname);
+  return (
+    <>
+      <link rel="canonical" href={href} />
+      <meta property="og:url" content={href} />
+    </>
+  );
+}
+
 function RootDocument() {
   return (
     <html lang="en" data-theme="dark" className="dark" suppressHydrationWarning>
       <head>
         <HeadContent />
+        <CanonicalLinks />
         <script dangerouslySetInnerHTML={{ __html: THEME_BOOT }} />
       </head>
       <body className="antialiased">
-        <PreviewHostBridge />
         <PageViewTelemetry />
         <AuthProvider>
           <SiteShell>

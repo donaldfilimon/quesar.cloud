@@ -8,10 +8,12 @@ import {
   writeFileSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
 import { test } from "node:test";
 import { isMigrationFile, migrationName, pendingMigrations } from "./migration-plan.mjs";
-import { projectRoot } from "./with-app-env.mjs";
+import { fileURLToPath } from "node:url";
+
+const projectRoot = () => join(dirname(fileURLToPath(import.meta.url)), "..");
 
 const AUTH_MIGRATION = "0001_auth.sql";
 
@@ -56,9 +58,13 @@ test("non-.sql entries are dropped (readdir also yields the auth/ directory)", (
   assert.deepEqual(pendingMigrations(["auth", "README.md"], []), []);
 });
 
-test("the auth schema ships outside the globbed directory", () => {
+test("every root migration is pending on an empty database, and auth/ is never globbed", () => {
   const migrationsDir = join(projectRoot(), "migrations");
-  assert.deepEqual(pendingMigrations(readdirSync(migrationsDir), []), []);
+  const entries = readdirSync(migrationsDir);
+  const pending = pendingMigrations(entries, []).map((m) => m.name);
+  assert.deepEqual(pending, entries.filter(isMigrationFile).sort());
+  assert.ok(pending.includes("0001_auth.sql"), "sign-in is on: the auth schema is copied up");
+  assert.ok(!pending.includes("auth"));
   assert.ok(readdirSync(join(migrationsDir, "auth")).includes("0001_auth.sql"));
 });
 

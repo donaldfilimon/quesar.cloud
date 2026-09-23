@@ -1,0 +1,1 @@
+var e=`https://quesar.cloud`;function t(e,t){return{meta:[{title:e},{name:`description`,content:t},{property:`og:title`,content:e},{property:`og:description`,content:t},{name:`twitter:title`,content:e},{name:`twitter:description`,content:t}]}}function n(t){return`${e}${t.length>1?t.replace(/\/+$/,``):`/`}`}export{n,t as r,e as t};

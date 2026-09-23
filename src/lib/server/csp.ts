@@ -2,19 +2,15 @@
  * Content-Security-Policy builder (ported from mlai `src/lib/csp.ts`).
  *
  * Shipped as `Content-Security-Policy-Report-Only` (see `src/start.ts`), not
- * enforced. The allowlist was curated for mlai's Next app, and this app runs
- * inside the framed Grok preview with injected platform scripts, so an
- * enforced policy could break the preview or the "Created with Grok" pill
- * (AGENTS.md shell rule 2). Reports to `/api/csp-report` show what enforcing
- * would break; flip to enforcing only once that stream is quiet.
+ * enforced. The allowlist was curated for mlai's Next app; reports to
+ * `/api/csp-report` show what enforcing would break, so flip to enforcing only
+ * once that stream is quiet.
  *
  * Deviations from mlai:
- * - no `frame-ancestors`: the Grok preview frames this app, and browsers
- *   ignore the directive in report-only anyway;
+ * - `frame-ancestors 'self'` is declared for when the policy is enforced
+ *   (browsers ignore it in report-only);
  * - no `upgrade-insecure-requests` (also ignored in report-only);
- * - `https://grok.com` + `https://*.grok.com` in script/style/img/connect/frame,
- *   for the platform's injected extensions script;
- * - no `storage.googleapis.com`: nothing here loads PoseNet checkpoints;
+ * - `storage.googleapis.com` in connect-src for the /tf-pose-demo PoseNet weights;
  * - development adds `ws:`/`wss:` to connect-src for Vite HMR, besides the
  *   `'unsafe-eval'` mlai already allowed there.
  *
@@ -32,7 +28,6 @@
  * never widen to a bare https: wildcard.
  */
 
-const GROK = ["https://grok.com", "https://*.grok.com"];
 const TURNSTILE = "https://challenges.cloudflare.com";
 
 export const CSP_HEADER = "Content-Security-Policy-Report-Only";
@@ -47,7 +42,6 @@ export function buildCsp({ dev }: { dev: boolean }): string {
     "blob:",
     "https://cdn.jsdelivr.net",
     TURNSTILE,
-    ...GROK,
     // Vite dev evaluates strings (HMR); production bundles never eval. Kept
     // last so the dev and production script-src differ by one trailing token.
     ...(dev ? ["'unsafe-eval'"] : []),
@@ -67,23 +61,23 @@ export function buildCsp({ dev }: { dev: boolean }): string {
     "https://fonts.gstatic.com",
     "https://fonts.googleapis.com",
     TURNSTILE,
-    ...GROK,
     ...(dev ? ["ws:", "wss:"] : []),
   ].join(" ");
 
   return [
     "default-src 'self'",
     scriptSrc,
-    `style-src 'self' 'unsafe-inline' https://fonts.googleapis.com ${GROK.join(" ")}`,
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     "font-src 'self' data: https://fonts.gstatic.com",
-    `img-src 'self' data: blob: https://avatars.githubusercontent.com ${GROK.join(" ")}`,
+    "img-src 'self' data: blob: https://avatars.githubusercontent.com",
     connectSrc,
     "media-src 'self' blob:",
     "worker-src 'self' blob:",
-    `frame-src ${TURNSTILE} ${GROK.join(" ")}`,
+    `frame-src ${TURNSTILE}`,
     "object-src 'none'",
     "base-uri 'self'",
     "form-action 'self'",
+    "frame-ancestors 'self'",
     // `report-to` is current; `report-uri` is kept because Safari and older
     // Firefox only implement that one.
     "report-to csp-endpoint",

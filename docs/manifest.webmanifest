@@ -1,0 +1,14 @@
+{
+  "name": "Quesar — MLAI",
+  "short_name": "Quesar",
+  "description": "Private intelligence from MLAI: Abbey, ABI and WDBX.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#04060a",
+  "theme_color": "#04060a",
+  "icons": [
+    { "src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}

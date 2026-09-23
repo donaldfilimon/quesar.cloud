@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://quesar.cloud/sitemap.xml
