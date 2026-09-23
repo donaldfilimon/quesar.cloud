@@ -22,7 +22,8 @@ bun run build        # vite build (Vercel preset) + PGLite assets + migrations
 bun run build:static # GitHub Pages build into docs/
 ```
 
-- **Gate:** `typecheck`, `lint`, `test`, `build`, and `build:static` when a change can reach the static site. `.vercel/` and `.output/` are git-ignored build output.
+- **Gate:** `typecheck`, `lint`, `test`, `build`, and `build:static` when a change can reach the static site. There is no `.github/` and no CI: the gate is local only. `.vercel/` and `.output/` are git-ignored build output.
+- **Prettier is configured but not enforced** (`.prettierrc`; `eslint-config-prettier` turns off lint's style rules). Most of the tree is not Prettier-formatted, so `bun run format` (`prettier --write .`) rewrites hundreds of files, `docs/` included. Format only the files you touch (`bunx prettier --write <files>`).
 - **Single test:** `bunx vitest run src/lib/server/crypto.server.test.ts`, or add `-t "<name>"` for one case. vitest is the only test runner.
 - **`scripts/*.ts` run directly on Node's type stripping** (`node scripts/migrate.ts`), so they may use only erasable TypeScript syntax (no enums, namespaces or parameter properties) and import each other with `.ts` extensions. The build runs them, so a violation fails the gate.
 - **Lint ignores `docs/**`, `sidecars/**`, `native/**` and `src/routeTree.gen.ts`**, so a green lint says nothing about those. react-refresh is off for `src/routes/**` (TanStack routes export `Route` beside their components); everywhere else, keep hooks, constants and helpers out of component files.
@@ -32,7 +33,7 @@ bun run build:static # GitHub Pages build into docs/
 
 ## Deployment
 
-- **As of 2026-09-23, `https://quesar.cloud` is the static build**, served by GitHub Pages from `main:/docs`. `bun run build:static` sets `VITE_STATIC_SITE=true` and `VITE_AUTH_ENABLED=false`, prerenders every crawlable page (skipping `/api/*` and server functions), then `scripts/publish-static.mjs` replaces `docs/` wholesale and adds `.nojekyll`, `CNAME` and `404.html`. **`docs/` is build output only: never hand-edit it.** Internal records go in `notes/`.
+- **As of 2026-09-23, `https://quesar.cloud` is the static build**, served by GitHub Pages from `main:/docs`. `bun run build:static` sets `VITE_STATIC_SITE=true` and `VITE_AUTH_ENABLED=false`, prerenders every crawlable page (skipping `/api/*` and server functions), then `scripts/publish-static.ts` replaces `docs/` wholesale and adds `.nojekyll`, `CNAME` and `404.html`. **`docs/` is build output only: never hand-edit it.** Internal records go in `notes/`.
 - The full server build (`bun run build`, Nitro `vercel` preset; `vercel.json` sets the bun install and build commands with the daily audit-expiry cron in `vite.config.ts`) is planned for Vercel. Secrets and go-live order are in `notes/deploy/secrets-checklist.md`.
 - `git fetch` before any push, never force-push.
 
