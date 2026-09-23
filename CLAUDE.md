@@ -16,7 +16,7 @@ bun is the package manager (`bun.lock`; there is no `package-lock.json`). The to
 bun install          # --frozen-lockfile in CI and on Vercel (vercel.json)
 bun run dev          # 0.0.0.0:8080, strictPort
 bun run typecheck    # tsc --noEmit over src/, scripts/ and the vite/vitest/eslint configs
-bun run lint         # eslint (eslint.config.ts, loaded through jiti); 0 errors expected
+bun run lint         # eslint 10 + react-hooks 7 (React Compiler rules), --max-warnings 0
 bun run test         # vitest: src/**/*.test.{ts,tsx} and scripts/**/*.test.ts
 bun run build        # vite build (Vercel preset) + PGLite assets + migrations
 bun run build:static # GitHub Pages build into docs/
@@ -25,7 +25,8 @@ bun run build:static # GitHub Pages build into docs/
 - **Gate:** `typecheck`, `lint`, `test`, `build`, and `build:static` when a change can reach the static site. `.vercel/` and `.output/` are git-ignored build output.
 - **Single test:** `bunx vitest run src/lib/server/crypto.server.test.ts`, or add `-t "<name>"` for one case. vitest is the only test runner.
 - **`scripts/*.ts` run directly on Node's type stripping** (`node scripts/migrate.ts`), so they may use only erasable TypeScript syntax (no enums, namespaces or parameter properties) and import each other with `.ts` extensions. The build runs them, so a violation fails the gate.
-- **Lint ignores `docs/**`, `sidecars/**`, `native/**` and `src/routeTree.gen.ts`**, so a green lint says nothing about those.
+- **Lint ignores `docs/**`, `sidecars/**`, `native/**` and `src/routeTree.gen.ts`**, so a green lint says nothing about those. react-refresh is off for `src/routes/**` (TanStack routes export `Route` beside their components); everywhere else, keep hooks, constants and helpers out of component files.
+- **TypeScript is 6.0.** 7.0 typechecks the tree but typescript-eslint does not load with it yet; `tsconfig.json` has no `baseUrl` (removed in 7).
 - `VITE_AUTH_ENABLED` is an ordinary env var (sign-in is on unless it is `"false"`); only `build:static` sets it.
 - If port 8080 is taken, see `AGENTS.md` (pass `BETTER_AUTH_URL` via the environment, or email sign-up fails with "Invalid origin").
 
