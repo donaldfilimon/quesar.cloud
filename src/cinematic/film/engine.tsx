@@ -3,7 +3,7 @@
 // timeline-context.ts). Depended on by main.tsx + every scene.
 
 import {
-  useState, useRef, useEffect, useMemo, useCallback,
+  useState, useRef, useEffect, useLayoutEffect, useMemo, useCallback,
   type ReactNode, type CSSProperties,
 } from "react";
 import { advance, frameDelta } from "@/lib/trailer-engine";
@@ -89,8 +89,12 @@ export function Stage({ width = 1920, height = 1080, duration = 10, background =
   const stageRefCb = useCallback((el: HTMLDivElement | null) => { stageRef.current = el; setChrome(el); }, []);
   const rafRef = useRef(0);
   const lastTsRef = useRef<number | null>(null);
+  // Latest playhead for the key handler and the unmount flush, synced after
+  // each commit (not during render).
   const timeRef = useRef(time);
-  timeRef.current = time;
+  useLayoutEffect(() => {
+    timeRef.current = time;
+  }, [time]);
   const lastSaveRef = useRef(0);
 
   // Persist the playhead, but throttled — the clock ticks ~60Hz and writing to

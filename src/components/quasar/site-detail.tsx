@@ -50,35 +50,46 @@ export function QuasarSiteDetail({ id }: { id: string }) {
 
   // One full read of the site, its feed page and its preview. Throws, so the
   // Retry below only clears uncertainty after a read that actually succeeded.
-  const readAll = useCallback(async () => {
-    const nextSite = await getSite(id);
-    setSite(nextSite);
-    setMissing(false);
-    const since = feedRef.current.next;
-    const page = await getEvents(id, since);
-    feedRef.current = applyEventPage(feedRef.current, since, page);
-    setFeed(feedRef.current);
-    setPreview(await previewStatus(id));
-    setPollError(null);
-  }, [id]);
+  // State is only set once the first request settles (inside `.then`), so the
+  // polling effect below never updates state synchronously.
+  const readAll = useCallback(
+    () =>
+      getSite(id).then(async (nextSite) => {
+        setSite(nextSite);
+        setMissing(false);
+        const since = feedRef.current.next;
+        const page = await getEvents(id, since);
+        feedRef.current = applyEventPage(feedRef.current, since, page);
+        setFeed(feedRef.current);
+        setPreview(await previewStatus(id));
+        setPollError(null);
+      }),
+    [id],
+  );
 
-  const poll = useCallback(async () => {
-    if (inFlight.current) return;
+  const poll = useCallback((): Promise<void> => {
+    if (inFlight.current) return Promise.resolve();
     inFlight.current = true;
-    try {
-      await readAll();
-    } catch (error) {
-      if (errorText(error) === "not found") setMissing(true);
-      setPollError(error);
-    } finally {
-      inFlight.current = false;
-    }
+    return readAll()
+      .catch((error: unknown) => {
+        if (errorText(error) === "not found") setMissing(true);
+        setPollError(error);
+      })
+      .finally(() => {
+        inFlight.current = false;
+      });
   }, [readAll]);
 
+  // A new origin or site id starts a fresh feed (the effect below re-runs for
+  // either): the state resets during render, the cursor ref in the effect.
+  const [feedFor, setFeedFor] = useState({ origin, id });
+  if (origin !== feedFor.origin || id !== feedFor.id) {
+    setFeedFor({ origin, id });
+    if (origin) setFeed(EMPTY_FEED);
+  }
   useEffect(() => {
     if (!origin) return;
     feedRef.current = EMPTY_FEED;
-    setFeed(EMPTY_FEED);
     void poll();
     const timer = setInterval(() => void poll(), POLL_MS);
     return () => clearInterval(timer);

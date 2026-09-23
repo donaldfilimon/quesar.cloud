@@ -13,6 +13,7 @@
 import {
   useState,
   useEffect,
+  useLayoutEffect,
   useRef,
   type ReactNode,
   type CSSProperties,
@@ -172,8 +173,11 @@ type Dust = { x: number; y: number; r: number; p: number; vy: number };
 
 function HeroCanvas({ tweaks }: { tweaks: TweakState }): ReactNode {
   const ref = useRef<HTMLCanvasElement>(null);
+  // Latest tweaks for the animation loop, synced after each commit (not during render).
   const tRef = useRef<TweakState>(tweaks);
-  tRef.current = tweaks;
+  useLayoutEffect(() => {
+    tRef.current = tweaks;
+  }, [tweaks]);
   const ptr = useRef<{ tx: number; ty: number; x: number; y: number }>({
     tx: 0,
     ty: 0,

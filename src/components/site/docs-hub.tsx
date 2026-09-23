@@ -7,6 +7,7 @@ import { CopyGrid, NamedGrid } from "./catalog";
 import { Callout, CodeBlock, PullQuote, SpecList, StepList } from "./lab";
 import { Surface } from "./section";
 import { StatusBadge } from "./status-badge";
+import { DOCS_HUB_ANCHORS } from "./docs-hub-anchors";
 
 /**
  * The reference half of mlai's `src/views/Docs.tsx` hub: capabilities, runtime
@@ -42,16 +43,6 @@ function PaperLink({ to, children }: { to: string; children: string }) {
     </Link>
   );
 }
-
-export const DOCS_HUB_ANCHORS = [
-  { id: "ref-runtime", label: "Runtime build" },
-  { id: "ref-personas", label: "Persona routing" },
-  { id: "ref-wdbx", label: "WDBX retrieval" },
-  { id: "ref-wdbx-v2", label: "WDBX V2 downloads" },
-  { id: "ref-mcp", label: "MCP tools" },
-  { id: "ref-deployment", label: "Deployment" },
-  { id: "ref-api", label: "Site surfaces" },
-] as const;
 
 export function DocsHub() {
   const attachments = research.publications.flatMap((publication) => publication.attachments);

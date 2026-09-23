@@ -3,7 +3,7 @@
    Brand mark · section scaffolding · glass · before/after · mono ·
    scroll-reveal · token row · code block.
    ════════════════════════════════════════════════════════════════ */
-import { useState, useRef, useEffect, type ReactNode, type CSSProperties } from "react";
+import { useState, useRef, useEffect, useSyncExternalStore, type ReactNode, type CSSProperties } from "react";
 
 /* ─────────────── Brand mark ─────────────── */
 export function Mark({ size = 34 }: { size?: number }): ReactNode {
@@ -129,6 +129,17 @@ export function Mono({
   return <span className={className} style={{ fontFamily: "JetBrains Mono, monospace", ...style }}>{children}</span>;
 }
 
+/* prefers-reduced-motion as an external store: false on the server and during
+   hydration (matching the server HTML), the live media query afterwards. */
+const REDUCE_QUERY = "(prefers-reduced-motion: reduce)";
+function subscribeReducedMotion(onChange: () => void): () => void {
+  const mq = window.matchMedia(REDUCE_QUERY);
+  mq.addEventListener("change", onChange);
+  return () => mq.removeEventListener("change", onChange);
+}
+const readReducedMotion = (): boolean => window.matchMedia(REDUCE_QUERY).matches;
+const serverReducedMotion = (): boolean => false;
+
 /* scroll-reveal wrapper — fades + lifts children into view once */
 export function Reveal({
   children, delay = 0, y = 22,
@@ -138,18 +149,19 @@ export function Reveal({
   y?: number;
 }): ReactNode {
   const ref = useRef<HTMLDivElement>(null);
-  const [shown, setShown] = useState(false);
+  const [revealed, setRevealed] = useState(false);
+  const reduce = useSyncExternalStore(subscribeReducedMotion, readReducedMotion, serverReducedMotion);
+  // Reduced motion shows the content straight away instead of waiting to scroll.
+  const shown = revealed || reduce;
   useEffect(() => {
     const el = ref.current;
-    if (!el) return;
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduce) { setShown(true); return; }
+    if (!el || reduce) return;
     const obs = new IntersectionObserver((ents) => {
-      ents.forEach((e) => { if (e.isIntersecting) { setShown(true); obs.disconnect(); } });
+      ents.forEach((e) => { if (e.isIntersecting) { setRevealed(true); obs.disconnect(); } });
     }, { rootMargin: "0px 0px -12% 0px", threshold: 0.08 });
     obs.observe(el);
     return () => obs.disconnect();
-  }, []);
+  }, [reduce]);
   return (
     <div
       ref={ref}

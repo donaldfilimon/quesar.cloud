@@ -1,16 +1,14 @@
 import { Moon, Sun } from "lucide-react";
-import { useEffect, useState } from "react";
-import { applyTheme, resolveTheme, type Theme } from "@/lib/theme";
+import { useSyncExternalStore } from "react";
+import { applyTheme, currentTheme, subscribeTheme, type Theme } from "@/lib/theme";
 import { cn } from "@/lib/utils";
 import { Toggle } from "@/components/ui/toggle";
 import { Hint } from "@/components/ui/tooltip";
 
 export function ThemeToggle({ className }: { className?: string }) {
-  const [theme, setTheme] = useState<Theme>("dark");
-
-  useEffect(() => {
-    setTheme(resolveTheme());
-  }, []);
+  // The server (and the hydration pass) render "dark", matching the root
+  // markup; the client then reads the theme actually applied to <html>.
+  const theme = useSyncExternalStore<Theme>(subscribeTheme, currentTheme, () => "dark");
 
   const dark = theme === "dark";
 
@@ -21,7 +19,6 @@ export function ThemeToggle({ className }: { className?: string }) {
         onPressedChange={(next) => {
           const value: Theme = next ? "dark" : "light";
           applyTheme(value);
-          setTheme(value);
         }}
         className={className}
         aria-label={dark ? "Switch to light theme" : "Switch to dark theme"}

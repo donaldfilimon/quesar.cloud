@@ -58,21 +58,29 @@ export function NotesPanel({ initialNode }: { initialNode?: string }) {
     [nodeId],
   );
 
-  useEffect(() => {
+  // Follow a changed `initialNode` prop (adjusted during render; the initial
+  // values above already cover the first render).
+  const [prevInitialNode, setPrevInitialNode] = useState(initialNode);
+  if (initialNode !== prevInitialNode) {
+    setPrevInitialNode(initialNode);
     if (initialNode) {
       setNodeId(initialNode);
       setFilter(initialNode);
     }
-  }, [initialNode]);
+  }
 
-  async function refresh() {
-    try {
-      const rows = await listNotes();
-      setNotes(rows);
-      setStatus("idle");
-    } catch {
-      setStatus("error");
-    }
+  // State is only set from the settled promise, so the mount effect below
+  // never updates state synchronously.
+  function refresh(): Promise<void> {
+    return listNotes().then(
+      (rows) => {
+        setNotes(rows);
+        setStatus("idle");
+      },
+      () => {
+        setStatus("error");
+      },
+    );
   }
 
   useEffect(() => {

@@ -154,20 +154,26 @@ function SessionsPanel({ canSignOut }: { canSignOut: boolean }) {
   const [busy, setBusy] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
 
-  const load = useCallback(async () => {
-    try {
-      const { data: sessions, error } = await authClient.listSessions();
-      if (error) {
-        // `list-sessions` answers 403 SESSION_NOT_FRESH once this sign-in is older than a day.
-        const stale = error.status === 403 || error.code === "SESSION_NOT_FRESH";
-        setState(stale ? { kind: "stale" } : { kind: "error", message: SESSIONS_FAILED });
-        return;
-      }
-      setState({ kind: "ready", sessions: (sessions ?? []) as SessionRow[] });
-    } catch {
-      setState({ kind: "error", message: SESSIONS_FAILED });
-    }
-  }, []);
+  // State is only set from the settled promise, so the mount effect below
+  // never updates state synchronously.
+  const load = useCallback(
+    () =>
+      authClient.listSessions().then(
+        ({ data: sessions, error }) => {
+          if (error) {
+            // `list-sessions` answers 403 SESSION_NOT_FRESH once this sign-in is older than a day.
+            const stale = error.status === 403 || error.code === "SESSION_NOT_FRESH";
+            setState(stale ? { kind: "stale" } : { kind: "error", message: SESSIONS_FAILED });
+            return;
+          }
+          setState({ kind: "ready", sessions: (sessions ?? []) as SessionRow[] });
+        },
+        () => {
+          setState({ kind: "error", message: SESSIONS_FAILED });
+        },
+      ),
+    [],
+  );
   useEffect(() => {
     void load();
   }, [load]);
@@ -191,7 +197,7 @@ function SessionsPanel({ canSignOut }: { canSignOut: boolean }) {
     setNotice(null);
     // Revoke the others, then end this session through `signOut`, which also
     // reports a sign-out only once the server confirms it.
-    let revoked = false;
+    let revoked: boolean;
     try {
       const { error } = await authClient.revokeOtherSessions();
       revoked = !error;

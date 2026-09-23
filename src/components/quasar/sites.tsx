@@ -14,18 +14,30 @@ export function QuasarSites() {
   const origin = useServiceOrigin();
   const [state, setState] = useState<State>({ kind: "loading" });
 
-  const load = useCallback(() => {
-    setState({ kind: "loading" });
+  // State is only set from the settled promise, so the effect below never
+  // updates state synchronously.
+  const fetchSites = useCallback(() => {
     listSites().then(
       (sites) => setState({ kind: "ready", sites }),
       (error: unknown) => setState({ kind: "failed", error }),
     );
   }, []);
 
-  // Reload whenever the configured origin changes (and once it is known).
+  const load = useCallback(() => {
+    setState({ kind: "loading" });
+    fetchSites();
+  }, [fetchSites]);
+
+  // Reload whenever the configured origin changes (and once it is known): back
+  // to "loading" during render, then fetch in the effect.
+  const [prevOrigin, setPrevOrigin] = useState(origin);
+  if (origin !== prevOrigin) {
+    setPrevOrigin(origin);
+    if (origin) setState({ kind: "loading" });
+  }
   useEffect(() => {
-    if (origin) load();
-  }, [origin, load]);
+    if (origin) fetchSites();
+  }, [origin, fetchSites]);
 
   return (
     <QuasarFrame

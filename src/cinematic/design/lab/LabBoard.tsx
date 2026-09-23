@@ -13,6 +13,7 @@
 import {
   useState,
   useEffect,
+  useLayoutEffect,
   useRef,
   createContext,
   useContext,
@@ -172,10 +173,14 @@ function CommandPalette({
   setOpen: (v: boolean) => void;
 }): ReactNode {
   const [q, setQ] = useState("");
-  const filtered = NAV.filter((n) => n[0].toLowerCase().includes(q.toLowerCase()));
-  useEffect(() => {
+  // Clear the query each time the palette opens (adjust state on prop change
+  // during render, per react.dev "storing information from previous renders").
+  const [prevOpen, setPrevOpen] = useState(open);
+  if (open !== prevOpen) {
+    setPrevOpen(open);
     if (open) setQ("");
-  }, [open]);
+  }
+  const filtered = NAV.filter((n) => n[0].toLowerCase().includes(q.toLowerCase()));
   useEffect(() => {
     const h = (e: KeyboardEvent) => {
       if (open && e.key === "Escape") setOpen(false);
@@ -478,7 +483,9 @@ function useCanvas(draw: CanvasDraw) {
   // The draw fn is captured once on mount (matching the original prototype's
   // empty-deps effect); keep the latest in a ref so it stays referentially safe.
   const drawRef = useRef(draw);
-  drawRef.current = draw;
+  useLayoutEffect(() => {
+    drawRef.current = draw;
+  }, [draw]);
   useEffect(() => {
     const c = ref.current;
     if (!c) return;

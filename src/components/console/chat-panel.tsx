@@ -42,20 +42,31 @@ export function ChatPanel({ onOpenAudits }: { onOpenAudits: () => void }) {
   const [error, setError] = useState("");
   const [copied, setCopied] = useState(false);
 
+  // State is only set from the settled promise, so the mount effect below
+  // never updates state synchronously.
+  const fetchStatus = useCallback(
+    () =>
+      getConsoleStatus().then(
+        (next) => {
+          setStatus(next);
+        },
+        (cause: unknown) => {
+          setLoadError(
+            unexpected("The console could not be loaded right now. Reload the page.", cause),
+          );
+        },
+      ),
+    [],
+  );
+
   const load = useCallback(async () => {
     setLoadError("");
-    try {
-      setStatus(await getConsoleStatus());
-    } catch (cause) {
-      setLoadError(
-        unexpected("The console could not be loaded right now. Reload the page.", cause),
-      );
-    }
-  }, []);
+    await fetchStatus();
+  }, [fetchStatus]);
 
   useEffect(() => {
-    void load();
-  }, [load]);
+    void fetchStatus();
+  }, [fetchStatus]);
 
   const consent = status?.consent;
   const ready = Boolean(status?.encryption && status.llm.configured && consent?.accepted);

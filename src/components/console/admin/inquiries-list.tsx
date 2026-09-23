@@ -10,25 +10,35 @@ export function InquiriesList() {
   const [hasMore, setHasMore] = useState(false);
   const [error, setError] = useState("");
 
-  const load = useCallback(async (target: number) => {
+  // State is only set from the settled promise, so the mount effect below
+  // never updates state synchronously.
+  const fetchPage = useCallback(
+    (target: number) =>
+      adminInquiries({ data: { page: target } }).then(
+        (result) => {
+          if (!result.ok) {
+            setError(result.message);
+            return;
+          }
+          setRows(result.inquiries);
+          setHasMore(result.hasMore);
+          setPage(result.page);
+        },
+        (cause: unknown) => {
+          setError(unexpected("Inquiries could not be loaded right now.", cause));
+        },
+      ),
+    [],
+  );
+
+  const load = (target: number) => {
     setError("");
-    try {
-      const result = await adminInquiries({ data: { page: target } });
-      if (!result.ok) {
-        setError(result.message);
-        return;
-      }
-      setRows(result.inquiries);
-      setHasMore(result.hasMore);
-      setPage(result.page);
-    } catch (cause) {
-      setError(unexpected("Inquiries could not be loaded right now.", cause));
-    }
-  }, []);
+    void fetchPage(target);
+  };
 
   useEffect(() => {
-    void load(1);
-  }, [load]);
+    void fetchPage(1);
+  }, [fetchPage]);
 
   return (
     <div className="grid gap-4">
@@ -74,7 +84,7 @@ export function InquiriesList() {
           variant="secondary"
           size="sm"
           disabled={page <= 1}
-          onClick={() => void load(page - 1)}
+          onClick={() => load(page - 1)}
         >
           Newer
         </Button>
@@ -83,7 +93,7 @@ export function InquiriesList() {
           variant="secondary"
           size="sm"
           disabled={!hasMore}
-          onClick={() => void load(page + 1)}
+          onClick={() => load(page + 1)}
         >
           Older
         </Button>

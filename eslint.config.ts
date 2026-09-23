@@ -51,6 +51,13 @@ export default tseslint.config(
       "@typescript-eslint/no-explicit-any": "off",
     },
   },
+  {
+    // TanStack file routes export `Route` beside their local components by
+    // design; the router plugin splits each route component into its own
+    // module for HMR, so react-refresh's one-file-one-kind rule does not apply.
+    files: ["src/routes/**/*.{ts,tsx}"],
+    rules: { "react-refresh/only-export-components": "off" },
+  },
   // Disable rules that conflict with Prettier formatting.
   prettier,
 );

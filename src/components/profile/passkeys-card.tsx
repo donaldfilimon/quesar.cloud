@@ -28,12 +28,17 @@ export function PasskeysCard() {
   const [state, setState] = useState<PasskeysState>({ kind: "loading" });
   const [busy, setBusy] = useState(false);
 
-  const load = useCallback(async () => {
-    const { data, error } = await authClient.passkey.listUserPasskeys();
-    if (error)
-      setState({ kind: "error", message: "Passkeys could not be loaded. Try again in a moment." });
-    else setState({ kind: "ready", passkeys: (data ?? []) as PasskeyRow[] });
-  }, []);
+  // State is only set from the settled promise, so the mount effect below
+  // never updates state synchronously.
+  const load = useCallback(
+    () =>
+      authClient.passkey.listUserPasskeys().then(({ data, error }) => {
+        if (error)
+          setState({ kind: "error", message: "Passkeys could not be loaded. Try again in a moment." });
+        else setState({ kind: "ready", passkeys: (data ?? []) as PasskeyRow[] });
+      }),
+    [],
+  );
 
   useEffect(() => {
     void load();
