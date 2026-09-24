@@ -20,6 +20,7 @@ export type ResearchContextCase = Readonly<{
   summary: string;
   relatedTopics: readonly ResearchContextTopic[];
   sections: readonly ResearchContextSection[];
+  sourceAvailability?: "public" | "withheld";
   sources: readonly ResearchContextSource[];
   limitations: readonly string[];
 }>;
@@ -27,7 +28,6 @@ export type ResearchContextCase = Readonly<{
 const MLAI_REVISION = "73721dba44afd14a081150a020127a7dec1dbb9e";
 const PRIVATE_APP_REVISION = "47c97ffa81bebd97b3cfe53421056f600b5e8e91";
 const ABBEY_REVISION = "86179ecb58a2350dab6904f6ec75be933d0bd501";
-const SPECIMEN_REVISION = "b730a044ef280c6cf240f83c5b25f4e44a2c2ca0";
 
 const mlaiSource = (path: string) =>
   `https://github.com/donaldfilimon/MLAI-CORPORATION-WWW/blob/${MLAI_REVISION}/${path}`;
@@ -37,9 +37,6 @@ const privateAppSource = (path: string) =>
 
 const abbeySource = (path: string) =>
   `https://github.com/donaldfilimon/abbey/blob/${ABBEY_REVISION}/${path}`;
-
-const specimenSource = (path: string) =>
-  `https://git.chatgpt-team.site/747fc7e8-caa2-4a0d-9c30-7a122e46f912/appgprj_6a9a935175ac8191b15e8bb4e7319462.git#${SPECIMEN_REVISION}:${path}`;
 
 export const researchContext = [
   {
@@ -271,6 +268,7 @@ export const researchContext = [
     summary:
       "WDBX Specimen combines a provenance-aware architecture specification with explicit browser and native runtime profiles, then uses conformance tests to make a bounded subset of the design executable.",
     relatedTopics: ["ai", "wdbx", "sea", "gpu", "mcp", "tui"],
+    sourceAvailability: "withheld",
     sections: [
       {
         heading: "Specification with provenance",
@@ -287,33 +285,9 @@ export const researchContext = [
         ],
       },
     ],
-    sources: [
-      {
-        title: "WDBX Specimen architecture specification",
-        url: specimenSource("public/WDBX-Specimen-Architecture-Specification.md"),
-        revision: SPECIMEN_REVISION,
-        sha256: "7489b6e12466faaaf6e5ef44fdbd98214c7470d8d4c9fdbd6ef8149ae828c327",
-      },
-      {
-        title: "WDBX Specimen browser runtime profile",
-        url: specimenSource("RUNTIME-PROFILE.md"),
-        revision: SPECIMEN_REVISION,
-        sha256: "dbdec3898b14332e2610b50f4eec010f082edbb98a9029d13b51c77486d793ab",
-      },
-      {
-        title: "WDBX Specimen native runtime profile",
-        url: specimenSource("NATIVE-RUNTIME-PROFILE.md"),
-        revision: SPECIMEN_REVISION,
-        sha256: "95a1a6e8110825616d9274a194de274bcd658a29039b5f2336d8e3ac839564cd",
-      },
-      {
-        title: "Native conformance tests",
-        url: specimenSource("native/specimen-core/tests/conformance.rs"),
-        revision: SPECIMEN_REVISION,
-        sha256: "a1e7f0b0328a5f93c03ab22a97b6b2e87042ee222d56e9a222bc13b87a92586f",
-      },
-    ],
+    sources: [],
     limitations: [
+      "Source citations are withheld because the underlying repository is private and cannot be verified by public readers.",
       "WDBX Specimen is an independent design-and-conformance project, not evidence for every capability of the canonical WDBX storage substrate.",
       "Specification requirements, browser demonstrations, native conformance, performance measurements, and production readiness are separate evidence layers.",
     ],
