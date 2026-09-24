@@ -8,7 +8,7 @@
  * emitting an invalid RFC-822 string.
  */
 
-import { site } from "@/lib/content";
+import { site } from "@/lib/site-identity";
 import { blog } from "./categories/blog";
 import { research } from "./categories/research";
 import { parseContentDate } from "./dates";
