@@ -2,7 +2,7 @@ import { createServer } from "node:http";
 import { createReadStream, statSync } from "node:fs";
 import { resolve, extname, sep } from "node:path";
 
-const root = resolve("docs");
+const root = resolve(process.env.E2E_STATIC_ROOT ?? "docs");
 const types: Record<string, string> = {
   ".html": "text/html",
   ".js": "text/javascript",

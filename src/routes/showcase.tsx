@@ -22,7 +22,7 @@ function ShowcasePage() {
         lede="The projection room. Films and trailers drawn frame by frame by a timeline engine in your browser, narrated by the three Quesar minds. Atmosphere is not evidence: the films are orientation, and status lives on the product pages."
       />
       <Section>
-        <Trailer />
+        <Trailer full />
         <div className="mt-10">
           <ShowcaseWall />
         </div>

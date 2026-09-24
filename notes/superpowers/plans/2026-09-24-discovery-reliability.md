@@ -40,6 +40,14 @@ URL, with each asset gzipped independently.
 
 ## Progress
 
+- Phase 4: complete. Full gate (403 tests), static build/budgets, and 36 browser
+  cases passed. The corrected playback-rejection test failed against the
+  original MP4 player before passing against this implementation.
+- Ruling: expose existing full chapter mode on /showcase, where the MP4 player
+  actually lives. /showcase/trailer is a separate cinematic renderer and was
+  the wrong test target; its initial test failures are not regression evidence.
+  The homepage remains a one-cut teaser.
+
 - Phase 3: complete. Six loader tests cover independent failures, shared loads,
   TTL/cooldown/forced retry, deadlines, malformed data, and retained README data.
   Full gate passed (403 tests), static checks passed, and 21 browser cases passed.
