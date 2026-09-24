@@ -1,3 +1,5 @@
+import type { StatusKind } from "@/lib/site-identity";
+
 /** Public entry points belong to the website; source setup remains authoritative. */
 export const primaryNavigation = [
   { to: "/products", label: "Products" },
@@ -5,12 +7,29 @@ export const primaryNavigation = [
   { to: "/docs", label: "Docs" },
   { to: "/about", label: "Company" },
 ];
+/**
+ * The local Abbey app's toolchain, one fact per entry. The Abbey journey's
+ * prerequisites sentence and the /abbey workspace facts both read from here, so
+ * a version bump lands on every page at once.
+ */
+export const abbeyRequirements = [
+  "Node 24, Bun 1.4",
+  "uv with Python 3.11–3.13",
+  "Java 21+ and LibreOffice",
+] as const;
+
+/**
+ * `status` is the claim-discipline status of each journey (data only, not
+ * rendered here). `src/lib/mlai/surfaces.content.test.ts` requires the surface
+ * rows that link a journey to carry the same status.
+ */
 export const productJourneys = [
   {
     slug: "abi",
     name: "ABI",
     purpose: "Route assistant requests and assemble inspectable context.",
     availability: "Local developer framework",
+    status: "current" as StatusKind,
     prerequisites:
       "A source checkout, nightly Rust and the sibling workspaces required by the ABI README.",
     limitation:
@@ -23,8 +42,8 @@ export const productJourneys = [
     name: "Abbey",
     purpose: "Work with documents in the local Abbey workspace and explore its assistant context.",
     availability: "Local document workspace",
-    prerequisites:
-      "Node 24, Bun 1.4, uv with Python 3.11–3.13, Java 21+ and LibreOffice as documented by the website-app setup; a local model is optional.",
+    status: "current" as StatusKind,
+    prerequisites: `${abbeyRequirements.join(", ")} as documented by the website-app setup; a local model is optional.`,
     limitation:
       "Assistant behavior depends on the selected backend. The public website does not provision an Abbey session or a shared product account.",
     setupHref: "/workspace",
@@ -35,6 +54,7 @@ export const productJourneys = [
     name: "WDBX",
     purpose: "Store durable records and retrieve vectors with inspectable provenance.",
     availability: "Implemented Rust components for local integration",
+    status: "current" as StatusKind,
     prerequisites:
       "Read the WDBX source README and prepare its Rust workspace before integrating persistence or retrieval.",
     limitation:
@@ -52,6 +72,7 @@ export const productJourneys = [
     name: "Quasar",
     purpose: "Generate a Next.js website and preview it on your own machine.",
     availability: "Local v1 website builder",
+    status: "experimental" as StatusKind,
     prerequisites:
       "Bun 1.4, the Quasar workspace, Anthropic credentials and a separately running local service plus Expo app.",
     limitation:
@@ -87,6 +108,7 @@ export const startJourneys = [
     description:
       "Run the Expo companion from source. Native CloudKit and the encrypted-local fallback are distinct paths; signed-device acceptance remains separate from a web export.",
     availability: "Source-based Expo companion",
+    status: "partial" as StatusKind,
     prerequisites:
       "Bun 1.4 and Expo tooling; native platform tooling for device builds. CloudKit requires an appropriately signed Apple build.",
     href: "/mobile",

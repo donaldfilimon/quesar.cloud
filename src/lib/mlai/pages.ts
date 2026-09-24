@@ -14,6 +14,9 @@
  */
 import type { StatusKind } from "@/lib/content";
 
+import { docsMcpTools, docsModuleMap, docsWdbxCapabilities } from "./categories/abi-runtime";
+import { wdbxGraphDefaults, wdbxGraphParams } from "./wdbx-facts";
+
 type Status = { status: StatusKind };
 
 /* ------------------------------------------------------------------ Home */
@@ -181,8 +184,8 @@ export const benchmarkFraming = [
 /** Structural facts verifiable from the WDBX sources. Not performance figures. */
 export const benchmarkArchitecture = [
   { property: "Primary type", value: "Vectors (ℝᵈ)" },
-  { property: "Index", value: "Layered HNSW; M=16, ef_construction=40, ef_search=32" },
-  { property: "Concurrency", value: "MVCC transactions" },
+  { property: "Index", value: `${wdbxGraphDefaults.index}; ${wdbxGraphParams}` },
+  { property: "Concurrency", value: `${wdbxGraphDefaults.transactions} transactions` },
   { property: "Integrity", value: "Hash-chained blocks" },
   { property: "Active runtime", value: "Rust" },
 ] as const;
@@ -226,14 +229,7 @@ export const docsHub = {
     { k: "Configuration", v: "Crate-specific Cargo features" },
     { k: "Capability inspection", v: "abi backends · abi wdbx gpu info" },
   ],
-  moduleMap: [
-    { name: "abi-ai", body: "Profile routing, completion, and governance helpers." },
-    { name: "abi-sea", body: "Evidence selection, scoring, and learning loop." },
-    { name: "abi-wdbx", body: "Durable memory and retrieval from the sibling Rust substrate." },
-    { name: "abi-gpu", body: "Backend reporting, optional Metal DOT kernels, and CPU fallback." },
-    { name: "abi-mcp", body: "JSON-RPC tool handlers and stdio server." },
-    { name: "abi-cli", body: "Commands, agent REPL, and diagnostics dashboard." },
-  ],
+  moduleMap: docsModuleMap,
   designDecisions: [
     {
       title: "Inspectable capabilities",
@@ -276,24 +272,8 @@ export const docsHub = {
       body: "Broad technical range, paired with the honesty to name uncertainty and defer to review instead of bluffing.",
     },
   ],
-  wdbxCapabilities: [
-    {
-      title: "Weighted backtrace paths",
-      body: "Inspect which sources were used and where confidence dropped.",
-    },
-    {
-      title: "SIMD vector search",
-      body: "Cosine nearest-neighbor through the active Rust substrate's layered HNSW index (M=16, EF_CONSTRUCTION=40, EF_SEARCH=32).",
-    },
-    {
-      title: "Durable snapshots",
-      body: "JSONL serialize/restore with integrity checks and tamper rejection.",
-    },
-    {
-      title: "Opt-in persistence",
-      body: "Completions persist only when store_result is set on the request.",
-    },
-  ],
+  /** Rendered without badges; `pendingStatus` stays in the record for the copy wave. */
+  wdbxCapabilities: docsWdbxCapabilities.map(({ title, body }) => ({ title, body })),
   wdbxV2Docs: [
     {
       file: "getting-started.md",
@@ -333,29 +313,7 @@ export const docsHub = {
     { k: "Discovery only", v: "GET /sse (one event, then close)" },
     { k: "Message endpoint", v: "POST /message" },
   ],
-  mcpTools: [
-    { name: "ai_learn", body: "Evidence-augmented completion with bounded evidence selection." },
-    { name: "scheduler_info", body: "Compatibility alias for scheduler statistics." },
-    { name: "ai_complete", body: "Run a single completion through the selected persona profile." },
-    { name: "ai_run", body: "Run completion with local profile routing." },
-    { name: "ai_train", body: "Train the selected local profile against WDBX." },
-    {
-      name: "wdbx_query",
-      body: "Vector / block retrieval against the WDBX store with ordered results.",
-    },
-    { name: "wdbx_stats", body: "Report store size, index health, and snapshot metadata." },
-    {
-      name: "gpu_status",
-      body: "Report GPU capability and backend, with deterministic CPU fallback.",
-    },
-    { name: "scheduler_stats", body: "Report scheduler task counts." },
-    {
-      name: "connector_test",
-      body: "Run local connector validation; does not prove live credentials work.",
-    },
-    { name: "plugin_list", body: "Enumerate registered plugins and their target features." },
-    { name: "plugin_run", body: "Invoke a registered plugin entry point." },
-  ],
+  mcpTools: docsMcpTools,
   /** Deployment of this site, from the env table in AGENTS.md. Each missing value is a "not configured" state, never a crash. */
   deploymentSteps: [
     {

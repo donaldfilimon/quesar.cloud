@@ -1,4 +1,5 @@
 import type { Platform, Runtime } from "../schemas";
+import { wdbxFacts } from "../wdbx-facts";
 
 export const platform: Platform = [
   {
@@ -132,11 +133,6 @@ export const runtime: Runtime = {
   // lock-free concurrency (api.md documents an RwLock-guarded pipeline),
   // and never mention weighted provenance paths, per-record point-in-time
   // rollback, or on-open chain verification.
-  memoryModel: [
-    { k: "Index", v: "Layered HNSW" },
-    { k: "Graph degree", v: "M = 16" },
-    { k: "Construction breadth", v: "EF_CONSTRUCTION = 40" },
-    { k: "Search breadth", v: "EF_SEARCH = 32" },
-    { k: "Transactions", v: "MVCC" },
-  ],
+  // The home facts minus the "Active implementation" row; one source in wdbx-facts.ts.
+  memoryModel: wdbxFacts.slice(1),
 };

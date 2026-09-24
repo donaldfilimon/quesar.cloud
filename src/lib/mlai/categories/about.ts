@@ -1,4 +1,18 @@
+import { site } from "@/lib/site-identity";
+
 import type { About } from "../schemas";
+
+/**
+ * The company on paper, stated once. `companyFacts` below and
+ * `investor.entity` (`./investor`) are built from it; the legal name is
+ * `site.legal`, so the company page and investor notes cannot disagree.
+ */
+export const companyIdentity = {
+  legalName: site.legal,
+  entity: "Delaware C-Corp",
+  location: "Orlando, FL",
+  model: "SDK licensing + integration services",
+} as const;
 
 export const about: About = {
   values: [
@@ -44,11 +58,15 @@ export const about: About = {
   // why they render through `SpecList` (configuration facts) rather than a
   // provenance-tagged `StatBlock`. Ported from the design handoff's Company page.
   companyFacts: [
-    { k: "Legal name", v: "Machine Learning Advanced Innovations, Inc." },
-    { k: "Entity", v: "Delaware C-Corp" },
-    { k: "Location", v: "Orlando, FL" },
+    { k: "Legal name", v: companyIdentity.legalName },
+    { k: "Entity", v: companyIdentity.entity },
+    { k: "Location", v: companyIdentity.location },
+    // TODO(copy-wave): contradicts integrityRules "Toolchain facts" (ABI is
+    // nightly Rust; no Zig-era claims) and the Rust runtime stated elsewhere on
+    // the site. Copy changes are out of scope for this wave; tracked by the
+    // it.todo in src/lib/mlai/investor.content.test.ts.
     { k: "Languages", v: "Zig, Swift, TypeScript" },
-    { k: "Model", v: "SDK licensing + integration services" },
+    { k: "Model", v: companyIdentity.model },
   ],
 
   // Positioning thesis — three claim-free cards on why on-device wins, ported
