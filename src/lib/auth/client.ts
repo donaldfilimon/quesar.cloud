@@ -8,8 +8,7 @@ import { SOCIAL_PROVIDERS, type SocialProviderId } from "./providers";
  */
 export const authClient = createAuthClient({ plugins: [passkeyClient()] });
 
-/** False only in the static Pages build, which has no auth server. */
-export const authEnabled = import.meta.env.VITE_AUTH_ENABLED !== "false";
+export { authEnabled } from "./enabled";
 
 export { SOCIAL_PROVIDERS };
 
