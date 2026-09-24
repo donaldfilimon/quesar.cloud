@@ -3,7 +3,7 @@ import { useId, useSyncExternalStore } from "react";
 import { applyTheme, currentTheme, subscribeTheme, type Theme } from "@/lib/theme";
 import { cn } from "@/lib/utils";
 import { Toggle } from "@/components/ui/toggle";
-import { loadHeaderMenus, TRIGGER_ATTR, useHeaderMenus } from "./header-menus-loader";
+import { preloadHeaderMenus, TRIGGER_ATTR, useHeaderMenus } from "./header-menus-loader";
 
 export function ThemeToggle({ className }: { className?: string }) {
   // The server (and the hydration pass) render "dark", matching the root
@@ -29,8 +29,8 @@ export function ThemeToggle({ className }: { className?: string }) {
       aria-label="Dark theme"
       {...{ [TRIGGER_ATTR]: id }}
       {...(menus ? null : { "data-state": "closed" })}
-      onPointerEnter={loadHeaderMenus}
-      onFocus={loadHeaderMenus}
+      onPointerEnter={preloadHeaderMenus}
+      onFocus={preloadHeaderMenus}
     >
       <span className="relative size-4">
         <Sun

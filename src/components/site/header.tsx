@@ -5,7 +5,8 @@ import { nav } from "@/lib/site-identity";
 import { cn } from "@/lib/utils";
 import { AuthSlot } from "./auth-slot";
 import {
-  loadHeaderMenus,
+  openWhenLoaded,
+  preloadHeaderMenus,
   TRIGGER_ATTR,
   useHeaderMenus,
   useLoadHeaderMenusWhenIdle,
@@ -67,12 +68,9 @@ export function SiteHeader() {
               data-state={moreOpen ? "open" : "closed"}
               className={moreClass}
               {...{ [TRIGGER_ATTR]: "more" }}
-              onPointerEnter={loadHeaderMenus}
-              onFocus={loadHeaderMenus}
-              onClick={() => {
-                setMoreOpen(true);
-                loadHeaderMenus();
-              }}
+              onPointerEnter={preloadHeaderMenus}
+              onFocus={preloadHeaderMenus}
+              onClick={() => openWhenLoaded(() => setMoreOpen(true))}
             >
               More
             </button>
@@ -94,12 +92,9 @@ export function SiteHeader() {
               data-state={open ? "open" : "closed"}
               className={mobileTriggerClass}
               {...{ [TRIGGER_ATTR]: "menu" }}
-              onPointerEnter={loadHeaderMenus}
-              onFocus={loadHeaderMenus}
-              onClick={() => {
-                setOpen(true);
-                loadHeaderMenus();
-              }}
+              onPointerEnter={preloadHeaderMenus}
+              onFocus={preloadHeaderMenus}
+              onClick={() => openWhenLoaded(() => setOpen(true))}
             >
               {menuIcon}
             </button>

@@ -1,7 +1,13 @@
 import { useNavigate } from "@tanstack/react-router";
 import { Search as SearchIcon } from "lucide-react";
 import { useEffect, useState } from "react";
-import { loadHeaderMenus, TRIGGER_ATTR, useHeaderMenus } from "./header-menus-loader";
+import {
+  headerMenusLoaded,
+  openWhenLoaded,
+  preloadHeaderMenus,
+  TRIGGER_ATTR,
+  useHeaderMenus,
+} from "./header-menus-loader";
 import type { Hit } from "./search-panel";
 import { loadSearchPanel } from "./search-panel-loader";
 
@@ -24,8 +30,8 @@ export function SiteSearch() {
       if (tag && ["INPUT", "TEXTAREA", "SELECT"].includes(tag)) return;
       event.preventDefault();
       void loadSearchPanel();
-      loadHeaderMenus();
-      setOpen((value) => !value);
+      if (headerMenusLoaded()) setOpen((value) => !value);
+      else openWhenLoaded(() => setOpen(true));
     }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -82,16 +88,13 @@ export function SiteSearch() {
       {...{ [TRIGGER_ATTR]: "search" }}
       onPointerEnter={() => {
         void loadSearchPanel();
-        loadHeaderMenus();
+        preloadHeaderMenus();
       }}
       onFocus={() => {
         void loadSearchPanel();
-        loadHeaderMenus();
+        preloadHeaderMenus();
       }}
-      onClick={() => {
-        setOpen(true);
-        loadHeaderMenus();
-      }}
+      onClick={() => openWhenLoaded(() => setOpen(true))}
     >
       {content}
     </button>
