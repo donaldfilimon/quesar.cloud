@@ -1,7 +1,8 @@
 import { Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { loadGithubData, type ReadmeCard } from "@/lib/github";
+import type { ReadmeCard } from "@/lib/github";
+import { useGithubData } from "@/lib/use-github-data";
+import { GithubSectionStatus } from "./section-status";
 import { pathForRepo } from "@/lib/catalog";
 
 const FALLBACK: ReadmeCard[] = [
@@ -31,82 +32,36 @@ const FALLBACK: ReadmeCard[] = [
   },
 ];
 
-function relFetched(iso: string | null) {
-  if (!iso) return null;
-  const then = Date.parse(iso);
-  if (!Number.isFinite(then)) return null;
-  const minutes = Math.max(0, Math.round((Date.now() - then) / 60_000));
-  if (minutes < 1) return "just now";
-  if (minutes === 1) return "1 min ago";
-  if (minutes < 60) return `${minutes} min ago`;
-  return `${Math.round(minutes / 60)}h ago`;
-}
-
 export function GithubStatusLine() {
-  const [status, setStatus] = useState<"loading" | "live" | "local">("loading");
-  const [when, setWhen] = useState<string | null>(null);
-
-  useEffect(() => {
-    let cancelled = false;
-    void loadGithubData().then((payload) => {
-      if (cancelled) return;
-      setWhen(relFetched(payload.fetchedAt));
-      setStatus(payload.readmes.length ? "live" : "local");
-    });
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
+  const { data, loading, retry } = useGithubData();
   return (
-    <p className="mt-6 text-xs text-fg-subtle" role="status">
-      {status === "loading"
-        ? "Asking GitHub…"
-        : status === "live"
-          ? `Live READMEs from donaldfilimon${when ? ` · ${when}` : ""}`
-          : "GitHub did not answer · local excerpts"}
-    </p>
+    <div className="mt-6">
+      <GithubSectionStatus
+        status={data?.sections.readmes}
+        loading={loading}
+        label="READMEs"
+        retry={retry}
+      />
+    </div>
   );
 }
 
 export function SourcePanel() {
-  const [cards, setCards] = useState<ReadmeCard[]>(FALLBACK);
-  const [live, setLive] = useState(false);
-  const [status, setStatus] = useState<"loading" | "live" | "local">("loading");
-  const [fetchedAt, setFetchedAt] = useState<string | null>(null);
-
-  useEffect(() => {
-    let cancelled = false;
-    void loadGithubData().then((payload) => {
-      if (cancelled) return;
-      setFetchedAt(payload.fetchedAt);
-      if (payload.readmes.length) {
-        setCards(payload.readmes);
-        setLive(true);
-        setStatus("live");
-        return;
-      }
-      setStatus("local");
-    });
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
+  const { data, loading, retry } = useGithubData();
+  const cards = data?.readmes.length ? data.readmes : FALLBACK;
   const first = cards[0]?.name ?? "abi";
-  const when = relFetched(fetchedAt);
 
   return (
     <div className="min-w-0 overflow-hidden rounded-[18px] bg-bg-elevated shadow-[var(--shadow-border)]">
       <div className="flex items-center justify-between gap-3 border-b border-border px-4 py-3">
-        <p className="text-xs text-accent">
-          {status === "loading" ? "asking GitHub…" : live ? "live README" : "local excerpt"}
-        </p>
-        <p className="font-mono text-[10px] text-fg-subtle">
-          {status === "live" && when ? `donaldfilimon · ${when}` : "donaldfilimon"}
-        </p>
+        <GithubSectionStatus
+          status={data?.sections.readmes}
+          loading={loading}
+          label="READMEs"
+          retry={retry}
+        />
       </div>
-      {status === "local" ? (
+      {!loading && !data?.readmes.length ? (
         <p className="border-b border-border px-4 py-2 text-xs text-fg-muted">
           GitHub did not answer. Showing the last verified excerpts. Product pages stay on this
           site.

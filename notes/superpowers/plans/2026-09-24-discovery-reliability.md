@@ -40,6 +40,12 @@ URL, with each asset gzipped independently.
 
 ## Progress
 
+- Phase 3: complete. Six loader tests cover independent failures, shared loads,
+  TTL/cooldown/forced retry, deadlines, malformed data, and retained README data.
+  Full gate passed (403 tests), static checks passed, and 21 browser cases passed.
+  GitHub request parsing is dynamically loaded; Developers uses 37 preloads
+  versus the 38-link baseline. Consumers share refresh and freshness state.
+
 - Phase 2: complete. Three browser regressions reproduced before fixes.
   Full gate passed (397 tests), static build and budgets passed, and all 15
   browser cases passed. Ruling: a narrow Vite build transform gives the search

@@ -1,14 +1,13 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { AppLink } from "@/components/site/app-link";
 import { Input } from "@/components/ui/input";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { repos, type RepoKind } from "@/lib/content";
-import { loadGithubData, type EventItem, type LiveRepo } from "@/lib/github";
+import { useGithubData } from "@/lib/use-github-data";
+import { GithubSectionStatus } from "./section-status";
 import { pathForRepo } from "@/lib/catalog";
 import { isAbsoluteUrl } from "@/lib/internal";
 import { cn } from "@/lib/utils";
-
-type LoadState = "loading" | "ready" | "unavailable";
 
 const FEATURED = new Set<string>(repos.map((r) => r.name));
 
@@ -35,24 +34,11 @@ function eventLabel(type: string) {
 }
 
 export function RepoList({ compact = false }: { compact?: boolean }) {
-  const [live, setLive] = useState<LiveRepo[]>([]);
-  const [events, setEvents] = useState<EventItem[]>([]);
-  const [state, setState] = useState<LoadState>("loading");
+  const { data, loading, retry } = useGithubData();
+  const live = useMemo(() => data?.repos ?? [], [data]);
+  const events = data?.events ?? [];
   const [query, setQuery] = useState("");
   const [kind, setKind] = useState<"all" | RepoKind>("all");
-
-  useEffect(() => {
-    let cancelled = false;
-    void loadGithubData().then((payload) => {
-      if (cancelled) return;
-      setLive(payload.repos);
-      setEvents(payload.events);
-      setState(payload.state);
-    });
-    return () => {
-      cancelled = true;
-    };
-  }, []);
 
   const catalog = useMemo(() => {
     const byName = new Map(live.map((r) => [r.name, r]));
@@ -74,21 +60,14 @@ export function RepoList({ compact = false }: { compact?: boolean }) {
 
   return (
     <div>
-      {state === "ready" ? (
-        <p className="mb-4 text-xs text-fg-subtle" role="status">
-          Live repository metadata from donaldfilimon
-        </p>
-      ) : null}
-      {state === "unavailable" ? (
-        <p className="mb-4 text-sm text-fg-muted" role="status">
-          Live repository metadata is unavailable. Pages below still describe each public tree.
-        </p>
-      ) : null}
-      {state === "loading" ? (
-        <p className="mb-4 text-sm text-fg-muted" role="status">
-          Loading public repository metadata…
-        </p>
-      ) : null}
+      <div className="mb-4">
+        <GithubSectionStatus
+          status={data?.sections.repos}
+          loading={loading}
+          label="repository metadata"
+          retry={retry}
+        />
+      </div>
 
       {!compact ? (
         <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -189,9 +168,15 @@ export function RepoList({ compact = false }: { compact?: boolean }) {
         </div>
       ) : null}
 
-      {!compact && events.length ? (
+      {!compact ? (
         <div className="mt-10">
           <p className="text-xs text-fg-subtle">Recent public activity</p>
+          <GithubSectionStatus
+            status={data?.sections.events}
+            loading={loading}
+            label="public activity"
+            retry={retry}
+          />
           <ul className="mt-3 divide-y divide-border overflow-hidden rounded-lg shadow-[var(--shadow-border)]">
             {events.map((event) => (
               <li
