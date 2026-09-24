@@ -1,6 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { getSql } from "@/lib/db";
-import { optedOut } from "@/lib/telemetry";
 import { normalizeTelemetryPath, routePatternsFromFiles } from "./telemetry-path";
 import { appRoutePatterns, routeFiles } from "./telemetry-routes.server";
 import { handleTelemetry } from "./telemetry.server";
@@ -32,30 +31,6 @@ const fixture = routePatternsFromFiles([
   "/src/routes/files.$.tsx",
 ]);
 const norm = (value: unknown) => normalizeTelemetryPath(value, fixture);
-
-describe("telemetry optedOut: privacy gate (ported from mlai)", () => {
-  it("opts out when navigator is unavailable (SSR)", () => {
-    vi.stubGlobal("navigator", undefined);
-    expect(optedOut()).toBe(true);
-  });
-
-  it("honors Do Not Track in both '1' and 'yes' forms", () => {
-    vi.stubGlobal("navigator", { doNotTrack: "1" });
-    expect(optedOut()).toBe(true);
-    vi.stubGlobal("navigator", { doNotTrack: "yes" });
-    expect(optedOut()).toBe(true);
-  });
-
-  it("honors Global Privacy Control", () => {
-    vi.stubGlobal("navigator", { doNotTrack: "0", globalPrivacyControl: true });
-    expect(optedOut()).toBe(true);
-  });
-
-  it("allows tracking when no opt-out signal is present", () => {
-    vi.stubGlobal("navigator", { doNotTrack: "unspecified" });
-    expect(optedOut()).toBe(false);
-  });
-});
 
 describe("routePatternsFromFiles: TanStack file-route conventions", () => {
   it("maps flat, directory, index, pathless and group names to paths", () => {

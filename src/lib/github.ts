@@ -68,12 +68,11 @@ async function readJson(url: string, browser = false) {
   return response.json();
 }
 
-function excerptMarkdown(md: string) {
+export function excerptMarkdown(md: string) {
   const cleaned = md
     .replace(/```[\s\S]*?```/g, " ")
     .replace(/<[^>]+>/g, " ")
     .replace(/!\[[^\]]*]\([^)]*\)/g, " ")
-    .replace(/\[([^\]]+)]\([^)]*\)/g, "$1")
     .split("\n")
     .map((line) => line.trim())
     .filter((line) => {
@@ -84,8 +83,13 @@ function excerptMarkdown(md: string) {
       if (line.startsWith("- [")) return false;
       if (line.startsWith("* [")) return false;
       if (/^[-*_]{3,}$/.test(line)) return false;
+      // Setext H1 underline ("Title\n=====").
+      if (/^=+$/.test(line)) return false;
       return true;
-    });
+    })
+    // Unwrap links only after filtering, so the "- [" / "* [" TOC rules still see them.
+    .map((line) => line.replace(/\[([^\]]+)]\([^)]*\)/g, "$1").trim())
+    .filter(Boolean);
   const text = cleaned.slice(0, 4).join(" ").replace(/\s+/g, " ").trim();
   if (text.length <= 420) return text;
   return `${text.slice(0, 417).replace(/\s+\S*$/, "")}…`;
