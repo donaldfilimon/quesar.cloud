@@ -12,6 +12,7 @@ native/
 public/
 # Dated records (some imported from mlai): kept byte-for-byte.
 notes/
-# Session-plugin state.
+# Session-plugin state and synced skill mirrors.
 .remember/
 .claude/
+.agents/
