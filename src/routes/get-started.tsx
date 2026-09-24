@@ -20,7 +20,7 @@ function GetStartedPage() {
       <PageHero
         eyebrow="Get started"
         title="What would you like to do?"
-        lede="Read first, run locally, or build from source. Choose a path to see what is available and what you need. Setup commands live on the matching app and docs pages, not as a redirect away."
+        lede="Read first, try a browser preview, or run the software from source. Choose a path to see what is available and what you need. The linked pages explain each surface; repository READMEs are the setup authority."
       />
       <Section>
         <div className="space-y-10">

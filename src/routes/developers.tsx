@@ -13,6 +13,7 @@ import {
 } from "@/components/site";
 import { setups } from "@/lib/content";
 import { pageHead } from "@/lib/seo";
+import { staticSite } from "@/lib/static-site";
 
 export const Route = createFileRoute("/developers")({
   head: () =>
@@ -105,7 +106,9 @@ function DevelopersPage() {
           {
             to: "/console",
             label: "Console",
-            body: "Sign in and save what you observed on a node.",
+            body: staticSite
+              ? "Field notes need the server deployment."
+              : "Sign in and save what you observed on a node.",
           },
           { to: "/services", label: "Services", body: "Audit, design, build, harden." },
           { to: "/contact", label: "Contact", body: "The public path is source." },

@@ -73,12 +73,13 @@ export const startJourneys = [
   },
   {
     id: "abbey",
-    title: "Run Abbey locally",
-    description: productJourneys[1].purpose,
-    availability: productJourneys[1].availability,
-    prerequisites: productJourneys[1].prerequisites,
+    title: "Explore Abbey's workspace",
+    description:
+      "Try the browser-only document loop, then follow the source setup for the local Abbey app.",
+    availability: "Browser preview; local app runs from source",
+    prerequisites: `A browser for this preview. To run the app locally: ${productJourneys[1].prerequisites}`,
     href: "/workspace",
-    label: "Open the workspace",
+    label: "Open browser workspace",
   },
   {
     id: "mobile",

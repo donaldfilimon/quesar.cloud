@@ -4,6 +4,7 @@ import { JourneyRail, PageClose, PageHero, Section, StepList } from "@/component
 import { architectureSteps } from "@/lib/content";
 import { isArchitectureNodeId } from "@/lib/architecture-node-ids";
 import { pageHead } from "@/lib/seo";
+import { staticSite } from "@/lib/static-site";
 
 type NodeSearch = { node?: string };
 
@@ -39,7 +40,13 @@ function ArchitecturePage() {
         lede="Select a component to see what is current in source versus what is not claimed. Motion on the connectors is a reminder that work flows; it is not a performance graph."
       />
       <JourneyRail current="architecture" />
-      <Section lede="Click a node. The inspector lists implemented scope and the claims this site refuses. Save a field note on the same node after you sign in.">
+      <Section
+        lede={
+          staticSite
+            ? "Select a node. The inspector lists implemented scope and the claims this site refuses. Field notes need the server deployment."
+            : "Select a node. The inspector lists implemented scope and the claims this site refuses. Save a field note on the same node after you sign in."
+        }
+      >
         <ArchitectureDiagram
           selectedId={node ?? "quesar"}
           onSelect={(id) => {
@@ -61,7 +68,9 @@ function ArchitecturePage() {
           {
             to: "/console",
             label: "Console",
-            body: "Sign in and save what is current versus not claimed.",
+            body: staticSite
+              ? "Field notes need the server deployment."
+              : "Sign in and save what is current versus not claimed.",
           },
           {
             to: "/developers",
