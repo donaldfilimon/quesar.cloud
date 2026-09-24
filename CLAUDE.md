@@ -10,10 +10,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Commands
 
-bun is the package manager (`bun.lock`; there is no `package-lock.json`). The tools themselves run on Node (>= 24): use `bun run <script>`, never `bun --bun`, and never bare `bun test` (that is Bun's own runner, not vitest).
+bun is the package manager (`bun.lock`; there is no `package-lock.json`). It must be Bun >= 1.4.2 (`packageManager`/`engines.bun`): `bun.lock` is lockfileVersion 2, which older Bun rejects with "Unknown lockfile version". In Claude Code on the web, `.claude/hooks/session-start.sh` upgrades an older Bun and runs `bun install --frozen-lockfile` at session start. The tools themselves run on Node (>= 24): use `bun run <script>`, never `bun --bun`, and never bare `bun test` (that is Bun's own runner, not vitest).
 
 ```bash
-bun install          # --frozen-lockfile in CI and on Vercel (vercel.json)
+bun install          # --frozen-lockfile on Vercel (vercel.json) and in the session-start hook
 bun run dev          # 0.0.0.0:8080, strictPort
 bun run typecheck    # tsc --noEmit over src/, scripts/ and the vite/vitest/eslint configs
 bun run lint         # eslint 10 + react-hooks 7 (React Compiler rules), --max-warnings 0
