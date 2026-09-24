@@ -8,7 +8,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import type { Hit } from "./search-panel";
+import type { SearchHit } from "@/lib/site-search";
 
 // The catalog indexes every content dataset and pulls in cmdk. This trigger is
 // in the header on every page, so the panel loads on first intent (hover,
@@ -49,14 +49,14 @@ export function SiteSearch() {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  function go(hit: Hit) {
+  function go(hit: SearchHit) {
     setOpen(false);
     setQuery("");
     if (hit.external) {
       window.open(hit.href, "_blank", "noopener,noreferrer");
       return;
     }
-    void navigate({ to: hit.href as never, search: hit.search as never });
+    void navigate({ to: hit.href as never, search: hit.search as never, hash: hit.hash });
   }
 
   return (

@@ -17,6 +17,8 @@ export default tseslint.config(
       "src/routeTree.gen.ts",
       // Built static site (bun run build:static) published by GitHub Pages.
       "docs/**",
+      "test-results/**",
+      "playwright-report/**",
       // Standalone projects with their own toolchains (Bun, Gradle, Swift),
       // outside the npm build. See their READMEs.
       "sidecars/**",

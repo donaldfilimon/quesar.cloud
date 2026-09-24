@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { AppLink } from "@/components/site/app-link";
 import { PageClose, PageHero, Section } from "@/components/site";
-import { searchIndex } from "@/lib/content";
+import { searchIndex } from "@/lib/search-pages";
 import { appSurfaces } from "@/lib/catalog";
 import { internalHref, isExternal } from "@/lib/internal";
 import { linkHub } from "@/lib/mlai/pages";
