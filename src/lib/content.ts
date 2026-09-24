@@ -510,26 +510,26 @@ export const investor = {
 export const setups = [
   {
     title: "Website (this surface)",
-    body: "Orientation, docs, research, and in-browser apps. Independent of mobile and builder gates.",
-    code: "bun run check:web",
-    href: "/developers",
+    body: "From this repository root: formatting, types, lint, tests, and the server build. Publish the static site with a separate build.",
+    code: "bun run check\nbun run build:static",
+    href: "/docs/deployment",
   },
   {
     title: "Abbey workspace",
-    body: "Node 24, Bun 1.4, uv, Java 21+, LibreOffice. A local model is optional. This site does not provision a session.",
-    code: "bun run check:website-app",
+    body: "The browser workspace here is a preview. The separate local Abbey app has its own setup and verification in its source README.",
+    code: null,
     href: "/workspace",
   },
   {
-    title: "Quasar builder",
-    body: "Local v1: Bun 1.4, Anthropic credentials, service + Expo. Writes a Next.js project to disk.",
-    code: "bun run check:quasar",
+    title: "Quasar service",
+    body: "A standalone Bun project under sidecars/. Its tests and typecheck do not run in the website gate. Generation needs Anthropic credentials.",
+    code: "cd sidecars/quasar-service\nbun test\nbun run typecheck",
     href: "/quesar",
   },
   {
-    title: "Mobile companion",
-    body: "Expo SDK 53. Native CloudKit is a signed iOS build. The page here is the web vault.",
-    code: "bun run check:mobile",
+    title: "Mobile and native",
+    body: "The web vault is a browser preview. The separate native shell has no root check script; Android sync and device validation are separate work.",
+    code: null,
     href: "/mobile",
   },
   {
@@ -543,10 +543,11 @@ export const setups = [
 export const repos = [
   {
     owner: "donaldfilimon",
-    name: "MLAI-CORPORATION-WWW",
-    summary: "Integration home: website, mobile, Quasar, Abbey workspace, research-sites.",
+    name: "quesar.cloud",
+    summary:
+      "Current MLAI/Quesar website, public docs, browser previews, and local service clients.",
     language: "TypeScript",
-    href: "/developers",
+    href: "https://github.com/donaldfilimon/quesar.cloud",
     kind: "core" as RepoKind,
   },
   {
@@ -596,6 +597,14 @@ export const repos = [
     language: "TypeScript",
     href: "/workspace",
     kind: "surface" as RepoKind,
+  },
+  {
+    owner: "donaldfilimon",
+    name: "MLAI-CORPORATION-WWW",
+    summary: "Former MLAI site; retained as a port source after quesar.cloud superseded it.",
+    language: "TypeScript",
+    href: "https://github.com/donaldfilimon/MLAI-CORPORATION-WWW",
+    kind: "related" as RepoKind,
   },
   {
     owner: "donaldfilimon",
@@ -769,23 +778,23 @@ export const searchIndex = [
 
 export const homeStart = [
   {
-    title: "Read the architecture",
-    body: "Click a node. Current in source versus not claimed is listed in the inspector.",
+    title: "Understand the architecture",
+    body: "Inspect each layer, its source-backed behavior, and the limits named beside it.",
     href: "/architecture",
   },
   {
-    title: "Keep a field note",
-    body: "Sign in, pick a node, write what you observed. Notes stay on your account — not Abbey memory.",
-    href: "/console",
+    title: "Explore the research",
+    body: "Read the ideas, citations, and implementation limits behind the system.",
+    href: "/research",
   },
   {
-    title: "Investors",
-    body: "TAM, SAM, SOM, and ARR are tagged. A target is never a result.",
-    href: "/investors",
+    title: "Compare the products",
+    body: "See what each surface does, how to try it, and what remains in development.",
+    href: "/products",
   },
   {
     title: "Read the source",
-    body: "Live GitHub READMEs when GitHub answers. Local excerpts when it does not.",
+    body: "Open the public repositories and their local setup guides.",
     href: "/developers",
   },
 ] as const;

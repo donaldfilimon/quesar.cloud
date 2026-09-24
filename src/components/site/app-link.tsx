@@ -6,13 +6,15 @@ export function AppLink({
   to,
   className,
   children,
+  external = false,
 }: {
   to: string;
   className?: string;
   children: ReactNode;
+  external?: boolean;
 }) {
-  const href = internalHref(to);
-  if (isExternal(href)) {
+  const href = external ? to : internalHref(to);
+  if (external || isExternal(href)) {
     return (
       <a href={href} className={className} rel="noreferrer">
         {children}

@@ -30,7 +30,7 @@ const organizationLd = {
 
 const HOME_TITLE = `${site.name}: AI memory that can show its sources`;
 const HOME_DESCRIPTION =
-  "Quesar is MLAI's infrastructure for persistent AI. Every answer keeps a weighted chain back to the records it came from, on machines you own.";
+  "Explore Quesar's source-backed architecture for persistent AI, provenance-aware memory, and local runtimes.";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -44,6 +44,7 @@ function Home() {
   return (
     <>
       <Hero />
+      <StartHere />
       <Row id="problem" label="The problem" title="Sessions forget. A substrate keeps the record.">
         <Transcripts />
       </Row>
@@ -103,7 +104,6 @@ function Home() {
         </dl>
         <p className="mt-8 text-sm text-fg-subtle">{site.apple}</p>
       </Row>
-      <StartHere />
     </>
   );
 }
@@ -118,8 +118,9 @@ function Hero() {
             AI memory that can show its sources.
           </h1>
           <p className="mt-7 max-w-[54ch] text-lg leading-8 text-fg-muted">
-            Quesar is MLAI's infrastructure for persistent AI. Every answer keeps a weighted chain
-            back to the records it came from, and the whole stack runs on machines you own.
+            Quesar connects assistant workflows to provenance-aware memory, so retrieved answers can
+            lead back to their records. Explore the public architecture and source here, then run
+            the components on your own machines.
           </p>
           <div className="mt-9 flex flex-wrap gap-3">
             <Button asChild size="lg">
@@ -225,19 +226,30 @@ function Transcripts() {
 
 function StartHere() {
   return (
-    <section aria-labelledby="start-title">
+    <section
+      id="start"
+      aria-labelledby="start-title"
+      className="scroll-mt-20 border-b border-border"
+    >
       <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24">
         <p className="eyebrow">Start here</p>
         <h2 id="start-title" className="section-title mt-4 max-w-[20ch]">
-          Pick the door that matches why you came.
+          Find your way into the work.
         </h2>
+        <p className="mt-4 max-w-2xl text-base leading-relaxed text-fg-muted">
+          These paths are open on the public site. Running the software starts from its source and
+          setup guides.
+        </p>
         <ul className="mt-10 grid border-t border-border sm:grid-cols-2">
           {homeStart.map((item) => (
             <li
               key={item.href}
               className="border-b border-border sm:odd:border-r sm:odd:pr-8 sm:even:pl-8"
             >
-              <Link to={item.href} className="group block py-6 no-underline">
+              <Link
+                to={item.href}
+                className="group block rounded-sm py-6 no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+              >
                 <span className="font-display text-xl tracking-tight text-fg group-hover:text-accent">
                   {item.title}
                 </span>

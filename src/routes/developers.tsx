@@ -13,6 +13,7 @@ import {
 } from "@/components/site";
 import { setups } from "@/lib/content";
 import { pageHead } from "@/lib/seo";
+import { staticSite } from "@/lib/static-site";
 
 export const Route = createFileRoute("/developers")({
   head: () =>
@@ -43,20 +44,22 @@ function DevelopersPage() {
         <RepoList />
       </Section>
 
-      <Section eyebrow="Local development" title="Each surface has its own gate.">
+      <Section eyebrow="Local development" title="Check each source tree on its own terms.">
         <div className="grid gap-4 lg:grid-cols-2">
           {setups.map((item) => (
             <Surface key={item.title}>
               <h3 className="font-display text-xl">{item.title}</h3>
               <p className="mt-2 text-sm text-fg-muted">{item.body}</p>
-              <div className="mt-4">
-                <CodeBlock code={item.code} label={item.title} />
-              </div>
+              {item.code ? (
+                <div className="mt-4">
+                  <CodeBlock code={item.code} label={item.title} />
+                </div>
+              ) : null}
               <Link
                 to={item.href as never}
                 className="mt-3 inline-flex min-h-11 items-center text-sm font-medium text-accent"
               >
-                Setup notes
+                Read details
               </Link>
             </Surface>
           ))}
@@ -105,7 +108,9 @@ function DevelopersPage() {
           {
             to: "/console",
             label: "Console",
-            body: "Sign in and save what you observed on a node.",
+            body: staticSite
+              ? "Field notes need the server deployment."
+              : "Sign in and save what you observed on a node.",
           },
           { to: "/services", label: "Services", body: "Audit, design, build, harden." },
           { to: "/contact", label: "Contact", body: "The public path is source." },

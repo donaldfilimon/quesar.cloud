@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { WorkspaceApp } from "@/components/apps/workspace-app";
 import { HeroStatus, PageClose, PageHero, Section } from "@/components/site";
 import { pageHead } from "@/lib/seo";
+import { staticSite } from "@/lib/static-site";
 
 export const Route = createFileRoute("/workspace")({
   head: () =>
@@ -22,7 +23,11 @@ function WorkspacePage() {
       >
         <HeroStatus
           status="current"
-          note="Notes stay in this browser. Live model requires sign-in."
+          note={
+            staticSite
+              ? "Documents stay in this browser. The live model is unavailable on this static site."
+              : "Notes stay in this browser. Live model requires sign-in."
+          }
         />
       </PageHero>
       <Section>

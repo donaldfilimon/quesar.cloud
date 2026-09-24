@@ -46,10 +46,10 @@ const RAW_HEADERS = {
 };
 
 const FEATURED_READMES = [
+  "quesar.cloud",
   "abi",
   "wdbx",
   "abbey",
-  "MLAI-CORPORATION-WWW",
   "skill-creator",
   "abbey-bot",
   "gama",

@@ -7,10 +7,26 @@ import { Link } from "@tanstack/react-router";
 export function ServerOnlyNotice({
   feature,
   className = "",
+  compact = false,
 }: {
   feature: string;
   className?: string;
+  compact?: boolean;
 }) {
+  if (compact) {
+    return (
+      <div
+        className={`rounded-lg border border-border bg-bg-elevated p-4 ${className}`}
+        role="note"
+      >
+        <p className="text-xs text-accent">Static preview</p>
+        <p className="mt-2 text-sm leading-relaxed text-fg-muted">
+          {feature} requires the server deployment, which is not live here.
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div
       className={`mx-auto max-w-2xl rounded-lg border border-border bg-bg-elevated p-6 ${className}`}

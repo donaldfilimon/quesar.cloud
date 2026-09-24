@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { askPersonaFromClient } from "@/lib/ai";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { readStore, writeStore } from "@/lib/local-store";
+import { staticSite } from "@/lib/static-site";
+import { ServerOnlyNotice } from "@/components/site/server-only-notice";
 
 type Doc = { id: string; title: string; body: string; updated: number };
 
@@ -192,25 +194,36 @@ export function WorkspaceApp() {
       </div>
       <aside className="p-4 sm:p-5">
         <p className="text-xs text-accent">Assistant</p>
-        <p className="mt-2 text-xs text-fg-muted">
-          {user
-            ? "Signed in. Live model is user-initiated and capped."
-            : "Local notes work offline. Sign in to ask Abbey."}
-        </p>
-        <textarea
-          value={question}
-          onChange={(event) => setQuestion(event.target.value.slice(0, 400))}
-          className="mt-3 min-h-24 w-full rounded-md bg-bg px-3 py-2 text-sm shadow-[var(--shadow-border)] outline-none"
-        />
-        <Button
-          type="button"
-          className="mt-3"
-          onClick={() => void ask()}
-          disabled={status === "asking"}
-        >
-          {status === "asking" ? "Asking…" : "Ask Abbey"}
-        </Button>
-        {answer ? <p className="mt-4 text-sm leading-relaxed text-fg-muted">{answer}</p> : null}
+        {staticSite ? (
+          <>
+            <p className="mt-2 text-sm leading-relaxed text-fg-muted">
+              Documents on this page stay in this browser.
+            </p>
+            <ServerOnlyNotice feature="Asking Abbey" compact className="mt-4" />
+          </>
+        ) : (
+          <>
+            <p className="mt-2 text-xs text-fg-muted">
+              {user
+                ? "Signed in. Live model is user-initiated and capped."
+                : "Local notes work offline. Sign in to ask Abbey."}
+            </p>
+            <textarea
+              value={question}
+              onChange={(event) => setQuestion(event.target.value.slice(0, 400))}
+              className="mt-3 min-h-24 w-full rounded-md bg-bg px-3 py-2 text-sm shadow-[var(--shadow-border)] outline-none"
+            />
+            <Button
+              type="button"
+              className="mt-3"
+              onClick={() => void ask()}
+              disabled={status === "asking"}
+            >
+              {status === "asking" ? "Asking…" : "Ask Abbey"}
+            </Button>
+            {answer ? <p className="mt-4 text-sm leading-relaxed text-fg-muted">{answer}</p> : null}
+          </>
+        )}
       </aside>
     </div>
   );
