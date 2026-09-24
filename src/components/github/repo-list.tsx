@@ -5,6 +5,7 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { repos, type RepoKind } from "@/lib/content";
 import { loadGithubData, type EventItem, type LiveRepo } from "@/lib/github";
 import { pathForRepo } from "@/lib/catalog";
+import { isAbsoluteUrl } from "@/lib/internal";
 import { cn } from "@/lib/utils";
 
 type LoadState = "loading" | "ready" | "unavailable";
@@ -117,51 +118,47 @@ export function RepoList({ compact = false }: { compact?: boolean }) {
       ) : null}
 
       <ul className={cn("grid gap-3", compact ? "sm:grid-cols-2" : "lg:grid-cols-2")}>
-        {catalog.map(({ repo, live: row }) => (
-          <li key={repo.name}>
-            <AppLink
-              to={repo.href}
-              external={repo.href.startsWith("https://")}
-              className="surface surface-hover flex h-full flex-col p-4 no-underline"
-            >
-              <div className="flex items-start justify-between gap-3">
-                <p className="truncate font-mono text-[0.7rem] text-fg-subtle">
-                  {repo.owner}/{repo.name}
-                </p>
-                {repo.name === "MLAI-CORPORATION-WWW" ? (
-                  <span className="text-xs text-fg-subtle">port source</span>
-                ) : row?.archived || repo.name === "mlai-website-app" ? (
-                  <span className="text-xs text-fg-subtle">archived</span>
+        {catalog.map(({ repo, live: row }) => {
+          const badge = repo.badge ?? (row?.archived ? "archived" : null);
+          const summary = repo.pinnedSummary ? repo.summary : row?.description || repo.summary;
+          return (
+            <li key={repo.name}>
+              <AppLink
+                to={repo.href}
+                external={isAbsoluteUrl(repo.href)}
+                className="surface surface-hover flex h-full flex-col p-4 no-underline"
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <p className="truncate font-mono text-[0.7rem] text-fg-subtle">
+                    {repo.owner}/{repo.name}
+                  </p>
+                  {badge ? <span className="text-xs text-fg-subtle">{badge}</span> : null}
+                </div>
+                <p className="mt-2 text-sm font-medium text-fg">{summary}</p>
+                {row?.topics?.length ? (
+                  <p className="mt-2 font-mono text-[10px] text-fg-subtle">
+                    {row.topics.slice(0, 6).join(" · ")}
+                  </p>
                 ) : null}
-              </div>
-              <p className="mt-2 text-sm font-medium text-fg">
-                {repo.name === "quesar.cloud" || repo.name === "MLAI-CORPORATION-WWW"
-                  ? repo.summary
-                  : row?.description || repo.summary}
-              </p>
-              {row?.topics?.length ? (
-                <p className="mt-2 font-mono text-[10px] text-fg-subtle">
-                  {row.topics.slice(0, 6).join(" · ")}
+                <p className="mt-auto pt-4 font-mono text-[0.7rem] text-fg-muted">
+                  {row?.language ?? repo.language}
+                  {row ? (
+                    <>
+                      <span aria-hidden="true"> · </span>
+                      {row.stars} {row.stars === 1 ? "star" : "stars"}
+                      {row.updated ? (
+                        <>
+                          <span aria-hidden="true"> · </span>
+                          {relTime(row.updated)}
+                        </>
+                      ) : null}
+                    </>
+                  ) : null}
                 </p>
-              ) : null}
-              <p className="mt-auto pt-4 font-mono text-[0.7rem] text-fg-muted">
-                {row?.language ?? repo.language}
-                {row ? (
-                  <>
-                    <span aria-hidden="true"> · </span>
-                    {row.stars} {row.stars === 1 ? "star" : "stars"}
-                    {row.updated ? (
-                      <>
-                        <span aria-hidden="true"> · </span>
-                        {relTime(row.updated)}
-                      </>
-                    ) : null}
-                  </>
-                ) : null}
-              </p>
-            </AppLink>
-          </li>
-        ))}
+              </AppLink>
+            </li>
+          );
+        })}
       </ul>
 
       {catalog.length === 0 ? (

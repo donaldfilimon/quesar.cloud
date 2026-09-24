@@ -540,7 +540,22 @@ export const setups = [
   },
 ] as const;
 
-export const repos = [
+export type Repo = {
+  owner: string;
+  name: string;
+  /** Local copy; shown when GitHub has no description or `pinnedSummary` is set. */
+  summary: string;
+  language: string;
+  /** A site route, or an absolute URL that is linked as-is. */
+  href: string;
+  kind: RepoKind;
+  /** Card label that overrides GitHub's own archived flag. */
+  badge?: "archived" | "port source";
+  /** Prefer `summary` over the live GitHub description. */
+  pinnedSummary?: true;
+};
+
+export const repos: readonly Repo[] = [
   {
     owner: "donaldfilimon",
     name: "quesar.cloud",
@@ -548,7 +563,8 @@ export const repos = [
       "Current MLAI/Quesar website, public docs, browser previews, and local service clients.",
     language: "TypeScript",
     href: "https://github.com/donaldfilimon/quesar.cloud",
-    kind: "core" as RepoKind,
+    kind: "core",
+    pinnedSummary: true,
   },
   {
     owner: "donaldfilimon",
@@ -556,7 +572,7 @@ export const repos = [
     summary: "Nightly Rust agent runtime. WDBX sibling required.",
     language: "Rust",
     href: "/abi",
-    kind: "core" as RepoKind,
+    kind: "core",
   },
   {
     owner: "donaldfilimon",
@@ -564,7 +580,7 @@ export const repos = [
     summary: "Provenance-aware episodic substrate extracted from abi with history preserved.",
     language: "Rust",
     href: "/wdbx",
-    kind: "core" as RepoKind,
+    kind: "core",
   },
   {
     owner: "donaldfilimon",
@@ -572,7 +588,7 @@ export const repos = [
     summary: "CLI/TUI companion that will not claim what the ledger cannot prove.",
     language: "Rust",
     href: "/abbey",
-    kind: "core" as RepoKind,
+    kind: "core",
   },
   {
     owner: "donaldfilimon",
@@ -580,7 +596,7 @@ export const repos = [
     summary: "Companion bot surface for Abbey.",
     language: "Rust",
     href: "/abbey-bot",
-    kind: "surface" as RepoKind,
+    kind: "surface",
   },
   {
     owner: "donaldfilimon",
@@ -588,7 +604,7 @@ export const repos = [
     summary: "Native macOS SwiftUI companion for Abbey Bot.",
     language: "Swift",
     href: "/companion",
-    kind: "surface" as RepoKind,
+    kind: "surface",
   },
   {
     owner: "donaldfilimon",
@@ -596,7 +612,8 @@ export const repos = [
     summary: "Public website, Abbey workspace, developer console, customer portal.",
     language: "TypeScript",
     href: "/workspace",
-    kind: "surface" as RepoKind,
+    kind: "surface",
+    badge: "archived",
   },
   {
     owner: "donaldfilimon",
@@ -604,7 +621,9 @@ export const repos = [
     summary: "Former MLAI site; retained as a port source after quesar.cloud superseded it.",
     language: "TypeScript",
     href: "https://github.com/donaldfilimon/MLAI-CORPORATION-WWW",
-    kind: "related" as RepoKind,
+    kind: "related",
+    badge: "port source",
+    pinnedSummary: true,
   },
   {
     owner: "donaldfilimon",
@@ -612,7 +631,7 @@ export const repos = [
     summary: "Public agent skill for shipping this site without breaking integrity rules.",
     language: "Markdown",
     href: "/skill-creator",
-    kind: "skill" as RepoKind,
+    kind: "skill",
   },
   {
     owner: "donaldfilimon",
@@ -620,7 +639,7 @@ export const repos = [
     summary: "abi-mega: skills, assets, and scripts consumed by ABI sync.",
     language: "Python",
     href: "/plugins",
-    kind: "skill" as RepoKind,
+    kind: "skill",
   },
   {
     owner: "donaldfilimon",
@@ -628,7 +647,7 @@ export const repos = [
     summary: "Declarative Swift UI framework. Founder-owned, not a Quesar product.",
     language: "Swift",
     href: "/gama",
-    kind: "related" as RepoKind,
+    kind: "related",
   },
   {
     owner: "donaldfilimon",
@@ -636,7 +655,7 @@ export const repos = [
     summary: "Systems language: Rust ownership, Swift ergonomics, Zig control, C ABI.",
     language: "Zig",
     href: "/source/cell-lang",
-    kind: "related" as RepoKind,
+    kind: "related",
   },
   {
     owner: "donaldfilimon",
@@ -644,7 +663,7 @@ export const repos = [
     summary: "Cellular-automaton experiment in Bun and TypeScript.",
     language: "TypeScript",
     href: "/source/cell-machine",
-    kind: "related" as RepoKind,
+    kind: "related",
   },
   {
     owner: "donaldfilimon",
@@ -652,7 +671,7 @@ export const repos = [
     summary: "Voxel-world experiment. Not a Quesar product surface.",
     language: "Rust",
     href: "/source/nyon",
-    kind: "related" as RepoKind,
+    kind: "related",
   },
   {
     owner: "donaldfilimon",
@@ -660,9 +679,9 @@ export const repos = [
     summary: "Earlier marketing site. Current orientation lives here.",
     language: "JavaScript",
     href: "/quesar",
-    kind: "surface" as RepoKind,
+    kind: "surface",
   },
-] as const;
+];
 
 export const searchIndex = [
   {

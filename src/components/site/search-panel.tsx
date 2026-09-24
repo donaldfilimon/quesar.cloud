@@ -2,6 +2,7 @@ import { Command } from "cmdk";
 import { Search as SearchIcon } from "lucide-react";
 import { useMemo } from "react";
 import { architectureNodes, repos, searchIndex } from "@/lib/content";
+import { isAbsoluteUrl } from "@/lib/internal";
 import { blog } from "@/lib/mlai/categories/blog";
 import { docs } from "@/lib/mlai/categories/docs";
 import { products as productPages } from "@/lib/mlai/categories/products";
@@ -32,7 +33,7 @@ const catalog: Hit[] = [
     href: item.href,
     group: item.group,
     body: item.body,
-    external: item.href.startsWith("http"),
+    external: isAbsoluteUrl(item.href),
   })),
   ...architectureNodes.map((node) => ({
     title: node.name,
@@ -47,7 +48,7 @@ const catalog: Hit[] = [
     href: repo.href,
     group: "Source",
     body: repo.summary,
-    external: false,
+    external: isAbsoluteUrl(repo.href),
   })),
   ...docs.map((doc) => ({
     title: doc.title,
