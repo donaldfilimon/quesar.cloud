@@ -1,1 +1,0 @@
-import{gt as e}from"./index-gIdFAtgf.js";var t=e({type:`function`});export{t};
