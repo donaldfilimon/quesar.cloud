@@ -1,0 +1,1 @@
+var e=[`user`,`quesar`,`abi`,`tools`,`router`,`context`,`wdbx`,`memory`,`embed`,`provenance`,`compute`,`output`];function t(t){return typeof t==`string`&&e.includes(t)}export{t};
