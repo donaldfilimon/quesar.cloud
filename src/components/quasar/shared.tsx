@@ -87,7 +87,7 @@ export function Notice({
 
 export function Command({ children }: { children: string }) {
   return (
-    <code className="block overflow-x-auto rounded-md bg-bg-subtle px-3 py-2 font-mono text-[0.8rem] text-fg shadow-[var(--shadow-border)]">
+    <code className="block overflow-x-auto rounded-md bg-bg-subtle px-3 py-2 font-mono text-0.8rem text-fg shadow-border">
       {children}
     </code>
   );

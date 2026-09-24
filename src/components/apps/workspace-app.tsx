@@ -148,7 +148,7 @@ export function WorkspaceApp() {
                 onClick={() => openDoc(doc)}
               >
                 <span className="block truncate">{doc.title || "Untitled"}</span>
-                <span className="mt-0.5 block font-mono text-[10px] text-fg-subtle">
+                <span className="mt-0.5 block font-mono text-10 text-fg-subtle">
                   {new Date(doc.updated).toLocaleDateString()}
                 </span>
               </button>
@@ -178,7 +178,7 @@ export function WorkspaceApp() {
               }}
               className="w-full bg-transparent font-display text-2xl outline-none"
             />
-            <p className="mt-2 font-mono text-[10px] text-fg-subtle">
+            <p className="mt-2 font-mono text-10 text-fg-subtle">
               {words} words · saved in this browser
             </p>
             <textarea
@@ -211,7 +211,7 @@ export function WorkspaceApp() {
             <textarea
               value={question}
               onChange={(event) => setQuestion(event.target.value.slice(0, 400))}
-              className="mt-3 min-h-24 w-full rounded-md bg-bg px-3 py-2 text-sm shadow-[var(--shadow-border)] outline-none"
+              className="mt-3 min-h-24 w-full rounded-md bg-bg px-3 py-2 text-sm shadow-border outline-none"
             />
             <Button
               type="button"

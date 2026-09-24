@@ -93,7 +93,7 @@ function AbbeyPage() {
         <p className="mt-4 mb-6 text-sm text-fg-muted">
           Enumerated with evidence in <code className="font-mono">{abbeyLedger.source}</code>,
           schema {abbeyLedger.schema}, digest{" "}
-          <code className="font-mono text-[11px] break-all">{abbeyLedger.digest}</code>.{" "}
+          <code className="font-mono text-11 break-all">{abbeyLedger.digest}</code>.{" "}
           <ProvTag tag="reported" className="ml-1 align-middle" />
         </p>
         <StatGrid

@@ -63,7 +63,7 @@ export function TelemetrySummaryPanel() {
                   : `${(summary.conversion.rate * 100).toFixed(2)}%`,
               ],
             ].map(([label, value]) => (
-              <div key={label} className="rounded-lg bg-card p-4 shadow-[var(--shadow-border)]">
+              <div key={label} className="rounded-lg bg-card p-4 shadow-border">
                 <dt className="text-xs text-fg-subtle">{label}</dt>
                 <dd className="mt-2 font-display text-2xl text-fg tabular-nums">{value}</dd>
               </div>

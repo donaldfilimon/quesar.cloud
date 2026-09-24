@@ -32,17 +32,14 @@ export function ArticleBody({
             </h2>
           ) : null}
           {section.paragraphs?.map((p) => (
-            <p
-              key={p.slice(0, 48)}
-              className="mt-4 max-w-[66ch] text-[1.0625rem] leading-8 text-fg"
-            >
+            <p key={p.slice(0, 48)} className="mt-4 max-w-[66ch] text-1.0625rem leading-8 text-fg">
               {p}
             </p>
           ))}
           {section.list?.length ? (
             <ul className="mt-5 max-w-[66ch] space-y-3">
               {section.list.map((item) => (
-                <li key={item} className="flex gap-3 text-[1.0625rem] leading-8 text-fg">
+                <li key={item} className="flex gap-3 text-1.0625rem leading-8 text-fg">
                   <span
                     className="mt-3 size-1.5 shrink-0 rounded-full bg-primary"
                     aria-hidden="true"
@@ -55,7 +52,7 @@ export function ArticleBody({
           {section.math?.map((tex) => (
             <pre
               key={tex}
-              className="mt-4 overflow-x-auto rounded-lg border border-border bg-muted px-4 py-3 font-mono text-[0.8rem] leading-7 text-foreground"
+              className="mt-4 overflow-x-auto rounded-lg border border-border bg-muted px-4 py-3 font-mono text-0.8rem leading-7 text-foreground"
             >
               {tex}
             </pre>

@@ -81,7 +81,7 @@ export function AuditReview() {
 
   return (
     <div className="grid gap-6">
-      <div className="grid gap-3 rounded-xl bg-card p-5 shadow-[var(--shadow-border)]">
+      <div className="grid gap-3 rounded-xl bg-card p-5 shadow-border">
         <div>
           <Label htmlFor="admin-reason">Reason for this access</Label>
           <Textarea
@@ -93,7 +93,7 @@ export function AuditReview() {
             onChange={(event) => setReason(event.target.value)}
             placeholder={`Why you are reviewing these records (${REASON_MIN}–${REASON_MAX} characters). Logged with every action.`}
           />
-          <p className="mt-1 font-mono text-[10px] text-fg-subtle">
+          <p className="mt-1 font-mono text-10 text-fg-subtle">
             {trimmed.length}/{REASON_MAX}
           </p>
         </div>
@@ -123,7 +123,7 @@ export function AuditReview() {
           {audits.map((audit) => (
             <li
               key={audit.id}
-              className="grid gap-3 rounded-lg bg-card p-3 shadow-[var(--shadow-border)] sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center"
+              className="grid gap-3 rounded-lg bg-card p-3 shadow-border sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center"
             >
               <div className="min-w-0">
                 <p className="truncate font-mono text-xs text-fg">{audit.userId}</p>

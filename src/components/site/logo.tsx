@@ -7,7 +7,7 @@ export function Mark({ className, mono = false }: { className?: string; mono?: b
     <span
       className={cn(
         "relative inline-flex size-8 shrink-0 items-center justify-center rounded-[10px]",
-        mono ? "text-current" : "bg-bg-elevated text-accent shadow-[var(--shadow-border)]",
+        mono ? "text-current" : "bg-bg-elevated text-accent shadow-border",
         className,
       )}
       aria-hidden="true"

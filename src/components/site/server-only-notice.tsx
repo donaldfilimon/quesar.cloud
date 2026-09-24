@@ -3,6 +3,7 @@ import { Link } from "@tanstack/react-router";
 /**
  * Shown in the static GitHub Pages build wherever a feature needs the server
  * deployment (sign-in, console, admin, profile, connectors, model calls).
+ * The full variant is always a page's whole content, so it owns the h1.
  */
 export function ServerOnlyNotice({
   feature,
@@ -33,9 +34,9 @@ export function ServerOnlyNotice({
       role="note"
     >
       <p className="text-xs text-accent">Static preview</p>
-      <h2 className="mt-2 font-display text-2xl tracking-tight">
+      <h1 className="mt-2 font-display text-2xl tracking-tight">
         {feature} runs on the server deployment.
-      </h2>
+      </h1>
       <p className="mt-3 text-sm leading-relaxed text-fg-muted">
         This copy of quesar.cloud is a static site, so there is no sign-in, database, or model call
         behind it. Sign-in, the console, admin review, profile, workspace connectors and chat need

@@ -1,7 +1,15 @@
-import type { Provenance } from "@/components/site/prov-tag";
+import { sharedResearchCopy } from "@/lib/mlai/categories/research-topics";
+import type { StatusKind } from "@/lib/site-identity";
 
-export type StatusKind =
-  "current" | "partial" | "experimental" | "development" | "planned" | "research";
+// Site identity, nav and StatusKind live in a small module so the entry chunk
+// (root route, header) does not pull in this whole catalog.
+export { nav, site, type StatusKind } from "@/lib/site-identity";
+export {
+  abbeyWorkspaceFacts,
+  quesarSurfaces,
+  quesarWhat,
+  setups,
+} from "@/lib/mlai/categories/surfaces";
 
 /** Shown in place of field-note prompts on the static site, which has no server. */
 export const fieldNotesOffline = "Field notes need the server deployment.";
@@ -21,28 +29,6 @@ export type ArchNode = {
   notClaimed: string[];
   href?: string;
 };
-
-export const site = {
-  name: "Quesar",
-  company: "MLAI",
-  legal: "Machine Learning Advanced Innovations, Inc.",
-  description:
-    "Quesar is MLAI's infrastructure for persistent, adaptive AI — inspectable orchestration, provenance-aware memory, and compute that stays on machines you own.",
-  mission:
-    "Build assistant workflows, memory systems, and developer tools with inspectable sources and explicit implementation boundaries.",
-  origin:
-    "Three voices, not one: Abbey for care, Aviva for clarity, Abi for competence. One substrate. Yours alone.",
-  apple:
-    "MLAI software is independent and is not affiliated with, endorsed by, or sponsored by Apple Inc.",
-} as const;
-
-export const nav = [
-  { to: "/quesar", label: "Quesar" },
-  { to: "/platform", label: "Platform" },
-  { to: "/docs", label: "Docs" },
-  { to: "/apps", label: "Apps" },
-  { to: "/company", label: "Company" },
-] as const;
 
 export const statusCopy: Record<StatusKind, { mark: string; label: string; meaning: string }> = {
   current: {
@@ -178,64 +164,16 @@ export const faqs = [
   },
 ] as const;
 
-export const wdbxSpecs = [
-  { k: "Engine", v: "Layered HNSW" },
-  { k: "Concurrency", v: "MVCC" },
-  { k: "M", v: "16" },
-  { k: "efConstruction", v: "40" },
-  { k: "efSearch", v: "32" },
-  { k: "Metric", v: "Cosine" },
-  { k: "Addressing", v: "Content-addressed" },
-  { k: "Sharding", v: "Not established" },
-] as const;
-
-export const wdbxCrates = [
-  { name: "abi-wdbx", body: "Episodic store, HNSW graph, query path, and persistence contracts." },
-  {
-    name: "abi-compute",
-    body: "CPU vector ops and optional macOS Metal DOT. CUDA/Vulkan not linked here.",
-  },
-  { name: "abi-foundation", body: "Shared primitives: identifiers, hashing, time, error types." },
-  { name: "abi-core", body: "Episode types, witness encoding, causal DAG helpers." },
-  {
-    name: "abi-telemetry",
-    body: "Local traces and capability reporting. Not a hosted metrics product.",
-  },
-] as const;
-
-export const abiCrates = [
-  { name: "abi-cli", body: "Operator surface. backends, scheduler, dashboard, plugin, wdbx." },
-  { name: "abi-mcp", body: "JSON-RPC 2.0 over stdio, optional loopback HTTP with bearer auth." },
-  {
-    name: "abi-ai",
-    body: "Exact model registry and template completion. Quality is not inferred.",
-  },
-  { name: "abi-sea", body: "Scheduler and execution adapter. Device selection is explicit." },
-  {
-    name: "abi-gpu",
-    body: "Capability reporting. accelerated=false when native kernels are not linked.",
-  },
-] as const;
-
-export const mcpTools = [
-  { name: "ai_learn", body: "Ingest a record into the local store. Persistence can be disabled." },
-  { name: "ai_complete", body: "Template completion against the exact registry model." },
-  { name: "wdbx_query", body: "Nearest-neighbor retrieval with inspectable hits." },
-  { name: "wdbx_stats", body: "Local store statistics. Not a cluster dashboard." },
-  { name: "gpu_status", body: "Honest device report. Fallback is reported as fallback." },
-  { name: "plugin_list", body: "Contract-covered plugins visible to this process." },
-] as const;
-
-export const abiCli = [
-  {
-    cmd: "abi backends",
-    note: "List configured execution backends and what they actually report.",
-  },
-  { cmd: "abi scheduler status", note: "Scheduler health for this process. Not a fleet view." },
-  { cmd: "abi dashboard --once --plain", note: "One-shot text dashboard. No hosted UI implied." },
-  { cmd: "abi plugin list", note: "Plugins the current binary loaded under contract." },
-  { cmd: "abi wdbx query", note: "Retrieve from the local store. Requires the sibling workspace." },
-] as const;
+// ABI/WDBX runtime facts (crates, MCP tools, CLI, spec rows, capabilities)
+// have one source shared with the docs hub.
+export {
+  abiCli,
+  abiCrates,
+  mcpTools,
+  wdbxCapabilities,
+  wdbxCrates,
+  wdbxSpecs,
+} from "@/lib/mlai/categories/abi-runtime";
 
 export const abbeyCommands = [
   { cmd: "abbey claims", note: "Print the claims ledger. This is the source of status language." },
@@ -412,8 +350,7 @@ export const architectureNodes: ArchNode[] = [
     layer: "memory",
     status: "partial",
     summary: "Vectors with a contract.",
-    detail:
-      "Ordered vector search and hybrid ranking contracts exist. Collapsing every signal into one score is a documented limitation.",
+    detail: `${sharedResearchCopy.retrieval} Collapsing every signal into one score is a documented limitation.`,
     implemented: ["Cosine search", "Graph construction parameters as configuration"],
     notClaimed: ["A published recall/QPS scoreboard", "Cross-encoder rerank as current"],
     href: "/research",
@@ -424,8 +361,7 @@ export const architectureNodes: ArchNode[] = [
     layer: "memory",
     status: "partial",
     summary: "Why this record is trusted.",
-    detail:
-      "Signatures and causal history answer why a record is trusted. They do not make the record true.",
+    detail: sharedResearchCopy.provenance,
     implemented: ["Content addressing", "Causal history"],
     notClaimed: [
       "Federation evidence without separate authorization",
@@ -458,90 +394,9 @@ export const architectureNodes: ArchNode[] = [
   },
 ];
 
-export const investor = {
-  entity: "Delaware C-Corp · Machine Learning Advanced Innovations, Inc.",
-  market: [
-    {
-      k: "TAM",
-      v: "$48B",
-      note: "On-device and private AI infrastructure. Category sizing, not a booking.",
-      tag: "target" as Provenance,
-    },
-    {
-      k: "SAM",
-      v: "$12B",
-      note: "Regulated software, research ops, and security-conscious product teams.",
-      tag: "target" as Provenance,
-    },
-    {
-      k: "SOM",
-      v: "$1.2B",
-      note: "Near-term reachable: SDK licensing plus integration services.",
-      tag: "target" as Provenance,
-    },
-  ],
-  raise: { round: "Seed", amount: "$4.5M" },
-  funds: [
-    { k: "Product", v: "50%", p: "ABI, WDBX, Abbey, Quesar" },
-    { k: "Infrastructure", v: "30%", p: "Tooling, eval, private deploy paths" },
-    { k: "GTM", v: "20%", p: "Services motion, not ads" },
-  ],
-  unit: [
-    { k: "Gross margin", v: "82% target", tag: "target" as Provenance },
-    { k: "CAC payback", v: "11 months target", tag: "target" as Provenance },
-    { k: "LTV/CAC", v: "5.4× target", tag: "target" as Provenance },
-    { k: "GPU 295×", v: "engineering target — not a result", tag: "target" as Provenance },
-  ],
-  arr: [
-    { year: "Y1", v: "0.4" },
-    { year: "Y2", v: "1.8" },
-    { year: "Y3", v: "6.5" },
-    { year: "Y4", v: "18" },
-    { year: "Y5", v: "42" },
-  ],
-  founder: [
-    {
-      k: "Public source across ABI, WDBX, Abbey, Gama, and this site",
-      tag: "measured" as Provenance,
-    },
-    { k: "Claims ledger in abbey/src/claims.rs", tag: "measured" as Provenance },
-    { k: "Independent verification gates per app", tag: "measured" as Provenance },
-    { k: "295× GPU figure", tag: "target" as Provenance },
-  ],
-} as const;
-
-export const setups = [
-  {
-    title: "Website (this surface)",
-    body: "From this repository root: formatting, types, lint, tests, and the server build. Publish the static site with a separate build.",
-    code: "bun run check\nbun run build:static",
-    href: "/docs/deployment",
-  },
-  {
-    title: "Abbey workspace",
-    body: "The browser workspace here is a preview. The separate local Abbey app has its own setup and verification in its source README.",
-    code: null,
-    href: "/workspace",
-  },
-  {
-    title: "Quasar service",
-    body: "A standalone Bun project under sidecars/. Its tests and typecheck do not run in the website gate. Generation needs Anthropic credentials.",
-    code: "cd sidecars/quasar-service\nbun test\nbun run typecheck",
-    href: "/quesar",
-  },
-  {
-    title: "Mobile and native",
-    body: "The web vault is a browser preview. The separate native shell has no root check script; Android sync and device validation are separate work.",
-    code: null,
-    href: "/mobile",
-  },
-  {
-    title: "ABI + WDBX",
-    body: "Clone both. Use ./tools/cargo.sh. Bare cargo is the wrong entry.",
-    code: "./tools/check.sh",
-    href: "/abi",
-  },
-] as const;
+// Investor notes live in the typed content layer (src/lib/mlai/categories/investor.ts);
+// re-exported so importers keep using `@/lib/content`.
+export { investor } from "@/lib/mlai/categories/investor";
 
 export type Repo = {
   owner: string;
@@ -798,95 +653,6 @@ export const searchIndex = [
   { title: "About", href: "/about", group: "Company", body: "Values principles entity" },
 ] as const;
 
-export const homeStart = [
-  {
-    title: "Understand the architecture",
-    body: "Inspect each layer, its source-backed behavior, and the limits named beside it.",
-    href: "/architecture",
-  },
-  {
-    title: "Explore the research",
-    body: "Read the ideas, citations, and implementation limits behind the system.",
-    href: "/research",
-  },
-  {
-    title: "Compare the products",
-    body: "See what each surface does, how to try it, and what remains in development.",
-    href: "/products",
-  },
-  {
-    title: "Read the source",
-    body: "Open the public repositories and their local setup guides.",
-    href: "/developers",
-  },
-] as const;
-
-export const homePrivacy = [
-  {
-    title: "Local by default",
-    body: "Workspaces, stores, and runtimes execute on operator-owned machines. This website does not host assistant sessions.",
-  },
-  {
-    title: "Memory you can inspect",
-    body: "WDBX records are content-addressed, signed, and recoverable. Persistence that did not happen is not reported as success.",
-  },
-  {
-    title: "Explicit remote",
-    body: "Cloud backends and live providers are optional and credential-gated. They are not the architecture's center.",
-  },
-  {
-    title: "Honest limits",
-    body: "We do not claim unhackable systems, military-grade anything, or 100% privacy. Security language tracks the source.",
-  },
-] as const;
-
-export const quesarSurfaces = [
-  {
-    surface: "This website",
-    role: "Product orientation and source setup links",
-    status: "current" as StatusKind,
-  },
-  {
-    surface: "Local site builder (Quasar)",
-    role: "Prompt-to-Next.js on your machine (Bun + Expo, Anthropic credentials)",
-    status: "experimental" as StatusKind,
-  },
-  {
-    surface: "Abbey workspace",
-    role: "Local document workspace with assistant context",
-    status: "current" as StatusKind,
-  },
-  {
-    surface: "Mobile companion",
-    role: "Source-based Expo app; native CloudKit is distinct from web export",
-    status: "partial" as StatusKind,
-  },
-  {
-    surface: "Hosted Quesar cloud",
-    role: "Managed sessions, generation, authentication",
-    status: "planned" as StatusKind,
-  },
-] as const;
-
-export const quesarWhat = [
-  {
-    title: "Who it is for",
-    body: "Developers, technical organizations, and privacy-conscious operators who need AI systems that keep context, expose provenance, and run across local, edge, and optional remote compute.",
-  },
-  {
-    title: "How it differs",
-    body: "Conventional apps bolt memory onto a chat transcript. Quesar treats memory as a substrate (WDBX), orchestration as a runtime (ABI), and the assistant as an experience (Abbey) — with claim-honest status on every surface.",
-  },
-  {
-    title: "What you can build",
-    body: "Local assistant workflows with inspectable context. Retrieval over signed episodic records. Tools and plugins under ABI contracts. A local site-generation loop that writes a real Next.js project onto disk.",
-  },
-  {
-    title: "What you cannot assume",
-    body: "This website does not provision an assistant or generate sites. Sign-in opens a console for field notes, not an Abbey session. The local builder does not host, deploy, or bill. Production sharding is not established.",
-  },
-] as const;
-
 export const architectureSteps = [
   {
     title: "User → Quesar",
@@ -958,150 +724,6 @@ export const abiNotClaimed = [
   "Browser autonomy",
 ] as const;
 
-export const wdbxCapabilities: { concern: string; what: string; status: StatusKind }[] = [
-  {
-    concern: "Blocks / segments",
-    what: "On-disk segment format, CRC-framed WAL, checkpoint publication and salvage",
-    status: "current",
-  },
-  {
-    concern: "Embeddings / search",
-    what: "Exact and layered HNSW, ordered vector search, 3-D spatial index",
-    status: "current",
-  },
-  {
-    concern: "Metadata",
-    what: "Block metadata round-tripping, versioning, access and execution state in records",
-    status: "current",
-  },
-  { concern: "Relationships", what: "Multi-parent causal audit DAG", status: "current" },
-  {
-    concern: "Provenance",
-    what: "SHA-256 content addressing, Ed25519 signing, deterministic CBOR envelopes",
-    status: "current",
-  },
-  {
-    concern: "Retrieval",
-    what: "Hybrid ranking contracts; score currently collapses several axes",
-    status: "partial",
-  },
-  {
-    concern: "Evidence-weighted rank",
-    what: "Separate semantic, temporal, causal, and persona signals",
-    status: "planned",
-  },
-  {
-    concern: "Distributed operation",
-    what: "Cluster replication with read repair in source; not production sharding",
-    status: "experimental",
-  },
-  {
-    concern: "Trust / federation",
-    what: "Local deterministic replay tests. Not deployed federation evidence.",
-    status: "research",
-  },
-  {
-    concern: "Hosted service",
-    what: "Nothing in the repository provides production authority",
-    status: "planned",
-  },
-];
-
-export const abbeyWorkspaceFacts = [
-  "Node 24, Bun 1.4",
-  "uv with Python 3.11–3.13",
-  "Java 21+ and LibreOffice",
-  "SQLite / Better Auth in the local app",
-  "Private databases and uploaded documents are not part of the public import",
-  "This site does not open a chat",
-] as const;
-
-export const researchTopics = [
-  {
-    title: "Memory architecture",
-    status: "current" as StatusKind,
-    applies: "WDBX, ABI",
-    body: "Episodic records with WAL, MVCC, causal DAGs, and content addressing. Memory is a substrate, not a chat log with embeddings glued on.",
-  },
-  {
-    title: "Retrieval",
-    status: "partial" as StatusKind,
-    applies: "WDBX",
-    body: "Ordered vector search and hybrid ranking contracts exist. Collapsing semantic, temporal, causal, and persona signals into one score is a documented limitation.",
-  },
-  {
-    title: "Distributed systems",
-    status: "experimental" as StatusKind,
-    applies: "WDBX",
-    body: "Reference cluster replication and read repair are in source. They do not establish production sharding or hosted authority.",
-  },
-  {
-    title: "Model orchestration",
-    status: "partial" as StatusKind,
-    applies: "ABI",
-    body: "Scheduler, plugins, MCP, exact model registry. Routing is explicit. Quality is not inferred from a successful template completion.",
-  },
-  {
-    title: "Privacy and local inference",
-    status: "current" as StatusKind,
-    applies: "Quesar, Abbey, ABI",
-    body: "Default posture is operator-owned machines. Remote is optional. This website does not see your documents, weights, or generated output.",
-  },
-  {
-    title: "Provenance and trust",
-    status: "partial" as StatusKind,
-    applies: "WDBX, Abbey",
-    body: "Signatures and causal history answer why a record is trusted. They do not make the record true. Federation evidence is separately authorized.",
-  },
-  {
-    title: "Synchronization",
-    status: "planned" as StatusKind,
-    applies: "Quesar, mobile",
-    body: "Mobile CloudKit and encrypted-local fallback are distinct. Signed-device acceptance is not the same as a web export.",
-  },
-  {
-    title: "Interoperability",
-    status: "research" as StatusKind,
-    applies: "Quesar",
-    body: "Workspaces, crates, and apps share a type vocabulary for product, persona, and claim provenance. Semantic UI tokens remain app-local.",
-  },
-] as const;
-
-export const researchSources = [
-  {
-    title: "ABI",
-    href: "/abi",
-    body: "Nightly Rust tree, wrappers, MCP, claim-honest GPU reporting.",
-  },
-  {
-    title: "WDBX",
-    href: "/wdbx",
-    body: "Provenance-aware episodic substrate, crate map, evidence vs gaps.",
-  },
-  {
-    title: "Abbey claims",
-    href: "/abbey",
-    body: "Companion interface with enumerated Current / Partial / Proposed / Blocked / Out of scope.",
-  },
-  {
-    title: "Integration surfaces",
-    href: "/developers",
-    body: "Website, mobile, local builder, Abbey workspace, research export.",
-  },
-  {
-    title: "Mobile companion",
-    href: "/mobile",
-    body: "Expo SDK 53. Native CloudKit is distinct from this web vault.",
-  },
-  {
-    title: "Quasar builder",
-    href: "/quesar",
-    body: "v1 writes a Next.js project on disk. Unit suite is not a live generation.",
-  },
-  {
-    title: "skill-creator",
-    href: "/skill-creator",
-    body: "Public skill for site integrity: Apple sentence, provenance tags, Apache-2.0, toolchain facts.",
-  },
-  { title: "Gama", href: "/gama", body: "Founder-owned Swift UI framework. Not a Quesar product." },
-] as const;
+// The /research topic and source lists live with the research records so their
+// track links can be checked against `researchRecords.tracks`.
+export { researchSources, researchTopics } from "@/lib/mlai/categories/research-topics";

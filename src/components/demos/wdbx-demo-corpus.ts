@@ -33,7 +33,7 @@ export const CORPUS: Doc[] = [
     id: "backtrack",
     tag: "wdbx",
     title: "Neural backtracking",
-    text: "Traverse the chain backwards to find the exact divergence point where a model began to hallucinate or drift from ground truth.",
+    text: "Designed to traverse the chain backwards to find the exact divergence point where a model began to hallucinate or drift from ground truth.",
   },
   {
     id: "retention",

@@ -54,7 +54,7 @@ function TeamProfile() {
                       rel="noopener noreferrer"
                       target="_blank"
                       aria-label={`${person.name} on GitHub`}
-                      className="inline-flex h-11 items-center rounded-md bg-bg-elevated px-3 font-mono text-xs text-fg-muted no-underline shadow-[var(--shadow-border)] hover:text-fg"
+                      className="inline-flex h-11 items-center rounded-md bg-bg-elevated px-3 font-mono text-xs text-fg-muted no-underline shadow-border hover:text-fg"
                     >
                       GitHub · {socials.github}
                     </a>
@@ -67,7 +67,7 @@ function TeamProfile() {
                       rel="noopener noreferrer"
                       target="_blank"
                       aria-label={`${person.name} on X`}
-                      className="inline-flex h-11 items-center rounded-md bg-bg-elevated px-3 font-mono text-xs text-fg-muted no-underline shadow-[var(--shadow-border)] hover:text-fg"
+                      className="inline-flex h-11 items-center rounded-md bg-bg-elevated px-3 font-mono text-xs text-fg-muted no-underline shadow-border hover:text-fg"
                     >
                       X · @{socials.x}
                     </a>
@@ -80,7 +80,7 @@ function TeamProfile() {
                       rel="noopener noreferrer"
                       target="_blank"
                       aria-label={`${person.name} website`}
-                      className="inline-flex h-11 items-center gap-1.5 rounded-md bg-bg-elevated px-3 font-mono text-xs text-fg-muted no-underline shadow-[var(--shadow-border)] hover:text-fg"
+                      className="inline-flex h-11 items-center gap-1.5 rounded-md bg-bg-elevated px-3 font-mono text-xs text-fg-muted no-underline shadow-border hover:text-fg"
                     >
                       <Globe className="size-3.5" aria-hidden="true" /> {socials.web}
                     </a>

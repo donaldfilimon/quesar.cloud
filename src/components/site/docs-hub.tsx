@@ -69,7 +69,7 @@ export function DocsHub() {
           <a
             key={anchor.id}
             href={`#${anchor.id}`}
-            className="inline-flex h-9 items-center rounded-full bg-muted px-3 font-mono text-[11px] text-muted-foreground no-underline hover:text-foreground"
+            className="inline-flex h-9 items-center rounded-full bg-muted px-3 font-mono text-11 text-muted-foreground no-underline hover:text-foreground"
           >
             {anchor.label}
           </a>
@@ -155,7 +155,7 @@ export function DocsHub() {
               >
                 <span className="flex items-center justify-between gap-2">
                   <span className="text-sm font-medium text-fg">{doc.label}</span>
-                  <span className="font-mono text-[10px] text-fg-subtle">.md ↓</span>
+                  <span className="font-mono text-10 text-fg-subtle">.md ↓</span>
                 </span>
                 <span className="mt-1 block text-xs leading-relaxed text-fg-muted">{doc.body}</span>
               </a>

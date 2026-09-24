@@ -54,7 +54,7 @@ export function InquiriesList() {
       {rows && rows.length > 0 ? (
         <ul className="grid gap-3">
           {rows.map((row) => (
-            <li key={row.id} className="rounded-lg bg-card p-4 shadow-[var(--shadow-border)]">
+            <li key={row.id} className="rounded-lg bg-card p-4 shadow-border">
               <div className="flex flex-wrap items-baseline justify-between gap-2">
                 <p className="text-sm text-fg">
                   {row.name}{" "}
@@ -71,9 +71,7 @@ export function InquiriesList() {
               ) : null}
               <p className="mt-3 whitespace-pre-wrap text-sm text-fg-muted">{row.message}</p>
               {row.userId ? (
-                <p className="mt-2 font-mono text-[10px] text-fg-subtle">
-                  signed in as {row.userId}
-                </p>
+                <p className="mt-2 font-mono text-10 text-fg-subtle">signed in as {row.userId}</p>
               ) : null}
             </li>
           ))}

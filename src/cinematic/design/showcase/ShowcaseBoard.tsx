@@ -188,7 +188,7 @@ function Poster() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <Mark size={40} />
-              <span className="font-bold tracking-[0.18em] text-white text-xl">MLAI</span>
+              <span className="font-bold tracking-0.18em text-white text-xl">MLAI</span>
             </div>
             <div className="text-right text-xs font-mono text-slate-400">
               <div>Brand board · v1.0</div>
@@ -196,7 +196,7 @@ function Poster() {
             </div>
           </div>
           <div className="flex-1 flex flex-col justify-center">
-            <div className="text-xs font-bold uppercase tracking-[0.25em] text-cyan-400 mb-4">
+            <div className="text-xs font-bold uppercase tracking-0.25em text-cyan-400 mb-4">
               Privacy-first AI infrastructure
             </div>
             <h1
@@ -223,7 +223,7 @@ function Poster() {
                   />
                   <div>
                     <div className="text-sm font-bold text-white">{n}</div>
-                    <div className="text-[11px] text-slate-400">{r}</div>
+                    <div className="text-11 text-slate-400">{r}</div>
                   </div>
                 </div>
               ))}
@@ -240,7 +240,7 @@ function Poster() {
                   style={{ background: hex }}
                 >
                   <span
-                    className={`absolute inset-0 flex items-center justify-center text-[10px] font-mono ${
+                    className={`absolute inset-0 flex items-center justify-center text-10 font-mono ${
                       ["#0c0c09", "#a855f7"].includes(hex) ? "text-white" : "text-slate-900"
                     } ${hover === hex ? "opacity-100" : "opacity-0"}`}
                   >
@@ -505,7 +505,7 @@ function Generative() {
             <button
               key={m}
               onClick={() => setMode(m)}
-              className={`text-[11px] px-2 py-1.5 rounded-lg border transition-colors ${
+              className={`text-11 px-2 py-1.5 rounded-lg border transition-colors ${
                 mode === m
                   ? "bg-white/10 text-white border-white/20"
                   : "text-slate-400 border-white/10 hover:text-white"
@@ -602,11 +602,11 @@ function OGCard() {
           <div className="relative h-full flex flex-col justify-between p-[5%]">
             <div className="flex items-center gap-3">
               <Mark size={48} />
-              <span className="font-bold tracking-[0.18em] text-white text-2xl">MLAI</span>
+              <span className="font-bold tracking-0.18em text-white text-2xl">MLAI</span>
             </div>
             <div>
               <div
-                className="text-sm font-bold uppercase tracking-[0.25em] mb-3"
+                className="text-sm font-bold uppercase tracking-0.25em mb-3"
                 style={{ color: d.accent }}
               >
                 {d.kicker}

@@ -146,7 +146,7 @@ const Mark = ({ size = 32, radius }: { size?: number; radius?: number }): ReactN
 );
 
 const Wordmark = ({ size = 20 }: { size?: number }): ReactNode => (
-  <span className="font-bold tracking-[0.18em] text-white" style={{ fontSize: size }}>
+  <span className="font-bold tracking-0.18em text-white" style={{ fontSize: size }}>
     MLAI
   </span>
 );
@@ -295,7 +295,7 @@ function Section({
     >
       <div className="flex items-baseline gap-3 mb-1">
         <span className="text-xs font-mono text-slate-600">{n}</span>
-        <div className="text-xs font-bold uppercase tracking-[0.2em] text-cyan-400">{kicker}</div>
+        <div className="text-xs font-bold uppercase tracking-0.2em text-cyan-400">{kicker}</div>
       </div>
       <h2
         className="text-3xl sm:text-4xl font-bold text-white tracking-tight mb-8"
@@ -450,7 +450,7 @@ const TYPE: readonly TypeSpec[] = [
     label: "Eyebrow",
     spec: "System sans · 12px · uppercase · tracking-widest · cyan",
     el: (
-      <span className="text-xs font-bold uppercase tracking-[0.2em] text-cyan-400">Technology</span>
+      <span className="text-xs font-bold uppercase tracking-0.2em text-cyan-400">Technology</span>
     ),
   },
   {
@@ -573,7 +573,7 @@ export default function BrandBoard(): ReactNode {
             <Mark size={44} />
             <Wordmark size={26} />
           </div>
-          <div className="text-xs font-bold uppercase tracking-[0.2em] text-cyan-400 mb-3">
+          <div className="text-xs font-bold uppercase tracking-0.2em text-cyan-400 mb-3">
             Brand Guidelines · v1.0
           </div>
           <h1
@@ -640,7 +640,7 @@ export default function BrandBoard(): ReactNode {
             <div className="text-xs text-slate-500 mb-4 uppercase tracking-wider">On light</div>
             <div className="rounded-xl bg-white flex items-center gap-3 h-24 px-6">
               <Mark size={36} />
-              <span className="font-bold tracking-[0.18em] text-slate-900" style={{ fontSize: 22 }}>
+              <span className="font-bold tracking-0.18em text-slate-900" style={{ fontSize: 22 }}>
                 MLAI
               </span>
             </div>
@@ -678,7 +678,7 @@ export default function BrandBoard(): ReactNode {
                     <IX s={14} />
                   </div>
                   {m.el}
-                  <span className="text-[10px] text-slate-500">{m.label}</span>
+                  <span className="text-10 text-slate-500">{m.label}</span>
                 </div>
               ))}
             </div>
@@ -766,7 +766,7 @@ export default function BrandBoard(): ReactNode {
               >
                 <div className="sm:w-44 shrink-0">
                   <div className="text-xs text-slate-400">{t.label}</div>
-                  <div className="text-[10px] text-slate-600 font-mono">{t.spec}</div>
+                  <div className="text-10 text-slate-600 font-mono">{t.spec}</div>
                 </div>
                 <div className="flex-1">{t.el}</div>
               </div>
@@ -861,10 +861,10 @@ export default function BrandBoard(): ReactNode {
             <button className="px-5 py-2.5 rounded-full border border-white/20 text-white text-sm font-medium">
               Secondary
             </button>
-            <span className="text-[10px] px-2 py-0.5 rounded-full border bg-cyan-500/15 text-cyan-300 border-cyan-500/25">
+            <span className="text-10 px-2 py-0.5 rounded-full border bg-cyan-500/15 text-cyan-300 border-cyan-500/25">
               badge
             </span>
-            <span className="text-[10px] px-2 py-0.5 rounded-full border bg-emerald-500/15 text-emerald-300 border-emerald-500/25">
+            <span className="text-10 px-2 py-0.5 rounded-full border bg-emerald-500/15 text-emerald-300 border-emerald-500/25">
               success
             </span>
             <kbd className="text-xs px-2 py-1 rounded-lg border border-white/10 text-slate-400">

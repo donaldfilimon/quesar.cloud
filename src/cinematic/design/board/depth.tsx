@@ -89,7 +89,7 @@ export function LightSection(): ReactNode {
           })}
         </div>
         <div className="absolute bottom-4 left-5">
-          <Mono className="text-[11px]" style={{ color: after ? "#22d3ee" : "#fbbf24" }}>
+          <Mono className="text-11" style={{ color: after ? "#22d3ee" : "#fbbf24" }}>
             {after
               ? "unified key + fill · inherited highlight"
               : "ad-hoc per-card glow · competing highlights"}
@@ -118,7 +118,7 @@ function CompShell({
         border: "1px solid rgba(255,255,255,0.06)",
       }}
     >
-      <Mono className="text-[10px] text-slate-600 mb-4 block">{label}</Mono>
+      <Mono className="text-10 text-slate-600 mb-4 block">{label}</Mono>
       {children}
     </div>
   );
@@ -202,7 +202,7 @@ export function ComponentsSection(): ReactNode {
             {CHIPS.map(([t, c]) => (
               <span
                 key={t}
-                className="inline-flex items-center gap-2 px-3.5 py-1.5 text-[11px] font-semibold uppercase transition-all duration-500"
+                className="inline-flex items-center gap-2 px-3.5 py-1.5 text-11 font-semibold uppercase transition-all duration-500"
                 style={{
                   borderRadius: after ? 999 : 6,
                   letterSpacing: "0.1em",
@@ -249,7 +249,7 @@ export function ComponentsSection(): ReactNode {
             >
               Trace Layer
             </h4>
-            <p className="text-[13px] text-slate-400 leading-relaxed">
+            <p className="text-13 text-slate-400 leading-relaxed">
               Every retrieval path and policy check captured as an inspectable event.
             </p>
           </div>
@@ -279,7 +279,7 @@ export function ComponentsSection(): ReactNode {
                 >
                   {v}
                 </div>
-                <Mono className="text-[10px] text-slate-500 mt-1 block">{l}</Mono>
+                <Mono className="text-10 text-slate-500 mt-1 block">{l}</Mono>
               </div>
             ))}
           </div>
@@ -337,17 +337,17 @@ function HeroApplied({ after }: { after: boolean }): ReactNode {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2.5">
             <Mark size={30} />
-            <span className="font-bold tracking-[0.18em] text-white text-sm">MLAI</span>
+            <span className="font-bold tracking-0.18em text-white text-sm">MLAI</span>
           </div>
           <div className="hidden sm:flex items-center" style={{ gap: after ? 28 : 18 }}>
             {APPLIED_NAV.map((t) => (
-              <span key={t} className="text-[13px] text-slate-400">
+              <span key={t} className="text-13 text-slate-400">
                 {t}
               </span>
             ))}
             <button
               type="button"
-              className="px-4 py-2 text-[13px] font-medium text-white"
+              className="px-4 py-2 text-13 font-medium text-white"
               style={{
                 borderRadius: after ? 999 : 6,
                 background: after ? "linear-gradient(180deg,#3b82f6,#2563eb)" : "#3b82f6",
@@ -377,7 +377,7 @@ function HeroApplied({ after }: { after: boolean }): ReactNode {
               style={{ background: "#22d3ee", boxShadow: after ? "0 0 8px #22d3ee" : "none" }}
             />
             <Mono
-              className="text-[10.5px] uppercase"
+              className="text-10.5 uppercase"
               style={{ letterSpacing: "0.18em", color: after ? "#22d3ee" : "#94a3b8" }}
             >
               Privacy-first AI infrastructure
@@ -421,7 +421,7 @@ function HeroApplied({ after }: { after: boolean }): ReactNode {
           <div className="flex flex-wrap items-center mt-8" style={{ gap: after ? 14 : 10 }}>
             <button
               type="button"
-              className="px-6 py-3 font-medium text-white text-[15px]"
+              className="px-6 py-3 font-medium text-white text-15"
               style={{
                 borderRadius: after ? 999 : 6,
                 background: after ? "linear-gradient(180deg,#3b82f6,#2563eb)" : "#3b82f6",
@@ -434,7 +434,7 @@ function HeroApplied({ after }: { after: boolean }): ReactNode {
             </button>
             <button
               type="button"
-              className="px-6 py-3 font-medium text-[15px] text-slate-200"
+              className="px-6 py-3 font-medium text-15 text-slate-200"
               style={{
                 borderRadius: after ? 999 : 6,
                 background: "rgba(255,255,255,0.06)",
@@ -466,8 +466,8 @@ function HeroApplied({ after }: { after: boolean }): ReactNode {
                 style={{ background: p.color, boxShadow: after ? `0 0 10px ${p.color}` : "none" }}
               />
               <div>
-                <div className="text-[13px] font-semibold text-white leading-none">{p.name}</div>
-                <div className="text-[10.5px] text-slate-500 mt-0.5">{p.role}</div>
+                <div className="text-13 font-semibold text-white leading-none">{p.name}</div>
+                <div className="text-10.5 text-slate-500 mt-0.5">{p.role}</div>
               </div>
             </div>
           ))}
@@ -495,7 +495,7 @@ export function AppliedSection(): ReactNode {
       <div className="rounded-3xl overflow-hidden ring-1 ring-white/10" style={{ height: 600 }}>
         <HeroApplied after={after} />
       </div>
-      <p className="text-center text-[12px] text-slate-600 mt-4">
+      <p className="text-center text-12 text-slate-600 mt-4">
         <Mono>Same content · same brand · system-level difference</Mono>
       </p>
     </section>
@@ -535,14 +535,14 @@ export function TokensSection(): ReactNode {
             <span className="text-white font-bold text-lg">{"{ }"}</span>
           </div>
           <div>
-            <Mono className="text-[13px] text-white block">src/index.css</Mono>
-            <span className="text-[12.5px] text-slate-400">
+            <Mono className="text-13 text-white block">src/index.css</Mono>
+            <span className="text-12.5 text-slate-400">
               ≈190 custom properties · color · elevation · spacing · type · motion
             </span>
           </div>
         </div>
         <span
-          className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[11px] font-semibold"
+          className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-11 font-semibold"
           style={{
             background: "rgba(52,211,153,0.12)",
             color: "#34d399",
@@ -577,7 +577,7 @@ export function TokensSection(): ReactNode {
                   type="button"
                   aria-pressed={tab === t}
                   onClick={() => setTab(t)}
-                  className="px-3.5 py-1.5 rounded-full text-[12px] font-semibold transition-all duration-300"
+                  className="px-3.5 py-1.5 rounded-full text-12 font-semibold transition-all duration-300"
                   style={style}
                 >
                   {t}
@@ -592,10 +592,10 @@ export function TokensSection(): ReactNode {
         <div>
           <Eyebrow color="var(--ds-accent3)">Consuming the tokens</Eyebrow>
           <CodeBlock code={USAGE} label="component.css" />
-          <p className="text-[12.5px] text-slate-500 mt-4 leading-relaxed">
+          <p className="text-12.5 text-slate-500 mt-4 leading-relaxed">
             No component hard-codes a hex, a shadow or a pixel. Re-theme the whole product — a
             lighter mode, a campaign accent, denser spacing — by editing one{" "}
-            <Mono className="text-cyan-400 text-[12px]">:root</Mono> block.
+            <Mono className="text-cyan-400 text-12">:root</Mono> block.
           </p>
         </div>
       </div>

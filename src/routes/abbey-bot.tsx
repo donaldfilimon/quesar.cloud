@@ -94,7 +94,7 @@ function AbbeyBotPage() {
             <input
               value={input}
               onChange={(event) => setInput(event.target.value.slice(0, 600))}
-              className="h-11 flex-1 rounded-md bg-bg px-3 text-sm shadow-[var(--shadow-border)] outline-none"
+              className="h-11 flex-1 rounded-md bg-bg px-3 text-sm shadow-border outline-none"
               placeholder="Ask Abbey, Aviva, or Abi"
             />
             <Button type="submit" disabled={pending}>

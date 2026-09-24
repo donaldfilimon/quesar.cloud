@@ -195,7 +195,7 @@ export function WorkspaceSources() {
         <div>
           <p className={cn(EYEBROW, "text-accent")}>Connected sources</p>
           <h2 className="mt-1 font-display text-2xl">Files</h2>
-          <p className="mt-1 font-mono text-[11px] text-fg-muted">
+          <p className="mt-1 font-mono text-11 text-fg-muted">
             {sources === null ? "Loading" : `${matched.length} shown`} · last {DEFAULT_WINDOW.days}{" "}
             days · read-only
           </p>
@@ -337,9 +337,7 @@ function SourceSection({
         {connection?.stored ? (
           <>
             {connection.accountEmail ? (
-              <span className="font-mono text-[10.5px] text-fg-muted">
-                {connection.accountEmail}
-              </span>
+              <span className="font-mono text-10.5 text-fg-muted">{connection.accountEmail}</span>
             ) : null}
             <Button
               type="button"
@@ -425,11 +423,11 @@ function FileRows({ files }: { files: WorkspaceFile[] }) {
               <Icon size={14} aria-hidden className="shrink-0 text-accent" />
               <span className="truncate text-fg">{file.title}</span>
             </span>
-            <span className="hidden font-mono text-[11px] text-fg-muted sm:block">
+            <span className="hidden font-mono text-11 text-fg-muted sm:block">
               {KIND_LABEL[file.kind]}
             </span>
             <span className="text-xs text-fg-muted">{formatModified(file.modified)}</span>
-            <span className="hidden text-right font-mono text-[11px] text-fg-muted sm:block">
+            <span className="hidden text-right font-mono text-11 text-fg-muted sm:block">
               {formatFileSize(file.sizeBytes)}
             </span>
           </a>
@@ -455,7 +453,7 @@ function FileGrid({ files }: { files: WorkspaceFile[] }) {
             <Icon size={28} aria-hidden className="text-accent" />
             <span className="min-w-0">
               <span className="block truncate text-sm text-fg">{file.title}</span>
-              <span className="mt-1 block font-mono text-[10.5px] text-fg-muted">
+              <span className="mt-1 block font-mono text-10.5 text-fg-muted">
                 {KIND_LABEL[file.kind]} · {formatModified(file.modified)} ·{" "}
                 {formatFileSize(file.sizeBytes)}
               </span>

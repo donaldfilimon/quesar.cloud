@@ -21,6 +21,29 @@
   --text-display--line-height: 0.98;
   --text-display--letter-spacing: -0.035em;
 
+  /* Font-size-only steps for the recurring arbitrary sizes. No --line-height
+     companion, so text-<name> emits only font-size, exactly like text-[<value>].
+     px steps are named by pixel size; rem steps keep their unit because they
+     scale with the root font size. */
+  --text-10: 10px;
+  --text-10\.5: 10.5px;
+  --text-11: 11px;
+  --text-12: 12px;
+  --text-12\.5: 12.5px;
+  --text-13: 13px;
+  --text-15: 15px;
+  --text-0\.7rem: 0.7rem;
+  --text-0\.8rem: 0.8rem;
+  --text-0\.9375rem: 0.9375rem;
+  --text-1\.0625rem: 1.0625rem;
+
+  /* Letter-spacing steps for uppercase labels (tracking-<name> == tracking-[<value>]). */
+  --tracking-0\.16em: 0.16em;
+  --tracking-0\.18em: 0.18em;
+  --tracking-0\.2em: 0.2em;
+  --tracking-0\.25em: 0.25em;
+  --tracking-0\.3em: 0.3em;
+
   --color-bg: var(--bg);
   --color-bg-elevated: var(--bg-elevated);
   --color-bg-subtle: var(--bg-subtle);
@@ -81,6 +104,8 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
+  /* Fixed 18px card radius (rounded-18 == rounded-[18px]); not tied to --radius. */
+  --radius-18: 18px;
 
   --shadow-border: var(--elev-border);
   --shadow-border-hover: var(--elev-border-hover);

@@ -51,16 +51,19 @@ export async function hit(
 }
 
 /**
- * A stable, non-reversible subject for anonymous requests. Prefers
- * Cloudflare/Vercel-provided client-IP headers; the IP is hashed with a
- * server-side key and never stored raw.
+ * A stable, non-reversible subject for anonymous requests. Reads only headers
+ * the deployment's proxy sets: `x-real-ip` (Vercel overwrites it), then the
+ * rightmost `x-forwarded-for` hop. `cf-connecting-ip` is passed through
+ * unchanged by Vercel, so it is trusted only when `TRUSTED_PROXY=cloudflare`
+ * says Cloudflare is in front. The IP is hashed with a server-side key and
+ * never stored raw.
  */
 export function clientSubject(request: Request): string {
   const headers = request.headers;
   const ip =
-    headers.get("cf-connecting-ip") ??
+    (env("TRUSTED_PROXY") === "cloudflare" ? headers.get("cf-connecting-ip") : null) ??
     headers.get("x-real-ip") ??
-    headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
+    headers.get("x-forwarded-for")?.split(",").at(-1)?.trim() ??
     "unknown";
   const salt = env("APP_ENCRYPTION_KEY") ?? env("BETTER_AUTH_SECRET") ?? "quesar-rate-limit";
   return createHmac("sha256", salt).update(`ip:${ip}`).digest("base64url").slice(0, 32);

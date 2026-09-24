@@ -41,7 +41,7 @@ function DocArticle() {
       <Crumbs items={[{ to: "/docs", label: "Docs" }, { label: doc.title }]} />
       <PageHero eyebrow={doc.group} title={doc.title} lede={doc.description} compact />
       <Section className="!pt-8">
-        <div className="grid gap-10 lg:grid-cols-[16rem_minmax(0,1fr)] xl:grid-cols-[16rem_minmax(0,1fr)_14rem]">
+        <div className="grid grid-cols-1 gap-10 lg:grid-cols-[16rem_minmax(0,1fr)] xl:grid-cols-[16rem_minmax(0,1fr)_14rem]">
           <DocSidebar current={resolved} />
           <div>
             <MathArticleBody sections={doc.body}>

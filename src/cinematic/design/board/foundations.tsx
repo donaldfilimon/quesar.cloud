@@ -87,7 +87,7 @@ export function ReviewSection(): ReactNode {
                   {t}
                 </h3>
                 <span
-                  className="shrink-0 text-[10px] font-bold uppercase px-2.5 py-1 rounded-full"
+                  className="shrink-0 text-10 font-bold uppercase px-2.5 py-1 rounded-full"
                   style={{
                     color: fg,
                     background: bg,
@@ -113,8 +113,8 @@ export function ReviewSection(): ReactNode {
         <Eyebrow color="var(--ds-accent3)">The four priorities</Eyebrow>
         <ol className="grid sm:grid-cols-2 gap-x-8 gap-y-3 mt-2">
           {PRIORITIES.map((s, i) => (
-            <li key={s} className="flex gap-3 items-baseline text-[15px] text-slate-200">
-              <Mono className="text-[13px]" style={{ color: "#22d3ee" }}>
+            <li key={s} className="flex gap-3 items-baseline text-15 text-slate-200">
+              <Mono className="text-13" style={{ color: "#22d3ee" }}>
                 {String(i + 1).padStart(2, "0")}
               </Mono>
               <span>{s}</span>
@@ -157,15 +157,15 @@ function Swatch({
         style={{ height: big ? 96 : 64, background: value }}
       >
         <span
-          className="absolute bottom-2 right-2.5 text-[10px] font-mono opacity-0 group-hover:opacity-100 transition-opacity"
+          className="absolute bottom-2 right-2.5 text-10 font-mono opacity-0 group-hover:opacity-100 transition-opacity"
           style={{ color: light ? "#0a0a12" : "#fff" }}
         >
           {copied ? "copied ✓" : "click to copy"}
         </span>
       </div>
       <div className="mt-2.5">
-        <Mono className="text-[12px] text-slate-200 block">{name}</Mono>
-        <Mono className="text-[11px] text-slate-500 block">{value}</Mono>
+        <Mono className="text-12 text-slate-200 block">{name}</Mono>
+        <Mono className="text-11 text-slate-500 block">{value}</Mono>
         {note && <p className="text-[11.5px] text-slate-500 mt-1 leading-snug">{note}</p>}
       </div>
     </button>
@@ -233,10 +233,10 @@ export function ColorSection(): ReactNode {
                   >
                     {p.name}
                   </div>
-                  <div className="text-[12px] text-slate-400">{p.role}</div>
+                  <div className="text-12 text-slate-400">{p.role}</div>
                 </div>
               </div>
-              <Mono className="text-[11px] text-slate-500 mt-4 block">var({p.token})</Mono>
+              <Mono className="text-11 text-slate-500 mt-4 block">var({p.token})</Mono>
             </Glass>
           ))}
         </div>
@@ -267,12 +267,12 @@ export function ElevationSection(): ReactNode {
           style={{ background: "#050509", border: "1px solid rgba(255,255,255,0.06)" }}
         >
           <div className="w-full max-w-sm">
-            <Mono className="text-[10px] text-slate-600 mb-3 block">L0 · Canvas</Mono>
+            <Mono className="text-10 text-slate-600 mb-3 block">L0 · Canvas</Mono>
             <div
               className="rounded-2xl p-6"
               style={{ background: l2.bg, border: `1px solid ${l2.border}`, boxShadow: l2.shadow }}
             >
-              <Mono className="text-[10px] text-slate-500 mb-3 block">L2 · Surface card</Mono>
+              <Mono className="text-10 text-slate-500 mb-3 block">L2 · Surface card</Mono>
               <div
                 className="rounded-xl p-5"
                 style={{
@@ -282,7 +282,7 @@ export function ElevationSection(): ReactNode {
                   backdropFilter: "blur(10px)",
                 }}
               >
-                <Mono className="text-[10px] text-slate-400 mb-3 block">L3 · Raised nested</Mono>
+                <Mono className="text-10 text-slate-400 mb-3 block">L3 · Raised nested</Mono>
                 <div
                   className="rounded-lg p-4 relative"
                   style={{
@@ -291,8 +291,8 @@ export function ElevationSection(): ReactNode {
                     boxShadow: l4.shadow,
                   }}
                 >
-                  <Mono className="text-[10px] text-slate-300">L4 · Overlay / popover</Mono>
-                  <div className="mt-2 inline-flex items-center gap-1.5 text-[11px] text-emerald-300">
+                  <Mono className="text-10 text-slate-300">L4 · Overlay / popover</Mono>
+                  <div className="mt-2 inline-flex items-center gap-1.5 text-11 text-emerald-300">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
                     depth resolves cleanly
                   </div>
@@ -323,15 +323,15 @@ export function ElevationSection(): ReactNode {
               <div className="flex-1 min-w-0">
                 <div className="flex items-baseline gap-2">
                   <span
-                    className="text-white font-semibold text-[15px]"
+                    className="text-white font-semibold text-15"
                     style={{ fontFamily: "var(--font-display)" }}
                   >
                     {e.name}
                   </span>
-                  <Mono className="text-[11px] text-slate-500">{e.n}</Mono>
+                  <Mono className="text-11 text-slate-500">{e.n}</Mono>
                 </div>
-                <div className="text-[12.5px] text-slate-400">{e.use}</div>
-                <Mono className="text-[10.5px] text-slate-600 mt-0.5 block truncate">
+                <div className="text-12.5 text-slate-400">{e.use}</div>
+                <Mono className="text-10.5 text-slate-600 mt-0.5 block truncate">
                   var({e.token}) · {e.bg.slice(0, 7)}
                 </Mono>
               </div>
@@ -360,7 +360,7 @@ export function SpacingSection(): ReactNode {
           <div className="space-y-2.5">
             {SPACING.map(([n, rem, px]) => (
               <div key={n} className="flex items-center gap-4">
-                <Mono className="text-[12px] text-slate-500 w-16 shrink-0">space-{n}</Mono>
+                <Mono className="text-12 text-slate-500 w-16 shrink-0">space-{n}</Mono>
                 <div
                   className="h-3.5 rounded-md"
                   style={{
@@ -369,7 +369,7 @@ export function SpacingSection(): ReactNode {
                     opacity: 0.85,
                   }}
                 />
-                <Mono className="text-[11px] text-slate-600">
+                <Mono className="text-11 text-slate-600">
                   {px}px · {rem}
                 </Mono>
               </div>
@@ -383,10 +383,10 @@ export function SpacingSection(): ReactNode {
             {RHYTHM.map(([t, v, note]) => (
               <div key={t} className="p-4">
                 <div className="flex items-center justify-between gap-3">
-                  <Mono className="text-[12.5px] text-slate-200">{t}</Mono>
-                  <Mono className="text-[11px] text-cyan-400">{v}</Mono>
+                  <Mono className="text-12.5 text-slate-200">{t}</Mono>
+                  <Mono className="text-11 text-cyan-400">{v}</Mono>
                 </div>
-                <p className="text-[12px] text-slate-500 mt-1">{note}</p>
+                <p className="text-12 text-slate-500 mt-1">{note}</p>
               </div>
             ))}
           </Glass>
@@ -413,8 +413,8 @@ export function TypeSection(): ReactNode {
             className="flex items-center gap-6 px-6 py-5 hover:bg-white/1.5 transition-colors"
           >
             <div className="w-20 shrink-0">
-              <div className="text-white font-semibold text-[13px]">{label}</div>
-              <Mono className="text-[10px] text-slate-600">{size}</Mono>
+              <div className="text-white font-semibold text-13">{label}</div>
+              <Mono className="text-10 text-slate-600">{size}</Mono>
             </div>
             <div className="flex-1 min-w-0 overflow-hidden">
               <div
@@ -433,13 +433,13 @@ export function TypeSection(): ReactNode {
               </div>
             </div>
             <div className="hidden md:block w-44 shrink-0 text-right">
-              <Mono className="text-[10.5px] text-slate-500 block">
+              <Mono className="text-10.5 text-slate-500 block">
                 {font} {weight}
               </Mono>
-              <Mono className="text-[10px] text-slate-600 block">
+              <Mono className="text-10 text-slate-600 block">
                 lh {lh} · ls {ls}
               </Mono>
-              <span className="text-[11px] text-slate-500">{use}</span>
+              <span className="text-11 text-slate-500">{use}</span>
             </div>
           </div>
         ))}

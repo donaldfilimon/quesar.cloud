@@ -2,7 +2,7 @@ import { ServerOnlyNotice } from "@/components/site/server-only-notice";
 import { staticSite } from "@/lib/static-site";
 import { createFileRoute } from "@tanstack/react-router";
 import { LoginForm } from "@/components/auth/login-form";
-import { authEnabled } from "@/lib/auth/client";
+import { authEnabled } from "@/lib/auth/enabled";
 import { getSignInMethods } from "@/lib/auth/methods";
 import type { SignInMethods } from "@/lib/auth/providers";
 import { safeInternalPath } from "@/lib/internal";

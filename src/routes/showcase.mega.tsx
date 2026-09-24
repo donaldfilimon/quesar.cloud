@@ -18,8 +18,12 @@ export const Route = createFileRoute("/showcase/mega")({
 
 function ShowcaseMegaPage() {
   return (
-    <Suspense fallback={<CinematicFallback />}>
-      <Room />
-    </Suspense>
+    <>
+      {/* The room portals to <body>; this names the page for assistive tech. */}
+      <h1 className="sr-only">Mega — Showcase</h1>
+      <Suspense fallback={<CinematicFallback />}>
+        <Room />
+      </Suspense>
+    </>
   );
 }

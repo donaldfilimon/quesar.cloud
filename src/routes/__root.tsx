@@ -8,7 +8,7 @@ import {
 import { AuthProvider } from "@/lib/auth/provider";
 import { SiteShell } from "@/components/site/shell";
 import { NotFound } from "@/components/site/not-found";
-import { site } from "@/lib/content";
+import { site } from "@/lib/site-identity";
 import { usePageViewTelemetry } from "@/lib/telemetry";
 import { canonicalUrl, SITE_ORIGIN } from "@/lib/seo";
 import appCss from "../styles.css?url";

@@ -52,7 +52,7 @@ const rows: TraceRow[] = [
  */
 export function Backtrace({ className }: { className?: string }) {
   return (
-    <figure className={cn("rounded-lg bg-bg-elevated shadow-[var(--shadow-border)]", className)}>
+    <figure className={cn("rounded-lg bg-bg-elevated shadow-border", className)}>
       <div className="border-b border-border px-5 py-5 sm:px-6">
         <p className="text-sm text-fg-muted">Answer</p>
         <p className="mt-1.5 font-display text-xl leading-snug tracking-tight sm:text-2xl">
@@ -82,7 +82,7 @@ export function Backtrace({ className }: { className?: string }) {
                     {row.weight.toFixed(2)}
                   </span>
                 </div>
-                <p className="mt-1 text-[0.9375rem] leading-snug text-fg">{row.excerpt}</p>
+                <p className="mt-1 text-0.9375rem leading-snug text-fg">{row.excerpt}</p>
                 <div className="mt-2 h-1 rounded-full bg-muted" aria-hidden="true">
                   <i
                     className={cn("block h-full rounded-full", row.dot)}

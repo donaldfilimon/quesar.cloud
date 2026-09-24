@@ -218,7 +218,7 @@ export function ChatPanel({ onOpenAudits }: { onOpenAudits: () => void }) {
         {loadError ? (
           <p
             role="alert"
-            className="rounded-lg bg-card px-4 py-3 text-sm text-status-partial shadow-[var(--shadow-border)]"
+            className="rounded-lg bg-card px-4 py-3 text-sm text-status-partial shadow-border"
           >
             {loadError}{" "}
             <button type="button" className="underline" onClick={() => void load()}>
@@ -226,10 +226,7 @@ export function ChatPanel({ onOpenAudits }: { onOpenAudits: () => void }) {
             </button>
           </p>
         ) : null}
-        <form
-          onSubmit={onSubmit}
-          className="grid gap-3 rounded-xl bg-card p-5 shadow-[var(--shadow-border)]"
-        >
+        <form onSubmit={onSubmit} className="grid gap-3 rounded-xl bg-card p-5 shadow-border">
           <div className="flex items-start justify-between gap-3">
             <div>
               <Label htmlFor="chat-prompt">Prompt</Label>
@@ -259,7 +256,7 @@ export function ChatPanel({ onOpenAudits }: { onOpenAudits: () => void }) {
             placeholder="Draft a safe rollout plan for a private retrieval agent that summarizes internal research notes."
           />
           <div className="flex items-center justify-between gap-3">
-            <p className="font-mono text-[10px] text-fg-subtle">
+            <p className="font-mono text-10 text-fg-subtle">
               {prompt.length}/{MAX_PROMPT}
             </p>
             <Button type="submit" disabled={busy || !ready || prompt.trim().length === 0}>
@@ -291,7 +288,7 @@ export function ChatPanel({ onOpenAudits }: { onOpenAudits: () => void }) {
         ) : null}
 
         {reply ? (
-          <div className="rounded-xl bg-card p-5 shadow-[var(--shadow-border)]">
+          <div className="rounded-xl bg-card p-5 shadow-border">
             <div className="flex items-center justify-between gap-3">
               <span className="text-xs text-accent">Quesar response</span>
               <div className="flex items-center gap-1">

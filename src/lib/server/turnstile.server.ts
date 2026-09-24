@@ -47,10 +47,15 @@ export function turnstileSiteKey(): string | null {
   return turnstileState() === "ready" ? (env("TURNSTILE_SITE_KEY") ?? null) : null;
 }
 
+/** Same trust rule as `clientSubject`: `cf-connecting-ip` only behind Cloudflare. */
 function requesterIp(req: Request): string | undefined {
-  const connectingIp = req.headers.get("cf-connecting-ip")?.trim();
-  if (connectingIp) return connectingIp;
-  return req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || undefined;
+  if (env("TRUSTED_PROXY") === "cloudflare") {
+    const connectingIp = req.headers.get("cf-connecting-ip")?.trim();
+    if (connectingIp) return connectingIp;
+  }
+  const realIp = req.headers.get("x-real-ip")?.trim();
+  if (realIp) return realIp;
+  return req.headers.get("x-forwarded-for")?.split(",").at(-1)?.trim() || undefined;
 }
 
 export async function verifyTurnstile(

@@ -156,10 +156,7 @@ export function ArchitectureDiagram({
         </div>
       </Instrument>
 
-      <aside
-        className="rounded-[28px] bg-bg-elevated p-6 shadow-[var(--shadow-border)] sm:p-7"
-        aria-live="polite"
-      >
+      <aside className="rounded-[28px] bg-bg-elevated p-6 shadow-border sm:p-7" aria-live="polite">
         <p className="text-xs text-fg-subtle">{layerCopy[node.layer]}</p>
         <div className="mt-2 flex flex-wrap items-center gap-3">
           <h3 className="font-display text-2xl tracking-tight">{node.name}</h3>
@@ -252,12 +249,12 @@ function NodeButton({
       onClick={() => onSelect(node.id)}
       onFocus={() => onSelect(node.id)}
       className={cn(
-        "w-full rounded-[12px] border-l-4 px-3 py-3 text-left shadow-[var(--shadow-border)] transition-[box-shadow,background-color] duration-150",
+        "w-full rounded-[12px] border-l-4 px-3 py-3 text-left shadow-border transition-[box-shadow,background-color] duration-150",
         stacked ? "bg-bg" : "max-w-md bg-bg",
         borderByAccent[accent],
         selected
-          ? cn("bg-bg-subtle shadow-[var(--shadow-border-hover)] ring-1", ringByAccent[accent])
-          : "hover:shadow-[var(--shadow-border-hover)]",
+          ? cn("bg-bg-subtle shadow-border-hover ring-1", ringByAccent[accent])
+          : "hover:shadow-border-hover",
       )}
     >
       <span className="flex items-center justify-between gap-3">

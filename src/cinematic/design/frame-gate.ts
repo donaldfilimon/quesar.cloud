@@ -8,13 +8,37 @@
 // A loop runs only while its element intersects the viewport and the document
 // is visible. Under `prefers-reduced-motion: reduce` it never loops; the frame
 // gate paints one static frame instead, the interval gate simply holds, and
-// both follow live changes to the setting.
+// both follow live changes to the setting. An interval the viewer started
+// explicitly may opt out of the motion check (see `attachIntervalGate`).
 
 const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
+
+function motionQuery(): MediaQueryList | null {
+  return typeof window !== "undefined" && typeof window.matchMedia === "function"
+    ? window.matchMedia(REDUCED_MOTION_QUERY)
+    : null;
+}
+
+/**
+ * The reduced-motion preference as an external store, for
+ * `useSyncExternalStore(subscribeReducedMotion, readReducedMotion, () => false)`
+ * when a component must render differently (a Run button that starts paused).
+ */
+export function subscribeReducedMotion(onChange: () => void): () => void {
+  const mq = motionQuery();
+  mq?.addEventListener("change", onChange);
+  return () => mq?.removeEventListener("change", onChange);
+}
+
+export function readReducedMotion(): boolean {
+  return motionQuery()?.matches ?? false;
+}
 
 interface Activity {
   /** True when on screen, the tab is visible and motion is allowed. */
   running(): boolean;
+  /** True when on screen and the tab is visible, whatever the motion setting. */
+  onScreen(): boolean;
   reduced(): boolean;
   dispose(): void;
 }
@@ -23,8 +47,7 @@ interface Activity {
 function watchActivity(el: Element, onChange: () => void): Activity {
   // Without IntersectionObserver (old engines) treat the element as visible.
   let visible = typeof IntersectionObserver !== "function";
-  const mq =
-    typeof window.matchMedia === "function" ? window.matchMedia(REDUCED_MOTION_QUERY) : null;
+  const mq = motionQuery();
   let reduce = mq?.matches ?? false;
 
   const io =
@@ -46,6 +69,7 @@ function watchActivity(el: Element, onChange: () => void): Activity {
 
   return {
     running: () => visible && !document.hidden && !reduce,
+    onScreen: () => visible && !document.hidden,
     reduced: () => reduce,
     dispose() {
       io?.disconnect();
@@ -111,14 +135,29 @@ export function attachFrameGate(el: Element, frame: (now: number) => void): Fram
   };
 }
 
+export interface IntervalGateOptions {
+  /**
+   * Hold under reduced motion (the default). Pass false only for a loop the
+   * viewer started with an explicit control: it then still pauses offscreen
+   * and in a hidden tab, but a deliberate "Run" is not overridden.
+   */
+  respectReducedMotion?: boolean;
+}
+
 /**
  * Runs `tick` every `ms` under the gate above. Under reduced motion it holds
- * the current values (no ticks) rather than animating them.
+ * the current values (no ticks) rather than animating them, unless
+ * `respectReducedMotion` is false.
  */
-export function attachIntervalGate(el: Element, tick: () => void, ms: number): () => void {
+export function attachIntervalGate(
+  el: Element,
+  tick: () => void,
+  ms: number,
+  { respectReducedMotion = true }: IntervalGateOptions = {},
+): () => void {
   let iv: ReturnType<typeof setInterval> | null = null;
   const sync = (): void => {
-    const run = activity.running();
+    const run = respectReducedMotion ? activity.running() : activity.onScreen();
     if (run && iv === null) iv = setInterval(tick, ms);
     else if (!run && iv !== null) {
       clearInterval(iv);

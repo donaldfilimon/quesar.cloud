@@ -33,7 +33,7 @@ export function NotFound() {
             <li key={item.to}>
               <Link
                 to={item.to}
-                className="group inline-flex h-11 items-center gap-1.5 rounded-full bg-bg-elevated px-4 text-sm text-fg-muted no-underline shadow-[var(--shadow-border)] hover:text-fg"
+                className="group inline-flex h-11 items-center gap-1.5 rounded-full bg-bg-elevated px-4 text-sm text-fg-muted no-underline shadow-border hover:text-fg"
               >
                 {item.label}
                 <ArrowRight

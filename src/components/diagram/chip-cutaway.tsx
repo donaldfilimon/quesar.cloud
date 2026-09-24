@@ -11,7 +11,7 @@ const layers = [
     href: "/abbey",
     body: "Human-facing companion. Personas, claims ledger, local workspace.",
     edge: "[--edge:var(--abbey)]",
-    glow: "shadow-[var(--shadow-border-hover)]",
+    glow: "shadow-border-hover",
   },
   {
     id: "abi",
@@ -20,7 +20,7 @@ const layers = [
     href: "/abi",
     body: "Reasoning, routing, orchestration. Inspectable context.",
     edge: "[--edge:var(--abi)]",
-    glow: "shadow-[var(--shadow-border-hover)]",
+    glow: "shadow-border-hover",
   },
   {
     id: "wdbx",
@@ -29,7 +29,7 @@ const layers = [
     href: "/wdbx",
     body: "Episodic substrate. Provenance, not a lookup table.",
     edge: "[--edge:var(--wdbx)]",
-    glow: "shadow-[var(--shadow-border-hover)]",
+    glow: "shadow-border-hover",
   },
 ] as const;
 
@@ -54,9 +54,9 @@ export function ChipCutaway() {
               value={layer.id}
               onMouseEnter={() => setActive(layer.id)}
               className={cn(
-                "chip-slab accent-edge relative block h-auto w-full rounded-[18px] px-6 py-5 text-left",
+                "chip-slab accent-edge relative block h-auto w-full rounded-18 px-6 py-5 text-left",
                 layer.edge,
-                isActive ? layer.glow : "shadow-[var(--shadow-border)]",
+                isActive ? layer.glow : "shadow-border",
                 isActive ? "bg-bg-elevated" : "bg-bg-elevated/80",
               )}
               style={{ marginTop: index === 0 ? 0 : -8, zIndex: layers.length - index }}

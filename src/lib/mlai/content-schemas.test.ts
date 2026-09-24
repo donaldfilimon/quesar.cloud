@@ -5,12 +5,15 @@ import { blog } from "./categories/blog";
 import { changelog } from "./categories/changelog";
 import { docs } from "./categories/docs";
 import { industries } from "./categories/industries";
+import { investor } from "./categories/investor";
 import { platform, runtime } from "./categories/platform";
 import { products } from "./categories/products";
 import { projects } from "./categories/projects";
 import { research } from "./categories/research";
+import { researchSources, researchTopics } from "./categories/research-topics";
 import { refusals, services } from "./categories/services";
 import { stats } from "./categories/stats";
+import { abbeyWorkspaceFacts, quesarSurfaces, quesarWhat, setups } from "./categories/surfaces";
 import { team } from "./categories/team";
 import {
   AboutSchema,
@@ -28,6 +31,14 @@ import {
   StatsSchema,
   TeamSchema,
 } from "./schemas";
+import { ResearchSourcesSchema, ResearchTopicsSchema } from "./schemas-research-topics";
+import {
+  AbbeyWorkspaceFactsSchema,
+  QuesarSurfacesSchema,
+  QuesarWhatSchema,
+  SetupsSchema,
+} from "./schemas-surfaces";
+import { InvestorSchema } from "./schemas-investor";
 
 // The content modules export plain typed data and never call zod at runtime,
 // so zod and the schemas stay out of the client bundle. Validation lives here
@@ -42,6 +53,8 @@ const datasets: [string, ZodType, unknown][] = [
   ["refusals", RefusalsSchema, refusals],
   ["runtime", RuntimeSchema, runtime],
   ["research", ResearchSchema, research],
+  ["researchTopics", ResearchTopicsSchema, researchTopics],
+  ["researchSources", ResearchSourcesSchema, researchSources],
   ["blog", BlogSchema, blog],
   ["team", TeamSchema, team],
   ["stats", StatsSchema, stats],
@@ -49,6 +62,11 @@ const datasets: [string, ZodType, unknown][] = [
   ["changelog", ChangelogSchema, changelog],
   ["docs", DocsSchema, docs],
   ["projects", ProjectsSchema, projects],
+  ["quesarSurfaces", QuesarSurfacesSchema, quesarSurfaces],
+  ["quesarWhat", QuesarWhatSchema, quesarWhat],
+  ["setups", SetupsSchema, setups],
+  ["abbeyWorkspaceFacts", AbbeyWorkspaceFactsSchema, abbeyWorkspaceFacts],
+  ["investor", InvestorSchema, investor],
 ];
 
 describe("content datasets match their schemas", () => {

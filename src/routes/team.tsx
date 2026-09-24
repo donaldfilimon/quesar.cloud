@@ -72,7 +72,7 @@ function TeamPage() {
           ))}
           <li>
             <div className="flex h-full flex-col items-center justify-center rounded-xl border border-dashed border-border p-10 text-center">
-              <span className="flex size-14 items-center justify-center rounded-full bg-bg-elevated shadow-[var(--shadow-border)]">
+              <span className="flex size-14 items-center justify-center rounded-full bg-bg-elevated shadow-border">
                 <Users className="size-6 text-accent" aria-hidden="true" />
               </span>
               <h2 className="mt-5 font-display text-xl">{teamIntro.join.title}</h2>

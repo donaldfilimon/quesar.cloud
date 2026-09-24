@@ -45,7 +45,7 @@ export function Eyebrow({
 }): ReactNode {
   return (
     <div
-      className="text-[11px] font-semibold uppercase mb-3"
+      className="text-11 font-semibold uppercase mb-3"
       style={{ letterSpacing: "0.24em", color, fontFamily: "var(--font-mono)" }}
     >
       {children}
@@ -79,7 +79,7 @@ export function SectionHead({
         {title}
       </h2>
       {lede && (
-        <p className="mt-4 text-[15px] sm:text-base leading-relaxed text-slate-400 text-pretty">
+        <p className="mt-4 text-15 sm:text-base leading-relaxed text-slate-400 text-pretty">
           {lede}
         </p>
       )}
@@ -279,8 +279,8 @@ export function TokenRow({
           style={{ background: swatch }}
         />
       )}
-      <Mono className="text-[12px] text-slate-300 flex-1 min-w-0 truncate">{name}</Mono>
-      <Mono className="text-[12px] text-slate-500">{value}</Mono>
+      <Mono className="text-12 text-slate-300 flex-1 min-w-0 truncate">{name}</Mono>
+      <Mono className="text-12 text-slate-500">{value}</Mono>
     </div>
   );
 }
@@ -307,12 +307,12 @@ export function CodeBlock({ code, label }: { code: string; label?: string }): Re
           <span className="w-2.5 h-2.5 rounded-full" style={{ background: "#f87171" }} />
           <span className="w-2.5 h-2.5 rounded-full" style={{ background: "#fbbf24" }} />
           <span className="w-2.5 h-2.5 rounded-full" style={{ background: "#34d399" }} />
-          {label && <Mono className="text-[10px] text-slate-500 ml-2">{label}</Mono>}
+          {label && <Mono className="text-10 text-slate-500 ml-2">{label}</Mono>}
         </div>
         <button
           type="button"
           onClick={copy}
-          className="text-[10px] font-semibold px-2.5 py-1 rounded-md transition-colors"
+          className="text-10 font-semibold px-2.5 py-1 rounded-md transition-colors"
           style={{
             color: copied ? "#34d399" : "#94a3b8",
             background: copied ? "rgba(52,211,153,0.12)" : "rgba(255,255,255,0.05)",
@@ -323,7 +323,7 @@ export function CodeBlock({ code, label }: { code: string; label?: string }): Re
         </button>
       </div>
       <pre
-        className="px-4 py-4 overflow-x-auto text-[12px] leading-relaxed"
+        className="px-4 py-4 overflow-x-auto text-12 leading-relaxed"
         style={{ fontFamily: "var(--font-mono)", color: "#cbd5e1" }}
       >
         <code>{code}</code>

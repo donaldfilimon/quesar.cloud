@@ -242,7 +242,7 @@ const raw = [
       {
         heading: "Crates you can inspect",
         paragraphs: [
-          "abi-cli is the operator surface. abi-mcp speaks JSON-RPC 2.0 over stdio with optional loopback HTTP. abi-ai holds an exact model registry and template completion. abi-sea is the scheduler. abi-gpu reports capability and returns accelerated=false when native kernels are not linked.",
+          "abi-cli is the operator surface. abi-mcp speaks JSON-RPC 2.0 over stdio with optional loopback HTTP. abi-ai holds an exact model registry and template completion. abi-sea selects bounded evidence for a context. abi-gpu reports capability and returns accelerated=false when native kernels are not linked.",
           "Local template completion does not establish model quality. Persistence defaults to $HOME/.abi/wdbx and can be disabled with ABI_WDBX_PERSIST=0.",
         ],
         list: [
@@ -360,8 +360,8 @@ const raw = [
           "The MCP server lives in the ABI repository. Transports are stdio and optional loopback HTTP with bearer auth. This website does not expose those tools to visitors.",
         ],
         list: [
-          "ai_learn — ingest a record; persistence can be disabled",
-          "ai_complete — template completion against the exact registry model",
+          "ai_learn — learning entry point with local side effects; persistence can be disabled",
+          "ai_complete — local persona-template completion; the model id is metadata, not proof it ran",
           "wdbx_query — nearest-neighbor retrieval with inspectable hits",
           "wdbx_stats — local store statistics, not a cluster dashboard",
           "gpu_status — honest device report; fallback is reported as fallback",

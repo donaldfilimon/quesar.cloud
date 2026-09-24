@@ -161,7 +161,7 @@ export function HomeResearchPreview() {
                 <span className="mt-1.5 block font-display text-xl leading-tight tracking-tight text-fg group-hover:text-accent">
                   {item.title}
                 </span>
-                <span className="mt-2 line-clamp-3 block text-[0.9375rem] leading-relaxed text-fg-muted">
+                <span className="mt-2 line-clamp-3 block text-0.9375rem leading-relaxed text-fg-muted">
                   {item.abstract}
                 </span>
               </Link>

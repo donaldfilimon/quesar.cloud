@@ -40,7 +40,7 @@ export function StepList({ steps }: { steps: readonly { title: string; body: str
     <ol className="grid gap-4 md:grid-cols-2">
       {steps.map((step, index) => (
         <li key={step.title} className="surface flex gap-4 p-5">
-          <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-bg font-mono text-[0.7rem] text-accent shadow-[var(--shadow-border)]">
+          <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-bg font-mono text-0.7rem text-accent shadow-border">
             {String(index + 1).padStart(2, "0")}
           </span>
           <div>
@@ -57,7 +57,7 @@ export function FaqList({ items }: { items: readonly { q: string; a: string }[] 
   return (
     <Accordion
       type="multiple"
-      className="divide-y divide-border overflow-hidden rounded-xl shadow-[var(--shadow-border)]"
+      className="divide-y divide-border overflow-hidden rounded-xl shadow-border"
     >
       {items.map((item) => (
         <AccordionItem key={item.q} value={item.q}>
@@ -97,13 +97,13 @@ export function CodeBlock({ code, label }: { code: string; label?: string }) {
   }
 
   return (
-    <div className="min-w-0 overflow-hidden rounded-lg bg-bg-elevated shadow-[var(--shadow-border)]">
+    <div className="min-w-0 overflow-hidden rounded-lg bg-bg-elevated shadow-border">
       <div className="flex items-center justify-between border-b border-border px-4 py-2">
         <span className="text-xs text-fg-subtle">{label ?? "source"}</span>
         <button
           type="button"
           onClick={() => void copy()}
-          className="inline-flex h-9 items-center gap-1.5 rounded-md px-2 text-[11px] text-fg-muted hover:bg-bg-subtle hover:text-fg"
+          className="inline-flex h-9 items-center gap-1.5 rounded-md px-2 text-11 text-fg-muted hover:bg-bg-subtle hover:text-fg"
         >
           {copied ? (
             <Check className="size-3.5" strokeWidth={1.75} />
@@ -113,7 +113,7 @@ export function CodeBlock({ code, label }: { code: string; label?: string }) {
           {copied ? "Copied" : "Copy"}
         </button>
       </div>
-      <pre className="max-w-full overflow-x-auto p-5 font-mono text-[0.8rem] leading-7 text-fg">
+      <pre className="max-w-full overflow-x-auto p-5 font-mono text-0.8rem leading-7 text-fg">
         <code>{code}</code>
       </pre>
     </div>

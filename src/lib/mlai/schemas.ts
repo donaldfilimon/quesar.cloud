@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import type { StatusKind } from "@/lib/content";
+
 /** A titled prose card — the shape shared by `about.values` and `about.investorThesis`. */
 const CardSchema = z.object({
   title: z.string(),
@@ -37,11 +39,27 @@ export const AboutSchema = z.object({
   investorThesis: z.array(CardSchema),
 });
 
+/**
+ * The site-wide claim-discipline status (`StatusKind` in `src/lib/content.ts`,
+ * labelled by `statusCopy`). `satisfies` keeps this enum from drifting outside
+ * the shared union.
+ */
+const StatusKindSchema = z.enum([
+  "current",
+  "partial",
+  "experimental",
+  "development",
+  "planned",
+  "research",
+]) satisfies z.ZodType<StatusKind>;
+
 export const PlatformSchema = z.array(
   z.object({
     title: z.string(),
     description: z.string(),
     detail: z.string(),
+    /** How much of this capability exists today; unfinished work is never shown as shipping. */
+    status: StatusKindSchema.optional(),
   }),
 );
 

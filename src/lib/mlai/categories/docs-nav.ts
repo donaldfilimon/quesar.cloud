@@ -28,7 +28,7 @@ export const docNav: readonly DocNavGroup[] = [
         id: "intro",
         label: "Introduction",
         description:
-          "Build private, traceable AI workflows on the ABI runtime with retrieval provenance, policy-gated agents, and audit trails.",
+          "Build private, traceable AI workflows on the ABI runtime with retrieval provenance and hash-chained memory; policy-gated agents are planned.",
         body: "MLAI developer platform documentation introduction overview",
       },
       {
