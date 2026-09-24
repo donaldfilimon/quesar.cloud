@@ -1,5 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { Button } from "@/components/ui/button";
+import {
+  attachIntervalGate,
+  readReducedMotion,
+  subscribeReducedMotion,
+} from "@/cinematic/design/frame-gate";
 
 const COLS = 48;
 const ROWS = 28;
@@ -39,14 +44,22 @@ function step(grid: number[][]) {
 
 export function CellMachine() {
   const [grid, setGrid] = useState<number[][]>(() => seed());
-  const [running, setRunning] = useState(true);
+  // null until the visitor presses Run/Pause: until then the machine autoplays
+  // only when motion is allowed (false on the server and during hydration).
+  const [choice, setChoice] = useState<boolean | null>(null);
+  const reduce = useSyncExternalStore(subscribeReducedMotion, readReducedMotion, () => false);
+  const running = choice ?? !reduce;
   const ref = useRef<HTMLCanvasElement>(null);
 
+  // Ticks only while the canvas is on screen and the tab is visible. Autoplay
+  // also holds under reduced motion; an explicit Run is honoured.
   useEffect(() => {
-    if (!running) return;
-    const id = window.setInterval(() => setGrid((g) => step(g)), 120);
-    return () => window.clearInterval(id);
-  }, [running]);
+    const canvas = ref.current;
+    if (!running || !canvas) return;
+    return attachIntervalGate(canvas, () => setGrid((g) => step(g)), 120, {
+      respectReducedMotion: choice === null,
+    });
+  }, [running, choice]);
 
   useEffect(() => {
     const canvas = ref.current;
@@ -71,7 +84,7 @@ export function CellMachine() {
   return (
     <div className="surface overflow-hidden p-4">
       <div className="mb-3 flex flex-wrap gap-2">
-        <Button type="button" size="sm" onClick={() => setRunning((v) => !v)}>
+        <Button type="button" size="sm" onClick={() => setChoice(!running)}>
           {running ? "Pause" : "Run"}
         </Button>
         <Button type="button" size="sm" variant="secondary" onClick={() => setGrid(seed())}>
