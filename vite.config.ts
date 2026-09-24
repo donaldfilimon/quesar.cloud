@@ -7,6 +7,7 @@ import viteReact from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import { nitro } from "nitro/vite";
 import { isMigrationFile } from "./scripts/migration-plan.ts";
+import { searchRetryPlugin } from "./scripts/search-retry-plugin.ts";
 
 /** The files `src/lib/db.ts` globs — same directory, same non-recursive scope. */
 function hasGlobbedMigrations(root: string): boolean {
@@ -67,6 +68,7 @@ export default defineConfig(({ command, isPreview, mode }) => {
     resolve: { tsconfigPaths: true },
     plugins: [
       pgliteBootstrapPlugin(),
+      searchRetryPlugin(),
       tailwindcss(),
       tanstackStart(
         isStatic

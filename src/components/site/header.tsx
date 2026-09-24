@@ -1,6 +1,6 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { Menu, X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { nav } from "@/lib/content";
 import { cn } from "@/lib/utils";
 import * as Sheet from "@radix-ui/react-dialog";
@@ -53,6 +53,14 @@ const mobileLinks = [...nav, ...extra, { to: "/contact", label: "Contact" }].fil
 export function SiteHeader() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const [open, setOpen] = useState(false);
+  useEffect(() => {
+    const desktop = window.matchMedia("(min-width: 1024px)");
+    const closeOnDesktop = () => {
+      if (desktop.matches) setOpen(false);
+    };
+    desktop.addEventListener("change", closeOnDesktop);
+    return () => desktop.removeEventListener("change", closeOnDesktop);
+  }, []);
 
   // Close the mobile sheet on navigation (adjusted during render, not in an effect).
   const [prevPathname, setPrevPathname] = useState(pathname);

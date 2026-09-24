@@ -40,6 +40,12 @@ URL, with each asset gzipped independently.
 
 ## Progress
 
+- Phase 2: complete. Three browser regressions reproduced before fixes.
+  Full gate passed (397 tests), static build and budgets passed, and all 15
+  browser cases passed. Ruling: a narrow Vite build transform gives the search
+  entry a fresh import URL because Chromium caches rejected module imports;
+  resetting React.lazy alone failed the real-browser recovery test.
+
 - Phase 1: complete. Full gate passed (397 tests); static build passed;
   six discovery browser cases passed across three viewports. Static checker
   passed for 128 pages and all four bundle budgets.
