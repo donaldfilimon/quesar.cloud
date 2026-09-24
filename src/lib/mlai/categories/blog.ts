@@ -255,13 +255,13 @@ export const blog: Blog = [
       {
         paragraphs: [
           'When an autonomous workflow does something surprising in production, the first question is never "what is the model?" It is "what just happened?" Most AI stacks cannot answer that question, because the only durable artifact they keep is the final response. The retrieval that fed it, the policy checks that passed, the tool calls that fired, and the operator who approved the run are all gone by the time anyone goes looking.',
-          "Quesar's Trace Layer is built around the opposite default: every orchestration step emits an inspectable event before it is allowed to change state. The trace is the system of record, not a debug log you remember to turn on.",
+          "Quesar's Trace Layer is designed around the opposite default: every orchestration step emits an inspectable event before it is allowed to change state. The trace is meant to be the system of record, not a debug log you remember to turn on.",
         ],
       },
       {
         heading: "What a trace actually contains",
         paragraphs: [
-          "A complete trace for a single agent run reconstructs the decision without re-running it. In the ABI runtime that means the captured events cover the full causal chain:",
+          "A complete trace for a single agent run reconstructs the decision without re-running it. The design is that the captured events cover the full causal chain. Today the ABI runtime records retrieval paths, routing decisions, and append-only memory; policy checks and operator interventions are not yet captured as one inspectable event stream:",
         ],
         list: [
           "Retrieval paths — which records were pulled from WDBX, their source metadata, and the weighted backtrace that connected them to the query.",
@@ -282,7 +282,7 @@ export const blog: Blog = [
         heading: "Designing for the review you will eventually run",
         paragraphs: [
           'The practical discipline is to treat the post-incident review as a first-class consumer of your architecture from day one. If you cannot answer "why did the agent take its last move" from durable artifacts alone — without re-prompting the model and hoping for the same output — the trace is incomplete.',
-          "Our operating principle here is blunt: no autonomous write action without an observable policy boundary, and no retrieval claim without a traceable source or confidence signal. Everything in the Trace Layer exists to keep those two promises auditable months after the run.",
+          "Our operating principle here is blunt: no autonomous write action without an observable policy boundary, and no retrieval claim without a traceable source or confidence signal. Everything in the Trace Layer is being built to keep those two promises auditable months after the run.",
         ],
       },
     ],
@@ -290,9 +290,9 @@ export const blog: Blog = [
   {
     slug: "production-ready-agent-metrics",
     tag: "ENGINEERING",
-    title: "What We Measure Before Calling an Agent Production-Ready",
+    title: "What We Plan to Measure Before Calling an Agent Production-Ready",
     excerpt:
-      "Latency and accuracy are not enough. We track tool-boundary violations, source coverage, rollback paths, abstention quality, and human-review burden.",
+      "Latency and accuracy are not enough. The gate we are building tracks tool-boundary violations, source coverage, rollback paths, abstention quality, and human-review burden.",
     date: "May 18, 2026",
     readTime: "9 min read",
     author: "MLAI Safety Engineering",
@@ -300,13 +300,13 @@ export const blog: Blog = [
       {
         paragraphs: [
           "Latency and accuracy are the metrics that demo well, which is exactly why they are insufficient as a release gate. An agent can be fast and frequently correct while still being unsafe to deploy, because the failure modes that matter in production are the ones that do not show up in a happy-path benchmark.",
-          "The Evaluation Mesh exists to turn AI quality into a release gate instead of an after-the-fact dashboard. Before we call an agent production-ready, it has to clear regression scenarios across dimensions that a single accuracy score hides.",
+          "The Evaluation Mesh is our planned answer: the design turns AI quality into a release gate instead of an after-the-fact dashboard. It is not built yet. The bar we are building toward is that, before we call an agent production-ready, it has to clear regression scenarios across dimensions that a single accuracy score hides.",
         ],
       },
       {
-        heading: "The dimensions we gate on",
+        heading: "The dimensions we plan to gate on",
         paragraphs: [
-          "Each of these runs as a repeatable scenario suite, not a one-time audit. A change to a prompt, a tool permission, or a retrieval index re-runs the full mesh.",
+          "The design is that each of these runs as a repeatable scenario suite, not a one-time audit, and that a change to a prompt, a tool permission, or a retrieval index re-runs the full mesh.",
         ],
         list: [
           "Tool-boundary violations — did the agent attempt an action outside its granted permissions, even if the attempt was blocked?",
@@ -320,14 +320,14 @@ export const blog: Blog = [
       {
         heading: "Abstention is a feature, not a failure",
         paragraphs: [
-          "Most evaluation harnesses penalize a model for not answering. We invert that for high-stakes workflows. An agent that abstains and escalates when retrieval confidence is low is behaving correctly; an agent that fabricates a plausible answer under the same conditions has failed the gate, regardless of how often it is right elsewhere.",
-          "This is why the persona split matters operationally. Abbey's analytical, safety-oriented review can flag a low-confidence retrieval before Abi's action-oriented execution profile ever touches production data.",
+          "Most evaluation harnesses penalize a model for not answering. Our design inverts that for high-stakes workflows. An agent that abstains and escalates when retrieval confidence is low is behaving correctly; an agent that fabricates a plausible answer under the same conditions should fail the gate, regardless of how often it is right elsewhere.",
+          "This is why the persona split matters operationally. Abbey's analytical, safety-oriented review is meant to flag a low-confidence retrieval before Abi's action-oriented execution profile ever touches production data.",
         ],
       },
       {
         heading: "Review burden as a leading indicator",
         paragraphs: [
-          "The metric teams most often forget is the one that predicts whether their controls will survive contact with reality: human-review burden. If every run needs a human, the system does not scale. If no run needs a human, the gates are probably theater. We track the ratio over time and treat a sharp move in either direction as a signal that the control plane needs retuning, not just the model.",
+          "The metric teams most often forget is the one that predicts whether their controls will survive contact with reality: human-review burden. If every run needs a human, the system does not scale. If no run needs a human, the gates are probably theater. The plan is to track the ratio over time and treat a sharp move in either direction as a signal that the control plane needs retuning, not just the model.",
         ],
       },
     ],
@@ -503,12 +503,12 @@ export const blog: Blog = [
       {
         heading: "The same controls, inside your boundary",
         paragraphs: [
-          "The Private Runtime packages LLM orchestration, retrieval, audit logs, and controls for cloud, VPC, on-premise, and offline-first deployments. The design intent is that going private subtracts nothing from observability:",
+          "The Private Runtime is designed to package LLM orchestration, retrieval, audit logs, and controls for cloud, VPC, on-premise, and offline-first deployments. Today the ABI CLI and MCP server run locally on machines you own; packaged installers for those targets are not shipped. The design intent is that going private subtracts nothing from observability:",
         ],
         list: [
           "Local audit trails — traces persist inside the boundary with integrity checks, not shipped to an external service.",
-          "Release gates — the evaluation mesh runs against your own scenarios before changes reach production, online or air-gapped.",
-          "Repeatable evals — regression suites you can run on demand without a network round-trip.",
+          "Release gates (planned) — the evaluation mesh is designed to run against your own scenarios before changes reach production, online or air-gapped.",
+          "Repeatable evals (planned) — regression suites you will be able to run on demand without a network round-trip.",
           "Operator-visible confidence — the same retrieval confidence and source-coverage signals an operator would see in a hosted deployment.",
         ],
       },
@@ -516,7 +516,7 @@ export const blog: Blog = [
         heading: "Why teams choose this path",
         paragraphs: [
           "Private deployment is shaped for environments where data residency, network isolation, or customer policy make unmanaged infrastructure a non-starter: regulated software teams, research organizations with sensitive corpora, security and compliance teams evaluating tool-using agents, and infrastructure teams running near the edge.",
-          'For those teams, "private" and "auditable" are not in tension — they are the same requirement seen from two sides. The runtime is built so you never have to choose between keeping your data and seeing what your AI did with it.',
+          'For those teams, "private" and "auditable" are not in tension — they are the same requirement seen from two sides. The runtime is being built so you never have to choose between keeping your data and seeing what your AI did with it.',
         ],
       },
     ],
@@ -526,7 +526,7 @@ export const blog: Blog = [
     tag: "FIELD NOTE",
     title: "Neural Backtracking: What a Block Chain Buys an AI Memory",
     excerpt:
-      "Hallucination debugging is archaeology. WDBX chains every interaction block to its parent so you can walk back to the exact moment a model drifted — and prove nobody edited the record.",
+      "Hallucination debugging is archaeology. WDBX chains every interaction block to its parent so you can prove nobody edited the record — and so a system can be built to walk back to the exact moment a model drifted.",
     date: "February 18, 2026",
     readTime: "7 min read",
     author: "MLAI Research · WDBX Core",
@@ -540,7 +540,7 @@ export const blog: Blog = [
       {
         heading: "Drift is a geometric event",
         paragraphs: [
-          "Each block stores the interaction's embedding alongside its content. That means drift detection becomes vector math: walk the chain backwards and measure the semantic distance between each block and the conversation's anchor context. The divergence point shows up as a discontinuity — the block where cosine similarity to ground truth falls off a cliff.",
+          "Each block stores the interaction's embedding alongside its content. That means drift detection can become vector math: walk the chain backwards and measure the semantic distance between each block and the conversation's anchor context. The divergence point shows up as a discontinuity — the block where cosine similarity to ground truth falls off a cliff. The sketch below shows the idea.",
         ],
         code: [
           {
@@ -562,7 +562,7 @@ pub fn findDivergence(chain: *const Chain, anchor: Vec) ?BlockRef {
       },
       {
         paragraphs: [
-          "Once you have the divergence block, you have options a stateless system doesn't: rewind the context window to the last good block, regenerate from there, or surface the exact exchange to a human reviewer. We call the whole capability neural backtracking, and it only works because the chain guarantees order.",
+          "Once you have the divergence block, you have options a stateless system doesn't: rewind the context window to the last good block, regenerate from there, or surface the exact exchange to a human reviewer. We call the whole capability neural backtracking. It is the design we are building toward, not a shipped rewind command, and it only works because the chain guarantees order.",
         ],
       },
       {

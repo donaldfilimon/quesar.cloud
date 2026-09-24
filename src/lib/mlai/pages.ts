@@ -191,7 +191,7 @@ export const benchmarkArchitecture = [
 
 export const docsHub = {
   title: "Quesar developer platform",
-  lede: "Build private, traceable AI workflows on the ABI runtime: retrieval provenance through WDBX, policy-gated agents, evaluation suites, and operator-ready audit trails, exposed over a local CLI and an MCP server.",
+  lede: "Build private, traceable AI workflows on the ABI runtime: retrieval provenance and hash-chained memory through WDBX, exposed over a local CLI and an MCP server. Policy-gated agents and an evaluation mesh are planned, not shipped.",
   /**
    * ABI/WDBX capability framing. Retrieval provenance and local operation exist
    * in the sibling Rust workspaces; policy gates and the evaluation mesh do not
