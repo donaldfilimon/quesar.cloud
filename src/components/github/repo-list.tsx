@@ -121,6 +121,7 @@ export function RepoList({ compact = false }: { compact?: boolean }) {
           <li key={repo.name}>
             <AppLink
               to={repo.href}
+              external={repo.href.startsWith("https://")}
               className="surface surface-hover flex h-full flex-col p-4 no-underline"
             >
               <div className="flex items-start justify-between gap-3">
