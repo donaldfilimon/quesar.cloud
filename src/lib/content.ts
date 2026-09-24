@@ -4,7 +4,6 @@ import type { StatusKind } from "@/lib/site-identity";
 // Site identity, nav and StatusKind live in a small module so the entry chunk
 // (root route, header) does not pull in this whole catalog.
 export { nav, site, type StatusKind } from "@/lib/site-identity";
-export { homePrivacy, homeStart } from "@/lib/home-content";
 export {
   abbeyWorkspaceFacts,
   quesarSurfaces,
