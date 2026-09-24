@@ -110,7 +110,7 @@ function QuesarPage() {
           </Link>
           <Link
             to="/quasar/new"
-            className="inline-flex h-10 items-center rounded-md bg-bg-elevated px-4 text-sm font-medium text-fg no-underline shadow-[var(--shadow-border)]"
+            className="inline-flex h-10 items-center rounded-md bg-bg-elevated px-4 text-sm font-medium text-fg no-underline shadow-border"
           >
             New site
           </Link>

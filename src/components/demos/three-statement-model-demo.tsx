@@ -197,7 +197,7 @@ export function ThreeStatementModelDemo() {
         <div className="grid grid-cols-2 gap-x-4 gap-y-1.5 sm:grid-cols-4 lg:grid-cols-6">
           {DRIVER_VIEW.map((dv) => (
             <div key={dv.key} className="flex items-baseline justify-between gap-2">
-              <span className="text-[11px] text-fg-subtle">{dv.label}</span>
+              <span className="text-11 text-fg-subtle">{dv.label}</span>
               <span className="font-mono text-xs font-semibold tabular-nums text-fg">
                 {driverDisplay(drivers[dv.key], dv.kind)}
               </span>
@@ -472,7 +472,7 @@ export function ThreeStatementModelDemo() {
         </table>
       </div>
 
-      <p className="mt-4 font-mono text-[11px] text-fg-subtle">
+      <p className="mt-4 font-mono text-11 text-fg-subtle">
         Δassets = NI + Δpayables + Δaccrued + Δdebt − dividends = Δliabilities + Δequity
         &nbsp;→&nbsp; balance = 0 every period. Loss years bank an NOL + deferred-tax asset
         (post-2017 80% cap); the deferred-tax add-back keeps cash tied.

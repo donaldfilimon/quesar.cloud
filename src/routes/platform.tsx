@@ -64,7 +64,7 @@ function PlatformPage() {
           rows={integrationApps}
           rowKey={(row) => row.path}
           columns={[
-            { header: "Path", className: "font-mono text-[12px]", cell: (row) => row.path },
+            { header: "Path", className: "font-mono text-12", cell: (row) => row.path },
             { header: "Purpose", className: "text-fg-muted", cell: (row) => row.purpose },
             { header: "Status", cell: (row) => <StatusBadge status={row.status} /> },
           ]}

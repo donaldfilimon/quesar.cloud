@@ -99,7 +99,7 @@ function Home() {
           {homePrivacy.map((item) => (
             <div key={item.title}>
               <dt className="font-display text-lg tracking-tight">{item.title}</dt>
-              <dd className="mt-2 text-[0.9375rem] leading-relaxed text-fg-muted">{item.body}</dd>
+              <dd className="mt-2 text-0.9375rem leading-relaxed text-fg-muted">{item.body}</dd>
             </div>
           ))}
         </dl>
@@ -189,7 +189,7 @@ function Row({
 function Transcripts() {
   return (
     <div className="grid gap-4 sm:grid-cols-2">
-      <figure className="rounded-lg bg-bg-elevated p-5 shadow-[var(--shadow-border)]">
+      <figure className="rounded-lg bg-bg-elevated p-5 shadow-border">
         <figcaption className="text-sm text-fg-muted">A conventional session</figcaption>
         <p className="mt-3 font-mono text-[0.8125rem] leading-7 text-fg">
           you: remember the deploy target
@@ -203,7 +203,7 @@ function Transcripts() {
           model: I don't have that
         </p>
       </figure>
-      <figure className="rounded-lg bg-bg-elevated p-5 shadow-[var(--shadow-border)]">
+      <figure className="rounded-lg bg-bg-elevated p-5 shadow-border">
         <figcaption className="text-sm text-fg-muted">With WDBX underneath</figcaption>
         <p className="mt-3 font-mono text-[0.8125rem] leading-7 text-fg">
           episode: deploy target recorded
@@ -254,7 +254,7 @@ function StartHere() {
                 <span className="font-display text-xl tracking-tight text-fg group-hover:text-accent">
                   {item.title}
                 </span>
-                <span className="mt-2 block text-[0.9375rem] leading-relaxed text-fg-muted">
+                <span className="mt-2 block text-0.9375rem leading-relaxed text-fg-muted">
                   {item.body}
                 </span>
               </Link>

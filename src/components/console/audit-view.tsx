@@ -5,10 +5,7 @@ import { day, when } from "./format";
 /** A decrypted audit: metadata, then the stored turns and reply. */
 export function AuditView({ audit, onClose }: { audit: AuditRecord; onClose: () => void }) {
   return (
-    <div
-      className="rounded-xl bg-card p-5 shadow-[var(--shadow-border)]"
-      aria-label={`Audit ${audit.id}`}
-    >
+    <div className="rounded-xl bg-card p-5 shadow-border" aria-label={`Audit ${audit.id}`}>
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <p className="break-all font-mono text-xs text-accent">audit {audit.id}</p>
@@ -33,7 +30,7 @@ export function AuditView({ audit, onClose }: { audit: AuditRecord; onClose: () 
           <p className="mt-1 whitespace-pre-wrap">{audit.content.reply}</p>
         </li>
       </ol>
-      <p className="mt-3 break-all font-mono text-[10px] text-fg-subtle">
+      <p className="mt-3 break-all font-mono text-10 text-fg-subtle">
         sha-256 {audit.contentDigest}
       </p>
     </div>

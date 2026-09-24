@@ -142,7 +142,7 @@ function Sidebar({ active }: { active: string }): ReactNode {
         <Mark size={34} />
         <div>
           <div
-            className="font-bold tracking-[0.16em] text-white text-[15px] leading-none"
+            className="font-bold tracking-0.16em text-white text-15 leading-none"
             style={{ fontFamily: "var(--font-display)" }}
           >
             MLAI
@@ -152,7 +152,7 @@ function Sidebar({ active }: { active: string }): ReactNode {
       </div>
       <div className="mt-8 mb-6">
         <span
-          className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[10px] font-semibold uppercase"
+          className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-10 font-semibold uppercase"
           style={{
             background:
               "linear-gradient(90deg,color-mix(in srgb,var(--ds-accent) 14%,transparent),color-mix(in srgb,var(--ds-accent3) 14%,transparent))",
@@ -172,7 +172,7 @@ function Sidebar({ active }: { active: string }): ReactNode {
             href={`#${id}`}
             className={`nav-link group flex items-center gap-3 py-2.5 text-[13.5px] text-slate-500 hover:text-white transition-colors ${active === id ? "active" : ""}`}
           >
-            <Mono className="text-[10px] text-slate-600 w-5">{num}</Mono>
+            <Mono className="text-10 text-slate-600 w-5">{num}</Mono>
             <span
               className="dot w-1.5 h-1.5 rounded-full transition-all duration-300"
               style={{
@@ -186,10 +186,10 @@ function Sidebar({ active }: { active: string }): ReactNode {
         ))}
       </nav>
       <div className="mt-auto pt-6 border-t border-white/6">
-        <Mono className="text-[10px] text-slate-600 leading-relaxed block">
+        <Mono className="text-10 text-slate-600 leading-relaxed block">
           Space Grotesk · IBM Plex Sans · IBM Plex Mono
         </Mono>
-        <Mono className="text-[10px] text-slate-700 mt-1 block">© 2026 MLAI Corporation</Mono>
+        <Mono className="text-10 text-slate-700 mt-1 block">© 2026 MLAI Corporation</Mono>
       </div>
     </aside>
   );
@@ -329,7 +329,7 @@ export default function DesignBoard(): ReactNode {
               {HERO_CHIPS.map((chip) => (
                 <span
                   key={chip}
-                  className="px-3.5 py-1.5 rounded-full text-[11px] font-medium text-slate-300"
+                  className="px-3.5 py-1.5 rounded-full text-11 font-medium text-slate-300"
                   style={{
                     background: "rgba(255,255,255,0.04)",
                     border: "1px solid rgba(255,255,255,0.1)",
@@ -399,10 +399,10 @@ export default function DesignBoard(): ReactNode {
                 >
                   MLAI Corporation
                 </div>
-                <Mono className="text-[11px] text-slate-500">Design System Upgrade · v2.0</Mono>
+                <Mono className="text-11 text-slate-500">Design System Upgrade · v2.0</Mono>
               </div>
             </div>
-            <Mono className="text-[11px] text-slate-600">
+            <Mono className="text-11 text-slate-600">
               Infrastructure for resilient intelligence
             </Mono>
           </footer>

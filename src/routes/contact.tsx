@@ -312,7 +312,7 @@ function ContactPage() {
               <ul className="mt-4 space-y-3">
                 {saved.slice(0, 5).map((item) => (
                   <li key={item.id} className="surface p-4">
-                    <p className="font-mono text-[11px] text-fg-subtle">
+                    <p className="font-mono text-11 text-fg-subtle">
                       {item.topic} · {new Date(item.created).toISOString().slice(0, 10)}
                     </p>
                     <p className="mt-2 line-clamp-3 text-sm text-fg-muted">{item.message}</p>

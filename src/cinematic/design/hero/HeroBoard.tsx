@@ -461,13 +461,13 @@ function PersonaDot({
       />
       <div className="leading-tight">
         <div
-          className="text-[13px] font-semibold text-white"
+          className="text-13 font-semibold text-white"
           style={{ fontFamily: "var(--font-display)" }}
         >
           {name}
         </div>
         <div
-          className="text-[11px]"
+          className="text-11"
           style={{
             color: "var(--text-faint)",
             fontFamily: "var(--font-mono)",
@@ -541,21 +541,21 @@ export default function HeroBoard(): ReactNode {
             }}
           >
             <span
-              className="text-white font-bold text-[13px]"
+              className="text-white font-bold text-13"
               style={{ fontFamily: "var(--font-display)" }}
             >
               M
             </span>
           </div>
           <span
-            className="text-[15px] font-semibold tracking-tight text-white"
+            className="text-15 font-semibold tracking-tight text-white"
             style={{ fontFamily: "var(--font-display)" }}
           >
             MLAI
           </span>
         </div>
         <div
-          className="hidden sm:flex items-center gap-7 text-[13px]"
+          className="hidden sm:flex items-center gap-7 text-13"
           style={{ color: "var(--text-dim)" }}
         >
           <span className="hover:text-white transition-colors cursor-default">WDBX</span>
@@ -565,7 +565,7 @@ export default function HeroBoard(): ReactNode {
         </div>
         <button
           onClick={() => setOverlay((o) => !o)}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-[12px] transition-colors"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-12 transition-colors"
           style={{
             borderColor: "rgba(255,255,255,0.15)",
             background: "rgba(255,255,255,0.05)",
@@ -581,7 +581,7 @@ export default function HeroBoard(): ReactNode {
       {show && (
         <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-6">
           <div
-            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border text-[12px] mb-7"
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border text-12 mb-7"
             style={{
               borderColor: "rgba(255,255,255,0.15)",
               background: "rgba(255,255,255,0.05)",
@@ -686,7 +686,7 @@ export default function HeroBoard(): ReactNode {
           style={{ animation: "hero-fadein 1s ease-out .8s both" }}
         >
           <span
-            className="text-[10px] tracking-[0.3em] uppercase"
+            className="text-10 tracking-0.3em uppercase"
             style={{ color: "var(--text-faint)", fontFamily: "var(--font-mono)" }}
           >
             scroll

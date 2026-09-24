@@ -125,16 +125,13 @@ export function NotesPanel({ initialNode }: { initialNode?: string }) {
   return (
     <div>
       {initialNode ? (
-        <p className="mb-6 rounded-lg bg-card px-4 py-3 text-sm text-fg-muted shadow-[var(--shadow-border)]">
+        <p className="mb-6 rounded-lg bg-card px-4 py-3 text-sm text-fg-muted shadow-border">
           From architecture: this form is attached to <span className="text-fg">{node?.name}</span>.
           Current versus not claimed is listed beside it.
         </p>
       ) : null}
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(16rem,0.7fr)]">
-        <form
-          onSubmit={onSubmit}
-          className="grid gap-3 rounded-xl bg-card p-5 shadow-[var(--shadow-border)]"
-        >
+        <form onSubmit={onSubmit} className="grid gap-3 rounded-xl bg-card p-5 shadow-border">
           <div>
             <Label htmlFor="note-node">Architecture node</Label>
             <Select value={nodeId} onValueChange={setNodeId}>
@@ -164,7 +161,7 @@ export function NotesPanel({ initialNode }: { initialNode?: string }) {
               }}
               placeholder={`What is current on ${node?.name}, and what is not claimed?`}
             />
-            <p className="mt-1 font-mono text-[10px] text-fg-subtle">{body.length}/2000</p>
+            <p className="mt-1 font-mono text-10 text-fg-subtle">{body.length}/2000</p>
           </div>
           <Button type="submit" disabled={status === "saving" || body.trim().length === 0}>
             {status === "saving" ? "Saving…" : "Save note"}
@@ -257,7 +254,7 @@ export function NotesPanel({ initialNode }: { initialNode?: string }) {
           const named = architectureNodes.find((item) => item.id === note.node_id);
           const when = noteWhen(note.created_at);
           return (
-            <li key={note.id} className="rounded-lg bg-card p-4 shadow-[var(--shadow-border)]">
+            <li key={note.id} className="rounded-lg bg-card p-4 shadow-border">
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <p className="text-xs text-accent">{named?.name ?? note.node_id}</p>

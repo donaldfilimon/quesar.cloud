@@ -129,18 +129,18 @@ export function RepoList({ compact = false }: { compact?: boolean }) {
                 className="surface surface-hover flex h-full flex-col p-4 no-underline"
               >
                 <div className="flex items-start justify-between gap-3">
-                  <p className="truncate font-mono text-[0.7rem] text-fg-subtle">
+                  <p className="truncate font-mono text-0.7rem text-fg-subtle">
                     {repo.owner}/{repo.name}
                   </p>
                   {badge ? <span className="text-xs text-fg-subtle">{badge}</span> : null}
                 </div>
                 <p className="mt-2 text-sm font-medium text-fg">{summary}</p>
                 {row?.topics?.length ? (
-                  <p className="mt-2 font-mono text-[10px] text-fg-subtle">
+                  <p className="mt-2 font-mono text-10 text-fg-subtle">
                     {row.topics.slice(0, 6).join(" · ")}
                   </p>
                 ) : null}
-                <p className="mt-auto pt-4 font-mono text-[0.7rem] text-fg-muted">
+                <p className="mt-auto pt-4 font-mono text-0.7rem text-fg-muted">
                   {row?.language ?? repo.language}
                   {row ? (
                     <>
@@ -175,11 +175,11 @@ export function RepoList({ compact = false }: { compact?: boolean }) {
                   to={pathForRepo(row.name)}
                   className="surface surface-hover block p-4 no-underline"
                 >
-                  <p className="font-mono text-[0.7rem] text-fg">{row.name}</p>
+                  <p className="font-mono text-0.7rem text-fg">{row.name}</p>
                   <p className="mt-1 line-clamp-2 text-xs text-fg-muted">
                     {row.description || "No description."}
                   </p>
-                  <p className="mt-2 font-mono text-[10px] text-fg-subtle">
+                  <p className="mt-2 font-mono text-10 text-fg-subtle">
                     {row.language ?? "—"} · {row.stars} ★ · {relTime(row.updated)}
                   </p>
                 </AppLink>
@@ -192,7 +192,7 @@ export function RepoList({ compact = false }: { compact?: boolean }) {
       {!compact && events.length ? (
         <div className="mt-10">
           <p className="text-xs text-fg-subtle">Recent public activity</p>
-          <ul className="mt-3 divide-y divide-border overflow-hidden rounded-lg shadow-[var(--shadow-border)]">
+          <ul className="mt-3 divide-y divide-border overflow-hidden rounded-lg shadow-border">
             {events.map((event) => (
               <li
                 key={event.id}
@@ -207,7 +207,7 @@ export function RepoList({ compact = false }: { compact?: boolean }) {
                   </AppLink>
                   <span className="mx-2 text-fg-subtle">{eventLabel(event.type)}</span>
                 </p>
-                <p className="shrink-0 font-mono text-[10px] text-fg-subtle">
+                <p className="shrink-0 font-mono text-10 text-fg-subtle">
                   {relTime(event.created)}
                 </p>
               </li>

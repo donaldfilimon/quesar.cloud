@@ -63,7 +63,7 @@ export function WdbxLiveDemo() {
         <span className="h-2.5 w-2.5 rounded-full bg-destructive/70" aria-hidden="true" />
         <span className="h-2.5 w-2.5 rounded-full bg-warn/70" aria-hidden="true" />
         <span className="h-2.5 w-2.5 rounded-full bg-accent/70" aria-hidden="true" />
-        <span className="ml-2 font-mono text-[11px] text-fg-muted">
+        <span className="ml-2 font-mono text-11 text-fg-muted">
           wdbx · live query — simulated in-browser · {engine.size} vectors · ℝ^{stats?.dim ?? 256}
         </span>
       </div>
@@ -95,7 +95,7 @@ export function WdbxLiveDemo() {
                 setQuery(p);
                 run(p);
               }}
-              className="rounded-full border border-border px-3 py-1 font-mono text-[11px] text-fg-muted transition-colors hover:border-accent/50 hover:text-accent"
+              className="rounded-full border border-border px-3 py-1 font-mono text-11 text-fg-muted transition-colors hover:border-accent/50 hover:text-accent"
             >
               {p}
             </button>
@@ -154,15 +154,15 @@ export function WdbxLiveDemo() {
             {blocks.map((b, i) => (
               <span key={b.height} className="contents">
                 {i > 0 && (
-                  <span className="font-mono text-[10px] text-accent/60" aria-hidden="true">
+                  <span className="font-mono text-10 text-accent/60" aria-hidden="true">
                     ─⛓─
                   </span>
                 )}
                 <span className="rounded-lg border border-accent/25 bg-accent/5 px-2.5 py-1.5">
-                  <span className="block font-mono text-[10px] text-accent">
+                  <span className="block font-mono text-10 text-accent">
                     #{b.height} · 0x{b.hash}
                   </span>
-                  <span className="block max-w-40 truncate font-mono text-[10px] text-fg-subtle">
+                  <span className="block max-w-40 truncate font-mono text-10 text-fg-subtle">
                     {b.query}
                   </span>
                 </span>

@@ -81,10 +81,10 @@ export function NamedGrid({
 
 export function CommandList({ rows }: { rows: readonly { cmd: string; note: string }[] }) {
   return (
-    <ul className="divide-y divide-border overflow-hidden rounded-xl shadow-[var(--shadow-border)]">
+    <ul className="divide-y divide-border overflow-hidden rounded-xl shadow-border">
       {rows.map((row) => (
         <li key={row.cmd} className="bg-bg-elevated px-5 py-4">
-          <p className="font-mono text-[0.8rem] text-fg">{row.cmd}</p>
+          <p className="font-mono text-0.8rem text-fg">{row.cmd}</p>
           <p className="mt-1 text-sm text-fg-muted">{row.note}</p>
         </li>
       ))}
@@ -104,7 +104,7 @@ export function DataTable<T>({
   minWidth?: string;
 }) {
   return (
-    <div className="overflow-x-auto rounded-xl shadow-[var(--shadow-border)]">
+    <div className="overflow-x-auto rounded-xl shadow-border">
       <table className="w-full text-left text-sm" style={{ minWidth }}>
         <thead className="bg-bg-elevated text-fg-muted">
           <tr>
@@ -229,7 +229,7 @@ export function ProjectRows({
     <div>
       {items.map((item, index) => (
         <Link key={item.href} to={item.href} className="project-row">
-          <span className="font-mono text-[11px] text-fg-subtle">
+          <span className="font-mono text-11 text-fg-subtle">
             {String(index + 1).padStart(2, "0")}
           </span>
           <span className="project-row-name font-display text-3xl tracking-tight">{item.name}</span>
@@ -358,7 +358,7 @@ export function ChipRow({ items }: { items: readonly string[] }) {
       {items.map((item) => (
         <span
           key={item}
-          className="rounded-full bg-muted px-3 py-1 font-mono text-[11px] text-muted-foreground"
+          className="rounded-full bg-muted px-3 py-1 font-mono text-11 text-muted-foreground"
         >
           {item}
         </span>
@@ -389,7 +389,7 @@ export function FilterChips<T extends string>({
             aria-pressed={active}
             onClick={() => onChange(option.value)}
             className={cn(
-              "h-9 rounded-full px-3 font-mono text-[11px] tracking-wide",
+              "h-9 rounded-full px-3 font-mono text-11 tracking-wide",
               active
                 ? "bg-primary text-primary-foreground"
                 : "bg-muted text-muted-foreground hover:text-foreground",

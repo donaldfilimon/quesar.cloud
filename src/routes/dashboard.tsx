@@ -114,7 +114,7 @@ function Desk({ name }: { name: string }) {
               <p className="text-xs text-fg-subtle">
                 {reply.mode === "model" ? "Model endpoint" : "Local catalog"}
               </p>
-              <p className="mt-3 max-w-[66ch] text-[1.0625rem] leading-8 text-fg">{reply.text}</p>
+              <p className="mt-3 max-w-[66ch] text-1.0625rem leading-8 text-fg">{reply.text}</p>
               {reply.hits.some((hit) => hit.score > 0) ? (
                 <ul className="mt-6 grid gap-3 sm:grid-cols-2">
                   {reply.hits

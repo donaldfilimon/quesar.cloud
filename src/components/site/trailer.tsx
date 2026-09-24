@@ -112,7 +112,7 @@ export function Trailer({
           </span>
         </button>
         <div className="absolute inset-x-0 bottom-0 z-10 flex flex-wrap items-center gap-2 bg-gradient-to-t from-black/80 to-transparent px-2 py-2 text-white sm:gap-3 sm:px-3 sm:py-3">
-          <span className="font-mono text-[11px] tabular-nums">
+          <span className="font-mono text-11 tabular-nums">
             {clock(time)} / {clock(duration)}
           </span>
           <input

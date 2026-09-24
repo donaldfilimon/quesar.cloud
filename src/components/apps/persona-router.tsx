@@ -27,7 +27,7 @@ export function PersonaRouter({ compact = false }: { compact?: boolean }) {
           value={text}
           onChange={(event) => setText(event.target.value.slice(0, 600))}
           rows={compact ? 3 : 4}
-          className="min-h-24 w-full rounded-md bg-bg px-3 py-3 text-sm text-fg shadow-[var(--shadow-border)] outline-none"
+          className="min-h-24 w-full rounded-md bg-bg px-3 py-3 text-sm text-fg shadow-border outline-none"
         />
       </label>
       <dl className="mt-5 grid gap-3 sm:grid-cols-3">

@@ -97,12 +97,12 @@ export function SourcePanel() {
   const when = relFetched(fetchedAt);
 
   return (
-    <div className="min-w-0 overflow-hidden rounded-[18px] bg-bg-elevated shadow-[var(--shadow-border)]">
+    <div className="min-w-0 overflow-hidden rounded-18 bg-bg-elevated shadow-border">
       <div className="flex items-center justify-between gap-3 border-b border-border px-4 py-3">
         <p className="text-xs text-accent">
           {status === "loading" ? "asking GitHub…" : live ? "live README" : "local excerpt"}
         </p>
-        <p className="font-mono text-[10px] text-fg-subtle">
+        <p className="font-mono text-10 text-fg-subtle">
           {status === "live" && when ? `donaldfilimon · ${when}` : "donaldfilimon"}
         </p>
       </div>

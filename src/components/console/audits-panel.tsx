@@ -127,7 +127,7 @@ export function AuditsPanel() {
           {audits.map((audit) => (
             <li
               key={audit.id}
-              className="grid gap-3 rounded-lg bg-card p-4 shadow-[var(--shadow-border)] sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center"
+              className="grid gap-3 rounded-lg bg-card p-4 shadow-border sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center"
             >
               <div className="min-w-0">
                 <p className="font-mono text-xs text-fg">

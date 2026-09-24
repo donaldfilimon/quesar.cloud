@@ -28,7 +28,7 @@ export function AdminLink() {
     <div className="mb-6 flex justify-end">
       <Link
         to="/admin"
-        className="inline-flex h-9 items-center rounded-md bg-bg-elevated px-3 text-sm text-fg no-underline shadow-[var(--shadow-border)] hover:text-accent"
+        className="inline-flex h-9 items-center rounded-md bg-bg-elevated px-3 text-sm text-fg no-underline shadow-border hover:text-accent"
       >
         Admin review
       </Link>

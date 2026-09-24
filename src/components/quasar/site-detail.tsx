@@ -297,8 +297,8 @@ export function QuasarSiteDetail({ id }: { id: string }) {
             </div>
 
             {href && running ? (
-              <div className="mt-5 overflow-hidden rounded-[18px] bg-bg shadow-[var(--shadow-border)]">
-                <p className="border-b border-border px-4 py-2 font-mono text-[10px] tracking-[0.16em] text-fg-subtle">
+              <div className="mt-5 overflow-hidden rounded-18 bg-bg shadow-border">
+                <p className="border-b border-border px-4 py-2 font-mono text-10 tracking-0.16em text-fg-subtle">
                   {href}
                 </p>
                 <iframe

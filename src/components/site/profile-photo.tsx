@@ -19,12 +19,7 @@ export function ProfilePhoto({
     .join("");
 
   return (
-    <div
-      className={cn(
-        "relative overflow-hidden rounded-2xl shadow-[var(--shadow-border)]",
-        className,
-      )}
-    >
+    <div className={cn("relative overflow-hidden rounded-2xl shadow-border", className)}>
       {failed ? (
         <div
           className="flex h-full w-full items-center justify-center bg-bg-elevated"

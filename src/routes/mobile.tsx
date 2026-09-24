@@ -23,7 +23,7 @@ function MobilePage() {
         <HeroStatus status="partial" />
       </PageHero>
       <Section eyebrow="Web vault" title="Notes stay in this browser.">
-        <div className="mx-auto max-w-md overflow-hidden rounded-[2rem] bg-bg-elevated p-3 shadow-[var(--shadow-border)]">
+        <div className="mx-auto max-w-md overflow-hidden rounded-[2rem] bg-bg-elevated p-3 shadow-border">
           <div className="rounded-[1.5rem] bg-bg p-2">
             <VaultApp />
           </div>

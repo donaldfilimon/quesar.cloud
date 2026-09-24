@@ -89,10 +89,7 @@ function PrivacyPage() {
               body: "Local models are optional. Live providers require stored credentials. This website does not broker them.",
             },
           ].map((item) => (
-            <li
-              key={item.title}
-              className="rounded-lg bg-bg-elevated p-5 shadow-[var(--shadow-border)]"
-            >
+            <li key={item.title} className="rounded-lg bg-bg-elevated p-5 shadow-border">
               <h3 className="text-base font-semibold">{item.title}</h3>
               <p className="mt-2 text-sm text-fg-muted">{item.body}</p>
             </li>

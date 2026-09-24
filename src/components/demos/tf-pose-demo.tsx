@@ -207,7 +207,7 @@ const TFPoseDemo = () => {
   return (
     <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
       <div
-        className="relative aspect-[4/3] overflow-hidden rounded-[18px] border border-border bg-bg-elevated"
+        className="relative aspect-[4/3] overflow-hidden rounded-18 border border-border bg-bg-elevated"
         data-state={status}
         aria-busy={busy}
       >

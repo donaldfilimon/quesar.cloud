@@ -206,7 +206,7 @@ function CommandPalette({
             placeholder="Jump to a page…"
             className="flex-1 bg-transparent text-white text-sm outline-none placeholder:text-slate-600"
           />
-          <kbd className="text-[10px] text-slate-500 border border-white/10 rounded px-1.5 py-0.5">
+          <kbd className="text-10 text-slate-500 border border-white/10 rounded px-1.5 py-0.5">
             esc
           </kbd>
         </div>
@@ -440,7 +440,7 @@ function WDBXDashboard(): ReactNode {
             <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
           </span>
           <span className="font-mono text-sm text-white">wdbx-prod-01</span>
-          <span className="text-[10px] px-2 py-0.5 rounded-full border border-amber-500/30 text-amber-300 bg-amber-500/10">
+          <span className="text-10 px-2 py-0.5 rounded-full border border-amber-500/30 text-amber-300 bg-amber-500/10">
             SIMULATED · ILLUSTRATIVE
           </span>
         </div>
@@ -787,7 +787,7 @@ const NetworkCanvas = (): ReactNode => {
 };
 
 const Badge = ({ children }: { children: ReactNode }): ReactNode => (
-  <span className="text-[10px] px-2 py-0.5 rounded-full border bg-cyan-500/15 text-cyan-300 border-cyan-500/25">
+  <span className="text-10 px-2 py-0.5 rounded-full border bg-cyan-500/15 text-cyan-300 border-cyan-500/25">
     {children}
   </span>
 );

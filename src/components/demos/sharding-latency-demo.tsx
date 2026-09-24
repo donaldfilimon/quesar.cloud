@@ -61,9 +61,7 @@ export function ShardingLatencyDemo() {
                 className={`w-full rounded-t-md transition-all ${b === n ? "bg-linear-to-t from-accent to-accent/60" : "bg-border group-hover:bg-border-strong"}`}
                 style={{ height: `${pct}%` }}
               />
-              <span className={`text-[10px] ${b === n ? "text-accent" : "text-fg-subtle"}`}>
-                {b}
-              </span>
+              <span className={`text-10 ${b === n ? "text-accent" : "text-fg-subtle"}`}>{b}</span>
             </button>
           );
         })}
