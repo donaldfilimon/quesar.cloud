@@ -20,6 +20,6 @@ export function pageHead(title: string, description: string) {
 
 /** Absolute canonical URL for a router pathname (no trailing slash except the root). */
 export function canonicalUrl(pathname: string): string {
-  const path = pathname.length > 1 ? pathname.replace(/\/+$/, "") : "/";
+  const path = pathname.replace(/\/+$/, "") || "/";
   return `${SITE_ORIGIN}${path}`;
 }
