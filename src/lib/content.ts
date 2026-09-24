@@ -3,6 +3,9 @@ import type { Provenance } from "@/components/site/prov-tag";
 export type StatusKind =
   "current" | "partial" | "experimental" | "development" | "planned" | "research";
 
+/** Shown in place of field-note prompts on the static site, which has no server. */
+export const fieldNotesOffline = "Field notes need the server deployment.";
+
 export type RepoKind = "core" | "surface" | "skill" | "related";
 
 export type ArchLayer = "experience" | "runtime" | "memory" | "compute";
