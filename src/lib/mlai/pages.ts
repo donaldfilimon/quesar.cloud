@@ -192,24 +192,33 @@ export const benchmarkArchitecture = [
 export const docsHub = {
   title: "Quesar developer platform",
   lede: "Build private, traceable AI workflows on the ABI runtime: retrieval provenance through WDBX, policy-gated agents, evaluation suites, and operator-ready audit trails, exposed over a local CLI and an MCP server.",
+  /**
+   * ABI/WDBX capability framing. Retrieval provenance and local operation exist
+   * in the sibling Rust workspaces; policy gates and the evaluation mesh do not
+   * yet, so each item carries its status rather than reading as shipping.
+   */
   capabilities: [
     {
       title: "Traceable retrieval",
-      body: "Index records with source metadata, confidence signals, and weighted backtrace paths so every claim has provenance and a rollback point.",
+      body: "Index records with source metadata and inspect weighted backtrace paths and retrieval score components; snapshots and write-ahead recovery give a restore point.",
+      status: "partial",
     },
     {
       title: "Agent policy gates",
-      body: "Bind tools to explicit permissions, approval thresholds, and review roles before execution reaches production data.",
+      body: "Planned: bind tools to explicit permissions, approval thresholds, and review roles before execution reaches production data. Today the MCP server only fails closed on unknown tools.",
+      status: "planned",
     },
     {
       title: "Evaluation mesh",
-      body: "Run regression suites for retrieval faithfulness, prompt-injection resilience, latency, and operator review burden as a release gate.",
+      body: "Planned: regression suites for retrieval faithfulness, prompt-injection resilience, latency, and operator review burden, run as a release gate.",
+      status: "planned",
     },
     {
       title: "Private runtime",
-      body: "Package orchestration, retrieval, audit logs, and controls for cloud, VPC, on-premise, and offline-first deployments.",
+      body: "The ABI CLI and MCP server run locally on operator-owned machines. Packaging for cloud, VPC, on-premise, and offline-first deployments is the design, not a shipped installer.",
+      status: "partial",
     },
-  ],
+  ] satisfies readonly ({ title: string; body: string } & Status)[],
   runtimeCommands:
     "# Validate the Rust workspace\n./tools/check.sh\n# Build the CLI and MCP server\n./tools/cargo.sh build -p abi-cli -p abi-mcp\n\n# Inspect capabilities and terminal surfaces\n./target/debug/abi backends\n./target/debug/abi dashboard --pane system --once --json\n./target/debug/abi agent tui",
   runtimeSpec: [

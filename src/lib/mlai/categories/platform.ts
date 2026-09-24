@@ -7,24 +7,36 @@ export const platform: Platform = [
       "Captures retrieval paths, policy checks, model decisions, tool calls, and operator interventions as inspectable events.",
     detail:
       "Useful for debugging, compliance review, incident response, and customer-facing explanations.",
+    // Surfaced by the L1 audit layer (append-only memory plus telemetry) and
+    // routing trace events; policy checks and operator interventions are not
+    // yet captured as one inspectable event stream.
+    status: "partial",
   },
   {
     title: "Control Plane",
     description:
       "Defines which agents can plan, review, execute, escalate, or abstain under each workflow condition.",
     detail: "Keeps risky actions behind explicit approval gates and measurable release criteria.",
+    // Rides on L5 guardrails and profile routing; per-workflow role policies
+    // and approval gates are still being built.
+    status: "development",
   },
   {
     title: "Evaluation Mesh",
     description:
       "Runs regression scenarios across retrieval faithfulness, latency, safety behavior, prompt injection, and human-review burden.",
     detail: "Turns AI quality into a release gate instead of an after-the-fact dashboard.",
+    // No regression-scenario harness or published scoreboard exists yet.
+    status: "planned",
   },
   {
     title: "Private Runtime",
     description:
       "Packages LLM orchestration, retrieval, audit logs, and controls for cloud, VPC, on-premise, and offline-first deployments.",
     detail: "Designed for teams that cannot send sensitive context to unmanaged infrastructure.",
+    // The L1-L6 stack runs locally on a machine you own; packaged cloud, VPC
+    // and on-premise deployments are not claimed.
+    status: "partial",
   },
 ];
 
