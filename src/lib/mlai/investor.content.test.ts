@@ -14,7 +14,7 @@ describe("company identity has one source", () => {
       { k: "Legal name", v: "Machine Learning Advanced Innovations, Inc." },
       { k: "Entity", v: "Delaware C-Corp" },
       { k: "Location", v: "Orlando, FL" },
-      { k: "Languages", v: "Zig, Swift, TypeScript" },
+      { k: "Languages", v: "Rust, Swift, TypeScript" },
       { k: "Model", v: "SDK licensing + integration services" },
     ]);
   });
@@ -44,14 +44,11 @@ describe("company identity has one source", () => {
     for (const row of rows) expect(row.tag).toBe("target");
   });
 
-  it("the toolchain rule the Languages fact currently conflicts with still exists", () => {
+  it("the Languages fact agrees with the toolchain rule (Rust runtime, no Zig-era claim)", () => {
     const toolchain = integrityRules.find((rule) => rule.title === "Toolchain facts");
     expect(toolchain?.body).toContain("nightly Rust");
+    const languages = about.companyFacts.find((fact) => fact.k === "Languages")?.v;
+    expect(languages).toContain("Rust");
+    expect(languages).not.toMatch(/\bZig\b/);
   });
-
-  // TODO(copy-wave): companyFacts "Languages: Zig, Swift, TypeScript" contradicts
-  // integrityRules "Toolchain facts" (ABI is nightly Rust; no Zig-era claims)
-  // and the Rust runtime stated on /about and in benchmark copy. Fix the copy,
-  // then turn this into a real assertion (no "Zig" in companyFacts).
-  it.todo("companyFacts Languages agrees with integrityRules Toolchain facts (no Zig-era claim)");
 });

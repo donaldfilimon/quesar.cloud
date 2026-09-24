@@ -61,11 +61,9 @@ export const about: About = {
     { k: "Legal name", v: companyIdentity.legalName },
     { k: "Entity", v: companyIdentity.entity },
     { k: "Location", v: companyIdentity.location },
-    // TODO(copy-wave): contradicts integrityRules "Toolchain facts" (ABI is
-    // nightly Rust; no Zig-era claims) and the Rust runtime stated elsewhere on
-    // the site. Copy changes are out of scope for this wave; tracked by the
-    // it.todo in src/lib/mlai/investor.content.test.ts.
-    { k: "Languages", v: "Zig, Swift, TypeScript" },
+    // Rust runtime (ABI, WDBX), Swift companions, TypeScript sites. Zig is
+    // founder research only (integrityRules "Toolchain facts").
+    { k: "Languages", v: "Rust, Swift, TypeScript" },
     { k: "Model", v: companyIdentity.model },
   ],
 
