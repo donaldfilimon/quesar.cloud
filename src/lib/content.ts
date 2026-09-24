@@ -769,23 +769,23 @@ export const searchIndex = [
 
 export const homeStart = [
   {
-    title: "Read the architecture",
-    body: "Click a node. Current in source versus not claimed is listed in the inspector.",
+    title: "Understand the architecture",
+    body: "Inspect each layer, its source-backed behavior, and the limits named beside it.",
     href: "/architecture",
   },
   {
-    title: "Keep a field note",
-    body: "Sign in, pick a node, write what you observed. Notes stay on your account — not Abbey memory.",
-    href: "/console",
+    title: "Explore the research",
+    body: "Read the ideas, citations, and implementation limits behind the system.",
+    href: "/research",
   },
   {
-    title: "Investors",
-    body: "TAM, SAM, SOM, and ARR are tagged. A target is never a result.",
-    href: "/investors",
+    title: "Compare the products",
+    body: "See what each surface does, how to try it, and what remains in development.",
+    href: "/products",
   },
   {
     title: "Read the source",
-    body: "Live GitHub READMEs when GitHub answers. Local excerpts when it does not.",
+    body: "Open the public repositories and their local setup guides.",
     href: "/developers",
   },
 ] as const;
