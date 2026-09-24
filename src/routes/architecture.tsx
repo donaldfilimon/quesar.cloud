@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { ArchitectureDiagram } from "@/components/diagram/architecture-diagram";
 import { JourneyRail, PageClose, PageHero, Section, StepList } from "@/components/site";
-import { architectureSteps } from "@/lib/content";
+import { architectureSteps, fieldNotesOffline } from "@/lib/content";
 import { isArchitectureNodeId } from "@/lib/architecture-node-ids";
 import { pageHead } from "@/lib/seo";
 import { staticSite } from "@/lib/static-site";
@@ -41,11 +41,9 @@ function ArchitecturePage() {
       />
       <JourneyRail current="architecture" />
       <Section
-        lede={
-          staticSite
-            ? "Select a node. The inspector lists implemented scope and the claims this site refuses. Field notes need the server deployment."
-            : "Select a node. The inspector lists implemented scope and the claims this site refuses. Save a field note on the same node after you sign in."
-        }
+        lede={`Select a node. The inspector lists implemented scope and the claims this site refuses. ${
+          staticSite ? fieldNotesOffline : "Save a field note on the same node after you sign in."
+        }`}
       >
         <ArchitectureDiagram
           selectedId={node ?? "quesar"}
@@ -69,7 +67,7 @@ function ArchitecturePage() {
             to: "/console",
             label: "Console",
             body: staticSite
-              ? "Field notes need the server deployment."
+              ? fieldNotesOffline
               : "Sign in and save what is current versus not claimed.",
           },
           {
