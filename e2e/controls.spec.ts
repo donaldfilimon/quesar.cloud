@@ -23,20 +23,20 @@ test("mobile menu releases focus and scroll when resized to desktop", async ({ p
   await expect(page.getByRole("button", { name: "Open menu" })).toBeFocused();
 });
 
-test("failed lazy search retries locally without losing the page", async ({ page }) => {
-  let fail = true;
-  await page.route("**/assets/search-panel-*.js*", (route) =>
-    fail ? route.abort() : route.continue(),
-  );
-  await page.goto("/");
-  await page.getByRole("button", { name: "Search the site" }).click();
-  await expect(page.getByText("Search could not load.")).toBeVisible();
-  fail = false;
-  await page.getByRole("button", { name: "Retry search" }).click();
-  await expect(page.getByRole("combobox", { name: "Search pages" })).toBeFocused();
-  await page.keyboard.press("Escape");
-  await expect(page.getByRole("button", { name: "Search the site" })).toBeFocused();
-});
+for (const asset of ["search-panel", "search-catalog"]) {
+  test(`failed ${asset} retries locally without losing the page`, async ({ page }) => {
+    let fail = true;
+    await page.route(`**/assets/${asset}-*`, (route) => (fail ? route.abort() : route.continue()));
+    await page.goto("/");
+    await page.getByRole("button", { name: "Search the site" }).click();
+    await expect(page.getByText("Search could not load.")).toBeVisible();
+    fail = false;
+    await page.getByRole("button", { name: "Retry search" }).click();
+    await expect(page.getByRole("combobox", { name: "Search pages" })).toBeFocused();
+    await page.keyboard.press("Escape");
+    await expect(page.getByRole("button", { name: "Search the site" })).toBeFocused();
+  });
+}
 
 test("shortcut leaves editable content alone and search supports keyboard navigation", async ({
   page,

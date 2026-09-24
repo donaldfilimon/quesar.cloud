@@ -40,6 +40,23 @@ URL, with each asset gzipped independently.
 
 ## Progress
 
+- Phase 5: complete. Full gate passed (408 tests / 49 files), static build passed,
+  and 91 Chromium browser cases passed. Accessibility covers five routes and
+  search in light/dark, reduced motion, three viewports, and simulated 200%
+  desktop reflow. Native browser zoom and other browser engines are unmeasured.
+- The static gate checks 128 HTML pages, CSS assets, generated search destinations,
+  and four initial-JavaScript budgets. Final gzip bytes: home 225242, docs 263598,
+  research 247532, developers 234392. Preloads: 35, 39, 36, 37 respectively.
+- Ruling: browser testing proved that a failed dependency remains poisoned even
+  with a fresh panel entry. Generate the search catalog as JSON from typed
+  content and fetch it on intent, keeping data retries out of the module cache.
+  This adds one deferred data request and a small Vite build/dev plugin, but
+  avoids a page reload that could discard user input. Both entry and data
+  failure recovery pass browser tests; the page data remains single-source.
+- Accessibility fixes: focus the main landmark through the skip link and
+  underline the Developers inline skill link.
+- Independent review: pending.
+
 - Phase 4: complete. Full gate (403 tests), static build/budgets, and 36 browser
   cases passed. The corrected playback-rejection test failed against the
   original MP4 player before passing against this implementation.

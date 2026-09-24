@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { rankHits, searchCatalog, type SearchHit } from "./site-search";
+import { rankHits, type SearchHit } from "./site-search";
+import { searchCatalog } from "./site-search-catalog";
 
 const hit = (title: string, href: string, body = ""): SearchHit => ({
   title,

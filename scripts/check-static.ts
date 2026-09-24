@@ -2,6 +2,7 @@ import { readFileSync, readdirSync, statSync, existsSync } from "node:fs";
 import { resolve, relative, sep } from "node:path";
 import { gzipSync } from "node:zlib";
 import { parse, type DefaultTreeAdapterMap } from "parse5";
+import { transform } from "lightningcss";
 
 type Node = DefaultTreeAdapterMap["node"];
 const root = resolve("docs");
@@ -57,14 +58,24 @@ for (const file of files(root).filter((file) => file.endsWith(".html"))) {
 }
 const failures = new Set<string>();
 let external = 0;
-for (const [file, page] of pages) {
-  const path =
+const references = [...pages].map(([file, page]) => ({
+  path:
     "/" +
     relative(root, file)
       .split(sep)
       .join("/")
-      .replace(/index\.html$/, "");
-  for (const raw of page.links) {
+      .replace(/index\.html$/, ""),
+  links: page.links,
+}));
+for (const file of files(root).filter((file) => /search-catalog-[^/]+\.json$/.test(file))) {
+  const entries = JSON.parse(readFileSync(file, "utf8")) as { href: string; hash?: string }[];
+  references.push({
+    path: "/" + relative(root, file).split(sep).join("/"),
+    links: entries.map((entry) => entry.href + (entry.hash ? "#" + entry.hash : "")),
+  });
+}
+for (const { path, links } of references) {
+  for (const raw of links) {
     if (!raw || raw.startsWith("data:") || raw.startsWith("blob:")) continue;
     const url = new URL(raw, origin + path);
     if (url.origin !== origin) {
@@ -80,6 +91,21 @@ for (const [file, page] of pages) {
     if (hash && pages.has(target) && !pages.get(target)!.ids.has(hash)) {
       failures.add(`${path}: missing anchor ${url.pathname}#${hash}`);
     }
+  }
+}
+for (const file of files(root).filter((file) => file.endsWith(".css"))) {
+  const path = "/" + relative(root, file).split(sep).join("/");
+  const { dependencies } = transform({
+    filename: file,
+    code: readFileSync(file),
+    analyzeDependencies: true,
+  });
+  for (const dependency of dependencies ?? []) {
+    if (dependency.type !== "url" && dependency.type !== "import") continue;
+    const url = new URL(dependency.url, origin + path);
+    if (url.origin !== origin) continue;
+    const target = localFile(url);
+    if (!target || !existsSync(target)) failures.add(`${path}: missing CSS asset ${url.pathname}`);
   }
 }
 for (const budget of budgets) {

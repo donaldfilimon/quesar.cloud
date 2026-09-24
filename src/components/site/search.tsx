@@ -1,6 +1,15 @@
 import { useNavigate } from "@tanstack/react-router";
 import { Search as SearchIcon } from "lucide-react";
-import { Component, lazy, Suspense, useEffect, useState, type ReactNode } from "react";
+import {
+  Component,
+  lazy,
+  Suspense,
+  useEffect,
+  useState,
+  type ReactNode,
+  type ComponentType,
+} from "react";
+import catalogUrl from "virtual:search-catalog-url";
 import {
   Dialog,
   DialogContent,
@@ -13,13 +22,32 @@ import type { SearchHit } from "@/lib/site-search";
 // The catalog indexes every content dataset and pulls in cmdk. This trigger is
 // in the header on every page, so the panel loads on first intent (hover,
 // focus, click or the shortcut) instead of riding in the root chunk.
-let panelPromise: Promise<typeof import("./search-panel")> | undefined;
+type PanelProps = {
+  query: string;
+  setQuery: (value: string) => void;
+  onSelect: (hit: SearchHit) => void;
+};
+let panelPromise: Promise<{ default: ComponentType<PanelProps> }> | undefined;
 const loadPanel = () =>
-  (panelPromise ??= import("./search-panel").catch((error: unknown) => {
-    panelPromise = undefined;
-    throw error;
-  }));
-const makePanel = () => lazy(() => loadPanel().then((m) => ({ default: m.SearchPanel })));
+  (panelPromise ??= Promise.all([
+    import("./search-panel"),
+    fetch(catalogUrl, { signal: AbortSignal.timeout(10000) }).then(async (response) => {
+      if (!response.ok) throw new Error("Search catalog unavailable");
+      const data: unknown = await response.json();
+      if (!Array.isArray(data)) throw new Error("Invalid search catalog");
+      return data as SearchHit[];
+    }),
+  ])
+    .then(([module, catalog]) => ({
+      default: function CatalogPanel(props: PanelProps) {
+        return <module.SearchPanel {...props} catalog={catalog} />;
+      },
+    }))
+    .catch((error: unknown) => {
+      panelPromise = undefined;
+      throw error;
+    }));
+const makePanel = () => lazy(loadPanel);
 const InitialPanel = makePanel();
 const preload = () => {
   void loadPanel().catch(() => {});

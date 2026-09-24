@@ -18,6 +18,12 @@ export default defineConfig({
   use: { baseURL, trace: "retain-on-failure", screenshot: "only-on-failure" },
   webServer: { command: "node scripts/serve-static.ts", url: baseURL, reuseExistingServer: false },
   projects: [
+    {
+      name: "desktop-200-percent",
+      testMatch: "accessibility.spec.ts",
+      // Equivalent CSS viewport and pixel density for 1440x900 at 200% zoom.
+      use: { viewport: { width: 720, height: 450 }, deviceScaleFactor: 2 },
+    },
     { name: "desktop", use: { viewport: { width: 1440, height: 900 } } },
     { name: "mobile", use: { viewport: { width: 390, height: 844 } } },
     { name: "short-mobile", use: { viewport: { width: 375, height: 568 } } },

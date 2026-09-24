@@ -18,6 +18,8 @@ bun run dev          # 0.0.0.0:8080, strictPort
 bun run typecheck    # tsc --noEmit over src/, scripts/ and the vite/vitest/eslint configs
 bun run lint         # eslint 10 + react-hooks 7 (React Compiler rules), --max-warnings 0
 bun run test         # vitest: src/**/*.test.{ts,tsx} and scripts/**/*.test.ts
+bun run test:e2e     # Playwright against docs/; build:static first
+bun run check:static # internal links/assets and initial JavaScript budgets in docs/
 bun run build        # vite build (Vercel preset) + PGLite assets + migrations
 bun run build:static # GitHub Pages build into docs/
 bun run check        # the gate: format:check, typecheck, lint, test, build (stops at first failure)
@@ -36,6 +38,19 @@ bun run format       # prettier --write . (.prettierignore skips docs/, notes/, 
 - If port 8080 is taken, see `AGENTS.md` (pass `BETTER_AUTH_URL` via the environment, or email sign-up fails with "Invalid origin").
 
 ## Deployment
+
+### Browser and static acceptance
+
+After a static build, run `bun run check:static` and `bun run test:e2e`.
+The browser suite uses an isolated loopback port, deterministic GitHub fixtures,
+three viewport sizes, light/dark themes, reduced motion, and a 720x450 CSS
+viewport at device scale 2 to simulate a 1440x900 desktop at 200% zoom.
+This simulation checks reflow; it is not an operating-system browser-zoom test.
+Failure traces and screenshots live in ignored `test-results/`.
+Successful accessibility cases also retain full-page screenshots there.
+For a persistent local preview, use `E2E_PORT=4197 node scripts/serve-static.ts`
+on an unused port. Vitest remains the unit-test runner; Playwright is the
+separate browser acceptance runner.
 
 - **As of 2026-09-23, `https://quesar.cloud` is the static build**, served by GitHub Pages from `main:/docs`. `bun run build:static` sets `VITE_STATIC_SITE=true` and `VITE_AUTH_ENABLED=false`, prerenders every crawlable page (skipping `/api/*` and server functions), then `scripts/publish-static.ts` replaces `docs/` wholesale and adds `.nojekyll`, `CNAME` and `404.html`. **`docs/` is build output only: never hand-edit it.** Internal records go in `notes/`. The `quesar-static-publish` skill (`.claude/skills/`) is the republish recipe: how to tell a real `docs/` change from timestamp noise, why built pages need `grep -a`, and the two-commit (source, then `build(docs): ...`) convention.
 - The full server build (`bun run build`, Nitro `vercel` preset; `vercel.json` sets the bun install and build commands with the daily audit-expiry cron in `vite.config.ts`) is planned for Vercel. Secrets and go-live order are in `notes/deploy/secrets-checklist.md`.

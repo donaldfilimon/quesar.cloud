@@ -4,23 +4,24 @@ import { useMemo, useState } from "react";
 import {
   destinationKey,
   rankHits,
-  searchCatalog,
   searchCategories,
   type SearchCategory,
   type SearchHit,
 } from "@/lib/site-search";
 
 export function SearchPanel({
+  catalog,
   query,
   setQuery,
   onSelect,
 }: {
+  catalog: SearchHit[];
   query: string;
   setQuery: (value: string) => void;
   onSelect: (hit: SearchHit) => void;
 }) {
   const [category, setCategory] = useState<SearchCategory>("all");
-  const hits = useMemo(() => rankHits(searchCatalog, query, category), [query, category]);
+  const hits = useMemo(() => rankHits(catalog, query, category), [catalog, query, category]);
   return (
     <Command shouldFilter={false} className="bg-bg-elevated text-fg">
       <div className="flex items-center gap-3 border-b border-border px-4">
