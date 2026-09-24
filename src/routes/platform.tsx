@@ -56,9 +56,9 @@ function PlatformPage() {
       </Section>
 
       <Section
-        eyebrow="Integration home"
-        title="Independent gates. One layout."
-        lede="From donaldfilimon/MLAI-CORPORATION-WWW. A green web gate is not mobile evidence."
+        eyebrow="This checkout"
+        title="Independent gates. One repository."
+        lede="quesar.cloud is the current site and contains the local service clients, sidecars, and native shell. Each needs its own verification; a green web gate does not prove device behavior."
       >
         <DataTable
           rows={integrationApps}

@@ -1,6 +1,7 @@
 import type { StatusKind } from "./content";
 
 export const repoPaths: Record<string, string> = {
+  "quesar.cloud": "/developers",
   "MLAI-CORPORATION-WWW": "/developers",
   "mlai-corp-website": "/developers",
   abi: "/abi",

@@ -543,10 +543,11 @@ export const setups = [
 export const repos = [
   {
     owner: "donaldfilimon",
-    name: "MLAI-CORPORATION-WWW",
-    summary: "Integration home: website, mobile, Quasar, Abbey workspace, research-sites.",
+    name: "quesar.cloud",
+    summary:
+      "Current MLAI/Quesar website, public docs, browser previews, and local service clients.",
     language: "TypeScript",
-    href: "/developers",
+    href: "https://github.com/donaldfilimon/quesar.cloud",
     kind: "core" as RepoKind,
   },
   {
@@ -596,6 +597,14 @@ export const repos = [
     language: "TypeScript",
     href: "/workspace",
     kind: "surface" as RepoKind,
+  },
+  {
+    owner: "donaldfilimon",
+    name: "MLAI-CORPORATION-WWW",
+    summary: "Former MLAI site; retained as a port source after quesar.cloud superseded it.",
+    language: "TypeScript",
+    href: "https://github.com/donaldfilimon/MLAI-CORPORATION-WWW",
+    kind: "related" as RepoKind,
   },
   {
     owner: "donaldfilimon",

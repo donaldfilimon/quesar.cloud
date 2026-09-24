@@ -127,11 +127,17 @@ export function RepoList({ compact = false }: { compact?: boolean }) {
                 <p className="truncate font-mono text-[0.7rem] text-fg-subtle">
                   {repo.owner}/{repo.name}
                 </p>
-                {row?.archived || repo.name === "mlai-website-app" ? (
+                {repo.name === "MLAI-CORPORATION-WWW" ? (
+                  <span className="text-xs text-fg-subtle">port source</span>
+                ) : row?.archived || repo.name === "mlai-website-app" ? (
                   <span className="text-xs text-fg-subtle">archived</span>
                 ) : null}
               </div>
-              <p className="mt-2 text-sm font-medium text-fg">{row?.description || repo.summary}</p>
+              <p className="mt-2 text-sm font-medium text-fg">
+                {repo.name === "quesar.cloud" || repo.name === "MLAI-CORPORATION-WWW"
+                  ? repo.summary
+                  : row?.description || repo.summary}
+              </p>
               {row?.topics?.length ? (
                 <p className="mt-2 font-mono text-[10px] text-fg-subtle">
                   {row.topics.slice(0, 6).join(" · ")}
