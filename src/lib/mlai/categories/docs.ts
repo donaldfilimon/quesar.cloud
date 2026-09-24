@@ -387,14 +387,14 @@ const raw = [
       {
         heading: "Independent gates",
         paragraphs: [
-          "Website, Abbey workspace, Quasar builder, mobile companion, and ABI+WDBX each have their own verification command. Passing one does not prove another.",
+          "Run each check in the source tree it covers. The website gate does not validate its standalone sidecars, the separate Abbey app, native devices, or the ABI and WDBX workspaces.",
         ],
         list: [
-          "bun run check:web — this orientation surface",
-          "bun run check:website-app — Abbey workspace",
-          "bun run check:quasar — local builder",
-          "bun run check:mobile — Expo companion",
-          "./tools/check.sh — ABI with the sibling WDBX workspace",
+          "bun run check — this website, from the repository root; bun run build:static prepares the GitHub Pages artifact",
+          "bun test and bun run typecheck — local Quasar service, from sidecars/quasar-service",
+          "Abbey workspace — follow the separate app's current README; the browser page here is only a preview",
+          "Mobile and native — the web vault is a preview; Android sync and signed-device checks are separate",
+          "./tools/check.sh — ABI checkout with its sibling WDBX workspace",
         ],
       },
       {

@@ -510,26 +510,26 @@ export const investor = {
 export const setups = [
   {
     title: "Website (this surface)",
-    body: "Orientation, docs, research, and in-browser apps. Independent of mobile and builder gates.",
-    code: "bun run check:web",
-    href: "/developers",
+    body: "From this repository root: formatting, types, lint, tests, and the server build. Publish the static site with a separate build.",
+    code: "bun run check\nbun run build:static",
+    href: "/docs/deployment",
   },
   {
     title: "Abbey workspace",
-    body: "Node 24, Bun 1.4, uv, Java 21+, LibreOffice. A local model is optional. This site does not provision a session.",
-    code: "bun run check:website-app",
+    body: "The browser workspace here is a preview. The separate local Abbey app has its own setup and verification in its source README.",
+    code: null,
     href: "/workspace",
   },
   {
-    title: "Quasar builder",
-    body: "Local v1: Bun 1.4, Anthropic credentials, service + Expo. Writes a Next.js project to disk.",
-    code: "bun run check:quasar",
+    title: "Quasar service",
+    body: "A standalone Bun project under sidecars/. Its tests and typecheck do not run in the website gate. Generation needs Anthropic credentials.",
+    code: "cd sidecars/quasar-service\nbun test\nbun run typecheck",
     href: "/quesar",
   },
   {
-    title: "Mobile companion",
-    body: "Expo SDK 53. Native CloudKit is a signed iOS build. The page here is the web vault.",
-    code: "bun run check:mobile",
+    title: "Mobile and native",
+    body: "The web vault is a browser preview. The separate native shell has no root check script; Android sync and device validation are separate work.",
+    code: null,
     href: "/mobile",
   },
   {
