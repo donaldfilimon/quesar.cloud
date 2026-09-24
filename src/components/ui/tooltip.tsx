@@ -34,10 +34,14 @@ export function Hint({
   children: ReactNode;
   side?: "top" | "bottom" | "left" | "right";
 }) {
+  // Self-provided: the site shell no longer mounts a TooltipProvider, so the
+  // tooltip stack stays out of the root chunk (see header-menus-loader.ts).
   return (
-    <Tooltip>
-      <TooltipTrigger asChild>{children}</TooltipTrigger>
-      <TooltipContent side={side}>{label}</TooltipContent>
-    </Tooltip>
+    <TooltipProvider delayDuration={200}>
+      <Tooltip>
+        <TooltipTrigger asChild>{children}</TooltipTrigger>
+        <TooltipContent side={side}>{label}</TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 }
