@@ -65,6 +65,23 @@ export default defineConfig(({ command, isPreview, mode }) => {
       strictPort: true,
     },
     resolve: { tsconfigPaths: true },
+    environments: {
+      client: {
+        build: {
+          rolldownOptions: {
+            output: {
+              codeSplitting: {
+                // The home route reads wdbxFacts; abi-runtime (the /abi, /wdbx
+                // and docs catalog) derives from the same module. Without its own
+                // group the bundler folds wdbx-facts into the abi-runtime chunk and
+                // the home page preloads the whole catalog.
+                groups: [{ name: "wdbx-facts", test: /src[\\/]lib[\\/]mlai[\\/]wdbx-facts\.ts$/ }],
+              },
+            },
+          },
+        },
+      },
+    },
     plugins: [
       pgliteBootstrapPlugin(),
       tailwindcss(),
