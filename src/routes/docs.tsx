@@ -23,9 +23,9 @@ function DocsPage() {
         lede="Sidebar, search, and articles are the same corpus. Setup commands are copied from READMEs. A successful gate is evidence for that checkout — not for a hosted product."
       />
       <Section>
-        <div className="grid gap-10 lg:grid-cols-[16rem_minmax(0,1fr)]">
+        <div className="grid grid-cols-1 gap-10 lg:grid-cols-[16rem_minmax(0,1fr)]">
           <DocSidebar />
-          <div className="grid gap-4">
+          <div className="grid grid-cols-1 gap-4">
             {docs.map((doc) => (
               <div key={doc.slug} id={doc.slug === "getting-started" ? "intro" : doc.slug}>
                 <Surface>
