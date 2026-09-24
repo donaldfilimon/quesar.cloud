@@ -93,8 +93,8 @@ describe("WDBX graph defaults", () => {
     );
   });
 
-  it("render the docs hub cards without a status badge", () => {
-    for (const card of docsHub.wdbxCapabilities)
-      expect(Object.keys(card)).toEqual(["title", "body"]);
+  it("badge every docs hub card", () => {
+    expect(docsHub.wdbxCapabilities).toBe(docsWdbxCapabilities);
+    for (const card of docsHub.wdbxCapabilities) expect(card.status).toBeTruthy();
   });
 });

@@ -47,16 +47,11 @@ export const WdbxCapabilitySchema = z.object({
   status: StatusKindSchema,
 });
 
-/**
- * A docs-hub WDBX capability card. `pendingStatus` is data only, not rendered
- * yet: it flags cards whose unbadged copy overstates or contradicts the /wdbx
- * table, for the copy wave. It is deliberately not named `status`, which
- * `CopyGrid` would render as a badge.
- */
+/** A docs-hub WDBX capability card. `CopyGrid` renders `status` as a badge. */
 export const DocsWdbxCapabilitySchema = z.object({
   title: z.string(),
   body: z.string(),
-  pendingStatus: StatusKindSchema.optional(),
+  status: StatusKindSchema,
 });
 
 export const McpToolCatalogSchema = z.array(McpToolSchema);

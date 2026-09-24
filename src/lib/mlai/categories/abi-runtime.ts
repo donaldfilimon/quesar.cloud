@@ -4,10 +4,11 @@
  * hub, which previously each kept their own copy. `@/lib/content` and
  * `docsHub` in `../pages.ts` re-export or derive from these records.
  *
- * Several pages word the same tool or crate differently. The variant texts are
- * kept verbatim (no copy edits in this wave), one field per page, so the
- * divergence is visible in one record instead of spread across files.
- * `TODO(copy-wave)` marks where the variants contradict each other.
+ * Several pages word the same tool or crate differently, one field per page.
+ * The variants may differ in length but must state the same fact; where they
+ * once contradicted each other, both now follow the pinned, dated research
+ * records in `./research-records.ts` (reviewed 2026-09-06) and, for WDBX
+ * storage, `notes/mlai/superpowers/specs/2026-09-22-single-app-merge-design.md`.
  *
  * Typed by `../schemas-runtime.ts` and parsed in `../abi-runtime.content.test.ts`;
  * no zod at runtime.
@@ -24,17 +25,20 @@ import { wdbxGraphConstants, wdbxGraphDefaults } from "../wdbx-facts";
 export const mcpToolCatalog: readonly McpTool[] = [
   {
     name: "ai_learn",
-    docsBody: "Evidence-augmented completion with bounded evidence selection.",
-    // TODO(copy-wave): /abi and the docs hub contradict each other on what
-    // ai_learn does (store ingest vs evidence-augmented completion).
-    abiBody: "Ingest a record into the local store. Persistence can be disabled.",
+    // The research MCP records only place ai_learn in the "learning" group and
+    // treat learning as a side effect; neither earlier wording is sourced.
+    docsBody:
+      "Learning entry point with local side effects; ABI_WDBX_PERSIST=0 disables persistence.",
+    abiBody: "Learning entry point with local side effects. Persistence can be disabled.",
   },
   { name: "scheduler_info", docsBody: "Compatibility alias for scheduler statistics." },
   {
     name: "ai_complete",
-    docsBody: "Run a single completion through the selected persona profile.",
-    // TODO(copy-wave): exact registry model vs persona profile.
-    abiBody: "Template completion against the exact registry model.",
+    // ai-overview: a keyword-routed profile renders a persona template; the
+    // requested model id is metadata, not proof that the model ran.
+    docsBody:
+      "Local template completion through the routed persona profile; the requested model id is metadata, not proof it ran.",
+    abiBody: "Local persona-template completion. The model id is metadata, not proof it ran.",
   },
   { name: "ai_run", docsBody: "Run completion with local profile routing." },
   { name: "ai_train", docsBody: "Train the selected local profile against WDBX." },
@@ -45,7 +49,7 @@ export const mcpToolCatalog: readonly McpTool[] = [
   },
   {
     name: "wdbx_stats",
-    docsBody: "Report store size, index health, and snapshot metadata.",
+    docsBody: "Report local WDBX store statistics; not a cluster dashboard.",
     abiBody: "Local store statistics. Not a cluster dashboard.",
   },
   {
@@ -97,9 +101,9 @@ export const abiModules: readonly AbiModule[] = [
   },
   {
     name: "abi-sea",
-    // TODO(copy-wave): /abi contradicts the docs hub and the research SEA
-    // track, which both describe evidence selection, not a scheduler.
-    abiBody: "Scheduler and execution adapter. Device selection is explicit.",
+    // The research SEA track pins abi-sea's evidence.rs, scorer.rs and
+    // learn_loop.rs: evidence selection, not a scheduler.
+    abiBody: "Bounded evidence selection and scoring. The learning loop persists router weights.",
     docsBody: "Evidence selection, scoring, and learning loop.",
   },
   {
@@ -255,30 +259,30 @@ export const wdbxCapabilities: WdbxCapability[] = [
 ];
 
 /**
- * The docs hub WDBX capability cards. They render without a badge today;
- * `pendingStatus` records what the /wdbx table implies, for the copy wave.
+ * The docs hub WDBX capability cards, badged like the /wdbx table rows they
+ * summarize (Retrieval partial, Blocks / segments and Embeddings current).
  */
 export const docsWdbxCapabilities: readonly DocsWdbxCapability[] = [
   {
     title: "Weighted backtrace paths",
-    body: "Inspect which sources were used and where confidence dropped.",
-    // TODO(copy-wave): unbadged, but /wdbx marks Retrieval partial (the score
-    // collapses several axes) and evidence-weighted rank planned.
-    pendingStatus: "partial",
+    body: "Hybrid retrieval exposes its score components. The score still collapses several axes; separate evidence-weighted ranking is planned.",
+    status: "partial",
   },
   {
-    title: "SIMD vector search",
+    title: "HNSW vector search",
     body: `Cosine nearest-neighbor through the active Rust substrate's layered HNSW index (${wdbxGraphConstants}).`,
+    status: "current",
   },
   {
     title: "Durable snapshots",
-    body: "JSONL serialize/restore with integrity checks and tamper rejection.",
-    // TODO(copy-wave): /wdbx names the persistence mechanism as the segment
-    // format, CRC-framed WAL and checkpoints, not JSONL snapshots.
-    pendingStatus: "partial",
+    body: "Snapshots with CRC-framed WAL recovery and checkpoints. Snapshot-chain and strict content verification are separate checks.",
+    status: "current",
   },
   {
-    title: "Opt-in persistence",
-    body: "Completions persist only when store_result is set on the request.",
+    // No repo record mentions store_result; the research guides and the docs
+    // runtime page show persistence on by default and switched off by env.
+    title: "Switchable persistence",
+    body: "The local store defaults to $HOME/.abi/wdbx; ABI_WDBX_PERSIST=0 disables persistence for evaluation runs.",
+    status: "current",
   },
 ];

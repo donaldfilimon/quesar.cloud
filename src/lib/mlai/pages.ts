@@ -272,8 +272,8 @@ export const docsHub = {
       body: "Broad technical range, paired with the honesty to name uncertainty and defer to review instead of bluffing.",
     },
   ],
-  /** Rendered without badges; `pendingStatus` stays in the record for the copy wave. */
-  wdbxCapabilities: docsWdbxCapabilities.map(({ title, body }) => ({ title, body })),
+  /** Badged by `CopyGrid`, like the /wdbx capability table. */
+  wdbxCapabilities: docsWdbxCapabilities,
   wdbxV2Docs: [
     {
       file: "getting-started.md",
