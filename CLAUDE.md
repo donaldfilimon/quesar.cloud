@@ -20,17 +20,19 @@ bun run lint         # eslint 10 + react-hooks 7 (React Compiler rules), --max-w
 bun run test         # vitest: src/**/*.test.{ts,tsx} and scripts/**/*.test.ts
 bun run build        # vite build (Vercel preset) + PGLite assets + migrations
 bun run build:static # GitHub Pages build into docs/
+bun run preview      # serve the last `bun run build` on 127.0.0.1:8081
+bun run db:migrate   # apply migrations/*.sql to DATABASE_URL (Neon); build runs it last
 bun run check        # the gate: format:check, typecheck, lint, test, build (stops at first failure)
 bun run format       # prettier --write . (.prettierignore skips docs/, notes/, sidecars/, native/, public/)
 ```
 
 - **Gate:** `bun run check`, plus `build:static` when a change can reach the static site. There is no `.github/` and no CI (a self-hosted runner on this public repo would run fork PRs on the host), so the gate is local only; `git config core.hooksPath scripts/git-hooks` opts into running it on every push (`git push --no-verify` skips it once). `.vercel/` and `.output/` are git-ignored build output.
 - **Republishing the site:** invoke the project skill `quesar-static-publish` (`.claude/skills/`, the canonical copy; `.agents/skills/` is a git-ignored sync mirror, so edit only the `.claude` one) whenever a `src/` change must reach `https://quesar.cloud`. It carries the gate, the `docs/` diff classification and the PR steps; don't re-derive them.
-- **Preview servers** (`.claude/launch.json`): `quesar-dev` runs `bun run dev` on 8080; `quesar-static` serves the built `docs/` on 8093 for checking a static build before it is published.
+- **Preview servers:** Donald's local `.claude/launch.json` (not committed, so absent in fresh clones and cloud sessions) defines `quesar-dev` (`bun run dev` on 8080) and `quesar-static` (the built `docs/` on 8093, for checking a static build before it is published). Without it, serve `docs/` with any static file server.
 - **Prettier is enforced by `format:check`** (`.prettierrc`; `eslint-config-prettier` turns off lint's style rules, so lint never flags formatting). Run `bun run format` or `bunx prettier --write <files>` before committing. Prettier moves inline JSX spaces into `{" "}`, which changes compiled chunks without changing rendered text.
 - **Single test:** `bunx vitest run src/lib/server/crypto.server.test.ts`, or add `-t "<name>"` for one case. vitest is the only test runner. Server tests call the real `getSql()`, so they run against in-memory PGLite; a `Test timed out` there under heavy machine load is load, not a bug, so re-run before chasing it.
 - **`scripts/*.ts` run directly on Node's type stripping** (`node scripts/migrate.ts`), so they may use only erasable TypeScript syntax (no enums, namespaces or parameter properties) and import each other with `.ts` extensions. The build runs them, so a violation fails the gate.
-- **Lint ignores `docs/**`, `sidecars/**`, `native/**` and `src/routeTree.gen.ts`**, so a green lint says nothing about those. react-refresh is off for `src/routes/**` (TanStack routes export `Route` beside their components); everywhere else, keep hooks, constants and helpers out of component files.
+- **Lint ignores `docs/`, `sidecars/`, `native/` and `src/routeTree.gen.ts`**, so a green lint says nothing about those. react-refresh is off under `src/routes/` (TanStack routes export `Route` beside their components); everywhere else, keep hooks, constants and helpers out of component files.
 - **TypeScript is 6.0.** 7.0 typechecks the tree but typescript-eslint does not load with it yet; `tsconfig.json` has no `baseUrl` (removed in 7).
 - `VITE_AUTH_ENABLED` is an ordinary env var (sign-in is on unless it is `"false"`); only `build:static` sets it.
 - If port 8080 is taken, see `AGENTS.md` (pass `BETTER_AUTH_URL` via the environment, or email sign-up fails with "Invalid origin").
