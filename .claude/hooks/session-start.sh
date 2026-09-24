@@ -10,17 +10,18 @@ fi
 
 cd "${CLAUDE_PROJECT_DIR:-$(dirname "$0")/../..}"
 
+MIN_BUN=1.4.2
+
+# True when the Bun on PATH is at least MIN_BUN (full major.minor.patch compare).
 bun_ok() {
   command -v bun >/dev/null 2>&1 || return 1
-  local v major minor
+  local v
   v="$(bun --version)"
-  major="${v%%.*}"
-  minor="$(echo "$v" | cut -d. -f2)"
-  [ "$major" -gt 1 ] || { [ "$major" -eq 1 ] && [ "$minor" -ge 4 ]; }
+  [ "$(printf '%s\n%s\n' "$MIN_BUN" "$v" | sort -V | head -n1)" = "$MIN_BUN" ]
 }
 
 if ! bun_ok; then
-  echo "session-start: Bun $(bun --version 2>/dev/null || echo missing) is older than 1.4; upgrading" >&2
+  echo "session-start: Bun $(bun --version 2>/dev/null || echo missing) is older than $MIN_BUN; upgrading" >&2
   npm install -g bun@latest >&2
   npm_bin="$(npm prefix -g)/bin"
   export PATH="$npm_bin:$PATH"
@@ -30,6 +31,6 @@ if ! bun_ok; then
   fi
   hash -r
 fi
-bun_ok || { echo "session-start: Bun >= 1.4 unavailable after upgrade" >&2; exit 1; }
+bun_ok || { echo "session-start: Bun >= $MIN_BUN unavailable after upgrade" >&2; exit 1; }
 
 bun install --frozen-lockfile >&2
