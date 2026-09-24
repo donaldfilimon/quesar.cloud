@@ -1,8 +1,9 @@
 import { useEffect, useSyncExternalStore } from "react";
 
 /**
- * The header's overlays (the "More" dropdown, the mobile sheet and the theme
- * toggle's tooltip) pull in the Radix menu, dialog, tooltip and popper stack.
+ * The header's overlays (the "More" dropdown, the mobile sheet, the search
+ * dialog and the theme toggle's tooltip) pull in the Radix menu, dialog,
+ * tooltip and popper stack.
  * The header is on every page, so that code loads after hydration (on idle, or
  * on first hover, focus or tap) instead of riding in the root chunk. Until it
  * arrives, the header renders plain triggers with the same markup.

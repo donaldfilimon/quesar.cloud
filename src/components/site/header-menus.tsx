@@ -15,10 +15,11 @@ import { TRIGGER_ATTR } from "./header-menus-loader";
 import { extra, mobileLinks, mobileTriggerClass, navActive } from "./header-nav";
 import { ThemeToggle } from "./theme-toggle";
 
-// Loaded after hydration by header-menus-loader.ts; header.tsx and
+// Loaded after hydration by header-menus-loader.ts; header.tsx, search.tsx and
 // theme-toggle.tsx render plain triggers with the same markup until then.
 
 export { Hint } from "@/components/ui/tooltip";
+export { SearchDialog } from "./search-dialog";
 
 /** The desktop "More of the site" dropdown. */
 export function MoreMenu({
