@@ -17,7 +17,12 @@ describe("research export contract", () => {
       const changed = structuredClone(research);
       const paper = changed.publications[0]!;
       if (mutation === "prose") paper.body[0]!.paragraphs.push("Changed statement.");
-      if (mutation === "source") paper.sources[0]!.revision = "a".repeat(40);
+      if (mutation === "source") {
+        // Citations are revision-pinned, so a new revision moves the URL with it.
+        const source = paper.sources[0]!;
+        source.url = source.url.replace(`/blob/${source.revision}/`, `/blob/${"a".repeat(40)}/`);
+        source.revision = "a".repeat(40);
+      }
       if (mutation === "attachment")
         paper.attachments.push({
           title: "Test",
