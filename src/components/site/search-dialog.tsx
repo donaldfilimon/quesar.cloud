@@ -1,5 +1,5 @@
 import { Search as SearchIcon } from "lucide-react";
-import { lazy, Suspense, type ReactNode } from "react";
+import { Component, lazy, Suspense, useState, type ReactNode } from "react";
 import {
   Dialog,
   DialogContent,
@@ -7,15 +7,49 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import type { SearchHit } from "@/lib/site-search";
 import { TRIGGER_ATTR } from "./header-menus-loader";
-import type { Hit } from "./search-panel";
-import { loadSearchPanel } from "./search-panel-loader";
+import { loadSearchPanel, preloadSearchPanel, resetSearchPanel } from "./search-panel-loader";
 
 // Loaded after hydration with the header's other overlays (see
 // header-menus-loader.ts); `SiteSearch` renders a plain trigger with the same
 // markup until then.
 
-const SearchPanel = lazy(() => loadSearchPanel().then((m) => ({ default: m.SearchPanel })));
+const makePanel = () => lazy(loadSearchPanel);
+const InitialPanel = makePanel();
+
+/** Contains a failed panel or catalog load inside the dialog, with a retry. */
+class SearchBoundary extends Component<
+  { children: ReactNode; retry: () => void; close: () => void },
+  { failed: boolean }
+> {
+  state = { failed: false };
+  static getDerivedStateFromError() {
+    return { failed: true };
+  }
+  render() {
+    if (!this.state.failed) return this.props.children;
+    return (
+      <div className="p-5">
+        <p role="alert" className="text-sm">
+          Search could not load.
+        </p>
+        <div className="mt-3 flex gap-4">
+          <button
+            type="button"
+            className="min-h-11 text-sm text-primary"
+            onClick={this.props.retry}
+          >
+            Retry search
+          </button>
+          <button type="button" className="min-h-11 text-sm" onClick={this.props.close}>
+            Close search
+          </button>
+        </div>
+      </div>
+    );
+  }
+}
 
 /** Same footprint as the panel's input row, shown while the panel loads. */
 function PanelFallback() {
@@ -46,10 +80,13 @@ export function SearchDialog({
   onOpenChange: (open: boolean) => void;
   query: string;
   setQuery: (query: string) => void;
-  onSelect: (hit: Hit) => void;
+  onSelect: (hit: SearchHit) => void;
   triggerClassName: string;
   children: ReactNode;
 }) {
+  // A fresh lazy component per retry: React keeps a rejected lazy rejected.
+  const [Panel, setPanel] = useState(() => InitialPanel);
+  const [attempt, setAttempt] = useState(0);
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
@@ -58,8 +95,8 @@ export function SearchDialog({
           className={triggerClassName}
           aria-label="Search the site"
           {...{ [TRIGGER_ATTR]: "search" }}
-          onPointerEnter={() => void loadSearchPanel()}
-          onFocus={() => void loadSearchPanel()}
+          onPointerEnter={preloadSearchPanel}
+          onFocus={preloadSearchPanel}
         >
           {children}
         </button>
@@ -69,9 +106,19 @@ export function SearchDialog({
         <DialogDescription className="sr-only">
           Jump to architecture nodes, products, docs, and public repositories.
         </DialogDescription>
-        <Suspense fallback={<PanelFallback />}>
-          <SearchPanel query={query} setQuery={setQuery} onSelect={onSelect} />
-        </Suspense>
+        <SearchBoundary
+          key={attempt}
+          close={() => onOpenChange(false)}
+          retry={() => {
+            resetSearchPanel();
+            setPanel(() => makePanel());
+            setAttempt((value) => value + 1);
+          }}
+        >
+          <Suspense fallback={<PanelFallback />}>
+            <Panel query={query} setQuery={setQuery} onSelect={onSelect} />
+          </Suspense>
+        </SearchBoundary>
       </DialogContent>
     </Dialog>
   );

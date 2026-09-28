@@ -86,7 +86,7 @@ function DevelopersPage() {
 
       <Section eyebrow="Integrity skill" title="The same rules this site is written under.">
         <p className="max-w-2xl text-sm leading-relaxed text-fg-muted">
-          <Link to="/skill-creator" className="text-accent">
+          <Link to="/skill-creator" className="text-accent underline">
             skill-creator
           </Link>{" "}
           is the public agent skill for creating skills and shipping the company site without

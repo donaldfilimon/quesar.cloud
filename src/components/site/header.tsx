@@ -1,6 +1,6 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { Menu } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { nav } from "@/lib/site-identity";
 import { cn } from "@/lib/utils";
 import { AuthSlot } from "./auth-slot";
@@ -24,6 +24,16 @@ export function SiteHeader() {
   // are plain buttons with the same markup (see header-menus-loader.ts).
   const menus = useHeaderMenus();
   useLoadHeaderMenusWhenIdle();
+  // Release the mobile sheet's modal state when the viewport grows past the
+  // breakpoint that hides its trigger.
+  useEffect(() => {
+    const desktop = window.matchMedia("(min-width: 1024px)");
+    const closeOnDesktop = () => {
+      if (desktop.matches) setOpen(false);
+    };
+    desktop.addEventListener("change", closeOnDesktop);
+    return () => desktop.removeEventListener("change", closeOnDesktop);
+  }, []);
 
   // Close the mobile sheet on navigation (adjusted during render, not in an effect).
   const [prevPathname, setPrevPathname] = useState(pathname);

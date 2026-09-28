@@ -1,6 +1,7 @@
 import { useNavigate } from "@tanstack/react-router";
 import { Search as SearchIcon } from "lucide-react";
 import { useEffect, useState } from "react";
+import type { SearchHit } from "@/lib/site-search";
 import {
   headerMenusLoaded,
   openWhenLoaded,
@@ -8,8 +9,7 @@ import {
   TRIGGER_ATTR,
   useHeaderMenus,
 } from "./header-menus-loader";
-import type { Hit } from "./search-panel";
-import { loadSearchPanel } from "./search-panel-loader";
+import { preloadSearchPanel } from "./search-panel-loader";
 
 const triggerClass =
   "inline-flex h-11 items-center gap-2 rounded-md px-2.5 text-fg-muted hover:bg-bg-subtle hover:text-fg";
@@ -20,16 +20,20 @@ export function SiteSearch() {
   const navigate = useNavigate();
   // The Radix dialog loads after hydration with the header's other overlays
   // (header-menus-loader.ts); until then the trigger is a plain button with
-  // the same markup, and the panel itself loads on first intent.
+  // the same markup, and the panel and its catalog load on first intent.
   const menus = useHeaderMenus();
 
   useEffect(() => {
     function onKey(event: KeyboardEvent) {
       if (!(event.metaKey || event.ctrlKey) || event.key.toLowerCase() !== "k") return;
-      const tag = (event.target as HTMLElement | null)?.tagName;
-      if (tag && ["INPUT", "TEXTAREA", "SELECT"].includes(tag)) return;
+      const target = event.target;
+      if (
+        target instanceof HTMLElement &&
+        (target.isContentEditable || target.closest("input, textarea, select"))
+      )
+        return;
       event.preventDefault();
-      void loadSearchPanel();
+      preloadSearchPanel();
       if (headerMenusLoaded()) setOpen((value) => !value);
       else openWhenLoaded(() => setOpen(true));
     }
@@ -42,14 +46,14 @@ export function SiteSearch() {
     if (!next) setQuery("");
   }
 
-  function go(hit: Hit) {
+  function go(hit: SearchHit) {
     setOpen(false);
     setQuery("");
     if (hit.external) {
       window.open(hit.href, "_blank", "noopener,noreferrer");
       return;
     }
-    void navigate({ to: hit.href as never, search: hit.search as never });
+    void navigate({ to: hit.href as never, search: hit.search as never, hash: hit.hash });
   }
 
   const content = (
@@ -87,11 +91,11 @@ export function SiteSearch() {
       data-state={open ? "open" : "closed"}
       {...{ [TRIGGER_ATTR]: "search" }}
       onPointerEnter={() => {
-        void loadSearchPanel();
+        preloadSearchPanel();
         preloadHeaderMenus();
       }}
       onFocus={() => {
-        void loadSearchPanel();
+        preloadSearchPanel();
         preloadHeaderMenus();
       }}
       onClick={() => openWhenLoaded(() => setOpen(true))}

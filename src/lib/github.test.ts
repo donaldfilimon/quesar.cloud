@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { excerptMarkdown } from "./github";
+import { excerptMarkdown } from "./github-data";
 
 describe("excerptMarkdown", () => {
   it("returns an empty string for empty or blank input", () => {

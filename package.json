@@ -17,6 +17,8 @@
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
+    "test:e2e": "playwright test",
+    "check:static": "node scripts/check-static.ts",
     "lint": "eslint . --max-warnings 0",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
@@ -72,7 +74,9 @@
     "zod": "^4.6.5"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
     "@eslint/js": "^10",
+    "@playwright/test": "^1.63.0",
     "@types/katex": "^0.16.8",
     "@types/node": "^24",
     "@types/pg": "^8.11.10",
@@ -87,6 +91,7 @@
     "jiti": "2.7.0",
     "lightningcss": "^1.28.0",
     "nitro": "3.0.260610-beta",
+    "parse5": "^8.0.1",
     "prettier": "^3.9.9",
     "shadcn": "^4.21.0",
     "typescript": "~6.0.3",
