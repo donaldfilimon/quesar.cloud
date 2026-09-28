@@ -36,3 +36,7 @@ The canonical corpus contains 21 publications (12 preserved notes, six overviews
 Topology, app-local TypeScript, 30 Vitest files / 261 tests, and the production build passed. Focused Chromium acceptance passed 64 checks across canonical and generated static presentations, including all article routes, tag filters, keyboard operation, mobile layout, 200% text reflow, equations, code and PDF responses. Canonical metadata, 21 social images, feed, sitemap and llms.txt were verified from the local production build. All 26 distinct public source URLs returned 200. Independent content/source and export-safety review found no remaining material issues.
 
 Full-site crawl and hosted owner-only verification receipts are delivered separately with the generated review manifest. Public rollout remains explicitly deferred.
+
+## Audience update — 2026-09-24
+
+Donald confirmed the existing MLAI Research Site should remain public. Publish the research corpus already present on the public canonical site, pin citations only to public source revisions, and label private-source citations as withheld. This supersedes the owner-only Sites audience and deferred public-rollout decisions above; the canonical `quesar.cloud` deployment branch remains unchanged.
