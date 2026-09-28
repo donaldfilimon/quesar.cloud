@@ -113,7 +113,12 @@ export function CodeBlock({ code, label }: { code: string; label?: string }) {
           {copied ? "Copied" : "Copy"}
         </button>
       </div>
-      <pre className="max-w-full overflow-x-auto p-5 font-mono text-0.8rem leading-7 text-fg">
+      {/* tabIndex: long lines scroll inside this box on narrow screens, so keyboard
+          users need to be able to focus it to scroll (axe scrollable-region-focusable). */}
+      <pre
+        tabIndex={0}
+        className="max-w-full overflow-x-auto p-5 font-mono text-0.8rem leading-7 text-fg"
+      >
         <code>{code}</code>
       </pre>
     </div>

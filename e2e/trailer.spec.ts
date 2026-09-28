@@ -1,4 +1,16 @@
-import { test, expect } from "@playwright/test";
+import { test, expect, type Page } from "@playwright/test";
+
+/**
+ * Synthetic media events are only seen once React has attached its handlers,
+ * and the static build hydrates after `load`. React tags hydrated nodes with a
+ * `__reactProps$<id>` key, so wait for that on the <video> before dispatching.
+ */
+async function waitForHydratedVideo(page: Page) {
+  await page.waitForFunction(() => {
+    const video = document.querySelector("video");
+    return Boolean(video && Object.keys(video).some((key) => key.startsWith("__reactProps$")));
+  });
+}
 
 test("rejected playback stays paused and can be retried", async ({ page }) => {
   const errors: string[] = [];
@@ -34,6 +46,7 @@ test("manual chapter selection cancels pending advancement and guards seeking", 
     };
   });
   await page.goto("/showcase");
+  await waitForHydratedVideo(page);
   await page.locator("video").dispatchEvent("ended");
   await expect(page.getByRole("button", { name: "2. The wafer" })).toHaveAttribute(
     "aria-current",
@@ -95,6 +108,7 @@ test("chapter advancement plays the next film and completion returns to paused",
     };
   });
   await page.goto("/showcase");
+  await waitForHydratedVideo(page);
   await page.locator("video").dispatchEvent("ended");
   await expect(page.getByRole("button", { name: "2. The wafer" })).toHaveAttribute(
     "aria-current",
