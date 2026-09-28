@@ -1,1 +1,0 @@
-import{M as e}from"./index-B_dYBlct.js";var t=e({type:`function`});export{t};
