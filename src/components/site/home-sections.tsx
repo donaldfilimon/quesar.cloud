@@ -86,8 +86,8 @@ export function HomeProductBoundary() {
     <Section
       id="product-boundary"
       eyebrow="Product boundary"
-      title="An operations console. Not a public chatbot."
-      lede="Quesar is for teams that need account-scoped access, explicit consent, and sealed conversation records on one request path."
+      title="The model. Not a session on this site."
+      lede="Quesar is the large model that trains and improves Abbey, Aviva, and the other assistants. This website does not host the model, run training, or host assistant sessions."
     >
       <div className="grid gap-4 md:grid-cols-2">
         {homeProductBoundary.map((item) => (
