@@ -31,7 +31,7 @@ const organizationLd = {
 
 const HOME_TITLE = `${site.name}: AI memory that can show its sources`;
 const HOME_DESCRIPTION =
-  "Explore Quesar's source-backed architecture for persistent AI, provenance-aware memory, and local runtimes.";
+  "Quesar is the large model that trains and improves Abbey, Aviva, and the other assistants. This website does not host the model, run training, or host assistant sessions.";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -119,9 +119,9 @@ function Hero() {
             AI memory that can show its sources.
           </h1>
           <p className="mt-7 max-w-[54ch] text-lg leading-8 text-fg-muted">
-            Quesar connects assistant workflows to provenance-aware memory, so retrieved answers can
-            lead back to their records. Explore the public architecture and source here, then run
-            the components on your own machines.
+            Quesar is the large model that trains and improves Abbey, Aviva, and the other
+            assistants. This website does not host the model, run training, or host assistant
+            sessions.
           </p>
           <div className="mt-9 flex flex-wrap gap-3">
             <Button asChild size="lg">
