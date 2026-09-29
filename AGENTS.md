@@ -3,9 +3,10 @@
 Donald's standing rules for this repository. `CLAUDE.md` carries the command set and the architecture map; this file carries the decisions.
 
 - **This is the main MLAI/Quesar site as of 2026-09-22.** It supersedes
-  `donaldfilimon/MLAI-CORPORATION-WWW` (local checkout `~/dev/active/mlai`,
-  Next 16), which is now the port source only. Port features from there, and
-  don't build new site work in it.
+  `donaldfilimon/MLAI-CORPORATION-WWW` (Next 16, archived on GitHub). All of it
+  was merged in at `8077dd1`; the local `mlai` checkout was retired 2026-09-28
+  (history: `~/at-risk-bundles/2026-09-28-consolidation/mlai.bundle`). Port any
+  remaining feature from that history; never revive it for new site work.
 - **No longer a Grok App Builder project (2026-09-23).** The repo began as a
   Grok export; its sandbox contract, platform chrome (PWA middleware, preview
   bridge, "Created with Grok" pill) and sandbox tooling were removed. Do not

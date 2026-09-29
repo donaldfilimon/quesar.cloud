@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 - **`AGENTS.md` is Donald's standing rules for this repo. Read it before any edit.** It holds the merge-from-mlai deviations (own OAuth workspace connectors, admin rule, AES-GCM sealing, account deletion, static build) and the env-var table. This file only points at them.
 - **This is no longer a Grok App Builder project (2026-09-23).** The sandbox contract, platform chrome and sandbox tooling were removed; never export from Grok into this repo again. The staged modernization plan (auth rebuild, bun + TS, design) is `notes/superpowers/specs/2026-09-23-quesar-modernization-design.md`.
-- This is the main MLAI/Quesar site. `~/dev/active/mlai` is a read-only port source; don't build site work there.
+- This is the main MLAI/Quesar site. The old mlai checkout is retired (history in `~/at-risk-bundles/2026-09-28-consolidation/mlai.bundle`); never build site work from it.
 
 ## Commands
 
