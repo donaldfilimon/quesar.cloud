@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 /**
- * GET /feed.xml: RSS 2.0 for lab notes and research publications. Ported from
+ * GET /feed.xml: RSS 2.0 for lab notes, research publications and releases. Ported from
  * mlai `app/feed.xml/route.ts`. The `[.]` in the file name escapes the dot, so
  * the path is `/feed.xml` rather than a nested `/feed/xml`. Content is static
  * data, so the response is cacheable and changes only on deploy. The feed

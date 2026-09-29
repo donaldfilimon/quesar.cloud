@@ -362,7 +362,17 @@ export const docsHub = {
     },
     {
       name: "GET /feed.xml",
-      body: "RSS 2.0 for lab notes and research publications. Public.",
+      body: "RSS 2.0 for lab notes, research publications and releases. Public.",
+      status: "current",
+    },
+    {
+      name: "POST /api/telemetry, POST /api/csp-report",
+      body: "Operational sinks: allowlisted anonymous page events (rate-limited, size-limited) and browser CSP violation reports (logged, not stored).",
+      status: "current",
+    },
+    {
+      name: "GET /api/cron/audits-expire",
+      body: "Daily expiry of old chat audits. Requires Authorization: Bearer CRON_SECRET; without the secret it answers 503 and is off.",
       status: "current",
     },
     {
@@ -442,7 +452,7 @@ export const linkHub: readonly { kicker: string; title: string; items: readonly 
         },
         {
           title: "RSS feed",
-          body: "Lab notes and research publications, newest first.",
+          body: "Lab notes, research publications and releases, newest first.",
           href: "/feed.xml",
         },
         {
