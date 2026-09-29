@@ -90,33 +90,43 @@ export function setSpeechPlaying(playing: boolean) {
    chose to watch. Lines primed before that are queued and warmed on request. */
 
 let voiceRequested = false;
-let pendingWarm: Array<{ who: string; text: string }> = [];
+// Lines primed before the first Play, keyed so a remount (StrictMode, or
+// leaving and re-entering a room) never queues the same line twice.
+const pendingWarm = new Map<string, { who: string; text: string }>();
+const lineKey = (line: { who: string; text: string }) => `${line.who}\u0000${line.text}`;
 
-// Pre-render a script's lines in idle time so playback is gapless, once the
-// viewer has asked for the voice (warm() kicks the model download).
-export function primeNeural(lines: Array<{ who?: PersonaKey | string; text: string }>) {
-  if (typeof window === "undefined") return;
+/**
+ * Pre-render a room's lines in idle time so playback is gapless, once the
+ * viewer has asked for the voice (warm() kicks the model download). Before
+ * that the lines wait in a queue. Returns a cleanup that drops them from the
+ * queue, so a room the viewer left is never synthesized ahead of the current
+ * one.
+ */
+export function primeNeural(lines: Array<{ who?: PersonaKey | string; text: string }>): () => void {
+  if (typeof window === "undefined") return () => {};
   const queued = lines.map((l) => ({ who: (l.who ?? "abbey") as string, text: l.text }));
   if (!voiceRequested) {
-    pendingWarm = pendingWarm.concat(queued);
-    return;
+    for (const line of queued) pendingWarm.set(lineKey(line), line);
+    return () => {
+      for (const line of queued) pendingWarm.delete(lineKey(line));
+    };
   }
   try {
-    if (!NeuralVoice.isSupported()) return;
-    void NeuralVoice.warm(queued);
+    if (NeuralVoice.isSupported()) void NeuralVoice.warm(queued);
   } catch {
     /* noop */
   }
+  return () => {};
 }
 
-/** Start the model download and warm any queued lines. Idempotent. */
+/** Start the model download and warm the queued lines. Idempotent. */
 export function requestVoice() {
   if (voiceRequested || typeof window === "undefined") return;
   voiceRequested = true;
   if (!NeuralVoice.isSupported()) return;
   NeuralVoice.load().catch(() => {});
-  const queued = pendingWarm;
-  pendingWarm = [];
+  const queued = [...pendingWarm.values()];
+  pendingWarm.clear();
   if (queued.length) void NeuralVoice.warm(queued).catch(() => {});
 }
 

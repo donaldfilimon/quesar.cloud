@@ -34,4 +34,15 @@ describe("voice gate", () => {
     speech.primeNeural([{ who: "aviva", text: "Later." }]);
     expect(voice.warm).toHaveBeenLastCalledWith([{ who: "aviva", text: "Later." }]);
   });
+
+  it("dedupes queued lines and drops a room's lines when it unmounts", async () => {
+    const speech = await import("./speech");
+    const leave = speech.primeNeural([{ who: "abbey", text: "Old room." }]);
+    speech.primeNeural([{ who: "abbey", text: "Current room." }]);
+    speech.primeNeural([{ who: "abbey", text: "Current room." }]);
+    leave();
+    speech.requestVoice();
+    expect(voice.warm).toHaveBeenCalledTimes(1);
+    expect(voice.warm).toHaveBeenCalledWith([{ who: "abbey", text: "Current room." }]);
+  });
 });

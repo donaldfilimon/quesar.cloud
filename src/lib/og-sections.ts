@@ -55,6 +55,3 @@ export const OG_SECTIONS = [
 ] as const;
 
 export type OgSection = (typeof OG_SECTIONS)[number]["slug"];
-
-/** Absolute-path image for a section's card. */
-export const ogImage = (slug: OgSection) => `/og/${slug}.jpg`;

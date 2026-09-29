@@ -145,6 +145,8 @@ export function Trailer({
   // Shortcuts while focus is in the player. A focused button owns Space and
   // Enter, and the seek slider owns the arrows, so those stay native.
   function onKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
+    // Leave browser and OS shortcuts (Cmd/Ctrl+F find, Cmd/Ctrl+C copy) alone.
+    if (event.metaKey || event.ctrlKey || event.altKey) return;
     const target = event.target as HTMLElement;
     const onControl = target.closest("button, input");
     const key = event.key.toLowerCase();

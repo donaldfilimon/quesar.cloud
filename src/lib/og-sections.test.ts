@@ -1,6 +1,7 @@
 import { existsSync } from "node:fs";
 import { describe, expect, it } from "vitest";
-import { OG_SECTIONS, ogImage } from "./og-sections";
+import { ogImage } from "./og-image";
+import { OG_SECTIONS } from "./og-sections";
 
 describe("Open Graph section cards", () => {
   it("has a rendered card for every section (bun run og:images)", () => {

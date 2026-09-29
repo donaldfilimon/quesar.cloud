@@ -16,13 +16,10 @@ const loadGithub = createServerFn({ method: "GET" })
  */
 export async function loadGithubData(force = false): Promise<GithubPayload> {
   if (!staticSite) return loadGithub({ data: force });
-  const [data, snapshot] = await Promise.all([
-    import("./github-data"),
-    import("./github-snapshot"),
-  ]);
-  const [live, captured] = await Promise.all([
-    data.fetchGithubPayload(force),
-    snapshot.loadGithubSnapshot(),
-  ]);
-  return data.withSnapshot(live, captured);
+  const data = await import("./github-data");
+  const live = await data.fetchGithubPayload(force);
+  // The snapshot is fetched only when it can fill something.
+  if (!data.needsSnapshot(live)) return live;
+  const { loadGithubSnapshot } = await import("./github-snapshot");
+  return data.withSnapshot(live, await loadGithubSnapshot());
 }

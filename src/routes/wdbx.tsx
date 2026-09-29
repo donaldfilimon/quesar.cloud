@@ -3,7 +3,7 @@ import { DataTable, NamedGrid, PageClose, PageHero, Section, SpecList } from "@/
 import { StatusBadge } from "@/components/site/status-badge";
 import { ProvTag } from "@/components/site/prov-tag";
 import { wdbxCapabilities, wdbxCrates, wdbxSpecs } from "@/lib/mlai/categories/abi-runtime";
-import { ogImage } from "@/lib/og-sections";
+import { ogImage } from "@/lib/og-image";
 import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/wdbx")({

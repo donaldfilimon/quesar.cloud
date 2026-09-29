@@ -3,7 +3,7 @@ import { PageClose, PageHero, RouteFrame, Section, Surface } from "@/components/
 import { DocSidebar } from "@/components/site/doc-nav";
 import { DocsHub } from "@/components/site/docs-hub";
 import { docs } from "@/lib/mlai/categories/docs";
-import { ogImage } from "@/lib/og-sections";
+import { ogImage } from "@/lib/og-image";
 import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/docs")({

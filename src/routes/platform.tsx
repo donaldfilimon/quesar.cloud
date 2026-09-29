@@ -14,7 +14,7 @@ import { HomeControlPlane, HomeProductBoundary } from "@/components/site/home-se
 import { integrationApps } from "@/lib/mlai/categories/site-copy";
 import { layers } from "@/lib/mlai/categories/architecture";
 import { wdbxSpecs } from "@/lib/mlai/categories/abi-runtime";
-import { ogImage } from "@/lib/og-sections";
+import { ogImage } from "@/lib/og-image";
 import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/platform")({

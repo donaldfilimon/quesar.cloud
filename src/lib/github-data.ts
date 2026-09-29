@@ -1,3 +1,5 @@
+import { README_NAMES } from "./github-readmes";
+
 export type LiveRepo = {
   name: string;
   description: string | null;
@@ -22,6 +24,8 @@ export type ReadmeCard = {
   name: string;
   excerpt: string;
   htmlUrl: string;
+  /** Set when the card came from the build-time snapshot, not a live fetch. */
+  capturedAt?: string;
 };
 
 /**
@@ -40,7 +44,7 @@ export type GithubPayload = {
   fetchedAt: string | null;
   sections: { repos: Freshness; events: Freshness; readmes: Freshness };
 };
-const README_NAMES = ["quesar.cloud", "abi", "wdbx", "abbey", "skill-creator", "abbey-bot", "gama"];
+
 type Slot<T> = { data?: T; at: number | null; next: number; failed: boolean };
 const slot = <T>(): Slot<T> => ({ at: null, next: 0, failed: false });
 const freshness = <T>(s: Slot<T>): Freshness => ({
@@ -255,9 +259,16 @@ export function withSnapshot(live: GithubPayload, snapshot: GithubPayload | null
     live.sections[section].state === "unavailable" && snapshot[section].length > 0;
 
   const liveNames = new Set(live.readmes.map((card) => card.name));
-  const filled = snapshot.readmes.filter((card) => !liveNames.has(card.name));
+  const capturedAt = snapshot.sections.readmes.fetchedAt ?? undefined;
+  // Each filled card carries its own capture time, so live cards beside it
+  // are never relabelled as the snapshot.
+  const filled = snapshot.readmes
+    .filter((card) => !liveNames.has(card.name))
+    .map((card) => ({ ...card, capturedAt }));
   const readmes = [...live.readmes, ...filled].sort(
-    (a, b) => README_NAMES.indexOf(a.name) - README_NAMES.indexOf(b.name),
+    (a, b) =>
+      README_NAMES.indexOf(a.name as (typeof README_NAMES)[number]) -
+      README_NAMES.indexOf(b.name as (typeof README_NAMES)[number]),
   );
 
   const repos = fillFromSnapshot("repos") ? snapshot.repos : live.repos;
@@ -270,7 +281,9 @@ export function withSnapshot(live: GithubPayload, snapshot: GithubPayload | null
     sections: {
       repos: fillFromSnapshot("repos") ? fromSnapshot("repos") : live.sections.repos,
       events: fillFromSnapshot("events") ? fromSnapshot("events") : live.sections.events,
-      readmes: filled.length ? fromSnapshot("readmes") : live.sections.readmes,
+      // The section reads as the snapshot only when no README came back live.
+      readmes:
+        filled.length && !live.readmes.length ? fromSnapshot("readmes") : live.sections.readmes,
     },
   };
 }
@@ -298,4 +311,13 @@ export function parseSnapshot(value: unknown): GithubPayload | null {
       (key) => typeof sections[key as keyof typeof sections]?.state === "string",
     );
   return ok ? (value as GithubPayload) : null;
+}
+
+/** True when some section or README did not load live, so the snapshot can help. */
+export function needsSnapshot(live: GithubPayload): boolean {
+  return (
+    live.sections.repos.state === "unavailable" ||
+    live.sections.events.state === "unavailable" ||
+    live.readmes.length < README_NAMES.length
+  );
 }

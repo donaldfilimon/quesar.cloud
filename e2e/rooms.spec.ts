@@ -25,3 +25,17 @@ test("the transcript carries the whole narration without starting playback", asy
   await expect(page.getByText("Abbey, for verified answers.", { exact: true })).toBeVisible();
   await expect(page.getByRole("button", { name: "Play", exact: true })).toBeVisible();
 });
+
+test("Space on the transcript toggle opens it without starting the film", async ({ page }) => {
+  await page.goto("/showcase/film");
+  await expect(page.getByRole("button", { name: "Play", exact: true })).toBeVisible();
+  await page.getByText("Transcript", { exact: true }).focus();
+  await page.keyboard.press("Space");
+  await expect(page.locator("details")).toHaveAttribute("open", "");
+  // Still on the start overlay: the press did not become Play.
+  await expect(page.getByRole("button", { name: "Play", exact: true })).toBeVisible();
+  await expect(page.getByRole("slider", { name: "Playhead" })).toHaveAttribute(
+    "aria-valuenow",
+    "0",
+  );
+});

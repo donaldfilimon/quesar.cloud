@@ -12,7 +12,7 @@ import {
 import { research } from "@/lib/mlai/categories/research";
 import { researchContext } from "@/lib/mlai/categories/research-context";
 import { researchSources, researchTopics } from "@/lib/mlai/categories/research-topics";
-import { ogImage } from "@/lib/og-sections";
+import { ogImage } from "@/lib/og-image";
 import { pageHead } from "@/lib/seo";
 
 const topicOptions = [
