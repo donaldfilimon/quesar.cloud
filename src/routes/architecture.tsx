@@ -1,7 +1,8 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { ArchitectureDiagram } from "@/components/diagram/architecture-diagram";
 import { JourneyRail, PageClose, PageHero, Section, StepList } from "@/components/site";
-import { architectureSteps, fieldNotesOffline } from "@/lib/content";
+import { architectureSteps } from "@/lib/mlai/categories/architecture";
+import { fieldNotesOffline } from "@/lib/mlai/categories/site-copy";
 import { isArchitectureNodeId } from "@/lib/architecture-node-ids";
 import { pageHead } from "@/lib/seo";
 import { staticSite } from "@/lib/static-site";

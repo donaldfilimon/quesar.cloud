@@ -161,7 +161,7 @@ export async function listWorkspaceConnections(
   }));
 }
 
-export async function deleteWorkspaceConnection(
+async function deleteWorkspaceConnection(
   userId: string,
   provider: WorkspaceProvider,
 ): Promise<boolean> {

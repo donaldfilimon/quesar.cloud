@@ -5,7 +5,7 @@ import { companyIdentity } from "./about";
 /**
  * The GPU engineering target. Stated once so the unit-economics row and the
  * founder-evidence row cannot drift apart; `architectureNodes` (compute) in
- * `@/lib/content` names the same figure as not claimed. Never a measurement.
+ * `./architecture.ts` names the same figure as not claimed. Never a measurement.
  */
 const gpuTargetFigure = "295×";
 

@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   captureGithubSnapshot,
   createGithubLoader,
+  needsSnapshot,
   parseSnapshot,
   withSnapshot,
 } from "./github-data";
@@ -119,7 +120,12 @@ describe("build-time snapshot", () => {
       state: "snapshot",
       fetchedAt: snapshot.sections.repos.fetchedAt,
     });
-    expect(merged.readmes).toEqual(snapshot.readmes);
+    expect(merged.readmes).toEqual(
+      snapshot.readmes.map((card) => ({
+        ...card,
+        capturedAt: snapshot.sections.readmes.fetchedAt,
+      })),
+    );
     expect(merged.sections.readmes.state).toBe("snapshot");
   });
 
@@ -139,7 +145,19 @@ describe("build-time snapshot", () => {
     expect(merged.readmes.find((c) => c.name === "abi")?.excerpt).toBe("Live excerpt.");
     expect(merged.readmes.find((c) => c.name === "wdbx")?.excerpt).toBe("A useful public runtime.");
     expect(merged.readmes.map((c) => c.name)).toEqual(snapshot.readmes.map((c) => c.name));
-    expect(merged.sections.readmes.state).toBe("snapshot");
+    // Live cards keep the live status; only the filled card is marked.
+    expect(merged.sections.readmes.state).toBe(live.sections.readmes.state);
+    expect(merged.readmes.find((c) => c.name === "abi")?.capturedAt).toBeUndefined();
+    expect(merged.readmes.find((c) => c.name === "wdbx")?.capturedAt).toBe(
+      snapshot.sections.readmes.fetchedAt,
+    );
+  });
+
+  it("asks for the snapshot only when something did not load live", async () => {
+    const full = await createGithubLoader(vi.fn(fixture))();
+    expect(needsSnapshot(full)).toBe(false);
+    const down = await createGithubLoader(vi.fn(offline))();
+    expect(needsSnapshot(down)).toBe(true);
   });
 
   it("rejects an asset that no longer has the payload shape", () => {

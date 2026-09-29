@@ -18,7 +18,7 @@ const StatusKindSchema = z.enum([
 ]) satisfies z.ZodType<StatusKind>;
 
 /** A product journey slug or start-journey id in `categories/product-journeys.ts`. */
-export const JourneyLinkSchema = z.enum(["abi", "abbey", "wdbx", "quasar", "mobile"]);
+const JourneyLinkSchema = z.enum(["abi", "abbey", "wdbx", "quasar", "mobile"]);
 
 export const QuesarSurfacesSchema = z.array(
   z.object({

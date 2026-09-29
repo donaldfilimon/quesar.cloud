@@ -18,7 +18,7 @@ export type AppUser = {
  * `"dev-user"` — the SAME id `verify.server.ts` returns server-side — so per-user
  * rows written in that mode belong to one consistent owner.
  */
-export const DEV_USER: AppUser = {
+const DEV_USER: AppUser = {
   id: "dev-user",
   displayName: "Dev User",
   primaryEmail: "dev@example.com",

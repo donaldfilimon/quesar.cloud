@@ -10,8 +10,9 @@ import {
   Section,
 } from "@/components/site";
 import { StatusBadge } from "@/components/site/status-badge";
-import { abiCli, abiCrates, abiDuties, abiNotClaimed, mcpTools } from "@/lib/content";
-import { ogImage } from "@/lib/og-sections";
+import { abiCli, abiCrates, mcpTools } from "@/lib/mlai/categories/abi-runtime";
+import { abiDuties, abiNotClaimed } from "@/lib/mlai/categories/abi";
+import { ogImage } from "@/lib/og-image";
 import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/abi")({

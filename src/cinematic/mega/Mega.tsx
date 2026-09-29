@@ -250,8 +250,11 @@ function MegaNarration() {
   const prev = useRef(0);
   const spoken = useRef<Set<number>>(new Set());
   useEffect(() => {
-    primeNeural(MEGA_SCRIPT);
-    return () => stopSpeech();
+    const unprime = primeNeural(MEGA_SCRIPT);
+    return () => {
+      unprime();
+      stopSpeech();
+    };
   }, []);
   useEffect(() => {
     const p = prev.current;

@@ -132,13 +132,6 @@ export function open(envelope: string, aad: string): string {
   return openWithRotation(envelope, aad).plaintext;
 }
 
-/** Keyed, non-reversible identifier (replaces mlai's AUDIT_SUBJECT_PEPPER hash). */
-export function keyedHash(value: string, purpose = "subject"): string {
-  return createHmac("sha256", subkey(activeKey(), `hash:${purpose}`))
-    .update(value)
-    .digest("base64url");
-}
-
 /** Unkeyed SHA-256 digest (integrity fingerprint of plaintext content). */
 export function digest(value: string): string {
   return createHash("sha256").update(value).digest("base64url");

@@ -68,11 +68,3 @@ export function clientSubject(request: Request): string {
   const salt = env("APP_ENCRYPTION_KEY") ?? env("BETTER_AUTH_SECRET") ?? "quesar-rate-limit";
   return createHmac("sha256", salt).update(`ip:${ip}`).digest("base64url").slice(0, 32);
 }
-
-export class RateLimitedError extends Error {
-  readonly status = 429;
-  constructor(message = "Too many requests. Try again shortly.") {
-    super(message);
-    this.name = "RateLimitedError";
-  }
-}

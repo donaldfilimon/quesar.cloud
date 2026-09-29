@@ -16,7 +16,7 @@ const publish = (next: typeof initial) => {
   listeners.forEach((listener) => listener());
 };
 
-export function refreshGithub(force = true): Promise<void> {
+function refreshGithub(force = true): Promise<void> {
   if (active) return active;
   publish({ ...snapshot, loading: true });
   active = loadGithubData(force)

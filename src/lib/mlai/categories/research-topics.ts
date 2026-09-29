@@ -3,7 +3,7 @@ import type { ResearchSources, ResearchTopics } from "../schemas-research-topics
 
 /**
  * Sentences that appear both in the /research topic list and in the
- * architecture map (`architectureNodes` in `@/lib/content`). Both build their
+ * architecture map (`architectureNodes` in `./architecture.ts`). Both build their
  * copy from these so the shared wording cannot drift apart.
  */
 export const sharedResearchCopy = {

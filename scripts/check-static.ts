@@ -7,11 +7,13 @@ import { transform } from "lightningcss";
 type Node = DefaultTreeAdapterMap["node"];
 const root = resolve("docs");
 const origin = "https://quesar.cloud";
+// Preload ceilings sit about four above the measured counts after the content
+// barrel was split (2026-09-29: 17, 17, 19, 21); gzip ceilings are unchanged.
 const budgets = [
-  { route: "/", preloads: 35, gzip: 225362 },
-  { route: "/docs/", preloads: 40, gzip: 264643 },
-  { route: "/research/", preloads: 36, gzip: 247971 },
-  { route: "/developers/", preloads: 38, gzip: 235878 },
+  { route: "/", preloads: 21, gzip: 225362 },
+  { route: "/docs/", preloads: 21, gzip: 264643 },
+  { route: "/research/", preloads: 23, gzip: 247971 },
+  { route: "/developers/", preloads: 25, gzip: 235878 },
 ];
 function walk(node: Node, visit: (node: DefaultTreeAdapterMap["element"]) => void) {
   if ("tagName" in node) visit(node);

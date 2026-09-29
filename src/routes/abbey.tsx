@@ -14,9 +14,10 @@ import {
 import { StatusBadge } from "@/components/site/status-badge";
 import { ProvTag } from "@/components/site/prov-tag";
 import { Button } from "@/components/ui/button";
-import { abbeyCommands, abbeyLedger, abbeyWorkflow, abbeyWorkspaceFacts } from "@/lib/content";
+import { abbeyCommands, abbeyLedger, abbeyWorkflow } from "@/lib/mlai/categories/abbey";
+import { abbeyWorkspaceFacts } from "@/lib/mlai/categories/surfaces";
 import { companionPersonas } from "@/lib/mlai/categories/personas";
-import { ogImage } from "@/lib/og-sections";
+import { ogImage } from "@/lib/og-image";
 import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/abbey")({

@@ -13,7 +13,7 @@ export type Recovery = {
   backLabel: string;
 };
 
-export const SECTION_RECOVERY = {
+const SECTION_RECOVERY = {
   docs: {
     eyebrow: "404 — Document not found",
     title: "That document doesn't exist.",

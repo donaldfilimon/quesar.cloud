@@ -1,1 +1,0 @@
-import{N as e}from"./index-VwoWv9c2.js";var t=e({type:`function`});export{t};

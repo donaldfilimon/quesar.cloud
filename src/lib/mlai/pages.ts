@@ -12,7 +12,7 @@
  * built carries `status: "development"` and is rendered with a status badge,
  * never as shipping.
  */
-import type { StatusKind } from "@/lib/content";
+import type { StatusKind } from "@/lib/site-identity";
 
 import { docsMcpTools, docsModuleMap, docsWdbxCapabilities } from "./categories/abi-runtime";
 import { wdbxGraphDefaults, wdbxGraphParams } from "./wdbx-facts";

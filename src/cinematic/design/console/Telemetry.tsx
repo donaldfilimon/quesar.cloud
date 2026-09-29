@@ -321,5 +321,3 @@ export function Telemetry() {
     </div>
   );
 }
-
-export { ArcGauge, Sparkline };

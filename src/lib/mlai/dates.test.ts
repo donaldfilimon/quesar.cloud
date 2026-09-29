@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { parseContentDate, toIsoDate, toSitemapDate } from "./dates";
+import { parseContentDate, toIsoDate } from "./dates";
 
 // Ported from mlai src/__tests__/dates.test.ts.
 describe("dates", () => {
@@ -26,15 +26,9 @@ describe("dates", () => {
     expect(toIsoDate("not a date")).toBeUndefined();
   });
 
-  it("toSitemapDate emits the bare YYYY-MM-DD form <lastmod> wants", () => {
-    expect(toSitemapDate("June 9, 2026")).toBe("2026-06-09");
-    expect(toSitemapDate("JUNE 2026")).toBe("2026-06-01");
-    expect(toSitemapDate("DECEMBER 2025")).toBe("2025-12-01");
-  });
-
-  it("toSitemapDate returns undefined rather than substituting a date", () => {
-    for (const bad of ["not a date", "", "Q1 2026", "coming soon"]) {
-      expect(toSitemapDate(bad)).toBeUndefined();
-    }
+  it("parses full ISO timestamps and zoned strings as written", () => {
+    expect(toIsoDate("2026-06-09T12:30:00.000Z")).toBe("2026-06-09T12:30:00.000Z");
+    expect(toIsoDate("2026-06-09T12:30:00+02:00")).toBe("2026-06-09T10:30:00.000Z");
+    expect(toIsoDate("June 9, 2026 GMT")).toBe("2026-06-09T00:00:00.000Z");
   });
 });

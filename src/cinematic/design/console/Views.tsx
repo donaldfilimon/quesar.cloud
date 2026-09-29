@@ -364,5 +364,3 @@ export function Settings() {
     </div>
   );
 }
-
-export { StatCard };

@@ -11,7 +11,8 @@ import {
   Section,
   Surface,
 } from "@/components/site";
-import { fieldNotesOffline, setups } from "@/lib/content";
+import { fieldNotesOffline } from "@/lib/mlai/categories/site-copy";
+import { setups } from "@/lib/mlai/categories/surfaces";
 import { pageHead } from "@/lib/seo";
 import { staticSite } from "@/lib/static-site";
 

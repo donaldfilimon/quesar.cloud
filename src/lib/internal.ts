@@ -20,7 +20,7 @@ export function isAbsoluteUrl(href: string) {
   return /^https?:\/\//i.test(href);
 }
 
-export function isGithubHref(href: string) {
+function isGithubHref(href: string) {
   return /github\.com|githubusercontent\.com/i.test(href);
 }
 

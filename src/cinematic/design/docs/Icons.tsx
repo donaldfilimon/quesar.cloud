@@ -9,7 +9,7 @@ export interface IcoProps {
   style?: CSSProperties;
 }
 
-export const Ico = ({ d, s = 16, style }: IcoProps): ReactNode => (
+const Ico = ({ d, s = 16, style }: IcoProps): ReactNode => (
   <svg
     width={s}
     height={s}
@@ -38,10 +38,6 @@ export const ISearch = (p: IconProps): ReactNode => (
       </>
     }
   />
-);
-
-export const IChevron = (p: IconProps): ReactNode => (
-  <Ico {...p} d={<path d="m9 18 6-6-6-6" />} />
 );
 
 export const ICopy = (p: IconProps): ReactNode => (

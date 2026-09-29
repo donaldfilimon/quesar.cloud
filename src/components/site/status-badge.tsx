@@ -1,4 +1,5 @@
-import { statusCopy, type StatusKind } from "@/lib/content";
+import { statusCopy } from "@/lib/status-copy";
+import { type StatusKind } from "@/lib/site-identity";
 import { cn } from "@/lib/utils";
 
 const tone: Record<StatusKind, string> = {

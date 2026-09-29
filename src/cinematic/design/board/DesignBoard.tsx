@@ -98,15 +98,30 @@ const BOARD_CSS = `
   color: transparent;
 }
 
-/* scroll-progress bar */
+/* scroll-progress bar: driven by the hub's scroller (the named --ds-page
+   timeline in DesignHub.tsx; the window never scrolls inside the fixed shell).
+   Where scroll-driven animations exist it needs no script and runs on the
+   compositor; elsewhere --ds-progress is set from a scroll listener. Either
+   way it scales, never re-lays out. */
 .ds-board .ds-scroll-progress {
   position: fixed;
   top: 0; left: 0;
-  height: 2px; width: 0%;
+  height: 2px; width: 100%;
   z-index: 9998;
   background: var(--ds-grad);
   box-shadow: 0 0 12px color-mix(in srgb, var(--ds-accent) 60%, transparent);
-  transition: width 0.1s linear;
+  transform-origin: 0 50%;
+  transform: scaleX(var(--ds-progress, 0));
+}
+@supports (animation-timeline: scroll()) {
+  .ds-board .ds-scroll-progress {
+    animation: ds-scroll-progress linear both;
+    animation-timeline: --ds-page;
+  }
+  @keyframes ds-scroll-progress {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+  }
 }
 `;
 
@@ -226,17 +241,19 @@ export default function DesignBoard(): ReactNode {
     r.setProperty("--ds-grain", t.grain ? "0.022" : "0");
   }, [t.theme, t.canvas, t.radius, t.glass, t.grain]);
 
-  // scroll progress bar
+  // Scroll progress bar fallback, for browsers without scroll-driven
+  // animations (the CSS above handles the rest with no script).
   useEffect(() => {
     const bar = document.getElementById("ds-scroll-progress");
-    if (!bar) return;
+    const scroller = bar?.closest<HTMLElement>("[data-ds-scroller]");
+    if (!bar || !scroller || CSS.supports("animation-timeline: scroll()")) return;
     const onScroll = (): void => {
-      const h = document.documentElement.scrollHeight - window.innerHeight;
-      bar.style.width = `${h > 0 ? (window.scrollY / h) * 100 : 0}%`;
+      const h = scroller.scrollHeight - scroller.clientHeight;
+      bar.style.setProperty("--ds-progress", String(h > 0 ? scroller.scrollTop / h : 0));
     };
     onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    scroller.addEventListener("scroll", onScroll, { passive: true });
+    return () => scroller.removeEventListener("scroll", onScroll);
   }, []);
 
   return (

@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useCallback, useEffect, useId, useMemo, useState } from "react";
 import { toast } from "sonner";
-import { architectureNodes, layerCopy, type ArchNode } from "@/lib/content";
+import { architectureNodes, layerCopy, type ArchNode } from "@/lib/mlai/categories/architecture";
 import { cn } from "@/lib/utils";
 import { StatusBadge } from "@/components/site/status-badge";
 import { Instrument } from "@/components/site/instrument";

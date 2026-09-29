@@ -18,9 +18,9 @@ const StatusKindSchema = z.enum([
 ]) satisfies z.ZodType<StatusKind>;
 
 /** A `researchRecords.tracks` id (`ai`, `wdbx`, `sea`, `gpu`, `mcp`, `tui`). */
-export const ResearchTrackIdSchema = z.enum(researchContextTopicIds);
+const ResearchTrackIdSchema = z.enum(researchContextTopicIds);
 
-export const ResearchTopicEntrySchema = z.object({
+const ResearchTopicEntrySchema = z.object({
   title: z.string().min(1),
   status: StatusKindSchema,
   /** Human-readable list of the projects the topic applies to. */
@@ -37,7 +37,7 @@ export const ResearchTopicsSchema = z.array(ResearchTopicEntrySchema);
  * Repo names where one exists (`abi`, `wdbx`, `abbey`, `gama`, `skill-creator`);
  * `mobile` and `quasar` are product surfaces without a repo of their own here.
  */
-export const ResearchSourceSubjectSchema = z.enum([
+const ResearchSourceSubjectSchema = z.enum([
   "abi",
   "wdbx",
   "abbey",
@@ -47,7 +47,7 @@ export const ResearchSourceSubjectSchema = z.enum([
   "quasar",
 ]);
 
-export const ResearchSourceSchema = z.object({
+const ResearchSourceSchema = z.object({
   title: z.string().min(1),
   href: z.string().startsWith("/"),
   body: z.string().min(1),

@@ -14,7 +14,10 @@
  * were built.
  */
 export function parseContentDate(value: string): number | null {
-  const t = Date.parse(/^\d{4}-\d{2}-\d{2}$/.test(value) ? value : `${value} UTC`);
+  // ISO forms (with or without a time) and strings naming their own zone parse
+  // as written; only a bare human date gets the explicit UTC zone.
+  const zoned = /^\d{4}-\d{2}-\d{2}/.test(value) || /\b(UTC|GMT)\b|[+-]\d{2}:?\d{2}$/.test(value);
+  const t = Date.parse(zoned ? value : `${value} UTC`);
   return Number.isNaN(t) ? null : t;
 }
 
@@ -22,15 +25,4 @@ export function parseContentDate(value: string): number | null {
 export function toIsoDate(value: string): string | undefined {
   const t = parseContentDate(value);
   return t === null ? undefined : new Date(t).toISOString();
-}
-
-/**
- * `parseContentDate` result as the `YYYY-MM-DD` form `<lastmod>` wants, or
- * undefined if unparseable. Undefined is a real answer: `<lastmod>` is
- * optional, and the sitemap omits it rather than stamping the build date on
- * pages that carry no date of their own (crawlers discount a `lastmod` that
- * changes on every build).
- */
-export function toSitemapDate(value: string): string | undefined {
-  return toIsoDate(value)?.slice(0, 10);
 }

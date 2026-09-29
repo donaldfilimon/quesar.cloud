@@ -106,5 +106,10 @@ const sitemap = htmlFiles(out).flatMap((file) => {
   return entry ? [entry] : [];
 });
 writeFileSync(join(out, "sitemap.xml"), buildSitemap(sitemap));
+// Only this build has a sitemap, so only this build's robots.txt names it.
+writeFileSync(
+  join(out, "robots.txt"),
+  `${readFileSync(join(out, "robots.txt"), "utf8").trimEnd()}\n\nSitemap: https://${DOMAIN}/sitemap.xml\n`,
+);
 console.log(`[publish-static] sitemap.xml lists ${sitemap.length} pages`);
 console.log(`[publish-static] docs/ ready for ${DOMAIN}`);

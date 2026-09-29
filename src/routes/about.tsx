@@ -3,7 +3,7 @@ import { BulletSurface, CopyGrid, PageClose, PageHero, Section } from "@/compone
 import { SpecList } from "@/components/site/lab";
 import { about } from "@/lib/mlai/categories/about";
 import { aboutMission, aboutWhoWeAre } from "@/lib/mlai/pages";
-import { site } from "@/lib/content";
+import { site } from "@/lib/site-identity";
 import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/about")({

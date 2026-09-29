@@ -1,4 +1,4 @@
-import type { StatusKind } from "./content";
+import type { StatusKind } from "./site-identity";
 
 export const repoPaths: Record<string, string> = {
   "quesar.cloud": "/developers",
@@ -309,22 +309,3 @@ export const repoDocs: Record<
     sections: [{ title: "Boundary", body: "Not a public product surface." }],
   },
 };
-
-export const quasarParts = [
-  {
-    title: "packages/shared",
-    body: "TypeScript types and zod schemas shared by the service and the Expo app — Site, GenerationEvent, PreviewStatus, request bodies.",
-  },
-  {
-    title: "sidecars/quasar-service",
-    body: "Local Bun service (default port 4700): registry, path guard, site filesystem tools, generation engine, scaffolder, preview manager.",
-  },
-  {
-    title: "templates/next-site",
-    body: "A buildable, checked-in Next.js 16 + Tailwind v4 starter, copied per-site as the generation baseline.",
-  },
-  {
-    title: "/quasar screens",
-    body: "Sites, new site, site detail with live events and preview, and settings, in this app. They call the local service from your browser. There is no deploy step in v1.",
-  },
-] as const;

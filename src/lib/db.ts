@@ -15,7 +15,7 @@ const databaseUrl = rawDatabaseUrl && rawDatabaseUrl.trim() ? rawDatabaseUrl : u
  * the app has a working database even with nothing configured — local dev
  * included. Swap in Neon later by just setting `DATABASE_URL`; no code changes.
  */
-export const dbSource: DbSource = databaseUrl ? "neon" : "pglite";
+const dbSource: DbSource = databaseUrl ? "neon" : "pglite";
 
 /**
  * Minimal shared SQL surface, satisfied by both Neon and PGLite. Both the

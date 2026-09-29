@@ -8,7 +8,9 @@ export function TabsList({ className, ...props }: ComponentProps<typeof TabsPrim
   return (
     <TabsPrimitive.List
       className={cn(
-        "flex min-w-0 gap-1 overflow-x-auto border-b border-border px-3 py-2",
+        // Wraps rather than scrolls: a horizontal scroll region hides tabs and
+        // is not keyboard-scrollable in Safari (axe scrollable-region-focusable).
+        "flex min-w-0 flex-wrap gap-1 border-b border-border px-3 py-2",
         className,
       )}
       {...props}

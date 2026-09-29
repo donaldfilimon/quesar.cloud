@@ -13,7 +13,7 @@
 
 import { useEffect, useMemo, useRef } from "react";
 import { createPortal } from "react-dom";
-import { C, FONT, PERSONAS, clamp, type PersonaKey } from "./tokens";
+import { C, FONT, clamp, type PersonaKey } from "./tokens";
 import { SCRIPT, type ScriptLine } from "./narration-script";
 import { step, fade } from "./easing";
 import { useTimeline } from "./timeline-context";
@@ -60,8 +60,11 @@ export function NarrationController() {
   // prewarm the neural model with this film's lines (idle-time, gapless playback);
   // stop all speech when the surface unmounts (e.g. navigating back).
   useEffect(() => {
-    primeNeural(SCRIPT);
-    return () => stopSpeech();
+    const unprime = primeNeural(SCRIPT);
+    return () => {
+      unprime();
+      stopSpeech();
+    };
   }, []);
 
   useEffect(() => {
@@ -287,5 +290,3 @@ export function VoiceToggle() {
   );
   return chrome ? createPortal(button, chrome) : button;
 }
-
-export { PERSONAS };

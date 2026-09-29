@@ -1,7 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { authMiddleware } from "@/lib/auth/middleware";
-import { architectureNodes } from "@/lib/content";
+import { architectureNodes } from "@/lib/mlai/categories/architecture";
 
 export const desks = [
   { id: "abbey", name: "Abbey", line: "Care first. Scaffold the next step." },

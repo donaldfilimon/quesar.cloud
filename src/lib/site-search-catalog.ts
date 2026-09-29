@@ -1,5 +1,6 @@
 import { DOCS_HUB_ANCHORS } from "@/components/site/docs-hub-anchors";
-import { architectureNodes, repos } from "./content";
+import { architectureNodes } from "./mlai/categories/architecture";
+import { repos } from "./mlai/categories/repos";
 import { searchIndex } from "./search-pages";
 import { isAbsoluteUrl } from "./internal";
 import { blog } from "./mlai/categories/blog";

@@ -15,8 +15,6 @@ import { auth, authConfigured } from "./server";
 const databaseConfigured = Boolean(process.env.DATABASE_URL?.trim());
 
 /** Re-export so callers can branch on it without importing `server.ts`. */
-export { authConfigured };
-
 if (databaseConfigured && !authConfigured) {
   console.error(
     "[auth] DATABASE_URL is set but auth is disabled (VITE_AUTH_ENABLED=false) " +
@@ -26,7 +24,7 @@ if (databaseConfigured && !authConfigured) {
 }
 
 /** Dev fallback user id, used only when auth is disabled (VITE_AUTH_ENABLED=false). */
-export const DEV_USER_ID = "dev-user";
+const DEV_USER_ID = "dev-user";
 
 /**
  * Thrown by `requireUserId` when the caller has no valid session. Carries

@@ -3,23 +3,36 @@ import { PageClose, PageHero, RouteFrame, Section } from "@/components/site";
 import { ShowcaseWall } from "@/components/site/showcase-wall";
 import { Trailer } from "@/components/site/trailer";
 import { FILM_PUBLISHED, filmCuts } from "@/components/site/film-cuts";
-import { ogImage } from "@/lib/og-sections";
+import { ogImage } from "@/lib/og-image";
 import { pageHead, SITE_ORIGIN } from "@/lib/seo";
 
 const DESCRIPTION = "Quesar showcase: trailer, film, explainer, design lab, Abbey, mega board.";
-const mark = filmCuts[0];
-const markMp4 = `${SITE_ORIGIN}${mark.sources[mark.sources.length - 1].src}`;
 
 export const Route = createFileRoute("/showcase")({
+  // The film records are read in the loader, which shares the component's lazy
+  // chunk; `head` only reads loaderData, so none of them reach the main bundle.
+  codeSplitGroupings: [["loader", "component"]],
+  loader: () => {
+    const mark = filmCuts[0];
+    return {
+      title: mark.title,
+      caption: mark.caption,
+      poster: `${SITE_ORIGIN}${mark.poster}`,
+      mp4: `${SITE_ORIGIN}${mark.sources[mark.sources.length - 1].src}`,
+      duration: Math.round(mark.duration),
+      published: FILM_PUBLISHED,
+    };
+  },
   // The trailer's first cut, described for link previews and search: og:video
   // for cards that can play it, VideoObject for structured data.
-  head: () => {
+  head: ({ loaderData: video }) => {
     const head = pageHead("Showcase — Quesar", DESCRIPTION, ogImage("showcase"));
+    if (!video) return head;
     return {
       meta: [
         ...head.meta,
         { property: "og:type", content: "video.other" },
-        { property: "og:video", content: markMp4 },
+        { property: "og:video", content: video.mp4 },
         { property: "og:video:type", content: "video/mp4" },
         { property: "og:video:width", content: "1280" },
         { property: "og:video:height", content: "720" },
@@ -30,12 +43,12 @@ export const Route = createFileRoute("/showcase")({
           children: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "VideoObject",
-            name: `Quesar film: ${mark.title}`,
-            description: mark.caption,
-            thumbnailUrl: `${SITE_ORIGIN}${mark.poster}`,
-            contentUrl: markMp4,
-            uploadDate: FILM_PUBLISHED,
-            duration: `PT${Math.round(mark.duration)}S`,
+            name: `Quesar film: ${video.title}`,
+            description: video.caption,
+            thumbnailUrl: video.poster,
+            contentUrl: video.mp4,
+            uploadDate: video.published,
+            duration: `PT${video.duration}S`,
           }),
         },
       ],

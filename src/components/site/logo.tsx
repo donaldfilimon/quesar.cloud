@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
 
 /** Weighted-graph “M” — the Lab mark. Mirrors WDBX’s directed backtrace. */
-export function Mark({ className, mono = false }: { className?: string; mono?: boolean }) {
+function Mark({ className, mono = false }: { className?: string; mono?: boolean }) {
   return (
     <span
       className={cn(

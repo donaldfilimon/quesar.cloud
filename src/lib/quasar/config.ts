@@ -7,7 +7,7 @@ import { staticSite } from "@/lib/static-site";
  * value the browser would be told to call, so no auth middleware. The browser
  * falls back to `http://localhost:4700` when this is null.
  */
-export const getQuasarDefaultOrigin = createServerFn({ method: "GET" }).handler(
+const getQuasarDefaultOrigin = createServerFn({ method: "GET" }).handler(
   async (): Promise<string | null> => {
     const { env } = await import("@/lib/env.server");
     const { normalizeOrigin } = await import("./connection");

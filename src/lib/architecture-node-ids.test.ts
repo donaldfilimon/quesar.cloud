@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { architectureNodes } from "./content";
+import { architectureNodes } from "./mlai/categories/architecture";
 import { ARCHITECTURE_NODE_IDS, isArchitectureNodeId } from "./architecture-node-ids";
 
 describe("architecture node ids", () => {

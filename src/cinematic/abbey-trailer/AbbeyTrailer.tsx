@@ -201,8 +201,13 @@ function AbbeyNarration({ timeline }: { timeline: AbbeyTimeline }) {
   const prev = useRef(0);
   const spoken = useRef<Set<number>>(new Set());
   useEffect(() => {
-    primeNeural(timeline.captions.map((c) => ({ who: c.who ?? "abbey", text: c.text })));
-    return () => stopSpeech();
+    const unprime = primeNeural(
+      timeline.captions.map((c) => ({ who: c.who ?? "abbey", text: c.text })),
+    );
+    return () => {
+      unprime();
+      stopSpeech();
+    };
   }, [timeline]);
   useEffect(() => {
     const p = prev.current;

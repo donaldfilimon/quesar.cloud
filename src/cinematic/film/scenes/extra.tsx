@@ -2,80 +2,13 @@
 // Ported from scenes_extra.jsx. Reuses SceneBox + brand + fx primitives.
 
 import { C, FONT } from "../tokens";
-import { Easing, step, fade } from "../easing";
+import { Easing, step } from "../easing";
 import { useSprite } from "../timeline-context";
 import { DiagramSVG, Wire, PulseRing, SignalDots, SignalPolyline, Rotor } from "../fx";
 import { hexOf } from "../fx-utils";
 import { Orb } from "../primitives";
 import { SceneTag, StatusBadge } from "../chrome";
 import { SceneBox } from "./_shared";
-import type { ReactNode } from "react";
-
-// ── Act title card ───────────────────────────────────────────────────────────
-export function ActCard({
-  num,
-  title,
-  accent = C.blueHi,
-}: {
-  num: ReactNode;
-  title: ReactNode;
-  accent?: string;
-}) {
-  const { localTime: lt, duration } = useSprite();
-  const op = fade(lt, duration, 0.8, 0.7);
-  const numIn = step(lt, 0.2, 0.7, Easing.easeOutBack);
-  const titleIn = step(lt, 0.6, 0.9);
-  const rule = step(lt, 1.1, 1.0);
-  return (
-    <div
-      style={{
-        position: "absolute",
-        inset: 0,
-        opacity: op,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      <Orb x={960} y={540} size={640} color={accent} opacity={0.1} />
-      <div
-        style={{
-          fontFamily: FONT.mono,
-          fontSize: 24,
-          letterSpacing: "0.5em",
-          color: accent,
-          opacity: numIn,
-          transform: `translateY(${(1 - numIn) * 10}px)`,
-          paddingLeft: "0.5em",
-        }}
-      >
-        ACT {num}
-      </div>
-      <div
-        style={{
-          width: 380 * rule,
-          height: 1,
-          margin: "34px 0",
-          background: `linear-gradient(90deg, transparent, ${C.lineHi}, transparent)`,
-        }}
-      />
-      <div
-        style={{
-          fontFamily: FONT.display,
-          fontWeight: 700,
-          fontSize: 96,
-          letterSpacing: "-0.02em",
-          color: C.text,
-          opacity: titleIn,
-          transform: `translateY(${(1 - titleIn) * 14}px) scale(${0.96 + 0.04 * titleIn})`,
-        }}
-      >
-        {title}
-      </div>
-    </div>
-  );
-}
 
 // ── WDBX · Storage — write-ahead log deep zoom ───────────────────────────────
 export function SceneStorage() {

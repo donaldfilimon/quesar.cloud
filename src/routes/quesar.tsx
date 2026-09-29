@@ -11,8 +11,8 @@ import {
 } from "@/components/site";
 import { StatusBadge } from "@/components/site/status-badge";
 import { Button } from "@/components/ui/button";
-import { quesarSurfaces, quesarWhat } from "@/lib/content";
-import { ogImage } from "@/lib/og-sections";
+import { quesarSurfaces, quesarWhat } from "@/lib/mlai/categories/surfaces";
+import { ogImage } from "@/lib/og-image";
 import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/quesar")({

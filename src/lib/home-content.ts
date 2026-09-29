@@ -1,6 +1,6 @@
 /**
- * Home-page copy. Kept apart from `@/lib/content` so the home route does not
- * preload the full content catalog. Import from here, not `@/lib/content`.
+ * Home-page copy. Kept apart from the category modules so the home route
+ * preloads only what it renders.
  */
 
 export const homeStart = [

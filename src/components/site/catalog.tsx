@@ -5,7 +5,8 @@ import { NextUp } from "./lab";
 import { Surface } from "./section";
 import { StatusBadge } from "./status-badge";
 import { ProvTag, type Provenance } from "./prov-tag";
-import { integrityRules, type StatusKind } from "@/lib/content";
+import { integrityRules } from "@/lib/mlai/categories/site-copy";
+import { type StatusKind } from "@/lib/site-identity";
 import { personas } from "@/lib/mlai/categories/personas";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -220,31 +221,6 @@ export function IntegrityList({
   );
 }
 
-export function ProjectRows({
-  items,
-}: {
-  items: readonly { href: string; name: string; oneLiner: string; status: StatusKind }[];
-}) {
-  return (
-    <div>
-      {items.map((item, index) => (
-        <Link key={item.href} to={item.href} className="project-row">
-          <span className="font-mono text-2xs text-fg-subtle">
-            {String(index + 1).padStart(2, "0")}
-          </span>
-          <span className="project-row-name font-display text-3xl tracking-tight">{item.name}</span>
-          <span className="project-row-copy text-sm leading-relaxed text-fg-muted">
-            {item.oneLiner}
-          </span>
-          <span className="project-row-status">
-            <StatusBadge status={item.status} />
-          </span>
-        </Link>
-      ))}
-    </div>
-  );
-}
-
 export function TruthList({
   items,
 }: {
@@ -293,7 +269,7 @@ export function MetricCard({
   );
 }
 
-export function Actions({ children }: { children: ReactNode }) {
+function Actions({ children }: { children: ReactNode }) {
   return <div className="flex flex-wrap gap-3">{children}</div>;
 }
 

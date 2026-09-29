@@ -11,7 +11,7 @@ import {
   StatGrid,
 } from "@/components/site";
 import { ProvTag } from "@/components/site/prov-tag";
-import { investor } from "@/lib/content";
+import { investor } from "@/lib/mlai/categories/investor";
 import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/investors")({

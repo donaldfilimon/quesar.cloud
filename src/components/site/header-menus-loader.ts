@@ -38,7 +38,7 @@ function recoverFromChunkError() {
   window.location.reload();
 }
 
-export function loadHeaderMenus(): Promise<HeaderMenus> {
+function loadHeaderMenus(): Promise<HeaderMenus> {
   if (menus) return Promise.resolve(menus);
   if (pending) return pending;
   pending = import("./header-menus").then(
