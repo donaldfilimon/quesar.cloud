@@ -47,6 +47,8 @@ while IFS= read -r f; do git show "HEAD:$f" | sed -E 's/u:[0-9]+/u:T/g; s#<lastB
 
 Zero `REAL:` lines means nothing user-visible changed: run `git checkout -- docs` and commit no docs/. A noise-only rebuild is never worth a commit.
 
+Every static build also captures a fresh GitHub snapshot (`docs/assets/github-snapshot-*.json`, plus the one chunk that references it), because repository metadata and activity change constantly. If the only real change is that snapshot and the chunk pointing at it, it is a data refresh, not a source change: commit it only when the refresh is the point, and never let it stand in for "the change landed".
+
 **4. Verify the change landed and the main bundle did not grow.** Built pages contain NUL bytes, so plain `grep` silently reports no match. Always use `grep -a`:
 
 ```bash

@@ -1,1 +1,0 @@
-import{t as e}from"./preload-helper-BZ1Pz5am.js";import{I as t,N as n}from"./index-BwPLgIWE.js";n({method:`GET`}).handler(t(`afaddab47e472f5b1d23e9ff5a5780608fab3db4d6e80f197569e2747dc035d0`));function r(t=!1){return e(()=>import(`./github-data-DdT16Q0G.js`).then(e=>e.fetchGithubPayload(t)),[])}export{r as t};

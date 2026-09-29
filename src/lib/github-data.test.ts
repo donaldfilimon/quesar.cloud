@@ -1,5 +1,10 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { createGithubLoader } from "./github-data";
+import {
+  captureGithubSnapshot,
+  createGithubLoader,
+  parseSnapshot,
+  withSnapshot,
+} from "./github-data";
 
 const repo = { name: "abi", html_url: "https://github.com/donaldfilimon/abi", stargazers_count: 2 };
 function fixture(url: string | URL | Request) {
@@ -91,5 +96,54 @@ describe("GitHub section recovery", () => {
     const partial = await load(true);
     expect(partial.readmes).toEqual(first.readmes);
     expect(partial.sections.readmes.state).toBe("stale");
+  });
+});
+
+describe("build-time snapshot", () => {
+  const offline = () => Promise.reject(new Error("offline"));
+
+  it("captures a ready payload, and nothing when GitHub does not answer", async () => {
+    const snapshot = await captureGithubSnapshot(vi.fn(fixture));
+    expect(snapshot?.repos[0].name).toBe("abi");
+    expect(parseSnapshot(JSON.parse(JSON.stringify(snapshot)))).toEqual(snapshot);
+    expect(await captureGithubSnapshot(vi.fn(offline))).toBeNull();
+  });
+
+  it("fills only the sections live GitHub could not load, labelled as the snapshot", async () => {
+    const snapshot = (await captureGithubSnapshot(vi.fn(fixture)))!;
+    const live = await createGithubLoader(vi.fn(offline))();
+    const merged = withSnapshot(live, snapshot);
+    expect(merged.state).toBe("ready");
+    expect(merged.repos).toEqual(snapshot.repos);
+    expect(merged.sections.repos).toEqual({
+      state: "snapshot",
+      fetchedAt: snapshot.sections.repos.fetchedAt,
+    });
+    expect(merged.readmes).toEqual(snapshot.readmes);
+    expect(merged.sections.readmes.state).toBe("snapshot");
+  });
+
+  it("prefers live data and merges README cards by name", async () => {
+    const snapshot = (await captureGithubSnapshot(vi.fn(fixture)))!;
+    const live = await createGithubLoader(
+      vi.fn((url: string | URL | Request) =>
+        String(url).includes("/wdbx/main/")
+          ? offline()
+          : String(url).includes("raw.githubusercontent")
+            ? Promise.resolve(new Response("Live excerpt."))
+            : fixture(url),
+      ),
+    )();
+    const merged = withSnapshot(live, snapshot);
+    expect(merged.sections.repos.state).toBe("fresh");
+    expect(merged.readmes.find((c) => c.name === "abi")?.excerpt).toBe("Live excerpt.");
+    expect(merged.readmes.find((c) => c.name === "wdbx")?.excerpt).toBe("A useful public runtime.");
+    expect(merged.readmes.map((c) => c.name)).toEqual(snapshot.readmes.map((c) => c.name));
+    expect(merged.sections.readmes.state).toBe("snapshot");
+  });
+
+  it("rejects an asset that no longer has the payload shape", () => {
+    expect(parseSnapshot(null)).toBeNull();
+    expect(parseSnapshot({ state: "ready", repos: [] })).toBeNull();
   });
 });

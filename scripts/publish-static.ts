@@ -4,8 +4,9 @@
  *
  * Copies the prerendered site from `.output/public` into `docs/` (the Pages
  * source: branch `main`, folder `/docs`), then adds what Pages needs:
- * `.nojekyll` (serve `_`-prefixed and `.md` paths verbatim), `CNAME`, and a
- * self-contained `404.html`. `docs/` holds ONLY the built site; internal
+ * `.nojekyll` (serve `_`-prefixed and `.md` paths verbatim), `CNAME`, a
+ * self-contained `404.html`, and `sitemap.xml` generated from the pages
+ * (`./sitemap.ts`). `docs/` holds ONLY the built site; internal
  * records live in `notes/`.
  */
 import {
@@ -19,6 +20,7 @@ import {
   writeFileSync,
 } from "node:fs";
 import { join, relative } from "node:path";
+import { buildSitemap, sitemapEntry } from "./sitemap.ts";
 
 const root = process.cwd();
 const src = join(root, ".output", "public");
@@ -99,4 +101,10 @@ writeFileSync(
 </html>
 `,
 );
+const sitemap = htmlFiles(out).flatMap((file) => {
+  const entry = sitemapEntry(readFileSync(file, "utf8"));
+  return entry ? [entry] : [];
+});
+writeFileSync(join(out, "sitemap.xml"), buildSitemap(sitemap));
+console.log(`[publish-static] sitemap.xml lists ${sitemap.length} pages`);
 console.log(`[publish-static] docs/ ready for ${DOMAIN}`);

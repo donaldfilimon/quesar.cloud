@@ -24,7 +24,14 @@ export type ReadmeCard = {
   htmlUrl: string;
 };
 
-export type Freshness = { state: "fresh" | "stale" | "unavailable"; fetchedAt: string | null };
+/**
+ * `snapshot`: GitHub did not answer, so the section shows the copy captured
+ * when the static site was built (`scripts/github-snapshot-plugin.ts`).
+ */
+export type Freshness = {
+  state: "fresh" | "stale" | "snapshot" | "unavailable";
+  fetchedAt: string | null;
+};
 export type GithubPayload = {
   state: "ready" | "unavailable";
   repos: LiveRepo[];
@@ -232,3 +239,63 @@ export function createGithubLoader(fetcher: typeof fetch = fetch, now = Date.now
   };
 }
 export const fetchGithubPayload = createGithubLoader();
+
+/**
+ * Fill every section the live refresh could not load from the build-time
+ * snapshot. A section with any live data keeps it; README cards merge by name,
+ * live first, so one failed README does not blank the others.
+ */
+export function withSnapshot(live: GithubPayload, snapshot: GithubPayload | null): GithubPayload {
+  if (!snapshot) return live;
+  const fromSnapshot = (section: keyof GithubPayload["sections"]): Freshness => ({
+    state: "snapshot",
+    fetchedAt: snapshot.sections[section].fetchedAt,
+  });
+  const fillFromSnapshot = (section: "repos" | "events") =>
+    live.sections[section].state === "unavailable" && snapshot[section].length > 0;
+
+  const liveNames = new Set(live.readmes.map((card) => card.name));
+  const filled = snapshot.readmes.filter((card) => !liveNames.has(card.name));
+  const readmes = [...live.readmes, ...filled].sort(
+    (a, b) => README_NAMES.indexOf(a.name) - README_NAMES.indexOf(b.name),
+  );
+
+  const repos = fillFromSnapshot("repos") ? snapshot.repos : live.repos;
+  return {
+    state: repos.length ? "ready" : live.state,
+    repos,
+    events: fillFromSnapshot("events") ? snapshot.events : live.events,
+    readmes,
+    fetchedAt: live.fetchedAt ?? snapshot.fetchedAt,
+    sections: {
+      repos: fillFromSnapshot("repos") ? fromSnapshot("repos") : live.sections.repos,
+      events: fillFromSnapshot("events") ? fromSnapshot("events") : live.sections.events,
+      readmes: filled.length ? fromSnapshot("readmes") : live.sections.readmes,
+    },
+  };
+}
+
+/** Build-time capture for the static site: everything a live load returns, or null when GitHub did not answer. */
+export async function captureGithubSnapshot(
+  fetcher: typeof fetch = fetch,
+): Promise<GithubPayload | null> {
+  const payload = await createGithubLoader(fetcher)(true);
+  return payload.state === "ready" ? payload : null;
+}
+
+/** Accepts a snapshot asset only if it still has the payload shape this build renders. */
+export function parseSnapshot(value: unknown): GithubPayload | null {
+  if (!value || typeof value !== "object") return null;
+  const v = value as Partial<GithubPayload>;
+  const sections = v.sections;
+  const ok =
+    v.state === "ready" &&
+    Array.isArray(v.repos) &&
+    Array.isArray(v.events) &&
+    Array.isArray(v.readmes) &&
+    !!sections &&
+    ["repos", "events", "readmes"].every(
+      (key) => typeof sections[key as keyof typeof sections]?.state === "string",
+    );
+  return ok ? (value as GithubPayload) : null;
+}

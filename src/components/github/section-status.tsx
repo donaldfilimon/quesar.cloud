@@ -22,12 +22,15 @@ export function GithubSectionStatus({
             ? `Live ${label} from donaldfilimon`
             : state === "stale"
               ? `Cached ${label}; GitHub refresh incomplete.`
-              : `Live ${label} unavailable. Curated content remains available.`}
+              : state === "snapshot"
+                ? `GitHub did not answer. Showing ${label} captured when this site was built.`
+                : `Live ${label} unavailable. Curated content remains available.`}
         {!loading && status?.fetchedAt ? (
           <>
             {" "}
             <time dateTime={status.fetchedAt}>
-              Fetched {new Date(status.fetchedAt).toLocaleString()}
+              {state === "snapshot" ? "Captured" : "Fetched"}{" "}
+              {new Date(status.fetchedAt).toLocaleString()}
             </time>
           </>
         ) : null}
