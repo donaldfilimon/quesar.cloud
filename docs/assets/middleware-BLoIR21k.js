@@ -1,0 +1,1 @@
+import{rt as e}from"./index-BV1NlZB2.js";var t=e({type:`function`});export{t};

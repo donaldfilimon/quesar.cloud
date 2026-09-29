@@ -1,1 +1,0 @@
-import{N as e}from"./index-DRaZKWLX.js";var t=e({type:`function`});export{t};
