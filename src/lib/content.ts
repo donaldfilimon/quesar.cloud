@@ -144,7 +144,7 @@ export const faqs = [
   },
   {
     q: "Is Quesar a chatbot?",
-    a: "No. Quesar is infrastructure: ABI orchestration, WDBX memory, Abbey as the companion experience. Chat is one interface, not the product.",
+    a: "No. Quesar is the large model that trains and improves Abbey, Aviva, and the other assistants. Chat is an interface on an assistant. This website does not host the model or an assistant session.",
   },
   {
     q: "Can it run privately?",
@@ -152,7 +152,7 @@ export const faqs = [
   },
   {
     q: "Do you replace existing models?",
-    a: "Usually no. Quesar sits around providers or self-hosted models: routing, retrieval, evaluation, and policy. Local template completion does not establish foundation-model quality.",
+    a: "Quesar is the large model that trains and improves Abbey, Aviva, and the other assistants. That is not a claim that this website replaces a provider you already run, or that local template completion is that model. This site does not host Quesar or run training.",
   },
   {
     q: "Where is the source?",
@@ -237,7 +237,7 @@ export const layers = [
     layer: "Product",
     href: "/quesar",
     accent: "accent" as const,
-    body: "The envelope that makes the relationships obvious. Not a hosted brain.",
+    body: "The large model that trains and improves Abbey, Aviva, and the other assistants. Not hosted on this website.",
   },
 ] as const;
 
@@ -266,9 +266,9 @@ export const architectureNodes: ArchNode[] = [
     name: "Quesar",
     layer: "experience",
     status: "partial",
-    summary: "Product envelope around the stack.",
+    summary: "The large model behind the assistants.",
     detail:
-      "Quesar names the relationships: Abbey on ABI on WDBX. Public orientation is current. Hosted assistants are not.",
+      "Quesar is the large model that trains and improves Abbey, Aviva, and the other assistants. Public orientation is current. This site does not host the model or an assistant session.",
     implemented: ["Public site", "Architecture map", "Status language"],
     notClaimed: ["A hosted Quesar HTTP API", "Client SDKs for third-party SaaS"],
     href: "/quesar",
@@ -544,7 +544,7 @@ export const repos: readonly Repo[] = [
 export const architectureSteps = [
   {
     title: "User → Quesar",
-    body: "A local workspace, CLI, or companion issues a request. Quesar is the product envelope, not a hosted brain.",
+    body: "A local workspace, CLI, or companion issues a request. Quesar is the large model that trains and improves the assistants. This website does not host that model.",
   },
   {
     title: "Quesar → ABI + tools",

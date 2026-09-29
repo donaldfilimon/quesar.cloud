@@ -3,7 +3,7 @@ export const searchIndex = [
     title: "Quesar",
     href: "/quesar",
     group: "Product",
-    body: "Infrastructure for private persistent adaptive AI",
+    body: "Large model that trains and improves Abbey, Aviva, and the other assistants",
   },
   {
     title: "Platform",

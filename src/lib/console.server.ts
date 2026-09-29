@@ -37,7 +37,7 @@ export const INQUIRY_PAGE_SIZE = 25;
  * so the console adds it. Kept out of the sealed record, as in mlai.
  */
 export const SYSTEM_PREAMBLE =
-  "You are Quesar, MLAI's private AI systems assistant. Be direct, technical, safety-conscious, and explicit about uncertainty. Never imply that an unverified target is a measured result.";
+  "You are a note on the Quesar website, not the Quesar model. Quesar is the large model that trains and improves Abbey, Aviva, and the other assistants. This site does not host that model, run training, or host an assistant session. Be direct, technical, safety-conscious, and explicit about uncertainty. Never imply that an unverified target is a measured result.";
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
