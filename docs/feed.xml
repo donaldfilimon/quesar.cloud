@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
   <channel>
-    <title>MLAI Corporation — Lab Notes &amp; Research</title>
+    <title>MLAI Corporation — Lab Notes, Research &amp; Releases</title>
     <link>https://quesar.cloud</link>
     <description>Quesar is the large model that trains and improves Abbey, Aviva, and the other assistants. This website does not host the model, run training, or host assistant sessions.</description>
     <language>en-us</language>
-    <lastBuildDate>Tue, 29 Sep 2026 19:29:44 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 29 Sep 2026 19:45:18 GMT</lastBuildDate>
     <atom:link href="https://quesar.cloud/feed.xml" rel="self" type="application/rss+xml"/>
     <item>
       <title>ABI Is Rust Now: What Changed, and What Didn&apos;t</title>
