@@ -1,0 +1,1 @@
+import{t as e}from"./jsx-runtime-BNakU3Ej.js";import"./useNavigate-Co69Y0sh.js";import{t}from"./server-only-notice-CHvX1An_.js";var n=e(),r=function(){return(0,n.jsx)(t,{feature:`Sign-up`,className:`my-24`})};export{r as component};
