@@ -40,7 +40,7 @@ export function EcosystemMap() {
     <Instrument
       serial="quesar · stack"
       status="three layers"
-      caption="Quesar is the product window onto this stack. Status lives on each node’s page, not in the diagram."
+      caption="Quesar is the large model that trains and improves the assistants. This diagram is orientation, not a hosted model or a training run."
       className="ecosystem-map"
     >
       <div className="map-canvas relative min-h-[22rem] p-4 sm:min-h-[24rem] sm:p-6">

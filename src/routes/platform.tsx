@@ -18,7 +18,7 @@ export const Route = createFileRoute("/platform")({
   head: () =>
     pageHead(
       "Platform — three layers, one chip",
-      "MLAI's platform stack: WDBX storage, ABI compute, Abbey application, and Quesar as the product envelope. Product accents and persona colors stay on separate axes.",
+      "Quesar is the large model that trains and improves Abbey, Aviva, and the other assistants. WDBX stores, ABI coordinates, Abbey speaks. This site does not host the model.",
     ),
   component: PlatformPage,
 });
@@ -29,7 +29,7 @@ function PlatformPage() {
       <PageHero
         eyebrow="Platform"
         title="Inference, index, and data on machines you own."
-        lede="Three layers on one chip: WDBX stores, ABI coordinates, Abbey speaks. Quesar is the product envelope that makes those relationships obvious. Gama is a founder-owned Swift framework — related by author, not claimed as a Quesar surface."
+        lede="Quesar is the large model that trains and improves Abbey, Aviva, and the other assistants. WDBX stores, ABI coordinates, Abbey speaks. This site does not host the model. Gama is a founder-owned Swift framework — related by author, not a Quesar surface."
       />
 
       <Section eyebrow="Stack" title="Bottom to top.">
