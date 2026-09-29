@@ -38,7 +38,7 @@ export const Route = createFileRoute("/research")({
       {
         rel: "alternate",
         type: "application/rss+xml",
-        title: "MLAI lab notes and research",
+        title: "MLAI lab notes, research and releases",
         href: "/feed.xml",
       },
     ],

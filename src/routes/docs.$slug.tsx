@@ -1,4 +1,4 @@
-import { createFileRoute, notFound } from "@tanstack/react-router";
+import { createFileRoute, notFound, redirect } from "@tanstack/react-router";
 import { SourceChips } from "@/components/site/article";
 import { MathArticleBody } from "@/components/site/math-article";
 import { DocOutline, DocSidebar } from "@/components/site/doc-nav";
@@ -15,6 +15,9 @@ export const Route = createFileRoute("/docs/$slug")({
   // chunk; `head` reads loaderData so the dataset stays out of the main bundle.
   codeSplitGroupings: [["loader", "component"]],
   loader: ({ params }) => {
+    // The mlai-era URL; keep old links and bookmarks working.
+    if (params.slug === "intro")
+      throw redirect({ to: "/docs/$slug", params: { slug: "getting-started" }, statusCode: 301 });
     const doc = docs.find((item) => item.slug === params.slug);
     if (!doc) throw notFound();
     return { title: doc.title, description: doc.description, ld: docLd(doc) };

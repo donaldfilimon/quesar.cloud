@@ -95,7 +95,7 @@ export function buildRssFeed(now: Date = new Date()): string {
   return `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
   <channel>
-    <title>MLAI Corporation — Lab Notes &amp; Research</title>
+    <title>MLAI Corporation — Lab Notes, Research &amp; Releases</title>
     <link>${SITE_URL}</link>
     <description>${escapeXml(site.description)}</description>
     <language>en-us</language>

@@ -1,1 +1,0 @@
-import{rt as e}from"./index-CIWHLAnb.js";var t=e({type:`function`});export{t};

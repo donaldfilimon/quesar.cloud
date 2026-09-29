@@ -41,7 +41,7 @@ export const Route = createRootRoute({
       {
         rel: "alternate",
         type: "application/rss+xml",
-        title: "Quesar lab notes and research",
+        title: "Quesar lab notes, research and releases",
         href: "/feed.xml",
       },
     ],

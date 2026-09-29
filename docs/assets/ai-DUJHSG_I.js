@@ -1,1 +1,0 @@
-import{it as e,st as t}from"./index-CIWHLAnb.js";import{t as n}from"./middleware-Cb_vvB-P.js";e({method:`POST`}).middleware([n]).handler(t(`c1aeecd732699de99d2098573d71dd95723e0fdaed88559c669cfe086ffc66fd`));function r(e){return Promise.resolve({ok:!1,error:`The live model runs on the server deployment; this is the static preview, so no model call was made.`})}export{r as t};

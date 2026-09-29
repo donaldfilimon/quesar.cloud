@@ -2,7 +2,7 @@
 export function CinematicFallback() {
   return (
     <div
-      className="fixed inset-0 z-80 flex items-center justify-center bg-[#040406] font-mono text-xs tracking-widest text-fg/60"
+      className="fixed inset-0 z-80 flex items-center justify-center bg-[#040406] font-mono text-xs tracking-widest text-white/60"
       role="status"
       aria-live="polite"
     >
