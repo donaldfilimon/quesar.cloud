@@ -19,9 +19,10 @@ import {
   stopSpeech,
   setSpeechPlaying,
   primeNeural,
-  useVoiceReady,
+  useVoiceGate,
 } from "../film/speech";
 import { VoiceToggle } from "../film/narration";
+import { Transcript } from "../film/transcript";
 
 const DURATION = 62;
 
@@ -111,6 +112,7 @@ function TrailerCaption() {
   let seen = 0;
   return (
     <div
+      aria-live="polite"
       style={{
         position: "absolute",
         left: 0,
@@ -291,8 +293,10 @@ function Stamp({
 }
 
 // Camera shake / zoom-punch driver applied to the whole frame at beat times.
+// Off under reduced motion: the beats still land in the cut, the frame holds.
 function ShakeRig({ beats, children }: { beats: number[]; children: ReactNode }) {
-  const time = useTimeline().time;
+  const { time, reducedMotion } = useTimeline();
+  if (reducedMotion) return <div style={{ position: "absolute", inset: 0 }}>{children}</div>;
   let amp = 0;
   for (const b of beats) {
     const d = time - b;
@@ -603,7 +607,7 @@ function TitleDrop() {
 const BEATS = [0.9, 4.0, 7.4, 11.4, 14.6, 20.2, 29.6, 35.6, 40.6, 47.2, 55.6];
 
 export function Trailer() {
-  const ready = useVoiceReady();
+  const voice = useVoiceGate();
   return (
     <Stage
       width={1920}
@@ -611,7 +615,7 @@ export function Trailer() {
       duration={DURATION}
       background="#040406"
       persistKey="mlai-trailer"
-      ready={ready}
+      voice={voice}
     >
       <GridBG opacity={0.5} />
       <Vignette />
@@ -696,6 +700,7 @@ export function Trailer() {
       <TrailerNarration />
       <TrailerCaption />
       <VoiceToggle />
+      <Transcript lines={TRAILER_SCRIPT} />
       <Grain />
     </Stage>
   );

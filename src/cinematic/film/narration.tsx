@@ -6,7 +6,8 @@
 //   · Aviva  — research / vision                       · violet
 //   · Abi    — adaptive router (interactive / fast)    · cyan
 //
-// Speech rides the Web Speech API and degrades to captions-only gracefully.
+// Speech is the on-device Kokoro model (neural-voice.ts); when it cannot run, or
+// the viewer plays without it, captions carry the words. No Web Speech fallback.
 // A small external store (speech.ts) carries live settings (voice on/off, rate, pitch …) so
 // the toggle, controller, and caption bar stay in sync without prop-drilling.
 
@@ -16,11 +17,11 @@ import { C, FONT, PERSONAS, clamp, type PersonaKey } from "./tokens";
 import { SCRIPT, type ScriptLine } from "./narration-script";
 import { step, fade } from "./easing";
 import { useTimeline } from "./timeline-context";
-import { NeuralVoice } from "./neural-voice";
 import {
   getSettings,
   lineSpeechDur,
   primeNeural,
+  requestVoice,
   setSetting,
   setSpeechPlaying,
   speak,
@@ -112,6 +113,7 @@ export function Narrator() {
 
   return (
     <div
+      aria-live="polite"
       style={{
         position: "absolute",
         left: 0,
@@ -241,23 +243,13 @@ export function VoiceToggle() {
   // picture the toggle shrank with it (22×7 px at a 320 px viewport). Outside a
   // Stage it renders in place, as before.
   const { chrome } = useTimeline();
-  useEffect(() => {
-    // browsers gate the AudioContext behind a user gesture — use the first
-    // interaction to start downloading the neural model.
-    const kick = () => {
-      try {
-        if (NeuralVoice.isSupported()) NeuralVoice.load().catch(() => {});
-      } catch {
-        /* noop */
-      }
-    };
-    window.addEventListener("pointerdown", kick);
-    return () => window.removeEventListener("pointerdown", kick);
-  }, []);
+  // Turning the voice on is a request for it, like Play: the model loads
+  // then, never on an unrelated click.
   const toggle = () => {
     const next = !getSettings().voiceOn;
     setSetting("voiceOn", next);
-    if (!next) stopSpeech();
+    if (next) requestVoice();
+    else stopSpeech();
   };
   const on = c.voiceOn;
   const button = (

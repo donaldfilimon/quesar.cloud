@@ -16,6 +16,12 @@ export interface TimelineValue {
   // voice toggle) portals here instead of rendering inside the scaled picture,
   // which shrinks a 90×28 button to 22×7 at a 320 px viewport.
   chrome: HTMLElement | null;
+  // The viewer asked for reduced motion. The film still plays; rooms drop
+  // camera shake, flashes and other vestibular effects when this is true.
+  reducedMotion: boolean;
+  // The CSS scale applied to the fixed frame; canvases size their backing
+  // store from it (backingRatio in engine-utils.ts).
+  scale: number;
 }
 export const TimelineContext = createContext<TimelineValue>({
   time: 0,
@@ -25,6 +31,8 @@ export const TimelineContext = createContext<TimelineValue>({
   setTime: () => {},
   setPlaying: () => {},
   chrome: null,
+  reducedMotion: false,
+  scale: 1,
 });
 export const useTime = () => useContext(TimelineContext).time;
 export const useTimeline = () => useContext(TimelineContext);

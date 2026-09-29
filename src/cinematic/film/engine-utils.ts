@@ -29,6 +29,21 @@ export function prefersReducedMotion(
   }
 }
 
+/* ── canvas resolution ────────────────────────────────────────── */
+
+/**
+ * Backing-store ratio for a canvas drawn in the Stage's fixed 1920×1080 frame.
+ * The frame is scaled by CSS, so the pixels actually shown are the device
+ * pixel ratio times that scale; rendering more is invisible work (a phone
+ * showed a 3840×2160 canvas at about 390 CSS px). Quantized to quarter steps
+ * so a window resize does not reallocate the canvas every frame; capped at the
+ * 2× the film was designed for.
+ */
+export function backingRatio(devicePixelRatio: number, stageScale: number): number {
+  const wanted = (devicePixelRatio || 1) * (stageScale || 1);
+  return clamp(Math.ceil(wanted * 4) / 4, 0.5, 2);
+}
+
 /* ── seeking ──────────────────────────────────────────────────── */
 
 /**

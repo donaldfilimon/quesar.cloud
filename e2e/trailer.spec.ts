@@ -68,7 +68,7 @@ test("manual chapter selection cancels pending advancement and guards seeking", 
 });
 
 test("media failure disables seek and keeps chapter selection usable", async ({ page }) => {
-  await page.route("**/media/*.mp4", (route) => route.abort());
+  await page.route(/\/media\/.*\.(mp4|webm)$/, (route) => route.abort());
   await page.goto("/showcase");
   await expect(page.getByRole("alert")).toContainText("This film could not load.");
   await expect(page.getByRole("slider", { name: "Seek" })).toBeDisabled();
@@ -119,4 +119,22 @@ test("chapter advancement plays the next film and completion returns to paused",
   await page.getByRole("button", { name: "3. The board" }).click();
   await page.locator("video").dispatchEvent("ended");
   await expect(page.getByRole("button", { name: "Play trailer" })).toBeVisible();
+});
+
+test("descriptions toggle, and mute only where a cut has sound", async ({ page }) => {
+  await page.goto("/showcase");
+  await waitForHydratedVideo(page);
+  const toggle = page.getByRole("button", { name: "Show descriptions" });
+  await expect(toggle).toHaveAttribute("aria-pressed", "true");
+  await toggle.click();
+  await expect(toggle).toHaveAttribute("aria-pressed", "false");
+  // The mark is silent: no mute control that would do nothing.
+  await expect(page.getByRole("button", { name: "Mute trailer" })).toHaveCount(0);
+  await page.getByRole("button", { name: "2. The wafer" }).click();
+  await expect(page.getByRole("button", { name: "Mute trailer" })).toBeVisible();
+  await expect(page.locator("video source").first()).toHaveAttribute(
+    "src",
+    "/media/atmosphere-wafer.webm",
+  );
+  await expect(page.locator("track")).toHaveAttribute("kind", "descriptions");
 });

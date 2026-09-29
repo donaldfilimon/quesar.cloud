@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { Pause, Play, Volume2, VolumeX } from "lucide-react";
+import { Captions, CaptionsOff, Maximize, Pause, Play, Volume2, VolumeX } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { filmCuts, type FilmCut } from "./film-cuts";
 
 function clock(seconds: number) {
-  if (!Number.isFinite(seconds)) return "0:00";
+  if (!Number.isFinite(seconds)) return "--:--";
   const whole = Math.max(0, Math.floor(seconds));
   return `${Math.floor(whole / 60)}:${String(whole % 60).padStart(2, "0")}`;
 }
@@ -32,21 +32,63 @@ export function Trailer({
   const [playing, setPlaying] = useState(false);
   const [muted, setMuted] = useState(true);
   const [time, setTime] = useState(0);
-  const [duration, setDuration] = useState(0);
+  const [duration, setDuration] = useState(Number.NaN);
   const [error, setError] = useState<string | null>(null);
+  const [showText, setShowText] = useState(true);
+  const [cue, setCue] = useState("");
+  const frameRef = useRef<HTMLDivElement>(null);
   const cut = cuts[index] ?? cuts[0];
 
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-    video.pause();
-    video.load();
+  // Moving to another cut: `key={cut.id}` remounts the <video>, which loads the
+  // new cut by itself, so only the player's own state resets here, and any
+  // pending play() is orphaned.
+  function goTo(next: number) {
     playRequest.current++;
     setPlaying(false);
     setTime(0);
-    setDuration(0);
+    setDuration(Number.NaN);
     setError(null);
-  }, [cut.src]);
+    setCue("");
+    setIndex(next);
+  }
+
+  // The description track is read, not rendered by the browser: browsers do
+  // not draw `descriptions` cues, so the active cue is shown by the player and
+  // the CC button toggles it.
+  useEffect(() => {
+    const track = videoRef.current?.textTracks[0];
+    if (!track) return;
+    track.mode = "hidden";
+    const onCue = () => {
+      const active = track.activeCues?.[0] as VTTCue | undefined;
+      setCue(active?.text ?? "");
+    };
+    track.addEventListener("cuechange", onCue);
+    return () => track.removeEventListener("cuechange", onCue);
+  }, [cut.id]);
+
+  // The browser tries the sources in order, and only the last one failing
+  // means the cut cannot play. On the prerendered page that can happen before
+  // hydration, when no React handler exists yet, so the check runs once after
+  // mount and a native listener covers later failures. NETWORK_NO_SOURCE alone
+  // is not failure (a fresh element reports it while it picks a source); with
+  // the last source as currentSrc, every source has been tried.
+  useEffect(() => {
+    const video = videoRef.current;
+    const last = video?.querySelector("source:last-of-type");
+    if (!video || !(last instanceof HTMLSourceElement)) return;
+    const onFailed = () => mediaError(video);
+    const frame = requestAnimationFrame(() => {
+      const exhausted =
+        video.networkState === HTMLMediaElement.NETWORK_NO_SOURCE && video.currentSrc === last.src;
+      if (exhausted) onFailed();
+    });
+    last.addEventListener("error", onFailed);
+    return () => {
+      cancelAnimationFrame(frame);
+      last.removeEventListener("error", onFailed);
+    };
+  }, [cut.id]);
 
   function play(video: HTMLVideoElement) {
     const request = ++playRequest.current;
@@ -71,9 +113,8 @@ export function Trailer({
 
   function choose(next: number) {
     resume.current = false;
-    playRequest.current++;
     videoRef.current?.pause();
-    setIndex(next);
+    goTo(next);
   }
 
   function mediaError(video: HTMLVideoElement) {
@@ -85,9 +126,46 @@ export function Trailer({
   }
   const seekable = Number.isFinite(duration) && duration > 0 && !error;
 
+  function seekBy(delta: number) {
+    const video = videoRef.current;
+    if (!video || !seekable) return;
+    video.currentTime = Math.min(Math.max(0, video.currentTime + delta), duration);
+  }
+
+  function fullscreen() {
+    const frame = frameRef.current;
+    const video = videoRef.current as
+      (HTMLVideoElement & { webkitEnterFullscreen?: () => void }) | null;
+    if (document.fullscreenElement) void document.exitFullscreen();
+    else if (frame?.requestFullscreen) void frame.requestFullscreen();
+    // iOS Safari has no element fullscreen, only the video's own player.
+    else video?.webkitEnterFullscreen?.();
+  }
+
+  // Shortcuts while focus is in the player. A focused button owns Space and
+  // Enter, and the seek slider owns the arrows, so those stay native.
+  function onKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
+    const target = event.target as HTMLElement;
+    const onControl = target.closest("button, input");
+    const key = event.key.toLowerCase();
+    if ((key === " " || key === "k") && !onControl) toggle();
+    else if (key === "arrowleft" && !onControl) seekBy(-5);
+    else if (key === "arrowright" && !onControl) seekBy(5);
+    else if (key === "f") fullscreen();
+    else if (key === "m" && cut.hasAudio) setMuted((value) => !value);
+    else if (key === "c") setShowText((value) => !value);
+    else return;
+    event.preventDefault();
+  }
+
   return (
     <figure className={cn("overflow-hidden rounded-xl border border-border bg-card", className)}>
-      <div className="relative bg-black">
+      <div
+        ref={frameRef}
+        className="relative bg-black"
+        onKeyDown={onKeyDown}
+        aria-keyshortcuts="Space K ArrowLeft ArrowRight F M C"
+      >
         <video
           key={cut.id}
           ref={videoRef}
@@ -125,27 +203,20 @@ export function Trailer({
             setPlaying(false);
             if (index < cuts.length - 1) {
               resume.current = true;
-              setIndex(index + 1);
+              goTo(index + 1);
             } else setPlaying(false);
           }}
         >
-          <source
-            src={cut.src}
-            type="video/mp4"
-            onError={() => {
-              if (videoRef.current?.querySelector("source")?.getAttribute("src") === cut.src) {
-                mediaError(videoRef.current);
-              }
-            }}
-          />
-          <track
-            kind="captions"
-            srcLang="en"
-            label="English"
-            src={`/media/${cut.id}.vtt`}
-            default
-          />
+          {cut.sources.map((source) => (
+            <source key={source.src} src={source.src} type={source.type} />
+          ))}
+          <track kind="descriptions" srcLang="en" label="English descriptions" src={cut.track} />
         </video>
+        {showText && cue ? (
+          <p className="pointer-events-none absolute inset-x-4 bottom-16 z-10 mx-auto max-w-[40ch] rounded-md bg-black/70 px-3 py-1.5 text-center text-sm text-white sm:bottom-20 sm:text-base">
+            {cue}
+          </p>
+        ) : null}
         <button
           type="button"
           onClick={toggle}
@@ -185,11 +256,30 @@ export function Trailer({
           <button
             type="button"
             className="grid size-11 place-items-center"
-            aria-label="Mute trailer"
-            aria-pressed={muted}
-            onClick={() => setMuted((value) => !value)}
+            aria-label="Show descriptions"
+            aria-pressed={showText}
+            onClick={() => setShowText((value) => !value)}
           >
-            {muted ? <VolumeX className="size-4" /> : <Volume2 className="size-4" />}
+            {showText ? <Captions className="size-4" /> : <CaptionsOff className="size-4" />}
+          </button>
+          {cut.hasAudio ? (
+            <button
+              type="button"
+              className="grid size-11 place-items-center"
+              aria-label="Mute trailer"
+              aria-pressed={muted}
+              onClick={() => setMuted((value) => !value)}
+            >
+              {muted ? <VolumeX className="size-4" /> : <Volume2 className="size-4" />}
+            </button>
+          ) : null}
+          <button
+            type="button"
+            className="grid size-11 place-items-center"
+            aria-label="Full screen"
+            onClick={fullscreen}
+          >
+            <Maximize className="size-4" />
           </button>
         </div>
       </div>
@@ -238,11 +328,8 @@ export function Trailer({
             ))}
           </div>
         ) : (
-          <Link
-            to="/showcase/trailer"
-            className="text-sm text-primary no-underline hover:underline"
-          >
-            Watch the full trailer
+          <Link to="/showcase" className="text-sm text-primary no-underline hover:underline">
+            Watch all three cuts
           </Link>
         )}
       </figcaption>

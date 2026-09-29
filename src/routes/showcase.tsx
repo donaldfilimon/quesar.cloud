@@ -2,14 +2,44 @@ import { createFileRoute } from "@tanstack/react-router";
 import { PageClose, PageHero, RouteFrame, Section } from "@/components/site";
 import { ShowcaseWall } from "@/components/site/showcase-wall";
 import { Trailer } from "@/components/site/trailer";
-import { pageHead } from "@/lib/seo";
+import { FILM_PUBLISHED, filmCuts } from "@/components/site/film-cuts";
+import { pageHead, SITE_ORIGIN } from "@/lib/seo";
+
+const DESCRIPTION = "Quesar showcase: trailer, film, explainer, design lab, Abbey, mega board.";
+const mark = filmCuts[0];
+const markMp4 = `${SITE_ORIGIN}${mark.sources[mark.sources.length - 1].src}`;
 
 export const Route = createFileRoute("/showcase")({
-  head: () =>
-    pageHead(
-      "Showcase — Quesar",
-      "Quesar showcase: trailer, film, explainer, design lab, Abbey, mega board.",
-    ),
+  // The trailer's first cut, described for link previews and search: og:video
+  // for cards that can play it, VideoObject for structured data.
+  head: () => {
+    const head = pageHead("Showcase — Quesar", DESCRIPTION);
+    return {
+      meta: [
+        ...head.meta,
+        { property: "og:type", content: "video.other" },
+        { property: "og:video", content: markMp4 },
+        { property: "og:video:type", content: "video/mp4" },
+        { property: "og:video:width", content: "1280" },
+        { property: "og:video:height", content: "720" },
+      ],
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "VideoObject",
+            name: `Quesar film: ${mark.title}`,
+            description: mark.caption,
+            thumbnailUrl: `${SITE_ORIGIN}${mark.poster}`,
+            contentUrl: markMp4,
+            uploadDate: FILM_PUBLISHED,
+            duration: `PT${Math.round(mark.duration)}S`,
+          }),
+        },
+      ],
+    };
+  },
   component: ShowcasePage,
 });
 

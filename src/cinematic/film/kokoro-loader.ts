@@ -1,11 +1,12 @@
-// kokoro-loader.ts — the one place apps/quasar-web knows about Kokoro and ONNX Runtime.
+// kokoro-loader.ts — the one place this site knows about Kokoro and ONNX Runtime.
 //
-// AudioEngine (@mlai/trailer-engine) takes a `LoadTTS` function and owns the
+// AudioEngine (src/lib/trailer-engine) takes a `LoadTTS` function and owns the
 // retries; this file owns one attempt: the CDN import, device detection, the
 // dtype choice, and the ORT log filter. Keeping the runtime a client-only
 // dynamic import means it never enters the server bundle or the initial chunk;
-// it is fetched only when load() first runs. src/lib/csp.ts allowlists the
-// jsDelivr and Hugging Face origins this needs.
+// it is fetched only when load() first runs, which is the viewer's first Play
+// (requestVoice in speech.ts). src/lib/server/csp.ts allowlists the jsDelivr
+// and Hugging Face origins this needs.
 
 import type { LoadTTS, TTSHandle } from "@/lib/trailer-engine";
 
@@ -25,8 +26,8 @@ async function detectDevice(): Promise<string> {
 // ONNX Runtime Web prints a benign warning on session creation when shape/CPU
 // ops fall back off the preferred EP ("VerifyEachNodeIsAssignedToAnEp … Some
 // nodes were not assigned to the preferred execution providers"). It is
-// informational, but ORT logs it via console.error, which trips the Next.js
-// dev error overlay. Filter ONLY that line; everything else passes through.
+// informational, but ORT logs it via console.error, where it reads as a
+// failure. Filter ONLY that line; everything else passes through.
 // Process-global and installed once; it is deliberately not part of the engine.
 let ortFilterInstalled = false;
 function installOrtLogFilter(): void {
