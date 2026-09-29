@@ -12,7 +12,7 @@ export const site = {
   company: "MLAI",
   legal: "Machine Learning Advanced Innovations, Inc.",
   description:
-    "Quesar is MLAI's infrastructure for persistent, adaptive AI — inspectable orchestration, provenance-aware memory, and compute that stays on machines you own.",
+    "Quesar is the large model that trains and improves Abbey, Aviva, and the other assistants. This website does not host the model, run training, or host assistant sessions.",
   mission:
     "Build assistant workflows, memory systems, and developer tools with inspectable sources and explicit implementation boundaries.",
   origin:

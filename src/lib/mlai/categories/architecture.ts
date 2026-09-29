@@ -48,7 +48,7 @@ export const layers = [
     layer: "Product",
     href: "/quesar",
     accent: "accent" as const,
-    body: "The envelope that makes the relationships obvious. Not a hosted brain.",
+    body: "The large model that trains and improves Abbey, Aviva, and the other assistants. Not hosted on this website.",
   },
 ] as const;
 
@@ -77,9 +77,9 @@ export const architectureNodes: ArchNode[] = [
     name: "Quesar",
     layer: "experience",
     status: "partial",
-    summary: "Product envelope around the stack.",
+    summary: "The large model behind the assistants.",
     detail:
-      "Quesar names the relationships: Abbey on ABI on WDBX. Public orientation is current. Hosted assistants are not.",
+      "Quesar is the large model that trains and improves Abbey, Aviva, and the other assistants. Public orientation is current. This site does not host the model or an assistant session.",
     implemented: ["Public site", "Architecture map", "Status language"],
     notClaimed: ["A hosted Quesar HTTP API", "Client SDKs for third-party SaaS"],
     href: "/quesar",
@@ -208,7 +208,7 @@ export const architectureNodes: ArchNode[] = [
 export const architectureSteps = [
   {
     title: "User → Quesar",
-    body: "A local workspace, CLI, or companion issues a request. Quesar is the product envelope, not a hosted brain.",
+    body: "A local workspace, CLI, or companion issues a request. Quesar is the large model that trains and improves the assistants. This website does not host that model.",
   },
   {
     title: "Quesar → ABI + tools",

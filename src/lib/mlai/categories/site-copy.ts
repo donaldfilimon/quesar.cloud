@@ -90,7 +90,7 @@ export const faqs = [
   },
   {
     q: "Is Quesar a chatbot?",
-    a: "No. Quesar is infrastructure: ABI orchestration, WDBX memory, Abbey as the companion experience. Chat is one interface, not the product.",
+    a: "No. Quesar is the large model that trains and improves Abbey, Aviva, and the other assistants. Chat is an interface on an assistant. This website does not host the model or an assistant session.",
   },
   {
     q: "Can it run privately?",
@@ -98,7 +98,7 @@ export const faqs = [
   },
   {
     q: "Do you replace existing models?",
-    a: "Usually no. Quesar sits around providers or self-hosted models: routing, retrieval, evaluation, and policy. Local template completion does not establish foundation-model quality.",
+    a: "Quesar is the large model that trains and improves Abbey, Aviva, and the other assistants. That is not a claim that this website replaces a provider you already run, or that local template completion is that model. This site does not host Quesar or run training.",
   },
   {
     q: "Where is the source?",

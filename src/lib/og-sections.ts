@@ -8,7 +8,7 @@ export const OG_SECTIONS = [
     slug: "quesar",
     path: "/quesar",
     title: "Quesar",
-    line: "Infrastructure for persistent, adaptive AI on machines you own.",
+    line: "The large model that trains and improves Abbey, Aviva, and the other assistants.",
   },
   {
     slug: "platform",
