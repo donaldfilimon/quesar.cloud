@@ -110,16 +110,16 @@ function ThemePicker(): ReactNode {
     <div className="relative">
       <button
         onClick={() => setOpen((o) => !o)}
-        className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-white/10 text-slate-400 hover:text-white hover:border-white/20 transition-colors"
+        className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-border text-fg-muted hover:text-fg hover:border-border-strong transition-colors"
       >
         <IPalette s={15} />
         <span
-          className="w-2.5 h-2.5 rounded-full ring-1 ring-white/20"
+          className="w-2.5 h-2.5 rounded-full ring-1 ring-border-strong"
           style={{ background: THEMES[theme].dot }}
         />
       </button>
       {open && (
-        <div className="absolute right-0 mt-2 w-40 rounded-xl border border-white/15 bg-slate-900 shadow-2xl p-1.5 z-80">
+        <div className="absolute right-0 mt-2 w-40 rounded-xl border border-border-strong bg-card shadow-2xl p-1.5 z-80">
           {entries.map(([k, t]) => (
             <button
               key={k}
@@ -128,16 +128,16 @@ function ThemePicker(): ReactNode {
                 setOpen(false);
               }}
               className={`w-full flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-xs text-left transition-colors ${
-                theme === k ? "bg-white/10 text-white" : "text-slate-400 hover:bg-white/5"
+                theme === k ? "bg-fg/10 text-fg" : "text-fg-muted hover:bg-fg/5"
               }`}
             >
               <span
-                className="w-3 h-3 rounded-full ring-1 ring-white/20"
+                className="w-3 h-3 rounded-full ring-1 ring-border-strong"
                 style={{ background: t.dot }}
               />
               {t.label}
               {theme === k && (
-                <span className="ml-auto text-cyan-400">
+                <span className="ml-auto text-accent">
                   <ICheck s={13} />
                 </span>
               )}
@@ -192,11 +192,11 @@ function CommandPalette({
       onClick={() => setOpen(false)}
     >
       <div
-        className="w-full max-w-lg rounded-2xl border border-white/15 bg-slate-900 shadow-2xl overflow-hidden"
+        className="w-full max-w-lg rounded-2xl border border-border-strong bg-card shadow-2xl overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center gap-3 px-4 py-3 border-b border-white/10">
-          <span className="text-slate-500">
+        <div className="flex items-center gap-3 px-4 py-3 border-b border-border">
+          <span className="text-fg-subtle">
             <ISearch s={16} />
           </span>
           <input
@@ -204,9 +204,9 @@ function CommandPalette({
             value={q}
             onChange={(e) => setQ(e.target.value)}
             placeholder="Jump to a page…"
-            className="flex-1 bg-transparent text-white text-sm outline-none placeholder:text-slate-600"
+            className="flex-1 bg-transparent text-fg text-sm outline-none placeholder:text-fg-subtle"
           />
-          <kbd className="text-10 text-slate-500 border border-white/10 rounded px-1.5 py-0.5">
+          <kbd className="text-2xs text-fg-subtle border border-border rounded px-1.5 py-0.5">
             esc
           </kbd>
         </div>
@@ -216,13 +216,13 @@ function CommandPalette({
               key={i}
               href={n[1]}
               onClick={() => setOpen(false)}
-              className="w-full flex items-center justify-between px-4 py-2.5 text-left text-sm text-slate-300 hover:bg-white/10 hover:text-white"
+              className="w-full flex items-center justify-between px-4 py-2.5 text-left text-sm text-fg-muted hover:bg-fg/10 hover:text-fg"
             >
-              <span className="flex items-center gap-2.5 text-cyan-400">
+              <span className="flex items-center gap-2.5 text-accent">
                 <IChevron s={14} />
-                <span className="text-slate-300">{n[0]}</span>
+                <span className="text-fg-muted">{n[0]}</span>
               </span>
-              <span className="text-xs text-slate-600">{n[1]}</span>
+              <span className="text-xs text-fg-subtle">{n[1]}</span>
             </a>
           ))}
         </div>
@@ -244,13 +244,13 @@ function Nav(): ReactNode {
     return () => removeEventListener("keydown", h);
   }, []);
   return (
-    <header className="sticky top-0 z-50 bg-[#0c0c09]/80 backdrop-blur-md border-b border-white/10">
+    <header className="sticky top-0 z-50 bg-[#0c0c09]/80 backdrop-blur-md border-b border-border">
       <div className="max-w-6xl mx-auto px-5 h-14 flex items-center justify-between">
         <a href="#" className="flex items-center gap-2.5">
           <div className="w-8 h-8 rounded-lg bg-linear-to-br from-cyan-400 via-blue-500 to-purple-600 flex items-center justify-center">
-            <span className="text-white font-black text-sm">M</span>
+            <span className="text-fg font-black text-sm">M</span>
           </div>
-          <span className="font-bold tracking-widest text-white">MLAI</span>
+          <span className="font-bold tracking-widest text-fg">MLAI</span>
         </a>
         <nav className="hidden lg:flex items-center gap-1">
           {NAV.map((n, i) => (
@@ -258,9 +258,7 @@ function Nav(): ReactNode {
               key={i}
               href={n[1]}
               className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
-                n[0] === "Lab"
-                  ? "bg-white/10 text-white"
-                  : "text-slate-400 hover:text-white hover:bg-white/5"
+                n[0] === "Lab" ? "bg-fg/10 text-fg" : "text-fg-muted hover:text-fg hover:bg-fg/5"
               }`}
             >
               {n[0]}
@@ -271,7 +269,7 @@ function Nav(): ReactNode {
           <ThemePicker />
           <button
             onClick={() => setCmd(true)}
-            className="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-white/10 text-slate-400 hover:text-white hover:border-white/20 text-xs transition-colors"
+            className="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-border text-fg-muted hover:text-fg hover:border-border-strong text-xs transition-colors"
           >
             <ISearch s={14} />
             <kbd>⌘K</kbd>
@@ -345,7 +343,7 @@ function ArcGauge({ label, value, max, unit, color, decimals = 0 }: ArcGaugeProp
           {unit}
         </text>
       </svg>
-      <div className="text-slate-300 text-xs font-semibold mt-1">{label}</div>
+      <div className="text-fg-muted text-xs font-semibold mt-1">{label}</div>
     </div>
   );
 }
@@ -366,10 +364,10 @@ function Sparkline({ data, color, label, unit }: SparklineProps): ReactNode {
   return (
     <div className="glass p-4">
       <div className="flex justify-between items-baseline mb-2">
-        <span className="text-slate-400 text-xs font-medium">{label}</span>
+        <span className="text-fg-muted text-xs font-medium">{label}</span>
         <span className="font-mono text-sm" style={{ color }}>
           {last.toFixed(1)}
-          <span className="text-slate-600 text-xs"> {unit}</span>
+          <span className="text-fg-subtle text-xs"> {unit}</span>
         </span>
       </div>
       <svg width="100%" viewBox={`0 0 ${w} ${h}`} preserveAspectRatio="none" className="block">
@@ -436,15 +434,15 @@ function WDBXDashboard(): ReactNode {
       <div className="flex items-center justify-between mb-5 flex-wrap gap-2">
         <div className="flex items-center gap-3">
           <span className="relative flex h-2.5 w-2.5">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-status-current opacity-75" />
+            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-status-current" />
           </span>
-          <span className="font-mono text-sm text-white">wdbx-prod-01</span>
-          <span className="text-10 px-2 py-0.5 rounded-full border border-amber-500/30 text-amber-300 bg-amber-500/10">
+          <span className="font-mono text-sm text-fg">wdbx-prod-01</span>
+          <span className="text-2xs px-2 py-0.5 rounded-full border border-status-partial/30 text-status-partial bg-status-partial/10">
             SIMULATED · ILLUSTRATIVE
           </span>
         </div>
-        <span className="font-mono text-xs text-slate-500">live · 900ms tick</span>
+        <span className="font-mono text-xs text-fg-subtle">live · 900ms tick</span>
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
         <ArcGauge label="Throughput" value={g.thru} max={100} unit="req/s" color="#22d3ee" />
@@ -471,7 +469,7 @@ function WDBXDashboard(): ReactNode {
         <Sparkline data={latHist} color="#a855f7" label="latency stream" unit="ms" />
       </div>
       <div>
-        <div className="text-slate-400 text-xs font-medium mb-2">shard health · 12 nodes</div>
+        <div className="text-fg-muted text-xs font-medium mb-2">shard health · 12 nodes</div>
         <div className="flex gap-1.5 flex-wrap">
           {shards.map((s, i) => (
             <div
@@ -787,7 +785,7 @@ const NetworkCanvas = (): ReactNode => {
 };
 
 const Badge = ({ children }: { children: ReactNode }): ReactNode => (
-  <span className="text-10 px-2 py-0.5 rounded-full border bg-cyan-500/15 text-cyan-300 border-cyan-500/25">
+  <span className="text-2xs px-2 py-0.5 rounded-full border bg-accent/15 text-accent border-accent/25">
     {children}
   </span>
 );
@@ -795,16 +793,16 @@ const Badge = ({ children }: { children: ReactNode }): ReactNode => (
 type LabCardProps = { title: string; tag?: string; desc: string; children: ReactNode };
 function LabCard({ title, tag, desc, children }: LabCardProps): ReactNode {
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/3 overflow-hidden flex flex-col hover:border-white/20 transition-colors">
-      <div className="relative h-48 flex items-center justify-center overflow-hidden border-b border-white/10 bg-[#1d1d16]/50">
+    <div className="rounded-2xl border border-border bg-fg/3 overflow-hidden flex flex-col hover:border-border-strong transition-colors">
+      <div className="relative h-48 flex items-center justify-center overflow-hidden border-b border-border bg-[#1d1d16]/50">
         {children}
       </div>
       <div className="p-4">
         <div className="flex items-center gap-2 mb-1 flex-wrap">
-          <h4 className="text-white font-semibold text-sm">{title}</h4>
+          <h4 className="text-fg font-semibold text-sm">{title}</h4>
           {tag && <Badge>{tag}</Badge>}
         </div>
-        <p className="text-slate-400 text-xs leading-relaxed">{desc}</p>
+        <p className="text-fg-muted text-xs leading-relaxed">{desc}</p>
       </div>
     </div>
   );
@@ -838,18 +836,18 @@ const EQUALIZER_BARS = [0, 1, 2, 3, 4, 5] as const;
 function Lab(): ReactNode {
   const year = new Date().getFullYear();
   return (
-    <div className="min-h-screen bg-[#0c0c09] text-white">
+    <div className="min-h-screen bg-[#0c0c09] text-fg">
       <Nav />
       <div
         id="lab"
-        className="relative px-6 sm:px-10 pt-14 pb-8 overflow-hidden border-b border-white/10"
+        className="relative px-6 sm:px-10 pt-14 pb-8 overflow-hidden border-b border-border"
       >
         <div className="absolute inset-0 opacity-40">
           <NetworkCanvas />
         </div>
         <div className="relative max-w-6xl mx-auto">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/15 bg-white/5 text-xs text-slate-300 mb-4">
-            <span className="text-purple-400">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-border-strong bg-fg/5 text-xs text-fg-muted mb-4">
+            <span className="text-abi">
               <IPalette s={14} />
             </span>{" "}
             Telemetry + algorithmic art
@@ -860,7 +858,7 @@ function Lab(): ReactNode {
           >
             Design & Animation Lab
           </h1>
-          <p className="mt-3 text-slate-400 max-w-2xl">
+          <p className="mt-3 text-fg-muted max-w-2xl">
             A live WDBX telemetry panel and a gallery of generative canvases — every tile is real,
             running code. Recolor the whole page from the palette switcher in the nav.
           </p>
@@ -868,14 +866,14 @@ function Lab(): ReactNode {
       </div>
 
       <section className="max-w-6xl mx-auto px-6 sm:px-10 py-12">
-        <h3 className="text-sm font-bold uppercase tracking-widest text-cyan-400 mb-5">
+        <h3 className="text-sm font-bold uppercase tracking-widest text-accent mb-5">
           WDBX telemetry
         </h3>
         <WDBXDashboard />
       </section>
 
       <section className="max-w-6xl mx-auto px-6 sm:px-10 pb-16">
-        <h3 className="text-sm font-bold uppercase tracking-widest text-cyan-400 mb-5">
+        <h3 className="text-sm font-bold uppercase tracking-widest text-accent mb-5">
           Algorithmic art
         </h3>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -928,7 +926,7 @@ function Lab(): ReactNode {
         </div>
       </section>
 
-      <footer className="border-t border-white/10 px-6 sm:px-10 py-10 text-slate-500 text-xs">
+      <footer className="border-t border-border px-6 sm:px-10 py-10 text-fg-subtle text-xs">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between gap-2">
           <span>© {year} Machine Learning Advanced Innovations, Inc.</span>
           <span>Dashboard figures are simulated for demonstration — not benchmark claims.</span>

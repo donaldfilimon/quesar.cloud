@@ -82,14 +82,14 @@ export function LightSection(): ReactNode {
                     background: after ? "linear-gradient(135deg,#22d3ee,#3b82f6)" : glowHex,
                   }}
                 />
-                <div className="h-2 rounded-full bg-white/20 mb-2" style={{ width: "80%" }} />
-                <div className="h-2 rounded-full bg-white/10" style={{ width: "55%" }} />
+                <div className="h-2 rounded-full bg-fg/20 mb-2" style={{ width: "80%" }} />
+                <div className="h-2 rounded-full bg-fg/10" style={{ width: "55%" }} />
               </div>
             );
           })}
         </div>
         <div className="absolute bottom-4 left-5">
-          <Mono className="text-11" style={{ color: after ? "#22d3ee" : "#fbbf24" }}>
+          <Mono className="text-2xs" style={{ color: after ? "#22d3ee" : "#fbbf24" }}>
             {after
               ? "unified key + fill · inherited highlight"
               : "ad-hoc per-card glow · competing highlights"}
@@ -118,7 +118,7 @@ function CompShell({
         border: "1px solid rgba(255,255,255,0.06)",
       }}
     >
-      <Mono className="text-10 text-slate-600 mb-4 block">{label}</Mono>
+      <Mono className="text-2xs text-fg-subtle mb-4 block">{label}</Mono>
       {children}
     </div>
   );
@@ -163,7 +163,7 @@ export function ComponentsSection(): ReactNode {
           <div className="flex flex-wrap gap-3 items-center">
             <button
               type="button"
-              className="px-5 py-2.5 font-medium text-white text-sm transition-all duration-500"
+              className="px-5 py-2.5 font-medium text-fg text-sm transition-all duration-500"
               style={{
                 borderRadius: r,
                 background: after ? "linear-gradient(180deg,#3b82f6,#2563eb)" : "#3b82f6",
@@ -202,7 +202,7 @@ export function ComponentsSection(): ReactNode {
             {CHIPS.map(([t, c]) => (
               <span
                 key={t}
-                className="inline-flex items-center gap-2 px-3.5 py-1.5 text-11 font-semibold uppercase transition-all duration-500"
+                className="inline-flex items-center gap-2 px-3.5 py-1.5 text-2xs font-semibold uppercase transition-all duration-500"
                 style={{
                   borderRadius: after ? 999 : 6,
                   letterSpacing: "0.1em",
@@ -241,15 +241,15 @@ export function ComponentsSection(): ReactNode {
               className="w-10 h-10 rounded-xl flex items-center justify-center mb-3"
               style={{ background: after ? "linear-gradient(135deg,#22d3ee,#3b82f6)" : "#3b82f6" }}
             >
-              <span className="text-white font-bold">◆</span>
+              <span className="text-fg font-bold">◆</span>
             </div>
             <h4
-              className="text-white font-semibold mb-1"
+              className="text-fg font-semibold mb-1"
               style={{ fontFamily: "var(--font-display)" }}
             >
               Trace Layer
             </h4>
-            <p className="text-13 text-slate-400 leading-relaxed">
+            <p className="text-xs text-fg-muted leading-relaxed">
               Every retrieval path and policy check captured as an inspectable event.
             </p>
           </div>
@@ -279,7 +279,7 @@ export function ComponentsSection(): ReactNode {
                 >
                   {v}
                 </div>
-                <Mono className="text-10 text-slate-500 mt-1 block">{l}</Mono>
+                <Mono className="text-2xs text-fg-subtle mt-1 block">{l}</Mono>
               </div>
             ))}
           </div>
@@ -337,17 +337,17 @@ function HeroApplied({ after }: { after: boolean }): ReactNode {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2.5">
             <Mark size={30} />
-            <span className="font-bold tracking-0.18em text-white text-sm">MLAI</span>
+            <span className="font-bold tracking-widest text-fg text-sm">MLAI</span>
           </div>
           <div className="hidden sm:flex items-center" style={{ gap: after ? 28 : 18 }}>
             {APPLIED_NAV.map((t) => (
-              <span key={t} className="text-13 text-slate-400">
+              <span key={t} className="text-xs text-fg-muted">
                 {t}
               </span>
             ))}
             <button
               type="button"
-              className="px-4 py-2 text-13 font-medium text-white"
+              className="px-4 py-2 text-xs font-medium text-fg"
               style={{
                 borderRadius: after ? 999 : 6,
                 background: after ? "linear-gradient(180deg,#3b82f6,#2563eb)" : "#3b82f6",
@@ -377,14 +377,14 @@ function HeroApplied({ after }: { after: boolean }): ReactNode {
               style={{ background: "#22d3ee", boxShadow: after ? "0 0 8px #22d3ee" : "none" }}
             />
             <Mono
-              className="text-10.5 uppercase"
+              className="text-2xs uppercase"
               style={{ letterSpacing: "0.18em", color: after ? "#22d3ee" : "#94a3b8" }}
             >
               Privacy-first AI infrastructure
             </Mono>
           </div>
           <h1
-            className="font-bold text-white"
+            className="font-bold text-fg"
             style={{
               fontFamily: "var(--font-display)",
               fontSize: "clamp(34px,5.6vw,64px)",
@@ -408,7 +408,7 @@ function HeroApplied({ after }: { after: boolean }): ReactNode {
             </span>
           </h1>
           <p
-            className="text-slate-400 mt-5 leading-relaxed"
+            className="text-fg-muted mt-5 leading-relaxed"
             style={{
               fontSize: "clamp(14px,1.6vw,18px)",
               maxWidth: 520,
@@ -421,7 +421,7 @@ function HeroApplied({ after }: { after: boolean }): ReactNode {
           <div className="flex flex-wrap items-center mt-8" style={{ gap: after ? 14 : 10 }}>
             <button
               type="button"
-              className="px-6 py-3 font-medium text-white text-15"
+              className="px-6 py-3 font-medium text-fg text-sm"
               style={{
                 borderRadius: after ? 999 : 6,
                 background: after ? "linear-gradient(180deg,#3b82f6,#2563eb)" : "#3b82f6",
@@ -434,7 +434,7 @@ function HeroApplied({ after }: { after: boolean }): ReactNode {
             </button>
             <button
               type="button"
-              className="px-6 py-3 font-medium text-15 text-slate-200"
+              className="px-6 py-3 font-medium text-sm text-fg"
               style={{
                 borderRadius: after ? 999 : 6,
                 background: "rgba(255,255,255,0.06)",
@@ -466,8 +466,8 @@ function HeroApplied({ after }: { after: boolean }): ReactNode {
                 style={{ background: p.color, boxShadow: after ? `0 0 10px ${p.color}` : "none" }}
               />
               <div>
-                <div className="text-13 font-semibold text-white leading-none">{p.name}</div>
-                <div className="text-10.5 text-slate-500 mt-0.5">{p.role}</div>
+                <div className="text-xs font-semibold text-fg leading-none">{p.name}</div>
+                <div className="text-2xs text-fg-subtle mt-0.5">{p.role}</div>
               </div>
             </div>
           ))}
@@ -492,10 +492,10 @@ export function AppliedSection(): ReactNode {
           <BeforeAfter value={after} onChange={setAfter} labels={["Current", "Upgraded"]} />
         </div>
       </div>
-      <div className="rounded-3xl overflow-hidden ring-1 ring-white/10" style={{ height: 600 }}>
+      <div className="rounded-3xl overflow-hidden ring-1 ring-border" style={{ height: 600 }}>
         <HeroApplied after={after} />
       </div>
-      <p className="text-center text-12 text-slate-600 mt-4">
+      <p className="text-center text-xs text-fg-subtle mt-4">
         <Mono>Same content · same brand · system-level difference</Mono>
       </p>
     </section>
@@ -532,24 +532,24 @@ export function TokensSection(): ReactNode {
               boxShadow: "0 8px 20px -6px rgba(59,130,246,0.6)",
             }}
           >
-            <span className="text-white font-bold text-lg">{"{ }"}</span>
+            <span className="text-fg font-bold text-lg">{"{ }"}</span>
           </div>
           <div>
-            <Mono className="text-13 text-white block">src/index.css</Mono>
-            <span className="text-12.5 text-slate-400">
+            <Mono className="text-xs text-fg block">src/index.css</Mono>
+            <span className="text-xs text-fg-muted">
               ≈190 custom properties · color · elevation · spacing · type · motion
             </span>
           </div>
         </div>
         <span
-          className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-11 font-semibold"
+          className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-2xs font-semibold"
           style={{
             background: "rgba(52,211,153,0.12)",
             color: "#34d399",
             fontFamily: "var(--font-mono)",
           }}
         >
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+          <span className="w-1.5 h-1.5 rounded-full bg-status-current" />
           ready to ship
         </span>
       </Glass>
@@ -577,7 +577,7 @@ export function TokensSection(): ReactNode {
                   type="button"
                   aria-pressed={tab === t}
                   onClick={() => setTab(t)}
-                  className="px-3.5 py-1.5 rounded-full text-12 font-semibold transition-all duration-300"
+                  className="px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all duration-300"
                   style={style}
                 >
                   {t}
@@ -592,10 +592,10 @@ export function TokensSection(): ReactNode {
         <div>
           <Eyebrow color="var(--ds-accent3)">Consuming the tokens</Eyebrow>
           <CodeBlock code={USAGE} label="component.css" />
-          <p className="text-12.5 text-slate-500 mt-4 leading-relaxed">
+          <p className="text-xs text-fg-subtle mt-4 leading-relaxed">
             No component hard-codes a hex, a shadow or a pixel. Re-theme the whole product — a
             lighter mode, a campaign accent, denser spacing — by editing one{" "}
-            <Mono className="text-cyan-400 text-12">:root</Mono> block.
+            <Mono className="text-accent text-xs">:root</Mono> block.
           </p>
         </div>
       </div>

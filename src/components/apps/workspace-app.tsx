@@ -148,7 +148,7 @@ export function WorkspaceApp() {
                 onClick={() => openDoc(doc)}
               >
                 <span className="block truncate">{doc.title || "Untitled"}</span>
-                <span className="mt-0.5 block font-mono text-10 text-fg-subtle">
+                <span className="mt-0.5 block font-mono text-2xs text-fg-subtle">
                   {new Date(doc.updated).toLocaleDateString()}
                 </span>
               </button>
@@ -178,7 +178,7 @@ export function WorkspaceApp() {
               }}
               className="w-full bg-transparent font-display text-2xl outline-none"
             />
-            <p className="mt-2 font-mono text-10 text-fg-subtle">
+            <p className="mt-2 font-mono text-2xs text-fg-subtle">
               {words} words · saved in this browser
             </p>
             <textarea

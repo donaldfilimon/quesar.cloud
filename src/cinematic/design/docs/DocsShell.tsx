@@ -167,7 +167,7 @@ export function TopNav({ onSearch }: { onSearch: () => void }): ReactNode {
           className="bg-linear-to-br from-cyan-400 via-blue-500 to-purple-600 flex items-center justify-center shrink-0"
           style={{ width: 28, height: 28, borderRadius: 8 }}
         >
-          <span className="text-white font-black" style={{ fontSize: 13, lineHeight: 1, fontFamily: "var(--font-display)" }}>
+          <span className="text-fg font-black" style={{ fontSize: 13, lineHeight: 1, fontFamily: "var(--font-display)" }}>
             M
           </span>
         </div>

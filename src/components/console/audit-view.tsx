@@ -30,7 +30,7 @@ export function AuditView({ audit, onClose }: { audit: AuditRecord; onClose: () 
           <p className="mt-1 whitespace-pre-wrap">{audit.content.reply}</p>
         </li>
       </ol>
-      <p className="mt-3 break-all font-mono text-10 text-fg-subtle">
+      <p className="mt-3 break-all font-mono text-2xs text-fg-subtle">
         sha-256 {audit.contentDigest}
       </p>
     </div>

@@ -41,7 +41,7 @@ function BenchmarksPage() {
             },
             {
               header: "WDBX implementation",
-              className: "font-mono text-12 text-fg",
+              className: "font-mono text-xs text-fg",
               cell: (row) => row.value,
             },
           ]}

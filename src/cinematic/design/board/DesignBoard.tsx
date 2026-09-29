@@ -135,24 +135,24 @@ function useActiveSection(ids: readonly string[]): string {
 function Sidebar({ active }: { active: string }): ReactNode {
   return (
     <aside
-      className="hidden lg:flex flex-col fixed top-0 left-0 h-screen w-64 px-7 py-8 border-r border-white/7 z-20"
+      className="hidden lg:flex flex-col fixed top-0 left-0 h-screen w-64 px-7 py-8 border-r border-border z-20"
       style={{ background: "rgba(5,5,9,0.7)", backdropFilter: "blur(16px)" }}
     >
       <div className="flex items-center gap-2.5 mb-1">
         <Mark size={34} />
         <div>
           <div
-            className="font-bold tracking-0.16em text-white text-15 leading-none"
+            className="font-bold tracking-widest text-fg text-sm leading-none"
             style={{ fontFamily: "var(--font-display)" }}
           >
             MLAI
           </div>
-          <Mono className="text-[9.5px] text-slate-500">design system</Mono>
+          <Mono className="text-[9.5px] text-fg-subtle">design system</Mono>
         </div>
       </div>
       <div className="mt-8 mb-6">
         <span
-          className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-10 font-semibold uppercase"
+          className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-2xs font-semibold uppercase"
           style={{
             background:
               "linear-gradient(90deg,color-mix(in srgb,var(--ds-accent) 14%,transparent),color-mix(in srgb,var(--ds-accent3) 14%,transparent))",
@@ -170,9 +170,9 @@ function Sidebar({ active }: { active: string }): ReactNode {
           <a
             key={id}
             href={`#${id}`}
-            className={`nav-link group flex items-center gap-3 py-2.5 text-[13.5px] text-slate-500 hover:text-white transition-colors ${active === id ? "active" : ""}`}
+            className={`nav-link group flex items-center gap-3 py-2.5 text-[13.5px] text-fg-subtle hover:text-fg transition-colors ${active === id ? "active" : ""}`}
           >
-            <Mono className="text-10 text-slate-600 w-5">{num}</Mono>
+            <Mono className="text-2xs text-fg-subtle w-5">{num}</Mono>
             <span
               className="dot w-1.5 h-1.5 rounded-full transition-all duration-300"
               style={{
@@ -185,11 +185,11 @@ function Sidebar({ active }: { active: string }): ReactNode {
           </a>
         ))}
       </nav>
-      <div className="mt-auto pt-6 border-t border-white/6">
-        <Mono className="text-10 text-slate-600 leading-relaxed block">
+      <div className="mt-auto pt-6 border-t border-border">
+        <Mono className="text-2xs text-fg-subtle leading-relaxed block">
           Space Grotesk · IBM Plex Sans · IBM Plex Mono
         </Mono>
-        <Mono className="text-10 text-slate-700 mt-1 block">© 2026 MLAI Corporation</Mono>
+        <Mono className="text-2xs text-fg-subtle mt-1 block">© 2026 MLAI Corporation</Mono>
       </div>
     </aside>
   );
@@ -309,7 +309,7 @@ export default function DesignBoard(): ReactNode {
           <header className="pt-20 pb-16 max-w-3xl">
             <Eyebrow color="#a855f7">Design System Upgrade · Response to spec</Eyebrow>
             <h1
-              className="font-bold text-white tracking-tight"
+              className="font-bold text-fg tracking-tight"
               style={{
                 fontFamily: "var(--font-display)",
                 fontSize: "clamp(40px,7vw,76px)",
@@ -320,7 +320,7 @@ export default function DesignBoard(): ReactNode {
               Not more glass.
               <br />A real <span className="t-grad">system</span> underneath.
             </h1>
-            <p className="mt-6 text-base sm:text-lg text-slate-400 leading-relaxed text-pretty">
+            <p className="mt-6 text-base sm:text-lg text-fg-muted leading-relaxed text-pretty">
               The upgrade spec asks for things MLAI already ships. This is the version that actually
               moves the needle: a reconciled palette, a four-tier elevation ramp, one declared light
               direction, formal spacing rhythm, and the whole thing applied to a live page.
@@ -329,7 +329,7 @@ export default function DesignBoard(): ReactNode {
               {HERO_CHIPS.map((chip) => (
                 <span
                   key={chip}
-                  className="px-3.5 py-1.5 rounded-full text-11 font-medium text-slate-300"
+                  className="px-3.5 py-1.5 rounded-full text-2xs font-medium text-fg-muted"
                   style={{
                     background: "rgba(255,255,255,0.04)",
                     border: "1px solid rgba(255,255,255,0.1)",
@@ -389,20 +389,20 @@ export default function DesignBoard(): ReactNode {
             </div>
           </div>
 
-          <footer className="border-t border-white/7 py-12 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
+          <footer className="border-t border-border py-12 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
             <div className="flex items-center gap-3">
               <Mark size={30} />
               <div>
                 <div
-                  className="text-white font-semibold text-sm"
+                  className="text-fg font-semibold text-sm"
                   style={{ fontFamily: "var(--font-display)" }}
                 >
                   MLAI Corporation
                 </div>
-                <Mono className="text-11 text-slate-500">Design System Upgrade · v2.0</Mono>
+                <Mono className="text-2xs text-fg-subtle">Design System Upgrade · v2.0</Mono>
               </div>
             </div>
-            <Mono className="text-11 text-slate-600">
+            <Mono className="text-2xs text-fg-subtle">
               Infrastructure for resilient intelligence
             </Mono>
           </footer>

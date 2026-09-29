@@ -3,6 +3,7 @@ import { DataTable, NamedGrid, PageClose, PageHero, Section, SpecList } from "@/
 import { StatusBadge } from "@/components/site/status-badge";
 import { ProvTag } from "@/components/site/prov-tag";
 import { wdbxCapabilities, wdbxCrates, wdbxSpecs } from "@/lib/content";
+import { ogImage } from "@/lib/og-sections";
 import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/wdbx")({
@@ -10,6 +11,7 @@ export const Route = createFileRoute("/wdbx")({
     pageHead(
       "WDBX — Provenance-aware memory substrate",
       "WDBX is MLAI's provenance-aware episodic substrate: durable records, vector retrieval, causal history, and inspectable evidence beneath ABI.",
+      ogImage("wdbx"),
     ),
   component: WdbxPage,
 });

@@ -12,6 +12,7 @@ import {
 import { StatusBadge } from "@/components/site/status-badge";
 import { HomeControlPlane, HomeProductBoundary } from "@/components/site/home-sections";
 import { integrationApps, layers, wdbxSpecs } from "@/lib/content";
+import { ogImage } from "@/lib/og-sections";
 import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/platform")({
@@ -19,6 +20,7 @@ export const Route = createFileRoute("/platform")({
     pageHead(
       "Platform — three layers, one chip",
       "MLAI's platform stack: WDBX storage, ABI compute, Abbey application, and Quesar as the product envelope. Product accents and persona colors stay on separate axes.",
+      ogImage("platform"),
     ),
   component: PlatformPage,
 });
@@ -64,7 +66,7 @@ function PlatformPage() {
           rows={integrationApps}
           rowKey={(row) => row.path}
           columns={[
-            { header: "Path", className: "font-mono text-12", cell: (row) => row.path },
+            { header: "Path", className: "font-mono text-xs", cell: (row) => row.path },
             { header: "Purpose", className: "text-fg-muted", cell: (row) => row.purpose },
             { header: "Status", cell: (row) => <StatusBadge status={row.status} /> },
           ]}

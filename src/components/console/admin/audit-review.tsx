@@ -93,7 +93,7 @@ export function AuditReview() {
             onChange={(event) => setReason(event.target.value)}
             placeholder={`Why you are reviewing these records (${REASON_MIN}–${REASON_MAX} characters). Logged with every action.`}
           />
-          <p className="mt-1 font-mono text-10 text-fg-subtle">
+          <p className="mt-1 font-mono text-2xs text-fg-subtle">
             {trimmed.length}/{REASON_MAX}
           </p>
         </div>

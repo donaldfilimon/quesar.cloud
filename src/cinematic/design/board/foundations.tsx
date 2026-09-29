@@ -81,13 +81,13 @@ export function ReviewSection(): ReactNode {
             <Glass key={t} level={2} className="p-6">
               <div className="flex items-start justify-between gap-4 mb-3">
                 <h3
-                  className="font-semibold text-white text-[17px]"
+                  className="font-semibold text-fg text-[17px]"
                   style={{ fontFamily: "var(--font-display)" }}
                 >
                   {t}
                 </h3>
                 <span
-                  className="shrink-0 text-10 font-bold uppercase px-2.5 py-1 rounded-full"
+                  className="shrink-0 text-2xs font-bold uppercase px-2.5 py-1 rounded-full"
                   style={{
                     color: fg,
                     background: bg,
@@ -98,7 +98,7 @@ export function ReviewSection(): ReactNode {
                   {label}
                 </span>
               </div>
-              <p className="text-[13.5px] leading-relaxed text-slate-400">{d}</p>
+              <p className="text-[13.5px] leading-relaxed text-fg-muted">{d}</p>
             </Glass>
           );
         })}
@@ -113,8 +113,8 @@ export function ReviewSection(): ReactNode {
         <Eyebrow color="var(--ds-accent3)">The four priorities</Eyebrow>
         <ol className="grid sm:grid-cols-2 gap-x-8 gap-y-3 mt-2">
           {PRIORITIES.map((s, i) => (
-            <li key={s} className="flex gap-3 items-baseline text-15 text-slate-200">
-              <Mono className="text-13" style={{ color: "#22d3ee" }}>
+            <li key={s} className="flex gap-3 items-baseline text-sm text-fg">
+              <Mono className="text-xs" style={{ color: "#22d3ee" }}>
                 {String(i + 1).padStart(2, "0")}
               </Mono>
               <span>{s}</span>
@@ -153,20 +153,20 @@ function Swatch({
       className="text-left group"
     >
       <div
-        className="relative rounded-2xl overflow-hidden ring-1 ring-white/10 transition-transform group-hover:scale-[1.015]"
+        className="relative rounded-2xl overflow-hidden ring-1 ring-border transition-transform group-hover:scale-[1.015]"
         style={{ height: big ? 96 : 64, background: value }}
       >
         <span
-          className="absolute bottom-2 right-2.5 text-10 font-mono opacity-0 group-hover:opacity-100 transition-opacity"
+          className="absolute bottom-2 right-2.5 text-2xs font-mono opacity-0 group-hover:opacity-100 transition-opacity"
           style={{ color: light ? "#0a0a12" : "#fff" }}
         >
           {copied ? "copied ✓" : "click to copy"}
         </span>
       </div>
       <div className="mt-2.5">
-        <Mono className="text-12 text-slate-200 block">{name}</Mono>
-        <Mono className="text-11 text-slate-500 block">{value}</Mono>
-        {note && <p className="text-[11.5px] text-slate-500 mt-1 leading-snug">{note}</p>}
+        <Mono className="text-xs text-fg block">{name}</Mono>
+        <Mono className="text-2xs text-fg-subtle block">{value}</Mono>
+        {note && <p className="text-[11.5px] text-fg-subtle mt-1 leading-snug">{note}</p>}
       </div>
     </button>
   );
@@ -228,15 +228,15 @@ export function ColorSection(): ReactNode {
                 </span>
                 <div>
                   <div
-                    className="text-white font-semibold"
+                    className="text-fg font-semibold"
                     style={{ fontFamily: "var(--font-display)" }}
                   >
                     {p.name}
                   </div>
-                  <div className="text-12 text-slate-400">{p.role}</div>
+                  <div className="text-xs text-fg-muted">{p.role}</div>
                 </div>
               </div>
-              <Mono className="text-11 text-slate-500 mt-4 block">var({p.token})</Mono>
+              <Mono className="text-2xs text-fg-subtle mt-4 block">var({p.token})</Mono>
             </Glass>
           ))}
         </div>
@@ -267,12 +267,12 @@ export function ElevationSection(): ReactNode {
           style={{ background: "#050509", border: "1px solid rgba(255,255,255,0.06)" }}
         >
           <div className="w-full max-w-sm">
-            <Mono className="text-10 text-slate-600 mb-3 block">L0 · Canvas</Mono>
+            <Mono className="text-2xs text-fg-subtle mb-3 block">L0 · Canvas</Mono>
             <div
               className="rounded-2xl p-6"
               style={{ background: l2.bg, border: `1px solid ${l2.border}`, boxShadow: l2.shadow }}
             >
-              <Mono className="text-10 text-slate-500 mb-3 block">L2 · Surface card</Mono>
+              <Mono className="text-2xs text-fg-subtle mb-3 block">L2 · Surface card</Mono>
               <div
                 className="rounded-xl p-5"
                 style={{
@@ -282,7 +282,7 @@ export function ElevationSection(): ReactNode {
                   backdropFilter: "blur(10px)",
                 }}
               >
-                <Mono className="text-10 text-slate-400 mb-3 block">L3 · Raised nested</Mono>
+                <Mono className="text-2xs text-fg-muted mb-3 block">L3 · Raised nested</Mono>
                 <div
                   className="rounded-lg p-4 relative"
                   style={{
@@ -291,9 +291,9 @@ export function ElevationSection(): ReactNode {
                     boxShadow: l4.shadow,
                   }}
                 >
-                  <Mono className="text-10 text-slate-300">L4 · Overlay / popover</Mono>
-                  <div className="mt-2 inline-flex items-center gap-1.5 text-11 text-emerald-300">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                  <Mono className="text-2xs text-fg-muted">L4 · Overlay / popover</Mono>
+                  <div className="mt-2 inline-flex items-center gap-1.5 text-2xs text-status-current">
+                    <span className="w-1.5 h-1.5 rounded-full bg-status-current" />
                     depth resolves cleanly
                   </div>
                 </div>
@@ -323,15 +323,15 @@ export function ElevationSection(): ReactNode {
               <div className="flex-1 min-w-0">
                 <div className="flex items-baseline gap-2">
                   <span
-                    className="text-white font-semibold text-15"
+                    className="text-fg font-semibold text-sm"
                     style={{ fontFamily: "var(--font-display)" }}
                   >
                     {e.name}
                   </span>
-                  <Mono className="text-11 text-slate-500">{e.n}</Mono>
+                  <Mono className="text-2xs text-fg-subtle">{e.n}</Mono>
                 </div>
-                <div className="text-12.5 text-slate-400">{e.use}</div>
-                <Mono className="text-10.5 text-slate-600 mt-0.5 block truncate">
+                <div className="text-xs text-fg-muted">{e.use}</div>
+                <Mono className="text-2xs text-fg-subtle mt-0.5 block truncate">
                   var({e.token}) · {e.bg.slice(0, 7)}
                 </Mono>
               </div>
@@ -360,7 +360,7 @@ export function SpacingSection(): ReactNode {
           <div className="space-y-2.5">
             {SPACING.map(([n, rem, px]) => (
               <div key={n} className="flex items-center gap-4">
-                <Mono className="text-12 text-slate-500 w-16 shrink-0">space-{n}</Mono>
+                <Mono className="text-xs text-fg-subtle w-16 shrink-0">space-{n}</Mono>
                 <div
                   className="h-3.5 rounded-md"
                   style={{
@@ -369,7 +369,7 @@ export function SpacingSection(): ReactNode {
                     opacity: 0.85,
                   }}
                 />
-                <Mono className="text-11 text-slate-600">
+                <Mono className="text-2xs text-fg-subtle">
                   {px}px · {rem}
                 </Mono>
               </div>
@@ -379,14 +379,14 @@ export function SpacingSection(): ReactNode {
         {/* rhythm */}
         <div>
           <Eyebrow color="var(--ds-accent3)">Rhythm tokens</Eyebrow>
-          <Glass level={1} className="p-2 divide-y divide-white/5">
+          <Glass level={1} className="p-2 divide-y divide-border">
             {RHYTHM.map(([t, v, note]) => (
               <div key={t} className="p-4">
                 <div className="flex items-center justify-between gap-3">
-                  <Mono className="text-12.5 text-slate-200">{t}</Mono>
-                  <Mono className="text-11 text-cyan-400">{v}</Mono>
+                  <Mono className="text-xs text-fg">{t}</Mono>
+                  <Mono className="text-2xs text-accent">{v}</Mono>
                 </div>
-                <p className="text-12 text-slate-500 mt-1">{note}</p>
+                <p className="text-xs text-fg-subtle mt-1">{note}</p>
               </div>
             ))}
           </Glass>
@@ -406,19 +406,19 @@ export function TypeSection(): ReactNode {
         title="The scale was right — the leading and tracking weren't"
         lede="Space Grotesk for display, IBM Plex Sans for text, IBM Plex Mono for labels and code. We keep the Major-Third scale and fix what was missing: negative tracking that tightens as size grows, and leading that loosens as size shrinks."
       />
-      <Glass level={1} className="divide-y divide-white/6 overflow-hidden">
+      <Glass level={1} className="divide-y divide-border overflow-hidden">
         {TYPE.map(([label, , size, lh, ls, font, weight, use]) => (
           <div
             key={label}
-            className="flex items-center gap-6 px-6 py-5 hover:bg-white/1.5 transition-colors"
+            className="flex items-center gap-6 px-6 py-5 hover:bg-fg/1.5 transition-colors"
           >
             <div className="w-20 shrink-0">
-              <div className="text-white font-semibold text-13">{label}</div>
-              <Mono className="text-10 text-slate-600">{size}</Mono>
+              <div className="text-fg font-semibold text-xs">{label}</div>
+              <Mono className="text-2xs text-fg-subtle">{size}</Mono>
             </div>
             <div className="flex-1 min-w-0 overflow-hidden">
               <div
-                className="text-white truncate"
+                className="text-fg truncate"
                 style={{
                   fontFamily: FONT_VAR[font] ?? "var(--font-sans)",
                   fontSize: `min(${size}, 7vw)`,
@@ -433,13 +433,13 @@ export function TypeSection(): ReactNode {
               </div>
             </div>
             <div className="hidden md:block w-44 shrink-0 text-right">
-              <Mono className="text-10.5 text-slate-500 block">
+              <Mono className="text-2xs text-fg-subtle block">
                 {font} {weight}
               </Mono>
-              <Mono className="text-10 text-slate-600 block">
+              <Mono className="text-2xs text-fg-subtle block">
                 lh {lh} · ls {ls}
               </Mono>
-              <span className="text-11 text-slate-500">{use}</span>
+              <span className="text-2xs text-fg-subtle">{use}</span>
             </div>
           </div>
         ))}

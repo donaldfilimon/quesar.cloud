@@ -71,7 +71,7 @@ export function InquiriesList() {
               ) : null}
               <p className="mt-3 whitespace-pre-wrap text-sm text-fg-muted">{row.message}</p>
               {row.userId ? (
-                <p className="mt-2 font-mono text-10 text-fg-subtle">signed in as {row.userId}</p>
+                <p className="mt-2 font-mono text-2xs text-fg-subtle">signed in as {row.userId}</p>
               ) : null}
             </li>
           ))}

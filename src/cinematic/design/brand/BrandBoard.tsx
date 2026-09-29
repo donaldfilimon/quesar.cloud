@@ -137,7 +137,7 @@ const Mark = ({ size = 32, radius }: { size?: number; radius?: number }): ReactN
     style={{ width: size, height: size, borderRadius: radius ?? size * 0.28 }}
   >
     <span
-      className="text-white font-black"
+      className="text-fg font-black"
       style={{ fontSize: size * 0.46, lineHeight: 1, fontFamily: "var(--font-display)" }}
     >
       M
@@ -146,7 +146,7 @@ const Mark = ({ size = 32, radius }: { size?: number; radius?: number }): ReactN
 );
 
 const Wordmark = ({ size = 20 }: { size?: number }): ReactNode => (
-  <span className="font-bold tracking-0.18em text-white" style={{ fontSize: size }}>
+  <span className="font-bold tracking-widest text-fg" style={{ fontSize: size }}>
     MLAI
   </span>
 );
@@ -248,13 +248,13 @@ function Swatch({ name, hex, sub, ink }: SwatchData): ReactNode {
   return (
     <button onClick={copy} className="group text-left w-full">
       <div
-        className="h-20 rounded-xl border border-white/10 relative overflow-hidden"
+        className="h-20 rounded-xl border border-border relative overflow-hidden"
         style={{ background: hex }}
       >
         <div
           className={`absolute inset-0 flex items-center justify-center text-xs font-medium transition-opacity ${
             c ? "opacity-100" : "opacity-0 group-hover:opacity-100"
-          } ${ink ? "text-white" : "text-slate-900"} ${c ? "bg-black/20" : "bg-black/10"}`}
+          } ${ink ? "text-fg" : "text-slate-900"} ${c ? "bg-black/20" : "bg-black/10"}`}
         >
           {c ? (
             <span className="flex items-center gap-1">
@@ -267,8 +267,8 @@ function Swatch({ name, hex, sub, ink }: SwatchData): ReactNode {
           )}
         </div>
       </div>
-      <div className="mt-2 text-sm text-white font-medium">{name}</div>
-      <div className="text-xs text-slate-500 font-mono">
+      <div className="mt-2 text-sm text-fg font-medium">{name}</div>
+      <div className="text-xs text-fg-subtle font-mono">
         {hex}
         {sub ? ` · ${sub}` : ""}
       </div>
@@ -294,11 +294,11 @@ function Section({
       id={kicker.toLowerCase()}
     >
       <div className="flex items-baseline gap-3 mb-1">
-        <span className="text-xs font-mono text-slate-600">{n}</span>
-        <div className="text-xs font-bold uppercase tracking-0.2em text-cyan-400">{kicker}</div>
+        <span className="text-xs font-mono text-fg-subtle">{n}</span>
+        <div className="text-xs font-bold uppercase tracking-widest text-accent">{kicker}</div>
       </div>
       <h2
-        className="text-3xl sm:text-4xl font-bold text-white tracking-tight mb-8"
+        className="text-3xl sm:text-4xl font-bold text-fg tracking-tight mb-8"
         style={{ fontFamily: "var(--font-display)" }}
       >
         {title}
@@ -414,7 +414,7 @@ const TYPE: readonly TypeSpec[] = [
     label: "Display / H1",
     spec: "Space Grotesk · 56–72px · tracking-tight",
     el: (
-      <span className="text-5xl font-bold text-white" style={{ fontFamily: "var(--font-display)" }}>
+      <span className="text-5xl font-bold text-fg" style={{ fontFamily: "var(--font-display)" }}>
         Private by default
       </span>
     ),
@@ -423,7 +423,7 @@ const TYPE: readonly TypeSpec[] = [
     label: "Heading / H2",
     spec: "Space Grotesk · 32–40px",
     el: (
-      <span className="text-3xl font-bold text-white" style={{ fontFamily: "var(--font-display)" }}>
+      <span className="text-3xl font-bold text-fg" style={{ fontFamily: "var(--font-display)" }}>
         The infrastructure layer
       </span>
     ),
@@ -441,7 +441,7 @@ const TYPE: readonly TypeSpec[] = [
     label: "Body",
     spec: "System sans · 15–16px · slate-300",
     el: (
-      <span className="text-base text-slate-300" style={{ fontFamily: "system-ui" }}>
+      <span className="text-base text-fg-muted" style={{ fontFamily: "system-ui" }}>
         A purpose-built substrate fusing durable retrieval, integrity, and concurrency.
       </span>
     ),
@@ -449,14 +449,12 @@ const TYPE: readonly TypeSpec[] = [
   {
     label: "Eyebrow",
     spec: "System sans · 12px · uppercase · tracking-widest · cyan",
-    el: (
-      <span className="text-xs font-bold uppercase tracking-0.2em text-cyan-400">Technology</span>
-    ),
+    el: <span className="text-xs font-bold uppercase tracking-widest text-accent">Technology</span>,
   },
   {
     label: "Mono / metrics",
     spec: "IBM Plex Mono · code, equations, data",
-    el: <span className="font-mono text-cyan-200 text-base">L_shard = α + (β·S)/n</span>,
+    el: <span className="font-mono text-accent text-base">L_shard = α + (β·S)/n</span>,
   },
 ];
 
@@ -480,15 +478,15 @@ const MISUSE: readonly MisuseItem[] = [
         className="bg-linear-to-br from-cyan-400 to-purple-600 flex items-center justify-center"
         style={{ width: 52, height: 26, borderRadius: 7 }}
       >
-        <span className="text-white font-black text-xs">M</span>
+        <span className="text-fg font-black text-xs">M</span>
       </div>
     ),
   },
   {
     label: "Don't recolor",
     el: (
-      <div className="w-8 h-8 rounded-lg bg-slate-500 flex items-center justify-center">
-        <span className="text-white font-black text-sm">M</span>
+      <div className="w-8 h-8 rounded-lg bg-fg-subtle flex items-center justify-center">
+        <span className="text-fg font-black text-sm">M</span>
       </div>
     ),
   },
@@ -499,7 +497,7 @@ const MISUSE: readonly MisuseItem[] = [
         className="w-8 h-8 rounded-lg bg-linear-to-br from-cyan-400 to-purple-600 flex items-center justify-center"
         style={{ boxShadow: "0 0 18px 6px rgba(34,211,238,.9)" }}
       >
-        <span className="text-white font-black text-sm">M</span>
+        <span className="text-fg font-black text-sm">M</span>
       </div>
     ),
   },
@@ -513,7 +511,7 @@ const MISUSE: readonly MisuseItem[] = [
             "repeating-linear-gradient(45deg,#f59e0b,#f59e0b 4px,#ef4444 4px,#ef4444 8px)",
         }}
       >
-        <span className="text-white font-black text-sm">M</span>
+        <span className="text-fg font-black text-sm">M</span>
       </div>
     ),
   },
@@ -532,9 +530,9 @@ const PRODUCT_ICONS: readonly ProductIcon[] = [
 
 /* color → Tailwind class helpers (full literals so the v4 scanner keeps them) */
 const textClass: Record<VoiceColor, string> = {
-  emerald: "text-emerald-400",
-  violet: "text-purple-400",
-  cyan: "text-cyan-400",
+  emerald: "text-status-current",
+  violet: "text-abi",
+  cyan: "text-accent",
 };
 const borderLeftClass: Record<VoiceColor, string> = {
   emerald: "border-l-emerald-400/60",
@@ -556,7 +554,7 @@ export default function BrandBoard(): ReactNode {
   return (
     <div
       ref={scroller}
-      className="bb-root h-screen overflow-y-auto text-white"
+      className="bb-root h-screen overflow-y-auto text-fg"
       style={{
         fontFamily: "system-ui, sans-serif",
         background: "#0c0c09",
@@ -564,7 +562,7 @@ export default function BrandBoard(): ReactNode {
     >
       <style>{BOARD_CSS}</style>
 
-      <header className="relative overflow-hidden border-b border-white/10">
+      <header className="relative overflow-hidden border-b border-border">
         <div className="absolute inset-0 opacity-50">
           <NetworkCanvas />
         </div>
@@ -573,7 +571,7 @@ export default function BrandBoard(): ReactNode {
             <Mark size={44} />
             <Wordmark size={26} />
           </div>
-          <div className="text-xs font-bold uppercase tracking-0.2em text-cyan-400 mb-3">
+          <div className="text-xs font-bold uppercase tracking-widest text-accent mb-3">
             Brand Guidelines · v1.0
           </div>
           <h1
@@ -582,19 +580,19 @@ export default function BrandBoard(): ReactNode {
           >
             The MLAI <span className="gtext">identity system</span>
           </h1>
-          <p className="mt-5 text-lg text-slate-300 max-w-2xl">
+          <p className="mt-5 text-lg text-fg-muted max-w-2xl">
             How we look, sound, and hold ourselves — privacy-first, precise, and quietly premium.
             Click any color to copy its value.
           </p>
         </div>
       </header>
 
-      <div className="sticky top-0 z-30 bg-[#0c0c09]/85 backdrop-blur border-b border-white/10 px-6 sm:px-10 py-3 flex gap-2 flex-wrap">
+      <div className="sticky top-0 z-30 bg-[#0c0c09]/85 backdrop-blur border-b border-border px-6 sm:px-10 py-3 flex gap-2 flex-wrap">
         {NAV.map((n) => (
           <button
             key={n}
             onClick={() => go(n)}
-            className="text-xs px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-slate-300 hover:bg-white/10 hover:text-white transition-colors"
+            className="text-xs px-3 py-1.5 rounded-full bg-fg/5 border border-border text-fg-muted hover:bg-fg/10 hover:text-fg transition-colors"
           >
             {n}
           </button>
@@ -604,7 +602,7 @@ export default function BrandBoard(): ReactNode {
       <Section n="01" kicker="Logo" title="The mark & wordmark">
         <div className="grid md:grid-cols-3 gap-5 mb-8">
           <Card>
-            <div className="text-xs text-slate-500 mb-4 uppercase tracking-wider">
+            <div className="text-xs text-fg-subtle mb-4 uppercase tracking-wider">
               Primary lockup
             </div>
             <div className="flex items-center gap-3 h-20">
@@ -613,13 +611,13 @@ export default function BrandBoard(): ReactNode {
             </div>
           </Card>
           <Card>
-            <div className="text-xs text-slate-500 mb-4 uppercase tracking-wider">Mark only</div>
+            <div className="text-xs text-fg-subtle mb-4 uppercase tracking-wider">Mark only</div>
             <div className="flex items-center justify-center h-20">
               <Mark size={56} />
             </div>
           </Card>
           <Card>
-            <div className="text-xs text-slate-500 mb-4 uppercase tracking-wider">Stacked</div>
+            <div className="text-xs text-fg-subtle mb-4 uppercase tracking-wider">Stacked</div>
             <div className="flex flex-col items-center justify-center gap-2 h-20">
               <Mark size={36} />
               <Wordmark size={16} />
@@ -628,19 +626,19 @@ export default function BrandBoard(): ReactNode {
         </div>
         <div className="grid md:grid-cols-2 gap-5 mb-8">
           <Card>
-            <div className="text-xs text-slate-500 mb-4 uppercase tracking-wider">
+            <div className="text-xs text-fg-subtle mb-4 uppercase tracking-wider">
               On dark (preferred)
             </div>
-            <div className="rounded-xl bg-slate-950 border border-white/10 flex items-center gap-3 h-24 px-6">
+            <div className="rounded-xl bg-background border border-border flex items-center gap-3 h-24 px-6">
               <Mark size={36} />
               <Wordmark size={22} />
             </div>
           </Card>
           <div className="glass p-6">
-            <div className="text-xs text-slate-500 mb-4 uppercase tracking-wider">On light</div>
+            <div className="text-xs text-fg-subtle mb-4 uppercase tracking-wider">On light</div>
             <div className="rounded-xl bg-white flex items-center gap-3 h-24 px-6">
               <Mark size={36} />
-              <span className="font-bold tracking-0.18em text-slate-900" style={{ fontSize: 22 }}>
+              <span className="font-bold tracking-widest text-slate-900" style={{ fontSize: 22 }}>
                 MLAI
               </span>
             </div>
@@ -648,37 +646,37 @@ export default function BrandBoard(): ReactNode {
         </div>
         <div className="grid md:grid-cols-2 gap-5">
           <Card>
-            <div className="text-xs text-slate-500 mb-4 uppercase tracking-wider">
+            <div className="text-xs text-fg-subtle mb-4 uppercase tracking-wider">
               Clear space & min size
             </div>
-            <div className="rounded-xl border border-dashed border-cyan-400/40 p-6 flex items-center justify-center">
-              <div className="border border-dashed border-white/15 p-5">
+            <div className="rounded-xl border border-dashed border-accent/40 p-6 flex items-center justify-center">
+              <div className="border border-dashed border-border-strong p-5">
                 <div className="flex items-center gap-3">
                   <Mark size={32} />
                   <Wordmark size={20} />
                 </div>
               </div>
             </div>
-            <p className="text-xs text-slate-400 mt-3 leading-relaxed">
+            <p className="text-xs text-fg-muted mt-3 leading-relaxed">
               Keep clear space ≥ the height of the “M” on all sides. Minimum mark size: 24px
               digital, 8mm print.
             </p>
           </Card>
           <Card>
-            <div className="text-xs text-slate-500 mb-4 uppercase tracking-wider">
+            <div className="text-xs text-fg-subtle mb-4 uppercase tracking-wider">
               Misuse — never
             </div>
             <div className="grid grid-cols-2 gap-3">
               {MISUSE.map((m) => (
                 <div
                   key={m.label}
-                  className="rounded-lg bg-black/30 border border-red-500/20 p-3 flex flex-col items-center gap-2 relative"
+                  className="rounded-lg bg-black/30 border border-destructive/20 p-3 flex flex-col items-center gap-2 relative"
                 >
-                  <div className="absolute top-1.5 right-1.5 text-red-400">
+                  <div className="absolute top-1.5 right-1.5 text-destructive">
                     <IX s={14} />
                   </div>
                   {m.el}
-                  <span className="text-10 text-slate-500">{m.label}</span>
+                  <span className="text-2xs text-fg-subtle">{m.label}</span>
                 </div>
               ))}
             </div>
@@ -688,15 +686,15 @@ export default function BrandBoard(): ReactNode {
 
       <Section n="02" kicker="Color" title="Palette">
         <div className="mb-8">
-          <div className="text-sm font-semibold text-white mb-3">Signature gradient</div>
-          <div className="h-16 rounded-2xl bg-linear-to-r from-cyan-300 via-blue-400 to-purple-400 border border-white/10" />
-          <div className="text-xs text-slate-500 font-mono mt-2">
+          <div className="text-sm font-semibold text-fg mb-3">Signature gradient</div>
+          <div className="h-16 rounded-2xl bg-linear-to-r from-cyan-300 via-blue-400 to-purple-400 border border-border" />
+          <div className="text-xs text-fg-subtle font-mono mt-2">
             linear-gradient(90deg, #67e8f9, #60a5fa, #c084fc)
           </div>
         </div>
         <div className="space-y-8">
           <div>
-            <div className="text-sm font-semibold text-white mb-3">Core accents</div>
+            <div className="text-sm font-semibold text-fg mb-3">Core accents</div>
             <div className="grid grid-cols-3 gap-4">
               {CORE.map((s) => (
                 <Swatch key={s.hex} {...s} />
@@ -704,18 +702,18 @@ export default function BrandBoard(): ReactNode {
             </div>
           </div>
           <div>
-            <div className="text-sm font-semibold text-white mb-3">Persona colors</div>
+            <div className="text-sm font-semibold text-fg mb-3">Persona colors</div>
             <div className="grid grid-cols-3 gap-4">
               {PERSONA.map((s) => (
                 <Swatch key={s.name} {...s} />
               ))}
             </div>
-            <p className="text-xs text-slate-500 mt-3">
+            <p className="text-xs text-fg-subtle mt-3">
               Emerald is reserved almost exclusively for Abbey, so she reads as the emotional heart.
             </p>
           </div>
           <div>
-            <div className="text-sm font-semibold text-white mb-3">Support / state</div>
+            <div className="text-sm font-semibold text-fg mb-3">Support / state</div>
             <div className="grid grid-cols-3 gap-4">
               {SUPPORT.map((s) => (
                 <Swatch key={s.name} {...s} />
@@ -723,7 +721,7 @@ export default function BrandBoard(): ReactNode {
             </div>
           </div>
           <div>
-            <div className="text-sm font-semibold text-white mb-3">Neutrals</div>
+            <div className="text-sm font-semibold text-fg mb-3">Neutrals</div>
             <div className="grid grid-cols-2 sm:grid-cols-5 gap-4">
               {NEUTRAL.map((s) => (
                 <Swatch key={s.hex} {...s} />
@@ -738,7 +736,7 @@ export default function BrandBoard(): ReactNode {
           {TYPE_CARDS.map((f, i) => (
             <Card key={f[0]}>
               <div
-                className="text-3xl text-white mb-2"
+                className="text-3xl text-fg mb-2"
                 style={{
                   fontFamily:
                     i === 0
@@ -750,23 +748,23 @@ export default function BrandBoard(): ReactNode {
               >
                 Aa
               </div>
-              <div className="text-sm font-semibold text-white">{f[0]}</div>
-              <div className="text-xs text-cyan-400 font-mono mb-1">{f[1]}</div>
-              <div className="text-xs text-slate-400 leading-relaxed">{f[2]}</div>
+              <div className="text-sm font-semibold text-fg">{f[0]}</div>
+              <div className="text-xs text-accent font-mono mb-1">{f[1]}</div>
+              <div className="text-xs text-fg-muted leading-relaxed">{f[2]}</div>
             </Card>
           ))}
         </div>
         <Card>
-          <div className="text-xs text-slate-500 mb-5 uppercase tracking-wider">Type scale</div>
+          <div className="text-xs text-fg-subtle mb-5 uppercase tracking-wider">Type scale</div>
           <div className="space-y-5">
             {TYPE.map((t) => (
               <div
                 key={t.label}
-                className="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-6 pb-5 border-b border-white/5 last:border-0 last:pb-0"
+                className="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-6 pb-5 border-b border-border last:border-0 last:pb-0"
               >
                 <div className="sm:w-44 shrink-0">
-                  <div className="text-xs text-slate-400">{t.label}</div>
-                  <div className="text-10 text-slate-600 font-mono">{t.spec}</div>
+                  <div className="text-xs text-fg-muted">{t.label}</div>
+                  <div className="text-2xs text-fg-subtle font-mono">{t.spec}</div>
                 </div>
                 <div className="flex-1">{t.el}</div>
               </div>
@@ -777,12 +775,12 @@ export default function BrandBoard(): ReactNode {
 
       <Section n="04" kicker="Voice" title="Voice & tone">
         <Card className="mb-6">
-          <div className="text-sm font-semibold text-white mb-2">Brand register</div>
-          <p className="text-slate-300 leading-relaxed text-sm">
+          <div className="text-sm font-semibold text-fg mb-2">Brand register</div>
+          <p className="text-fg-muted leading-relaxed text-sm">
             Terse, precise, and privacy-forward. We state what's true and useful without hype or
             hedging. Confident, not loud. Technical depth delivered with clarity. Default to{" "}
-            <span className="text-cyan-300">Abi's</span> neutral register; shift toward Abbey or
-            Aviva to match the audience.
+            <span className="text-accent">Abi's</span> neutral register; shift toward Abbey or Aviva
+            to match the audience.
           </p>
         </Card>
         <div className="grid md:grid-cols-3 gap-5">
@@ -792,17 +790,17 @@ export default function BrandBoard(): ReactNode {
               <div key={v.name} className={`glass p-5 border-l-4 ${borderLeftClass[v.c]}`}>
                 <div className="flex items-center gap-3 mb-3">
                   <div
-                    className={`w-10 h-10 rounded-xl bg-linear-to-br ${ramp[v.c]} flex items-center justify-center text-white`}
+                    className={`w-10 h-10 rounded-xl bg-linear-to-br ${ramp[v.c]} flex items-center justify-center text-fg`}
                   >
                     <Icon s={20} />
                   </div>
                   <div>
                     <div className={`font-bold ${textClass[v.c]}`}>{v.name}</div>
-                    <div className="text-xs text-slate-500">{v.role}</div>
+                    <div className="text-xs text-fg-subtle">{v.role}</div>
                   </div>
                 </div>
-                <p className="text-slate-400 text-sm leading-relaxed mb-3">{v.desc}</p>
-                <p className="text-slate-300 text-xs italic leading-relaxed border-t border-white/5 pt-3">
+                <p className="text-fg-muted text-sm leading-relaxed mb-3">{v.desc}</p>
+                <p className="text-fg-muted text-xs italic leading-relaxed border-t border-border pt-3">
                   {v.sample}
                 </p>
               </div>
@@ -814,23 +812,21 @@ export default function BrandBoard(): ReactNode {
       <Section n="05" kicker="Visual" title="Visual language">
         <div className="grid md:grid-cols-2 gap-5 mb-5">
           <Card>
-            <div className="text-sm font-semibold text-white mb-1">Glassmorphism</div>
-            <p className="text-xs text-slate-400 mb-4">
+            <div className="text-sm font-semibold text-fg mb-1">Glassmorphism</div>
+            <p className="text-xs text-fg-muted mb-4">
               Frosted panels on near-black:{" "}
-              <span className="font-mono text-cyan-300/80">
-                bg-white/4 · border-white/10 · blur
-              </span>
+              <span className="font-mono text-accent/80">bg-fg/4 · border-border · blur</span>
             </p>
             <div className="grid grid-cols-2 gap-3">
               <div className="glass h-20" />
               <div className="glass h-20" />
             </div>
           </Card>
-          <div className="rounded-2xl border border-white/10 overflow-hidden relative h-37">
+          <div className="rounded-2xl border border-border overflow-hidden relative h-37">
             <NetworkCanvas />
             <div className="absolute bottom-4 left-4">
-              <div className="text-sm font-semibold text-white">Particle networks</div>
-              <p className="text-xs text-slate-400">
+              <div className="text-sm font-semibold text-fg">Particle networks</div>
+              <p className="text-xs text-fg-muted">
                 vectors, nodes, embedding space — the recurring motif
               </p>
             </div>
@@ -842,37 +838,37 @@ export default function BrandBoard(): ReactNode {
             return (
               <Card key={p.t}>
                 <div
-                  className={`w-11 h-11 rounded-xl bg-linear-to-br ${ramp[p.c]} flex items-center justify-center mb-3 text-white`}
+                  className={`w-11 h-11 rounded-xl bg-linear-to-br ${ramp[p.c]} flex items-center justify-center mb-3 text-fg`}
                 >
                   <Icon s={20} />
                 </div>
-                <div className="text-sm font-semibold text-white">{p.t}</div>
-                <div className="text-xs text-slate-500">product icon lockup</div>
+                <div className="text-sm font-semibold text-fg">{p.t}</div>
+                <div className="text-xs text-fg-subtle">product icon lockup</div>
               </Card>
             );
           })}
         </div>
         <Card>
-          <div className="text-xs text-slate-500 mb-4 uppercase tracking-wider">UI elements</div>
+          <div className="text-xs text-fg-subtle mb-4 uppercase tracking-wider">UI elements</div>
           <div className="flex flex-wrap items-center gap-3">
             <button className="px-5 py-2.5 rounded-full bg-white text-slate-950 text-sm font-semibold">
               Primary
             </button>
-            <button className="px-5 py-2.5 rounded-full border border-white/20 text-white text-sm font-medium">
+            <button className="px-5 py-2.5 rounded-full border border-border-strong text-fg text-sm font-medium">
               Secondary
             </button>
-            <span className="text-10 px-2 py-0.5 rounded-full border bg-cyan-500/15 text-cyan-300 border-cyan-500/25">
+            <span className="text-2xs px-2 py-0.5 rounded-full border bg-accent/15 text-accent border-accent/25">
               badge
             </span>
-            <span className="text-10 px-2 py-0.5 rounded-full border bg-emerald-500/15 text-emerald-300 border-emerald-500/25">
+            <span className="text-2xs px-2 py-0.5 rounded-full border bg-status-current/15 text-status-current border-status-current/25">
               success
             </span>
-            <kbd className="text-xs px-2 py-1 rounded-lg border border-white/10 text-slate-400">
+            <kbd className="text-xs px-2 py-1 rounded-lg border border-border text-fg-muted">
               ⌘K
             </kbd>
             {/* Mono-inline sample. The previous performance value had no
                 reproducible harness; a layout board must use sample data. */}
-            <span className="font-mono text-cyan-200 text-sm bg-black/30 rounded-lg px-3 py-1.5">
+            <span className="font-mono text-accent text-sm bg-black/30 rounded-lg px-3 py-1.5">
               1,234
             </span>
           </div>
@@ -886,25 +882,25 @@ export default function BrandBoard(): ReactNode {
             return (
               <div key={p.t} className="glass p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 rounded-xl bg-slate-900 flex items-center justify-center text-white">
+                  <div className="w-12 h-12 rounded-xl bg-card flex items-center justify-center text-fg">
                     <Icon s={22} />
                   </div>
-                  <span className="text-xs text-slate-500">{p.m}</span>
+                  <span className="text-xs text-fg-subtle">{p.m}</span>
                 </div>
-                <h3 className="text-lg font-bold text-white">{p.t}</h3>
-                <p className="mt-2 text-sm text-slate-400 leading-relaxed">{p.d}</p>
+                <h3 className="text-lg font-bold text-fg">{p.t}</h3>
+                <p className="mt-2 text-sm text-fg-muted leading-relaxed">{p.d}</p>
               </div>
             );
           })}
         </div>
       </Section>
 
-      <footer className="border-t border-white/10 px-6 sm:px-10 py-10 max-w-5xl mx-auto">
+      <footer className="border-t border-border px-6 sm:px-10 py-10 max-w-5xl mx-auto">
         <div className="flex items-center gap-2.5">
           <Mark size={28} />
           <Wordmark size={18} />
         </div>
-        <p className="mt-3 text-xs text-slate-500">
+        <p className="mt-3 text-xs text-fg-subtle">
           Machine Learning Advanced Innovations, Inc. · Brand Guidelines v1.0 · Disciplined Secrecy
           · Mission Stewardship · Operational Velocity
         </p>

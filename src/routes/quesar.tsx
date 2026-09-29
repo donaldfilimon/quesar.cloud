@@ -12,6 +12,7 @@ import {
 import { StatusBadge } from "@/components/site/status-badge";
 import { Button } from "@/components/ui/button";
 import { quesarSurfaces, quesarWhat } from "@/lib/content";
+import { ogImage } from "@/lib/og-sections";
 import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/quesar")({
@@ -19,6 +20,7 @@ export const Route = createFileRoute("/quesar")({
     pageHead(
       "Quesar — MLAI infrastructure for persistent AI",
       "Quesar is MLAI's infrastructure for persistent, adaptive AI systems — orchestration, private memory, and interoperable compute.",
+      ogImage("quesar"),
     ),
   component: QuesarPage,
 });

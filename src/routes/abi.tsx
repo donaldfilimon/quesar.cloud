@@ -11,6 +11,7 @@ import {
 } from "@/components/site";
 import { StatusBadge } from "@/components/site/status-badge";
 import { abiCli, abiCrates, abiDuties, abiNotClaimed, mcpTools } from "@/lib/content";
+import { ogImage } from "@/lib/og-sections";
 import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/abi")({
@@ -18,6 +19,7 @@ export const Route = createFileRoute("/abi")({
     pageHead(
       "ABI — Orchestration and inspectable context",
       "ABI is MLAI's local nightly Rust framework for routing assistant requests, assembling inspectable context, and reporting capabilities honestly.",
+      ogImage("abi"),
     ),
   component: AbiPage,
 });

@@ -3,6 +3,7 @@ import { PageClose, PageHero, RouteFrame, Section, Surface } from "@/components/
 import { DocSidebar } from "@/components/site/doc-nav";
 import { DocsHub } from "@/components/site/docs-hub";
 import { docs } from "@/lib/mlai/categories/docs";
+import { ogImage } from "@/lib/og-sections";
 import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/docs")({
@@ -10,6 +11,7 @@ export const Route = createFileRoute("/docs")({
     pageHead(
       "Docs — Quesar, ABI, WDBX",
       "Documentation for Quesar and ABI: getting started, runtime, personas, WDBX, MCP, and evidence.",
+      ogImage("docs"),
     ),
   component: DocsPage,
 });

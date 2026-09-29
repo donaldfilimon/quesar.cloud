@@ -8,7 +8,7 @@ const css = readFileSync(fileURLToPath(new URL("../styles.css", import.meta.url)
 
 const themes = {
   light: readThemeTokens(css, `:root, [data-theme="light"]`),
-  dark: readThemeTokens(css, `[data-theme="dark"]`),
+  dark: readThemeTokens(css, `[data-theme="dark"], .mlai-ds`),
 };
 
 const textTokens = ["--fg", "--fg-muted", "--fg-subtle", "--muted-foreground"];

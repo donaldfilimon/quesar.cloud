@@ -60,7 +60,7 @@ export function SiteSearch() {
     <>
       <SearchIcon className="size-4" strokeWidth={1.75} />
       <span className="hidden text-xs xl:inline">Search</span>
-      <kbd className="hidden rounded-sm bg-bg-subtle px-1.5 py-0.5 font-mono text-10 text-fg-subtle xl:inline">
+      <kbd className="hidden rounded-sm bg-bg-subtle px-1.5 py-0.5 font-mono text-2xs text-fg-subtle xl:inline">
         ⌘K
       </kbd>
     </>

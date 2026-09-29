@@ -461,13 +461,13 @@ function PersonaDot({
       />
       <div className="leading-tight">
         <div
-          className="text-13 font-semibold text-white"
+          className="text-xs font-semibold text-fg"
           style={{ fontFamily: "var(--font-display)" }}
         >
           {name}
         </div>
         <div
-          className="text-11"
+          className="text-2xs"
           style={{
             color: "var(--text-faint)",
             fontFamily: "var(--font-mono)",
@@ -541,31 +541,31 @@ export default function HeroBoard(): ReactNode {
             }}
           >
             <span
-              className="text-white font-bold text-13"
+              className="text-fg font-bold text-xs"
               style={{ fontFamily: "var(--font-display)" }}
             >
               M
             </span>
           </div>
           <span
-            className="text-15 font-semibold tracking-tight text-white"
+            className="text-sm font-semibold tracking-tight text-fg"
             style={{ fontFamily: "var(--font-display)" }}
           >
             MLAI
           </span>
         </div>
         <div
-          className="hidden sm:flex items-center gap-7 text-13"
+          className="hidden sm:flex items-center gap-7 text-xs"
           style={{ color: "var(--text-dim)" }}
         >
-          <span className="hover:text-white transition-colors cursor-default">WDBX</span>
-          <span className="hover:text-white transition-colors cursor-default">ABI Framework</span>
-          <span className="hover:text-white transition-colors cursor-default">Personas</span>
-          <span className="hover:text-white transition-colors cursor-default">Research</span>
+          <span className="hover:text-fg transition-colors cursor-default">WDBX</span>
+          <span className="hover:text-fg transition-colors cursor-default">ABI Framework</span>
+          <span className="hover:text-fg transition-colors cursor-default">Personas</span>
+          <span className="hover:text-fg transition-colors cursor-default">Research</span>
         </div>
         <button
           onClick={() => setOverlay((o) => !o)}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-12 transition-colors"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs transition-colors"
           style={{
             borderColor: "rgba(255,255,255,0.15)",
             background: "rgba(255,255,255,0.05)",
@@ -581,7 +581,7 @@ export default function HeroBoard(): ReactNode {
       {show && (
         <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-6">
           <div
-            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border text-12 mb-7"
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border text-xs mb-7"
             style={{
               borderColor: "rgba(255,255,255,0.15)",
               background: "rgba(255,255,255,0.05)",
@@ -602,7 +602,7 @@ export default function HeroBoard(): ReactNode {
           </div>
 
           <h1
-            className="text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight leading-[1.04] text-white max-w-4xl"
+            className="text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight leading-[1.04] text-fg max-w-4xl"
             style={{
               fontFamily: "var(--font-display)",
               animation: "hero-rise .7s ease-out .1s both",
@@ -651,7 +651,7 @@ export default function HeroBoard(): ReactNode {
               </span>
             </button>
             <button
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-medium text-white transition-all"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-medium text-fg transition-all"
               style={{ border: "1px solid rgba(255,255,255,0.2)" }}
             >
               Meet Abbey
@@ -686,7 +686,7 @@ export default function HeroBoard(): ReactNode {
           style={{ animation: "hero-fadein 1s ease-out .8s both" }}
         >
           <span
-            className="text-10 tracking-0.3em uppercase"
+            className="text-2xs tracking-widest uppercase"
             style={{ color: "var(--text-faint)", fontFamily: "var(--font-mono)" }}
           >
             scroll

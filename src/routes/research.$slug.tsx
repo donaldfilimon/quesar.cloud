@@ -78,7 +78,9 @@ function ResearchPaper() {
               <Surface>
                 <p className="text-xs text-accent">Status</p>
                 <p className="mt-2 text-sm text-fg-muted">{paper.statusNote}</p>
-                <p className="mt-2 font-mono text-11 text-fg-subtle">Reviewed {paper.reviewedAt}</p>
+                <p className="mt-2 font-mono text-2xs text-fg-subtle">
+                  Reviewed {paper.reviewedAt}
+                </p>
               </Surface>
             </div>
             <nav aria-label="Related products" className="mb-8 flex flex-wrap gap-4 text-sm">
@@ -221,7 +223,7 @@ function Evidence({ paper }: { paper: (typeof research.publications)[number] }) 
                   {attachment.edition === "historical" ? "Historical edition" : "Current edition"} ·{" "}
                   {attachment.date} · {attachment.pages} pages
                 </p>
-                <p className="mt-1 break-all font-mono text-11 text-fg-subtle">
+                <p className="mt-1 break-all font-mono text-2xs text-fg-subtle">
                   SHA-256: {attachment.sha256}
                 </p>
               </li>

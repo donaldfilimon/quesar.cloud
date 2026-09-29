@@ -94,7 +94,7 @@ function Home() {
           {homePrivacy.map((item) => (
             <div key={item.title}>
               <dt className="font-display text-lg tracking-tight">{item.title}</dt>
-              <dd className="mt-2 text-0.9375rem leading-relaxed text-fg-muted">{item.body}</dd>
+              <dd className="mt-2 text-base leading-relaxed text-fg-muted">{item.body}</dd>
             </div>
           ))}
         </dl>
@@ -249,7 +249,7 @@ function StartHere() {
                 <span className="font-display text-xl tracking-tight text-fg group-hover:text-accent">
                   {item.title}
                 </span>
-                <span className="mt-2 block text-0.9375rem leading-relaxed text-fg-muted">
+                <span className="mt-2 block text-base leading-relaxed text-fg-muted">
                   {item.body}
                 </span>
               </Link>

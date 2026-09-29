@@ -76,7 +76,7 @@ export function ShowcaseWall() {
                 {showcaseVoice.title}
               </h2>
               <p className="text-sm leading-relaxed text-fg-muted">{showcaseVoice.body}</p>
-              <p className="mt-auto border-t border-border pt-4 font-mono text-11 leading-relaxed text-fg-subtle">
+              <p className="mt-auto border-t border-border pt-4 font-mono text-2xs leading-relaxed text-fg-subtle">
                 {showcaseVoice.keys}
               </p>
             </div>
