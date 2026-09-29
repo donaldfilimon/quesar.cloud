@@ -1,0 +1,1 @@
+import{L as e,P as t}from"./index-CTwlls5t.js";import{t as n}from"./middleware-LaaT_yD5.js";t({method:`POST`}).middleware([n]).handler(e(`c1aeecd732699de99d2098573d71dd95723e0fdaed88559c669cfe086ffc66fd`));function r(e){return Promise.resolve({ok:!1,error:`The live model runs on the server deployment; this is the static preview, so no model call was made.`})}export{r as t};
