@@ -1,7 +1,13 @@
 import { describe, expect, it } from "vitest";
 import { blog } from "./categories/blog";
 import { research } from "./categories/research";
-import { buildRssFeed, collectFeedItems, escapeXml, parseContentDate } from "./feed";
+import {
+  buildRssFeed,
+  collectFeedItems,
+  currentReleases,
+  escapeXml,
+  parseContentDate,
+} from "./feed";
 import { SITE_URL } from "./structured-data";
 
 // Ported from mlai src/__tests__/feed.test.ts.
@@ -20,7 +26,9 @@ describe("feed", () => {
 
   it("includes every blog post and research publication exactly once", () => {
     const items = collectFeedItems();
-    expect(items).toHaveLength(blog.length + research.publications.length);
+    expect(items).toHaveLength(
+      blog.length + research.publications.length + currentReleases().length,
+    );
     const links = items.map((i) => i.link);
     expect(new Set(links).size).toBe(links.length);
     for (const post of blog) expect(links).toContain(`${SITE_URL}/blog/${post.slug}`);
@@ -44,7 +52,9 @@ describe("feed", () => {
     for (const match of xml.matchAll(/&(?!amp;|lt;|gt;|quot;|apos;|#)/g)) {
       throw new Error(`raw ampersand at index ${match.index}`);
     }
-    expect((xml.match(/<item>/g) ?? []).length).toBe(blog.length + research.publications.length);
+    expect((xml.match(/<item>/g) ?? []).length).toBe(
+      blog.length + research.publications.length + currentReleases().length,
+    );
   });
 
   it("keeps the Abbey/ABI tagline off the channel (brand split)", () => {

@@ -1,14 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { PageClose, PageHero, Section, Surface } from "@/components/site";
 import { termsSections } from "@/lib/mlai/pages";
+import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/terms")({
-  head: () => ({
-    meta: [
-      { title: "Terms — MLAI" },
-      { name: "description", content: "Terms of use for the public Quesar orientation site." },
-    ],
-  }),
+  head: () => pageHead("Terms — MLAI", "Terms of use for the public Quesar orientation site."),
   component: TermsPage,
 });
 

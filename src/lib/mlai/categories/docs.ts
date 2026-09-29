@@ -1,21 +1,22 @@
 import type { Docs } from "../schemas";
+import { wdbxGraphConstants, wdbxGraphDefaults } from "../wdbx-facts";
 
 /**
- * Provenance sources, ported verbatim from the vendored review site's own
- * `sources` lookup map (`vendor/mlai-review/lib/content.ts`). Each document's
- * `sources` array below is a set of keys into this map. They are resolved to
- * objects below so the page can link them, matching how
- * `projects.ts` inlines its resolved `source` (Ruling B).
- *
- * Only the five keys the ported documents actually use are carried. The
- * vendored map also held `website` and `wdbx`; no ported document references
- * them, and they are not invented here.
+ * Provenance sources. Each document's `sources` array is a set of keys into
+ * this map, resolved below so the page can link them (as `projects.ts` inlines
+ * its resolved `source`). `site` replaced the vendored `platform` key, which
+ * pointed at the archived MLAI-CORPORATION-WWW repository.
  */
 const DOC_SOURCES = {
-  platform: {
-    title: "Quesar platform README",
-    url: "https://github.com/donaldfilimon/MLAI-CORPORATION-WWW/blob/f08203c58ce1c1ab5ce69f5790597a72d1bad830/README.md",
-    scope: "Repository structure; reviewed at the pinned source revision.",
+  site: {
+    title: "quesar.cloud repository rules",
+    url: "https://github.com/donaldfilimon/quesar.cloud/blob/main/AGENTS.md",
+    scope: "This site's own auth, admin, encryption and configuration decisions.",
+  },
+  siteContent: {
+    title: "quesar.cloud content layer",
+    url: "https://github.com/donaldfilimon/quesar.cloud/blob/main/CLAUDE.md",
+    scope: "The claim-discipline and status contract this site's content follows.",
   },
   abi: {
     title: "ABI README",
@@ -50,7 +51,9 @@ const raw = [
     slug: "getting-started",
     title: "Start with the source.",
     description: "Prepare an ABI checkout and follow its own validation workflow.",
-    group: "Start here",
+    group: "Start",
+    navLabel: "Introduction",
+    reviewedAt: "2026-09-29",
     sources: ["abi"],
     body: [
       {
@@ -62,10 +65,10 @@ const raw = [
         code: [
           {
             lang: "bash",
-            code: "git clone https://github.com/donaldfilimon/abi.git\ncd abi",
+            code: "git clone https://github.com/donaldfilimon/wdbx.git\ngit clone https://github.com/donaldfilimon/abi.git\ncd abi",
           },
         ],
-        note: "The repository may require additional sibling-workspace setup. Follow its current README before running the gate.",
+        note: "WDBX is a required sibling: ABI builds against ../wdbx through relative Cargo paths, so clone both into the same parent directory.",
       },
       {
         heading: "Use the project’s validation gate",
@@ -100,8 +103,10 @@ const raw = [
     title: "Different tools. Clear roles.",
     description:
       "Separate runtime, storage, interface, and application framework responsibilities.",
-    group: "Start here",
-    sources: ["abi", "identity", "platform", "gama"],
+    group: "Start",
+    navLabel: "Roles",
+    reviewedAt: "2026-09-29",
+    sources: ["abi", "identity", "gama"],
     body: [
       {
         heading: "Runtime and storage",
@@ -127,10 +132,124 @@ const raw = [
     ],
   },
   {
+    slug: "runtime",
+    title: "ABI runtime, as the tree actually ships.",
+    description:
+      "Nightly Rust orchestration, wrappers, crates, and what a successful gate actually proves.",
+    group: "Start",
+    navLabel: "ABI Runtime",
+    reviewedAt: "2026-09-29",
+    sources: ["abi"],
+    body: [
+      {
+        heading: "Use the wrappers",
+        paragraphs: [
+          "The public ABI tree is nightly Rust. Bare cargo is the wrong entry. ./tools/cargo.sh pins the toolchain the tree actually builds with. ./tools/check.sh is the primary validation gate.",
+          "WDBX is a required sibling. Clone both workspaces. A successful gate is evidence for that checkout and environment, not for a hosted product or a foundation-model quality claim.",
+        ],
+        code: [
+          {
+            lang: "bash",
+            file: "donaldfilimon/abi",
+            code: "git clone https://github.com/donaldfilimon/wdbx\ngit clone https://github.com/donaldfilimon/abi\ncd abi\n./tools/cargo.sh --version\n./tools/check.sh\n./tools/cargo.sh build -p abi-cli",
+          },
+        ],
+        note: "These commands are copied from the README. This page does not execute them.",
+      },
+      {
+        heading: "Crates you can inspect",
+        paragraphs: [
+          "abi-cli is the operator surface. abi-mcp speaks JSON-RPC 2.0 over stdio with optional loopback HTTP. abi-ai holds an exact model registry and template completion. abi-sea selects bounded evidence for a context. abi-gpu reports capability and returns accelerated=false when native kernels are not linked.",
+          "Local template completion does not establish model quality. Persistence defaults to $HOME/.abi/wdbx and can be disabled with ABI_WDBX_PERSIST=0.",
+        ],
+        list: [
+          "abi backends — list what this process actually reports",
+          "abi scheduler status — health for this process, not a fleet view",
+          "abi dashboard --once --plain — one-shot text, no hosted UI implied",
+          "abi plugin list — plugins the current binary loaded under contract",
+          "abi wdbx query — retrieve from the local store",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "trust",
+    title: "Fail closed. Tag the figure.",
+    description:
+      "Sessions, evaluation gates, and the difference between measured, reported, and target.",
+    group: "Security & trust",
+    navLabel: "Security & trust",
+    reviewedAt: "2026-09-29",
+    sources: ["claims", "site"],
+    body: [
+      {
+        heading: "Operator-owned by default",
+        paragraphs: [
+          "Remote providers are optional and credential-gated. This website does not see your documents, weights, or generated output from your own ABI runtime. Unknown MCP tools fail closed in that runtime.",
+          "A green web check is not mobile evidence. A reported test suite is not an independently reproduced benchmark.",
+        ],
+      },
+      {
+        heading: "What signing in to this site does",
+        paragraphs: [
+          "Sign-in is first-party Better Auth: email and password, passkeys, and Google, Apple or X when their credentials are configured. It opens the console, which holds your field notes, a consent-gated model chat, and the audits of those chats. It is not an Abbey session and not a hosted WDBX store.",
+          "Chat audits and workspace refresh tokens are sealed with AES-256-GCM under a server key. Without that key those features refuse rather than store plaintext. You can read and delete your audits, and deleting your account removes your per-user rows.",
+          "Administrators are an email allowlist plus a linked Google or Apple account. An allowlisted email-and-password account is refused, because sign-up is open and unverified.",
+        ],
+      },
+      {
+        heading: "Provenance language",
+        paragraphs: [
+          "Figures on this site are tagged measured, target, or reported. A new number ships only with the source that produced it. Planned is never shipping. Research is not a Quesar product claim.",
+        ],
+        list: [
+          "Measured — produced by a repository test or documented artifact",
+          "Reported — stated by source, not rerun here",
+          "Target — intent, never presented as current performance",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "evidence",
+    title: "Evidence before promises.",
+    description:
+      "Keep documented behavior, reported testing, measured results and targets separate.",
+    group: "Security & trust",
+    navLabel: "Evidence",
+    reviewedAt: "2026-09-29",
+    sources: ["siteContent", "abi", "claims"],
+    body: [
+      {
+        heading: "Two independent axes",
+        paragraphs: [
+          "Implementation status and evidence provenance answer different questions. Current/Partial/Proposed describe the scope of an implementation. Measured/reported/target describe how a public numerical figure should be interpreted in the existing Quesar content contract.",
+          "Neither axis can replace the other. A reported test suite is not an independently reproduced benchmark. A proposed feature is not a delivered capability. An attractive graph is not evidence that its numbers were measured.",
+        ],
+      },
+      {
+        heading: "A minimum evidence record",
+        paragraphs: [
+          "A useful performance statement identifies the source revision, date, environment, configuration, workload, methodology and artifact containing the results. It also states limitations and keeps comparisons consistent.",
+          "This page publishes no runtime performance figures. ABI’s README labels its project-site dashboard data as synthetic samples. Those samples must not become latency, accuracy, energy-efficiency or throughput claims elsewhere.",
+        ],
+      },
+      {
+        heading: "What source review can establish",
+        paragraphs: [
+          "Source review establishes what a particular document says. Testing a website can establish whether its own links, search, controls and layouts work in the tested browser. Neither activity independently validates the linked software’s runtime, security, model quality or production deployment.",
+          "Links to further specifications are reading pointers, not an assertion that every linked document, implementation path or external service was audited.",
+        ],
+      },
+    ],
+  },
+  {
     slug: "identity",
     title: "A companion, not a capability claim.",
     description: "Understand Abbey, Aviva and ABI without confusing identity with implementation.",
     group: "Systems",
+    navLabel: "Identity",
+    reviewedAt: "2026-09-29",
     sources: ["abi", "identity"],
     body: [
       {
@@ -160,6 +279,8 @@ const raw = [
     title: "One tree. Many surfaces.",
     description: "A source-based introduction to Gama’s Swift scene and rendering model.",
     group: "Systems",
+    navLabel: "Gama",
+    reviewedAt: "2026-09-29",
     sources: ["gama"],
     body: [
       {
@@ -186,108 +307,12 @@ const raw = [
     ],
   },
   {
-    slug: "evidence",
-    title: "Evidence before promises.",
-    description:
-      "Keep documented behavior, reported testing, measured results and targets separate.",
-    group: "Principles",
-    sources: ["platform", "abi", "claims"],
-    body: [
-      {
-        heading: "Two independent axes",
-        paragraphs: [
-          "Implementation status and evidence provenance answer different questions. Current/Partial/Proposed describe the scope of an implementation. Measured/reported/target describe how a public numerical figure should be interpreted in the existing Quesar content contract.",
-          "Neither axis can replace the other. A reported test suite is not an independently reproduced benchmark. A proposed feature is not a delivered capability. An attractive graph is not evidence that its numbers were measured.",
-        ],
-      },
-      {
-        heading: "A minimum evidence record",
-        paragraphs: [
-          "A useful performance statement identifies the source revision, date, environment, configuration, workload, methodology and artifact containing the results. It also states limitations and keeps comparisons consistent.",
-          "This page publishes no runtime performance figures. ABI’s README labels its project-site dashboard data as synthetic samples. Those samples must not become latency, accuracy, energy-efficiency or throughput claims elsewhere.",
-        ],
-      },
-      {
-        heading: "What source review can establish",
-        paragraphs: [
-          "Source review establishes what a particular document says. Testing a website can establish whether its own links, search, controls and layouts work in the tested browser. Neither activity independently validates the linked software’s runtime, security, model quality or production deployment.",
-          "Links to further specifications are reading pointers, not an assertion that every linked document, implementation path or external service was audited.",
-        ],
-      },
-    ],
-  },
-  {
-    slug: "runtime",
-    title: "ABI runtime, as the tree actually ships.",
-    description:
-      "Nightly Rust orchestration, wrappers, crates, and what a successful gate actually proves.",
-    group: "Start",
-    sources: ["abi"],
-    body: [
-      {
-        heading: "Use the wrappers",
-        paragraphs: [
-          "The public ABI tree is nightly Rust. Bare cargo is the wrong entry. ./tools/cargo.sh pins the toolchain the tree actually builds with. ./tools/check.sh is the primary validation gate.",
-          "WDBX is a required sibling. Clone both workspaces. A successful gate is evidence for that checkout and environment, not for a hosted product or a foundation-model quality claim.",
-        ],
-        code: [
-          {
-            lang: "bash",
-            file: "donaldfilimon/abi",
-            code: "git clone https://github.com/donaldfilimon/wdbx\ngit clone https://github.com/donaldfilimon/abi\ncd abi\n./tools/cargo.sh\n./tools/check.sh\n./tools/cargo.sh build -p abi-cli",
-          },
-        ],
-        note: "These commands are copied from the README. This page does not execute them.",
-      },
-      {
-        heading: "Crates you can inspect",
-        paragraphs: [
-          "abi-cli is the operator surface. abi-mcp speaks JSON-RPC 2.0 over stdio with optional loopback HTTP. abi-ai holds an exact model registry and template completion. abi-sea selects bounded evidence for a context. abi-gpu reports capability and returns accelerated=false when native kernels are not linked.",
-          "Local template completion does not establish model quality. Persistence defaults to $HOME/.abi/wdbx and can be disabled with ABI_WDBX_PERSIST=0.",
-        ],
-        list: [
-          "abi backends — list what this process actually reports",
-          "abi scheduler status — health for this process, not a fleet view",
-          "abi dashboard --once --plain — one-shot text, no hosted UI implied",
-          "abi plugin list — plugins the current binary loaded under contract",
-          "abi wdbx query — retrieve from the local store",
-        ],
-      },
-    ],
-  },
-  {
-    slug: "trust",
-    title: "Fail closed. Tag the figure.",
-    description:
-      "Sessions, evaluation gates, and the difference between measured, reported, and target.",
-    group: "Security & trust",
-    sources: ["claims", "platform"],
-    body: [
-      {
-        heading: "Operator-owned by default",
-        paragraphs: [
-          "Remote providers are optional and credential-gated. This website does not see your documents, weights, or generated output. Sign-in on this site opens a console for field notes, not an Abbey session.",
-          "Unknown tools fail closed. A green web check is not mobile evidence. A reported test suite is not an independently reproduced benchmark.",
-        ],
-      },
-      {
-        heading: "Provenance language",
-        paragraphs: [
-          "Figures on this site are tagged measured, target, or reported. New numbers that are not in the skill-creator master reference do not ship. Planned is never shipping. Research is not a Quesar product claim.",
-        ],
-        list: [
-          "Measured — produced by a repository test or documented artifact",
-          "Reported — stated by source, not rerun here",
-          "Target — intent, never presented as current performance",
-        ],
-      },
-    ],
-  },
-  {
     slug: "personas",
     title: "Abbey, Aviva, Abi — profiles, not products.",
     description: "Routing is a design mechanism. Per-persona quality is evaluated, not assumed.",
     group: "Architecture",
+    navLabel: "Persona Routing",
+    reviewedAt: "2026-09-29",
     sources: ["identity", "abi"],
     body: [
       {
@@ -312,13 +337,15 @@ const raw = [
     description:
       "Layered HNSW, MVCC, content addressing. Integrity of storage is not truth of the record.",
     group: "Architecture",
+    navLabel: "WDBX Retrieval",
+    reviewedAt: "2026-09-29",
     sources: ["wdbx", "abi"],
     body: [
       {
         heading: "Configuration facts",
         paragraphs: [
           "The active substrate is the Rust tree extracted from donaldfilimon/abi on 2026-08-22 with history preserved. Crate names keep the abi- prefix deliberately. ABI owns this layer.",
-          "Engine: layered HNSW. Concurrency: MVCC. M=16, EF_CONSTRUCTION=40, EF_SEARCH=32, cosine metric, content-addressed. Sharding is not established.",
+          `Engine: ${wdbxGraphDefaults.index}. Concurrency: ${wdbxGraphDefaults.transactions}. ${wdbxGraphConstants}, cosine metric, content-addressed. Sharding is not established.`,
         ],
       },
       {
@@ -332,17 +359,20 @@ const raw = [
   },
   {
     slug: "wdbx-v2",
-    title: "Historical Zig-era documentation.",
+    title: "The V2 snapshot, kept for reference.",
     description:
-      "A frozen mirror retained so the catalog is complete. Not the current implementation guide.",
+      "A frozen June 2026 documentation set from the earlier Abbey WDBX project. Not the current implementation guide.",
     group: "Architecture",
+    navLabel: "WDBX V2 Docs",
+    reviewedAt: "2026-09-29",
     sources: ["wdbx", "claims"],
     body: [
       {
         heading: "Authority",
         paragraphs: [
-          "WDBX V2 documentation is a historical Zig-era mirror. The current substrate is nightly Rust. Do not mix toolchains. Do not treat a Zig-era figure as a current measurement.",
-          "wdbx-py, wdnx, and related Python sketches are historical relatives. Configuration facts on this site come from the Rust crates.",
+          "WDBX V2 documents the earlier single-crate Abbey WDBX project: Rust 2024 on the stable toolchain, run with plain cargo. The current substrate is the abi-extracted wdbx workspace on nightly Rust, whose own README and crates are authoritative. The two are different trees; do not mix their commands.",
+          "The V2 set is frozen as published on June 9, 2026, alongside its release note. Treat any figure or capability in it as a claim about that snapshot, to be revalidated against the current crates.",
+          "wdbx-py, wdnx, and related Python sketches are historical relatives. Configuration facts on this site come from the current Rust crates.",
         ],
       },
     ],
@@ -352,20 +382,15 @@ const raw = [
     title: "Twelve contract-covered tools.",
     description: "JSON-RPC 2.0 over stdio, optional loopback HTTP. Unknown tools fail closed.",
     group: "Architecture",
+    navLabel: "MCP Server",
+    reviewedAt: "2026-09-29",
     sources: ["abi"],
     body: [
       {
         heading: "What you can call locally",
         paragraphs: [
-          "The MCP server lives in the ABI repository. Transports are stdio and optional loopback HTTP with bearer auth. This website does not expose those tools to visitors.",
-        ],
-        list: [
-          "ai_learn — learning entry point with local side effects; persistence can be disabled",
-          "ai_complete — local persona-template completion; the model id is metadata, not proof it ran",
-          "wdbx_query — nearest-neighbor retrieval with inspectable hits",
-          "wdbx_stats — local store statistics, not a cluster dashboard",
-          "gpu_status — honest device report; fallback is reported as fallback",
-          "plugin_list — contract-covered plugins visible to this process",
+          "The MCP server lives in the ABI repository. stdio is the primary transport; an optional loopback HTTP listener with bearer auth serves MCP 2024-11-05 HTTP+SSE sessions. This website does not expose those tools to visitors.",
+          "Twelve tools are contract-covered. They are listed with their transport details in the MCP server reference below, taken from the same catalog the /abi page uses.",
         ],
       },
       {
@@ -382,7 +407,9 @@ const raw = [
     description:
       "Packaging orchestration, retrieval, and controls. A web check is not mobile evidence.",
     group: "Operations",
-    sources: ["platform", "abi"],
+    navLabel: "Deployment",
+    reviewedAt: "2026-09-29",
+    sources: ["site", "abi"],
     body: [
       {
         heading: "Independent gates",
@@ -391,7 +418,7 @@ const raw = [
         ],
         list: [
           "bun run check — this website, from the repository root; bun run build:static prepares the GitHub Pages artifact",
-          "bun test and bun run typecheck — local Quasar service, from sidecars/quasar-service",
+          "bun run test and bun run typecheck — local Quasar service, from sidecars/quasar-service",
           "Abbey workspace — follow the separate app's current README; the browser page here is only a preview",
           "Mobile and native — the web vault is a preview; Android sync and signed-device checks are separate",
           "./tools/check.sh — ABI checkout with its sibling WDBX workspace",
@@ -400,7 +427,7 @@ const raw = [
       {
         heading: "Targets",
         paragraphs: [
-          "Default posture is operator-owned machines. VPC, on-premise, hybrid, and offline-first paths are the design. This website does not provision hosting, deploy adapters, or bill.",
+          "Default posture is operator-owned machines. VPC, on-premise, hybrid, and offline-first paths are the design. This website does not provision hosting, deploy adapters, or bill. Configuring quesar.cloud itself is covered below.",
         ],
       },
     ],
@@ -410,13 +437,16 @@ const raw = [
     title: "Protected surfaces fail closed.",
     description: "The console requires a session. There is no public hosted assistant API.",
     group: "Reference",
-    sources: ["platform", "claims"],
+    navLabel: "Protected API",
+    reviewedAt: "2026-09-29",
+    sources: ["site", "claims"],
     body: [
       {
         heading: "What this site actually exposes",
         paragraphs: [
-          "Sign-in opens /console for per-user field notes on architecture nodes. Live persona replies, when available, are sign-in-gated and capped. They are not an Abbey session.",
-          "Without credentials the console redirects to sign-in. Unknown MCP tools fail closed in the runtime. This page is not a platform SDK.",
+          "Sign-in opens /console: per-user field notes on architecture nodes, a consent-gated model chat, and the sealed audits of that chat. Model replies are sign-in-gated, rate-limited per user, and not an Abbey session.",
+          "Every per-user server function runs behind the session middleware and scopes its queries by the signed-in user id, never an id sent by the browser. Without a session the console redirects to sign-in. On the static GitHub Pages build these surfaces render a server-only notice instead.",
+          "The surfaces below are everything the server exposes. There is no hosted assistant API and no platform SDK.",
         ],
       },
     ],

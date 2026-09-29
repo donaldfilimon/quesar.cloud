@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { AppLink } from "./app-link";
 import { CodeBlock } from "./lab";
 import { Surface } from "./section";
+import { headingId } from "@/lib/utils";
 
 type Section = {
   heading?: string;
@@ -25,7 +26,7 @@ export function ArticleBody({
         <article key={`${section.heading ?? "block"}-${index}`}>
           {section.heading ? (
             <h2
-              id={section.heading.toLowerCase().replace(/[^a-z0-9]+/g, "-")}
+              id={headingId(section.heading)}
               className="scroll-mt-24 font-display text-[1.65rem] leading-tight tracking-tight text-fg"
             >
               {section.heading}

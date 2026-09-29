@@ -5,8 +5,49 @@
     <link>https://quesar.cloud</link>
     <description>Quesar is the large model that trains and improves Abbey, Aviva, and the other assistants. This website does not host the model, run training, or host assistant sessions.</description>
     <language>en-us</language>
-    <lastBuildDate>Tue, 29 Sep 2026 18:21:40 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 29 Sep 2026 19:23:04 GMT</lastBuildDate>
     <atom:link href="https://quesar.cloud/feed.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>ABI Is Rust Now: What Changed, and What Didn&apos;t</title>
+      <link>https://quesar.cloud/blog/abi-is-rust-now</link>
+      <guid isPermaLink="true">https://quesar.cloud/blog/abi-is-rust-now</guid>
+      <description>The ABI runtime moved from Zig to a nightly-Rust workspace on July 30, 2026, and WDBX became its own sibling workspace in August. Here is what that means for anyone building from source.</description>
+      <category>ENGINEERING</category>
+      <dc:creator>MLAI Research</dc:creator>
+      <pubDate>Tue, 29 Sep 2026 04:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>v0.15.0: Docs checked against their sources</title>
+      <link>https://quesar.cloud/changelog#v0.15.0</link>
+      <guid isPermaLink="true">https://quesar.cloud/changelog#v0.15.0</guid>
+      <description>Every /docs article is re-checked against the ABI, WDBX and Gama READMEs and carries the date of that review. Each article renders its own reference material (MCP tools, site surfaces, WDBX V2 downloads) from the same records as the /docs hub, so the two cannot disagree. The MCP article lists all twelve contract-covered tools; WDBX V2 is described as the earlier Rust project it documents, not a Zig mirror.</description>
+      <category>CHANGELOG</category>
+      <pubDate>Tue, 29 Sep 2026 00:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>v0.14.0: First-party sign-in; MCP over HTTP+SSE</title>
+      <link>https://quesar.cloud/changelog#v0.14.0</link>
+      <guid isPermaLink="true">https://quesar.cloud/changelog#v0.14.0</guid>
+      <description>quesar.cloud leaves the Grok App Builder: sandbox tooling and platform chrome removed, bun and TypeScript throughout. Sign-in is first-party Better Auth: email and password, passkeys, and Google, Apple or X when configured. abi-mcp&apos;s optional loopback listener serves persistent MCP 2024-11-05 HTTP+SSE sessions; POST /message without a session keeps the one-shot reply. Not Streamable HTTP.</description>
+      <category>CHANGELOG</category>
+      <pubDate>Wed, 23 Sep 2026 00:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>v0.13.0: One site for MLAI and Quesar</title>
+      <link>https://quesar.cloud/changelog#v0.13.0</link>
+      <guid isPermaLink="true">https://quesar.cloud/changelog#v0.13.0</guid>
+      <description>The MLAI corporate site is merged into quesar.cloud, which becomes the only MLAI and Quesar site; the old repository is archived. Chat audits and workspace tokens sealed with AES-256-GCM; account deletion purges per-user data. https://quesar.cloud serves the static build from GitHub Pages.</description>
+      <category>CHANGELOG</category>
+      <pubDate>Tue, 22 Sep 2026 00:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>v0.12.0: Research records pinned to source</title>
+      <link>https://quesar.cloud/changelog#v0.12.0</link>
+      <guid isPermaLink="true">https://quesar.cloud/changelog#v0.12.0</guid>
+      <description>Research publications re-reviewed against pinned ABI and WDBX commits, each with its status, limitations and review date.</description>
+      <category>CHANGELOG</category>
+      <pubDate>Sun, 06 Sep 2026 00:00:00 GMT</pubDate>
+    </item>
     <item>
       <title>AI &amp; agent behavior</title>
       <link>https://quesar.cloud/research/ai-overview</link>
@@ -87,6 +128,22 @@
       <category>IMPLEMENTATION GUIDE</category>
       <dc:creator>MLAI Runtime Engineering</dc:creator>
       <pubDate>Tue, 01 Sep 2026 04:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>v0.11.0: WDBX becomes its own substrate</title>
+      <link>https://quesar.cloud/changelog#v0.11.0</link>
+      <guid isPermaLink="true">https://quesar.cloud/changelog#v0.11.0</guid>
+      <description>The WDBX crates are extracted from ABI into the wdbx workspace with history preserved; the abi- crate prefix is kept deliberately and ABI builds against it as a sibling.</description>
+      <category>CHANGELOG</category>
+      <pubDate>Sat, 22 Aug 2026 00:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>v0.10.0: ABI rewritten in Rust</title>
+      <link>https://quesar.cloud/changelog#v0.10.0</link>
+      <guid isPermaLink="true">https://quesar.cloud/changelog#v0.10.0</guid>
+      <description>The ABI runtime lands as a nightly-Rust workspace; the Zig tree is torn down. ./tools/check.sh is the validation gate and ./tools/cargo.sh the pinned Cargo wrapper.</description>
+      <category>CHANGELOG</category>
+      <pubDate>Thu, 30 Jul 2026 00:00:00 GMT</pubDate>
     </item>
     <item>
       <title>WDBX V2: Observable Memory, Multimodal Inputs, and Research Alignment</title>

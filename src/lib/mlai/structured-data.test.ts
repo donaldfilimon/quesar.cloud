@@ -96,11 +96,11 @@ describe("structured-data", () => {
     expect(ld).not.toHaveProperty("offers");
   });
 
-  it("docLd publishes no fabricated dates", () => {
+  it("docLd dates the review, and fabricates no publication date", () => {
     const ld = docLd(docs[0]!);
     expect(ld["@type"]).toBe("TechArticle");
     expect(ld).not.toHaveProperty("datePublished");
-    expect(ld).not.toHaveProperty("dateModified");
+    expect(ld.dateModified).toBe(docs[0]!.reviewedAt);
   });
 
   it("projectLd names the source repository", () => {

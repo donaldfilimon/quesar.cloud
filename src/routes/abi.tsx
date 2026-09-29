@@ -69,7 +69,7 @@ cd abi
       <Section
         eyebrow="MCP"
         title="Contract-covered tools, not a hosted SDK."
-        lede="stdio is the default. Optional loopback HTTP uses bearer auth. Persistent HTTP+SSE is not claimed. Tool names are from the ABI README."
+        lede="stdio is the default. The optional loopback listener serves MCP 2024-11-05 HTTP+SSE sessions with bearer auth; it is not Streamable HTTP. Tool names are from the ABI README."
       >
         <NamedGrid items={mcpTools} nameClass="text-abi" />
       </Section>

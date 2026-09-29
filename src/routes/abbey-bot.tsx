@@ -7,18 +7,14 @@ import { Button } from "@/components/ui/button";
 import { askPersonaFromClient } from "@/lib/ai";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { StatusBadge } from "@/components/site/status-badge";
+import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/abbey-bot")({
-  head: () => ({
-    meta: [
-      { title: "Abbey bot — Quesar" },
-      {
-        name: "description",
-        content:
-          "Companion bot surface: watch Abi route Abbey and Aviva, then ask a signed-in live model.",
-      },
-    ],
-  }),
+  head: () =>
+    pageHead(
+      "Abbey bot — Quesar",
+      "Companion bot surface: watch Abi route Abbey and Aviva, then ask a signed-in live model.",
+    ),
   component: AbbeyBotPage,
 });
 

@@ -11,8 +11,9 @@
  * not people, so they are split on either separator and emitted as
  * `Organization`. There is deliberately no person-vs-organization heuristic.
  *
- * `docLd` emits no dates because `Doc` carries none: synthesizing one would
- * publish a fabricated date as structured data.
+ * `docLd` emits only `dateModified`, from the article's `reviewedAt`. There is
+ * no recorded publication date, and synthesizing one would publish a
+ * fabricated date as structured data.
  */
 
 import { bylineNames } from "./byline";
@@ -135,6 +136,7 @@ export function docLd(doc: Doc) {
     author: ORG_REF,
     publisher: ORG_REF,
     keywords: doc.group,
+    dateModified: doc.reviewedAt,
   };
 }
 

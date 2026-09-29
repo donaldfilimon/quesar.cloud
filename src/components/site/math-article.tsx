@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { BlockMath } from "@/components/math/math";
 import { CodeBlock } from "./lab";
+import { headingId } from "@/lib/utils";
 
 type Section = {
   heading?: string;
@@ -30,7 +31,7 @@ export function MathArticleBody({
         <article key={`${section.heading ?? "block"}-${index}`}>
           {section.heading ? (
             <h2
-              id={section.heading.toLowerCase().replace(/[^a-z0-9]+/g, "-")}
+              id={headingId(section.heading)}
               className="scroll-mt-24 font-display text-[1.65rem] leading-tight tracking-tight text-fg"
             >
               {section.heading}

@@ -56,7 +56,11 @@ function BlogPage() {
               title: post.title,
               body: post.excerpt,
               kicker: `${post.tag} · ${post.date} · ${post.readTime}`,
-              note: post.author ? `By ${post.author}` : undefined,
+              note: post.historical
+                ? "Historical: the superseded Zig implementation"
+                : post.author
+                  ? `By ${post.author}`
+                  : undefined,
               href: `/blog/${post.slug}`,
             }))}
           />

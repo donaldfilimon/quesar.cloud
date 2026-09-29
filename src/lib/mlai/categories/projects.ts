@@ -7,13 +7,9 @@ import type { Projects } from "../schemas";
  * vendored `id` is renamed `slug`; every other field is carried verbatim
  * (curly apostrophes included) with three exceptions:
  *
- * Ruling A — `docsHref`: the vendored `docs` field was a bare article slug.
- * `abbey`/`gama` ported cleanly to `/docs/identity` and `/docs/gama`, but
- * `abi`/`wdbx` pointed at slugs (`runtime`, `wdbx`) this app never ported as
- * standalone doc routes — the existing `/docs` page already covers both
- * subjects (see `src/data/categories/docs-nav.ts`, whose `docNav` ids are
- * exactly `runtime` and `wdbx`). Those two resolve to the `/docs` page's own
- * anchors instead of a dead `/docs/<slug>` link.
+ * Ruling A — `docsHref`: the vendored `docs` field was a bare article slug;
+ * here it is the full `/docs/<slug>` path of an article in `docs.ts`
+ * (`content.test.ts` checks every one resolves).
  *
  * Ruling B — `source`: the vendored `source` field was a key into a separate
  * `sources` lookup map (`vendor/mlai-review/lib/content.ts`'s `sources`).

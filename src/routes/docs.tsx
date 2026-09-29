@@ -27,7 +27,7 @@ function DocsPage() {
           <DocSidebar />
           <div className="grid grid-cols-1 gap-4">
             {docs.map((doc) => (
-              <div key={doc.slug} id={doc.slug === "getting-started" ? "intro" : doc.slug}>
+              <div key={doc.slug} id={doc.slug}>
                 <Surface>
                   <p className="text-xs text-accent">{doc.group}</p>
                   <h2 className="mt-2 font-display text-2xl">

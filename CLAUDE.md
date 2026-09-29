@@ -15,25 +15,27 @@ bun is the package manager (`bun.lock`; there is no `package-lock.json`). It mus
 ```bash
 bun install          # --frozen-lockfile on Vercel (vercel.json) and in the session-start hook
 bun run dev          # 0.0.0.0:8080, strictPort
-bun run typecheck    # tsc --noEmit over src/, scripts/ and the vite/vitest/eslint configs
+bun run typecheck    # tsc --noEmit over src/, scripts/, e2e/ and the vite/vitest/eslint/playwright configs
 bun run lint         # eslint 10 + react-hooks 7 (React Compiler rules), --max-warnings 0
 bun run test         # vitest: src/**/*.test.{ts,tsx} and scripts/**/*.test.ts
 bun run test:e2e     # Playwright against docs/; build:static first
-bun run check:static # internal links/assets and initial JavaScript budgets in docs/
+bun run check:static # internal links/assets and per-route preload + gzip JS budgets in docs/
 bun run build        # vite build (Vercel preset) + PGLite assets + migrations
 bun run build:static # GitHub Pages build into docs/
+bun run build:dev    # vite build --mode development only: no PGLite assets, no migrations
 bun run preview      # serve the last `bun run build` on 127.0.0.1:8081
 bun run db:migrate   # apply migrations/*.sql to DATABASE_URL (Neon); build runs it last
 bun run check        # the gate: format:check, typecheck, lint, test, build (stops at first failure)
 bun run format       # prettier --write . (.prettierignore skips docs/, notes/, sidecars/, native/, public/)
+bun run export:research-site -- --output <abs dir> --generated-at <YYYY-MM-DD>  # standalone MLAI Research Sites export
 ```
 
 - **Gate:** `bun run check`, plus `build:static` when a change can reach the static site. There is no `.github/` and no CI (a self-hosted runner on this public repo would run fork PRs on the host), so the gate is local only; `git config core.hooksPath scripts/git-hooks` opts into running it on every push (`git push --no-verify` skips it once). `.vercel/` and `.output/` are git-ignored build output.
 - **Republishing the site:** invoke the project skill `quesar-static-publish` (`.claude/skills/`, the canonical copy; `.agents/skills/` is a git-ignored sync mirror, so edit only the `.claude` one) whenever a `src/` change must reach `https://quesar.cloud`. It carries the gate, the `docs/` diff classification and the PR steps; don't re-derive them.
 - **Preview servers:** Donald's local `.claude/launch.json` (not committed, so absent in fresh clones and cloud sessions) defines `quesar-dev` (`bun run dev` on 8080) and `quesar-static` (the built `docs/` on 8093, for checking a static build before it is published). Without it, serve `docs/` with any static file server.
 - **Prettier is enforced by `format:check`** (`.prettierrc`; `eslint-config-prettier` turns off lint's style rules, so lint never flags formatting). Run `bun run format` or `bunx prettier --write <files>` before committing. Prettier moves inline JSX spaces into `{" "}`, which changes compiled chunks without changing rendered text.
-- **Single test:** `bunx vitest run src/lib/server/crypto.server.test.ts`, or add `-t "<name>"` for one case. vitest is the only test runner. Server tests call the real `getSql()`, so they run against in-memory PGLite; a `Test timed out` there under heavy machine load is load, not a bug, so re-run before chasing it.
-- **`scripts/*.ts` run directly on Node's type stripping** (`node scripts/migrate.ts`), so they may use only erasable TypeScript syntax (no enums, namespaces or parameter properties) and import each other with `.ts` extensions. The build runs them, so a violation fails the gate.
+- **Single test:** `bunx vitest run src/lib/server/crypto.server.test.ts`, or add `-t "<name>"` for one case. vitest is the only test runner. Server tests call the real `getSql()`, so they run against in-memory PGLite; a `Test timed out` there under heavy machine load is load, not a bug, so re-run before chasing it. `vitest.config.ts` bounds the suite to 4 workers with a 20 s default timeout for that reason; don't raise parallelism to speed it up. Tests run in the `node` environment (no jsdom): `.test.tsx` files render with `renderToStaticMarkup`.
+- **`scripts/*.ts` run directly on Node's type stripping** (`node scripts/migrate.ts`), so they may use only erasable TypeScript syntax (no enums, namespaces or parameter properties) and import each other with `.ts` extensions. The build runs them, so a violation fails the gate. The one exception is `scripts/export-research-site.tsx`, which needs JSX and runs on Bun (`bun scripts/...`).
 - **Lint ignores `docs/`, `sidecars/`, `native/` and `src/routeTree.gen.ts`**, so a green lint says nothing about those. react-refresh is off under `src/routes/` (TanStack routes export `Route` beside their components); everywhere else, keep hooks, constants and helpers out of component files.
 - **TypeScript is 6.0.** 7.0 typechecks the tree but typescript-eslint does not load with it yet; `tsconfig.json` has no `baseUrl` (removed in 7).
 - `VITE_AUTH_ENABLED` is an ordinary env var (sign-in is on unless it is `"false"`); only `build:static` sets it.
@@ -44,6 +46,9 @@ bun run format       # prettier --write . (.prettierignore skips docs/, notes/, 
 ### Browser and static acceptance
 
 After a static build, run `bun run check:static` and `bun run test:e2e`.
+`check:static` fails when `/`, `/docs/`, `/research/` or `/developers/` exceeds its hard-coded
+preload count or gzip byte budget in `scripts/check-static.ts`; raise a budget only
+deliberately, in the change that explains why.
 The browser suite uses an isolated loopback port, deterministic GitHub fixtures,
 three viewport sizes, light/dark themes, reduced motion, and a 720x450 CSS
 viewport at device scale 2 to simulate a 1440x900 desktop at 200% zoom.
@@ -64,6 +69,8 @@ separate browser acceptance runner.
 
 **Route files and the main bundle.** TanStack's code splitter lazy-loads only a route's `component` (plus `loader` where a route sets `codeSplitGroupings`, which the eight dynamic detail routes (`$slug` and `source.$name`) do). Everything else in a route file stays in the main bundle that every page loads: `beforeLoad`, `head`, `validateSearch`, and any top-level statement such as a `z.object(...)` schema. So look records up in the loader, keep heavy data and schemas in component modules (see `src/components/auth/login-form.tsx`), and check `docs/index.html`'s `modulepreload` list after a build. Header overlays (More menu, mobile sheet, search dialog, tooltip) load after hydration through `src/components/site/header-menus-loader.ts` behind plain triggers with identical markup; keep new header UI on that path. `vite.config.ts` has a client `codeSplitting` group for `wdbx-facts` so the home page does not preload the ABI catalog that shares it.
 
+**Request middleware (`src/start.ts`).** Creating this file replaced TanStack Start's built-in request middleware, which is only the server-function CSRF check. `csrf` must stay first and unchanged, or every server function loses cross-site protection. The second sets the report-only CSP; its header comment in `src/lib/server/csp.ts` is the rule for adding an external origin.
+
 **Server/client boundary.** Server-only modules are named `*.server.ts` (mostly `src/lib/server/`) so they never land in the client bundle; `src/lib/auth/middleware.ts` is dual-sided and may import only `*.server` modules on its server half. The failure when this slips is the browser dying with `AsyncLocalStorage is not a constructor`: a non-`.server` module pulled in `@tanstack/react-start/server` (see the header of `src/lib/auth/isolation.server.ts`). Per-user server functions use `.middleware([authMiddleware])` and scope every query by `context.userId` (the Better Auth `user.id`), never a client-sent id. `src/lib/profile.ts` is a representative example. The middleware also rejects scripted cross-site requests (`isolation.server.ts`, Fetch-Metadata). With `VITE_AUTH_ENABLED=false` it resolves a shared `dev-user` id, and it fails closed if `DATABASE_URL` is also set (`verify.server.ts`).
 
 **Auth.** Better Auth (`src/lib/auth/server.ts`, mounted at `src/routes/api/auth/$.ts`): email/password, passkeys, and first-party Google, Apple and X. `src/lib/auth/methods.server.ts` reads each provider's credentials from the env (Apple's client-secret JWT is minted in `apple-secret.server.ts`), and the login page asks `getSignInMethods` (`src/lib/auth/methods.ts`) which buttons to render, so an unconfigured provider never shows. The admin rule (`src/lib/server/admin.server.ts`) accepts only a linked Google or Apple account. Session cookies are `__Host-quesar.*`. Without `DATABASE_URL`, Better Auth runs over the embedded PGLite through the lazy Kysely dialect in `src/lib/auth/pglite-dialect.ts`, which connects only after migrations finish.
@@ -73,6 +80,8 @@ separate browser acceptance runner.
 **Content layer.** Site copy is typed data, not JSX: `src/lib/site-identity.ts` (`site`, `nav`, the `StatusKind` badges), `src/lib/home-content.ts` (home lists), `src/lib/content.ts` (the remaining shared records, plus re-exports of the identity and of the one-source category modules), `src/lib/catalog.ts` (repo-to-route map, app surfaces), `src/lib/mlai/categories/*` (blog, docs, research, products, team, and the single sources `abi-runtime`, `research-topics`, `surfaces`, `investor`, ...) and `src/lib/mlai/pages.ts` (ported page copy). The root route, header and home import `site-identity`/`home-content` directly, never `@/lib/content`, which would pull the whole catalog into the entry chunk. The category modules are typed by `src/lib/mlai/schemas.ts` and the `schemas-*.ts` files beside it but never call zod at runtime, which keeps zod out of the client bundle; `src/lib/mlai/content-schemas.test.ts` does the parsing and requires it to be a no-op. Claim discipline: every capability carries a status (`current`, `partial`, `experimental`, `development`, `planned`, `research`), and copy describes only what this repository implements; unfinished work is badged, never presented as shipping. `src/lib/mlai/` also holds structured data, dates, the RSS feed builder and not-found handling, most with tests beside them. Content edits usually mean editing a record in one of these, then rebuilding `docs/`.
 
 **Static mode.** `src/lib/static-site.ts` exports `staticSite`. Every surface that needs the server checks it and renders `src/components/site/server-only-notice.tsx` instead of calling out. GitHub panels fetch GitHub's public API from the browser, and contact becomes a mailto. New server-backed UI must handle `staticSite` or the Pages build breaks (`failOnError: true`) or ships dead controls.
+
+**Site search.** `src/lib/site-search-catalog.ts` derives the search catalog from the typed content modules (never keep a second inventory). `scripts/search-catalog-plugin.ts` serializes it to a JSON asset exposed as `virtual:search-catalog-url` (dev serves it at `/__search-catalog.json`), and `src/components/site/search-panel-loader.ts` fetches it together with the lazy panel on first intent. `scripts/search-retry-plugin.ts` gives each built `search-panel-*` import a fresh URL, because browsers cache rejected dynamic imports. New pages become searchable by adding them to the content or `src/lib/search-pages.ts`, not the panel.
 
 **Server services (`src/lib/server/`).** `llm/` is the single model interface (xAI or Cloudflare AI Gateway to Gemini; an unconfigured provider returns `not_configured` and callers must say so, never fabricate). `crypto.server.ts` does AES-256-GCM sealing. `rate-limit.server.ts` is database-backed. `admin.server.ts` enforces the admin rule. There are also CSP and CSP reports, telemetry, Turnstile, and body limits. Config is read through `config.server.ts` and `src/lib/env.server.ts`.
 

@@ -30,3 +30,8 @@ const twMerge = extendTailwindMerge({
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
+
+/** The anchor id a heading gets; shared by article bodies and the doc outline. */
+export function headingId(heading: string): string {
+  return heading.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+}

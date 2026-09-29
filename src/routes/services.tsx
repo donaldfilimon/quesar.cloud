@@ -3,18 +3,14 @@ import { PageClose, PageHero, Section, Surface } from "@/components/site";
 import { Callout, StepList } from "@/components/site/lab";
 import { Button } from "@/components/ui/button";
 import { engagement, refusals, services } from "@/lib/mlai/categories/services";
+import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/services")({
-  head: () => ({
-    meta: [
-      { title: "Services — MLAI engineering" },
-      {
-        name: "description",
-        content:
-          "MLAI engineering services: audit, design, build, and harden AI systems that need traceability, private deployment, and operational control.",
-      },
-    ],
-  }),
+  head: () =>
+    pageHead(
+      "Services — MLAI engineering",
+      "MLAI engineering services: audit, design, build, and harden AI systems that need traceability, private deployment, and operational control.",
+    ),
   component: ServicesPage,
 });
 

@@ -2,7 +2,6 @@ import { createFileRoute } from "@tanstack/react-router";
 import { CosineSimDemo } from "@/components/demos/cosine-sim-demo";
 import { ShardingLatencyDemo } from "@/components/demos/sharding-latency-demo";
 import { CopyGrid, DataTable, MetricCard, PageClose, PageHero, Section } from "@/components/site";
-import { ProvTag } from "@/components/site/prov-tag";
 import { benchmarkArchitecture, benchmarkFraming, wdbxFacts } from "@/lib/mlai/pages";
 import { pageHead } from "@/lib/seo";
 
@@ -22,11 +21,7 @@ function BenchmarksPage() {
         eyebrow="Benchmarks"
         title="No borrowed numbers."
         lede="How WDBX retrieval and agent orchestration are built, with interactive models and source-backed properties. Performance figures stay unpublished until a reproducible harness and methodology exist. Nothing on this page is a vendor comparison."
-      >
-        <div className="mt-6">
-          <ProvTag tag="measured" />
-        </div>
-      </PageHero>
+      />
       <Section eyebrow="Framing" title="Benchmarks with operating context.">
         <CopyGrid items={benchmarkFraming} columns="md:grid-cols-3" />
       </Section>

@@ -1,1 +1,0 @@
-import{M as e}from"./index-BBs9ET-z.js";var t=e({type:`function`});export{t};

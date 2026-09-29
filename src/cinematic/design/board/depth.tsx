@@ -126,8 +126,8 @@ function CompShell({
 
 // Placeholder chip/stat content for a layout board. `/showcase/design` is a
 // public, indexed route: "SOC 2 track" asserted a compliance program that does
-// not exist (see `src/data/categories/stats.ts`), and performance figures need
-// a reproducible harness and published methodology.
+// not exist (no SOC 2 program, controls matrix or auditor is engaged), and
+// performance figures need a reproducible harness and published methodology.
 const CHIPS: readonly (readonly [string, string])[] = [
   ["Privacy-first", "#22d3ee"],
   ["WDBX runtime", "#60a5fa"],

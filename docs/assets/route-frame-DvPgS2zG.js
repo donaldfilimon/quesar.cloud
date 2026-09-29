@@ -1,0 +1,1 @@
+import{t as e}from"./jsx-runtime-BNakU3Ej.js";import{F as t,P as n}from"./index-BwPLgIWE.js";var r=e();function i({children:e}){return n().length>0?(0,r.jsx)(t,{}):e}export{i as t};
