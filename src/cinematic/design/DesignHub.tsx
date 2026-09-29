@@ -44,7 +44,16 @@ export function DesignHub() {
 
   return (
     <div
-      style={{ position: "absolute", inset: 0, overflow: "auto", background: "var(--surface-0)" }}
+      // The boards scroll here, not the window: the shell is a fixed overlay.
+      // The named timeline drives the system board's progress bar.
+      data-ds-scroller=""
+      style={{
+        position: "absolute",
+        inset: 0,
+        overflow: "auto",
+        background: "var(--surface-0)",
+        scrollTimeline: "--ds-page block",
+      }}
     >
       <Suspense
         fallback={

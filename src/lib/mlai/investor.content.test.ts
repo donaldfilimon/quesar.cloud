@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { integrityRules } from "@/lib/content";
+import { integrityRules } from "@/lib/mlai/categories/site-copy";
 import { site } from "@/lib/site-identity";
 
 import { about, companyIdentity } from "./categories/about";

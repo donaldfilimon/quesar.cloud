@@ -1,10 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import {
-  architectureNodes,
-  researchSources as contentSources,
-  researchTopics as contentTopics,
-} from "@/lib/content";
+import { architectureNodes } from "@/lib/mlai/categories/architecture";
 import { researchRecords } from "./categories/research-records";
 import {
   researchSources,
@@ -23,11 +19,6 @@ describe("research topics and sources", () => {
     const sources = ResearchSourcesSchema.safeParse(researchSources);
     expect(sources.error?.issues ?? []).toEqual([]);
     expect(sources.data).toStrictEqual(researchSources);
-  });
-
-  it("are re-exported unchanged from @/lib/content", () => {
-    expect(contentTopics).toBe(researchTopics);
-    expect(contentSources).toBe(researchSources);
   });
 
   it("link only to research tracks that exist", () => {

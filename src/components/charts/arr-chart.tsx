@@ -1,5 +1,5 @@
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-import { investor } from "@/lib/content";
+import { investor } from "@/lib/mlai/categories/investor";
 
 const data = investor.arr.map((row) => ({ year: row.year, value: Number(row.v) }));
 

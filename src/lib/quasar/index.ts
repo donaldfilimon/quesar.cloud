@@ -55,11 +55,5 @@ export function slugify(name: string): string {
   return s || "site";
 }
 
-export {
-  Connection,
-  normalizeOrigin,
-  DEFAULT_ORIGIN,
-  ORIGIN_KEY,
-  applyEventPage,
-} from "./connection";
+export { Connection, DEFAULT_ORIGIN, ORIGIN_KEY, applyEventPage } from "./connection";
 export type { OriginStorage } from "./connection";

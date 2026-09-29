@@ -1,4 +1,4 @@
-import { nav } from "@/lib/content";
+import { nav } from "@/lib/site-identity";
 
 export const linkClass =
   "nav-link rounded-sm px-2.5 py-2 text-sm no-underline transition-[color,background-color] duration-150";

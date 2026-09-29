@@ -23,7 +23,7 @@ import { useCurrentUser, useCurrentUserState, type AppUser } from "./use-current
  */
 
 /** Where `RedirectToSignIn` sends signed-out visitors. */
-export const SIGN_IN_PATH = "/login";
+const SIGN_IN_PATH = "/login";
 
 /** Render children only when a user is present (real session, or the disabled-auth dev user). */
 export function SignedIn({ children }: { children: ReactNode }) {
@@ -49,7 +49,7 @@ export function SignedOut({ children }: { children: ReactNode }) {
  * Guard routes by waiting out `isPending` first (see `use-current-user`), then
  * render this.
  */
-export function RedirectToSignIn({ to = SIGN_IN_PATH }: { to?: string }) {
+function RedirectToSignIn({ to = SIGN_IN_PATH }: { to?: string }) {
   const navigate = useNavigate();
   const router = useRouter();
   // Capture where the visitor was at mount. Reading the live location instead

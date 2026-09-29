@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { PageClose, PageHero, Section, Surface } from "@/components/site";
-import { investor } from "@/lib/content";
+import { investor } from "@/lib/mlai/categories/investor";
 import { ProvTag } from "@/components/site/prov-tag";
 import { ThreeStatementModelDemo } from "@/components/demos/three-statement-model-demo";
 import { about } from "@/lib/mlai/categories/about";

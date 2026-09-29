@@ -88,7 +88,7 @@ const database = databaseUrl
   : { dialect: pgliteDialect(() => getPglite()), type: "postgres" as const };
 
 /** Session token cookie name. */
-export const SESSION_TOKEN_COOKIE = "__Host-quesar.session_token";
+const SESSION_TOKEN_COOKIE = "__Host-quesar.session_token";
 
 export const auth = betterAuth({
   baseURL,

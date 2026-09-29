@@ -72,4 +72,3 @@ export type PersonaKey = keyof typeof PERSONAS;
 
 // small math helpers used across the graph
 export const clamp = (v: number, lo = 0, hi = 1) => Math.min(hi, Math.max(lo, v));
-export const lerp = (a: number, b: number, t: number) => a + (b - a) * t;

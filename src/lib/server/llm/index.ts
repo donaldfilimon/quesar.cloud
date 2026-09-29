@@ -26,8 +26,8 @@ export type CompleteResult =
   | { ok: false; reason: "not_configured"; message: string }
   | { ok: false; reason: "provider_error"; provider: LlmProviderId; message: string };
 
-export const XAI_MODEL = "grok-4.5";
-export const GEMINI_MODEL = "gemini-3.7-flash";
+const XAI_MODEL = "grok-4.5";
+const GEMINI_MODEL = "gemini-3.7-flash";
 
 export interface LlmStatus {
   configured: boolean;

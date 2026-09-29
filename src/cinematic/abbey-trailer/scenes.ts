@@ -41,9 +41,9 @@ export interface Caption {
   text: string;
 }
 
-export const ABBEY_DURATION = 38;
-export const PARTICLE_COUNT = 1400;
-export const MIN_PARTICLES = 400;
+const ABBEY_DURATION = 38;
+const PARTICLE_COUNT = 1400;
+const MIN_PARTICLES = 400;
 const CX = 960,
   CY = 540;
 
@@ -65,7 +65,7 @@ function springStep(ctx: SceneContext, dt: number, stiffness: number, damping: n
 }
 
 /** Particle count for the host's detail budget; never below a legible floor. */
-export function particleBudget(quality: number): number {
+function particleBudget(quality: number): number {
   return Math.max(MIN_PARTICLES, Math.round(PARTICLE_COUNT * clamp(quality, 0, 1)));
 }
 
@@ -124,7 +124,7 @@ const rgba = (hex: string, a: number): string => {
 /* ─────────────────────────────── scenes ─────────────────────────────── */
 
 /** Scattered dust gathers into one slab: "one model pretending to be everything". */
-export class MonolithScene implements LifecycleScene {
+class MonolithScene implements LifecycleScene {
   private ctx: SceneContext | null = null;
   constructor(private readonly pal: TrailerPalette) {}
   enter(ctx: SceneContext): void {
@@ -147,7 +147,7 @@ export class MonolithScene implements LifecycleScene {
 }
 
 /** The slab breaks: one seeded outward impulse per shard, decided in enter. */
-export class ShatterScene implements LifecycleScene {
+class ShatterScene implements LifecycleScene {
   private ctx: SceneContext | null = null;
   constructor(private readonly pal: TrailerPalette) {}
   enter(ctx: SceneContext): void {
@@ -203,7 +203,7 @@ export class ShatterScene implements LifecycleScene {
 }
 
 /** Shards settle into a slowly turning ring in one persona's colour. */
-export class PersonaRingScene implements LifecycleScene {
+class PersonaRingScene implements LifecycleScene {
   private ctx: SceneContext | null = null;
   private angle0: Float32Array | null = null;
   constructor(
@@ -254,7 +254,7 @@ export class PersonaRingScene implements LifecycleScene {
 }
 
 /** Three rings spiral into one cluster: "three minds, in concert". */
-export class ConvergenceScene implements LifecycleScene {
+class ConvergenceScene implements LifecycleScene {
   private ctx: SceneContext | null = null;
   private angle0: Float32Array | null = null;
   constructor(private readonly pal: TrailerPalette) {}
@@ -304,7 +304,7 @@ export class ConvergenceScene implements LifecycleScene {
 }
 
 /** The cluster settles into the mark: a hexagonal constellation that holds. */
-export class FinalMarkScene implements LifecycleScene {
+class FinalMarkScene implements LifecycleScene {
   private ctx: SceneContext | null = null;
   constructor(private readonly pal: TrailerPalette) {}
   enter(ctx: SceneContext): void {

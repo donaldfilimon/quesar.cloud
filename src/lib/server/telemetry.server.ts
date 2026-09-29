@@ -19,7 +19,7 @@ import { normalizeTelemetryPath, type RoutePatterns } from "./telemetry-path";
  * mlai allowed only the four inquiry-dialog events. `page_view` is new here:
  * the task adds route-change page views, sent by `src/lib/telemetry.ts`.
  */
-export const TELEMETRY_EVENTS = new Set([
+const TELEMETRY_EVENTS = new Set([
   "page_view",
   "inquiry_open",
   "inquiry_submit",

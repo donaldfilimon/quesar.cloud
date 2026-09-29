@@ -27,7 +27,7 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
-import { architectureNodes } from "@/lib/content";
+import { architectureNodes } from "@/lib/mlai/categories/architecture";
 import { addNote, deleteNote, listNotes } from "@/lib/workspace";
 
 /** Field notes on architecture nodes: the console's original behaviour, unchanged. */

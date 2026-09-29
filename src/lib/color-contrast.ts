@@ -9,7 +9,7 @@ export type Rgb = readonly [number, number, number];
 
 const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
 
-export function parseHex(input: string): Rgb {
+function parseHex(input: string): Rgb {
   const hex = input.trim().replace(/^#/, "");
   if (!/^(?:[0-9a-f]{3}|[0-9a-f]{6})$/i.test(hex)) {
     throw new Error(`Unsupported hex color: ${input}`);
@@ -20,7 +20,7 @@ export function parseHex(input: string): Rgb {
 }
 
 /** OKLCH (L in 0..1, C, H in degrees) to gamma-encoded sRGB, clipped to gamut. */
-export function oklchToRgb(l: number, c: number, h: number): Rgb {
+function oklchToRgb(l: number, c: number, h: number): Rgb {
   const hr = (h * Math.PI) / 180;
   const a = c * Math.cos(hr);
   const b = c * Math.sin(hr);
@@ -38,7 +38,7 @@ export function oklchToRgb(l: number, c: number, h: number): Rgb {
   ];
 }
 
-export function parseOklch(input: string): Rgb {
+function parseOklch(input: string): Rgb {
   const match = /^oklch\(\s*([\d.]+)(%?)\s+([\d.]+)\s+([\d.]+)(?:deg)?\s*(?:\/[^)]*)?\)$/i.exec(
     input.trim(),
   );

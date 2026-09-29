@@ -1,8 +1,8 @@
 /**
  * The architecture diagram's node ids, on their own so that route search
  * validation (`/architecture?node=`, `/console?node=`), which runs in the main
- * client bundle, does not pull the full node catalog from `@/lib/content` into
- * it. A test keeps this list equal to `architectureNodes`.
+ * client bundle, does not pull the full node catalog
+ * (`@/lib/mlai/categories/architecture`) into it. A test keeps this list equal to `architectureNodes`.
  */
 export const ARCHITECTURE_NODE_IDS = [
   "user",

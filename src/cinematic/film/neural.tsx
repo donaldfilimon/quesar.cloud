@@ -21,15 +21,7 @@ const readIntensity = (): number => {
   return tw.neural != null ? tw.neural : 1;
 };
 
-export function NeuralCanvas({
-  t,
-  mode,
-  opacity = 1,
-}: {
-  t: number;
-  mode: string;
-  opacity?: number;
-}) {
+function NeuralCanvas({ t, mode, opacity = 1 }: { t: number; mode: string; opacity?: number }) {
   const ref = useRef<HTMLCanvasElement>(null);
   const stage = useRef<{ renderer: Canvas2DRenderer; scene: NeuralScene } | null>(null);
   // Fixed logical frame; Stage scales it with a CSS transform, and the backing

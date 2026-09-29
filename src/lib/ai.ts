@@ -16,7 +16,7 @@ const SYSTEM: Record<"abbey" | "aviva" | "abi", string> = {
   abi: "You are Abi, MLAI's adaptive moderator. Route the user toward inspectable next steps. Say what the ledger can prove. Keep answers under 160 words.",
 };
 
-export const askPersona = createServerFn({ method: "POST" })
+const askPersona = createServerFn({ method: "POST" })
   .middleware([authMiddleware])
   .validator((value: unknown) => input.parse(value))
   .handler(async ({ data, context }) => {

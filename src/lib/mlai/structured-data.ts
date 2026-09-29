@@ -28,7 +28,7 @@ type ResearchPub = Research["publications"][number];
 type TeamMember = Team[number];
 type Product = Products[number];
 
-export const ORG_REF = {
+const ORG_REF = {
   "@type": "Organization" as const,
   name: "MLAI Corporation",
   url: SITE_URL,

@@ -1,7 +1,7 @@
-export const THEME_KEY = "mlai-theme";
+const THEME_KEY = "mlai-theme";
 export type Theme = "dark" | "light";
 
-export function readStoredTheme(): Theme | null {
+function readStoredTheme(): Theme | null {
   try {
     const value = localStorage.getItem(THEME_KEY);
     if (value === "dark" || value === "light") return value;
@@ -42,7 +42,7 @@ export function currentTheme(): Theme {
   return resolveTheme();
 }
 
-export function resolveTheme(): Theme {
+function resolveTheme(): Theme {
   return (
     readStoredTheme() ??
     (window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark")

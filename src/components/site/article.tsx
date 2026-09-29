@@ -1,7 +1,6 @@
 import type { ReactNode } from "react";
 import { AppLink } from "./app-link";
 import { CodeBlock } from "./lab";
-import { Surface } from "./section";
 import { headingId } from "@/lib/utils";
 
 type Section = {
@@ -95,14 +94,5 @@ export function SourceChips({
         </li>
       ))}
     </ul>
-  );
-}
-
-export function Equation({ tex, note }: { tex: string; note?: string }) {
-  return (
-    <Surface className="mt-4">
-      <pre className="overflow-x-auto font-mono text-[0.85rem] leading-7 text-fg">{tex}</pre>
-      {note ? <p className="mt-3 text-sm leading-relaxed text-fg-muted">{note}</p> : null}
-    </Surface>
   );
 }

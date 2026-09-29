@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { DataTable, NamedGrid, PageClose, PageHero, Section, SpecList } from "@/components/site";
 import { StatusBadge } from "@/components/site/status-badge";
 import { ProvTag } from "@/components/site/prov-tag";
-import { wdbxCapabilities, wdbxCrates, wdbxSpecs } from "@/lib/content";
+import { wdbxCapabilities, wdbxCrates, wdbxSpecs } from "@/lib/mlai/categories/abi-runtime";
 import { ogImage } from "@/lib/og-sections";
 import { pageHead } from "@/lib/seo";
 

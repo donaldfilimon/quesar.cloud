@@ -261,30 +261,6 @@ export function Reveal({
   );
 }
 
-/* copyable token row helper */
-export function TokenRow({
-  name,
-  value,
-  swatch,
-}: {
-  name: string;
-  value: string;
-  swatch?: string;
-}): ReactNode {
-  return (
-    <div className="flex items-center gap-3 py-2 border-b border-border last:border-0">
-      {swatch && (
-        <span
-          className="w-4 h-4 rounded-md shrink-0 ring-1 ring-border"
-          style={{ background: swatch }}
-        />
-      )}
-      <Mono className="text-xs text-fg-muted flex-1 min-w-0 truncate">{name}</Mono>
-      <Mono className="text-xs text-fg-subtle">{value}</Mono>
-    </div>
-  );
-}
-
 /* code block with copy button (used by the Tokens / CSS section) */
 export function CodeBlock({ code, label }: { code: string; label?: string }): ReactNode {
   const [copied, setCopied] = useState(false);

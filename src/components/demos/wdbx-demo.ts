@@ -13,7 +13,7 @@
  */
 
 export const DIM = 256;
-export const PARTITIONS = 4;
+const PARTITIONS = 4;
 
 export interface Doc {
   id: string;

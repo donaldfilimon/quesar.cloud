@@ -11,7 +11,9 @@ import {
 } from "@/components/site";
 import { StatusBadge } from "@/components/site/status-badge";
 import { HomeControlPlane, HomeProductBoundary } from "@/components/site/home-sections";
-import { integrationApps, layers, wdbxSpecs } from "@/lib/content";
+import { integrationApps } from "@/lib/mlai/categories/site-copy";
+import { layers } from "@/lib/mlai/categories/architecture";
+import { wdbxSpecs } from "@/lib/mlai/categories/abi-runtime";
 import { ogImage } from "@/lib/og-sections";
 import { pageHead } from "@/lib/seo";
 

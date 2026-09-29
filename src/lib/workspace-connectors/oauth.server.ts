@@ -112,10 +112,6 @@ export function providerCredentials(provider: WorkspaceProvider): ProviderCreden
   return { clientId, clientSecret };
 }
 
-export function isProviderConfigured(provider: WorkspaceProvider): boolean {
-  return providerCredentials(provider) !== null;
-}
-
 /**
  * The public origin of a request. Behind a TLS-terminating proxy the runtime can
  * see `http:`; `x-forwarded-proto: https` upgrades it, never the reverse, so the

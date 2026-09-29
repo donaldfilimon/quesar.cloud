@@ -254,7 +254,7 @@ export function TweakSection({
   );
 }
 
-export function TweakRow({
+function TweakRow({
   label,
   value,
   children,
@@ -495,64 +495,6 @@ export function TweakText({
   );
 }
 
-export function TweakNumber({
-  label,
-  value,
-  min,
-  max,
-  step = 1,
-  unit = "",
-  onChange,
-}: {
-  label: string;
-  value: number;
-  min?: number;
-  max?: number;
-  step?: number;
-  unit?: string;
-  onChange: (v: number) => void;
-}): ReactNode {
-  const clamp = (num: number): number => {
-    if (min != null && num < min) return min;
-    if (max != null && num > max) return max;
-    return num;
-  };
-  const startRef = useRef<{ x: number; val: number }>({ x: 0, val: 0 });
-  const onScrubStart = (e: ReactPointerEvent<HTMLSpanElement>): void => {
-    e.preventDefault();
-    startRef.current = { x: e.clientX, val: value };
-    const decimals = (String(step).split(".")[1] ?? "").length;
-    const move = (ev: PointerEvent): void => {
-      const dx = ev.clientX - startRef.current.x;
-      const raw = startRef.current.val + dx * step;
-      const snapped = Math.round(raw / step) * step;
-      onChange(clamp(Number(snapped.toFixed(decimals))));
-    };
-    const up = (): void => {
-      window.removeEventListener("pointermove", move);
-      window.removeEventListener("pointerup", up);
-    };
-    window.addEventListener("pointermove", move);
-    window.addEventListener("pointerup", up);
-  };
-  return (
-    <div className="twk-num">
-      <span className="twk-num-lbl" onPointerDown={onScrubStart}>
-        {label}
-      </span>
-      <input
-        type="number"
-        value={value}
-        min={min}
-        max={max}
-        step={step}
-        onChange={(e) => onChange(clamp(Number(e.target.value)))}
-      />
-      {unit && <span className="twk-num-unit">{unit}</span>}
-    </div>
-  );
-}
-
 // Relative-luminance contrast pick. Hex input only (#rgb / #rrggbb).
 function twkIsLight(hex: string): boolean {
   const h = String(hex).replace("#", "");
@@ -649,21 +591,5 @@ export function TweakColor({
         })}
       </div>
     </TweakRow>
-  );
-}
-
-export function TweakButton({
-  label,
-  onClick,
-  secondary = false,
-}: {
-  label: string;
-  onClick: () => void;
-  secondary?: boolean;
-}): ReactNode {
-  return (
-    <button type="button" className={secondary ? "twk-btn secondary" : "twk-btn"} onClick={onClick}>
-      {label}
-    </button>
   );
 }

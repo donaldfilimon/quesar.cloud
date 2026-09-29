@@ -11,7 +11,10 @@ import {
 import { StatusBadge } from "@/components/site/status-badge";
 import { ProvLegend } from "@/components/site/prov-tag";
 import { ProvTag } from "@/components/site/prov-tag";
-import { faqs, investor, site, statusCopy, type StatusKind } from "@/lib/content";
+import { faqs } from "@/lib/mlai/categories/site-copy";
+import { investor } from "@/lib/mlai/categories/investor";
+import { site, type StatusKind } from "@/lib/site-identity";
+import { statusCopy } from "@/lib/status-copy";
 import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/company")({

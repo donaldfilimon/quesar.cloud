@@ -59,7 +59,7 @@ export type ConnectBlocker = "provider_not_configured" | "encryption_not_configu
  * valid `APP_ENCRYPTION_KEY` exists to seal the refresh token. Checked before a
  * flow starts, so a provider code is never spent on a token we could not store.
  */
-export function connectBlocker(provider: WorkspaceProvider): ConnectBlocker | null {
+function connectBlocker(provider: WorkspaceProvider): ConnectBlocker | null {
   const flags = features();
   if (!(provider === "google" ? flags.google : flags.microsoft)) return "provider_not_configured";
   if (!encryptionConfigured()) return "encryption_not_configured";

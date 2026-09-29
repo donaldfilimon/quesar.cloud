@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { AppLink } from "@/components/site/app-link";
 import { Input } from "@/components/ui/input";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { repos, type RepoKind } from "@/lib/content";
+import { repos, type RepoKind } from "@/lib/mlai/categories/repos";
 import { useGithubData } from "@/lib/use-github-data";
 import { GithubSectionStatus } from "./section-status";
 import { pathForRepo } from "@/lib/catalog";

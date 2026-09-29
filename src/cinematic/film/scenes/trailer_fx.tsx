@@ -9,77 +9,7 @@ import { C, FONT, clamp } from "../tokens";
 import { Easing } from "../easing";
 import { useTime, useSprite } from "../timeline-context";
 import { DiagramSVG } from "../fx";
-import { IMPACTS, impactK, impactKick } from "./impacts";
-
-// runtime tweaks object (set by the Tweaks panel); typed safely, never crashes.
-const readTw = (): Record<string, number> =>
-  (window as unknown as { __tw?: Record<string, number> }).__tw ?? {};
-
-// Camera: continuous handheld drift + shake + zoom punch on impacts.
-export function Camera({ children }: { children: ReactNode }) {
-  const t = useTime();
-  const tw = readTw();
-  const shake = tw.shake != null ? tw.shake : 1;
-  const zoomT = tw.zoom != null ? tw.zoom : 1;
-  const drift = tw.drift != null ? tw.drift : 1;
-  const k = impactK(t, 0.42),
-    kick = impactKick(t, 0.42);
-
-  // ever-present handheld float (never a dead frame)
-  const hx = (Math.sin(t * 0.6) * 8 + Math.sin(t * 0.27 + 1) * 5) * drift;
-  const hy = (Math.cos(t * 0.5) * 6 + Math.cos(t * 0.33 + 2) * 4) * drift;
-  const hrot = (Math.sin(t * 0.43) * 0.28 + Math.sin(t * 0.21) * 0.16) * drift;
-
-  // impact shake + directional kick
-  const sx = (k ? Math.sin(t * 94) * 14 * k : 0) * shake + kick * 26 * shake;
-  const sy = (k ? Math.cos(t * 86) * 14 * k : 0) * shake;
-  const srot = (k ? Math.sin(t * 70) * 0.7 * k : 0) * shake;
-
-  // zoom: slow breath + punch on impact
-  const zoom = 1 + 0.022 * Math.sin(t * 0.4) + 0.075 * k * zoomT;
-
-  return (
-    <div
-      style={{
-        position: "absolute",
-        inset: 0,
-        transform: `translate(${hx + sx}px, ${hy + sy}px) scale(${zoom}) rotate(${hrot + srot}deg)`,
-        transformOrigin: "center",
-        willChange: "transform",
-      }}
-    >
-      {children}
-    </div>
-  );
-}
-
-// Full-frame flash on impacts (intensity from Tweaks).
-export function FlashCut({ color = "#bfe0ff" }: { color?: string }) {
-  const t = useTime();
-  const tw = readTw();
-  const fI = tw.flash != null ? tw.flash : 1;
-  let op = 0;
-  for (let i = 0; i < IMPACTS.length; i++) {
-    const im = IMPACTS[i]!;
-    const dt = t - im;
-    if (dt >= 0 && dt < 0.18) op = Math.max(op, (1 - dt / 0.18) * 0.5);
-  }
-  op *= fI;
-  if (op < 0.01) return null;
-  return (
-    <div
-      style={{
-        position: "absolute",
-        inset: 0,
-        background: color,
-        opacity: op,
-        zIndex: 80,
-        mixBlendMode: "screen",
-        pointerEvents: "none",
-      }}
-    />
-  );
-}
+import { impactK } from "./impacts";
 
 // Kinetic title that slams in (overshoot), holds, snaps out — with chromatic split.
 export function SlamText({

@@ -13,7 +13,7 @@ import { getSql } from "@/lib/db";
 import { adminEmails } from "./config.server";
 
 /** Providers whose sign-in proves control of the email address. */
-export const VERIFIED_PROVIDERS = new Set(["google", "apple"]);
+const VERIFIED_PROVIDERS = new Set(["google", "apple"]);
 
 export interface AdminCandidate {
   email: string;
@@ -39,16 +39,8 @@ export function decideAdmin(user: AdminCandidate, allowlist: Set<string>): Admin
   return { admin: true };
 }
 
-export class ForbiddenError extends Error {
-  readonly status = 403;
-  constructor(message = "Admin access required") {
-    super(message);
-    this.name = "ForbiddenError";
-  }
-}
-
 /** Load the candidate for a Better Auth user id. Null when the user row is missing. */
-export async function loadAdminCandidate(userId: string): Promise<AdminCandidate | null> {
+async function loadAdminCandidate(userId: string): Promise<AdminCandidate | null> {
   const sql = await getSql();
   const users = await sql<{ email: string; emailVerified: boolean }>`
     select "email", "emailVerified" from "user" where "id" = ${userId} limit 1`;
@@ -67,10 +59,4 @@ export async function adminDecisionFor(userId: string): Promise<AdminDecision> {
   const candidate = await loadAdminCandidate(userId);
   if (!candidate) return { admin: false, reason: "not_allowlisted" };
   return decideAdmin(candidate, adminEmails());
-}
-
-/** Throws `ForbiddenError` unless `userId` is an admin. */
-export async function assertAdmin(userId: string): Promise<void> {
-  const decision = await adminDecisionFor(userId);
-  if (!decision.admin) throw new ForbiddenError();
 }

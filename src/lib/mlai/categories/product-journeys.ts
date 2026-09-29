@@ -1,12 +1,4 @@
 import type { StatusKind } from "@/lib/site-identity";
-
-/** Public entry points belong to the website; source setup remains authoritative. */
-export const primaryNavigation = [
-  { to: "/products", label: "Products" },
-  { to: "/research", label: "Research" },
-  { to: "/docs", label: "Docs" },
-  { to: "/about", label: "Company" },
-];
 /**
  * The local Abbey app's toolchain, one fact per entry. The Abbey journey's
  * prerequisites sentence and the /abbey workspace facts both read from here, so

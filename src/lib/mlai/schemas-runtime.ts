@@ -22,7 +22,7 @@ const StatusKindSchema = z.enum([
  * One MCP tool exposed by `abi-mcp`. `docsBody` is the docs-hub wording (all
  * twelve tools); `abiBody` is the /abi page wording for the subset shown there.
  */
-export const McpToolSchema = z.object({
+const McpToolSchema = z.object({
   name: z.string(),
   docsBody: z.string(),
   abiBody: z.string().optional(),
@@ -33,7 +33,7 @@ export const McpToolSchema = z.object({
  * its own wording: `abiBody` (/abi), `wdbxBody` (/wdbx), `docsBody` (docs hub
  * module map).
  */
-export const AbiModuleSchema = z.object({
+const AbiModuleSchema = z.object({
   name: z.string(),
   abiBody: z.string().optional(),
   wdbxBody: z.string().optional(),
@@ -41,14 +41,14 @@ export const AbiModuleSchema = z.object({
 });
 
 /** A /wdbx capability table row. */
-export const WdbxCapabilitySchema = z.object({
+const WdbxCapabilitySchema = z.object({
   concern: z.string(),
   what: z.string(),
   status: StatusKindSchema,
 });
 
 /** A docs-hub WDBX capability card. `CopyGrid` renders `status` as a badge. */
-export const DocsWdbxCapabilitySchema = z.object({
+const DocsWdbxCapabilitySchema = z.object({
   title: z.string(),
   body: z.string(),
   status: StatusKindSchema,

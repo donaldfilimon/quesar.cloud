@@ -3,7 +3,7 @@ import { staticSite } from "./static-site";
 import type { GithubPayload } from "./github-data";
 export type { GithubPayload, LiveRepo, ReadmeCard, EventItem, Freshness } from "./github-data";
 
-export const loadGithub = createServerFn({ method: "GET" })
+const loadGithub = createServerFn({ method: "GET" })
   .validator((value: unknown) => value === true)
   .handler(async ({ data }): Promise<GithubPayload> =>
     (await import("./github-data")).fetchGithubPayload(data),

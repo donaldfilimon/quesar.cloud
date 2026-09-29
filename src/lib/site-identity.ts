@@ -1,8 +1,7 @@
 /**
- * Site identity, primary nav and the status vocabulary. Kept apart from
- * `@/lib/content` because the root route and header load on every page: importing
- * the full content catalog there would put all of it in the entry chunk.
- * `@/lib/content` re-exports these, so either import path works.
+ * Site identity, primary nav and the status vocabulary. Kept tiny because the
+ * root route and header load on every page: anything imported here lands in
+ * the entry chunk. Status labels live in `@/lib/status-copy`.
  */
 
 export type StatusKind =

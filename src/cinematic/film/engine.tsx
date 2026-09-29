@@ -13,12 +13,11 @@ import {
   type CSSProperties,
 } from "react";
 import { advance, frameDelta } from "@/lib/trailer-engine";
-import { Easing, clamp } from "./easing";
+import { clamp } from "./easing";
 import {
   TimelineContext,
   SpriteContext,
   useTimeline,
-  useSprite,
   type TimelineValue,
   type SpriteValue,
 } from "./timeline-context";
@@ -64,123 +63,6 @@ export function Sprite({
     <SpriteContext.Provider value={value}>
       {typeof children === "function" ? children(value) : children}
     </SpriteContext.Provider>
-  );
-}
-
-/* ── text / rect sprites (handy primitives) ───────────────────── */
-
-export function TextSprite({
-  text,
-  x = 0,
-  y = 0,
-  size = 48,
-  color = "#fff",
-  font = "var(--font-sans)",
-  weight = 600,
-  entryDur = 0.45,
-  exitDur = 0.35,
-  align = "left",
-  letterSpacing = "-0.01em",
-}: {
-  text: string;
-  x?: number;
-  y?: number;
-  size?: number;
-  color?: string;
-  font?: string;
-  weight?: number;
-  entryDur?: number;
-  exitDur?: number;
-  align?: "left" | "center" | "right";
-  letterSpacing?: string;
-}) {
-  const { localTime, duration } = useSprite();
-  const exitStart = Math.max(0, duration - exitDur);
-  let opacity = 1,
-    ty = 0;
-  if (localTime < entryDur) {
-    const t = Easing.easeOutBack(clamp(localTime / entryDur, 0, 1));
-    opacity = t;
-    ty = (1 - t) * 16;
-  } else if (localTime > exitStart) {
-    const t = Easing.easeInCubic(clamp((localTime - exitStart) / exitDur, 0, 1));
-    opacity = 1 - t;
-    ty = -t * 8;
-  }
-  const tx = align === "center" ? "-50%" : align === "right" ? "-100%" : "0";
-  return (
-    <div
-      style={{
-        position: "absolute",
-        left: x,
-        top: y,
-        transform: `translate(${tx}, ${ty}px)`,
-        opacity,
-        fontFamily: font,
-        fontSize: size,
-        fontWeight: weight,
-        color,
-        letterSpacing,
-        whiteSpace: "pre",
-        lineHeight: 1.1,
-      }}
-    >
-      {text}
-    </div>
-  );
-}
-
-export function RectSprite({
-  x = 0,
-  y = 0,
-  width = 100,
-  height = 100,
-  color = "#fff",
-  radius = 8,
-  entryDur = 0.4,
-  exitDur = 0.3,
-  render,
-}: {
-  x?: number;
-  y?: number;
-  width?: number;
-  height?: number;
-  color?: string;
-  radius?: number;
-  entryDur?: number;
-  exitDur?: number;
-  render?: (ctx: SpriteValue) => CSSProperties;
-}) {
-  const ctx = useSprite();
-  const { localTime, duration } = ctx;
-  const exitStart = Math.max(0, duration - exitDur);
-  let opacity = 1,
-    scale = 1;
-  if (localTime < entryDur) {
-    const t = Easing.easeOutBack(clamp(localTime / entryDur, 0, 1));
-    opacity = clamp(localTime / entryDur, 0, 1);
-    scale = 0.4 + 0.6 * t;
-  } else if (localTime > exitStart) {
-    const t = Easing.easeInQuad(clamp((localTime - exitStart) / exitDur, 0, 1));
-    opacity = 1 - t;
-    scale = 1 - 0.15 * t;
-  }
-  return (
-    <div
-      style={{
-        position: "absolute",
-        left: x,
-        top: y,
-        width,
-        height,
-        background: color,
-        borderRadius: radius,
-        opacity,
-        transform: `scale(${scale})`,
-        transformOrigin: "center",
-        ...(render ? render(ctx) : {}),
-      }}
-    />
   );
 }
 

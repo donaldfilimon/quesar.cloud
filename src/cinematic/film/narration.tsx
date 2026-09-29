@@ -13,7 +13,7 @@
 
 import { useEffect, useMemo, useRef } from "react";
 import { createPortal } from "react-dom";
-import { C, FONT, PERSONAS, clamp, type PersonaKey } from "./tokens";
+import { C, FONT, clamp, type PersonaKey } from "./tokens";
 import { SCRIPT, type ScriptLine } from "./narration-script";
 import { step, fade } from "./easing";
 import { useTimeline } from "./timeline-context";
@@ -287,5 +287,3 @@ export function VoiceToggle() {
   );
   return chrome ? createPortal(button, chrome) : button;
 }
-
-export { PERSONAS };

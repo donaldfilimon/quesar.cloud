@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import type { StatusKind } from "@/lib/content";
+import type { StatusKind } from "@/lib/site-identity";
 
 /** A titled prose card — the shape shared by `about.values` and `about.investorThesis`. */
 const CardSchema = z.object({
@@ -65,7 +65,7 @@ export const PlatformSchema = z.array(
 
 export const IndustriesSchema = z.array(z.string());
 
-export const BlogSectionSchema = z.object({
+const BlogSectionSchema = z.object({
   heading: z.string().optional(),
   paragraphs: z.array(z.string()).default([]),
   list: z.array(z.string()).optional(),
@@ -107,7 +107,7 @@ export const ServicesSchema = z.array(
   }),
 );
 
-export const ResearchTopicSchema = z.enum(["ai", "wdbx", "sea", "gpu", "mcp", "tui"]);
+const ResearchTopicSchema = z.enum(["ai", "wdbx", "sea", "gpu", "mcp", "tui"]);
 
 export const ResearchSchema = z.object({
   tracks: z.array(
@@ -177,7 +177,7 @@ export const BlogSchema = z.array(
   }),
 );
 
-export const DocSectionSchema = BlogSectionSchema.extend({
+const DocSectionSchema = BlogSectionSchema.extend({
   /** Vendored Section.note — an aside the blog shape has no home for. */
   note: z.string().optional(),
 });
