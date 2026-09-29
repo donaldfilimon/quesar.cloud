@@ -1,0 +1,1 @@
+import{M as e}from"./index-f8cr4jg4.js";var t=e({type:`function`});export{t};
