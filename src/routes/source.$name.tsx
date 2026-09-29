@@ -1,10 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
 import { CellMachine } from "@/components/apps/cell-machine";
 import { PageClose, PageHero, Section, Surface } from "@/components/site";
 import { StatusBadge } from "@/components/site/status-badge";
 import { pathForRepo, repoDocs, repoPaths } from "@/lib/catalog";
-import { loadGithubData, type LiveRepo } from "@/lib/github";
+import { useGithubData } from "@/lib/use-github-data";
 import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/source/$name")({
@@ -33,13 +32,10 @@ function SourceRepoPage() {
   const decoded = decodeURIComponent(name);
   const canonical = pathForRepo(decoded);
   const doc = repoDocs[decoded] ?? repoDocs[decoded.toLowerCase()];
-  const [live, setLive] = useState<LiveRepo | null>(null);
-
-  useEffect(() => {
-    void loadGithubData().then((payload) => {
-      setLive(payload.repos.find((row) => row.name === decoded) ?? null);
-    });
-  }, [decoded]);
+  // The shared store: one GitHub load per page, snapshot fallback on the
+  // static site, and failures that leave the page on its curated copy.
+  const { data } = useGithubData();
+  const live = data?.repos.find((row) => row.name === decoded) ?? null;
 
   if (canonical !== `/source/${encodeURIComponent(decoded)}` && repoPaths[decoded]) {
     return (

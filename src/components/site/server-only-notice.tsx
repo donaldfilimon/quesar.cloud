@@ -28,10 +28,13 @@ export function ServerOnlyNotice({
     );
   }
 
+  // `data-server-only-page` keeps the page out of the generated sitemap
+  // (scripts/sitemap.ts): on the static host it has nothing to index.
   return (
     <div
       className={`mx-auto max-w-2xl rounded-lg border border-border bg-bg-elevated p-6 ${className}`}
       role="note"
+      data-server-only-page=""
     >
       <p className="text-xs text-accent">Static preview</p>
       <h1 className="mt-2 font-display text-2xl tracking-tight">

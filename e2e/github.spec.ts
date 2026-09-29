@@ -44,3 +44,19 @@ test("total outage leaves curated source links and filters usable", async ({ pag
     page.getByRole("link").filter({ hasText: "donaldfilimon/abi" }).first(),
   ).toBeVisible();
 });
+
+test("total outage falls back to the build-time snapshot, labelled as such", async ({ page }) => {
+  const { readdirSync } = await import("node:fs");
+  test.skip(
+    !readdirSync("docs/assets").some((name) => name.startsWith("github-snapshot-")),
+    "this build had no network, so it carries no snapshot",
+  );
+  await page.route("https://api.github.com/**", (route) => route.abort());
+  await page.route("https://raw.githubusercontent.com/**", (route) => route.abort());
+  await page.goto("/developers");
+  await expect(
+    page.getByText("Showing READMEs captured when this site was built", { exact: false }).first(),
+  ).toBeVisible();
+  await expect(page.getByRole("tab", { name: "abi" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Retry READMEs" }).first()).toBeVisible();
+});

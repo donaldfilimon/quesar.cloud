@@ -9,9 +9,20 @@ export const loadGithub = createServerFn({ method: "GET" })
     (await import("./github-data")).fetchGithubPayload(data),
   );
 
-/** Keep the network/parser implementation out of the initial route payload. */
-export function loadGithubData(force = false): Promise<GithubPayload> {
-  return staticSite
-    ? import("./github-data").then((module) => module.fetchGithubPayload(force))
-    : loadGithub({ data: force });
+/**
+ * Keep the network/parser implementation out of the initial route payload. On
+ * the static site the browser calls GitHub itself, and anything it cannot load
+ * is filled from the snapshot captured at build time.
+ */
+export async function loadGithubData(force = false): Promise<GithubPayload> {
+  if (!staticSite) return loadGithub({ data: force });
+  const [data, snapshot] = await Promise.all([
+    import("./github-data"),
+    import("./github-snapshot"),
+  ]);
+  const [live, captured] = await Promise.all([
+    data.fetchGithubPayload(force),
+    snapshot.loadGithubSnapshot(),
+  ]);
+  return data.withSnapshot(live, captured);
 }

@@ -9,6 +9,7 @@ import { nitro } from "nitro/vite";
 import { isMigrationFile } from "./scripts/migration-plan.ts";
 import { searchRetryPlugin } from "./scripts/search-retry-plugin.ts";
 import { searchCatalogPlugin } from "./scripts/search-catalog-plugin.ts";
+import { githubSnapshotPlugin } from "./scripts/github-snapshot-plugin.ts";
 
 /** The files `src/lib/db.ts` globs — same directory, same non-recursive scope. */
 function hasGlobbedMigrations(root: string): boolean {
@@ -88,6 +89,7 @@ export default defineConfig(({ command, isPreview, mode }) => {
       pgliteBootstrapPlugin(),
       searchRetryPlugin(),
       searchCatalogPlugin(),
+      githubSnapshotPlugin({ enabled: isStatic }),
       tailwindcss(),
       tanstackStart(
         isStatic

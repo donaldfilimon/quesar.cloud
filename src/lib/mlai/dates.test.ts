@@ -13,6 +13,12 @@ describe("dates", () => {
     expect(parseContentDate("")).toBeNull();
   });
 
+  it("reads every format as midnight UTC, whatever zone the build runs in", () => {
+    expect(toIsoDate("June 9, 2026")).toBe("2026-06-09T00:00:00.000Z");
+    expect(toIsoDate("SEPTEMBER 2026")).toBe("2026-09-01T00:00:00.000Z");
+    expect(toIsoDate("2026-09-23")).toBe("2026-09-23T00:00:00.000Z");
+  });
+
   it("toIsoDate mirrors parseContentDate but as an ISO string", () => {
     const iso = toIsoDate("June 9, 2026");
     expect(iso).toBeDefined();
