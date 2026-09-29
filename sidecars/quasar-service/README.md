@@ -31,6 +31,12 @@ Changes from the source, and nothing else:
 - `tsconfig.json` inlines mlai's `apps/quasar/tsconfig.base.json` and adds
   `shared` to `include`.
 
+Dependency refresh (2026-09-28): the service uses TypeScript 7.0.2 and the
+Anthropic SDK 0.129.0; type checking and all 69 tests pass. The Next template
+uses Next 16.3.6 and React 19.3.0. It retains TypeScript 6 and ESLint 9 because
+the current Next React lint plugin fails with ESLint 10. Its typecheck, lint,
+and production build pass. These checks do not certify live provider calls.
+
 Not copied: the Expo app (`apps/quasar/apps/quasar`, replaced by quesar's
 `/quasar/*` routes), `scripts/verify-journeys.ts` (it drives that Expo export
 through a Playwright environment that no longer exists), and
