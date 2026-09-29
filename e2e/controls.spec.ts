@@ -54,7 +54,10 @@ test("shortcut leaves editable content alone and search supports keyboard naviga
   await page.getByRole("button", { name: "Search the site" }).focus();
   await page.keyboard.press("Control+k");
   await page.getByRole("combobox", { name: "Search pages" }).fill("runtime build");
+  // The exact title match ranks first; step past it and back so the arrows are
+  // exercised without depending on how many other pages mention both words.
   await page.keyboard.press("ArrowDown");
+  await page.keyboard.press("ArrowUp");
   await page.keyboard.press("Enter");
   await expect(page).toHaveURL(/\/docs#ref-runtime$/);
 });

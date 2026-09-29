@@ -2,6 +2,44 @@ import type { Blog } from "../schemas";
 
 export const blog: Blog = [
   {
+    slug: "abi-is-rust-now",
+    tag: "ENGINEERING",
+    title: "ABI Is Rust Now: What Changed, and What Didn't",
+    excerpt:
+      "The ABI runtime moved from Zig to a nightly-Rust workspace on July 30, 2026, and WDBX became its own sibling workspace in August. Here is what that means for anyone building from source.",
+    date: "September 29, 2026",
+    readTime: "3 min read",
+    author: "MLAI Research",
+    body: [
+      {
+        paragraphs: [
+          "On July 30, 2026 the ABI runtime landed on main as a nightly-Rust workspace, and the Zig tree was torn down the same day. Two of the posts below, on Zig 0.16 and on why WDBX was written in Zig, describe the implementation that replaced. They stay up for provenance and are marked historical.",
+          "This note covers what a reader building from source needs to know. It makes no performance claim: there is still no published benchmark harness, and a language change is not evidence that anything got faster.",
+        ],
+      },
+      {
+        heading: "One gate, one wrapper",
+        paragraphs: [
+          "The ABI README names two entry points. ./tools/check.sh is the validation gate: policy tests, formatting, clippy with warnings denied, the workspace build and tests, and docs. ./tools/cargo.sh is the Cargo wrapper that selects the pinned nightly toolchain. Bare cargo is the wrong entry, because it may pick a different toolchain than the tree builds with.",
+          "A green gate is evidence about that checkout on that machine. It is not evidence about a hosted product, a mobile build, or model quality.",
+        ],
+      },
+      {
+        heading: "WDBX is a sibling, not a subdirectory",
+        paragraphs: [
+          "On August 22 the WDBX crates were extracted into their own workspace with history preserved. They keep the abi- crate prefix on purpose, and ABI builds against them through relative Cargo paths, so the two repositories must be cloned side by side.",
+          "The WDBX V2 documentation set published in June describes an earlier single-crate project. It remains downloadable from the docs, labelled as a snapshot, and the current wdbx README is the authority for the substrate.",
+        ],
+      },
+      {
+        heading: "The MCP surface",
+        paragraphs: [
+          "abi-mcp exposes twelve contract-covered tools over stdio. Since September 23 its optional loopback HTTP listener also serves persistent MCP 2024-11-05 HTTP+SSE sessions with optional bearer auth. It is not the newer Streamable HTTP transport, and this website does not expose those tools to visitors.",
+        ],
+      },
+    ],
+  },
+  {
     slug: "wdbx-v2-release",
     tag: "RELEASE",
     title: "WDBX V2: Observable Memory, Multimodal Inputs, and Research Alignment",
@@ -577,6 +615,8 @@ pub fn findDivergence(chain: *const Chain, anchor: Vec) ?BlockRef {
   },
   {
     slug: "zig-016-migration",
+    historical:
+      "This post describes the Zig implementation, which the nightly-Rust workspace replaced on July 30, 2026. It is kept for provenance, not as current build guidance.",
     tag: "ENGINEERING",
     title: "Surviving Writergate: Migrating ABI to Zig 0.16",
     excerpt:
@@ -646,6 +686,8 @@ zig version | grep -q "0.16.0-dev" || {
   },
   {
     slug: "why-zig",
+    historical:
+      "This post describes the Zig implementation, which the nightly-Rust workspace replaced on July 30, 2026. It is kept for provenance, not as current build guidance.",
     tag: "FIELD NOTE",
     title: "Why WDBX Is Written in Zig",
     excerpt:

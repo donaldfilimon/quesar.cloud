@@ -12,7 +12,6 @@ import { projects } from "./categories/projects";
 import { research } from "./categories/research";
 import { researchSources, researchTopics } from "./categories/research-topics";
 import { refusals, services } from "./categories/services";
-import { stats } from "./categories/stats";
 import { abbeyWorkspaceFacts, quesarSurfaces, quesarWhat, setups } from "./categories/surfaces";
 import { team } from "./categories/team";
 import {
@@ -28,7 +27,6 @@ import {
   ResearchSchema,
   RuntimeSchema,
   ServicesSchema,
-  StatsSchema,
   TeamSchema,
 } from "./schemas";
 import { ResearchSourcesSchema, ResearchTopicsSchema } from "./schemas-research-topics";
@@ -57,7 +55,6 @@ const datasets: [string, ZodType, unknown][] = [
   ["researchSources", ResearchSourcesSchema, researchSources],
   ["blog", BlogSchema, blog],
   ["team", TeamSchema, team],
-  ["stats", StatsSchema, stats],
   ["products", ProductsSchema, products],
   ["changelog", ChangelogSchema, changelog],
   ["docs", DocsSchema, docs],

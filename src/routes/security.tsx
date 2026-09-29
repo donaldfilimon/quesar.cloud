@@ -2,18 +2,14 @@ import { createFileRoute } from "@tanstack/react-router";
 import { PageClose, PageHero, Section, Surface } from "@/components/site";
 import { StatusBadge } from "@/components/site/status-badge";
 import { LEGAL_UPDATED, securitySections } from "@/lib/mlai/pages";
+import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/security")({
-  head: () => ({
-    meta: [
-      { title: "Security — Quesar / MLAI" },
-      {
-        name: "description",
-        content:
-          "Security posture for MLAI and Quesar: claim-honest language, local trust boundaries, and documented hazards.",
-      },
-    ],
-  }),
+  head: () =>
+    pageHead(
+      "Security — Quesar / MLAI",
+      "Security posture for MLAI and Quesar: claim-honest language, local trust boundaries, and documented hazards.",
+    ),
   component: SecurityPage,
 });
 

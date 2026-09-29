@@ -305,6 +305,6 @@ export const CORPUS: Doc[] = [
     id: "bunstack",
     tag: "docs",
     title: "Bun + TypeScript services",
-    text: "Service layers run on Bun with TypeScript; the site ships as a Next.js App Router application.",
+    text: "Service layers run on Bun with TypeScript; the site ships as a TanStack Start application.",
   },
 ];

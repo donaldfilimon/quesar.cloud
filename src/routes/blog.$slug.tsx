@@ -1,5 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { MathArticleBody } from "@/components/site/math-article";
+import { Callout } from "@/components/site/lab";
 import { PageClose, PageHero, Section } from "@/components/site";
 import { Button } from "@/components/ui/button";
 import { blog } from "@/lib/mlai/categories/blog";
@@ -43,6 +44,11 @@ function BlogPost() {
         ) : null}
       </PageHero>
       <Section>
+        {post.historical ? (
+          <Callout label="Historical" className="mb-10 max-w-3xl">
+            {post.historical}
+          </Callout>
+        ) : null}
         <MathArticleBody sections={post.body} />
         <div className="mt-14 flex max-w-3xl flex-wrap items-center justify-between gap-6 border-t border-border pt-8">
           <Button asChild>

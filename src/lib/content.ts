@@ -292,8 +292,8 @@ export const architectureNodes: ArchNode[] = [
     status: "partial",
     summary: "Contract-covered plugins and MCP tools.",
     detail:
-      "Twelve contract-covered MCP tools including wdbx_query and gpu_status. Persistent HTTP+SSE is not claimed.",
-    implemented: ["stdio MCP", "Optional loopback HTTP with bearer auth"],
+      "Twelve contract-covered MCP tools including wdbx_query and gpu_status. The optional loopback listener serves MCP 2024-11-05 HTTP+SSE sessions, not Streamable HTTP.",
+    implemented: ["stdio MCP", "Optional loopback HTTP+SSE with bearer auth"],
     notClaimed: ["A hosted plugin marketplace", "Unauthenticated internet exposure"],
     href: "/plugins",
   },
@@ -586,7 +586,7 @@ export const abiDuties: { title: string; body: string; status: StatusKind }[] = 
   },
   {
     title: "Tool orchestration",
-    body: "MCP tools in the public tree. Optional loopback HTTP is not a spec-conforming persistent SSE channel.",
+    body: "Twelve MCP tools in the public tree over stdio, plus an optional loopback HTTP+SSE listener. Not Streamable HTTP.",
     status: "current",
   },
   {

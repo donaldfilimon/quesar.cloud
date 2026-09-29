@@ -2,14 +2,15 @@
  * RSS 2.0 feed builder, pure and testable. Ported from mlai `src/lib/feed.ts`;
  * the `/feed.xml` server route is a thin wrapper.
  *
- * Items are every blog post and every research publication, unified and sorted
- * newest first. Human-readable dates ("June 9, 2026", "JUNE 2026") are parsed
+ * Items are every blog post, every research publication and every Rust-era
+ * changelog entry, unified and sorted newest first. Human-readable dates ("June 9, 2026", "JUNE 2026") are parsed
  * best-effort; an unparseable date sorts last and omits <pubDate> rather than
  * emitting an invalid RFC-822 string.
  */
 
 import { site } from "@/lib/site-identity";
 import { blog } from "./categories/blog";
+import { changelog } from "./categories/changelog";
 import { research } from "./categories/research";
 import { parseContentDate } from "./dates";
 import { SITE_URL } from "./structured-data";
@@ -54,9 +55,22 @@ export function collectFeedItems(): FeedItem[] {
     timestamp: parseContentDate(p.date),
   }));
 
-  return [...posts, ...papers].sort(
+  const releases: FeedItem[] = currentReleases().map((entry) => ({
+    title: `${entry.version}: ${entry.title}`,
+    link: `${SITE_URL}/changelog#${entry.version}`,
+    description: entry.items.map((item) => item.text).join(" "),
+    category: "CHANGELOG",
+    timestamp: parseContentDate(entry.date),
+  }));
+
+  return [...posts, ...papers, ...releases].sort(
     (a, b) => (b.timestamp ?? -Infinity) - (a.timestamp ?? -Infinity),
   );
+}
+
+/** Changelog entries for the current (Rust) tree; the Zig archive stays off the feed. */
+export function currentReleases() {
+  return changelog.filter((entry) => entry.era === "rust");
 }
 
 export function buildRssFeed(now: Date = new Date()): string {

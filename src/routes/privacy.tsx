@@ -1,18 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { PageClose, PageHero, Section, Surface } from "@/components/site";
 import { LEGAL_UPDATED, privacyPolicy } from "@/lib/mlai/pages";
+import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/privacy")({
-  head: () => ({
-    meta: [
-      { title: "Privacy — Quesar / MLAI" },
-      {
-        name: "description",
-        content:
-          "How MLAI treats privacy as architecture: local processing, operator-owned memory, and the limits of this public website.",
-      },
-    ],
-  }),
+  head: () =>
+    pageHead(
+      "Privacy — Quesar / MLAI",
+      "How MLAI treats privacy as architecture: local processing, operator-owned memory, and the limits of this public website.",
+    ),
   component: PrivacyPage,
 });
 

@@ -86,7 +86,9 @@ export const BlogSectionSchema = z.object({
 export const ChangelogSchema = z.array(
   z.object({
     version: z.string(),
-    date: z.string(),
+    date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+    /** `rust` is the current tree; `zig` entries describe the superseded implementation. */
+    era: z.enum(["rust", "zig"]),
     title: z.string(),
     items: z.array(
       z.object({
@@ -169,6 +171,8 @@ export const BlogSchema = z.array(
     date: z.string(),
     readTime: z.string(),
     author: z.string().optional(),
+    /** Set on posts about a superseded implementation; shown above the post and on its card. */
+    historical: z.string().optional(),
     body: z.array(BlogSectionSchema).default([]),
   }),
 );
@@ -183,7 +187,12 @@ export const DocsSchema = z.array(
     slug: z.string(),
     title: z.string(),
     description: z.string(),
+    /** Sidebar group; the docs array order is the sidebar and prev/next order. */
     group: z.string(),
+    /** Short sidebar label. */
+    navLabel: z.string(),
+    /** Date the article was last checked against its sources. */
+    reviewedAt: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
     body: z.array(DocSectionSchema).default([]),
     sources: z
       .array(
@@ -280,14 +289,6 @@ export const TeamSchema = z.array(
   }),
 );
 
-export const StatsSchema = z.array(
-  z.object({
-    value: z.string(),
-    label: z.string(),
-    detail: z.string(),
-  }),
-);
-
 // Product deep-dive pages (/products/:slug) — structured narrative content
 // ported from the MLAI mega-site. Equations are LaTeX (KaTeX block render);
 // accents bind to the persona palette already used by the Docs persona dots.
@@ -373,7 +374,6 @@ export const ContentSchema = z.object({
   research: ResearchSchema,
   blog: BlogSchema,
   team: TeamSchema,
-  stats: StatsSchema,
   products: ProductsSchema,
   changelog: ChangelogSchema,
   docs: DocsSchema,
@@ -389,7 +389,6 @@ export type Runtime = z.infer<typeof RuntimeSchema>;
 export type Research = z.infer<typeof ResearchSchema>;
 export type Blog = z.infer<typeof BlogSchema>;
 export type Team = z.infer<typeof TeamSchema>;
-export type Stats = z.infer<typeof StatsSchema>;
 export type Products = z.infer<typeof ProductsSchema>;
 export type Changelog = z.infer<typeof ChangelogSchema>;
 export type Content = z.infer<typeof ContentSchema>;

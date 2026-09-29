@@ -1,15 +1,116 @@
 import type { Changelog } from "../schemas";
 
 /**
- * Release history, ported from the mlai-vite iteration. Versions/dates are
- * presentation-layer markers aligned to the project's documented milestones
- * (Zig migrations, WDBX storage engine, Abbey training stack) — the page
- * states this framing explicitly; edit freely as releases formalize.
+ * Release history. Versions are presentation-layer markers, not published
+ * package versions; dates are the day the work landed on `main`.
+ *
+ * Rust-era entries (newest first) are sourced from the ABI and WDBX git
+ * histories, `abi/CHANGELOG.md`, and this repository's `AGENTS.md` and git log.
+ * The `zig` entries were ported from the mlai-vite iteration and describe the
+ * superseded Zig implementation; `/changelog` shows them as an archive, as
+ * `abi/CHANGELOG.md` does.
  */
 export const changelog: Changelog = [
   {
+    version: "v0.15.0",
+    date: "2026-09-29",
+    era: "rust",
+    title: "Docs checked against their sources",
+    items: [
+      {
+        cat: "fixed",
+        text: "Every /docs article is re-checked against the ABI, WDBX and Gama READMEs and carries the date of that review.",
+      },
+      {
+        cat: "changed",
+        text: "Each article renders its own reference material (MCP tools, site surfaces, WDBX V2 downloads) from the same records as the /docs hub, so the two cannot disagree.",
+      },
+      {
+        cat: "fixed",
+        text: "The MCP article lists all twelve contract-covered tools; WDBX V2 is described as the earlier Rust project it documents, not a Zig mirror.",
+      },
+    ],
+  },
+  {
+    version: "v0.14.0",
+    date: "2026-09-23",
+    era: "rust",
+    title: "First-party sign-in; MCP over HTTP+SSE",
+    items: [
+      {
+        cat: "changed",
+        text: "quesar.cloud leaves the Grok App Builder: sandbox tooling and platform chrome removed, bun and TypeScript throughout.",
+      },
+      {
+        cat: "added",
+        text: "Sign-in is first-party Better Auth: email and password, passkeys, and Google, Apple or X when configured.",
+      },
+      {
+        cat: "added",
+        text: "abi-mcp's optional loopback listener serves persistent MCP 2024-11-05 HTTP+SSE sessions; POST /message without a session keeps the one-shot reply. Not Streamable HTTP.",
+      },
+    ],
+  },
+  {
+    version: "v0.13.0",
+    date: "2026-09-22",
+    era: "rust",
+    title: "One site for MLAI and Quesar",
+    items: [
+      {
+        cat: "changed",
+        text: "The MLAI corporate site is merged into quesar.cloud, which becomes the only MLAI and Quesar site; the old repository is archived.",
+      },
+      {
+        cat: "added",
+        text: "Chat audits and workspace tokens sealed with AES-256-GCM; account deletion purges per-user data.",
+      },
+      {
+        cat: "added",
+        text: "https://quesar.cloud serves the static build from GitHub Pages.",
+      },
+    ],
+  },
+  {
+    version: "v0.12.0",
+    date: "2026-09-06",
+    era: "rust",
+    title: "Research records pinned to source",
+    items: [
+      {
+        cat: "added",
+        text: "Research publications re-reviewed against pinned ABI and WDBX commits, each with its status, limitations and review date.",
+      },
+    ],
+  },
+  {
+    version: "v0.11.0",
+    date: "2026-08-22",
+    era: "rust",
+    title: "WDBX becomes its own substrate",
+    items: [
+      {
+        cat: "changed",
+        text: "The WDBX crates are extracted from ABI into the wdbx workspace with history preserved; the abi- crate prefix is kept deliberately and ABI builds against it as a sibling.",
+      },
+    ],
+  },
+  {
+    version: "v0.10.0",
+    date: "2026-07-30",
+    era: "rust",
+    title: "ABI rewritten in Rust",
+    items: [
+      {
+        cat: "changed",
+        text: "The ABI runtime lands as a nightly-Rust workspace; the Zig tree is torn down. ./tools/check.sh is the validation gate and ./tools/cargo.sh the pinned Cargo wrapper.",
+      },
+    ],
+  },
+  {
     version: "v0.9.0",
     date: "2026-05-14",
+    era: "zig",
     title: "Zig 0.17-dev migration begins",
     items: [
       {
@@ -29,6 +130,7 @@ export const changelog: Changelog = [
   {
     version: "v0.8.0",
     date: "2026-04-08",
+    era: "zig",
     title: "Abbey training pipeline",
     items: [
       {
@@ -52,6 +154,7 @@ export const changelog: Changelog = [
   {
     version: "v0.7.0",
     date: "2026-03-12",
+    era: "zig",
     title: "Production infrastructure expansion",
     items: [
       {
@@ -71,6 +174,7 @@ export const changelog: Changelog = [
   {
     version: "v0.6.0",
     date: "2026-02-10",
+    era: "zig",
     title: "Performance tooling & test milestone",
     items: [
       {
@@ -90,6 +194,7 @@ export const changelog: Changelog = [
   {
     version: "v0.5.0",
     date: "2026-01-08",
+    era: "zig",
     title: "Zig 0.16 — the Writergate migration",
     items: [
       {
@@ -109,6 +214,7 @@ export const changelog: Changelog = [
   {
     version: "v0.4.0",
     date: "2025-12-04",
+    era: "zig",
     title: "WDBX verification track",
     items: [
       {
@@ -128,6 +234,7 @@ export const changelog: Changelog = [
   {
     version: "v0.3.0",
     date: "2025-11-06",
+    era: "zig",
     title: "GPU backend matrix",
     items: [
       {
@@ -144,6 +251,7 @@ export const changelog: Changelog = [
   {
     version: "v0.2.0",
     date: "2025-10-02",
+    era: "zig",
     title: "Storage engine core",
     items: [
       { cat: "added", text: "HNSW approximate nearest-neighbor index tuned for cache locality." },
@@ -160,6 +268,7 @@ export const changelog: Changelog = [
   {
     version: "v0.1.0",
     date: "2025-09-10",
+    era: "zig",
     title: "Initial public release",
     items: [
       {

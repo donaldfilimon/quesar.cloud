@@ -3,6 +3,9 @@ import { about } from "./categories/about";
 import { blog } from "./categories/blog";
 import { changelog } from "./categories/changelog";
 import { docs } from "./categories/docs";
+import { mcpToolCatalog } from "./categories/abi-runtime";
+import { docsHub } from "./pages";
+import { DOCS_HUB_SECTIONS } from "@/components/site/docs-hub-anchors";
 import { industries } from "./categories/industries";
 import { platform, runtime } from "./categories/platform";
 import { productJourneys, startJourneys } from "./categories/product-journeys";
@@ -10,7 +13,6 @@ import { products } from "./categories/products";
 import { projects } from "./categories/projects";
 import { research } from "./categories/research";
 import { refusals, services } from "./categories/services";
-import { stats } from "./categories/stats";
 import { team } from "./categories/team";
 import { ContentSchema, DocsSchema, ProductsSchema, ProjectsSchema } from "./schemas";
 
@@ -30,7 +32,6 @@ const content = {
   research,
   blog,
   team,
-  stats,
   products,
   changelog,
   docs,
@@ -50,7 +51,6 @@ describe("content data layer", () => {
     expect(research.publications.length).toBeGreaterThan(0);
     expect(blog.length).toBeGreaterThan(0);
     expect(team.length).toBeGreaterThan(0);
-    expect(stats.length).toBeGreaterThan(0);
   });
 
   it("gives blog posts and papers unique, URL-safe slugs and renderable bodies", () => {
@@ -104,6 +104,22 @@ describe("docs corpus", () => {
         ).toBeGreaterThan(0);
       }
     }
+  });
+
+  it("keeps each sidebar group contiguous, so group order is the docs order", () => {
+    const groups = docs.map((d) => d.group).filter((g, i, all) => g !== all[i - 1]);
+    expect(new Set(groups).size).toBe(groups.length);
+  });
+
+  it("gives every hub reference section an article to live under", () => {
+    const slugs = new Set(docs.map((d) => d.slug));
+    for (const section of DOCS_HUB_SECTIONS) expect(slugs, section.slug).toContain(section.slug);
+  });
+
+  it("does not hand-list MCP tools; the reference below renders the whole catalog", () => {
+    const mcp = JSON.stringify(docs.find((d) => d.slug === "mcp"));
+    for (const tool of mcpToolCatalog) expect(mcp).not.toContain(`${tool.name} —`);
+    expect(docsHub.mcpTools.map((t) => t.name)).toEqual(mcpToolCatalog.map((t) => t.name));
   });
 
   it("states the WDBX HNSW defaults the Rust source uses", () => {

@@ -152,15 +152,15 @@ export const teamIntro = {
 export const blogRubrics = [
   {
     title: "Architecture memos",
-    body: "Practical context, patterns, and decision notes for production-minded AI teams.",
+    body: "How the runtime, memory substrate and personas fit together, and the decisions behind each boundary.",
   },
   {
     title: "Safety drills",
-    body: "Practical context, patterns, and decision notes for production-minded AI teams.",
+    body: "Failure modes worked through in advance: what fails closed, what gets logged, and who reviews it.",
   },
   {
     title: "Operator UX",
-    body: "Practical context, patterns, and decision notes for production-minded AI teams.",
+    body: "Control surfaces for the people running the system: calm defaults, visible state, and honest status.",
   },
 ] as const;
 
@@ -308,10 +308,11 @@ export const docsHub = {
   mcpSpec: [
     { k: "Transport", v: "JSON-RPC 2.0 over stdio" },
     { k: "Request cap", v: "64 KB" },
-    { k: "Loopback HTTP listener", v: "127.0.0.1:8080" },
+    { k: "Loopback HTTP listener", v: "127.0.0.1:8080 (optional)" },
     { k: "Port override", v: "ABI_MCP_HTTP_PORT" },
-    { k: "Discovery only", v: "GET /sse (one event, then close)" },
-    { k: "Message endpoint", v: "POST /message" },
+    { k: "Bearer auth", v: "ABI_MCP_HTTP_TOKEN (optional)" },
+    { k: "Session stream", v: "GET /sse: persistent MCP 2024-11-05 HTTP+SSE session" },
+    { k: "Message endpoint", v: "POST /message; without a sessionId, one-shot direct reply" },
   ],
   mcpTools: docsMcpTools,
   /** Deployment of this site, from the env table in AGENTS.md. Each missing value is a "not configured" state, never a crash. */
