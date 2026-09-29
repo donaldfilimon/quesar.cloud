@@ -12,6 +12,7 @@ import {
 import { StatusBadge } from "@/components/site/status-badge";
 import { Button } from "@/components/ui/button";
 import { quesarSurfaces, quesarWhat } from "@/lib/content";
+import { ogImage } from "@/lib/og-sections";
 import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/quesar")({
@@ -19,6 +20,7 @@ export const Route = createFileRoute("/quesar")({
     pageHead(
       "Quesar — the large model",
       "Quesar is the large model that trains and improves Abbey, Aviva, and the other assistants. This website does not host the model, run training, or host assistant sessions.",
+      ogImage("quesar"),
     ),
   component: QuesarPage,
 });

@@ -1,1 +1,0 @@
-import{N as e}from"./index-CTwlls5t.js";var t=e({type:`function`});export{t};

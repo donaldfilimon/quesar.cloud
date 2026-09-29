@@ -42,7 +42,7 @@ function CompanionPage() {
         <div className="mt-8 overflow-hidden rounded-[24px] bg-bg-elevated p-6 shadow-border">
           <p className="text-xs text-accent">Window</p>
           <div className="mt-4 grid gap-3 sm:grid-cols-[8rem_1fr]">
-            <div className="rounded-lg bg-bg p-3 font-mono text-11 text-fg-subtle">
+            <div className="rounded-lg bg-bg p-3 font-mono text-2xs text-fg-subtle">
               Threads · Claims · Memory
             </div>
             <div className="rounded-lg bg-bg p-4 text-sm text-fg-muted">

@@ -40,7 +40,7 @@ export function StepList({ steps }: { steps: readonly { title: string; body: str
     <ol className="grid gap-4 md:grid-cols-2">
       {steps.map((step, index) => (
         <li key={step.title} className="surface flex gap-4 p-5">
-          <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-bg font-mono text-0.7rem text-accent shadow-border">
+          <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-bg font-mono text-2xs text-accent shadow-border">
             {String(index + 1).padStart(2, "0")}
           </span>
           <div>
@@ -103,7 +103,7 @@ export function CodeBlock({ code, label }: { code: string; label?: string }) {
         <button
           type="button"
           onClick={() => void copy()}
-          className="inline-flex h-9 items-center gap-1.5 rounded-md px-2 text-11 text-fg-muted hover:bg-bg-subtle hover:text-fg"
+          className="inline-flex h-9 items-center gap-1.5 rounded-md px-2 text-2xs text-fg-muted hover:bg-bg-subtle hover:text-fg"
         >
           {copied ? (
             <Check className="size-3.5" strokeWidth={1.75} />
@@ -117,7 +117,7 @@ export function CodeBlock({ code, label }: { code: string; label?: string }) {
           users need to be able to focus it to scroll (axe scrollable-region-focusable). */}
       <pre
         tabIndex={0}
-        className="max-w-full overflow-x-auto p-5 font-mono text-0.8rem leading-7 text-fg"
+        className="max-w-full overflow-x-auto p-5 font-mono text-xs leading-7 text-fg"
       >
         <code>{code}</code>
       </pre>

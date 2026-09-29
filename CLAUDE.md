@@ -21,6 +21,7 @@ bun run test         # vitest: src/**/*.test.{ts,tsx} and scripts/**/*.test.ts
 bun run test:e2e     # Playwright against docs/; build:static first
 bun run check:static # internal links/assets and per-route preload + gzip JS budgets in docs/
 bun run check:research-drift  # report-only: commits since the research records' pinned abi/wdbx revisions
+bun run og:images    # re-render public/og/<slug>.jpg from src/lib/og-sections.ts (Playwright Chromium); by hand, commit the output; the build never runs it
 bun run build        # vite build (Vercel preset) + PGLite assets + migrations
 bun run build:static # GitHub Pages build into docs/
 bun run build:dev    # vite build --mode development only: no PGLite assets, no migrations
@@ -88,7 +89,7 @@ separate browser acceptance runner.
 
 **Workspace connectors.** Google Drive / Microsoft OAuth under `src/routes/api/workspace/*` and `src/lib/workspace-connectors/` (a deliberate deviation; see `AGENTS.md`).
 
-**Head and SEO.** The root route (`src/routes/__root.tsx`) sets site-wide OG/Twitter defaults, the static `public/manifest.webmanifest` and the touch icon, and renders the canonical URL and `og:url` from the current route. Pages call `pageHead(title, description)` from `src/lib/seo.ts`, which mirrors both into OG and Twitter tags.
+**Head and SEO.** The root route (`src/routes/__root.tsx`) sets site-wide OG/Twitter defaults, the static `public/manifest.webmanifest` and the touch icon, and renders the canonical URL and `og:url` from the current route. Pages call `pageHead(title, description, image?)` from `src/lib/seo.ts`, which mirrors them into OG and Twitter tags; `image` is `ogImage(slug)` from `src/lib/og-sections.ts`, a committed card in `public/og/` (re-render with `bun run og:images` when a section's title or line changes).
 
 **Cinematic showcase.** `/showcase/*` are `ssr: false` routes that lazy-load `src/cinematic/rooms/<room>.tsx`. Playback runs on `src/lib/trailer-engine/` (vendored from mlai). `src/cinematic/components/CinematicShell.tsx` portals to `<body>` because `.page-enter`'s transform would trap `position: fixed`, so keep the portal. Each narrated room passes `useVoiceGate()` (`src/cinematic/film/speech.ts`) to its `Stage`: nothing downloads until Play, the clock holds while the model loads, and "Play without voice" always opens the gate. Under reduced motion the film waits for Play and rooms read `reducedMotion` from the timeline context to drop shake and flashes; never hold the clock for it. `/showcase` and the home teaser use the MP4 player in `src/components/site/trailer.tsx`; each cut's sources, text track, poster and `hasAudio` are declared in `film-cuts.ts`, and wall posters in `public/media/rooms/` are real frames captured from the built rooms.
 

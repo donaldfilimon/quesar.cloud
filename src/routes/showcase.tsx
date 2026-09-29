@@ -3,6 +3,7 @@ import { PageClose, PageHero, RouteFrame, Section } from "@/components/site";
 import { ShowcaseWall } from "@/components/site/showcase-wall";
 import { Trailer } from "@/components/site/trailer";
 import { FILM_PUBLISHED, filmCuts } from "@/components/site/film-cuts";
+import { ogImage } from "@/lib/og-sections";
 import { pageHead, SITE_ORIGIN } from "@/lib/seo";
 
 const DESCRIPTION = "Quesar showcase: trailer, film, explainer, design lab, Abbey, mega board.";
@@ -13,7 +14,7 @@ export const Route = createFileRoute("/showcase")({
   // The trailer's first cut, described for link previews and search: og:video
   // for cards that can play it, VideoObject for structured data.
   head: () => {
-    const head = pageHead("Showcase — Quesar", DESCRIPTION);
+    const head = pageHead("Showcase — Quesar", DESCRIPTION, ogImage("showcase"));
     return {
       meta: [
         ...head.meta,

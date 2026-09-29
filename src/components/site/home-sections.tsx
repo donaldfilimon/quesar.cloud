@@ -161,46 +161,13 @@ export function HomeResearchPreview() {
                 <span className="mt-1.5 block font-display text-xl leading-tight tracking-tight text-fg group-hover:text-accent">
                   {item.title}
                 </span>
-                <span className="mt-2 line-clamp-3 block text-0.9375rem leading-relaxed text-fg-muted">
+                <span className="mt-2 line-clamp-3 block text-base leading-relaxed text-fg-muted">
                   {item.abstract}
                 </span>
               </Link>
             </li>
           ))}
         </ol>
-      </div>
-    </section>
-  );
-}
-
-export function HomeCta() {
-  return (
-    <section aria-labelledby="quesar-cta-heading" className="border-t border-border">
-      <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-24">
-        <Surface accent="wdbx" className="p-8 md:p-12">
-          <div className="grid gap-10 lg:grid-cols-[1fr_auto] lg:items-end">
-            <div className="max-w-3xl">
-              <p className="eyebrow">Console</p>
-              <h2 id="quesar-cta-heading" className="section-title mt-4">
-                Put one governed workflow through Quesar.
-              </h2>
-              <p className="mt-5 text-lg leading-relaxed text-fg-muted">
-                Signed-in accounts can enter the console. Teams can request a scoped evaluation with
-                the workflow, failure modes, and data boundary made explicit.
-              </p>
-            </div>
-            <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
-              <Button asChild size="lg">
-                <Link to="/get-started">
-                  Get started <ArrowRight className="size-4" aria-hidden="true" />
-                </Link>
-              </Button>
-              <Button asChild size="lg" variant="secondary">
-                <Link to="/contact">Start an inquiry</Link>
-              </Button>
-            </div>
-          </div>
-        </Surface>
       </div>
     </section>
   );

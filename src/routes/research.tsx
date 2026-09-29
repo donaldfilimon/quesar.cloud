@@ -12,6 +12,7 @@ import {
 import { research } from "@/lib/mlai/categories/research";
 import { researchContext } from "@/lib/mlai/categories/research-context";
 import { researchSources, researchTopics } from "@/lib/content";
+import { ogImage } from "@/lib/og-sections";
 import { pageHead } from "@/lib/seo";
 
 const topicOptions = [
@@ -31,6 +32,7 @@ export const Route = createFileRoute("/research")({
     ...pageHead(
       "Research — MLAI memory, retrieval, and orchestration",
       "Research notes for MLAI and Quesar: memory architecture, retrieval, provenance, local inference, and implementation case studies with sources attached.",
+      ogImage("research"),
     ),
     links: [
       {

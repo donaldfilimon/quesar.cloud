@@ -16,6 +16,7 @@ import { ProvTag } from "@/components/site/prov-tag";
 import { Button } from "@/components/ui/button";
 import { abbeyCommands, abbeyLedger, abbeyWorkflow, abbeyWorkspaceFacts } from "@/lib/content";
 import { companionPersonas } from "@/lib/mlai/categories/personas";
+import { ogImage } from "@/lib/og-sections";
 import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/abbey")({
@@ -23,6 +24,7 @@ export const Route = createFileRoute("/abbey")({
     pageHead(
       "Abbey — Adaptive assistant on MLAI architecture",
       "Abbey is the adaptive assistant experience on Quesar: a local document workspace and a CLI/TUI companion that will not claim what the ledger cannot prove.",
+      ogImage("abbey"),
     ),
   component: AbbeyPage,
 });
@@ -93,7 +95,7 @@ function AbbeyPage() {
         <p className="mt-4 mb-6 text-sm text-fg-muted">
           Enumerated with evidence in <code className="font-mono">{abbeyLedger.source}</code>,
           schema {abbeyLedger.schema}, digest{" "}
-          <code className="font-mono text-11 break-all">{abbeyLedger.digest}</code>.{" "}
+          <code className="font-mono text-2xs break-all">{abbeyLedger.digest}</code>.{" "}
           <ProvTag tag="reported" className="ml-1 align-middle" />
         </p>
         <StatGrid

@@ -24,7 +24,7 @@ export function SourcePanel() {
   const first = cards[0]?.name ?? "abi";
 
   return (
-    <div className="min-w-0 overflow-hidden rounded-18 bg-bg-elevated shadow-border">
+    <div className="min-w-0 overflow-hidden rounded-3xl bg-bg-elevated shadow-border">
       <div className="flex items-center justify-between gap-3 border-b border-border px-4 py-3">
         <GithubSectionStatus
           status={data?.sections.readmes}

@@ -51,7 +51,7 @@ function Mark({ size = 36 }: { size?: number }) {
       style={{ width: size, height: size, borderRadius: size * 0.28 }}
     >
       <span
-        className="text-white font-black"
+        className="text-fg font-black"
         style={{ fontSize: size * 0.46, fontFamily: "var(--font-display)" }}
       >
         M
@@ -175,7 +175,7 @@ function Poster() {
 
   return (
     <div className="relative w-full" style={{ height: "min(86vh, 900px)" }}>
-      <div className="absolute inset-0 rounded-3xl overflow-hidden border border-white/10">
+      <div className="absolute inset-0 rounded-3xl overflow-hidden border border-border">
         <Field />
         <div
           className="absolute inset-0"
@@ -188,15 +188,15 @@ function Poster() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <Mark size={40} />
-              <span className="font-bold tracking-0.18em text-white text-xl">MLAI</span>
+              <span className="font-bold tracking-widest text-fg text-xl">MLAI</span>
             </div>
-            <div className="text-right text-xs font-mono text-slate-400">
+            <div className="text-right text-xs font-mono text-fg-muted">
               <div>Brand board · v1.0</div>
-              <div className="text-slate-600">Machine Learning Advanced Innovations</div>
+              <div className="text-fg-subtle">Machine Learning Advanced Innovations</div>
             </div>
           </div>
           <div className="flex-1 flex flex-col justify-center">
-            <div className="text-xs font-bold uppercase tracking-0.25em text-cyan-400 mb-4">
+            <div className="text-xs font-bold uppercase tracking-widest text-accent mb-4">
               Privacy-first AI infrastructure
             </div>
             <h1
@@ -222,15 +222,15 @@ function Poster() {
                     style={{ background: col, boxShadow: `0 0 10px ${col}` }}
                   />
                   <div>
-                    <div className="text-sm font-bold text-white">{n}</div>
-                    <div className="text-11 text-slate-400">{r}</div>
+                    <div className="text-sm font-bold text-fg">{n}</div>
+                    <div className="text-2xs text-fg-muted">{r}</div>
                   </div>
                 </div>
               ))}
             </div>
           </div>
           <div>
-            <div className="flex rounded-xl overflow-hidden border border-white/10 mb-5 h-14">
+            <div className="flex rounded-xl overflow-hidden border border-border mb-5 h-14">
               {PALETTE.map(([, hex]) => (
                 <button
                   key={hex}
@@ -240,8 +240,8 @@ function Poster() {
                   style={{ background: hex }}
                 >
                   <span
-                    className={`absolute inset-0 flex items-center justify-center text-10 font-mono ${
-                      ["#0c0c09", "#a855f7"].includes(hex) ? "text-white" : "text-slate-900"
+                    className={`absolute inset-0 flex items-center justify-center text-2xs font-mono ${
+                      ["#0c0c09", "#a855f7"].includes(hex) ? "text-fg" : "text-slate-900"
                     } ${hover === hex ? "opacity-100" : "opacity-0"}`}
                   >
                     {hex}
@@ -249,10 +249,10 @@ function Poster() {
                 </button>
               ))}
             </div>
-            <div className="flex items-center justify-between text-xs text-slate-500">
+            <div className="flex items-center justify-between text-xs text-fg-subtle">
               <div className="flex gap-5">
                 {PRINCIPLES.map(([title]) => (
-                  <span key={title} className="text-slate-300">
+                  <span key={title} className="text-fg-muted">
                     {title}
                   </span>
                 ))}
@@ -311,8 +311,8 @@ function GenSlider({
   return (
     <label className="block mb-3">
       <div className="flex justify-between text-xs mb-1">
-        <span className="text-slate-300">{label}</span>
-        <span className="text-cyan-400 font-mono">{p[k]}</span>
+        <span className="text-fg-muted">{label}</span>
+        <span className="text-accent font-mono">{p[k]}</span>
       </div>
       <input
         type="range"
@@ -492,12 +492,12 @@ function Generative() {
 
   return (
     <div
-      className="relative rounded-3xl overflow-hidden border border-white/10"
+      className="relative rounded-3xl overflow-hidden border border-border"
       style={{ height: "min(82vh, 820px)" }}
     >
       <canvas ref={ref} className="absolute inset-0 w-full h-full" />
       <div className="absolute top-5 left-5 glass rounded-2xl p-5 w-64">
-        <div className="text-xs font-bold uppercase tracking-widest text-cyan-400 mb-3">
+        <div className="text-xs font-bold uppercase tracking-widest text-accent mb-3">
           Generative studio
         </div>
         <div className="grid grid-cols-2 gap-1.5 mb-4">
@@ -505,10 +505,10 @@ function Generative() {
             <button
               key={m}
               onClick={() => setMode(m)}
-              className={`text-11 px-2 py-1.5 rounded-lg border transition-colors ${
+              className={`text-2xs px-2 py-1.5 rounded-lg border transition-colors ${
                 mode === m
-                  ? "bg-white/10 text-white border-white/20"
-                  : "text-slate-400 border-white/10 hover:text-white"
+                  ? "bg-fg/10 text-fg border-border-strong"
+                  : "text-fg-muted border-border hover:text-fg"
               }`}
             >
               {m}
@@ -528,7 +528,7 @@ function Generative() {
               trail: Math.floor(Math.random() * 100),
             })
           }
-          className="w-full mt-1 px-3 py-2 rounded-lg bg-linear-to-r from-cyan-500 to-purple-500 text-white text-sm font-semibold"
+          className="w-full mt-1 px-3 py-2 rounded-lg bg-linear-to-r from-cyan-500 to-purple-500 text-fg text-sm font-semibold"
         >
           ⤬ Shuffle
         </button>
@@ -579,8 +579,8 @@ function OGCard() {
             onClick={() => setV(k)}
             className={`text-xs px-4 py-2 rounded-full border transition-colors ${
               v === k
-                ? "bg-white/10 text-white border-white/20"
-                : "text-slate-400 border-white/10 hover:text-white"
+                ? "bg-fg/10 text-fg border-border-strong"
+                : "text-fg-muted border-border hover:text-fg"
             }`}
           >
             {k}
@@ -590,7 +590,7 @@ function OGCard() {
       <div className="mx-auto" style={{ width: "100%", maxWidth: 1200 }}>
         <div
           style={{ aspectRatio: "1200 / 630", width: "100%" }}
-          className="relative rounded-2xl overflow-hidden border border-white/10"
+          className="relative rounded-2xl overflow-hidden border border-border"
         >
           <Field />
           <div
@@ -602,17 +602,17 @@ function OGCard() {
           <div className="relative h-full flex flex-col justify-between p-[5%]">
             <div className="flex items-center gap-3">
               <Mark size={48} />
-              <span className="font-bold tracking-0.18em text-white text-2xl">MLAI</span>
+              <span className="font-bold tracking-widest text-fg text-2xl">MLAI</span>
             </div>
             <div>
               <div
-                className="text-sm font-bold uppercase tracking-0.25em mb-3"
+                className="text-sm font-bold uppercase tracking-widest mb-3"
                 style={{ color: d.accent }}
               >
                 {d.kicker}
               </div>
               <div
-                className="font-bold text-white leading-[1.05]"
+                className="font-bold text-fg leading-[1.05]"
                 style={{
                   fontFamily: "var(--font-display)",
                   fontSize: "clamp(28px, 5.2vw, 64px)",
@@ -620,11 +620,11 @@ function OGCard() {
               >
                 {d.title}
               </div>
-              <div className="mt-4 text-slate-300" style={{ fontSize: "clamp(13px, 1.8vw, 22px)" }}>
+              <div className="mt-4 text-fg-muted" style={{ fontSize: "clamp(13px, 1.8vw, 22px)" }}>
                 {d.sub}
               </div>
             </div>
-            <div className="flex items-center justify-between text-xs text-slate-500 font-mono">
+            <div className="flex items-center justify-between text-xs text-fg-subtle font-mono">
               <span>mlai.dev</span>
               <span className="flex gap-3">
                 {PERSONAS.map(([n, , col]) => (
@@ -637,7 +637,7 @@ function OGCard() {
           </div>
         </div>
       </div>
-      <p className="text-xs text-slate-500 mt-4 text-center">
+      <p className="text-xs text-fg-subtle mt-4 text-center">
         True 1200×630 ratio. Export: screenshot the card region, or open the standalone card and use
         a browser screenshot to PNG. (I can wire an html-to-image download button on request.)
       </p>
@@ -666,13 +666,13 @@ export default function ShowcaseBoard(): ReactNode {
   };
 
   return (
-    <div className="showcase-board text-white" style={rootStyle}>
+    <div className="showcase-board text-fg" style={rootStyle}>
       <style>{BOARD_STYLES}</style>
-      <header className="sticky top-0 z-30 bg-[#0c0c09]/85 backdrop-blur border-b border-white/10 px-6 py-3 flex items-center justify-between">
+      <header className="sticky top-0 z-30 bg-[#0c0c09]/85 backdrop-blur border-b border-border px-6 py-3 flex items-center justify-between">
         <div className="flex items-center gap-2.5">
           <Mark size={30} />
-          <span className="font-bold tracking-widest text-white text-sm">MLAI</span>
-          <span className="text-slate-600 text-xs hidden sm:inline">· design extras</span>
+          <span className="font-bold tracking-widest text-fg text-sm">MLAI</span>
+          <span className="text-fg-subtle text-xs hidden sm:inline">· design extras</span>
         </div>
         <div className="flex gap-2">
           {TABS.map((t) => (
@@ -681,8 +681,8 @@ export default function ShowcaseBoard(): ReactNode {
               onClick={() => setTab(t)}
               className={`text-xs px-3.5 py-1.5 rounded-full border transition-colors ${
                 tab === t
-                  ? "bg-white/10 text-white border-white/20"
-                  : "text-slate-400 border-white/10 hover:text-white"
+                  ? "bg-fg/10 text-fg border-border-strong"
+                  : "text-fg-muted border-border hover:text-fg"
               }`}
             >
               {t}

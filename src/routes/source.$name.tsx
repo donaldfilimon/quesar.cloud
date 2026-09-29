@@ -79,7 +79,7 @@ function SourceRepoPage() {
           </div>
         ) : null}
         {live ? (
-          <p className="mt-6 font-mono text-11 text-fg-subtle">
+          <p className="mt-6 font-mono text-2xs text-fg-subtle">
             {live.stars} stars · updated {live.updated.slice(0, 10)}
           </p>
         ) : null}

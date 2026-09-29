@@ -30,5 +30,15 @@ export function TabsTrigger({ className, ...props }: ComponentProps<typeof TabsP
 }
 
 export function TabsContent({ className, ...props }: ComponentProps<typeof TabsPrimitive.Content>) {
-  return <TabsPrimitive.Content className={cn("outline-none", className)} {...props} />;
+  // Radix makes the panel focusable (Tab moves into it), so it shows the site
+  // focus ring rather than hiding focus.
+  return (
+    <TabsPrimitive.Content
+      className={cn(
+        "rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+        className,
+      )}
+      {...props}
+    />
+  );
 }

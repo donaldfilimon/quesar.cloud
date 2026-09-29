@@ -33,7 +33,7 @@ function ServicesPage() {
               </p>
               <ul className="mt-4 space-y-1.5">
                 {service.outcomes.map((outcome) => (
-                  <li key={outcome} className="font-mono text-11 text-fg-subtle">
+                  <li key={outcome} className="font-mono text-2xs text-fg-subtle">
                     → {outcome}
                   </li>
                 ))}

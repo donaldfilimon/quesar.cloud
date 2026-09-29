@@ -161,7 +161,7 @@ export function NotesPanel({ initialNode }: { initialNode?: string }) {
               }}
               placeholder={`What is current on ${node?.name}, and what is not claimed?`}
             />
-            <p className="mt-1 font-mono text-10 text-fg-subtle">{body.length}/2000</p>
+            <p className="mt-1 font-mono text-2xs text-fg-subtle">{body.length}/2000</p>
           </div>
           <Button type="submit" disabled={status === "saving" || body.trim().length === 0}>
             {status === "saving" ? "Saving…" : "Save note"}

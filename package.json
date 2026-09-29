@@ -20,6 +20,7 @@
     "test:e2e": "playwright test",
     "check:static": "node scripts/check-static.ts",
     "check:research-drift": "node scripts/research-drift.ts",
+    "og:images": "node scripts/og-images.ts",
     "lint": "eslint . --max-warnings 0",
     "format": "prettier --write .",
     "format:check": "prettier --check .",

@@ -26,7 +26,7 @@ export function Mark({ size = 34 }: { size?: number }): ReactNode {
       }}
     >
       <span
-        className="text-white font-black"
+        className="text-fg font-black"
         style={{ fontSize: size * 0.46, fontFamily: "var(--font-display)", lineHeight: 1 }}
       >
         M
@@ -45,7 +45,7 @@ export function Eyebrow({
 }): ReactNode {
   return (
     <div
-      className="text-11 font-semibold uppercase mb-3"
+      className="text-2xs font-semibold uppercase mb-3"
       style={{ letterSpacing: "0.24em", color, fontFamily: "var(--font-mono)" }}
     >
       {children}
@@ -68,7 +68,7 @@ export function SectionHead({
     <header className="mb-10 max-w-3xl">
       {kicker && <Eyebrow color={color}>{kicker}</Eyebrow>}
       <h2
-        className="font-bold text-white tracking-tight"
+        className="font-bold text-fg tracking-tight"
         style={{
           fontFamily: "var(--font-display)",
           fontSize: "clamp(30px,4vw,46px)",
@@ -79,7 +79,7 @@ export function SectionHead({
         {title}
       </h2>
       {lede && (
-        <p className="mt-4 text-15 sm:text-base leading-relaxed text-slate-400 text-pretty">
+        <p className="mt-4 text-sm sm:text-base leading-relaxed text-fg-muted text-pretty">
           {lede}
         </p>
       )}
@@ -153,7 +153,7 @@ export function BeforeAfter({
 }): ReactNode {
   return (
     <div
-      className="inline-flex p-1 rounded-full border border-white/10 bg-black/40"
+      className="inline-flex p-1 rounded-full border border-border bg-black/40"
       style={{ backdropFilter: "blur(8px)" }}
     >
       {labels.map((l, i) => {
@@ -272,15 +272,15 @@ export function TokenRow({
   swatch?: string;
 }): ReactNode {
   return (
-    <div className="flex items-center gap-3 py-2 border-b border-white/6 last:border-0">
+    <div className="flex items-center gap-3 py-2 border-b border-border last:border-0">
       {swatch && (
         <span
-          className="w-4 h-4 rounded-md shrink-0 ring-1 ring-white/10"
+          className="w-4 h-4 rounded-md shrink-0 ring-1 ring-border"
           style={{ background: swatch }}
         />
       )}
-      <Mono className="text-12 text-slate-300 flex-1 min-w-0 truncate">{name}</Mono>
-      <Mono className="text-12 text-slate-500">{value}</Mono>
+      <Mono className="text-xs text-fg-muted flex-1 min-w-0 truncate">{name}</Mono>
+      <Mono className="text-xs text-fg-subtle">{value}</Mono>
     </div>
   );
 }
@@ -302,17 +302,17 @@ export function CodeBlock({ code, label }: { code: string; label?: string }): Re
         boxShadow: "inset 0 2px 14px rgba(0,0,0,0.55)",
       }}
     >
-      <div className="flex items-center justify-between px-4 py-2.5 border-b border-white/6">
+      <div className="flex items-center justify-between px-4 py-2.5 border-b border-border">
         <div className="flex items-center gap-1.5">
           <span className="w-2.5 h-2.5 rounded-full" style={{ background: "#f87171" }} />
           <span className="w-2.5 h-2.5 rounded-full" style={{ background: "#fbbf24" }} />
           <span className="w-2.5 h-2.5 rounded-full" style={{ background: "#34d399" }} />
-          {label && <Mono className="text-10 text-slate-500 ml-2">{label}</Mono>}
+          {label && <Mono className="text-2xs text-fg-subtle ml-2">{label}</Mono>}
         </div>
         <button
           type="button"
           onClick={copy}
-          className="text-10 font-semibold px-2.5 py-1 rounded-md transition-colors"
+          className="text-2xs font-semibold px-2.5 py-1 rounded-md transition-colors"
           style={{
             color: copied ? "#34d399" : "#94a3b8",
             background: copied ? "rgba(52,211,153,0.12)" : "rgba(255,255,255,0.05)",
@@ -323,7 +323,7 @@ export function CodeBlock({ code, label }: { code: string; label?: string }): Re
         </button>
       </div>
       <pre
-        className="px-4 py-4 overflow-x-auto text-12 leading-relaxed"
+        className="px-4 py-4 overflow-x-auto text-xs leading-relaxed"
         style={{ fontFamily: "var(--font-mono)", color: "#cbd5e1" }}
       >
         <code>{code}</code>

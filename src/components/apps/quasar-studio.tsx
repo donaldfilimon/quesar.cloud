@@ -52,7 +52,7 @@ export function QuasarStudio() {
           Refresh preview
         </Button>
       </div>
-      <div className="overflow-hidden rounded-18 bg-bg shadow-border">
+      <div className="overflow-hidden rounded-3xl bg-bg shadow-border">
         <p className="border-b border-border px-4 py-2 text-xs text-fg-subtle">next dev · local</p>
         <iframe title="Quasar preview" src={src} className="h-[28rem] w-full bg-bg" />
       </div>

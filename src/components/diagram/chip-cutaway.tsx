@@ -54,7 +54,7 @@ export function ChipCutaway() {
               value={layer.id}
               onMouseEnter={() => setActive(layer.id)}
               className={cn(
-                "chip-slab accent-edge relative block h-auto w-full rounded-18 px-6 py-5 text-left",
+                "chip-slab accent-edge relative block h-auto w-full rounded-3xl px-6 py-5 text-left",
                 layer.edge,
                 isActive ? layer.glow : "shadow-border",
                 isActive ? "bg-bg-elevated" : "bg-bg-elevated/80",

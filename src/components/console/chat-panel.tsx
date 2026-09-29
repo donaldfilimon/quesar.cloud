@@ -256,7 +256,7 @@ export function ChatPanel({ onOpenAudits }: { onOpenAudits: () => void }) {
             placeholder="Draft a safe rollout plan for a private retrieval agent that summarizes internal research notes."
           />
           <div className="flex items-center justify-between gap-3">
-            <p className="font-mono text-10 text-fg-subtle">
+            <p className="font-mono text-2xs text-fg-subtle">
               {prompt.length}/{MAX_PROMPT}
             </p>
             <Button type="submit" disabled={busy || !ready || prompt.trim().length === 0}>

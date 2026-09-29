@@ -2,9 +2,9 @@
    MLAI DESIGN-SYSTEM TOKENS · scoped port from the brand-site design system
    ──────────────────────────────────────────────────────────────────────────
    Scoped under .mlai-ds (NOT :root). The rooms are dark-first on every page
-   theme, so this scope first pins the site's editorial-instrument tokens to
-   their DARK values (a mirror of [data-theme="dark"] in src/styles.css; keep
-   the two in sync), then maps the ported design-system roles onto them:
+   theme: src/styles.css gives .mlai-ds the site's DARK editorial-instrument
+   tokens (same rule as [data-theme="dark"]), and this file maps the ported
+   design-system roles onto them:
    accent → the one "chain" accent (--primary), text/muted/border → the dark
    ink ramp, persona/product/status → the site's identity colors. Wrap any
    ported design board or cinematic surface in <div className="mlai-ds"> and
@@ -17,42 +17,8 @@
    ══════════════════════════════════════════════════════════════════════════ */
 
 .mlai-ds {
-  /* ── site tokens pinned to the dark theme (mirror of src/styles.css) ── */
+  /* The site's dark tokens come from the `.mlai-ds` selector in src/styles.css. */
   color-scheme: dark;
-  --background: #111410;
-  --foreground: #eef0e8;
-  --card: #181c16;
-  --card-foreground: #eef0e8;
-  --popover: #181c16;
-  --popover-foreground: #eef0e8;
-  --primary: #6cc3d9;
-  --primary-foreground: #0e1a1f;
-  --secondary: #20251e;
-  --secondary-foreground: #eef0e8;
-  --muted: #20251e;
-  --muted-foreground: #a9b1a0;
-  --destructive: #f08070;
-  --border: #2a2f27;
-  --input: #353b31;
-  --ring: #6cc3d9;
-  --bg: var(--background);
-  --bg-elevated: var(--card);
-  --bg-subtle: var(--muted);
-  --fg: var(--foreground);
-  --fg-muted: var(--muted-foreground);
-  --fg-subtle: #8f9885;
-  --accent: var(--primary);
-  --accent-fg: var(--primary-foreground);
-  --abi: #b49ad6;
-  --wdbx: var(--primary);
-  --abbey: #7fc49b;
-  --aviva: #e08aad;
-  --warn: #e0b060;
-  --border-strong: #3a4035;
-  --status-current: #7fc49b;
-  --status-partial: #e0b060;
-  --status-planned: var(--fg-subtle);
-  --grad: linear-gradient(92deg, var(--primary), var(--abi));
 
   /* raw brand palette. Cyan is the chain accent, violet the ABI identity
      color; amber/red/green follow the site's status colors. Blue has no site
