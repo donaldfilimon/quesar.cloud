@@ -47,10 +47,10 @@ export function useSettings(): Settings {
 
 /* ── speech: the neural model is the only engine ──────────────────────
    All three minds (Abbey/Aviva/Abi) speak through Kokoro (neural-voice.ts).
-   Playback is gated on the model being ready (see useVoiceReady), so a line is
-   never crossed before the voice exists — nothing is dropped or silent. If the
-   model is unsupported or fails to load, the gate opens anyway and captions
-   carry the words. ──────────────────────────────────────────────────────── */
+   Playback is gated on the model being ready (see useVoiceGate), so a line is
+   never crossed before the voice exists. If the model is unsupported or fails
+   to load, or the viewer chooses to watch without it, the gate opens and
+   captions carry the words. There is no Web Speech fallback. ─────────────── */
 
 export function speak(who: PersonaKey, text: string) {
   if (typeof window === "undefined" || !settings.voiceOn) return;
@@ -84,43 +84,74 @@ export function setSpeechPlaying(playing: boolean) {
   }
 }
 
-// Pre-render a script's lines in idle time so playback is gapless. warm() itself
-// kicks the model download.
+/* ── the voice gate ────────────────────────────────────────────────
+   Nothing downloads until the viewer presses Play (requestVoice). The model is
+   large, and loading it on page entry spent a visitor's bandwidth before they
+   chose to watch. Lines primed before that are queued and warmed on request. */
+
+let voiceRequested = false;
+let pendingWarm: Array<{ who: string; text: string }> = [];
+
+// Pre-render a script's lines in idle time so playback is gapless, once the
+// viewer has asked for the voice (warm() kicks the model download).
 export function primeNeural(lines: Array<{ who?: PersonaKey | string; text: string }>) {
   if (typeof window === "undefined") return;
+  const queued = lines.map((l) => ({ who: (l.who ?? "abbey") as string, text: l.text }));
+  if (!voiceRequested) {
+    pendingWarm = pendingWarm.concat(queued);
+    return;
+  }
   try {
     if (!NeuralVoice.isSupported()) return;
-    NeuralVoice.warm(lines.map((l) => ({ who: (l.who ?? "abbey") as string, text: l.text })));
+    void NeuralVoice.warm(queued);
   } catch {
     /* noop */
   }
 }
 
-// True once playback may start: the model is ready, OR it can't/needn't run
-// (muted, unsupported, or it gave up) — so we never hang the film forever.
-function voiceGateOpen(): boolean {
-  if (!settings.voiceOn) return true;
-  if (typeof window === "undefined" || !NeuralVoice.isSupported()) return true;
-  const s = NeuralVoice.status();
-  return s === "ready" || s === "error";
+/** Start the model download and warm any queued lines. Idempotent. */
+export function requestVoice() {
+  if (voiceRequested || typeof window === "undefined") return;
+  voiceRequested = true;
+  if (!NeuralVoice.isSupported()) return;
+  NeuralVoice.load().catch(() => {});
+  const queued = pendingWarm;
+  pendingWarm = [];
+  if (queued.length) void NeuralVoice.warm(queued).catch(() => {});
 }
 
-// Hook for a <Stage ready={…}> gate: kicks the model load and flips true when the
-// voice is ready (polls status — load has no synchronous "done" signal).
-export function useVoiceReady(): boolean {
-  const [ready, setReady] = useState(() => voiceGateOpen());
-  useEffect(() => {
-    if (ready) return;
-    NeuralVoice.load().catch(() => {});
-    const iv = setInterval(() => {
-      if (voiceGateOpen()) {
-        setReady(true);
-        clearInterval(iv);
-      }
-    }, 200);
-    return () => clearInterval(iv);
-  }, [ready]);
-  return ready;
+// True once playback may start: the model is ready, OR it can't/needn't run
+// (muted, unsupported, or it gave up) — so we never hang the film forever.
+function gateOpen(voiceOn: boolean, status: string | undefined): boolean {
+  if (!voiceOn) return true;
+  if (typeof window === "undefined" || !NeuralVoice.isSupported()) return true;
+  return status === "ready" || status === "error";
+}
+
+export interface VoiceGate {
+  /** Playback may run: the voice is ready, off, unsupported, or gave up. */
+  ready: boolean;
+  /** Model download progress, 0 to 1, while it loads. */
+  progress: number;
+  /** Begin loading the voice (the first Play). */
+  request: () => void;
+  /** Watch with captions only: turns the voice off, which opens the gate. */
+  skip: () => void;
+}
+
+/** The Stage's voice gate, live against the model's status and the settings store. */
+export function useVoiceGate(): VoiceGate {
+  const voiceOn = useSettings().voiceOn;
+  const [snapshot, setSnapshot] = useState(() =>
+    typeof window === "undefined" ? null : NeuralVoice.snapshot(),
+  );
+  useEffect(() => NeuralVoice.onChange(setSnapshot), []);
+  return {
+    ready: gateOpen(voiceOn, snapshot?.status),
+    progress: snapshot?.progress ?? 0,
+    request: requestVoice,
+    skip: () => setSetting("voiceOn", false),
+  };
 }
 
 // karaoke timing: estimate spoken duration accounting for punctuation pauses

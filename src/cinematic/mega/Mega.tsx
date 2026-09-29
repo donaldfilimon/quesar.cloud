@@ -7,7 +7,8 @@
 // an explicit import from src/film/*, not a window global.
 //
 // Reuses the already-ported film scenes (Scene4/5/6/7) under their cut names,
-// and hosts Abbey's voiceover via the shared Web Speech engine.
+// and hosts Abbey's voiceover via the shared Kokoro neural voice (captions
+// carry the words when it cannot run).
 
 import { useRef, useEffect, useMemo } from "react";
 import { C, FONT } from "../film/tokens";
@@ -23,7 +24,7 @@ import {
   stopSpeech,
   setSpeechPlaying,
   primeNeural,
-  useVoiceReady,
+  useVoiceGate,
 } from "../film/speech";
 import type { ReactNode } from "react";
 
@@ -55,6 +56,7 @@ import {
 import { SceneGovernance as Scene6, SceneNorthStar as Scene7 } from "../film/scenes/outro";
 import { MathScene } from "../film/scenes/math";
 import { MATH } from "../film/scenes/math-data";
+import { Transcript } from "../film/transcript";
 
 /* ── timeline (seconds). Each entry [start, end]; scenes keep their length. ── */
 const M: Record<string, [number, number]> = {
@@ -133,9 +135,12 @@ function MegaNeural() {
   return <NeuralLayer mode={megaMode(t)} opacity={1} />;
 }
 
-/* ── camera rig: continuous handheld drift + impact shake/zoom ── */
+/* ── camera rig: continuous handheld drift + impact shake/zoom ──
+   Under reduced motion the camera is locked off: no drift, shake, rotation or
+   zoom punch. */
 function MegaCamera({ children }: { children: ReactNode }) {
-  const t = useTime();
+  const { time: t, reducedMotion } = useTimeline();
+  if (reducedMotion) return <div style={{ position: "absolute", inset: 0 }}>{children}</div>;
   const { shake, zoom: zoomT, drift } = RIG;
   const k = megaImpactK(t),
     kick = megaImpactKick(t);
@@ -162,7 +167,8 @@ function MegaCamera({ children }: { children: ReactNode }) {
 }
 
 function MegaFlash({ color = "#bfe0ff" }: { color?: string }) {
-  const t = useTime();
+  const { time: t, reducedMotion } = useTimeline();
+  if (reducedMotion) return null;
   let op = 0;
   for (const im of MEGA_IMPACTS) {
     const dt = t - im;
@@ -291,6 +297,7 @@ function MegaCaption() {
   let seen = 0;
   return (
     <div
+      aria-live="polite"
       style={{
         position: "absolute",
         left: 0,
@@ -382,7 +389,7 @@ function MegaGrain() {
 /* ── the cut ── */
 export function Mega() {
   const math0 = MATH[0]!;
-  const ready = useVoiceReady();
+  const voice = useVoiceGate();
   return (
     <Stage
       width={1920}
@@ -390,7 +397,7 @@ export function Mega() {
       duration={DURATION}
       background="#030408"
       persistKey="mlai-mega"
-      ready={ready}
+      voice={voice}
     >
       <GridBG opacity={0.34} />
       <Vignette />
@@ -518,6 +525,7 @@ export function Mega() {
       <MegaCaption />
       <ScreenLabel />
       <VoiceToggle />
+      <Transcript lines={MEGA_SCRIPT} />
     </Stage>
   );
 }

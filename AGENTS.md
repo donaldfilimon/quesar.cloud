@@ -23,9 +23,10 @@ Donald's standing rules for this repository. `CLAUDE.md` carries the command set
 - `CinematicShell` portals to `<body>`, because the route wrapper
   `.page-enter` keeps a transform that would trap `position: fixed`. Keep the
   portal.
-- Narration loads Kokoro TTS from jsdelivr at runtime and falls back to Web
-  Speech. The films are orientation, not benchmarks, so keep their
-  VISION/ROADMAP labels.
+- Narration is Kokoro TTS, loaded from jsdelivr only when the viewer presses
+  Play (or turns the voice on); there is no Web Speech fallback, and captions
+  and a transcript carry the words when it cannot run. The films are
+  orientation, not benchmarks, so keep their VISION/ROADMAP labels.
 - Always `git fetch` before pushing, and never force-push.
 
 ## Merged from mlai (2026-09-22): deliberate deviations and runtime config

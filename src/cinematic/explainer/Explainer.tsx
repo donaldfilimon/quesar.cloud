@@ -1,7 +1,7 @@
 // Explainer.tsx — the MLAI "What is MLAI?" cut. A calm, ~2:12 explainer that
 // sits between the 62s vision trailer and the longer brand film. It is a pure
 // curation of the existing system — every scene, the engine, the neural field,
-// and the shared Web Speech voice are reused unchanged, so this cut stays in
+// and the shared Kokoro neural voice are reused unchanged, so this cut stays in
 // sync with every fix made to the underlying components (zero new scene code).
 //
 // Register: a fresh, clear Abbey narration — warm, metaphor-first, one tight
@@ -22,7 +22,7 @@ import {
   stopSpeech,
   setSpeechPlaying,
   primeNeural,
-  useVoiceReady,
+  useVoiceGate,
 } from "../film/speech";
 import { SceneOpen, SceneClose } from "../film/scenes/title";
 import { Scene3 } from "../film/scenes/intro";
@@ -30,6 +30,7 @@ import { SceneStorage } from "../film/scenes/extra";
 import { ScenePersonaRouting, SceneVerifiableMemory } from "../film/scenes/core";
 import { SceneGovernance, SceneNorthStar } from "../film/scenes/outro";
 import { BeatPersona } from "../film/scenes/beats";
+import { Transcript } from "../film/transcript";
 
 /* ── scene slots [start, end] in seconds — aligned to the narration ── */
 const T = {
@@ -76,9 +77,11 @@ const RAW: Array<Omit<ELine, "dur">> = [
     text: "On top of that memory live three minds — not one model pretending to be everything.",
   },
   { t: 67.6, text: "Each question is scored, then sent to whoever should answer it." },
-  { t: 76.2, text: "Abbey — the careful one, for proof and verified answers." },
-  { t: 79.2, text: "Aviva — the explorer, for research and what comes next." },
-  { t: 82.2, text: "Abi — the quick one, routing each request to the right place." },
+  // Each persona beat is three seconds of picture, so each line must finish
+  // inside it: a longer line was cut off by the next one (speak() interrupts).
+  { t: 76.2, text: "Abbey, for verified answers." },
+  { t: 79.2, text: "Aviva, for research and vision." },
+  { t: 82.2, text: "Abi, routing every request." },
   // governance
   { t: 86.4, text: "Before any answer reaches you, it's weighed against six principles." },
   { t: 92.0, text: "Truthfulness, safety, helpfulness, fairness, privacy, transparency." },
@@ -150,6 +153,7 @@ function ExplainerCaption() {
   let seen = 0;
   return (
     <div
+      aria-live="polite"
       style={{
         position: "absolute",
         left: 0,
@@ -242,7 +246,7 @@ function ExplainerNeural() {
 
 /* ── the cut ── */
 export function Explainer() {
-  const ready = useVoiceReady();
+  const voice = useVoiceGate();
   return (
     <Stage
       width={1920}
@@ -250,7 +254,7 @@ export function Explainer() {
       duration={DURATION}
       background="#040406"
       persistKey="mlai-explainer"
-      ready={ready}
+      voice={voice}
     >
       <ExplainerNeural />
       <GridBG opacity={0.26} />
@@ -297,6 +301,7 @@ export function Explainer() {
       <ExplainerNarration />
       <ExplainerCaption />
       <VoiceToggle />
+      <Transcript lines={SCRIPT} />
 
       <Grain />
     </Stage>

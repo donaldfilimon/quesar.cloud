@@ -8,7 +8,8 @@
 import { useRef, useEffect, type CSSProperties } from "react";
 import { Canvas2DRenderer, NeuralScene, type NeuralModePreset } from "@/lib/trailer-engine";
 import { C } from "./tokens";
-import { useTime } from "./timeline-context";
+import { useTime, useTimeline } from "./timeline-context";
+import { backingRatio } from "./engine-utils";
 import { NL_MODES, neuralModeForTime } from "./neural-mode";
 
 // `C` is part of the canonical token surface for film modules; referenced to keep the
@@ -31,19 +32,24 @@ export function NeuralCanvas({
 }) {
   const ref = useRef<HTMLCanvasElement>(null);
   const stage = useRef<{ renderer: Canvas2DRenderer; scene: NeuralScene } | null>(null);
-  // Fixed logical frame; Stage scales it with a CSS transform. dpr stays 2 on
-  // purpose: the film has always rendered at 2× regardless of the display.
+  // Fixed logical frame; Stage scales it with a CSS transform, and the backing
+  // store follows the pixels actually shown (backingRatio).
   const W = 1920,
     H = 1080;
+  const { scale } = useTimeline();
+  const ratio = backingRatio(typeof window === "undefined" ? 1 : window.devicePixelRatio, scale);
+  // The ratio the canvas is currently sized to; 0 until the first redraw.
+  const sizedTo = useRef(0);
 
   useEffect(() => {
     const c = ref.current;
     if (!c) return;
     const renderer = new Canvas2DRenderer(c);
-    renderer.resize(W, H, 2);
+    renderer.resize(W, H, 1);
     const scene = new NeuralScene({ initial: NL_MODES.chaos, intensity: readIntensity });
     renderer.setScene(scene);
     stage.current = { renderer, scene };
+    sizedTo.current = 0;
     return () => {
       // Null the ref before disposing so a StrictMode re-run never draws
       // through a disposed renderer.
@@ -52,12 +58,17 @@ export function NeuralCanvas({
     };
   }, []);
 
+  // Resizing clears the canvas, so it happens here, right before a redraw.
   useEffect(() => {
     const s = stage.current;
     if (!s) return;
+    if (sizedTo.current !== ratio) {
+      s.renderer.resize(W, H, ratio);
+      sizedTo.current = ratio;
+    }
     s.scene.setMode((NL_MODES as Record<string, NeuralModePreset>)[mode] ?? NL_MODES.build);
     s.renderer.render(t);
-  }, [t, mode]);
+  }, [t, mode, ratio]);
 
   const style: CSSProperties = {
     position: "absolute",
@@ -67,7 +78,7 @@ export function NeuralCanvas({
     opacity,
     pointerEvents: "none",
   };
-  return <canvas ref={ref} style={style} />;
+  return <canvas ref={ref} style={style} aria-hidden="true" />;
 }
 
 export function NeuralLayer({ opacity = 1, mode }: { opacity?: number; mode?: string }) {

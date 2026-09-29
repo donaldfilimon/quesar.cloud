@@ -18,7 +18,9 @@ import { SceneOpen, SceneClose } from "./scenes/title";
 import { ScenePersonaRouting, SceneVerifiableMemory } from "./scenes/core";
 import { SceneGovernance, SceneNorthStar } from "./scenes/outro";
 import { NarrationController, Narrator, VoiceToggle } from "./narration";
-import { useVoiceReady } from "./speech";
+import { useVoiceGate } from "./speech";
+import { Transcript } from "./transcript";
+import { SCRIPT } from "./narration-script";
 
 // Scene slots [start, end] in seconds — must match the narration script.
 const T = {
@@ -32,7 +34,7 @@ const T = {
 const DURATION = 69;
 
 export function Film() {
-  const ready = useVoiceReady();
+  const voice = useVoiceGate();
   return (
     <Stage
       width={1920}
@@ -40,7 +42,7 @@ export function Film() {
       duration={DURATION}
       background="#040406"
       persistKey="mlai-film"
-      ready={ready}
+      voice={voice}
     >
       {/* persistent ambient substrate */}
       <GridBG opacity={0.4} />
@@ -69,6 +71,7 @@ export function Film() {
       <NarrationController />
       <Narrator />
       <VoiceToggle />
+      <Transcript lines={SCRIPT} />
 
       {/* film grain on top */}
       <Grain />

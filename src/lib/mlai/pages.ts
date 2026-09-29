@@ -546,7 +546,7 @@ export const showcaseReels = [
     reel: "04",
     title: "Explainer film",
     duration: "132s · narrated",
-    body: "The deep-dive explainer: storage, routing, math, and the north star, with captions synced to the voices.",
+    body: "The deep-dive explainer: memory, routing, governance and the north star, narrated by Abbey with captions and a transcript.",
   },
   {
     href: "/showcase/design",
@@ -572,7 +572,7 @@ export const showcaseProgram = [
 
 export const showcaseVoice = {
   title: "On-device neural voice",
-  body: "Narration is synthesized in your browser by the Kokoro-82M text-to-speech model (WebGPU, falling back to WASM), with each persona in its own voice and prosody. The model downloads on first playback; the text is never sent to a server. If your browser can't run it, captions carry the words.",
+  body: "Narration is synthesized in your browser by the Kokoro-82M text-to-speech model (WebGPU, falling back to WASM), with each persona in its own voice and prosody. Nothing downloads until you press Play, and the text is never sent to a server. You can watch without the voice, and captions and a transcript carry the words either way.",
   keys: "space play/pause · ←/→ scrub · 0 restart",
 } as const;
 

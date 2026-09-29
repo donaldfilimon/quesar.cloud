@@ -13,8 +13,10 @@ import { C, FONT, PERSONAS } from "../film/tokens";
 import { fade } from "../film/easing";
 import { Stage } from "../film/engine";
 import { useTimeline } from "../film/timeline-context";
+import { backingRatio } from "../film/engine-utils";
+import { Transcript } from "../film/transcript";
 import { VoiceToggle } from "../film/narration";
-import { primeNeural, setSpeechPlaying, speak, stopSpeech, useVoiceReady } from "../film/speech";
+import { primeNeural, setSpeechPlaying, speak, stopSpeech, useVoiceGate } from "../film/speech";
 import { Grain, Vignette } from "../film/primitives";
 import { buildAbbeyTimeline, captionAt, type AbbeyTimeline } from "./scenes";
 
@@ -38,20 +40,6 @@ function useAbbeyTimeline(): AbbeyTimeline {
   );
 }
 
-/** True when the user asked for reduced motion; re-evaluated if the query changes. */
-function usePrefersReducedMotion(): boolean {
-  const [reduced, setReduced] = useState(false);
-  useEffect(() => {
-    if (typeof window === "undefined" || typeof window.matchMedia !== "function") return;
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const update = () => setReduced(mq.matches);
-    update();
-    mq.addEventListener("change", update);
-    return () => mq.removeEventListener("change", update);
-  }, []);
-  return reduced;
-}
-
 /** Frame-time budget: above this exponential average, drop detail one notch. */
 const SLOW_FRAME_MS = 14;
 const FAST_FRAME_MS = 7;
@@ -64,20 +52,23 @@ function AbbeyCanvas({ timeline }: { timeline: AbbeyTimeline }) {
   const lastT = useRef<number | null>(null);
   const lastCue = useRef<string | null>(null);
   const frameMs = useRef(0);
+  const sizedTo = useRef(0);
   const [settled, setSettled] = useState(true);
-  const reduced = usePrefersReducedMotion();
-  const { time } = useTimeline();
+  // The Stage owns the live reduced-motion query; the film plays either way.
+  const { time, reducedMotion: reduced, scale } = useTimeline();
+  const ratio = backingRatio(typeof window === "undefined" ? 1 : window.devicePixelRatio, scale);
 
   useEffect(() => {
     const c = ref.current;
     if (!c) return;
     const renderer = new Canvas2DRenderer(c);
-    renderer.resize(W, H, 2);
+    renderer.resize(W, H, 1);
     const sequencer = new SceneSequencer(timeline.cues, { particles: new ParticleBuffer(1600) });
     renderer.setScene(sequencer);
     stage.current = { renderer, sequencer };
     lastT.current = null;
     lastCue.current = null;
+    sizedTo.current = 0;
     return () => {
       stage.current = null;
       sequencer.dispose();
@@ -90,6 +81,12 @@ function AbbeyCanvas({ timeline }: { timeline: AbbeyTimeline }) {
     if (!s) return;
     const prev = lastT.current;
     lastT.current = time;
+    // Resizing clears the canvas; forgetting the cue makes both branches redraw.
+    if (sizedTo.current !== ratio) {
+      s.renderer.resize(W, H, ratio);
+      sizedTo.current = ratio;
+      lastCue.current = null;
+    }
 
     if (reduced) {
       // Reduced motion is a different grammar, not fewer particles: each cue is
@@ -123,7 +120,7 @@ function AbbeyCanvas({ timeline }: { timeline: AbbeyTimeline }) {
       s.sequencer.setQuality(Math.min(1, q + QUALITY_STEP));
       frameMs.current = FAST_FRAME_MS * 1.4;
     }
-  }, [time, reduced]);
+  }, [time, reduced, ratio]);
 
   const style: CSSProperties = {
     position: "absolute",
@@ -231,70 +228,9 @@ function AbbeyNarration({ timeline }: { timeline: AbbeyTimeline }) {
   return null;
 }
 
-// The whole script as static text, for readers who cannot or do not want to
-// follow a live caption. Rendered as React text nodes, never as markup, so it
-// stays safe when copy later arrives from a CMS or a model.
-function AbbeyTranscript({ timeline }: { timeline: AbbeyTimeline }) {
-  return (
-    <details
-      style={{
-        position: "absolute",
-        left: 24,
-        bottom: 24,
-        zIndex: 60,
-        maxWidth: 520,
-        color: C.dim,
-        fontFamily: FONT.sans,
-        fontSize: 14,
-      }}
-    >
-      <summary
-        style={{
-          cursor: "pointer",
-          fontFamily: FONT.mono,
-          fontSize: 12,
-          letterSpacing: "0.22em",
-          color: C.dim2,
-        }}
-      >
-        TRANSCRIPT
-      </summary>
-      <ol
-        style={{
-          margin: "10px 0 0",
-          padding: "12px 16px 12px 32px",
-          background: "rgba(4,4,6,0.82)",
-          border: `1px solid ${C.line}`,
-          borderRadius: 10,
-          lineHeight: 1.5,
-        }}
-      >
-        {timeline.captions.map((c) => (
-          <li key={c.start}>
-            {c.who ? (
-              <span
-                style={{
-                  color: PERSONAS[c.who].color,
-                  fontFamily: FONT.mono,
-                  fontSize: 12,
-                  letterSpacing: "0.18em",
-                  marginRight: 8,
-                }}
-              >
-                {PERSONAS[c.who].name.toUpperCase()}
-              </span>
-            ) : null}
-            {c.text}
-          </li>
-        ))}
-      </ol>
-    </details>
-  );
-}
-
 export function AbbeyTrailer() {
   const timeline = useAbbeyTimeline();
-  const ready = useVoiceReady();
+  const voice = useVoiceGate();
   return (
     <Stage
       width={W}
@@ -302,13 +238,13 @@ export function AbbeyTrailer() {
       duration={timeline.duration}
       background={C.bg}
       persistKey="mlai-abbey"
-      ready={ready}
+      voice={voice}
     >
       <AbbeyCanvas timeline={timeline} />
       <Vignette />
       <AbbeyCaption timeline={timeline} />
       <AbbeyNarration timeline={timeline} />
-      <AbbeyTranscript timeline={timeline} />
+      <Transcript lines={timeline.captions} />
       <VoiceToggle />
       <Grain />
     </Stage>

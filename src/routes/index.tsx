@@ -80,14 +80,9 @@ function Home() {
         id="film"
         label="The film"
         title="See the system before you read about it."
-        lede="A short cut of the mark, the wafer and the board. It plays when you press play, with labels rather than a live runtime."
+        lede="The opening cut: the mark. The wafer and the board follow in the showcase. It plays when you press play, with labels rather than a live runtime."
       >
         <Trailer />
-        <p className="mt-4 text-sm">
-          <Link to="/showcase" className="text-accent underline-offset-4 hover:underline">
-            Open the showcase rooms
-          </Link>
-        </p>
       </Row>
       <HomeResearchPreview />
       <Row

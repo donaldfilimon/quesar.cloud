@@ -22,7 +22,21 @@ import {
   type TimelineValue,
   type SpriteValue,
 } from "./timeline-context";
-import { prefersReducedMotion, resolveSeek } from "./engine-utils";
+import { REDUCED_MOTION_QUERY, prefersReducedMotion, resolveSeek } from "./engine-utils";
+import type { VoiceGate } from "./speech";
+
+/** Live `prefers-reduced-motion`, so an OS change applies without a remount. */
+function useReducedMotion(): boolean {
+  const [reduced, setReduced] = useState(() => prefersReducedMotion());
+  useEffect(() => {
+    if (typeof window === "undefined" || typeof window.matchMedia !== "function") return;
+    const query = window.matchMedia(REDUCED_MOTION_QUERY);
+    const onChange = () => setReduced(query.matches);
+    query.addEventListener("change", onChange);
+    return () => query.removeEventListener("change", onChange);
+  }, []);
+  return reduced;
+}
 
 /* ── sprite ───────────────────────────────────────────────────── */
 // Timeline/sprite contexts and hooks live in timeline-context.ts; pure helpers
@@ -180,7 +194,7 @@ export function Stage({
   loop = true,
   autoplay = true,
   persistKey = "animstage",
-  ready = true,
+  voice,
   children,
 }: {
   width?: number;
@@ -190,9 +204,12 @@ export function Stage({
   loop?: boolean;
   autoplay?: boolean;
   persistKey?: string;
-  ready?: boolean;
+  /** A narrated film's voice gate (useVoiceGate). Without one, playback never waits. */
+  voice?: VoiceGate;
   children: ReactNode;
 }) {
+  const ready = voice?.ready ?? true;
+  const reducedMotion = useReducedMotion();
   const [time, setTime] = useState<number>(() => {
     try {
       const v = parseFloat(localStorage.getItem(persistKey + ":t") || "0");
@@ -201,7 +218,12 @@ export function Stage({
       return 0;
     }
   });
-  const [playing, setPlaying] = useState(autoplay);
+  // Autoplay only when nothing needs a decision first: under reduced motion,
+  // or before a narrated film's voice is loaded, the viewer presses Play.
+  const [playing, setPlaying] = useState(
+    () => autoplay && !prefersReducedMotion() && (voice?.ready ?? true),
+  );
+  const [started, setStarted] = useState(playing);
   const [hoverTime, setHoverTime] = useState<number | null>(null);
   const [scale, setScale] = useState(1);
   const [chrome, setChrome] = useState<HTMLElement | null>(null);
@@ -249,7 +271,7 @@ export function Stage({
     const el = stageRef.current;
     if (!el) return;
     const measure = () => {
-      const barH = 44;
+      const barH = 60;
       setScale(Math.max(0.05, Math.min(el.clientWidth / width, (el.clientHeight - barH) / height)));
     };
     measure();
@@ -271,13 +293,6 @@ export function Stage({
     }
     const stepFrame = (ts: number) => {
       if (lastTsRef.current == null) lastTsRef.current = ts;
-      // reduced-motion check: if enabled, hold the clock (keep polling so a
-      // change in the OS setting resumes playback without a remount).
-      if (prefersReducedMotion()) {
-        lastTsRef.current = ts;
-        rafRef.current = requestAnimationFrame(stepFrame);
-        return;
-      }
       // frameDelta clamps the step — see MAX_FRAME_DT in easing.ts for why a
       // backgrounded tab would otherwise jump the playhead by the time away.
       const dt = frameDelta(ts, lastTsRef.current);
@@ -311,6 +326,25 @@ export function Stage({
     return () => document.removeEventListener("visibilitychange", onVisibility);
   }, []);
 
+  // Play is the one place the voice is requested: nothing downloads until the
+  // viewer chooses to watch. Until it is ready the clock holds (above).
+  const requestVoice = voice?.request;
+  const play = useCallback(() => {
+    if (!ready) requestVoice?.();
+    setStarted(true);
+    setPlaying(true);
+  }, [ready, requestVoice]);
+  const skipVoice = voice?.skip;
+  const playWithoutVoice = useCallback(() => {
+    skipVoice?.();
+    setStarted(true);
+    setPlaying(true);
+  }, [skipVoice]);
+  const togglePlay = useCallback(() => {
+    if (playing) setPlaying(false);
+    else play();
+  }, [playing, play]);
+
   const seekTo = useCallback(
     (t: number) => {
       const r = resolveSeek(t, duration);
@@ -334,7 +368,7 @@ export function Stage({
       if (e.code === "Space") {
         e.preventDefault();
         setHoverTime(null);
-        setPlaying((p) => !p);
+        togglePlay();
       } else if (e.code === "ArrowLeft") {
         setHoverTime(null);
         setTime((t) => clamp(t - (e.shiftKey ? 1 : 0.1), 0, duration));
@@ -347,12 +381,22 @@ export function Stage({
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [duration, seekTo]);
+  }, [duration, seekTo, togglePlay]);
 
   const displayTime = hoverTime != null ? hoverTime : time;
   const ctxValue = useMemo<TimelineValue>(
-    () => ({ time: displayTime, clock: time, duration, playing, setTime, setPlaying, chrome }),
-    [displayTime, time, duration, playing, chrome],
+    () => ({
+      time: displayTime,
+      clock: time,
+      duration,
+      playing,
+      setTime,
+      setPlaying,
+      chrome,
+      reducedMotion,
+      scale,
+    }),
+    [displayTime, time, duration, playing, chrome, reducedMotion, scale],
   );
 
   return (
@@ -399,34 +443,130 @@ export function Stage({
         time={displayTime}
         duration={duration}
         playing={playing}
-        onPlayPause={() => setPlaying((p) => !p)}
+        onPlayPause={togglePlay}
         onReset={() => setTime(0)}
         onSeek={seekTo}
         onHover={(t) => setHoverTime(t)}
       />
-      {!ready && (
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            zIndex: 50,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            background: "rgba(4,4,6,0.5)",
-            backdropFilter: "blur(2px)",
-            color: "rgba(220,220,228,0.85)",
-            fontFamily: "var(--font-mono)",
-            fontSize: 13,
-            letterSpacing: "0.34em",
-          }}
-        >
-          <span className="mlai-voice-pulse">PREPARING&nbsp;VOICE…</span>
-          {/* The only animation that runs while the clock holds, so it too must honor reduced motion. */}
-          <style>{`@keyframes mlaiVoicePulse{0%,100%{opacity:.4}50%{opacity:1}}.mlai-voice-pulse{animation:mlaiVoicePulse 1.2s ease-in-out infinite}@media (prefers-reduced-motion: reduce){.mlai-voice-pulse{animation:none;opacity:.8}}`}</style>
-        </div>
-      )}
+      {!started ? (
+        <StageOverlay>
+          <p style={{ fontSize: 20, fontFamily: "var(--font-display)", color: "#f6f4ef" }}>
+            {voice && !ready ? "Narrated film" : "Film"}
+          </p>
+          {reducedMotion ? (
+            <p style={overlayNote}>
+              Your system asks for reduced motion, so camera shake and flashes are off.
+            </p>
+          ) : null}
+          {voice && !ready ? (
+            <p style={overlayNote}>
+              The voice is a neural model that downloads when you press play. Captions run either
+              way.
+            </p>
+          ) : null}
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 12, justifyContent: "center" }}>
+            <OverlayButton primary onClick={play}>
+              Play
+            </OverlayButton>
+            {voice && !ready ? (
+              <OverlayButton onClick={playWithoutVoice}>Play without voice</OverlayButton>
+            ) : null}
+          </div>
+        </StageOverlay>
+      ) : !ready ? (
+        <StageOverlay>
+          <div role="status" style={{ display: "grid", gap: 10, justifyItems: "center" }}>
+            <p style={{ fontSize: 15, color: "#f6f4ef" }}>Preparing the voice</p>
+            <div
+              aria-hidden="true"
+              style={{
+                width: 220,
+                height: 4,
+                borderRadius: 2,
+                background: "rgba(255,255,255,0.12)",
+                overflow: "hidden",
+              }}
+            >
+              <div
+                style={{
+                  width: `${Math.round(clamp(voice?.progress ?? 0, 0, 1) * 100)}%`,
+                  height: "100%",
+                  background: "oklch(72% 0.12 250)",
+                }}
+              />
+            </div>
+            <p style={overlayNote}>
+              {Math.round(clamp(voice?.progress ?? 0, 0, 1) * 100)}% downloaded
+            </p>
+          </div>
+          <OverlayButton onClick={playWithoutVoice}>Play without voice</OverlayButton>
+        </StageOverlay>
+      ) : null}
     </div>
+  );
+}
+
+/* ── overlays ─────────────────────────────────────────────────── */
+
+const overlayNote: CSSProperties = {
+  maxWidth: 420,
+  fontSize: 13,
+  lineHeight: 1.5,
+  color: "rgba(220,220,228,0.8)",
+  textAlign: "center",
+};
+
+function StageOverlay({ children }: { children: ReactNode }) {
+  return (
+    <div
+      style={{
+        position: "absolute",
+        inset: 0,
+        zIndex: 50,
+        display: "flex",
+        flexDirection: "column",
+        gap: 16,
+        alignItems: "center",
+        justifyContent: "center",
+        padding: 24,
+        background: "rgba(4,4,6,0.72)",
+        fontFamily: "var(--font-sans)",
+      }}
+    >
+      <style>{`.mlai-overlay-button:focus-visible{outline:2px solid #7cb0ff;outline-offset:2px}`}</style>
+      {children}
+    </div>
+  );
+}
+
+function OverlayButton({
+  children,
+  onClick,
+  primary = false,
+}: {
+  children: ReactNode;
+  onClick: () => void;
+  primary?: boolean;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="mlai-overlay-button"
+      style={{
+        minHeight: 44,
+        padding: "0 20px",
+        borderRadius: 8,
+        border: "1px solid rgba(255,255,255,0.2)",
+        background: primary ? "#f6f4ef" : "rgba(255,255,255,0.06)",
+        color: primary ? "#0a0a0a" : "#f6f4ef",
+        fontSize: 14,
+        fontWeight: 500,
+        cursor: "pointer",
+      }}
+    >
+      {children}
+    </button>
   );
 }
 
@@ -458,20 +598,6 @@ function PlaybackBar({
     },
     [duration],
   );
-
-  useEffect(() => {
-    if (!dragging) return;
-    const onUp = () => setDragging(false);
-    const onMove = (e: MouseEvent) => {
-      if (trackRef.current) onSeek(timeFromEvent(e));
-    };
-    window.addEventListener("mouseup", onUp);
-    window.addEventListener("mousemove", onMove);
-    return () => {
-      window.removeEventListener("mouseup", onUp);
-      window.removeEventListener("mousemove", onMove);
-    };
-  }, [dragging, timeFromEvent, onSeek]);
 
   const pct = duration > 0 ? (time / duration) * 100 : 0;
   const fmt = (t: number) => {
@@ -516,7 +642,7 @@ function PlaybackBar({
           />
         </svg>
       </IconButton>
-      <IconButton onClick={onPlayPause} title="Play/pause (space)">
+      <IconButton onClick={onPlayPause} title={playing ? "Pause (space)" : "Play (space)"}>
         {playing ? (
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
             <rect x="3" y="2" width="3" height="10" fill="currentColor" />
@@ -559,18 +685,27 @@ function PlaybackBar({
             onSeek(duration);
           }
         }}
-        onMouseMove={(e) => (dragging ? onSeek(timeFromEvent(e)) : onHover(timeFromEvent(e)))}
-        onMouseLeave={() => {
-          if (!dragging) onHover(null);
-        }}
-        onMouseDown={(e) => {
+        // Pointer events cover mouse, touch and pen; capture keeps the drag on
+        // the track when the finger or cursor leaves it.
+        onPointerDown={(e) => {
+          e.currentTarget.setPointerCapture(e.pointerId);
           setDragging(true);
           onSeek(timeFromEvent(e));
           onHover(null);
         }}
+        onPointerMove={(e) => {
+          if (dragging) onSeek(timeFromEvent(e));
+          else if (e.pointerType === "mouse") onHover(timeFromEvent(e));
+        }}
+        onPointerUp={() => setDragging(false)}
+        onPointerCancel={() => setDragging(false)}
+        onPointerLeave={() => {
+          if (!dragging) onHover(null);
+        }}
         style={{
           flex: 1,
-          height: 22,
+          height: 44,
+          touchAction: "none",
           position: "relative",
           cursor: "pointer",
           display: "flex",
@@ -647,8 +782,9 @@ function IconButton({
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
       style={{
-        width: 28,
-        height: 28,
+        width: 44,
+        height: 44,
+        flexShrink: 0,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
