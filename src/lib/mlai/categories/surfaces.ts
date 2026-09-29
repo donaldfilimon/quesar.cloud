@@ -85,7 +85,7 @@ export const quesarWhat = [
   },
   {
     title: "How it differs",
-    body: "Conventional apps bolt memory onto a chat transcript. Quesar treats memory as a substrate (WDBX), orchestration as a runtime (ABI), and the assistant as an experience (Abbey) — with claim-honest status on every surface.",
+    body: "Quesar is the large model that trains and improves Abbey, Aviva, and the other assistants. WDBX is the memory substrate, ABI is the runtime, and Abbey is one assistant. This website does not host the model.",
   },
   {
     title: "What you can build",

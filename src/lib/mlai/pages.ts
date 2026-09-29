@@ -82,7 +82,7 @@ export const homeRequestPath: readonly ({ n: string; title: string; body: string
 export const homeProductBoundary = [
   {
     title: "What it is",
-    body: "A governed generation path: account-scoped sessions, one server-side provider interface, sealed records, and an admin model that needs a provider-verified identity. Surfaces that are still being built say so.",
+    body: "Quesar is the large model that trains and improves Abbey, Aviva, and the other assistants. This website does not host the model, run training, or host assistant sessions.",
   },
   {
     title: "What it is not",
@@ -138,7 +138,7 @@ export const aboutMission = {
 
 export const teamIntro = {
   title: "The mind behind Quesar.",
-  lede: "Quesar is founder-led today, focused on safe, traceable AI infrastructure, and growing deliberately.",
+  lede: "Quesar is founder-led today. It is the large model that trains and improves Abbey, Aviva, and the other assistants. This website does not host the model.",
   join: {
     title: "Join the mission",
     body: "We're always looking for exceptional minds in neural research and systems safety.",

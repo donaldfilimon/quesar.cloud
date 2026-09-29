@@ -89,7 +89,7 @@ function ProductsPage() {
           {
             to: "/quesar",
             label: "Quesar",
-            body: "The platform that makes the relationships obvious.",
+            body: "The large model that trains and improves Abbey, Aviva, and the other assistants.",
           },
           { to: "/apps", label: "Apps", body: "Working orientations of the shipping surfaces." },
         ]}

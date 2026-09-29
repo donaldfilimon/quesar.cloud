@@ -17,8 +17,8 @@ import { pageHead } from "@/lib/seo";
 export const Route = createFileRoute("/quesar")({
   head: () =>
     pageHead(
-      "Quesar — MLAI infrastructure for persistent AI",
-      "Quesar is MLAI's infrastructure for persistent, adaptive AI systems — orchestration, private memory, and interoperable compute.",
+      "Quesar — the large model",
+      "Quesar is the large model that trains and improves Abbey, Aviva, and the other assistants. This website does not host the model, run training, or host assistant sessions.",
     ),
   component: QuesarPage,
 });
@@ -28,8 +28,8 @@ function QuesarPage() {
     <>
       <PageHero
         eyebrow="Quesar"
-        title="Infrastructure for private, persistent, adaptive AI."
-        lede="Quesar is the product experience that connects ABI, WDBX, and Abbey. It is not a chatbot, not a vector database, and not a hosted wrapper around a public model."
+        title="The large model behind the assistants."
+        lede="Quesar is the large model that trains and improves Abbey, Aviva, and the other assistants. This website does not host the model, run training, or host assistant sessions."
       >
         <div className="mt-6 flex flex-wrap items-center gap-3">
           <StatusBadge status="partial" />
@@ -50,14 +50,14 @@ function QuesarPage() {
 
       <Section
         eyebrow="Name"
-        title="Quesar is the product. Quasar is the local builder."
+        title="Quesar is the model. Quasar is the local builder."
         lede="They are not interchangeable. This repository keeps the builder service at sidecars/quasar-service and its screens at /quasar/sites; the website is this app."
       >
         <CopyGrid
           items={[
             {
               title: "Quesar",
-              body: "The infrastructure product: orchestration, private memory, local compute. This site is orientation for that product.",
+              body: "The large model that trains and improves Abbey, Aviva, and the other assistants. This site is orientation. It does not host the model or run training.",
               accent: "accent",
             },
             {

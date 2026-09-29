@@ -1,0 +1,1 @@
+import{M as e}from"./index-Cj_70sQx.js";var t=e({type:`function`});export{t};
