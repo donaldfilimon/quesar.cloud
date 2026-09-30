@@ -10,7 +10,13 @@ You publish an audited change to quesar.cloud. The site goes live only when Dona
 ## Preconditions
 
 - You are on a topic branch, never `main`.
-- The change carries a `claims-auditor` result ending `VERDICT: PASS` for the current diff. If it is missing, or the diff changed after the audit, stop and say so.
+- The change carries a `claims-auditor` result ending `VERDICT: PASS` followed by an `AUDITED:` line. Before any build or commit, run the fingerprint command below from the repository root and compare its output with the `AUDITED:` value. If the result has no `AUDITED:` line, or the values differ, the tree changed after the audit: stop and say so.
+
+  ```bash
+  { git rev-parse HEAD; git diff HEAD --binary -- . ':(exclude)docs'; git ls-files --others --exclude-standard -z -- src public scripts migrations | xargs -0 shasum -a 256; } | shasum -a 256 | cut -d' ' -f1
+  ```
+
+  The fingerprint covers `HEAD`, every tracked change outside `docs/` (staged or not), and the content of untracked files in the source directories. Compare it before your first commit, because committing changes `HEAD`.
 
 ## Procedure
 
@@ -19,6 +25,14 @@ Follow `.claude/skills/quesar-static-publish/SKILL.md` step by step. It is the a
 - **Before the gate:** if a section title or line in `src/lib/og-sections.ts` changed, run `bun run og:images` first. The static build copies `public/og/` into `docs/og/`, so cards regenerated after `build:static` would leave `docs/` serving the old images. Include the regenerated `public/og/*.jpg` in the source commit.
 - Run each gate command on its own line and read the exit code from the command itself, never through a pipe. The logs go to `$TMPDIR`, as the skill shows.
 - If the gate fails, do not modify tests, lint rules or checks to make it pass, and do not edit content. Stop and report the first real error with its log excerpt. The one allowed retry is the skill's PGLite-timeout-under-load case.
+- **After `build:static`, run the static acceptance checks** from `CLAUDE.md`, each on its own line:
+
+  ```bash
+  bun run check:static >| "${TMPDIR:-/tmp}"/qs-check-static.log 2>&1; echo EXIT:$?
+  bun run test:e2e >| "${TMPDIR:-/tmp}"/qs-e2e.log 2>&1; echo EXIT:$?
+  ```
+
+  `check:static` enforces internal links, assets and the per-route preload and gzip budgets; `test:e2e` is the Playwright browser suite against `docs/`. Both must print `EXIT:0`. A failure stops the publish like a gate failure. Never raise a budget in `scripts/check-static.ts` to get past it. If `test:e2e` cannot start (for example, no Playwright browser installed), report it as unmeasured, never as passing.
 - Classify the `docs/` change exactly as the skill describes. If it is timestamp noise only, do not commit `docs/`.
 
 ## Commits and PR
@@ -28,7 +42,8 @@ Follow `.claude/skills/quesar-static-publish/SKILL.md` step by step. It is the a
 - Open the PR with `gh pr create` against `main`. The description must include:
   - what changed, in two or three sentences;
   - the claims sheet and the auditor verdict table;
-  - the gate evidence: both `EXIT:0` results and the `[publish-static] docs/ ready for quesar.cloud` line;
+  - the audit binding: the `AUDITED:` value and your matching fingerprint;
+  - the gate evidence: the `EXIT:0` results of `check`, `build:static`, `check:static` and `test:e2e`, and the `[publish-static] docs/ ready for quesar.cloud` line;
   - the `docs/` classification.
 - Never merge, never enable auto-merge, never push to `main`.
 

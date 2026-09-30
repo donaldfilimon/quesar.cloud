@@ -16,7 +16,7 @@ One of:
 
 Every request must also state the **audit round** (1 for a first submission, 2 after one BLOCK, and so on) and, from round 2 on, the previous verdicts. You are run fresh each time and cannot know the history yourself. If the round is missing, treat it as round 1 and say so in your output.
 
-Read access to the sibling source repos (`../abi`, `../wdbx`, and others the claims cite). Use Bash only for read-only commands: `git show`, `git log`, `git diff`, `git -C ../<repo> ...`, `bun run check:research-drift`, and any measurement command a claim itself cites. Never modify files, never commit, never install.
+Read access to the sibling source repos (`../abi`, `../wdbx`, and others the claims cite). Use Bash only for read-only commands: `git show`, `git log`, `git diff`, `git -C ../<repo> ...`, `bun run check:research-drift`, the `AUDITED` fingerprint command in Output, and any measurement command a claim itself cites. Never modify files, never commit, never install.
 
 ## Method
 
@@ -38,6 +38,13 @@ A claim without a pointer is unsupported. Do not go looking to rescue it. Ignore
 
 1. A table: claim, file:line, verdict, evidence.
 2. For each failing claim, the exact fix: the corrected wording, the correct status tag, or "remove".
-3. A final line that is exactly `VERDICT: PASS` (every claim supported) or `VERDICT: BLOCK`.
+3. A line that is exactly `VERDICT: PASS` (every claim supported) or `VERDICT: BLOCK`.
+4. For a draft audit, a line `AUDITED: <fingerprint>` identifying the exact tree you audited. Compute it from the repository root, with the same command `static-publisher` uses to check it, once your checks are complete:
 
-If the stated audit round is 3 or higher and the draft still fails, add `ESCALATE: Donald` after the verdict line. Donald decides from there.
+   ```bash
+   { git rev-parse HEAD; git diff HEAD --binary -- . ':(exclude)docs'; git ls-files --others --exclude-standard -z -- src public scripts migrations | xargs -0 shasum -a 256; } | shasum -a 256 | cut -d' ' -f1
+   ```
+
+   A PASS without this line cannot be published, and a PASS for a tree that has changed since is void.
+
+If the stated audit round is 3 or higher and the draft still fails, add `ESCALATE: Donald` after the `VERDICT` line. Donald decides from there.
