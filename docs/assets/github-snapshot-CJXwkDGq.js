@@ -1,0 +1,1 @@
+import"./github-data-s_yv0E6f.js";function e(){return Promise.resolve(null)}export{e as loadGithubSnapshot};
