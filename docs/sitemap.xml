@@ -69,12 +69,12 @@
   <url><loc>https://quesar.cloud/quasar/sites</loc></url>
   <url><loc>https://quesar.cloud/quesar</loc></url>
   <url><loc>https://quesar.cloud/research</loc></url>
-  <url><loc>https://quesar.cloud/research/ai-overview</loc><lastmod>2026-09-06</lastmod></url>
-  <url><loc>https://quesar.cloud/research/backtrace-confidence-signals-hallucination</loc><lastmod>2026-09-06</lastmod></url>
-  <url><loc>https://quesar.cloud/research/chunk-provenance-long-context-retrieval</loc><lastmod>2026-09-06</lastmod></url>
-  <url><loc>https://quesar.cloud/research/gpu-implementation-guide</loc><lastmod>2026-09-06</lastmod></url>
-  <url><loc>https://quesar.cloud/research/gpu-overview</loc><lastmod>2026-09-06</lastmod></url>
-  <url><loc>https://quesar.cloud/research/human-approval-gates-operators-use</loc><lastmod>2026-09-06</lastmod></url>
+  <url><loc>https://quesar.cloud/research/ai-overview</loc><lastmod>2026-09-30</lastmod></url>
+  <url><loc>https://quesar.cloud/research/backtrace-confidence-signals-hallucination</loc><lastmod>2026-09-30</lastmod></url>
+  <url><loc>https://quesar.cloud/research/chunk-provenance-long-context-retrieval</loc><lastmod>2026-09-30</lastmod></url>
+  <url><loc>https://quesar.cloud/research/gpu-implementation-guide</loc><lastmod>2026-09-30</lastmod></url>
+  <url><loc>https://quesar.cloud/research/gpu-overview</loc><lastmod>2026-09-30</lastmod></url>
+  <url><loc>https://quesar.cloud/research/human-approval-gates-operators-use</loc><lastmod>2026-09-30</lastmod></url>
   <url><loc>https://quesar.cloud/research/implementations</loc></url>
   <url><loc>https://quesar.cloud/research/implementations/abbey-executable-capability-ledger</loc></url>
   <url><loc>https://quesar.cloud/research/implementations/deterministic-research-provenance-exports</loc></url>
@@ -83,21 +83,21 @@
   <url><loc>https://quesar.cloud/research/implementations/quasar-bounded-repository-generation</loc></url>
   <url><loc>https://quesar.cloud/research/implementations/six-layer-evidence-aware-platform</loc></url>
   <url><loc>https://quesar.cloud/research/implementations/wdbx-specimen-architecture-and-conformance</loc></url>
-  <url><loc>https://quesar.cloud/research/latency-budgets-real-time-orchestration</loc><lastmod>2026-09-06</lastmod></url>
+  <url><loc>https://quesar.cloud/research/latency-budgets-real-time-orchestration</loc><lastmod>2026-09-30</lastmod></url>
   <url><loc>https://quesar.cloud/research/mcp-implementation-guide</loc><lastmod>2026-09-30</lastmod></url>
   <url><loc>https://quesar.cloud/research/mcp-overview</loc><lastmod>2026-09-30</lastmod></url>
-  <url><loc>https://quesar.cloud/research/multi-persona-routing-policy-weights</loc><lastmod>2026-09-06</lastmod></url>
-  <url><loc>https://quesar.cloud/research/offline-first-ai-sensitive-data</loc><lastmod>2026-09-06</lastmod></url>
-  <url><loc>https://quesar.cloud/research/policy-locked-tool-use-multi-agent</loc><lastmod>2026-09-06</lastmod></url>
-  <url><loc>https://quesar.cloud/research/prompt-injection-drills-agentic-systems</loc><lastmod>2026-09-06</lastmod></url>
-  <url><loc>https://quesar.cloud/research/sea-overview</loc><lastmod>2026-09-06</lastmod></url>
-  <url><loc>https://quesar.cloud/research/sparse-evidence-attention-context-assembly</loc><lastmod>2026-09-06</lastmod></url>
-  <url><loc>https://quesar.cloud/research/tui-implementation-guide</loc><lastmod>2026-09-06</lastmod></url>
-  <url><loc>https://quesar.cloud/research/tui-overview</loc><lastmod>2026-09-06</lastmod></url>
-  <url><loc>https://quesar.cloud/research/vector-index-maintenance-continuous-ingestion</loc><lastmod>2026-09-06</lastmod></url>
-  <url><loc>https://quesar.cloud/research/wdbx-graph-weights-traceable-retrieval</loc><lastmod>2026-09-06</lastmod></url>
-  <url><loc>https://quesar.cloud/research/wdbx-overview</loc><lastmod>2026-09-06</lastmod></url>
-  <url><loc>https://quesar.cloud/research/wdbx-weighted-backtrace-memory-store</loc><lastmod>2026-09-06</lastmod></url>
+  <url><loc>https://quesar.cloud/research/multi-persona-routing-policy-weights</loc><lastmod>2026-09-30</lastmod></url>
+  <url><loc>https://quesar.cloud/research/offline-first-ai-sensitive-data</loc><lastmod>2026-09-30</lastmod></url>
+  <url><loc>https://quesar.cloud/research/policy-locked-tool-use-multi-agent</loc><lastmod>2026-09-30</lastmod></url>
+  <url><loc>https://quesar.cloud/research/prompt-injection-drills-agentic-systems</loc><lastmod>2026-09-30</lastmod></url>
+  <url><loc>https://quesar.cloud/research/sea-overview</loc><lastmod>2026-09-30</lastmod></url>
+  <url><loc>https://quesar.cloud/research/sparse-evidence-attention-context-assembly</loc><lastmod>2026-09-30</lastmod></url>
+  <url><loc>https://quesar.cloud/research/tui-implementation-guide</loc><lastmod>2026-09-30</lastmod></url>
+  <url><loc>https://quesar.cloud/research/tui-overview</loc><lastmod>2026-09-30</lastmod></url>
+  <url><loc>https://quesar.cloud/research/vector-index-maintenance-continuous-ingestion</loc><lastmod>2026-09-30</lastmod></url>
+  <url><loc>https://quesar.cloud/research/wdbx-graph-weights-traceable-retrieval</loc><lastmod>2026-09-30</lastmod></url>
+  <url><loc>https://quesar.cloud/research/wdbx-overview</loc><lastmod>2026-09-30</lastmod></url>
+  <url><loc>https://quesar.cloud/research/wdbx-weighted-backtrace-memory-store</loc><lastmod>2026-09-30</lastmod></url>
   <url><loc>https://quesar.cloud/security</loc></url>
   <url><loc>https://quesar.cloud/services</loc></url>
   <url><loc>https://quesar.cloud/showcase</loc></url>
