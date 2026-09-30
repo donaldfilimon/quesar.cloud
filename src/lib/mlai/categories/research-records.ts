@@ -65,7 +65,7 @@ export const researchRecords: Research = {
       application: "Evaluate a local integration from an MCP client into the ABI tool catalog.",
       availability: "The twelve-tool stdio JSON-RPC contract is implemented.",
       limitations: [
-        "The loopback HTTP endpoint is a custom compatibility listener, not a persistent conforming MCP HTTP+SSE transport.",
+        "The best-effort loopback HTTP listener (127.0.0.1 only) serves MCP 2024-11-05 HTTP+SSE sessions; it is not a general web server and not Streamable HTTP (2025-03-26).",
         "A listed tool does not prove provider credentials, production access or remote deployment.",
       ],
       overviewSlug: "mcp-overview",
@@ -413,7 +413,7 @@ export const researchRecords: Research = {
       status: "Implemented",
       statusNote:
         "Implementation status applies to the bounded source capabilities described here, not to a hosted product or benchmark result.",
-      reviewedAt: "2026-09-06",
+      reviewedAt: "2026-09-30",
       sources: [
         {
           title: "Twelve-tool MCP contract",
@@ -422,14 +422,20 @@ export const researchRecords: Research = {
           kind: "source",
         },
         {
-          title: "Loopback HTTP compatibility boundary",
-          url: "https://github.com/donaldfilimon/abi/blob/6321a47bf4c48a5f58caf2df0eb631b5a2ecdcee/crates/abi-mcp/src/http.rs",
-          revision: "6321a47bf4c48a5f58caf2df0eb631b5a2ecdcee",
+          title: "Loopback HTTP+SSE transport boundary",
+          url: "https://github.com/donaldfilimon/abi/blob/80dfe079ebe7413a6815c2d564be1f0aaa901267/crates/abi-mcp/src/http.rs",
+          revision: "80dfe079ebe7413a6815c2d564be1f0aaa901267",
+          kind: "source",
+        },
+        {
+          title: "Startup: stdio primary, loopback listener attempted",
+          url: "https://github.com/donaldfilimon/abi/blob/80dfe079ebe7413a6815c2d564be1f0aaa901267/crates/abi-mcp/src/main.rs",
+          revision: "80dfe079ebe7413a6815c2d564be1f0aaa901267",
           kind: "source",
         },
       ],
       limitations: [
-        "The loopback HTTP endpoint is a custom compatibility listener, not a persistent conforming MCP HTTP+SSE transport.",
+        "The best-effort loopback HTTP listener (127.0.0.1 only) serves MCP 2024-11-05 HTTP+SSE sessions; it is not a general web server and not Streamable HTTP (2025-03-26).",
         "A listed tool does not prove provider credentials, production access or remote deployment.",
       ],
       attachments: [],
@@ -1726,12 +1732,12 @@ export const researchRecords: Research = {
       abstract: "Expose bounded ABI operations through a documented tool interface.",
       practicalSummary:
         "Evaluate a local integration from an MCP client into the ABI tool catalog.",
-      readTime: "2 min read",
+      readTime: "3 min read",
       authors: "MLAI Runtime Engineering",
       status: "Implemented",
       statusNote:
         "The documented local interface exists in the cited source. Actual runtime and client acceptance must be checked in the intended environment.",
-      reviewedAt: "2026-09-06",
+      reviewedAt: "2026-09-30",
       sources: [
         {
           title: "Twelve-tool MCP contract",
@@ -1740,14 +1746,32 @@ export const researchRecords: Research = {
           kind: "source",
         },
         {
-          title: "Loopback HTTP compatibility boundary",
-          url: "https://github.com/donaldfilimon/abi/blob/6321a47bf4c48a5f58caf2df0eb631b5a2ecdcee/crates/abi-mcp/src/http.rs",
-          revision: "6321a47bf4c48a5f58caf2df0eb631b5a2ecdcee",
+          title: "Loopback HTTP+SSE transport boundary",
+          url: "https://github.com/donaldfilimon/abi/blob/80dfe079ebe7413a6815c2d564be1f0aaa901267/crates/abi-mcp/src/http.rs",
+          revision: "80dfe079ebe7413a6815c2d564be1f0aaa901267",
+          kind: "source",
+        },
+        {
+          title: "Startup: stdio primary, loopback listener attempted",
+          url: "https://github.com/donaldfilimon/abi/blob/80dfe079ebe7413a6815c2d564be1f0aaa901267/crates/abi-mcp/src/main.rs",
+          revision: "80dfe079ebe7413a6815c2d564be1f0aaa901267",
+          kind: "source",
+        },
+        {
+          title: "Launcher: runs the built abi-mcp binary",
+          url: "https://github.com/donaldfilimon/abi/blob/80dfe079ebe7413a6815c2d564be1f0aaa901267/mcp/launcher.sh",
+          revision: "80dfe079ebe7413a6815c2d564be1f0aaa901267",
+          kind: "source",
+        },
+        {
+          title: "ABI_WDBX_PERSIST=0 disables WDBX persistence",
+          url: "https://github.com/donaldfilimon/abi/blob/80dfe079ebe7413a6815c2d564be1f0aaa901267/crates/abi-mcp/src/ai_tools.rs",
+          revision: "80dfe079ebe7413a6815c2d564be1f0aaa901267",
           kind: "source",
         },
       ],
       limitations: [
-        "The loopback HTTP endpoint is a custom compatibility listener, not a persistent conforming MCP HTTP+SSE transport.",
+        "The best-effort loopback HTTP listener (127.0.0.1 only) serves MCP 2024-11-05 HTTP+SSE sessions; it is not a general web server and not Streamable HTTP (2025-03-26).",
         "A listed tool does not prove provider credentials, production access or remote deployment.",
       ],
       attachments: [],
@@ -1762,7 +1786,7 @@ export const researchRecords: Research = {
         {
           heading: "Local entry points",
           paragraphs: [
-            "Run from the ABI checkout with the CLI built and available on PATH. Use disposable data for evaluation; do not connect a test to a live memory store.",
+            "Build the MCP binary from the ABI checkout (`./tools/cargo.sh build -p abi-mcp`); `mcp/launcher.sh` runs `target/release/abi-mcp` or `target/debug/abi-mcp` and exits if neither exists. Use disposable data for evaluation; do not connect a test to a live memory store.",
           ],
           code: [
             {
@@ -1775,14 +1799,14 @@ export const researchRecords: Research = {
           heading: "Acceptance and limits",
           paragraphs: [
             "Start with initialization and tool discovery, then a harmless read-only call. Validate the exact client transport and required arguments. Enable writes or provider calls only within the intended application permissions.",
-            "The loopback HTTP endpoint is a custom compatibility listener, not a persistent conforming MCP HTTP+SSE transport.",
+            "The best-effort loopback HTTP listener (127.0.0.1 only) serves MCP 2024-11-05 HTTP+SSE sessions; it is not a general web server and not Streamable HTTP (2025-03-26).",
             "A listed tool does not prove provider credentials, production access or remote deployment.",
           ],
         },
         {
           heading: "A minimal read-only protocol exercise",
           paragraphs: [
-            "After building the ABI MCP binary, send newline-delimited requests using the local launcher. Persistence is explicitly disabled for this example. The initialization request, tool discovery and gpu_status call exercise handshake, catalog and read-only dispatch. Match response IDs and inspect protocol errors rather than treating process startup as successful integration. The listener may attempt its custom loopback port; a port warning must be interpreted separately from stdio responses.",
+            "After building the ABI MCP binary, send newline-delimited requests using the local launcher. Persistence is explicitly disabled for this example. The initialization request, tool discovery and gpu_status call exercise handshake, catalog and read-only dispatch. Match response IDs and inspect protocol errors rather than treating process startup as successful integration. The binary always attempts its loopback HTTP listener at startup; the resulting stderr line (listening, or unavailable and continuing with stdio only) must be interpreted separately from stdio responses.",
           ],
           code: [
             {
@@ -1800,7 +1824,7 @@ export const researchRecords: Research = {
         {
           heading: "Transport selection and adoption",
           paragraphs: [
-            "Use the actual stdio integration contract when configuring a client. The custom GET /sse endpoint emits discovery once and closes, while POST /message returns its response over HTTP. A client expecting a persistent HTTP+SSE response stream needs a different conforming transport implementation. Before enabling writes, define data ownership and error recovery for each tool. This guide does not ask you to run learning, training or plugin side effects as a handshake test.",
+            "Stdio is the primary transport; use it when configuring a client unless the client needs HTTP. The binary also attempts a loopback HTTP listener at startup; stdio runs either way, and the process stays stdio-only if the listener cannot bind or report its port. The listener binds 127.0.0.1 only, defaults to port 8080 (ABI_MCP_HTTP_PORT) and accepts optional bearer auth via ABI_MCP_HTTP_TOKEN. GET /sse opens a persistent MCP 2024-11-05 HTTP+SSE session whose endpoint event names /message?sessionId=<id>; a POST to that path gets 202 Accepted and its response arrives as a message event on the stream (a notification gets 202 and no event), and an unknown session gets 404. POST /message without a session keeps the original mode: one JSON-RPC request body, one JSON-RPC response over HTTP. The listener lives only while stdio is open: when stdin reaches EOF the process stops it. The listener is not Streamable HTTP (2025-03-26), so a client that speaks only that transport needs a different implementation. Before enabling writes, define data ownership and error recovery for each tool. This guide does not ask you to run learning, training or plugin side effects as a handshake test.",
           ],
         },
       ],

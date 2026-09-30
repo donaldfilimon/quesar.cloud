@@ -114,7 +114,8 @@ describe("public research evidence contracts", () => {
     const gpu = research.publications.find((p) => p.slug === "gpu-overview");
     expect(gpu?.limitations.join(" ")).toContain("CUDA and Vulkan dispatch are not linked");
     const mcp = research.publications.find((p) => p.slug === "mcp-overview");
-    expect(mcp?.limitations.join(" ")).toContain("not a persistent conforming MCP HTTP+SSE");
+    expect(mcp?.limitations.join(" ")).toContain("not Streamable HTTP (2025-03-26)");
+    expect(mcp?.limitations.join(" ")).not.toContain("not a persistent conforming MCP HTTP+SSE");
   });
 
   it("binds current and historical PDF links to exact bytes and preserves historical URLs", () => {
