@@ -21,7 +21,7 @@ Content is typed data, not MDX: `src/lib/mlai/categories/*.ts` (blog, changelog,
 ## Claim rules
 
 - Every factual claim needs a source: a repo path at a full commit SHA (use `https://github.com/donaldfilimon/<repo>/blob/<sha>/<path>` in `sources` where the schema has them), or a command you ran together with its output.
-- Use the existing status vocabularies, never a new word: the site-wide `StatusKind` (`current`, `partial`, `experimental`, `development`, `planned`, `research`); research records' `Implemented` / `Experimental` / `Proposed` plus a `statusNote`; figures tagged as measured or `target`. Never present a target, plan or partial feature as shipped.
+- Use the existing status vocabularies, never a new word: the site-wide `StatusKind` (`current`, `partial`, `experimental`, `development`, `planned`, `research`); research records' `Implemented` / `Experimental` / `Proposed` plus a `statusNote`; figure provenance as `measured` (reproduced here), `reported` (from an external artifact, not independently reproduced) or `target` (see `src/lib/mlai/schemas-investor.ts`). Never present a target, plan or partial feature as shipped, and never label a reported figure as measured.
 - MLAI has no customers, testimonials, case studies or benchmarks against competitors. Do not imply any.
 - Quesar's tagline is "Private AI operations." "Intelligence Without Limits" belongs to Abbey, Abbey Bot and ABI only (`notes/mlai/brand.md`).
 - If you cannot source a claim, do not write it. List it under Open questions.
