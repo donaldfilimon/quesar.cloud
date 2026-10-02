@@ -1,14 +1,15 @@
 // Vendored from mlai `apps/quasar/packages/shared/src/connection.ts` at b6f3686
-// (donaldfilimon/MLAI-CORPORATION-WWW). Behaviour is unchanged; only formatting
-// differs. The service itself moves to `sidecars/quasar-service/` (WS H), and
-// this copy must keep matching its HTTP contract.
+// (donaldfilimon/MLAI-CORPORATION-WWW). Pairing adds origin-scoped credentials
+// and cancellation on credential changes. Keep both copies on one wire contract.
 
 export const DEFAULT_ORIGIN = "http://localhost:4700";
+export const credentialKey = (origin: string) => `quasar.pairing:${normalizeOrigin(origin)}`;
 export const ORIGIN_KEY = "quasar.serviceOrigin";
 
 export interface OriginStorage {
   getItem(key: string): Promise<string | null>;
   setItem(key: string, value: string): Promise<void>;
+  removeItem?(key: string): Promise<void>;
 }
 
 export function normalizeOrigin(input: string): string {
@@ -35,6 +36,12 @@ export function normalizeOrigin(input: string): string {
     throw new Error("Use an HTTP(S) origin only, without credentials, path, query, or fragment.");
   }
   return url.origin;
+}
+
+export function requireCredentialTransport(origin: string): void {
+  const url = new URL(origin);
+  if (url.protocol !== "https:" && !["localhost", "127.0.0.1", "[::1]"].includes(url.hostname))
+    throw new Error("Pairing credentials require HTTPS for non-loopback services.");
 }
 
 export class Connection {
@@ -82,9 +89,40 @@ export class Connection {
     this.ready = Promise.resolve();
   }
 
+  async saveCredential(value: string) {
+    await this.hydrate();
+    requireCredentialTransport(this.origin);
+    const token = value.trim();
+    if (!/^[A-Za-z0-9_-]{43,}$/.test(token)) throw new Error("Enter the operator's pairing token.");
+    await this.storage.setItem(credentialKey(this.origin), token);
+    this.invalidate();
+  }
+
+  async hasCredential() {
+    await this.hydrate();
+    return Boolean(await this.storage.getItem(credentialKey(this.origin)));
+  }
+
+  async clearCredential() {
+    await this.hydrate();
+    const key = credentialKey(this.origin);
+    if (this.storage.removeItem) await this.storage.removeItem(key);
+    else await this.storage.setItem(key, "");
+    this.invalidate();
+  }
+
+  private invalidate() {
+    this.revision++;
+    for (const controller of this.active) controller.abort();
+    for (const listener of this.listeners) listener();
+  }
+
   async request<T>(path: string, init: RequestInit = {}, timeout = 15_000): Promise<T> {
     await this.hydrate();
     const revision = this.revision;
+    const origin = this.origin;
+    if (!path.startsWith("/api/") || path.includes("\\"))
+      throw new Error("Invalid service API path");
     const controller = new AbortController();
     const abort = () => controller.abort();
     init.signal?.addEventListener("abort", abort, { once: true });
@@ -103,13 +141,21 @@ export class Connection {
         }, timeout);
       });
       const work = async () => {
-        const response = await this.fetcher.call(globalThis, `${this.origin}${path}`, {
+        const token = await this.storage.getItem(credentialKey(origin));
+        if (revision !== this.revision || controller.signal.aborted)
+          throw new Error("Connection changed before request.");
+        const headers = new Headers(init.headers);
+        if (init.body) headers.set("content-type", "application/json");
+        if (token) {
+          requireCredentialTransport(origin);
+          headers.set("authorization", `Bearer ${token}`);
+        } else headers.delete("authorization");
+        const response = await this.fetcher.call(globalThis, `${origin}${path}`, {
           ...init,
           signal: controller.signal,
-          headers: {
-            ...(init.body ? { "content-type": "application/json" } : {}),
-            ...init.headers,
-          },
+          redirect: "error",
+          credentials: "omit",
+          headers,
         });
         if (!response.ok) throw new Error((await response.text()) || response.statusText);
         return response.status === 204 ? (undefined as T) : ((await response.json()) as T);

@@ -1,1 +1,0 @@
-import{rt as e}from"./index-DkoH8Ov5.js";var t=e({type:`function`});export{t};

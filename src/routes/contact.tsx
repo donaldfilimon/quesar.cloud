@@ -16,6 +16,13 @@ import {
   TOPICS,
   type TurnstileConfig,
 } from "@/lib/inquiries";
+import {
+  contactSearch,
+  readReceipts,
+  receiptLabel,
+  submitContact,
+  type InquiryReceipt,
+} from "@/lib/contact-context";
 import { readStore, writeStore } from "@/lib/local-store";
 import { pageHead } from "@/lib/seo";
 import { track } from "@/lib/telemetry";
@@ -30,28 +37,27 @@ export const Route = createFileRoute("/contact")({
       "Contact — MLAI Corporation",
       "Send an inquiry about Quesar, ABI, WDBX, Abbey, or services without leaving this site.",
     ),
+  validateSearch: contactSearch,
   component: ContactPage,
 });
 
-type Inquiry = {
-  id: string;
-  name: string;
-  email: string;
-  topic: string;
-  message: string;
-  created: number;
-};
-
-/** Local receipts of inquiries the server accepted (newest first, max 20). */
+/** Local drafts, accepted receipts and delivery-unknown legacy copies (max 20). */
 const KEY = "mlai-inquiries";
 
 function ContactPage() {
+  const { service } = contactSearch(Route.useSearch());
   const { user } = useCurrentUserState();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [topic, setTopic] = useState<(typeof TOPICS)[number]>("Quesar");
+  const [topic, setTopic] = useState<(typeof TOPICS)[number]>(service ? "Services" : "Quesar");
+  const [selectedService, setSelectedService] = useState(service ?? "");
+  const [previousService, setPreviousService] = useState(service);
+  if (service !== previousService) {
+    setPreviousService(service);
+    setSelectedService(service ?? "");
+  }
   const [message, setMessage] = useState("");
-  const [saved, setSaved] = useState<Inquiry[]>([]);
+  const [saved, setSaved] = useState<InquiryReceipt[]>([]);
   const [status, setStatus] = useState<"idle" | "saving" | "done" | "error">("idle");
   const [error, setError] = useState("");
   // The static build has no server to ask: Turnstile is off from the start.
@@ -70,7 +76,7 @@ function ContactPage() {
   const [receiptsLoaded, setReceiptsLoaded] = useState(false);
   if (hydrated && !receiptsLoaded) {
     setReceiptsLoaded(true);
-    setSaved(readStore<Inquiry[]>(KEY, []));
+    setSaved(readReceipts(readStore<unknown>(KEY, [])));
   }
   // Prefill from the account while a field is empty (as before, a field cleared
   // while signed in refills).
@@ -107,7 +113,17 @@ function ContactPage() {
   async function onSubmit(event: FormEvent) {
     event.preventDefault();
     const trimmed = message.trim();
+    const inquiryMessage = selectedService.trim()
+      ? `Service: ${selectedService.trim()}\n\n${trimmed}`
+      : trimmed;
     if (!trimmed || blocked) return;
+    if (inquiryMessage.length > INQUIRY_LIMITS.messageMax) {
+      setStatus("error");
+      setError(
+        `Keep your service context and message under ${INQUIRY_LIMITS.messageMax} characters.`,
+      );
+      return;
+    }
     setStatus("saving");
     setError("");
     track("inquiry_submit");
@@ -115,14 +131,15 @@ function ContactPage() {
       const subject = encodeURIComponent(
         `[${topic}] Inquiry from ${name.trim() || "the Quesar site"}`,
       );
-      const body = encodeURIComponent(`${trimmed}\n\n— ${name.trim()} <${email.trim()}>`);
+      const body = encodeURIComponent(`${inquiryMessage}\n\n— ${name.trim()} <${email.trim()}>`);
       window.location.href = `mailto:${INQUIRY_EMAIL}?subject=${subject}&body=${body}`;
-      const draft: Inquiry = {
+      const draft: InquiryReceipt = {
+        delivery: "draft",
         id: crypto.randomUUID(),
         name: name.trim(),
         email: email.trim(),
         topic,
-        message: trimmed,
+        message: inquiryMessage,
         created: Date.now(),
       };
       const kept = [draft, ...saved].slice(0, 20);
@@ -132,18 +149,10 @@ function ContactPage() {
       toast.success(`Opening your email app to send this to ${INQUIRY_EMAIL}.`);
       return;
     }
-    let result: Awaited<ReturnType<typeof sendInquiry>>;
-    try {
-      result = await sendInquiry({
-        data: { name, email, company: "", topic, message: trimmed, turnstileToken },
-      });
-    } catch {
-      result = {
-        ok: false,
-        code: "unavailable",
-        error: "We couldn't reach the server. Your message is still in the form.",
-      };
-    }
+    const result = await submitContact(
+      { name, email, company: "", topic, message: inquiryMessage, turnstileToken },
+      (data) => sendInquiry({ data }),
+    );
     // Turnstile tokens are single-use: always start the next attempt fresh.
     if (needsToken) turnstileRef.current?.reset();
     if (!result.ok) {
@@ -153,12 +162,13 @@ function ContactPage() {
       return;
     }
     track("inquiry_success");
-    const inquiry: Inquiry = {
+    const inquiry: InquiryReceipt = {
+      delivery: "accepted",
       id: crypto.randomUUID(),
       name: name.trim(),
       email: email.trim(),
       topic,
-      message: trimmed,
+      message: inquiryMessage,
       created: Date.now(),
     };
     const next = [inquiry, ...saved].slice(0, 20);
@@ -166,18 +176,18 @@ function ContactPage() {
     setSaved(next);
     setMessage("");
     setStatus("done");
-    toast.success("Inquiry sent.");
+    toast.success("Inquiry accepted by the site.");
   }
 
   return (
     <>
       <PageHero
         eyebrow="Contact"
-        title="Write here. Stay here."
+        title="Discuss your project."
         lede={
           staticSite
-            ? `This static preview has no server, so sending opens your email app addressed to ${INQUIRY_EMAIL}. A copy of what you wrote stays on this device as a receipt. For architecture questions, the pages themselves are the public path.`
-            : "Your inquiry is sent to MLAI and stored with this site; if you are signed in, it is linked to your account. A copy of what you sent stays on this device as a receipt. For architecture questions, the pages themselves are the public path."
+            ? `This static preview has no server, so sending opens your email app addressed to ${INQUIRY_EMAIL}. A copy of what you wrote stays on this device as an email draft; delivery is unconfirmed. For architecture questions, the pages themselves are the public path.`
+            : "The server accepts and stores your inquiry with this site; if you are signed in, it is linked to your account. A local receipt records acceptance by the site. For architecture questions, the pages themselves are the public path."
         }
       />
       <Section>
@@ -211,6 +221,19 @@ function ContactPage() {
                 />
               </div>
             </div>
+            <div className="mt-4">
+              <Label htmlFor="contact-service">Service or project context (optional)</Label>
+              <Input
+                id="contact-service"
+                value={selectedService}
+                maxLength={120}
+                onChange={(event) => setSelectedService(event.target.value)}
+                className="mt-1 bg-bg"
+              />
+              <p className="mt-2 text-sm text-fg-muted">
+                Edit this context to describe the scope you need. It is included with your message.
+              </p>
+            </div>
             <fieldset className="mt-4">
               <legend className="text-sm">Topic</legend>
               <RadioGroup
@@ -232,6 +255,7 @@ function ContactPage() {
                 id="contact-message"
                 required
                 minLength={INQUIRY_LIMITS.messageMin}
+                maxLength={INQUIRY_LIMITS.messageMax}
                 value={message}
                 onChange={(event) =>
                   setMessage(event.target.value.slice(0, INQUIRY_LIMITS.messageMax))
@@ -269,12 +293,22 @@ function ContactPage() {
               </p>
             ) : null}
             <div className="mt-5 flex flex-wrap items-center gap-3">
-              <Button type="submit" disabled={status === "saving" || blocked}>
-                {status === "saving" ? "Sending…" : "Send inquiry"}
+              <Button
+                type="submit"
+                className="hover:bg-primary hover:underline motion-reduce:transition-none"
+                disabled={status === "saving" || blocked}
+              >
+                {status === "saving"
+                  ? "Sending…"
+                  : staticSite
+                    ? "Open email draft"
+                    : "Send inquiry"}
               </Button>
               {status === "done" ? (
                 <p role="status" className="text-sm text-fg-muted">
-                  Sent. A receipt is kept on this device.
+                  {staticSite
+                    ? "Email draft opened. Delivery is unconfirmed."
+                    : "Inquiry accepted by the site. A receipt is kept on this device."}
                 </p>
               ) : null}
               {status === "error" && error ? (
@@ -304,7 +338,9 @@ function ContactPage() {
                   <Link to="/apps" className="text-accent">
                     Apps
                   </Link>
-                  <p className="text-fg-muted">Workspace, vault, studio, bot — in the browser.</p>
+                  <p className="text-fg-muted">
+                    Preview app surfaces and inspect their setup requirements.
+                  </p>
                 </li>
               </ul>
             </Surface>
@@ -313,7 +349,8 @@ function ContactPage() {
                 {saved.slice(0, 5).map((item) => (
                   <li key={item.id} className="surface p-4">
                     <p className="font-mono text-2xs text-fg-subtle">
-                      {item.topic} · {new Date(item.created).toISOString().slice(0, 10)}
+                      {receiptLabel(item.delivery)} · {item.topic} ·{" "}
+                      {new Date(item.created).toISOString().slice(0, 10)}
                     </p>
                     <p className="mt-2 line-clamp-3 text-sm text-fg-muted">{item.message}</p>
                   </li>

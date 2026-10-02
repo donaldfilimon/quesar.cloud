@@ -105,7 +105,12 @@ export function DataTable<T>({
   minWidth?: string;
 }) {
   return (
-    <div className="overflow-x-auto rounded-xl shadow-border">
+    <div
+      tabIndex={0}
+      role="region"
+      aria-label="Scrollable data table"
+      className="overflow-x-auto rounded-xl shadow-border focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
+    >
       <table className="w-full text-left text-sm" style={{ minWidth }}>
         <thead className="bg-bg-elevated text-fg-muted">
           <tr>

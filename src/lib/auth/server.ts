@@ -21,16 +21,12 @@ import { betterAuth } from "better-auth";
 import { tanstackStartCookies } from "better-auth/tanstack-start";
 import { randomBytes } from "node:crypto";
 import { Pool } from "pg";
-import { ensureDbReady, getPglite } from "../db";
+import { getPglite } from "../db";
 import { env } from "../env.server";
-import { staticSite } from "../static-site";
 import { emailAndPasswordEnabled } from "./email-password";
 import { authEnabledOnServer, socialCredentials } from "./methods.server";
+import { runtimeReadiness } from "../server/readiness.server";
 import { pgliteDialect } from "./pglite-dialect";
-
-// Kick (and share) PGLite bootstrap as soon as the auth server module loads.
-// Not in the static build: it has no database (see src/lib/db.ts).
-if (!staticSite) void ensureDbReady();
 
 /**
  * Local-dev secret that outlives module reloads: PGLite (and its session rows)
@@ -55,104 +51,126 @@ const LOCAL_DEV_ORIGINS: string[] = [
   "http://[::1]:8080",
 ];
 
-// The public origin. Deployed builds set BETTER_AUTH_URL; local dev falls back
-// to a dynamic baseURL restricted to the loopback hosts.
-const explicitBaseURL = env("BETTER_AUTH_URL")?.replace(/\/+$/, "");
-const baseURL = explicitBaseURL ?? {
-  allowedHosts: ["localhost", "127.0.0.1", "[::1]"],
-  protocol: "auto" as const,
-  fallback: "http://localhost:8080",
-};
+function createAuth() {
+  // The public origin. Deployed builds set BETTER_AUTH_URL; local dev falls back
+  // to a dynamic baseURL restricted to the loopback hosts.
+  const configuredBaseURL = env("BETTER_AUTH_URL")?.replace(/\/+$/, "");
+  // Invalid runtime config is rejected by request middleware. Module evaluation
+  // must still be safe during a credential-free build/prerender.
+  const explicitBaseURL = (() => {
+    try {
+      return configuredBaseURL ? new URL(configuredBaseURL).origin : undefined;
+    } catch {
+      return undefined;
+    }
+  })();
+  const baseURL = explicitBaseURL ?? {
+    allowedHosts: ["localhost", "127.0.0.1", "[::1]"],
+    protocol: "auto" as const,
+    fallback: "http://localhost:8080",
+  };
 
-const social = authConfigured ? socialCredentials() : {};
+  const social = authConfigured ? socialCredentials() : {};
 
-// Origins Better Auth accepts on credentialed POSTs. Apple completes sign-in
-// with a cross-site form POST to the callback, so its origin must be trusted.
-const trustedOrigins: string[] = [
-  ...(explicitBaseURL ? [explicitBaseURL] : []),
-  ...LOCAL_DEV_ORIGINS,
-  ...(social.apple ? ["https://appleid.apple.com"] : []),
-];
+  // Origins Better Auth accepts on credentialed POSTs. Apple completes sign-in
+  // with a cross-site form POST to the callback, so its origin must be trusted.
+  const trustedOrigins: string[] = [
+    ...(explicitBaseURL ? [explicitBaseURL] : []),
+    ...LOCAL_DEV_ORIGINS,
+    ...(social.apple ? ["https://appleid.apple.com"] : []),
+  ];
 
-// WebAuthn binds a passkey to the relying party's host name.
-const passkeyRpID = explicitBaseURL ? new URL(explicitBaseURL).hostname : "localhost";
-const passkeyOrigin = explicitBaseURL ? [explicitBaseURL] : LOCAL_DEV_ORIGINS;
+  // WebAuthn binds a passkey to the relying party's host name.
+  const passkeyRpID = explicitBaseURL ? new URL(explicitBaseURL).hostname : "localhost";
+  const passkeyOrigin = explicitBaseURL ? [explicitBaseURL] : LOCAL_DEV_ORIGINS;
 
-const databaseUrl = env("DATABASE_URL");
+  const databaseUrl = env("DATABASE_URL");
 
-// Real Postgres when `DATABASE_URL` is set, else the embedded PGLite through a
-// Kysely dialect, so Better Auth persists to the SAME database as app data.
-// The schema is `migrations/0001_auth.sql` plus `0008_passkeys.sql`.
-const database = databaseUrl
-  ? new Pool({ connectionString: databaseUrl })
-  : { dialect: pgliteDialect(() => getPglite()), type: "postgres" as const };
+  // Real Postgres when `DATABASE_URL` is set, else the embedded PGLite through a
+  // Kysely dialect, so Better Auth persists to the SAME database as app data.
+  // The schema is `migrations/0001_auth.sql` plus `0008_passkeys.sql`.
+  const database = databaseUrl
+    ? new Pool({ connectionString: databaseUrl })
+    : { dialect: pgliteDialect(() => getPglite()), type: "postgres" as const };
 
-/** Session token cookie name. */
-const SESSION_TOKEN_COOKIE = "__Host-quesar.session_token";
+  /** Session token cookie name. */
+  const SESSION_TOKEN_COOKIE = "__Host-quesar.session_token";
 
-export const auth = betterAuth({
-  baseURL,
-  secret: env("BETTER_AUTH_SECRET") ?? devAuthSecret(),
-  database,
-  trustedOrigins,
+  return betterAuth({
+    baseURL,
+    secret: env("BETTER_AUTH_SECRET") ?? devAuthSecret(),
+    database,
+    trustedOrigins,
 
-  socialProviders: {
-    ...(social.google ? { google: { ...social.google, prompt: "select_account" as const } } : {}),
-    ...(social.apple ? { apple: social.apple } : {}),
-    ...(social.twitter ? { twitter: social.twitter } : {}),
-  },
-
-  // Encrypt provider OAuth tokens at rest. Linking a social identity to an
-  // existing user by email is allowed only for providers that verify the
-  // address (Google, Apple); X may return no email or an unverified one.
-  account: {
-    encryptOAuthTokens: true,
-    accountLinking: {
-      enabled: true,
-      trustedProviders: ["google", "apple"],
+    socialProviders: {
+      ...(social.google ? { google: { ...social.google, prompt: "select_account" as const } } : {}),
+      ...(social.apple ? { apple: social.apple } : {}),
+      ...(social.twitter ? { twitter: social.twitter } : {}),
     },
-  },
 
-  // Cache the session in the short-lived signed `session_data` cookie so reads
-  // (incl. the client's `/get-session`) skip the database.
-  session: { cookieCache: { enabled: true, maxAge: 300 } },
-
-  // Account deletion. Additive edit authorized by Donald on 2026-09-22 (see
-  // AGENTS.md). Purge per-user app data first; a DB failure there
-  // throws, so Better Auth aborts rather than leaving orphaned data behind.
-  user: {
-    deleteUser: {
-      enabled: true,
-      beforeDelete: async (user) => {
-        const { purgeUserData } = await import("../server/account-deletion.server");
-        await purgeUserData(user.id);
+    // Encrypt provider OAuth tokens at rest. Linking a social identity to an
+    // existing user by email is allowed only for providers that verify the
+    // address (Google, Apple); X may return no email or an unverified one.
+    account: {
+      encryptOAuthTokens: true,
+      accountLinking: {
+        enabled: true,
+        trustedProviders: ["google", "apple"],
       },
     },
-  },
 
-  // Local email/password, toggled in `./email-password`.
-  ...(emailAndPasswordEnabled ? { emailAndPassword: { enabled: true } } : {}),
+    // Cache the session in the short-lived signed `session_data` cookie so reads
+    // (incl. the client's `/get-session`) skip the database.
+    session: { cookieCache: { enabled: true, maxAge: 300 } },
 
-  // `__Host-` cookies: the browser refuses any same-named cookie that carries a
-  // `Domain` attribute, so no sibling subdomain can plant a session cookie here.
-  // `__Host-` requires Secure + Path=/ + no Domain; Better Auth otherwise uses
-  // `__Secure-` (which permits Domain), so its auto prefix is off and the names
-  // are set here. Browsers allow Secure cookies on http://localhost.
-  advanced: {
-    useSecureCookies: false,
-    defaultCookieAttributes: { secure: true, sameSite: "lax", path: "/" },
-    cookies: {
-      session_token: { name: SESSION_TOKEN_COOKIE },
-      session_data: { name: "__Host-quesar.session_data" },
-      account_data: { name: "__Host-quesar.account_data" },
-      dont_remember: { name: "__Host-quesar.dont_remember" },
+    // Account deletion. Additive edit authorized by Donald on 2026-09-22 (see
+    // AGENTS.md). Purge per-user app data first; a DB failure there
+    // throws, so Better Auth aborts rather than leaving orphaned data behind.
+    user: {
+      deleteUser: {
+        enabled: true,
+        beforeDelete: async (user) => {
+          const { purgeUserData } = await import("../server/account-deletion.server");
+          await purgeUserData(user.id);
+        },
+      },
     },
-  },
 
-  plugins: [
-    passkey({ rpID: passkeyRpID, rpName: "Quesar", origin: passkeyOrigin }),
-    // Bridges Better Auth's Set-Cookie into TanStack Start responses. MUST be
-    // last so it runs after every other plugin's hooks.
-    tanstackStartCookies(),
-  ],
-});
+    // Local email/password, toggled in `./email-password`.
+    ...(emailAndPasswordEnabled ? { emailAndPassword: { enabled: true } } : {}),
+
+    // `__Host-` cookies: the browser refuses any same-named cookie that carries a
+    // `Domain` attribute, so no sibling subdomain can plant a session cookie here.
+    // `__Host-` requires Secure + Path=/ + no Domain; Better Auth otherwise uses
+    // `__Secure-` (which permits Domain), so its auto prefix is off and the names
+    // are set here. Browsers allow Secure cookies on http://localhost.
+    advanced: {
+      useSecureCookies: false,
+      defaultCookieAttributes: { secure: true, sameSite: "lax", path: "/" },
+      cookies: {
+        session_token: { name: SESSION_TOKEN_COOKIE },
+        session_data: { name: "__Host-quesar.session_data" },
+        account_data: { name: "__Host-quesar.account_data" },
+        dont_remember: { name: "__Host-quesar.dont_remember" },
+      },
+    },
+
+    plugins: [
+      passkey({ rpID: passkeyRpID, rpName: "Quesar", origin: passkeyOrigin }),
+      // Bridges Better Auth's Set-Cookie into TanStack Start responses. MUST be
+      // last so it runs after every other plugin's hooks.
+      tanstackStartCookies(),
+    ],
+  });
+}
+
+type Auth = ReturnType<typeof createAuth>;
+let instance: Auth | undefined;
+/** Importing this module never constructs Better Auth or opens its database.
+ * Revalidate before construction, including calls outside Start middleware.
+ */
+export function getAuth(): Auth {
+  if (!runtimeReadiness().ready) throw new Error("Runtime configuration is not ready");
+  instance ??= createAuth();
+  return instance;
+}

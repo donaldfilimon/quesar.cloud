@@ -1,3 +1,4 @@
+import { clientExperience } from "@/lib/mlai/categories/client-experience";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { PageClose, PageHero, Section, Surface } from "@/components/site";
 import { Callout, StepList } from "@/components/site/lab";
@@ -18,10 +19,23 @@ function ServicesPage() {
   return (
     <>
       <PageHero
-        eyebrow="Services"
-        title="Audit, design, build, and harden."
-        lede="Work that needs traceability, private deployment options, and operational control. If the engagement requires your corpus to leave your hardware, the engagement is designed wrong."
+        eyebrow={clientExperience.landingIntros.services.eyebrow}
+        title={clientExperience.landingIntros.services.title}
+        lede={clientExperience.landingIntros.services.lede}
       />
+      <Section>
+        <p className="max-w-3xl text-base leading-relaxed text-fg-muted">
+          {clientExperience.landingIntros.services.availability}
+        </p>
+        <a
+          href={clientExperience.landingIntros.services.sources[0]}
+          target="_blank"
+          rel="noreferrer"
+          className="mt-4 inline-block text-sm text-accent underline underline-offset-4"
+        >
+          Inspect the source behind this page
+        </a>
+      </Section>
 
       <Section eyebrow="Core" title="Nine engagements. Each ends with evidence.">
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -31,15 +45,14 @@ function ServicesPage() {
               <p className="mt-2 flex-1 text-sm leading-relaxed text-fg-muted">
                 {service.description}
               </p>
-              <ul className="mt-4 space-y-1.5">
+              <ul className="mt-4 list-disc space-y-2 pl-5 text-sm leading-relaxed text-fg-muted">
                 {service.outcomes.map((outcome) => (
-                  <li key={outcome} className="font-mono text-2xs text-fg-subtle">
-                    → {outcome}
-                  </li>
+                  <li key={outcome}>{outcome}</li>
                 ))}
               </ul>
               <Link
                 to="/contact"
+                search={{ service: service.title }}
                 className="mt-5 inline-flex items-center gap-2 border-t border-border pt-4 text-sm text-accent no-underline hover:underline"
               >
                 Discuss this service <span aria-hidden="true">→</span>
@@ -67,7 +80,7 @@ function ServicesPage() {
         </div>
         <div className="mt-8 flex flex-wrap gap-3">
           <Button asChild>
-            <Link to="/contact">Start from source</Link>
+            <Link to="/contact">Discuss your project</Link>
           </Button>
           <Button asChild variant="secondary">
             <Link to="/architecture">Read the architecture</Link>
@@ -75,7 +88,7 @@ function ServicesPage() {
         </div>
       </Section>
       <PageClose
-        primary={{ to: "/contact", label: "Contact" }}
+        primary={{ to: "/contact", label: "Discuss your project" }}
         next={[
           {
             to: "/developers",

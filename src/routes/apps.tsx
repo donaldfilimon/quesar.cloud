@@ -1,3 +1,4 @@
+import { clientExperience } from "@/lib/mlai/categories/client-experience";
 import { createFileRoute } from "@tanstack/react-router";
 import { CopyGrid, PageClose, PageHero, Section } from "@/components/site";
 import { appSurfaces } from "@/lib/catalog";
@@ -16,10 +17,23 @@ function AppsPage() {
   return (
     <>
       <PageHero
-        eyebrow="Apps"
-        title="Every surface, in this site."
-        lede="The shipping apps run on your machine. These pages are working orientations — documents, vaults, routers, and studios — so you do not have to leave for GitHub to see what they are."
+        eyebrow={clientExperience.landingIntros.apps.eyebrow}
+        title={clientExperience.landingIntros.apps.title}
+        lede={clientExperience.landingIntros.apps.lede}
       />
+      <Section>
+        <p className="max-w-3xl text-base leading-relaxed text-fg-muted">
+          {clientExperience.landingIntros.apps.availability}
+        </p>
+        <a
+          href={clientExperience.landingIntros.apps.sources[0]}
+          target="_blank"
+          rel="noreferrer"
+          className="mt-4 inline-block text-sm text-accent underline underline-offset-4"
+        >
+          Inspect the source behind this page
+        </a>
+      </Section>
       <Section>
         <CopyGrid
           items={appSurfaces.map((app) => ({
@@ -32,7 +46,11 @@ function AppsPage() {
         />
       </Section>
       <PageClose
-        primary={{ to: "/architecture", label: "Architecture" }}
+        primary={{ to: "/contact", label: "Discuss your project" }}
+        secondary={[
+          { to: "/architecture", label: "Architecture" },
+          { to: "/docs", label: "Documentation" },
+        ]}
         next={[
           { to: "/workspace", label: "Workspace", body: "Documents on this machine." },
           {

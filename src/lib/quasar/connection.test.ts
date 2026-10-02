@@ -31,10 +31,12 @@ test("hydration precedes requests and persistence survives recreation", async ()
   const client = new Connection(
     {
       ...saved,
-      getItem: () =>
-        new Promise((resolve) => {
-          release = resolve;
-        }),
+      getItem: (key) =>
+        key !== "quasar.serviceOrigin"
+          ? Promise.resolve(null)
+          : new Promise((resolve) => {
+              release = resolve;
+            }),
     },
     stub(async (url) => {
       calls.push(String(url));
@@ -185,4 +187,88 @@ test("fetch receives its browser global receiver rather than the Connection inst
   } as typeof fetch;
   const client = new Connection(storage(), nativeLikeFetch);
   expect(await client.request<unknown[]>("/api/sites")).toEqual([]);
+});
+
+test("pairing credentials stay scoped to the exact origin, survive cold load, and clear explicitly", async () => {
+  const values = new Map<string, string>();
+  const saved = {
+    getItem: async (key: string) => values.get(key) ?? null,
+    setItem: async (key: string, value: string) => {
+      values.set(key, value);
+    },
+    removeItem: async (key: string) => {
+      values.delete(key);
+    },
+  };
+  const calls: { url: string; authorization: string | null; redirect?: RequestRedirect }[] = [];
+  const transport = stub(async (url, init) => {
+    calls.push({
+      url: String(url),
+      authorization: new Headers(init?.headers).get("authorization"),
+      redirect: init?.redirect,
+    });
+    return Response.json([]);
+  });
+  const client = new Connection(saved, transport);
+  await client.saveCredential("a".repeat(43));
+  await client.request("/api/sites");
+  await client.save("http://127.0.0.1:4700");
+  await client.request("/api/sites");
+  expect(calls[0]?.authorization).toBe(`Bearer ${"a".repeat(43)}`);
+  expect(calls[1]?.authorization).toBeNull();
+  await client.save(DEFAULT_ORIGIN);
+  const cold = new Connection(saved, transport);
+  expect(await cold.hasCredential()).toBe(true);
+  await cold.request("/api/sites");
+  expect(calls[2]?.authorization).toBe(calls[0]?.authorization);
+  expect(calls.every((call) => call.redirect === "error")).toBe(true);
+  expect(calls.every((call) => !call.url.includes("aaa"))).toBe(true);
+  await cold.clearCredential();
+  expect(await cold.hasCredential()).toBe(false);
+  await cold.request("/api/sites");
+  expect(calls[3]?.authorization).toBeNull();
+  await expect(cold.request("//evil.example/steal")).rejects.toThrow("Invalid service API path");
+});
+
+test("pairing credentials are origin-scoped, clearable and never transmitted over remote HTTP", async () => {
+  const values = new Map<string, string>();
+  const saved = {
+    getItem: async (key: string) => values.get(key) ?? null,
+    setItem: async (key: string, value: string) => {
+      values.set(key, value);
+    },
+    removeItem: async (key: string) => {
+      values.delete(key);
+    },
+  };
+  const sent: string[] = [];
+  const client = new Connection(
+    saved,
+    stub(async (_url, init) => {
+      sent.push(new Headers(init?.headers).get("authorization") ?? "");
+      return Response.json([]);
+    }),
+  );
+  const token = "s".repeat(43);
+  await client.save("https://one.example");
+  await client.saveCredential(token);
+  await client.request("/api/sites");
+  expect(sent.pop()).toBe(`Bearer ${token}`);
+  await client.save("https://two.example");
+  expect(await client.hasCredential()).toBe(false);
+  await client.request("/api/sites");
+  expect(sent.pop()).toBe("");
+  await client.save("https://one.example");
+  await client.clearCredential();
+  expect(await client.hasCredential()).toBe(false);
+  await client.save("http://remote.example");
+  await expect(client.saveCredential(token)).rejects.toThrow("HTTPS");
+  values.set("quasar.pairing:http://remote.example", token);
+  await expect(client.request("/api/sites")).rejects.toThrow("HTTPS");
+  expect(sent).toEqual([]);
+  for (const origin of ["http://localhost:4700", "http://127.0.0.1:4700", "http://[::1]:4700"]) {
+    await client.save(origin);
+    await client.saveCredential(token);
+    expect(await client.hasCredential()).toBe(true);
+  }
 });

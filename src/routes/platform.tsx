@@ -1,3 +1,4 @@
+import { clientExperience } from "@/lib/mlai/categories/client-experience";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ChipCutaway } from "@/components/diagram/chip-cutaway";
 import {
@@ -21,7 +22,7 @@ export const Route = createFileRoute("/platform")({
   head: () =>
     pageHead(
       "Platform — three layers, one chip",
-      "Quesar is the large model that trains and improves Abbey, Aviva, and the other assistants. WDBX stores, ABI coordinates, Abbey speaks. This site does not host the model.",
+      "Explore trace, control, evaluation, and runtime capabilities alongside the layers underneath them.",
       ogImage("platform"),
     ),
   component: PlatformPage,
@@ -31,10 +32,23 @@ function PlatformPage() {
   return (
     <>
       <PageHero
-        eyebrow="Platform"
-        title="Inference, index, and data on machines you own."
-        lede="Quesar is the large model that trains and improves Abbey, Aviva, and the other assistants. WDBX stores, ABI coordinates, Abbey speaks. This site does not host the model. Gama is a founder-owned Swift framework — related by author, not a Quesar surface."
+        eyebrow={clientExperience.landingIntros.platform.eyebrow}
+        title={clientExperience.landingIntros.platform.title}
+        lede={clientExperience.landingIntros.platform.lede}
       />
+      <Section>
+        <p className="max-w-3xl text-base leading-relaxed text-fg-muted">
+          {clientExperience.landingIntros.platform.availability}
+        </p>
+        <a
+          href={clientExperience.landingIntros.platform.sources[0]}
+          target="_blank"
+          rel="noreferrer"
+          className="mt-4 inline-block text-sm text-accent underline underline-offset-4"
+        >
+          Inspect the source behind this page
+        </a>
+      </Section>
 
       <Section eyebrow="Stack" title="Bottom to top.">
         <div className="mb-10">
@@ -97,7 +111,7 @@ function PlatformPage() {
           <p className="mt-2 max-w-2xl text-sm leading-relaxed text-fg-muted">
             A modular declarative Swift UI framework with TUI, Apple, WebAssembly, and embed
             backends. It lives at{" "}
-            <Link to="/gama" className="text-accent">
+            <Link to="/gama" className="text-accent underline underline-offset-4">
               Gama
             </Link>
             . It is not a Quesar product, not an Abbey runtime, and not evidence of a shipped
@@ -108,8 +122,11 @@ function PlatformPage() {
       <HomeControlPlane />
       <HomeProductBoundary />
       <PageClose
-        primary={{ to: "/architecture", label: "Architecture" }}
-        secondary={[{ to: "/quesar", label: "Quesar" }]}
+        primary={{ to: "/contact", label: "Discuss your project" }}
+        secondary={[
+          { to: "/architecture", label: "Architecture" },
+          { to: "/quesar", label: "Quesar" },
+        ]}
         next={[
           { to: "/abi", label: "ABI", body: "Nightly Rust orchestration." },
           { to: "/abbey", label: "Abbey", body: "The claims-honest companion." },

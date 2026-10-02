@@ -20,6 +20,10 @@ export function navActive(to: string, pathname: string) {
 }
 
 export const extra = [
+  { to: "/quesar", label: "Quesar" },
+  { to: "/company", label: "Company" },
+  { to: "/products", label: "Products" },
+  { to: "/showcase", label: "Showcase" },
   { to: "/architecture", label: "Architecture" },
   { to: "/research", label: "Research" },
   { to: "/research/implementations", label: "Implementations" },

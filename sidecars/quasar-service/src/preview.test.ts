@@ -39,7 +39,7 @@ test("start spawns a working server and reports running, stop tears it down", as
   const status = await manager.start("site-a", cwd, port);
   expect(status.state).toBe("running");
   expect(status.port).toBe(port);
-  expect(status.url).toBe(`http://localhost:${port}`);
+  expect(status.url).toBe("/preview/site-a/");
 
   expect(manager.status("site-a")).toEqual(status);
 
