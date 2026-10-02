@@ -1,3 +1,4 @@
+import markUrl from "../mlai-mark.svg";
 /* Marketing — the full MLAI marketing page entry point.
    Composes Nav + Hero + Features + Personas + Footer over the GalaxyCanvas
    background, plus a Request-access modal. Self-contained: all kit-specific
@@ -90,7 +91,7 @@ function AccessModal({ open, onClose }: AccessModalProps) {
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <img src="/mlai-mark.svg" width="32" height="32" alt="MLAI" />
+            <img src={markUrl} width="32" height="32" alt="MLAI" />
             <span
               style={{
                 fontFamily: "var(--font-display)",
@@ -139,10 +140,10 @@ function AccessModal({ open, onClose }: AccessModalProps) {
                 margin: "0 0 6px",
               }}
             >
-              You&apos;re on the list
+              Concept form preview
             </h3>
             <p style={{ fontSize: 14, color: "var(--text-dim)", margin: 0 }}>
-              We&apos;ll reach out when your environment is provisioned.
+              This design board does not submit a request or provision an environment.
             </p>
           </div>
         ) : (
@@ -159,7 +160,7 @@ function AccessModal({ open, onClose }: AccessModalProps) {
               Request access
             </h3>
             <p style={{ fontSize: 14, color: "var(--text-dim)", margin: "0 0 20px" }}>
-              Private preview of WDBX + the ABI framework.
+              Illustrative contact form for a future project.
             </p>
             <label
               style={{

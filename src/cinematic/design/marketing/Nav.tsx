@@ -1,3 +1,4 @@
+import markUrl from "../mlai-mark.svg";
 /* Nav + Command palette (⌘K) for the MLAI marketing site. */
 import { useEffect, useState } from "react";
 import { IChevron, ISearch } from "./Icons.tsx";
@@ -208,7 +209,7 @@ export default function Nav({ onAccess }: NavProps) {
             textDecoration: "none",
           }}
         >
-          <img src="/mlai-mark.svg" width="30" height="30" alt="MLAI" />
+          <img src={markUrl} width="30" height="30" alt="MLAI" />
           <span
             style={{
               fontFamily: "var(--font-display)",

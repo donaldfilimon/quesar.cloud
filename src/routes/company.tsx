@@ -21,8 +21,8 @@ import { pageHead } from "@/lib/seo";
 export const Route = createFileRoute("/company")({
   head: () =>
     pageHead(
-      "Company — MLAI Corporation",
-      "MLAI Corporation — Machine Learning Advanced Innovations. Origin, founder, public source, and the only approved Apple sentence.",
+      "Company — MLAI",
+      "MLAI: founder-led AI engineering, source references, implementation boundaries, and proposed engagement scopes.",
     ),
   component: CompanyPage,
 });
@@ -49,14 +49,13 @@ function CompanyPage() {
         </a>
       </Section>
 
-      <Section eyebrow="Entity" title="Who ships this.">
+      <Section eyebrow="Company" title="Who develops this.">
         <div className="grid gap-4 md:grid-cols-2">
           <Surface>
-            <h3 className="font-display text-xl">MLAI Corporation</h3>
+            <h3 className="font-display text-xl">MLAI</h3>
             <p className="mt-2 text-sm leading-relaxed text-fg-muted">
-              Legal name: {site.legal}. {investor.entity}. Public orientation lives here.
-              Integration source lives on GitHub. This website does not host assistant sessions or
-              generation.
+              MLAI is the company brand used on this site. Its public pages provide orientation and
+              source references.
             </p>
           </Surface>
           <Surface>
@@ -85,7 +84,7 @@ function CompanyPage() {
       <Section
         eyebrow="Integrity"
         title="Rules that cost more to break than any asset."
-        lede="Copied from the public skill-creator skill. They apply to this site as written."
+        lede="These are the site's integrity rules. Licensing statements refer to the named repository licenses; figures require a source and provenance tag."
       >
         <IntegrityList />
       </Section>
@@ -110,9 +109,9 @@ function CompanyPage() {
       </Section>
       <Section eyebrow="Public work" title="Choose the right contact path.">
         <p className="max-w-2xl text-sm leading-relaxed text-fg-muted">
-          Discuss a project through the contact form. The public static site opens an email draft; a
-          configured server accepts and stores inquiries. Setup questions and patches belong with
-          the source for the relevant product.
+          Discuss a project through the contact form. The public static site requests an email draft
+          in your email app; a configured server accepts and stores inquiries. Setup questions and
+          patches belong with the source for the relevant product.
         </p>
       </Section>
       <PageClose

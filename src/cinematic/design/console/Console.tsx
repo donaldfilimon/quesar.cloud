@@ -81,6 +81,7 @@ export default function Console() {
       >
         <Topbar route={route} onCmd={() => setCmd(true)} />
         <main
+          data-design-scroll=""
           style={{
             flex: 1,
             minHeight: 0,

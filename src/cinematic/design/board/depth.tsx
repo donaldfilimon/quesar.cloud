@@ -250,7 +250,7 @@ export function ComponentsSection(): ReactNode {
               Trace Layer
             </h4>
             <p className="text-xs text-fg-muted leading-relaxed">
-              Every retrieval path and policy check captured as an inspectable event.
+              Concept trace card; no universal retrieval or policy-coverage claim.
             </p>
           </div>
         </CompShell>
@@ -415,8 +415,8 @@ function HeroApplied({ after }: { after: boolean }): ReactNode {
               marginTop: after ? 20 : 14,
             }}
           >
-            WDBX · ABI · Abbey — orchestration you can trace, benchmark and run entirely on your own
-            infrastructure.
+            WDBX · ABI · Abbey — source foundations; agree runtime and security evidence for the
+            intended path.
           </p>
           <div className="flex flex-wrap items-center mt-8" style={{ gap: after ? 14 : 10 }}>
             <button
@@ -485,8 +485,8 @@ export function AppliedSection(): ReactNode {
         <SectionHead
           kicker="07 · Applied"
           color="var(--ds-accent)"
-          title="The whole system, on one real page"
-          lede="Color roles, the elevation ramp, the light direction, spacing rhythm and refined type — applied to the Quesar home hero. Toggle between the current build and the upgrade."
+          title="The visual proposal, on one sample page"
+          lede="Color roles, elevation, light direction, spacing and type on a concept hero. Toggle between two design treatments."
         />
         <div className="pb-1">
           <BeforeAfter value={after} onChange={setAfter} labels={["Current", "Upgraded"]} />
@@ -550,7 +550,7 @@ export function TokensSection(): ReactNode {
           }}
         >
           <span className="w-1.5 h-1.5 rounded-full bg-status-current" />
-          ready to ship
+          design proposal
         </span>
       </Glass>
 
@@ -593,8 +593,7 @@ export function TokensSection(): ReactNode {
           <Eyebrow color="var(--ds-accent3)">Consuming the tokens</Eyebrow>
           <CodeBlock code={USAGE} label="component.css" />
           <p className="text-xs text-fg-subtle mt-4 leading-relaxed">
-            No component hard-codes a hex, a shadow or a pixel. Re-theme the whole product — a
-            lighter mode, a campaign accent, denser spacing — by editing one{" "}
+            This token proposal explores theming. Review component coverage before adopting its{" "}
             <Mono className="text-accent text-xs">:root</Mono> block.
           </p>
         </div>

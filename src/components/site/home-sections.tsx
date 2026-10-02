@@ -26,8 +26,8 @@ export function HomeControlPlane() {
         id="control-plane"
         className="scroll-mt-32"
         eyebrow="Trust boundary"
-        title="Three boundaries. One control plane."
-        lede="Identity, provider, and records are the same request, not settings an operator has to remember to align."
+        title="Configured console Chat: three boundaries."
+        lede="The server-side console Chat path checks identity, provider configuration, and audit storage within one request. Broader runtime control-plane work has separate status and acceptance requirements."
       >
         <div className="grid gap-4 lg:grid-cols-3">
           {homeBoundaries.map((item) => (
@@ -48,12 +48,13 @@ export function HomeControlPlane() {
           <div className="min-w-0 lg:sticky lg:top-32">
             <p className="eyebrow">One request</p>
             <h2 id="request-path-heading" className="section-title mt-4">
-              Five control points. One return condition.
+              Five checks for console Chat.
             </h2>
             <p className="mt-5 max-w-xl text-base leading-relaxed text-fg-muted sm:text-lg">
-              Authenticate, consent, generate, encrypt, commit. The design: if a control point
-              fails, no unaudited response is returned. Three of the five are still being built and
-              are labeled; until they ship, replies are not audited.
+              In the configured server console Chat path, authenticate, consent, generate, encrypt,
+              and store the audit before returning the reply. These checks are implemented in
+              source. The static preview has no server chat, and live deployment acceptance requires
+              separate evidence.
             </p>
             <Button asChild variant="secondary" className="mt-7">
               <Link to="/security">
@@ -86,8 +87,8 @@ export function HomeProductBoundary() {
     <Section
       id="product-boundary"
       eyebrow="Product boundary"
-      title="The model. Not a session on this site."
-      lede="Quesar is the large model that trains and improves Abbey, Aviva, and the other assistants. This website does not host the model, run training, or host assistant sessions."
+      title="An experimental local builder."
+      lede="The Quasar browser client pairs with an operator-owned service that scaffolds Next.js projects and uses a configured provider for generation. Live provider generation remains unverified. ABI, WDBX, and Abbey have separate source and integration boundaries."
     >
       <div className="grid gap-4 md:grid-cols-2">
         {homeProductBoundary.map((item) => (

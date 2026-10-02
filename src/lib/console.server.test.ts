@@ -423,3 +423,25 @@ describe("cron", () => {
     ]);
   });
 });
+
+it("withholds a stubbed reply and redacts sensitive SQL failure text", async () => {
+  const userId = newUserId();
+  await acceptChatConsent(userId, CHAT_AUDIT_POLICY_VERSION);
+  const sql = await getSql();
+  const log = vi.spyOn(console, "error").mockImplementation(() => {});
+  await sql.query(
+    "create function audit_acceptance_fault() returns trigger language plpgsql as $$ begin raise exception 'synthetic-private-audit-secret'; end $$",
+  );
+  await sql.query(
+    "create trigger audit_acceptance_fault before insert on conversation_audits for each row execute function audit_acceptance_fault()",
+  );
+  try {
+    expect(await chatAs(userId)).toMatchObject({ ok: false, reason: "audit_failed" });
+    expect(log.mock.calls).toEqual([["Conversation audit could not be stored."]]);
+    expect(await sql`select id from conversation_audits where user_id = ${userId}`).toHaveLength(0);
+  } finally {
+    await sql.query("drop trigger audit_acceptance_fault on conversation_audits");
+    await sql.query("drop function audit_acceptance_fault()");
+    log.mockRestore();
+  }
+});

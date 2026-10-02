@@ -37,7 +37,7 @@ export const INQUIRY_PAGE_SIZE = 25;
  * so the console adds it. Kept out of the sealed record, as in mlai.
  */
 export const SYSTEM_PREAMBLE =
-  "You are a note on the Quesar website, not the Quesar model. Quesar is the large model that trains and improves Abbey, Aviva, and the other assistants. This site does not host that model, run training, or host an assistant session. Be direct, technical, safety-conscious, and explicit about uncertainty. Never imply that an unverified target is a measured result.";
+  "You are responding through a configured model provider on the Quesar website. Quesar's public product surface is an experimental browser client paired with a separately running, operator-owned website-builder service. This website model-request path is separate from that builder. ABI, WDBX, and Abbey have their own source, implementation, and integration boundaries. Do not infer a trained Quesar foundation model, a training pipeline between these projects, or deployed integration from these source surfaces. Be direct, technical, safety-conscious, and explicit about uncertainty. Distinguish source implementation, configured operation, and deployment acceptance. Never imply that an unverified target is a measured result.";
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
@@ -204,7 +204,12 @@ export type ChatResult =
  * count against the rate limit, then call the model, then seal and store the
  * audit, and only then return the reply.
  */
-export async function runChat(userId: string, input: unknown): Promise<ChatResult> {
+export async function runChat(
+  userId: string,
+  input: unknown,
+  // Trusted server callers only. No server function accepts these options from clients.
+  options?: { systemPrompt: string; maxTokens: number },
+): Promise<ChatResult> {
   let size: number;
   try {
     size = new TextEncoder().encode(JSON.stringify(input ?? null)).byteLength;
@@ -221,7 +226,7 @@ export async function runChat(userId: string, input: unknown): Promise<ChatResul
   if (!encryptionConfigured()) {
     return fail(
       "encryption_not_configured",
-      "Chat is off: audit encryption (APP_ENCRYPTION_KEY) is not configured, and chat never runs unaudited.",
+      "Model requests are off because audit encryption (APP_ENCRYPTION_KEY) is not configured.",
     );
   }
   const consent = await getChatConsent(userId);
@@ -242,7 +247,14 @@ export async function runChat(userId: string, input: unknown): Promise<ChatResul
     return fail("rate_limited", "Too many requests in a short time. Wait a minute and try again.");
 
   const result = await complete({
-    messages: [{ role: "system", content: SYSTEM_PREAMBLE }, ...messages],
+    messages: [
+      {
+        role: "system",
+        content: options ? `${SYSTEM_PREAMBLE}\n\n${options.systemPrompt}` : SYSTEM_PREAMBLE,
+      },
+      ...messages,
+    ],
+    ...(options ? { maxTokens: options.maxTokens } : {}),
   });
   if (!result.ok) {
     return result.reason === "not_configured"
@@ -261,8 +273,8 @@ export async function runChat(userId: string, input: unknown): Promise<ChatResul
       result.model,
     );
     return { ok: true, text: result.text, provider: result.provider, model: result.model, audit };
-  } catch (error) {
-    console.error("Conversation audit could not be stored:", error);
+  } catch {
+    console.error("Conversation audit could not be stored.");
     return fail(
       "audit_failed",
       "The response was withheld because its audit record could not be stored.",
@@ -370,8 +382,8 @@ async function readAudit(args: {
       reason,
     });
     return { ok: true, audit: { ...summary(row), contentDigest: row.content_digest, content } };
-  } catch (error) {
-    console.error("Audit could not be decrypted:", error);
+  } catch {
+    console.error("Audit could not be decrypted.");
     await accessEvent({ auditId: id, actorUserId, actorType, action, outcome: "failed", reason });
     return fail("undecryptable", "That audit record could not be decrypted.");
   }
@@ -476,8 +488,8 @@ async function deleteAndLog(args: {
         outcome: "failed",
         reason,
       });
-    } catch (logError) {
-      console.error("Audit deletion failure could not be logged:", logError);
+    } catch {
+      console.error("Audit deletion failure could not be logged.");
     }
     throw error;
   }

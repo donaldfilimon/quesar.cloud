@@ -1,5 +1,7 @@
+import { AiConsentPanel } from "@/components/console/ai-consent-panel";
+import { useAiConsent } from "@/components/console/use-ai-consent";
 import { useHydrated } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { askPersonaFromClient } from "@/lib/ai";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
@@ -11,10 +13,12 @@ type Doc = { id: string; title: string; body: string; updated: number };
 
 const KEY = "mlai-abbey-workspace";
 const WELCOME_BODY =
-  "Abbey workspace orientation.\n\nThis page is the in-browser loop: documents stay in this browser. The shipping app uses SQLite, a Python worker, and an optional local model.\n\nWrite a brief, then ask Abbey for a pass.";
+  "Abbey workspace orientation.\n\nThis page is a browser document preview: documents are stored in this browser's localStorage. A configured server can provide a separate model-request path; the static preview cannot.\n\nWrite a brief, then inspect the available interaction and setup requirements.";
 
 export function WorkspaceApp() {
   const { user } = useCurrentUserState();
+  const consent = useAiConsent();
+  const requestLock = useRef(false);
   const [docs, setDocs] = useState<Doc[]>([]);
   const [active, setActive] = useState<string | null>(null);
   const [title, setTitle] = useState("Welcome");
@@ -99,6 +103,8 @@ export function WorkspaceApp() {
   }
 
   async function ask() {
+    if (!consent.ready || requestLock.current || !question.trim() || title.length > 200) return;
+    requestLock.current = true;
     setStatus("asking");
     setAnswer("");
     try {
@@ -109,15 +115,20 @@ export function WorkspaceApp() {
         },
       });
       if (!result.ok) {
-        setAnswer(result.error);
+        setAnswer(result.message);
+        await consent.refresh();
         setStatus("error");
         return;
       }
       setAnswer(result.text);
       setStatus("idle");
     } catch {
-      setAnswer("Sign in to use the live model. Local notes still save.");
+      setAnswer(
+        "The request could not be completed. Your document and question are preserved; check your session and retry.",
+      );
       setStatus("error");
+    } finally {
+      requestLock.current = false;
     }
   }
 
@@ -171,6 +182,8 @@ export function WorkspaceApp() {
         {current ? (
           <>
             <input
+              aria-label="Document title"
+              maxLength={200}
               value={title}
               onChange={(event) => {
                 setTitle(event.target.value);
@@ -182,6 +195,7 @@ export function WorkspaceApp() {
               {words} words · saved in this browser
             </p>
             <textarea
+              aria-label="Document body"
               value={body}
               onChange={(event) => {
                 setBody(event.target.value);
@@ -208,7 +222,18 @@ export function WorkspaceApp() {
                 ? "Signed in. Live model is user-initiated and capped."
                 : "Local notes work offline. Sign in to ask Abbey."}
             </p>
+            <AiConsentPanel consent={consent} busy={status === "asking"} />
+            <p className="mt-3 text-xs text-fg-muted">
+              Ask Abbey sends this document’s title, the first 800 body characters, and your
+              question to the configured model provider. A successful exchange is stored as a sealed
+              audit before its reply is shown. Editing alone stays in this browser.
+            </p>
+            {title.length > 200 ? (
+              <p role="alert">Shorten the title to 200 characters before asking.</p>
+            ) : null}
             <textarea
+              aria-label="Question for Abbey"
+              disabled={status === "asking"}
               value={question}
               onChange={(event) => setQuestion(event.target.value.slice(0, 400))}
               className="mt-3 min-h-24 w-full rounded-md bg-bg px-3 py-2 text-sm shadow-border outline-none"
@@ -217,11 +242,20 @@ export function WorkspaceApp() {
               type="button"
               className="mt-3"
               onClick={() => void ask()}
-              disabled={status === "asking"}
+              disabled={
+                status === "asking" || !consent.ready || !question.trim() || title.length > 200
+              }
             >
               {status === "asking" ? "Asking…" : "Ask Abbey"}
             </Button>
-            {answer ? <p className="mt-4 text-sm leading-relaxed text-fg-muted">{answer}</p> : null}
+            {answer ? (
+              <p
+                role={status === "error" ? "alert" : "status"}
+                className="mt-4 text-sm leading-relaxed text-fg-muted"
+              >
+                {answer}
+              </p>
+            ) : null}
           </>
         )}
       </aside>

@@ -6,7 +6,7 @@ export const Route = createFileRoute("/companion")({
   head: () =>
     pageHead(
       "Abbey Companion — Quesar",
-      "Native macOS SwiftUI companion for Abbey Bot. Local surface, not a hosted session.",
+      "Browser orientation to companion concepts. Native implementation and device acceptance require separate source evidence.",
     ),
   component: CompanionPage,
 });
@@ -16,8 +16,8 @@ function CompanionPage() {
     <>
       <PageHero
         eyebrow="Companion"
-        title="A Mac window onto Abbey."
-        lede="Native SwiftUI companion for Abbey Bot (Swift 6.4 / SwiftData). This page is the orientation — the binary runs on your Mac."
+        title="Explore a companion interface."
+        lede="Browser orientation to companion concepts. Native implementation and device acceptance require separate source evidence."
       >
         <HeroStatus status="partial" />
       </PageHero>
@@ -25,16 +25,16 @@ function CompanionPage() {
         <CopyGrid
           items={[
             {
-              title: "SwiftData",
-              body: "Local records on device. Not a cloud workspace disguised as a native shell.",
+              title: "Illustrated local records",
+              body: "Explore the record organization shown in this browser illustration.",
             },
             {
-              title: "SwiftUI",
-              body: "Menus, threads, and claims. The companion does not invent a hosted API.",
+              title: "Illustrated companion interface",
+              body: "Inspect the companion concepts presented here: threads, claims, and memory.",
             },
             {
-              title: "Boundary",
-              body: "Not Quesar-as-a-service. Related to Abbey Bot, not a third product line.",
+              title: "Product boundary",
+              body: "This page presents companion concepts; a native runtime has its own implementation and qualification requirements.",
             },
           ]}
           columns="md:grid-cols-3"
@@ -46,7 +46,7 @@ function CompanionPage() {
               Threads · Claims · Memory
             </div>
             <div className="rounded-lg bg-bg p-4 text-sm text-fg-muted">
-              Companion chrome. Sign-in on this website opens field notes, not this native session.
+              Browser illustration of companion chrome: threads, claims, and memory.
             </div>
           </div>
         </div>

@@ -44,31 +44,34 @@ export async function purgeUserData(
     workspace.push({ provider, revoked: result.revoked });
   }
 
-  const count = (rows: unknown[]) => rows.length;
-  const deleted: Record<string, number> = {};
-  deleted.workspace_connections = count(
-    await sql`delete from workspace_connections where user_id = ${userId} returning 1`,
-  );
-  deleted.audit_access_events = count(
-    await sql`delete from audit_access_events
-      where actor_user_id = ${userId}
-         or audit_id in (select id from conversation_audits where user_id = ${userId})
-      returning 1`,
-  );
-  deleted.conversation_audits = count(
-    await sql`delete from conversation_audits where user_id = ${userId} returning 1`,
-  );
-  deleted.chat_consents = count(
-    await sql`delete from chat_consents where user_id = ${userId} returning 1`,
-  );
-  deleted.field_notes = count(
-    await sql`delete from field_notes where user_id = ${userId} returning 1`,
-  );
-  deleted.rate_limits = count(
-    await sql`delete from rate_limits where subject = ${userId} returning 1`,
-  );
-  const inquiriesUnlinked = count(
-    await sql`update inquiries set user_id = null where user_id = ${userId} returning 1`,
-  );
+  // One statement is atomic on both pooled PostgreSQL and PGLite. Do not use
+  // BEGIN plus pool.query: subsequent queries could use a different connection.
+  // Provider revocation/token cleanup above and Better Auth deletion afterwards
+  // remain separate steps and cannot be rolled back by this statement.
+  const [counts] = await sql<Record<string, number>>`
+    with connections as (
+      delete from workspace_connections where user_id = ${userId} returning 1
+    ), access as (
+      delete from audit_access_events where actor_user_id = ${userId}
+        or audit_id in (select id from conversation_audits where user_id = ${userId}) returning 1
+    ), audits as (
+      delete from conversation_audits where user_id = ${userId} returning 1
+    ), consents as (
+      delete from chat_consents where user_id = ${userId} returning 1
+    ), notes as (
+      delete from field_notes where user_id = ${userId} returning 1
+    ), limits as (
+      delete from rate_limits where subject = ${userId} returning 1
+    ), inquiries as (
+      update inquiries set user_id = null where user_id = ${userId} returning 1
+    ) select
+      (select count(*)::int from connections) as workspace_connections,
+      (select count(*)::int from access) as audit_access_events,
+      (select count(*)::int from audits) as conversation_audits,
+      (select count(*)::int from consents) as chat_consents,
+      (select count(*)::int from notes) as field_notes,
+      (select count(*)::int from limits) as rate_limits,
+      (select count(*)::int from inquiries) as inquiries_unlinked`;
+  const { inquiries_unlinked: inquiriesUnlinked, ...deleted } = counts;
   return { workspace, deleted, inquiriesUnlinked };
 }

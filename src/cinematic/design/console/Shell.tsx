@@ -1,3 +1,4 @@
+import markUrl from "../mlai-mark.svg";
 /* Console shell — sidebar nav, top bar, and ⌘K command palette. */
 import { useEffect, useState } from "react";
 import { IChevron, ISearch } from "./Icons.tsx";
@@ -156,7 +157,7 @@ export function Sidebar({ route, setRoute }: SidebarProps) {
       className="cn-sidebar"
     >
       <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "4px 8px 18px" }}>
-        <img src="/mlai-mark.svg" width="30" height="30" alt="MLAI" />
+        <img src={markUrl} width="30" height="30" alt="MLAI" />
         <div style={{ lineHeight: 1.1 }}>
           <div
             style={{
@@ -230,7 +231,7 @@ export function Sidebar({ route, setRoute }: SidebarProps) {
             marginBottom: 8,
           }}
         >
-          PERSONAS ONLINE
+          SAMPLE PROFILES
         </div>
         <div style={{ display: "flex", gap: 12 }}>
           {(
@@ -336,7 +337,7 @@ export function Topbar({ route, onCmd }: TopbarProps) {
               boxShadow: "0 0 8px var(--proof)",
             }}
           />
-          on-device
+          concept only
         </span>
       </div>
     </header>

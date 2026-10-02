@@ -54,11 +54,15 @@ describe("surface and setup rows agree with the product journeys", () => {
     }
   });
 
-  it("the Abbey toolchain is stated once", () => {
+  it("the Abbey browser prerequisites and storage boundary agree", () => {
     const abbey = productJourneys.find((item) => item.slug === "abbey");
     expect(abbey?.prerequisites).toBe(
-      "Node 24, Bun 1.4, uv with Python 3.11–3.13, Java 21+ and LibreOffice as documented by the website-app setup; a local model is optional.",
+      "A browser. A configured server and model provider are required for model requests; the static preview cannot call a model.",
     );
+    expect(abbey?.limitation).toContain("localStorage");
+    expect(abbeyRequirements).toEqual(["A browser for this preview"]);
+    expect(abbeyWorkspaceFacts.join(" ")).toContain("static workspace preview cannot call a model");
+    expect(abbeyWorkspaceFacts.join(" ")).not.toMatch(/SQLite|Python|LibreOffice/);
     expect(abbeyWorkspaceFacts.slice(0, abbeyRequirements.length)).toEqual([...abbeyRequirements]);
   });
 });

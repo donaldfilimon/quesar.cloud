@@ -1,5 +1,7 @@
+import { AiConsentPanel } from "@/components/console/ai-consent-panel";
+import { useAiConsent } from "@/components/console/use-ai-consent";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { type FormEvent, useState } from "react";
+import { type FormEvent, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { RequireSession } from "@/lib/auth/gates";
@@ -31,6 +33,10 @@ function DashboardPage() {
 }
 
 function Desk({ name }: { name: string }) {
+  const consent = useAiConsent();
+  const requestLock = useRef(false);
+  const canAsk =
+    consent.ready || Boolean(consent.status && !consent.status.llm.configured && !consent.loading);
   const [desk, setDesk] = useState<DeskId>("abbey");
   const [prompt, setPrompt] = useState("What is current in this stack, and what is not claimed?");
   const [reply, setReply] = useState<Reply | null>(null);
@@ -40,15 +46,28 @@ function Desk({ name }: { name: string }) {
 
   async function onSubmit(event: FormEvent) {
     event.preventDefault();
+    if (!canAsk || !prompt.trim() || requestLock.current) return;
+    requestLock.current = true;
+    setReply(null);
     setStatus("asking");
     setError("");
     try {
       const result = await askDesk({ data: { desk, prompt } });
+      if (!result.ok) {
+        setError(result.message);
+        setStatus("error");
+        await consent.refresh();
+        return;
+      }
       setReply({ mode: result.mode, text: result.text, hits: result.hits });
       setStatus("idle");
     } catch {
-      setError("Sign in again. The desk API requires a session.");
+      setError(
+        "The desk request could not be completed. Your prompt is preserved; check your session and retry.",
+      );
       setStatus("error");
+    } finally {
+      requestLock.current = false;
     }
   }
 
@@ -68,6 +87,7 @@ function Desk({ name }: { name: string }) {
         </Link>
       </header>
 
+      <AiConsentPanel consent={consent} busy={status === "asking"} />
       <div className="mt-6 flex gap-2 overflow-x-auto pb-1 lg:hidden">
         {desks.map((item) => (
           <button
@@ -138,16 +158,21 @@ function Desk({ name }: { name: string }) {
 
           <form onSubmit={(event) => void onSubmit(event)} className="mt-6">
             <Textarea
+              disabled={status === "asking"}
               value={prompt}
               onChange={(event) => setPrompt(event.target.value.slice(0, 1200))}
               className="min-h-28 text-base leading-7"
               aria-label={`Ask ${current.name}`}
             />
             <div className="mt-3 flex flex-wrap items-center gap-3">
-              <Button type="submit" disabled={status === "asking"}>
+              <Button type="submit" disabled={status === "asking" || !canAsk || !prompt.trim()}>
                 {status === "asking" ? "Calling API…" : `Ask ${current.name}`}
               </Button>
-              {error ? <p className="text-sm text-status-partial">{error}</p> : null}
+              {error ? (
+                <p role="alert" className="text-sm text-status-partial">
+                  {error}
+                </p>
+              ) : null}
             </div>
           </form>
         </section>

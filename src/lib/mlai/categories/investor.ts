@@ -2,12 +2,7 @@ import type { Investor } from "../schemas-investor";
 
 import { companyIdentity } from "./about";
 
-/**
- * The GPU engineering target. Stated once so the unit-economics row and the
- * founder-evidence row cannot drift apart; `architectureNodes` (compute) in
- * `./architecture.ts` names the same figure as not claimed. Never a measurement.
- */
-const gpuTargetFigure = "295×";
+/** Figures retained from the design record are illustrative planning assumptions. */
 
 export const investor: Investor = {
   entity: `${companyIdentity.entity} · ${companyIdentity.legalName}`,
@@ -15,13 +10,13 @@ export const investor: Investor = {
     {
       k: "TAM",
       v: "$48B",
-      note: "On-device and private AI infrastructure. Category sizing, not a booking.",
+      note: "Illustrative planning assumption for private AI infrastructure; not validated market sizing.",
       tag: "target",
     },
     {
       k: "SAM",
       v: "$12B",
-      note: "Regulated software, research ops, and security-conscious product teams.",
+      note: "Illustrative planning assumption for the proposed customer segments; not validated market sizing.",
       tag: "target",
     },
     {
@@ -30,21 +25,24 @@ export const investor: Investor = {
       // Same business model as `companyIdentity.model`; the wording differs
       // ("plus" vs "+") and is kept as rendered copy. investor.content.test.ts
       // keeps the two in agreement.
-      note: "Near-term reachable: SDK licensing plus integration services.",
+      note: "Illustrative planning assumption for proposed SDK licensing plus integration services; not validated reachable revenue.",
       tag: "target",
     },
   ],
-  raise: { round: "Seed", amount: "$4.5M" },
+  raise: { round: "Illustrative seed scenario", amount: "$4.5M target" },
   funds: [
-    { k: "Product", v: "50%", p: "ABI, WDBX, Abbey, Quesar" },
-    { k: "Infrastructure", v: "30%", p: "Tooling, eval, private deploy paths" },
-    { k: "GTM", v: "20%", p: "Services motion, not ads" },
+    { k: "Product", v: "50% target", p: "Illustrative allocation: ABI, WDBX, Abbey, Quesar" },
+    {
+      k: "Infrastructure",
+      v: "30% target",
+      p: "Illustrative allocation: tooling, eval, private deploy paths",
+    },
+    { k: "GTM", v: "20% target", p: "Illustrative allocation: proposed services motion" },
   ],
   unit: [
     { k: "Gross margin", v: "82% target", tag: "target" },
     { k: "CAC payback", v: "11 months target", tag: "target" },
     { k: "LTV/CAC", v: "5.4× target", tag: "target" },
-    { k: `GPU ${gpuTargetFigure}`, v: "engineering target — not a result", tag: "target" },
   ],
   arr: [
     { year: "Y1", v: "0.4" },
@@ -55,11 +53,16 @@ export const investor: Investor = {
   ],
   founder: [
     {
-      k: "Public source across ABI, WDBX, Abbey, Gama, and this site",
-      tag: "measured",
+      k: "Source references: ABI, WDBX, Abbey, Gama, and this site; not deployment acceptance",
+      tag: "reported",
     },
-    { k: "Claims ledger in abbey/src/claims.rs", tag: "measured" },
-    { k: "Independent verification gates per app", tag: "measured" },
-    { k: `${gpuTargetFigure} GPU figure`, tag: "target" },
+    {
+      k: "Abbey source includes a capability ledger in src/claims.rs; not a model-quality result",
+      tag: "reported",
+    },
+    {
+      k: "Proposed acceptance: repeatable verification for each deployment and device",
+      tag: "target",
+    },
   ],
 };

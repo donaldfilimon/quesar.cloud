@@ -1,3 +1,5 @@
+import { captureLocalTime } from "../film/capture";
+
 // Shared gates for the design boards' animation loops.
 //
 // Plain functions (not hooks) so each effect keeps its own state: switching
@@ -49,6 +51,11 @@ function watchActivity(el: Element, onChange: () => void): Activity {
   let visible = typeof IntersectionObserver !== "function";
   const mq = motionQuery();
   let reduce = mq?.matches ?? false;
+  const director = el.closest<HTMLElement>("[data-directed-playing]");
+  const directed = () => !director || director.dataset.directedPlaying === "true";
+  const mutation = director ? new MutationObserver(onChange) : null;
+  if (director)
+    mutation?.observe(director, { attributes: true, attributeFilter: ["data-directed-playing"] });
 
   const io =
     typeof IntersectionObserver === "function"
@@ -68,11 +75,12 @@ function watchActivity(el: Element, onChange: () => void): Activity {
   mq?.addEventListener("change", onMotionChange);
 
   return {
-    running: () => visible && !document.hidden && !reduce,
-    onScreen: () => visible && !document.hidden,
+    running: () => visible && !document.hidden && !reduce && directed(),
+    onScreen: () => visible && !document.hidden && directed(),
     reduced: () => reduce,
     dispose() {
       io?.disconnect();
+      mutation?.disconnect();
       document.removeEventListener("visibilitychange", onChange);
       mq?.removeEventListener("change", onMotionChange);
     },
@@ -90,7 +98,20 @@ export interface FrameGate {
  * must attach its own window "resize" listener BEFORE calling this: the gate
  * repaints once after a resize while idle, because resizing clears the canvas.
  */
-export function attachFrameGate(el: Element, frame: (now: number) => void): FrameGate {
+export function attachFrameGate(
+  el: Element,
+  frame: (now: number) => void,
+  options: { advance?: (now: number) => void } = {},
+): FrameGate {
+  const captureTime = captureLocalTime(el);
+  if (captureTime !== null) {
+    // A capture frame mounts a fresh board. Reconstruct stateful simulations at
+    // fixed 60 Hz, including trail buffers; no previous seek or wall clock leaks.
+    const steps = Math.floor(captureTime * 60);
+    for (let step = 0; step < steps; step++) (options.advance ?? frame)((step * 1000) / 60);
+    frame((steps * 1000) / 60);
+    return { renderOnce() {}, dispose() {} };
+  }
   let raf = 0;
   const tick = (now: number): void => {
     frame(now);
@@ -155,6 +176,11 @@ export function attachIntervalGate(
   ms: number,
   { respectReducedMotion = true }: IntervalGateOptions = {},
 ): () => void {
+  const captureTime = captureLocalTime(el);
+  if (captureTime !== null) {
+    for (let step = 1; step <= Math.floor((captureTime * 1000) / ms); step++) tick();
+    return () => {};
+  }
   let iv: ReturnType<typeof setInterval> | null = null;
   const sync = (): void => {
     const run = respectReducedMotion ? activity.running() : activity.onScreen();

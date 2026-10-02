@@ -1,3 +1,4 @@
+import { sceneRandom } from "../../film/capture";
 import {
   useState,
   useEffect,
@@ -33,8 +34,8 @@ type PersonaTuple = readonly [string, string, string];
 
 const PERSONAS: readonly PersonaTuple[] = [
   ["Abbey", "Empathic Polymath", "#34d399"],
-  ["Aviva", "Unfiltered Expert", "#a855f7"],
-  ["Abi", "Adaptive Moderator", "#22d3ee"],
+  ["Aviva", "Direct Technical Profile", "#a855f7"],
+  ["Abi", "Orchestration Profile", "#22d3ee"],
 ];
 
 const PRINCIPLES: readonly ColorTuple[] = [
@@ -74,6 +75,7 @@ function Field() {
   const ref = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
+    const random = sceneRandom("showcase1984");
     const c = ref.current;
     if (!c) return;
     const ctx = c.getContext("2d");
@@ -99,12 +101,12 @@ function Field() {
       c.height = h * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       pts = Array.from({ length: Math.min(420, Math.floor((w * h) / 4200)) }, (): FieldPoint => {
-        const u = Math.random();
-        const v = Math.random();
+        const u = random();
+        const v = random();
         const th = u * 6.28;
         const ph = Math.acos(2 * v - 1);
-        const r = 0.55 + Math.random() * 0.45;
-        const col = COLS[Math.floor(Math.random() * 3)]!;
+        const r = 0.55 + random() * 0.45;
+        const col = COLS[Math.floor(random() * 3)]!;
         return {
           x: r * Math.sin(ph) * Math.cos(th),
           y: r * Math.cos(ph),
@@ -342,6 +344,7 @@ function Generative() {
   const ref = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
+    const random = sceneRandom("showcase10032");
     const c = ref.current;
     if (!c) return;
     const ctx = c.getContext("2d");
@@ -368,16 +371,16 @@ function Generative() {
       const num = Math.floor(120 + pr.current.count * 12);
       if (mode === "Flow field") {
         flow = Array.from({ length: num }, (): FlowPoint => ({
-          x: Math.random() * w,
-          y: Math.random() * h,
+          x: random() * w,
+          y: random() * h,
         }));
       } else if (mode === "Embedding galaxy") {
         galaxy = Array.from({ length: num }, (): GalaxyPoint => {
-          const u = Math.random();
-          const v = Math.random();
+          const u = random();
+          const v = random();
           const th = u * 6.28;
           const ph = Math.acos(2 * v - 1);
-          const r = 0.6 + Math.random() * 0.4;
+          const r = 0.6 + random() * 0.4;
           return {
             x: r * Math.sin(ph) * Math.cos(th),
             y: r * Math.cos(ph),
@@ -417,8 +420,8 @@ function Generative() {
           q.x = nx;
           q.y = ny;
           if (q.x < 0 || q.x > w || q.y < 0 || q.y > h) {
-            q.x = Math.random() * w;
-            q.y = Math.random() * h;
+            q.x = random() * w;
+            q.y = random() * h;
           }
         }
       } else if (mode === "Embedding galaxy") {
@@ -550,19 +553,19 @@ const OG_VARIANTS: Record<string, OGVariant> = {
     accent: "#22d3ee",
     kicker: "PRIVACY-FIRST AI INFRASTRUCTURE",
     title: "Infrastructure for resilient intelligence",
-    sub: "WDBX · ABI · Abbey — fast by design, private by default.",
+    sub: "WDBX · ABI · Abbey — source foundations for a scoped review.",
   },
   "Product · WDBX": {
     accent: "#60a5fa",
     kicker: "WDBX VECTOR RUNTIME",
-    title: "Memory you can verify",
-    sub: "HNSW search, SHA-256 chained history, lock-free MVCC — in Zig.",
+    title: "Audit chain / integrity checks",
+    sub: "CRC-framed WAL records and strict stored-content hash checks. Source inspection only.",
   },
   Abbey: {
     accent: "#34d399",
     kicker: "ABBEY · EMPATHIC POLYMATH",
-    title: "Turns apprehension into fascination",
-    sub: "Technical mastery with emotional intelligence.",
+    title: "Conversational and empathetic profile",
+    sub: "A profile contract; no independently trained mind or verified-answer guarantee.",
   },
 };
 

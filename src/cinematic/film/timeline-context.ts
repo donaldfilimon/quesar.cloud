@@ -22,6 +22,7 @@ export interface TimelineValue {
   // The CSS scale applied to the fixed frame; canvases size their backing
   // store from it (backingRatio in engine-utils.ts).
   scale: number;
+  capture?: boolean;
 }
 export const TimelineContext = createContext<TimelineValue>({
   time: 0,

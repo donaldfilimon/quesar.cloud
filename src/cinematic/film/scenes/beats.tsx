@@ -382,7 +382,7 @@ export function BeatMemory() {
           color: C.dim,
         }}
       >
-        SHA-256 LINKED HISTORY
+        AUDIT CHAIN · ILLUSTRATIVE BLOCKS
       </div>
       <DiagramSVG>
         {TBLOCKS.slice(0, -1).map((_, i) => {
@@ -731,13 +731,13 @@ export function BeatBigWord({ word, size = 360 }: { word: string; size?: number 
 }
 
 // ── Beat 10: close ───────────────────────────────────────────────────────────
-export function BeatClose() {
+export function BeatClose({ hold = false }: { hold?: boolean }) {
   const { localTime: lt } = useSprite();
   const T = useTime();
   const tag = step(lt, 0.3, 0.8);
   const prod = step(lt, 1.4, 0.8);
   return (
-    <Beat>
+    <Beat hold={hold}>
       <DiagramSVG>
         <PulseRing
           cx={960}
@@ -839,7 +839,7 @@ export function BeatReason() {
           color: C.cyan,
         }}
       >
-        FORWARD PASS
+        ILLUSTRATIVE FORWARD PASS / VISION
       </div>
       <div
         style={{
@@ -856,7 +856,7 @@ export function BeatReason() {
           textShadow: `0 0 60px ${C.cyan}55`,
         }}
       >
-        IT REASONS.
+        REASONING / VISION.
       </div>
       <div
         style={{

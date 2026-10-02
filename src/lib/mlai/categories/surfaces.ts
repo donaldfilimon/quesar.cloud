@@ -18,7 +18,7 @@ export const setups = [
   },
   {
     title: "Abbey workspace",
-    body: "The browser workspace here is a preview. The separate local Abbey app has its own setup and verification in its source README.",
+    body: "The browser workspace requires a browser; model requests require the configured server path.",
     code: null,
     href: "/workspace",
     journey: "abbey",
@@ -26,7 +26,7 @@ export const setups = [
   {
     title: "Quasar service",
     body: "A standalone Bun project under sidecars/. Its tests and typecheck do not run in the website gate. Generation needs Anthropic credentials.",
-    code: "cd sidecars/quasar-service\nbun test\nbun run typecheck",
+    code: "cd sidecars/quasar-service\nbun run test\nbun run typecheck",
     href: "/quesar",
     journey: "quasar",
   },
@@ -55,19 +55,19 @@ export const quesarSurfaces = [
   },
   {
     surface: "Local site builder (Quasar)",
-    role: "Prompt-to-Next.js on your machine (Bun + Expo, Anthropic credentials)",
+    role: "Experimental browser client paired to a local Bun service; generation requires Anthropic credentials",
     status: "experimental" as StatusKind,
     journey: "quasar",
   },
   {
     surface: "Abbey workspace",
-    role: "Local document workspace with assistant context",
+    role: "Browser document preview with localStorage documents and an optional configured server model-request path",
     status: "current" as StatusKind,
     journey: "abbey",
   },
   {
     surface: "Mobile companion",
-    role: "Source-based Expo app; native CloudKit is distinct from web export",
+    role: "Browser vault preview uses localStorage; separate Capacitor source is not signed-device sync acceptance",
     status: "partial" as StatusKind,
     journey: "mobile",
   },
@@ -81,26 +81,25 @@ export const quesarSurfaces = [
 export const quesarWhat = [
   {
     title: "Who it is for",
-    body: "Developers, technical organizations, and privacy-conscious operators who need AI systems that keep context, expose provenance, and run across local, edge, and optional remote compute.",
+    body: "Developers and operators evaluating a local website-building workflow, with explicit provider configuration and source setup requirements.",
   },
   {
     title: "How it differs",
-    body: "Quesar is the large model that trains and improves Abbey, Aviva, and the other assistants. WDBX is the memory substrate, ABI is the runtime, and Abbey is one assistant. This website does not host the model.",
+    body: "The experimental Quasar builder combines browser pairing, an operator-owned service, and a configured generation provider. ABI, WDBX, and Abbey are separate source projects; this builder does not establish a training pipeline between them.",
   },
   {
     title: "What you can build",
-    body: "Local assistant workflows with inspectable context. Retrieval over signed episodic records. Tools and plugins under ABI contracts. A local site-generation loop that writes a real Next.js project onto disk.",
+    body: "The Quasar service scaffolds Next.js projects and implements provider-assisted file edits and a local preview. Live provider generation requires separate acceptance. ABI tools and WDBX retrieval have their own source and integration requirements.",
   },
   {
     title: "What you cannot assume",
-    body: "This website does not provision an assistant or generate sites. Sign-in opens a console for field notes, not an Abbey session. The local builder does not host, deploy, or bill. Production sharding is not established.",
+    body: "The static website provides orientation and browser previews. A configured server separately supports consent-gated console chat; the Quasar browser client requires a running paired service for generation. Neither surface establishes a hosted Abbey product session, a managed deployment service, or live provider acceptance.",
   },
 ] as const satisfies readonly QuesarWhatCard[];
 
-/** The toolchain rows come from `abbeyRequirements`, shared with the Abbey journey. */
+/** Browser preview requirements and storage scope, shared with the Abbey journey. */
 export const abbeyWorkspaceFacts = [
   ...abbeyRequirements,
-  "SQLite / Better Auth in the local app",
-  "Private databases and uploaded documents are not part of the public import",
-  "This site does not open a chat",
+  "Documents are stored in this browser's localStorage",
+  "The static workspace preview cannot call a model; configured server chat is a separate path",
 ] as const;

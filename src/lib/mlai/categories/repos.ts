@@ -130,7 +130,8 @@ export const repos: readonly Repo[] = [
   {
     owner: "donaldfilimon",
     name: "NYON",
-    summary: "Voxel-world experiment. Not a Quesar product surface.",
+    summary:
+      "Deterministic Rust strategy game and offline Galaxy Workshop sandbox. Related source work.",
     language: "Rust",
     href: "/source/nyon",
     kind: "related",

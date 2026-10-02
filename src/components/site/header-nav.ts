@@ -13,13 +13,18 @@ export function navActive(to: string, pathname: string) {
       (pathname.startsWith("/research/") && !pathname.startsWith("/research/implementations"))
     );
   }
-  if (to === "/docs" || to === "/apps" || to === "/research/implementations") {
+  if (
+    to === "/docs" ||
+    to === "/apps" ||
+    to === "/products" ||
+    to === "/research/implementations"
+  ) {
     return pathname === to || pathname.startsWith(`${to}/`);
   }
   return pathname === to;
 }
 
-export const extra = [
+const moreDestinations = [
   { to: "/quesar", label: "Quesar" },
   { to: "/company", label: "Company" },
   { to: "/products", label: "Products" },
@@ -27,13 +32,18 @@ export const extra = [
   { to: "/architecture", label: "Architecture" },
   { to: "/research", label: "Research" },
   { to: "/research/implementations", label: "Implementations" },
-  { to: "/docs", label: "Documents" },
+  { to: "/docs", label: "Docs" },
+  { to: "/apps", label: "Apps" },
   { to: "/dashboard", label: "Desk" },
   { to: "/console", label: "Console" },
   { to: "/workspace", label: "Workspace" },
   { to: "/investors", label: "Investors" },
   { to: "/developers", label: "Developers" },
 ] as const;
+
+export const extra = moreDestinations.filter(
+  (item) => !nav.some((primary) => primary.to === item.to),
+);
 
 /** Primary nav, then the "More" destinations, then contact: each path once. */
 export const mobileLinks = [...nav, ...extra, { to: "/contact", label: "Contact" }].filter(

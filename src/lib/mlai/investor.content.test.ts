@@ -9,39 +9,47 @@ import { investor } from "./categories/investor";
 const fact = (k: string) => about.companyFacts.find((row) => row.k === k)?.v;
 
 describe("company identity has one source", () => {
-  it("companyFacts render the same values as before the split", () => {
+  it("describes a brand and proposed business without asserting registration", () => {
     expect(about.companyFacts).toStrictEqual([
-      { k: "Legal name", v: "Machine Learning Advanced Innovations, Inc." },
-      { k: "Entity", v: "Delaware C-Corp" },
-      { k: "Location", v: "Orlando, FL" },
+      { k: "Brand", v: "MLAI" },
+      { k: "Focus", v: "Founder-led AI engineering" },
       { k: "Languages", v: "Rust, Swift, TypeScript" },
-      { k: "Model", v: "SDK licensing + integration services" },
+      { k: "Model", v: "Proposed SDK licensing + integration services" },
     ]);
+    expect(companyIdentity.legalName).toBe(site.company);
+    expect(fact("Brand")).toBe(site.company);
+    expect(site.legal).toBe(site.company);
+    expect(fact("Legal name")).toBeUndefined();
+    expect(fact("Entity")).toBeUndefined();
   });
 
-  it("the legal name is site.legal everywhere", () => {
-    expect(companyIdentity.legalName).toBe(site.legal);
-    expect(fact("Legal name")).toBe(site.legal);
-    expect(investor.entity).toContain(site.legal);
+  it("derives investor orientation from the shared brand and focus", () => {
+    expect(investor.entity).toBe(`${fact("Focus")} · ${fact("Brand")}`);
+    expect(investor.entity).not.toMatch(/Delaware|C-Corp|Inc\./);
   });
 
-  it("investor.entity is derived from companyIdentity, byte-identical to its old literal", () => {
-    expect(investor.entity).toBe("Delaware C-Corp · Machine Learning Advanced Innovations, Inc.");
-    expect(investor.entity).toBe(`${fact("Entity")} · ${fact("Legal name")}`);
-  });
-
-  it("the SOM note and the company model describe the same business", () => {
+  it("states the proposed business model and illustrates market assumptions", () => {
     const som = investor.market.find((row) => row.k === "SOM")?.note ?? "";
     for (const text of [som, companyIdentity.model, fact("Model") ?? ""]) {
+      expect(text).toMatch(/proposed/i);
       expect(text).toContain("SDK licensing");
       expect(text).toContain("integration services");
     }
+    for (const row of investor.market) {
+      expect(row.note).toMatch(/Illustrative planning assumption/);
+      expect(row.note).toMatch(/not validated/);
+      expect(row.tag).toBe("target");
+    }
+    expect(investor.raise.round).toContain("Illustrative");
   });
 
-  it("the GPU target figure is the same string in every investor row and always tagged target", () => {
-    const rows = [...investor.unit, ...investor.founder].filter((row) => row.k.includes("295"));
-    expect(rows.map((row) => row.k)).toEqual(["GPU 295×", "295× GPU figure"]);
-    for (const row of rows) expect(row.tag).toBe("target");
+  it("keeps source reports distinct from operating results and GPU forecasts", () => {
+    expect(investor.unit).toHaveLength(3);
+    for (const row of investor.unit) expect(row.tag).toBe("target");
+    expect(investor.founder.map((row) => row.tag)).toEqual(["reported", "reported", "target"]);
+    expect(investor.founder[0]?.k).toContain("not deployment acceptance");
+    expect(investor.founder[1]?.k).toContain("not a model-quality result");
+    expect(JSON.stringify([...investor.unit, ...investor.founder])).not.toMatch(/295/);
   });
 
   it("the Languages fact agrees with the toolchain rule (Rust runtime, no Zig-era claim)", () => {

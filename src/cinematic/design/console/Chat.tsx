@@ -15,9 +15,14 @@ interface Persona {
 }
 
 const PEOPLE: Record<PersonaName, Persona> = {
-  Abi: { color: "var(--persona-abi)", hex: "#22d3ee", role: "Adaptive Moderator", Icon: IFlow },
+  Abi: { color: "var(--persona-abi)", hex: "#22d3ee", role: "Orchestration Profile", Icon: IFlow },
   Abbey: { color: "var(--persona-abbey)", hex: "#34d399", role: "Empathic Polymath", Icon: ISpark },
-  Aviva: { color: "var(--persona-aviva)", hex: "#a855f7", role: "Unfiltered Expert", Icon: IZap },
+  Aviva: {
+    color: "var(--persona-aviva)",
+    hex: "#a855f7",
+    role: "Direct Technical Profile",
+    Icon: IZap,
+  },
 };
 
 const PERSONA_NAMES: PersonaName[] = ["Abi", "Abbey", "Aviva"];
@@ -29,14 +34,14 @@ const REPLIES: Record<PersonaName, string[]> = {
     "Classifying intent: setup + best-practice. Here's the neutral version first.",
   ],
   Abbey: [
-    "Think of a vector database as a library that files books by meaning, not title. WDBX builds that index with HNSW, then chains every write so the history can't be quietly rewritten.",
+    "Illustrative reply: a vector index compares representations. WDBX has hash-linked records and strict content checks; links are not signatures.",
     "Totally reasonable to find this fuzzy at first. Start with the picture: similar things sit close together in space; search just walks toward the nearest neighbors.",
     "Here's the gentle version, then the precise one — tell me where to stop.",
   ],
   Aviva: [
-    "Use HNSW. M=16, ef=32. Cosine for text, L2 for clustering. Done.",
+    "Illustrative reply: choose the metric and search breadth against a measured workload.",
     "Replicate for resilience when the topology requires it. Don't market replication as distributed sharding.",
-    "Chain the writes with SHA-256, verify on read, reject on mismatch. No exceptions.",
+    "Illustrative reply: distinguish predecessor-link checks from strict content-hash recomputation. Evaluate the intended path.",
   ],
 };
 
@@ -134,7 +139,7 @@ export function Chat() {
   const [who, setWho] = useState<PersonaName>("Abi");
   const [text, setText] = useState("");
   const [msgs, setMsgs] = useState<Message[]>([
-    { from: "bot", who: "Abi", text: "Ask anything. I'll answer or route you to Abbey or Aviva." },
+    { from: "bot", who: "Abi", text: "Concept chat · scripted replies, no model connection." },
   ]);
   const idx = useRef<Record<PersonaName, number>>({ Abi: 0, Abbey: 0, Aviva: 0 });
   const scroller = useRef<HTMLDivElement | null>(null);

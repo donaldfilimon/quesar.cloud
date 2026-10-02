@@ -49,8 +49,9 @@ export function backingRatio(devicePixelRatio: number, stageScale: number): numb
 /**
  * Where a seek lands. A seek onto the end pauses: the clock's next frame would
  * otherwise wrap a looping film to 0, so End on the scrubber (and dragging it
- * to the far right) read as "jump to start". Resuming from the end still wraps,
- * exactly as reaching it by playback does. `atEnd` is never true for a
+ * to the far right) read as "jump to start". The transport's Play action
+ * restarts a completed film deliberately; ordinary playback holds the end.
+ * `atEnd` is never true for a
  * zero-length film, which has no last frame to hold.
  */
 export function resolveSeek(t: number, duration: number): { time: number; atEnd: boolean } {

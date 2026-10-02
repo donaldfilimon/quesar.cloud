@@ -72,8 +72,8 @@ export function StatusBadge({
   note?: string;
 }) {
   const map: Record<StatusKind, { c: string; t: string }> = {
-    current: { c: C.green, t: "CURRENT" },
-    partial: { c: C.amber, t: "PARTIAL" },
+    current: { c: C.green, t: "SOURCE INSPECTION" },
+    partial: { c: C.amber, t: "SCOPED / SOURCE" },
     vision: { c: C.violet, t: "VISION · ROADMAP" },
   };
   const m = map[kind];

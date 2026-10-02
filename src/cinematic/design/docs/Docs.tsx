@@ -100,7 +100,7 @@ export default function Docs(): ReactNode {
       <TopNav onSearch={() => setSearch(true)} />
       <div style={{ flex: 1, display: "flex", minHeight: 0 }}>
         <SideTree route={route} setRoute={setRoute} />
-        <main ref={mainRef} style={{ flex: 1, minWidth: 0, overflowY: "auto" }}>
+        <main data-design-scroll="" ref={mainRef} style={{ flex: 1, minWidth: 0, overflowY: "auto" }}>
           <article style={{ maxWidth: 740, margin: "0 auto", padding: "40px 40px 120px" }}>
             <div className="dk-eyebrow" style={{ marginBottom: 12 }}>
               {page.eyebrow}

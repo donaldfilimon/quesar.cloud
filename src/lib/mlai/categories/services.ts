@@ -1,7 +1,7 @@
 import type { Refusals } from "../schemas";
 
 /**
- * "What we say no to" — the refusal copy, ported verbatim from the design
+ * "What we say no to" — proposed engagement boundaries from the design
  * handoff (design-sources/handoffs/design_handoff_mlai_site Services page).
  * Rendered as `site/Callout` asides on the Services view; `accent` is the
  * product accent axis the handoff assigned each callout.
@@ -10,12 +10,12 @@ export const refusals = [
   {
     label: "Scope discipline",
     accent: "abbey",
-    body: "We don't take work that puts your data in our hands. If the engagement requires your corpus to leave your hardware, the engagement is designed wrong — and we'll say so.",
+    body: "Proposed engagement boundary: agree who may access the corpus, where it may move, and which provider calls require approval before implementation.",
   },
   {
     label: "Claims discipline",
     accent: "wdbx",
-    body: "Deliverables ship with provenance-tagged numbers. Targets are framed as targets; nothing is reported as measured until it reproduces on your hardware.",
+    body: "Proposed evidence requirement: deliverables should tag figures as targets, source reports, or measurements. Measurements require an agreed workload, environment, and reproduction record.",
   },
 ] as const satisfies readonly Refusals[number][];
 
@@ -29,74 +29,75 @@ export const services = [
   {
     title: "Autonomy Readiness Audit",
     description:
-      "Map workflows, prompt surfaces, data paths, and approval gates to determine which tasks are safe to automate.",
+      "Proposed scope: map workflows, prompt surfaces, data paths, and approval gates to identify automation candidates and the evidence needed to evaluate their risks.",
     outcomes: ["Risk register", "Control-map", "90-day rollout plan"],
   },
   {
     title: "WDBX Retrieval Architecture",
     description:
-      "Design weighted backtrace retrieval pipelines that preserve source context and support inspectable vector search.",
+      "Proposed scope: design retrieval pipelines with source context and inspectable vector search; evaluate weighted backtrace approaches separately.",
     outcomes: ["Index strategy", "Recall benchmarks", "Trace schema"],
   },
   {
     title: "Multi-Agent Orchestration",
     description:
-      "Implement agent roles, tool permissions, task handoffs, and conflict-resolution policies.",
+      "Proposed scope: define and implement agent roles, tool permissions, task handoffs, and conflict-resolution policies against agreed acceptance criteria.",
     outcomes: ["Agent graph", "Tool policy", "Evaluation harness"],
   },
   {
     title: "Model & Runtime Optimization",
     description:
-      "Profile inference paths, memory pressure, batching, and edge constraints for real-world latency.",
+      "Proposed scope: profile inference paths, memory pressure, batching, and edge constraints on an agreed workload and environment.",
     outcomes: ["Latency profile", "Optimization backlog", "Capacity model"],
   },
   {
     title: "Safety & Compliance Layering",
     description:
-      "Embed policy checks, audit trails, and red-team scenarios into high-trust systems.",
+      "Proposed scope: develop policy checks, audit trails, and red-team scenarios for an agreed system boundary. Legal or compliance acceptance requires separate review.",
     outcomes: ["Policy matrix", "Audit events", "Red-team scripts"],
   },
   {
     title: "Private AI Deployment",
-    description: "Package workflows for VPC, on-premise, offline, and hybrid environments.",
+    description:
+      "Proposed scope: assess and package workflows for an agreed VPC, on-premise, offline, or hybrid deployment boundary.",
     outcomes: ["Deployment topology", "Runbook", "Rollback plan"],
   },
   {
     title: "Research Translation",
     description:
-      "Turn papers and notebooks into constrained, documented services engineers can maintain.",
+      "Proposed scope: translate papers and notebooks into a constrained prototype, API contract, and test plan.",
     outcomes: ["Prototype hardening", "API contract", "Test plan"],
   },
   {
     title: "Executive & Engineering Workshops",
     description:
-      "Align leadership, security, product, and engineering around autonomy strategy and risk boundaries.",
+      "Proposed scope: run workshops with leadership, security, product, and engineering to document autonomy decisions and risk boundaries.",
     outcomes: ["Decision memo", "Team training", "Architecture review"],
   },
   {
     title: "Continuous Evaluation Systems",
     description:
-      "Build suites for tool use, retrieval faithfulness, safety behavior, and regression drift.",
+      "Proposed scope: build evaluation suites for tool use, retrieval faithfulness, policy behavior, and regression drift against agreed criteria.",
     outcomes: ["Eval suite", "Scorecards", "Release gates"],
   },
 ] as const;
 
-/** The four engagement phases on /services ("How an engagement runs"). */
+/** Proposed phases; scope, deliverables, and acceptance must be agreed per project. */
 export const engagement = [
   {
     title: "Audit",
-    body: "Inventory workflows, data, tools, and failure modes. Ends with a risk register the next phase is not allowed to ignore.",
+    body: "Proposed deliverable: an inventory of workflows, data, tools, and failure modes, with a risk register for review before design.",
   },
   {
     title: "Design",
-    body: "Bounded architecture: retrieval, policy, personas, deployment topology. Ends with a harness, not a slide.",
+    body: "Proposed deliverables: a bounded architecture for retrieval, permissions, personas, and deployment, plus an agreed evaluation harness.",
   },
   {
     title: "Build",
-    body: "Implement against the harness on hardware you own. Ends with a baseline you can re-run.",
+    body: "Proposed deliverables: an implementation on agreed operator-owned hardware and a baseline the team can rerun against the harness.",
   },
   {
     title: "Harden",
-    body: "Red-team, rollback, observability, and operator training. Ends with a gate, not a demo day.",
+    body: "Proposed deliverables: red-team checks, rollback guidance, observability, operator training, and a release gate with explicit acceptance criteria.",
   },
 ] as const;

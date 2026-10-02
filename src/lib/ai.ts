@@ -4,7 +4,7 @@ import { authMiddleware } from "@/lib/auth/middleware";
 import { staticSite } from "@/lib/static-site";
 
 const input = z.object({
-  prompt: z.string().trim().min(1).max(1200),
+  prompt: z.string().trim().min(1).max(1600),
   persona: z.enum(["abbey", "aviva", "abi"]).default("abi"),
 });
 
@@ -20,32 +20,15 @@ const askPersona = createServerFn({ method: "POST" })
   .middleware([authMiddleware])
   .validator((value: unknown) => input.parse(value))
   .handler(async ({ data, context }) => {
-    const { complete } = await import("@/lib/server/llm");
-    const { hit, LIMITS } = await import("@/lib/server/rate-limit.server");
-    const limited = await hit("llm", context.userId, LIMITS.llm);
-    if (!limited.allowed)
-      return { ok: false as const, error: "Too many requests. Try again in a minute." };
-    const result = await complete({
+    const { runChat } = await import("@/lib/console.server");
+    return runChat(context.userId, [{ role: "user", content: data.prompt }], {
+      systemPrompt: SYSTEM[data.persona],
       maxTokens: 280,
-      messages: [
-        { role: "system", content: SYSTEM[data.persona] },
-        { role: "user", content: data.prompt },
-      ],
     });
-    if (!result.ok) {
-      return {
-        ok: false as const,
-        error:
-          result.reason === "not_configured"
-            ? "Live model is not available in this environment."
-            : result.message,
-      };
-    }
-    return { ok: true as const, text: result.text };
   });
 
 type AskInput = { data: { prompt: string; persona?: "abbey" | "aviva" | "abi" } };
-type AskResult = { ok: true; text: string } | { ok: false; error: string };
+type AskResult = import("./console.server").ChatResult;
 
 /**
  * What components call. The static GitHub Pages build has no server, so it
@@ -55,7 +38,8 @@ export function askPersonaFromClient(input: AskInput): Promise<AskResult> {
   if (staticSite) {
     return Promise.resolve({
       ok: false,
-      error:
+      reason: "llm_not_configured",
+      message:
         "The live model runs on the server deployment; this is the static preview, so no model call was made.",
     });
   }

@@ -1,3 +1,4 @@
+import markUrl from "../mlai-mark.svg";
 /* Features — product cards, a stat band, and the footer. */
 import { IDb, ILayers, ISpark, type IconComponent } from "./Icons.tsx";
 
@@ -15,21 +16,21 @@ const FEATURES: readonly Feature[] = [
     name: "WDBX",
     tint: "var(--spectrum-cyan)",
     tag: "Runtime",
-    desc: "A vector-database runtime in Zig — HNSW search, SHA-256-chained history and lock-free MVCC. Memory you can verify.",
+    desc: "WDBX source includes CRC-framed WAL records, snapshots and recovery paths. Strict integrity checks recompute stored block hashes.",
   },
   {
     icon: ILayers,
     name: "ABI Framework",
     tint: "var(--spectrum-blue)",
     tag: "Orchestration",
-    desc: "A six-layer runtime that routes, traces and governs. Every retrieval path and policy check is an inspectable event.",
+    desc: "ABI source defines local keyword routing and thirteen case-insensitive audit patterns. Those checks do not establish semantic safety.",
   },
   {
     icon: ISpark,
     name: "The Personas",
     tint: "var(--persona-abbey)",
     tag: "Interface",
-    desc: "Abbey, Aviva and Abi — three minds in one system. Abi routes by intent; Abbey scaffolds; Aviva goes dense.",
+    desc: "Abbey, Aviva and ABI are profile contracts: conversational and empathetic; direct and technical; orchestration and routing.",
   },
 ];
 
@@ -134,7 +135,7 @@ export default function Features() {
             margin: 0,
           }}
         >
-          Three layers, one private substrate
+          Three source foundations
         </h2>
         <p
           style={{
@@ -144,8 +145,8 @@ export default function Features() {
             color: "var(--text-dim)",
           }}
         >
-          Each layer earns its place — the runtime that remembers, the framework that orchestrates,
-          and the minds you talk to.
+          Inspect storage, routing and identity sources. Agree the runtime evidence for the intended
+          project.
         </p>
       </div>
       <div
@@ -210,7 +211,7 @@ export default function Features() {
             marginTop: 4,
           }}
         >
-          Figures illustrative — published only against reproducible benchmarks
+          Sample figures are illustrative; no measured performance or service claim.
         </div>
       </div>
     </section>
@@ -228,7 +229,7 @@ export function Footer() {
       }}
     >
       <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
-        <img src="/mlai-mark.svg" width="26" height="26" alt="MLAI" />
+        <img src={markUrl} width="26" height="26" alt="MLAI" />
         <span
           style={{
             fontFamily: "var(--font-display)",

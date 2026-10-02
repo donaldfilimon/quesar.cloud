@@ -21,29 +21,29 @@ const MINDS: readonly Mind[] = [
     tint: "var(--persona-abbey)",
     hex: "#34d399",
     Icon: ISpark,
-    line: "proof · verified",
+    line: "conversational · empathetic",
     traits: ["Warm", "Metaphor-first", "Scaffolds hard ideas"],
     quote:
-      "Think of a vector database as a library that files books by meaning, not title. Here’s exactly how WDBX does it…",
+      "Think of a vector database as a library that files books by meaning, not title. This is a conceptual explanation, not retrieval evidence.",
   },
   {
     key: "Aviva",
-    role: "Unfiltered Expert",
+    role: "Direct Technical Profile",
     tint: "var(--persona-aviva)",
     hex: "#a855f7",
     Icon: IZap,
-    line: "research · vision",
-    traits: ["Direct", "Maximum density", "Zero hedging"],
-    quote: "Use HNSW. M=16, ef=32. Cosine for text, L2 for clustering. Done.",
+    line: "direct · technical",
+    traits: ["Direct", "Maximum density", "Explicit uncertainty"],
+    quote: "Illustrative reply: choose the metric and search breadth against a measured workload.",
   },
   {
     key: "Abi",
-    role: "Adaptive Moderator",
+    role: "Orchestration Profile",
     tint: "var(--persona-abi)",
     hex: "#22d3ee",
     Icon: IFlow,
-    line: "interactive · fast",
-    traits: ["Neutral default", "Classifies intent", "Routes & blends"],
+    line: "orchestration · routing",
+    traits: ["Risk and context", "Classifies intent", "Routing contract"],
     quote: "Routing this to Abbey — it reads as a learning question with some frustration.",
   },
 ];
@@ -77,7 +77,7 @@ export default function Personas() {
             margin: 0,
           }}
         >
-          Three minds, one system
+          Three profiles, one system
         </h2>
         <p
           style={{
@@ -87,8 +87,8 @@ export default function Personas() {
             color: "var(--text-dim)",
           }}
         >
-          One model can&apos;t be everything at once. Abi classifies intent and routes — to Abbey
-          when you need scaffolding, to Aviva when you need density.
+          ABI defines profile contracts and a local keyword routing path. Explicit profile selection
+          can bypass scoring.
         </p>
       </div>
       <div

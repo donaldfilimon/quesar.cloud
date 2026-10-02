@@ -3,9 +3,9 @@ import GalaxyCanvas from "./GalaxyCanvas.tsx";
 import { IArrow, ILock } from "./Icons.tsx";
 
 const PERSONAS: ReadonlyArray<readonly [name: string, role: string, color: string]> = [
-  ["Abbey", "proof · verified", "var(--persona-abbey)"],
-  ["Aviva", "research · vision", "var(--persona-aviva)"],
-  ["Abi", "interactive · fast", "var(--persona-abi)"],
+  ["Abbey", "conversational · empathetic", "var(--persona-abbey)"],
+  ["Aviva", "direct · technical", "var(--persona-aviva)"],
+  ["Abi", "orchestration · routing", "var(--persona-abi)"],
 ];
 
 interface PersonaDotProps {
@@ -140,7 +140,7 @@ export default function Hero({ onAccess }: HeroProps) {
               letterSpacing: "0.04em",
             }}
           >
-            Zig · local-first
+            CONCEPT · SOURCE REVIEW
           </span>
         </div>
         <h1
@@ -167,7 +167,7 @@ export default function Hero({ onAccess }: HeroProps) {
               animation: "mkSheen 6s linear infinite",
             }}
           >
-            private, high-performance AI
+            private AI operations / vision
           </span>
         </h1>
         <p
@@ -180,8 +180,8 @@ export default function Hero({ onAccess }: HeroProps) {
             marginInline: "auto",
           }}
         >
-          From the vector engine up — WDBX, the ABI framework, and three minds in one system. Fast
-          by design, private by default, verifiable by architecture.
+          WDBX and ABI source foundations: durable records, scoped integrity checks and three
+          profile contracts. Runtime and security acceptance remain separate.
         </p>
         <div
           style={{

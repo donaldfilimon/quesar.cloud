@@ -35,7 +35,7 @@ export function SceneGovernance() {
 
   return (
     <SceneBox>
-      <SceneTag index="05" label="Governance" reveal={head} />
+      <SceneTag index="05" label="Scoped pattern audit" reveal={head} />
       <StatusBadge kind="current" x={120} y={150} reveal={badge} />
       <Orb x={960} y={540} size={620} color={C.green} opacity={0.07} />
 
@@ -59,7 +59,7 @@ export function SceneGovernance() {
             marginBottom: 12,
           }}
         >
-          GENERATED RESPONSE
+          ILLUSTRATIVE RESPONSE
         </div>
         <div
           style={{
@@ -157,7 +157,7 @@ export function SceneGovernance() {
             Constitution
           </span>
           <span style={{ fontFamily: FONT.mono, fontSize: 14, color: C.dim2, marginLeft: 12 }}>
-            evaluateResponse()
+            13 substring patterns
           </span>
         </div>
       </div>
@@ -258,7 +258,7 @@ export function SceneGovernance() {
             textAlign: "center",
           }}
         >
-          APPROVED
+          EXAMPLE RESULT
         </div>
       </div>
 
@@ -282,7 +282,8 @@ export function SceneGovernance() {
             letterSpacing: "-0.01em",
           }}
         >
-          Six principles. <span style={{ color: C.green }}>Every response, governed.</span>
+          Six principle scores.{" "}
+          <span style={{ color: C.green }}>Pattern checks are not semantic safety.</span>
         </div>
       </div>
     </SceneBox>
@@ -537,7 +538,7 @@ export function SceneNorthStar() {
             letterSpacing: "-0.01em",
           }}
         >
-          A distributed cognitive fabric, across hardware tiers.
+          Distributed cognitive fabric / vision.
         </div>
         <div
           style={{
@@ -548,7 +549,7 @@ export function SceneNorthStar() {
             letterSpacing: "0.06em",
           }}
         >
-          Proposed direction — not a current capability.
+          Proposed direction — compatibility needs execution evidence.
         </div>
       </div>
     </SceneBox>

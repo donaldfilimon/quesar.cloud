@@ -19,7 +19,7 @@ export const integrationApps = [
     href: "/security",
     purpose:
       "Postgres schema (Neon, or in-memory PGLite without DATABASE_URL): auth, notes, audits, connectors, rate limits",
-    gate: "bun run build (applies migrations)",
+    gate: "bun run db:migrate (explicit release step)",
     status: "current" as StatusKind,
   },
   {
@@ -27,7 +27,7 @@ export const integrationApps = [
     href: "/quasar/sites",
     purpose:
       "Local AI site-builder service (Bun, port 4700) that the /quasar screens drive; run it yourself, never hosted",
-    gate: "bun test",
+    gate: "bun run test && bun run typecheck (inside the sidecar)",
     status: "experimental" as StatusKind,
   },
   {
@@ -42,8 +42,8 @@ export const integrationApps = [
     path: "native/",
     href: "/mobile",
     purpose:
-      "Capacitor shell that loads the deployed site; Android project and CloudKit plugin, iOS blocked on CocoaPods",
-    gate: "not gated (no Capacitor build on this machine)",
+      "Capacitor shell source that loads the deployed site, with an Android project and a CloudKit availability plugin",
+    gate: "The native source receipt reports no completed build or sync; native and signed-device acceptance require separate verification",
     status: "partial" as StatusKind,
   },
   {
@@ -67,7 +67,7 @@ export const integrityRules = [
   },
   {
     title: "Apache-2.0",
-    body: "Core runtimes ship Apache-2.0. Do not relicense by implication or copy a proprietary notice onto public crates.",
+    body: "ABI and WDBX each include an Apache-2.0 LICENSE in their inspected source revisions. Check the named repository license before reusing its code.",
   },
   {
     title: "Toolchain facts",
@@ -79,30 +79,30 @@ export const integrityRules = [
   },
   {
     title: "No borrowed benchmarks",
-    body: "If a number is not in the public skill-creator master reference or a named source artifact, it does not ship.",
+    body: "Site policy: publish a figure only with a named source artifact and a provenance tag. A source report is not an independently reproduced measurement.",
   },
 ] as const;
 
 export const faqs = [
   {
     q: "Does this website host Abbey?",
-    a: "No. This site orients and offers a signed-in console for field notes. The Abbey workspace, Quasar builder, and mobile vault on this site are in-browser orientations of local apps — they do not provision a hosted session.",
+    a: "The website does not provision a hosted Abbey product session. Its static preview offers orientation and browser demos. A configured server deployment separately supports signed-in, consent-gated console chat through a model provider. Quasar's browser client connects to a separately running operator-owned service.",
   },
   {
-    q: "Is Quesar a chatbot?",
-    a: "No. Quesar is the large model that trains and improves Abbey, Aviva, and the other assistants. Chat is an interface on an assistant. This website does not host the model or an assistant session.",
+    q: "What can I run with Quesar?",
+    a: "The experimental Quasar builder pairs this website's browser client with a separately running local service. The service scaffolds Next.js projects and uses configured Anthropic credentials for generation. Live provider generation remains unverified.",
   },
   {
     q: "Can it run privately?",
-    a: "Yes. Default posture is operator-owned machines. VPC, on-premise, hybrid, and offline-first paths are the design. Remote providers are optional and credential-gated.",
+    a: "The Quasar service defaults to operator-owned loopback operation. Generation sends requests to the configured provider; local project storage does not make provider inference offline. VPC, on-premise, and hybrid engagements are proposed service scopes.",
   },
   {
     q: "Do you replace existing models?",
-    a: "Quesar is the large model that trains and improves Abbey, Aviva, and the other assistants. That is not a claim that this website replaces a provider you already run, or that local template completion is that model. This site does not host Quesar or run training.",
+    a: "The experimental website builder uses a configured model provider. ABI's local completion path renders deterministic persona templates. Neither implementation establishes a trained Quesar foundation model or an improvement in model quality.",
   },
   {
     q: "Where is the source?",
-    a: "On this site. Product pages, /source/:name, docs, and research carry the public tree. GitHub is the backing store — you do not need to leave to read it.",
+    a: "Product pages, source pages, docs, and research provide selected source references and README excerpts. The repository catalog is bounded; full source trees and pinned revisions are available through the linked GitHub repositories.",
   },
   {
     q: "What do the status labels mean?",

@@ -19,7 +19,7 @@ export const Route = createFileRoute("/skill-creator")({
   head: () =>
     pageHead(
       "skill-creator — MLAI",
-      "Public agent skill for creating skills and shipping the company site without breaking integrity rules.",
+      "Browser composer for a SKILL.md preview and this site's integrity rules.",
     ),
   component: SkillCreatorPage,
 });
@@ -53,7 +53,7 @@ ${purpose}
       <PageHero
         eyebrow="skill-creator"
         title="The same rules this site is written under."
-        lede="Public agent skill for creating skills and shipping the company site without breaking Apple framing, provenance tags, Apache-2.0, or toolchain facts."
+        lede="Browser composer for a SKILL.md preview and this site's integrity rules."
       >
         <HeroStatus status="current" />
       </PageHero>
@@ -80,7 +80,7 @@ ${purpose}
           <CodeBlock code={skill} label="SKILL.md" />
         </div>
       </Section>
-      <Section eyebrow="Rules" title="Copied from the public skill.">
+      <Section eyebrow="Rules" title="Site integrity rules.">
         <IntegrityList rules={integrityRules} />
       </Section>
       <PageClose

@@ -1,3 +1,4 @@
+import { sceneRandom, isCapture } from "./capture";
 // neural.tsx — React shell over @mlai/trailer-engine's NeuralScene.
 // The 3D neural-network backdrop (layered MLP in rotating perspective, radial
 // "fabric" warp, title bloom) is drawn by the package; this file owns the MLAI
@@ -17,6 +18,7 @@ import { NL_MODES, neuralModeForTime } from "./neural-mode";
 void C;
 
 const readIntensity = (): number => {
+  if (isCapture()) return 1;
   const tw = (window as unknown as { __tw?: { neural?: number } }).__tw || {};
   return tw.neural != null ? tw.neural : 1;
 };
@@ -38,7 +40,11 @@ function NeuralCanvas({ t, mode, opacity = 1 }: { t: number; mode: string; opaci
     if (!c) return;
     const renderer = new Canvas2DRenderer(c);
     renderer.resize(W, H, 1);
-    const scene = new NeuralScene({ initial: NL_MODES.chaos, intensity: readIntensity });
+    const scene = new NeuralScene({
+      initial: NL_MODES.chaos,
+      intensity: readIntensity,
+      random: sceneRandom("neural"),
+    });
     renderer.setScene(scene);
     stage.current = { renderer, scene };
     sizedTo.current = 0;

@@ -242,6 +242,8 @@ export class AudioEngine {
 
   /** Bumped by dispose(); every async continuation checks it before writing. */
   private generation = 0;
+  /** Cancels playback intent without discarding useful in-flight synthesis. */
+  private playbackGeneration = 0;
   private readonly timers = new Set<unknown>();
   private readonly idleCancels = new Set<() => void>();
   private readonly sleepers = new Set<() => void>();
@@ -628,11 +630,16 @@ export class AudioEngine {
 
   /* ── playback ── */
 
-  stop(): void {
+  private stopCurrent(): void {
     if (this.current) {
       this.stopNode(this.current, this.crossfadeSec);
       this.current = null;
     }
+  }
+
+  stop(): void {
+    this.playbackGeneration++;
+    this.stopCurrent();
   }
 
   /** Play a line. Resolves to the spoken duration in seconds, or null. */
@@ -641,12 +648,17 @@ export class AudioEngine {
     // Never autoplay narration under reduced motion; an explicit gesture opts in.
     if (this.prefersReducedMotion() && !opts.force) return null;
     const gen = this.generation;
+    // A seek's stop() cancels old playback even while TTS is rendering. New
+    // interrupting lines also supersede pending ones, irrespective of which
+    // synthesis finishes first. Explicit non-interrupting requests can overlap.
+    const playbackGen =
+      opts.interrupt !== false ? ++this.playbackGeneration : this.playbackGeneration;
     const buf = await this.render(who, text);
-    if (!buf || gen !== this.generation) return null;
+    if (!buf || gen !== this.generation || playbackGen !== this.playbackGeneration) return null;
     const ctx = this.audioCtx();
     if (!ctx) return null;
 
-    if (opts.interrupt !== false) this.stop();
+    if (opts.interrupt !== false) this.stopCurrent();
 
     const speaker = this.resolveSpeaker(who);
     const src = ctx.createBufferSource();

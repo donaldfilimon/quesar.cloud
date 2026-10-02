@@ -3,44 +3,20 @@
 // only the active one is downloaded/mounted, so opening the hub is cheap and the
 // heavy boards (canvas demos, the system board) load on demand.
 
-import { useState, lazy, Suspense } from "react";
+import { useState, Suspense } from "react";
+import { BOARDS, type Board } from "./boards";
+import { designShots, filmScript } from "../catalog";
 
-const BrandBoard = lazy(() => import("./brand/BrandBoard"));
-const DesignBoard = lazy(() => import("./board/DesignBoard"));
-const ShowcaseBoard = lazy(() => import("./showcase/ShowcaseBoard"));
-const HeroBoard = lazy(() => import("./hero/HeroBoard"));
-const LabBoard = lazy(() => import("./lab/LabBoard"));
-const Marketing = lazy(() => import("./marketing/Marketing"));
-const Console = lazy(() => import("./console/Console"));
-const Docs = lazy(() => import("./docs/Docs"));
-
-type Board = "brand" | "system" | "showcase" | "hero" | "lab" | "marketing" | "console" | "docs";
-
-const TABS: Array<{ key: Board; label: string }> = [
-  { key: "brand", label: "Brand" },
-  { key: "system", label: "System" },
-  { key: "showcase", label: "Showcase" },
-  { key: "hero", label: "Hero" },
-  { key: "lab", label: "Lab" },
-  { key: "marketing", label: "Marketing" },
-  { key: "console", label: "Console" },
-  { key: "docs", label: "Docs" },
-];
-
-const BOARDS: Record<Board, React.LazyExoticComponent<() => React.ReactNode>> = {
-  brand: BrandBoard,
-  system: DesignBoard,
-  showcase: ShowcaseBoard,
-  hero: HeroBoard,
-  lab: LabBoard,
-  marketing: Marketing,
-  console: Console,
-  docs: Docs,
-};
+const TABS = designShots.map((chapter) => ({
+  key: chapter.shot.board,
+  label: chapter.shot.board[0].toUpperCase() + chapter.shot.board.slice(1),
+}));
+const SCRIPT = filmScript("design");
 
 export function DesignHub() {
   const [board, setBoard] = useState<Board>("brand");
   const Active = BOARDS[board];
+  const shot = designShots.find((chapter) => chapter.shot.board === board)!;
 
   return (
     <div
@@ -55,6 +31,28 @@ export function DesignHub() {
         scrollTimeline: "--ds-page block",
       }}
     >
+      <aside
+        style={{
+          position: "sticky",
+          top: 0,
+          zIndex: 40,
+          padding: "12px 24px 12px 170px",
+          background: "#0c0d14",
+          color: "var(--text-dim)",
+          fontFamily: "var(--font-mono)",
+          fontSize: 12,
+        }}
+      >
+        {shot.shot.overlay} · Explore · {shot.title} · illustrative data, no live service
+        <details style={{ marginTop: 6 }}>
+          <summary>Walkthrough transcript · planned 80-second cut</summary>
+          <ol>
+            {SCRIPT.map((line) => (
+              <li key={line.id}>{line.text}</li>
+            ))}
+          </ol>
+        </details>
+      </aside>
       <Suspense
         fallback={
           <div
@@ -74,7 +72,9 @@ export function DesignHub() {
           </div>
         }
       >
-        <Active />
+        <div data-design-board={board} data-shot-start={shot.start} data-shot-end={shot.end}>
+          <Active />
+        </div>
       </Suspense>
 
       {/* floating board switcher */}

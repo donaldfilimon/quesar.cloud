@@ -1,3 +1,4 @@
+import { FilmEvidence } from "./evidence";
 // Film.tsx — the MLAI brand film. A ~69s, six-scene explainer in the MLAI
 // visual system (near-black substrate, electric cyan→blue→violet, Space
 // Grotesk / IBM Plex Sans / IBM Plex Mono), hosted by the three agent voices.
@@ -21,17 +22,11 @@ import { NarrationController, Narrator, VoiceToggle } from "./narration";
 import { useVoiceGate } from "./speech";
 import { Transcript } from "./transcript";
 import { SCRIPT } from "./narration-script";
+import { filmRecord, filmTimeline } from "../catalog";
 
 // Scene slots [start, end] in seconds — must match the narration script.
-const T = {
-  open: [0, 9],
-  routing: [9, 22],
-  memory: [22, 37],
-  governance: [37, 51],
-  northStar: [51, 60],
-  close: [60, 69],
-} as const;
-const DURATION = 69;
+const T = filmTimeline("film");
+const DURATION = filmRecord("film").duration;
 
 export function Film() {
   const voice = useVoiceGate();
@@ -75,6 +70,7 @@ export function Film() {
 
       {/* film grain on top */}
       <Grain />
+      <FilmEvidence id="film" />
     </Stage>
   );
 }

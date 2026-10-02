@@ -11,6 +11,14 @@ test("home client actions and service inquiry context work by keyboard", async (
     "href",
     "/platform",
   );
+  await expect(hero.getByRole("link", { name: "Meet Abbey" })).toHaveAttribute("href", "/abbey");
+  const ecosystem = hero.getByRole("link", { name: "Explore the ecosystem" });
+  await ecosystem.focus();
+  await page.keyboard.press("Enter");
+  await expect(page).toHaveURL(/#ecosystem$/);
+  await expect(
+    page.getByRole("heading", { name: "Distinct roles. One inspectable architecture." }),
+  ).toBeInViewport();
   await page.goto("/services");
   const inquiry = page.getByRole("link", { name: "Discuss this service" }).first();
   await inquiry.focus();
@@ -31,6 +39,30 @@ test("home client actions and service inquiry context work by keyboard", async (
   );
   await page.goto("/contact?service=Unknown");
   await expect(page.getByLabel("Service or project context (optional)")).toHaveValue("");
+});
+
+test("the neural opening respects reduced motion and exposes source-based builder paths", async ({
+  page,
+}, testInfo) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+    "Human imagination.Adaptive intelligence.",
+  );
+  await expect(page.locator(".neural-field")).toHaveAttribute("aria-hidden", "true");
+  const animation = await page
+    .locator(".neural-field-edge")
+    .first()
+    .evaluate((element) => getComputedStyle(element).animationName);
+  expect(animation).toBe("none");
+  await expect(page.getByRole("link", { name: "Open setup guide" })).toHaveAttribute(
+    "href",
+    "/docs/getting-started",
+  );
+  await expect(
+    page.getByText("Hosted Quesar APIs and platform SDKs are not published."),
+  ).toBeVisible();
+  await page.screenshot({ path: testInfo.outputPath("hero.png") });
 });
 
 test("static drafts, accepted receipts and legacy copies keep their delivery labels", async ({

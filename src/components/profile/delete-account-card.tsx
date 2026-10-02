@@ -4,20 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { authClient } from "@/lib/auth/client";
-import { confirmationMatches } from "./delete-account";
-
-/** Better Auth error codes that mean "sign in again first", not a real failure. */
-function friendlyError(code: string | undefined, message: string | undefined): string {
-  if (
-    code === "SESSION_EXPIRED" ||
-    code === "SESSION_NOT_FRESH" ||
-    /fresh|expired/i.test(message ?? "")
-  ) {
-    return "For safety, deleting an account needs a recent sign-in. Sign out, sign back in, and try again.";
-  }
-  if (code === "INVALID_PASSWORD") return "That password is not correct.";
-  return message || "The account could not be deleted. Nothing was removed; try again.";
-}
+import { confirmationMatches, deletionError } from "./delete-account";
 
 /**
  * Permanently delete the signed-in account. The server purges notes, consents,
@@ -45,7 +32,7 @@ export function DeleteAccountCard({
     const { error: failure } = await authClient.deleteUser(hasPassword ? { password } : {});
     if (failure) {
       setStatus("error");
-      setError(friendlyError(failure.code, failure.message));
+      setError(deletionError(failure.code, failure.message));
       return;
     }
     window.location.assign("/");
@@ -56,8 +43,8 @@ export function DeleteAccountCard({
       <p className="text-xs text-status-partial">Delete account</p>
       <p className="mt-2 text-sm text-fg-muted">
         Permanently deletes this account, its sessions, field notes, chat consents and encrypted
-        audits, and any workspace connections (Google grants are revoked). Contact inquiries you
-        sent are kept, without your account attached. This cannot be undone.
+        audits, and any workspace connections (provider revocation is attempted). Contact inquiries
+        you sent are kept, without your account attached. This cannot be undone.
       </p>
       <form className="mt-4 grid gap-3" onSubmit={onSubmit}>
         <div className="grid gap-1.5">

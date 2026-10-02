@@ -22,12 +22,12 @@ export const COLOR: Readonly<
     c("--action-soft", "rgba(59,130,246,0.14)", "Tinted action surface"),
   ],
   spectrum: [
-    c("--spectrum-cyan", "#22D3EE", "Abi · moderation, interactive accents"),
+    c("--spectrum-cyan", "#22D3EE", "ABI · orchestration and routing"),
     c("--spectrum-blue", "#60A5FA", "Mid-spectrum · charts, gradients"),
-    c("--spectrum-violet", "#A855F7", "Aviva · research, vision"),
+    c("--spectrum-violet", "#A855F7", "Aviva · direct and technical"),
   ],
   semantic: [
-    c("--proof", "#34D399", "Abbey · success, verified, benchmark-pass"),
+    c("--proof", "#34D399", "Abbey · conversational and empathetic"),
     c("--signal", "#FBBF24", "Benchmarks, attention, throughput"),
     c("--danger", "#F87171", "Failure modes, destructive"),
   ],
@@ -48,8 +48,8 @@ export interface PersonaEntry {
 }
 export const PERSONA: readonly PersonaEntry[] = [
   { name: "Abbey", role: "Empathic Polymath", color: "#34D399", token: "proof" },
-  { name: "Aviva", role: "Unfiltered Expert", color: "#A855F7", token: "spectrum-violet" },
-  { name: "Abi", role: "Adaptive Moderator", color: "#22D3EE", token: "spectrum-cyan" },
+  { name: "Aviva", role: "Direct Technical Profile", color: "#A855F7", token: "spectrum-violet" },
+  { name: "Abi", role: "Orchestration Profile", color: "#22D3EE", token: "spectrum-cyan" },
 ];
 
 /* 4-tier surface elevation ramp */
@@ -177,9 +177,9 @@ export const CSS_TABS: Readonly<Record<string, string>> = {
 --action-soft:     rgba(59,130,246,0.14);
 
 --spectrum-grad:   linear-gradient(100deg,#67e8f9,#60a5fa,#c084fc);
---persona-abbey:   #34d399;   /* proof / verified  */
---persona-aviva:   #a855f7;   /* research / vision */
---persona-abi:     #22d3ee;   /* interactive       */
+--persona-abbey:   #34d399;   /* conversational    */
+--persona-aviva:   #a855f7;   /* direct technical  */
+--persona-abi:     #22d3ee;   /* orchestration     */
 
 --proof:  #34d399;   --signal: #fbbf24;   --danger: #f87171;
 --text:   #fafafa;   --text-dim: #a1a1aa; --text-faint: #6b6b76;`,

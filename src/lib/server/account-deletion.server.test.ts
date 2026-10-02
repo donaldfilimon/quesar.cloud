@@ -90,3 +90,33 @@ describe("purgeUserData", () => {
     expect((await rowsFor(userId)).connections).toBe(0);
   }, 30_000);
 });
+
+it("rolls back local app purges on a later SQL fault, without claiming provider rollback", async () => {
+  const userId = `user-${randomUUID()}`;
+  await seed(userId);
+  const sql = await getSql();
+  // A database trigger reproduces an actual late failure, not a mocked query order.
+  await sql.query(
+    `create function acceptance_purge_fault() returns trigger language plpgsql as $$ begin raise exception 'synthetic purge fault'; end $$`,
+  );
+  await sql.query(
+    `create trigger acceptance_purge_fault before delete on field_notes for each row execute function acceptance_purge_fault()`,
+  );
+  const revoke = vi.fn(async () => ({ removed: false, revoked: true }));
+  try {
+    await expect(purgeUserData(userId, revoke)).rejects.toThrow("synthetic purge fault");
+    expect(revoke).toHaveBeenCalledOnce();
+    expect(await rowsFor(userId)).toEqual({
+      notes: 1,
+      consents: 1,
+      audits: 1,
+      access: 1,
+      connections: 1,
+      limits: 1,
+      inquiries: 1,
+    });
+  } finally {
+    await sql.query("drop trigger acceptance_purge_fault on field_notes");
+    await sql.query("drop function acceptance_purge_fault()");
+  }
+});

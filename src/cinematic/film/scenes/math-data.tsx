@@ -13,8 +13,8 @@ export const MATH: MathDef[] = [
   {
     idx: "M1",
     label: "Similarity",
-    badge: "current",
-    title: "Cosine distance",
+    badge: "vision",
+    title: "Cosine similarity",
     motif: "vectors",
     eqs: [
       {
@@ -24,41 +24,37 @@ export const MATH: MathDef[] = [
             <Tok c={AV}>b</Tok>‖)
           </span>
         ),
-        note: "Relevance is the angle between two embeddings.",
+        note: "Cosine similarity illustrates vector alignment, not semantic truth.",
       },
     ],
     bullets: [
       "Vectors normalized to unit length",
-      "Dot product over 768+ dimensions",
-      "Zig @Vector SIMD — many lanes per cycle",
+      "Dot product over the input dimensions",
+      "Illustrative equation; no throughput claim",
     ],
   },
   {
     idx: "M2",
     label: "Index",
-    badge: "partial",
+    badge: "vision",
     title: "HNSW search",
     motif: "graph",
     eqs: [
       {
-        tex: (
-          <span>
-            search ≈ O(<Tok c={AVC}>log N</Tok>) &nbsp; · &nbsp; M=16, ef=32
-          </span>
-        ),
-        note: "A hierarchical navigable small-world graph.",
+        tex: <span>Illustrative graph traversal · sample M=16, ef=32</span>,
+        note: "Conceptual graph-search illustration; no implementation claim.",
       },
     ],
     bullets: [
-      "Coarse top layers, dense bottom layer",
-      "Greedy descent toward the query",
-      "Results returned in non-increasing score",
+      "Illustrative coarse and dense layers",
+      "Illustrative traversal toward a query",
+      "Illustrative result ordering",
     ],
   },
   {
     idx: "M3",
     label: "Hybrid rank",
-    badge: "partial",
+    badge: "vision",
     title: "Beyond similarity",
     motif: "curve",
     eqs: [
@@ -76,114 +72,118 @@ export const MATH: MathDef[] = [
             <Tok c="#60a5fa">temporal</Tok> = e<Sup>−λΔt</Sup>
           </span>
         ),
-        note: "Recency decays on a half-life; cause is BFS hop-distance.",
+        note: "Conceptual recency decay and causal proximity; no implemented ranking claim.",
       },
     ],
-    bullets: ["Recency half-life decay", "Causal-edge proximity", "Router persona weight"],
+    bullets: [
+      "Illustrative recency factor",
+      "Illustrative causal factor",
+      "Illustrative persona factor",
+    ],
   },
   {
     idx: "M4",
     label: "Integrity",
-    badge: "current",
+    badge: "vision",
     title: "SHA-256 chaining",
     motif: "chain",
     eqs: [
       {
         tex: (
           <span>
-            H<Sub>n</Sub> = SHA256( H<Sub>n−1</Sub> ‖ ts ‖ profile ‖ q ‖ r )
+            H<Sub>n</Sub> = SHA256( H<Sub>n−1</Sub> ‖ ts ‖ sequence ‖ profile ‖ metadata )
           </span>
         ),
         note: "Each block commits to its predecessor.",
       },
     ],
     bullets: [
-      "Tamper-evident by construction",
-      "verifyBlocks() re-derives every hash",
-      "One flipped bit breaks the chain",
+      "Hash links are not digital signatures",
+      "Strict verification recomputes stored content hashes",
+      "Link-only verification checks predecessor links",
     ],
   },
   {
     idx: "M5",
     label: "Durability",
-    badge: "partial",
+    badge: "vision",
     title: "Write-ahead log",
     motif: "orbit",
     eqs: [
       {
         tex: (
           <span>
-            frame = [ len ‖ payload ‖ <Tok c={AVC}>crc32</Tok> ]
+            frame = <Tok c={AVC}>crc32(JSON)</Tok> ‖ space ‖ JSON ‖ newline
           </span>
         ),
-        note: "CRC-32 is polynomial division over GF(2).",
+        note: "The checksum covers the minified JSON bytes.",
       },
     ],
     bullets: [
-      "Append-only, framed records",
-      "Corruption fails the checksum",
-      "Replay rebuilds state deterministically",
+      "Append-only CRC-prefixed records",
+      "CRC mismatches are rejected; an incomplete final frame may be ignored",
+      "Verified frames replay onto a matching checkpoint",
     ],
   },
   {
     idx: "M6",
     label: "Compression",
-    badge: "partial",
+    badge: "vision",
     title: "int8 quantization",
     motif: "orbit",
     eqs: [
       {
         tex: <span>q = round( x / s ), &nbsp; s = max|x| / 127</span>,
-        note: "Float-32 → int-8, one scale factor per vector.",
+        note: "Illustrative formula assuming a positive, nonzero scale; zero-vector behavior unspecified.",
       },
     ],
     bullets: [
-      "~4× smaller footprint",
-      "Bounded reconstruction error",
-      "Dequantize on the hot path",
+      "Conceptual conversion example",
+      "Storage ratio and reconstruction behavior require separate evidence",
+      "Illustrative conversion, not runtime acceptance",
     ],
   },
   {
     idx: "M7",
     label: "Privacy",
-    badge: "partial",
-    title: "Homomorphic sums",
+    badge: "vision",
+    title: "Encrypted aggregation",
     motif: "orbit",
     eqs: [
       {
-        tex: (
-          <span>
-            Enc(<Tok c={AVC}>a</Tok>) + Enc(<Tok c={AV}>b</Tok>) = Enc(<Tok c={AVC}>a</Tok>+
-            <Tok c={AV}>b</Tok>) &nbsp; (mod p)
-          </span>
-        ),
-        note: "Additive, single-key homomorphism over GF(p).",
+        tex: <span>Encrypted aggregation / conceptual objective</span>,
+        note: "A scheme and threat model require separate evidence",
       },
     ],
     bullets: [
-      "Aggregate without decrypting",
-      "Sums decrypt to plaintext sums",
-      "Full multiply — still research",
+      "No cryptographic privacy guarantee",
+      "Research direction / vision",
+      "Qualification requires separate evidence",
     ],
   },
   {
     idx: "M8",
     label: "Consensus",
-    badge: "partial",
-    title: "Raft replication",
+    badge: "vision",
+    title: "Raft replication / concept",
     motif: "orbit",
-    eqs: [{ tex: <span>commit ⟺ acks ≥ ⌊n/2⌋ + 1</span>, note: "Agreement by majority quorum." }],
+    eqs: [
+      {
+        tex: <span>Illustrative majority threshold = ⌊n/2⌋ + 1</span>,
+        note: "Conceptual vote count; not a complete Raft commit rule.",
+      },
+    ],
     bullets: [
-      "Single leader per term",
-      "Log replicated to followers",
-      "In-process today — networked is proposed",
+      "Leader/follower illustration",
+      "Replication direction / vision",
+      "Protocol qualification requires separate evidence",
     ],
   },
   {
     idx: "M9",
     label: "The minds",
-    badge: "current",
-    title: "Three loss functions",
+    badge: "vision",
+    title: "Conceptual profile objectives",
     motif: "blend",
     eqs: [
       {
@@ -219,26 +219,30 @@ export const MATH: MathDef[] = [
             </Tok>
           </span>
         ),
-        note: "Abi sets α — empathy vs. directness.",
+        note: "Illustrative α; the identity contract does not establish a learned blend.",
       },
     ],
     bullets: [
-      "Each persona is an objective",
-      "Blended in a single pass",
-      "Moderated, never averaged blindly",
+      "Conceptual objectives, not trained model weights",
+      "Illustrative blend, not execution evidence",
+      "Profile contracts do not verify answers",
     ],
   },
   {
     idx: "M10",
-    label: "QED",
-    title: "The proof is the math",
+    label: "Concepts / vision",
+    title: "Illustrative mathematics / vision",
     motif: "orbit",
     eqs: [
       {
         tex: <span>resilient ⟸ verifiable ∧ governed ∧ routed</span>,
-        note: "Everything Abbey promised — formalized.",
+        note: "Equations illustrate concepts; they do not prove deployment claims.",
       },
     ],
-    bullets: ["No hand-waving", "Every layer, a definition", "And the math checks out"],
+    bullets: [
+      "State the assumptions",
+      "Define the acceptance evidence",
+      "Test the intended execution path",
+    ],
   },
 ];

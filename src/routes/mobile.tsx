@@ -7,7 +7,7 @@ export const Route = createFileRoute("/mobile")({
   head: () =>
     pageHead(
       "Mobile companion — Quesar",
-      "Web vault orientation of the Expo mobile companion. Native CloudKit is a signed iOS build.",
+      "Browser vault preview with localStorage notes and separate native shell source boundaries.",
     ),
   component: MobilePage,
 });
@@ -18,7 +18,7 @@ function MobilePage() {
       <PageHero
         eyebrow="Mobile"
         title="A vault you can hold."
-        lede="Expo SDK 53 companion. Native CloudKit and the encrypted-local fallback are distinct paths. Signed-device acceptance is not the same as this web export."
+        lede="This browser preview stores notes in localStorage. The separate Capacitor shell and CloudKit availability plugin are source work; native build and signed-device sync acceptance remain unverified."
       >
         <HeroStatus status="partial" />
       </PageHero>
@@ -33,12 +33,15 @@ function MobilePage() {
             items={[
               {
                 title: "Tabs",
-                body: "Home, products, platform, company, vault — the Expo app mirrors this site's orientation.",
+                body: "This page previews the vault interaction. Separate native projects require their own platform setup and acceptance.",
               },
-              { title: "CloudKit", body: "Private vault on a signed Apple build. Not this page." },
+              {
+                title: "CloudKit",
+                body: "The separate plugin exposes availability and account-status checks. This page does not implement CloudKit sync.",
+              },
               {
                 title: "Fallback",
-                body: "Encrypted-local store when iCloud is unavailable. Web uses localStorage only.",
+                body: "Browser notes use localStorage. This preview does not establish encrypted native storage or device delivery.",
               },
             ]}
             columns="md:grid-cols-3"

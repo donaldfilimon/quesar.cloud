@@ -37,7 +37,7 @@ function ServicesPage() {
         </a>
       </Section>
 
-      <Section eyebrow="Core" title="Nine engagements. Each ends with evidence.">
+      <Section eyebrow="Core" title="Nine proposed engagement scopes.">
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {services.map((service) => (
             <Surface key={service.title} className="flex h-full flex-col">
@@ -63,9 +63,9 @@ function ServicesPage() {
       </Section>
 
       <Section
-        eyebrow="How an engagement runs"
-        title="From audit to governed production."
-        lede="Four phases, in order. Each one ends with evidence — a register, a harness, a baseline — that gates the next."
+        eyebrow="Proposed engagement process"
+        title="Define the release evidence together."
+        lede="These four proposed phases identify deliverables to agree for each project: a register, a harness, a baseline, and acceptance criteria."
       >
         <StepList steps={engagement} />
       </Section>
@@ -95,7 +95,11 @@ function ServicesPage() {
             label: "Developers",
             body: "What you can run without an engagement.",
           },
-          { to: "/company", label: "Company", body: "Who ships this, and under which rules." },
+          {
+            to: "/company",
+            label: "Company",
+            body: "Who develops this, and the site's integrity rules.",
+          },
         ]}
       />
     </>

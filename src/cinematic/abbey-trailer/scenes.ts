@@ -21,6 +21,8 @@ import {
   type SceneCue,
 } from "@/lib/trailer-engine";
 
+import { filmCaptions, filmRecord, filmTimeline } from "../catalog";
+
 export interface PersonaPalette {
   abi: string;
   aviva: string;
@@ -41,7 +43,8 @@ export interface Caption {
   text: string;
 }
 
-const ABBEY_DURATION = 38;
+const ABBEY_DURATION = filmRecord("abbey").duration;
+const T = filmTimeline("abbey");
 const PARTICLE_COUNT = 1400;
 const MIN_PARTICLES = 400;
 const CX = 960,
@@ -360,32 +363,62 @@ export interface AbbeyTimeline {
 
 export function buildAbbeyTimeline(pal: TrailerPalette): AbbeyTimeline {
   const cues: SceneCue[] = [
-    { name: "monolith", scene: new MonolithScene(pal), start: 0, duration: 6, seed: 101 },
-    { name: "shatter", scene: new ShatterScene(pal), start: 6, duration: 4, seed: 202 },
-    { name: "abi", scene: new PersonaRingScene(pal, "abi"), start: 10, duration: 5, seed: 303 },
-    { name: "aviva", scene: new PersonaRingScene(pal, "aviva"), start: 15, duration: 5, seed: 404 },
-    { name: "abbey", scene: new PersonaRingScene(pal, "abbey"), start: 20, duration: 5, seed: 505 },
-    { name: "convergence", scene: new ConvergenceScene(pal), start: 25, duration: 6, seed: 606 },
-    { name: "mark", scene: new FinalMarkScene(pal), start: 31, duration: 7, seed: 707 },
+    {
+      name: "monolith",
+      scene: new MonolithScene(pal),
+      start: T.monolith[0],
+      duration: T.monolith[1] - T.monolith[0],
+      seed: 101,
+    },
+    {
+      name: "shatter",
+      scene: new ShatterScene(pal),
+      start: T.shatter[0],
+      duration: T.shatter[1] - T.shatter[0],
+      seed: 202,
+    },
+    {
+      name: "abi",
+      scene: new PersonaRingScene(pal, "abi"),
+      start: T.abi[0],
+      duration: T.abi[1] - T.abi[0],
+      seed: 303,
+    },
+    {
+      name: "aviva",
+      scene: new PersonaRingScene(pal, "aviva"),
+      start: T.aviva[0],
+      duration: T.aviva[1] - T.aviva[0],
+      seed: 404,
+    },
+    {
+      name: "abbey",
+      scene: new PersonaRingScene(pal, "abbey"),
+      start: T.abbey[0],
+      duration: T.abbey[1] - T.abbey[0],
+      seed: 505,
+    },
+    {
+      name: "convergence",
+      scene: new ConvergenceScene(pal),
+      start: T.convergence[0],
+      duration: T.convergence[1] - T.convergence[0],
+      seed: 606,
+    },
+    {
+      name: "mark",
+      scene: new FinalMarkScene(pal),
+      start: T.mark[0],
+      duration: T.mark[1] - T.mark[0],
+      seed: 707,
+    },
   ];
-  // Copy already shipped in the Vision Trailer; nothing new is claimed and no
-  // figure appears. The three persona roles are the tokens.ts registry's.
-  const captions: Caption[] = [
-    { start: 0.8, end: 3.4, text: "They gave you an answer." },
-    { start: 3.6, end: 6.0, text: "But could it ever prove it?" },
-    { start: 6.4, end: 9.8, text: "Not one model pretending to be everything." },
-    { start: 10.6, end: 14.6, who: "abi", text: "Abi. Interactive. Fast." },
-    { start: 15.6, end: 19.6, who: "aviva", text: "Aviva. Research. Vision." },
-    { start: 20.6, end: 24.6, who: "abbey", text: "Abbey. Proof. Verified." },
-    { start: 25.8, end: 30.4, text: "Three minds. In concert." },
-    { start: 31.8, end: 34.4, text: "This is MLAI." },
-    { start: 34.6, end: 37.8, text: "Infrastructure for resilient intelligence." },
-  ];
+  const captions: Caption[] = filmCaptions("abbey");
   return { cues, captions, duration: ABBEY_DURATION };
 }
 
 export function captionAt(captions: readonly Caption[], t: number): Caption | null {
   let hit: Caption | null = null;
-  for (const c of captions) if (t >= c.start && t <= c.end) hit = c;
+  for (const c of captions) if (t >= c.start && t < c.end) hit = c;
   return hit;
 }

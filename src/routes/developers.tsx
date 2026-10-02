@@ -20,7 +20,7 @@ export const Route = createFileRoute("/developers")({
   head: () =>
     pageHead(
       "Source — Quesar, ABI, WDBX, Abbey",
-      "Public GitHub for MLAI and Quesar: live repository metadata, README excerpts, local setup, verification gates, and skill-creator integrity rules.",
+      "MLAI source orientation: repository metadata, README excerpts, setup requirements, verification gates, and site integrity rules.",
     ),
   component: DevelopersPage,
 });
@@ -75,11 +75,11 @@ function DevelopersPage() {
           items={[
             {
               title: "Current in source",
-              body: "ABI public tree (nightly Rust) with ./tools/cargo.sh and ./tools/check.sh. MCP server (stdio, optional loopback HTTP). Twelve contract-covered MCP tools, including wdbx_query and gpu_status. Local site-builder HTTP API on a trusted LAN (no auth).",
+              body: "ABI provides a Rust source tree with ./tools/cargo.sh and ./tools/check.sh, and MCP stdio plus an optional loopback HTTP listener. Separately, the experimental Quasar sidecar exposes a browser-paired local website-builder API, defaults to loopback, and requires authentication for API operations.",
             },
             {
               title: "Not published as a platform SDK",
-              body: "A hosted Quesar HTTP API. Client SDKs for third-party SaaS integration. Guaranteed stable versioning across all crates. Deploy adapters and authentication for the local Quasar builder.",
+              body: "Source does not establish a managed Quesar platform API, third-party SaaS SDK, or stable versioning across every crate. Quasar generation requires a configured provider; remote exposure and previews require the operator's network and HTTPS setup.",
             },
           ]}
         />
@@ -87,13 +87,11 @@ function DevelopersPage() {
 
       <Section eyebrow="Integrity skill" title="The same rules this site is written under.">
         <p className="max-w-2xl text-sm leading-relaxed text-fg-muted">
-          <Link to="/skill-creator" className="text-accent underline">
-            skill-creator
-          </Link>{" "}
-          is the public agent skill for creating skills and shipping the company site without
-          breaking Apple framing, provenance tags, Apache-2.0, or toolchain facts. New numbers that
-          are not in that skill's master reference do not ship. Toolchain claims follow each
-          repository README — ABI is nightly Rust, not Zig.
+          This site uses integrity rules for Apple framing, provenance, named repository licensing,
+          and toolchain facts. Figures require a named source artifact and the appropriate measured,
+          reported, or target tag. Repository toolchain claims follow the source README. The skill
+          composer on this site is a browser preview; copied external-skill attribution has not been
+          established.
         </p>
         <div className="mt-6">
           <IntegrityList />

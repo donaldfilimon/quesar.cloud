@@ -42,7 +42,7 @@ let observers: FakeObserver[];
 let rafQueue: Map<number, (t: number) => void>;
 let rafId: number;
 
-const el = {} as Element;
+const el = { closest: () => null } as unknown as Element;
 
 function setReduced(v: boolean) {
   mq.matches = v;
@@ -224,5 +224,31 @@ describe("reduced-motion store", () => {
     vi.stubGlobal("window", emitter());
     expect(readReducedMotion()).toBe(false);
     expect(() => subscribeReducedMotion(() => {})()).not.toThrow();
+  });
+});
+
+describe("controlled board capture", () => {
+  afterEach(() => vi.unstubAllEnvs());
+  it("reconstructs fixed simulation steps without RAF, intervals or visibility observers", () => {
+    vi.stubEnv("VITE_FILM_CAPTURE", "1");
+    Object.assign(win, { location: { href: "http://127.0.0.1/?capture=1" } });
+    const board = { closest: () => ({ dataset: { shotTime: "2.5" } }) } as unknown as Element;
+    const frames: number[] = [];
+    const gate = attachFrameGate(board, (time) => frames.push(time));
+    expect(frames).toHaveLength(151);
+    expect(frames[0]).toBe(0);
+    expect(frames.at(-1)).toBe(2500);
+    gate.renderOnce();
+    expect(frames).toHaveLength(151);
+    const tick = vi.fn();
+    const dispose = attachIntervalGate(board, tick, 900);
+    expect(tick).toHaveBeenCalledTimes(2);
+    vi.advanceTimersByTime(9000);
+    flushFrame();
+    expect(tick).toHaveBeenCalledTimes(2);
+    expect(rafQueue.size).toBe(0);
+    expect(observers).toHaveLength(0);
+    gate.dispose();
+    dispose();
   });
 });

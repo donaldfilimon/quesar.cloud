@@ -17,8 +17,8 @@ import { pageHead } from "@/lib/seo";
 export const Route = createFileRoute("/investors")({
   head: () =>
     pageHead(
-      "Investors — MLAI Corporation",
-      "MLAI investor notes: entity, founder evidence, and unit-economics targets. ARR and TAM figures are tagged — a target is never a result.",
+      "Investors — MLAI",
+      "MLAI planning notes: illustrative financial assumptions, source reports, and proposed acceptance work.",
     ),
   component: InvestorsPage,
 });
@@ -29,10 +29,9 @@ function InvestorsPage() {
       <PageHero
         eyebrow="Investors"
         title="An engineer who tells you the truth, including the parts that are still a target."
-        lede="Figures on this page come from the public skill-creator master reference. Every number is tagged. ARR, unit economics, and the 295× GPU figure are targets. They are not results."
+        lede="Figures on this page are illustrative planning assumptions and source reports. They are not validated market sizing, operating results, bookings, or a validated forecast."
       >
         <div className="mt-6 flex flex-wrap gap-2">
-          <ProvTag tag="measured" />
           <ProvTag tag="target" />
           <ProvTag tag="reported" />
         </div>
@@ -40,9 +39,9 @@ function InvestorsPage() {
       <JourneyRail current="investors" />
 
       <Section
-        eyebrow="Entity"
+        eyebrow="Planning scenario"
         title={investor.entity}
-        lede="TAM, SAM, and SOM are category sizing. None of them is a booking."
+        lede="These are illustrative design assumptions, not validated market sizing or reachable revenue."
       >
         <div className="mb-4 flex flex-wrap gap-2">
           <ProvTag tag="target" />
@@ -74,8 +73,8 @@ function InvestorsPage() {
 
       <Section
         eyebrow="Unit economics"
-        title="All four are targets."
-        lede="Nothing here is a measured operating result."
+        title="Unit economics planning assumptions."
+        lede="These targets have no reproduced operating result in this draft."
       >
         <div className="mb-4">
           <ProvTag tag="target" />
@@ -86,7 +85,7 @@ function InvestorsPage() {
       <Section
         eyebrow="ARR projection"
         title="Million-dollar figures, tagged as targets."
-        lede="A projection is not a booking. Do not cite these as revenue."
+        lede="These values are illustrative planning targets. They are not bookings, observed revenue, or a validated forecast."
       >
         <div className="mb-4">
           <ProvTag tag="target" />
@@ -107,7 +106,7 @@ function InvestorsPage() {
         </div>
       </Section>
 
-      <Section eyebrow="Founder" title="What is measured.">
+      <Section eyebrow="Founder" title="Source reports and proposed acceptance.">
         <ul className="space-y-3">
           {investor.founder.map((row) => (
             <li
@@ -124,7 +123,7 @@ function InvestorsPage() {
         primary={{ to: "/architecture", label: "Architecture" }}
         secondary={[
           { to: "/developers", label: "Developers" },
-          { to: "/skill-creator", label: "Master reference" },
+          { to: "/skill-creator", label: "Skill composer" },
         ]}
         next={[
           { to: "/console", label: "Console", body: "Sign in and keep a node-level observation." },

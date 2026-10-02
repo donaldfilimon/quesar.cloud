@@ -51,16 +51,16 @@ describe("research topics and sources", () => {
 
   it("keep the rendered copy of the shared sentences", () => {
     expect(researchTopics.find((t) => t.title === "Retrieval")?.body).toBe(
-      "Ordered vector search and hybrid ranking contracts exist. Collapsing semantic, temporal, causal, and persona signals into one score is a documented limitation.",
+      "WDBX implements exact and layered-HNSW retrieval with a pluggable scoring seam; evidence-weighted retrieval remains unimplemented.",
     );
     expect(researchTopics.find((t) => t.title === "Provenance and trust")?.body).toBe(
-      "Signatures and causal history answer why a record is trusted. They do not make the record true. Federation evidence is separately authorized.",
+      "Content addressing, signatures, and causal history expose record commitments and relationships. They do not establish the truth or evidential reliability of a record. Federation evidence is separately authorized.",
     );
     expect(architectureNodes.find((n) => n.id === "embed")?.detail).toBe(
-      "Ordered vector search and hybrid ranking contracts exist. Collapsing every signal into one score is a documented limitation.",
+      "WDBX implements exact and layered-HNSW retrieval with a pluggable scoring seam; evidence-weighted retrieval remains unimplemented.",
     );
     expect(architectureNodes.find((n) => n.id === "provenance")?.detail).toBe(
-      "Signatures and causal history answer why a record is trusted. They do not make the record true.",
+      "Content addressing, signatures, and causal history expose record commitments and relationships. They do not establish the truth or evidential reliability of a record.",
     );
   });
 });

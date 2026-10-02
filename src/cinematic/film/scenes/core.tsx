@@ -25,9 +25,9 @@ const TOKEN_STARTS: readonly number[] = QUERY_TOKENS.map((_, i) =>
   QUERY_TOKENS.slice(0, i).reduce((n, tok) => n + tok.t.length, 0),
 );
 const ROUTE_PERSONAS = [
-  { name: "Abbey", role: "Analytical · supportive", w: 0.62, accent: "#34d399" },
-  { name: "Aviva", role: "Creative · exploratory", w: 0.14, accent: "#a78bfa" },
-  { name: "Abi", role: "Concise · action", w: 0.24, accent: "#22d3ee" },
+  { name: "Abbey", role: "Conversational · empathetic", w: 0.62, accent: "#34d399" },
+  { name: "Aviva", role: "Direct · technical", w: 0.14, accent: "#a78bfa" },
+  { name: "Abi", role: "Orchestration · routing", w: 0.24, accent: "#22d3ee" },
 ];
 
 export function ScenePersonaRouting() {
@@ -83,7 +83,7 @@ export function ScenePersonaRouting() {
 
   return (
     <SceneBox>
-      <SceneTag index="03" label="Persona routing" reveal={head} />
+      <SceneTag index="03" label="Local persona routing" reveal={head} />
       <StatusBadge kind="current" x={120} y={150} reveal={badge} />
       <Orb x={1300} y={500} size={560} color={C.blue} opacity={0.1} />
 
@@ -107,7 +107,7 @@ export function ScenePersonaRouting() {
             marginBottom: 14,
           }}
         >
-          INCOMING QUERY
+          ILLUSTRATIVE QUERY / SCORES
         </div>
         <div
           style={{
@@ -136,7 +136,7 @@ export function ScenePersonaRouting() {
         h={router.h}
         reveal={routerIn}
         title="Router"
-        subtitle="weighted scoring"
+        subtitle="local keyword path"
         accent={C.cyan}
       />
 
@@ -303,7 +303,7 @@ export function ScenePersonaRouting() {
                   opacity: glow,
                 }}
               >
-                SELECTED
+                EXAMPLE
               </span>
             )}
           </div>
@@ -330,7 +330,8 @@ export function ScenePersonaRouting() {
             letterSpacing: "-0.01em",
           }}
         >
-          Routing that's <span style={{ color: C.cyan }}>deterministic, local, explainable.</span>
+          Local keyword routing.{" "}
+          <span style={{ color: C.cyan }}>Explicit selection can bypass scoring.</span>
         </div>
       </div>
     </SceneBox>
@@ -383,7 +384,7 @@ export function SceneVerifiableMemory() {
 
   return (
     <SceneBox>
-      <SceneTag index="04" label="Verifiable memory" reveal={head} />
+      <SceneTag index="04" label="Audit chain / integrity checks" reveal={head} />
       <StatusBadge kind="current" x={120} y={150} reveal={badge} />
       <Orb x={500} y={520} size={520} color={C.cyan} opacity={0.08} />
 
@@ -400,7 +401,7 @@ export function SceneVerifiableMemory() {
           color: C.dim2,
         }}
       >
-        SEMANTIC RECALL · HNSW
+        ILLUSTRATIVE VECTOR SEARCH
       </div>
       <DiagramSVG>
         {NN.map((idx, k) => {
@@ -485,8 +486,8 @@ export function SceneVerifiableMemory() {
           lineHeight: 1.4,
         }}
       >
-        Embeddings searched by SIMD cosine distance —{" "}
-        <span style={{ color: C.text }}>nearest memory, instantly.</span>
+        Vector similarity is a retrieval signal —{" "}
+        <span style={{ color: C.text }}>not a guarantee of relevant memory.</span>
       </div>
 
       <div
@@ -502,7 +503,7 @@ export function SceneVerifiableMemory() {
           color: C.dim2,
         }}
       >
-        SHA-256 LINKED HISTORY
+        SHA-256 LINKS · ILLUSTRATIVE BLOCKS
       </div>
       <DiagramSVG>
         {MEM_BLOCKS.slice(0, -1).map((_, i) => {
@@ -636,10 +637,10 @@ export function SceneVerifiableMemory() {
           <div
             style={{ fontFamily: FONT.mono, fontSize: 16, color: C.red, letterSpacing: "0.04em" }}
           >
-            ✕ ChecksumMismatch
+            ✕ Example hash mismatch
           </div>
           <div style={{ fontFamily: FONT.sans, fontSize: 15, color: C.dim, marginTop: 4 }}>
-            tamper rejected
+            illustrated integrity check
           </div>
         </div>
       )}
@@ -657,7 +658,7 @@ export function SceneVerifiableMemory() {
         <span
           style={{ fontFamily: FONT.mono, fontSize: 18, color: C.green, letterSpacing: "0.08em" }}
         >
-          verifyBlocks() ✓ chain intact
+          Link check ≠ content hash recomputation
         </span>
       </div>
       <div
@@ -674,8 +675,8 @@ export function SceneVerifiableMemory() {
           lineHeight: 1.4,
         }}
       >
-        Every exchange hashed into an append-only chain.{" "}
-        <span style={{ color: C.text }}>Tampering can't hide.</span>
+        Strict checks recompute stored block hashes.{" "}
+        <span style={{ color: C.text }}>Hash links are not signatures.</span>
       </div>
     </SceneBox>
   );

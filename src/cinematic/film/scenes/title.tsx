@@ -13,16 +13,24 @@ import type { ReactNode } from "react";
 function SceneBox({
   inDur = 0.8,
   outDur = 0.8,
+  hold = false,
   children,
 }: {
   inDur?: number;
   outDur?: number;
+  hold?: boolean;
   children: ReactNode;
 }) {
   const { localTime, duration } = useSprite();
   return (
     <div
-      style={{ position: "absolute", inset: 0, opacity: fade(localTime, duration, inDur, outDur) }}
+      style={{
+        position: "absolute",
+        inset: 0,
+        opacity: hold
+          ? step(localTime, 0, inDur, Easing.easeOutCubic)
+          : fade(localTime, duration, inDur, outDur),
+      }}
     >
       {children}
     </div>
@@ -224,7 +232,7 @@ export function SceneClose() {
   const tag = step(lt, 1.4, 0.9);
   const prod = step(lt, 2.6, 0.9);
   return (
-    <SceneBox inDur={0.9} outDur={1.2}>
+    <SceneBox inDur={0.9} hold>
       <Constellation lt={lt + 4} />
       <Orb x={960} y={520} size={620} color={C.blue} opacity={0.1} />
       <div

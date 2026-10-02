@@ -7,9 +7,10 @@ import type { ResearchSources, ResearchTopics } from "../schemas-research-topics
  * copy from these so the shared wording cannot drift apart.
  */
 export const sharedResearchCopy = {
-  retrieval: "Ordered vector search and hybrid ranking contracts exist.",
+  retrieval:
+    "WDBX implements exact and layered-HNSW retrieval with a pluggable scoring seam; evidence-weighted retrieval remains unimplemented.",
   provenance:
-    "Signatures and causal history answer why a record is trusted. They do not make the record true.",
+    "Content addressing, signatures, and causal history expose record commitments and relationships. They do not establish the truth or evidential reliability of a record.",
 } as const;
 
 /**
@@ -31,7 +32,7 @@ export const researchTopics: ResearchTopics = [
     title: "Retrieval",
     status: "partial",
     applies: "WDBX",
-    body: `${sharedResearchCopy.retrieval} Collapsing semantic, temporal, causal, and persona signals into one score is a documented limitation.`,
+    body: sharedResearchCopy.retrieval,
     trackIds: ["wdbx"],
   },
   {
@@ -45,14 +46,14 @@ export const researchTopics: ResearchTopics = [
     title: "Model orchestration",
     status: "partial",
     applies: "ABI",
-    body: "Scheduler, plugins, MCP, exact model registry. Routing is explicit. Quality is not inferred from a successful template completion.",
+    body: "Deterministic persona routing, template completion, and source-defined MCP tools. Model execution and quality require separate evidence from the selected runtime path.",
     trackIds: ["ai"],
   },
   {
-    title: "Privacy and local inference",
-    status: "current",
+    title: "Privacy and provider boundaries",
+    status: "partial",
     applies: "Quesar, Abbey, ABI",
-    body: "Default posture is operator-owned machines. Remote is optional. This website does not see your documents, weights, or generated output.",
+    body: "Browser workspace documents and vault notes use localStorage. Configured website model requests and Quasar generation have separate provider and data boundaries.",
     trackIds: [],
   },
   {
@@ -66,14 +67,14 @@ export const researchTopics: ResearchTopics = [
     title: "Synchronization",
     status: "planned",
     applies: "Quesar, mobile",
-    body: "Mobile CloudKit and encrypted-local fallback are distinct. Signed-device acceptance is not the same as a web export.",
+    body: "Synchronization requires separate implementation and signed-device qualification. The browser vault uses localStorage; the native CloudKit availability plugin does not implement vault synchronization.",
     trackIds: [],
   },
   {
     title: "Interoperability",
     status: "research",
     applies: "Quesar",
-    body: "Workspaces, crates, and apps share a type vocabulary for product, persona, and claim provenance. Semantic UI tokens remain app-local.",
+    body: "Research scope: consistent product, persona, and claim-provenance vocabularies across integrations, with implementation and UI semantics evaluated separately.",
     trackIds: [],
   },
 ];
@@ -82,7 +83,7 @@ export const researchSources: ResearchSources = [
   {
     title: "ABI",
     href: "/abi",
-    body: "Nightly Rust tree, wrappers, MCP, claim-honest GPU reporting.",
+    body: "Nightly Rust source, CLI wrappers, deterministic persona routing, and MCP tools.",
     subject: "abi",
   },
   {
@@ -94,7 +95,7 @@ export const researchSources: ResearchSources = [
   {
     title: "Abbey claims",
     href: "/abbey",
-    body: "Companion interface with enumerated Current / Partial / Proposed / Blocked / Out of scope.",
+    body: "Source capability ledger with enumerated Current / Partial / Proposed / Blocked / Out of scope states.",
     subject: "abbey",
   },
   {
@@ -105,7 +106,7 @@ export const researchSources: ResearchSources = [
   {
     title: "Mobile companion",
     href: "/mobile",
-    body: "Expo SDK 53. Native CloudKit is distinct from this web vault.",
+    body: "Browser vault preview and separate Capacitor source with CloudKit availability checks.",
     subject: "mobile",
   },
   {
@@ -117,7 +118,7 @@ export const researchSources: ResearchSources = [
   {
     title: "skill-creator",
     href: "/skill-creator",
-    body: "Public skill for site integrity: Apple sentence, provenance tags, Apache-2.0, toolchain facts.",
+    body: "Browser SKILL.md composer and this site's integrity rules.",
     subject: "skill-creator",
   },
   {

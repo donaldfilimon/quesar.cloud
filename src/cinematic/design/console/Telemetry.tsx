@@ -1,3 +1,4 @@
+import { sceneRandom } from "../../film/capture";
 /* WDBX Telemetry — arc gauges, sparkline streams, shard health.
    Simulated / illustrative live data. Adapted from the brand's lab. */
 import { useEffect, useRef, useState } from "react";
@@ -162,10 +163,10 @@ const SHARD_COLORS: Record<ShardState, string> = {
 export function Telemetry() {
   const [g, setG] = useState<Gauges>({ thru: 78, p99: 9.4, recall: 94.6, mem: 1.48 });
   const [thruHist, setThruHist] = useState<number[]>(() =>
-    Array.from({ length: 30 }, () => 76 + Math.random() * 8),
+    Array.from({ length: 30 }, sceneRandom("throughput-history")).map((n) => 76 + n * 8),
   );
   const [latHist, setLatHist] = useState<number[]>(() =>
-    Array.from({ length: 30 }, () => 8 + Math.random() * 3),
+    Array.from({ length: 30 }, sceneRandom("latency-history")).map((n) => 8 + n * 3),
   );
   const [shards, setShards] = useState<ShardState[]>(() =>
     Array.from({ length: 12 }, (): ShardState => "ok"),
@@ -175,20 +176,22 @@ export function Telemetry() {
   useEffect(() => {
     const el = rootRef.current;
     if (!el) return;
+    const random = sceneRandom("telemetry");
     return attachIntervalGate(
       el,
       () => {
+        const noise = Array.from({ length: 18 }, random);
         setG((p) => ({
-          thru: Math.max(60, Math.min(96, p.thru + (Math.random() - 0.5) * 7)),
-          p99: Math.max(6, Math.min(16, p.p99 + (Math.random() - 0.5) * 1.6)),
-          recall: Math.max(91, Math.min(97, p.recall + (Math.random() - 0.5) * 0.8)),
-          mem: Math.max(1.2, Math.min(1.9, p.mem + (Math.random() - 0.5) * 0.08)),
+          thru: Math.max(60, Math.min(96, p.thru + (noise[0]! - 0.5) * 7)),
+          p99: Math.max(6, Math.min(16, p.p99 + (noise[1]! - 0.5) * 1.6)),
+          recall: Math.max(91, Math.min(97, p.recall + (noise[2]! - 0.5) * 0.8)),
+          mem: Math.max(1.2, Math.min(1.9, p.mem + (noise[3]! - 0.5) * 0.08)),
         }));
-        setThruHist((h) => [...h.slice(1), 70 + Math.random() * 22]);
-        setLatHist((h) => [...h.slice(1), 7 + Math.random() * 6]);
+        setThruHist((h) => [...h.slice(1), 70 + noise[4]! * 22]);
+        setLatHist((h) => [...h.slice(1), 7 + noise[5]! * 6]);
         setShards((s) =>
-          s.map((): ShardState => {
-            const r = Math.random();
+          s.map((_, i): ShardState => {
+            const r = noise[6 + i]!;
             return r > 0.97 ? "warn" : r > 0.995 ? "down" : "ok";
           }),
         );
@@ -232,7 +235,7 @@ export function Telemetry() {
             />
           </span>
           <span style={{ fontFamily: "var(--font-mono)", fontSize: 14, color: "var(--text)" }}>
-            wdbx-prod-01
+            sample-host-01
           </span>
           <span
             style={{
@@ -249,7 +252,7 @@ export function Telemetry() {
           </span>
         </div>
         <span style={{ fontFamily: "var(--font-mono)", fontSize: 12, color: "var(--text-faint)" }}>
-          live · 900ms tick
+          simulated · 900ms animation
         </span>
       </div>
       <div
@@ -294,7 +297,7 @@ export function Telemetry() {
       </div>
       <div>
         <div style={{ color: "var(--text-dim)", fontSize: 12, fontWeight: 500, marginBottom: 8 }}>
-          shard health · 12 nodes
+          illustrative node health · 12 sample nodes
         </div>
         <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
           {shards.map((s, i) => {

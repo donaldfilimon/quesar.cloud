@@ -1,0 +1,9 @@
+# Quasar actual provider preflight — 2026-10-02
+
+Read actual sidecar src/index.ts and engine.ts, installedAnthropicSDK0.129client.ts. Runtime uses newAnthropic(), directSDKtoolrunner modelclaude-opus-5/adaptivethinking/stream/max_tokens64000. SDK automaticallyresolvesconfig/environmentcredentialsonthefirstrequest; absentrootANTHROPIC_API_KEYaloneisnotproofunconfigured. No broadcredentialfileinspection wasperformed.
+
+Rootmade two bounded actualSDKrequests in sidecardirectory usingexisting dependency anddefaultcredentialresolution, timeout15000ms,maxRetries0,logLeveloff. Prompt only “Reply exactly QUESAR_PROVIDER_PROBE.” No tools/userdata/secrets orgeneratedprojectexecuted. Firstordinary12tokenrequest returnedBadRequestError400, noresponse/modelacceptance. Secondbetastream request matchedengine'sadaptive/streamcontract(max_tokens1024), returnedBadRequestError400,errorTypeinvalid_request_error; sanitizedcategorymatches billing/credit/balance. Onlycategory/type/statuswerelogged; no rawresponse, credentials oraccountamounts.
+
+Bothshellcommands exited0 becauseerrorswerecaughtasstructuredreceipts; provideroperationsFAILED. This proves actualproviderrefusalviaSDKpath, not successfulgeneration/edit/liveprovideracceptance. Do notmislabelas credentialabsence orauthenticatedgenerationPASS. Billing/credit-balance refusal requiresoperatoraction; no purchase/billingchangesattempted. Livegenerationacceptance remainsBlocked. Reattemptonlyafterproviderstatechanges; no repeatedunchangedprobes.
+
+Separate sourcepreflight foundno cancellation/Abort or startuprecovery path inservice server/index. BackendgenerationlifecycleTask2continuationmustimplementboundedcancellation+restart-terminalrecovery, independentfixtures andactualgeneration/edit/previewqualificationwhenproviderworks. ExistingsecurityTask2approvaldoesnotaccepttheseunfinishedgenerationrequirements.

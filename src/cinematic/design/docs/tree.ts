@@ -15,7 +15,7 @@ export const TREE: readonly TreeGroup[] = [
       ["hnsw", "HNSW parameters"],
     ],
   ],
-  ["ABI · Personas", [["personas", "Three minds, one system"]]],
+  ["ABI · Personas", [["personas", "Three profiles, one system"]]],
 ];
 
 export const FLAT: readonly TreeLeaf[] = TREE.flatMap(([, items]) => items);

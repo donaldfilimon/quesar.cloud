@@ -3,15 +3,13 @@ import { site } from "@/lib/site-identity";
 import type { About } from "../schemas";
 
 /**
- * The company on paper, stated once. `companyFacts` below and
- * `investor.entity` (`./investor`) are built from it; the legal name is
- * `site.legal`, so the company page and investor notes cannot disagree.
+ * Brand and proposed business model, stated once. The historical `legalName`
+ * field is retained for consumers; its value is a brand, not registration evidence.
  */
 export const companyIdentity = {
-  legalName: site.legal,
-  entity: "Delaware C-Corp",
-  location: "Orlando, FL",
-  model: "SDK licensing + integration services",
+  legalName: site.company,
+  entity: "Founder-led AI engineering",
+  model: "Proposed SDK licensing + integration services",
 } as const;
 
 export const about: About = {
@@ -19,32 +17,32 @@ export const about: About = {
     {
       title: "Safety Before Scale",
       description:
-        "We design autonomy around bounded execution, explicit approvals, and measurable failure modes before expanding capability or throughput.",
+        "Our proposed engineering approach starts with bounded execution, explicit approvals, and failure criteria before expanding capability or throughput.",
     },
     {
       title: "Observable Reasoning",
       description:
-        "Every orchestration layer is built to expose provenance, retrieval context, decision checkpoints, and the operator actions that changed state.",
+        "We aim to expose provenance, retrieval context, decision checkpoints, and the operator actions that changed state. Each implementation needs its own evidence.",
     },
     {
       title: "Performance With Proof",
       description:
-        "Latency, recall quality, and GPU utilization are benchmarked against repeatable workloads instead of optimistic demos or synthetic-only claims.",
+        "Our evidence policy requires workload and environment notes for latency, recall, and GPU figures, and a reproduction record before calling them measured.",
     },
     {
       title: "Private Deployment Paths",
       description:
-        "Architectures are shaped for on-premise, VPC, hybrid, and edge deployments where data residency and auditability cannot be compromised.",
+        "Proposed deployment work starts by agreeing the data boundary and evaluating on-premise, VPC, hybrid, or edge requirements.",
     },
     {
       title: "Human-Centered Control",
       description:
-        "Quesar systems keep escalation, review, and override flows visible so subject-matter experts remain in control of critical outcomes.",
+        "We propose visible escalation, review, and override flows, with acceptance criteria agreed by the people responsible for the system.",
     },
     {
       title: "Research-To-Runtime Discipline",
       description:
-        "Novel techniques are packaged with integration notes, safety constraints, and operational guidance so research can survive production pressure.",
+        "Research translation engagements propose integration notes, constraints, and operational guidance; a prototype needs separate release acceptance.",
     },
   ],
   operatingPrinciples: [
@@ -54,37 +52,32 @@ export const about: About = {
     "No deployment plan that ignores rollback, incident review, and human escalation.",
   ],
 
-  // The company on paper — registration-level facts, not measurements, which is
-  // why they render through `SpecList` (configuration facts) rather than a
-  // provenance-tagged `StatBlock`. Ported from the design handoff's Company page.
+  // Brand and source orientation. Registration and location require separate evidence.
   companyFacts: [
-    { k: "Legal name", v: companyIdentity.legalName },
-    { k: "Entity", v: companyIdentity.entity },
-    { k: "Location", v: companyIdentity.location },
+    { k: "Brand", v: companyIdentity.legalName },
+    { k: "Focus", v: companyIdentity.entity },
     // Rust runtime (ABI, WDBX), Swift companions, TypeScript sites. Zig is
     // founder research only (integrityRules "Toolchain facts").
     { k: "Languages", v: "Rust, Swift, TypeScript" },
     { k: "Model", v: companyIdentity.model },
   ],
 
-  // Positioning thesis — three claim-free cards on why on-device wins, ported
-  // verbatim from the design handoff's Investors page. Deliberately carries no
-  // figures; any number here would need a provenance tag and a repo artifact.
+  // Proposed evaluation questions, not legal, device-adoption, or cost findings.
   investorThesis: [
     {
-      title: "Privacy is becoming law",
+      title: "Define the data boundary",
       description:
-        "Regulated industries increasingly cannot send corpora to third-party clouds. On-device is the compliance story, not a feature.",
+        "Evaluate where a workload may run, which data may leave the operator's environment, and which obligations need separate legal review.",
     },
     {
-      title: "The silicon is already shipped",
+      title: "Evaluate available hardware",
       description:
-        "Apple Silicon's unified memory and Neural Engine sit idle in hundreds of millions of devices. We write the software that spends them.",
+        "Inspect the target device, runtime support, and workload before proposing local inference or acceleration.",
     },
     {
-      title: "Zero marginal cloud cost",
+      title: "Measure the full operating cost",
       description:
-        "Local-first inference and storage carry no per-query COGS. Unit economics improve with adoption instead of degrading.",
+        "Compare hardware, energy, maintenance, and provider costs using an agreed workload; local execution alone does not establish unit economics.",
     },
   ],
 };

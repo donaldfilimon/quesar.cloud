@@ -1,3 +1,4 @@
+import { sceneRandom, isCapture } from "../../film/capture";
 /* GalaxyCanvas — the signature MLAI embedding-galaxy background.
    Three persona-colored lobes (Abbey emerald / Aviva violet / Abi cyan)
    rotating slowly in a near-black void, with aura rings, a breathing core,
@@ -36,13 +37,14 @@ interface Projected {
 }
 
 function sphere(n: number, clustered: boolean): Particle[] {
+  const random = sceneRandom("sphere");
   return Array.from({ length: n }, () => {
-    const ci = Math.floor(Math.random() * 3);
-    const u = Math.random();
-    const v = Math.random();
+    const ci = Math.floor(random() * 3);
+    const u = random();
+    const v = random();
     const th = u * Math.PI * 2;
     const ph = Math.acos(2 * v - 1);
-    const r = 0.55 + Math.random() * 0.45;
+    const r = 0.55 + random() * 0.45;
     let x = r * Math.sin(ph) * Math.cos(th);
     let y = r * Math.cos(ph);
     let z = r * Math.sin(ph) * Math.sin(th);
@@ -73,6 +75,7 @@ export default function GalaxyCanvas({ speed = 1, glow = 1, chain = true }: Gala
   const ptr = useRef({ tx: 0, ty: 0, x: 0, y: 0 });
 
   useEffect(() => {
+    if (isCapture()) return;
     const onMove = (e: PointerEvent) => {
       ptr.current.tx = (e.clientX / innerWidth - 0.5) * 2;
       ptr.current.ty = (e.clientY / innerHeight - 0.5) * 2;
@@ -82,6 +85,7 @@ export default function GalaxyCanvas({ speed = 1, glow = 1, chain = true }: Gala
   }, []);
 
   useEffect(() => {
+    const random = sceneRandom("marketing");
     const c = ref.current;
     if (!c) return;
     const x = c.getContext("2d");
@@ -102,11 +106,11 @@ export default function GalaxyCanvas({ speed = 1, glow = 1, chain = true }: Gala
       cloud = sphere(Math.min(640, Math.floor((w * h) / 5200)), true);
       lat = sphere(42, false);
       dust = Array.from({ length: Math.floor((w * h) / 14000) }, () => ({
-        x: Math.random() * w,
-        y: Math.random() * h,
-        r: Math.random() * 1.1 + 0.3,
-        p: Math.random() * 6.28,
-        vy: 0.04 + Math.random() * 0.08,
+        x: random() * w,
+        y: random() * h,
+        r: random() * 1.1 + 0.3,
+        p: random() * 6.28,
+        vy: 0.04 + random() * 0.08,
       }));
     };
 
@@ -152,11 +156,23 @@ export default function GalaxyCanvas({ speed = 1, glow = 1, chain = true }: Gala
 
     const PERIOD = 8000 / speed;
 
-    const draw = (now: number) => {
-      const loop = (now % PERIOD) / PERIOD;
+    const advance = () => {
       const P = ptr.current;
       P.x += (P.tx - P.x) * 0.05;
       P.y += (P.ty - P.y) * 0.05;
+      for (const d of dust) {
+        d.y -= d.vy;
+        if (d.y < -2) {
+          d.y = h + 2;
+          d.x = random() * w;
+        }
+      }
+    };
+
+    const draw = (now: number) => {
+      advance();
+      const loop = (now % PERIOD) / PERIOD;
+      const P = ptr.current;
       const ox = P.x * 24;
       const oy = P.y * 16;
       const breath = 1 + 0.04 * Math.sin(loop * Math.PI * 2);
@@ -176,11 +192,6 @@ export default function GalaxyCanvas({ speed = 1, glow = 1, chain = true }: Gala
       ctx.globalCompositeOperation = "lighter";
 
       for (const d of dust) {
-        d.y -= d.vy;
-        if (d.y < -2) {
-          d.y = h + 2;
-          d.x = Math.random() * w;
-        }
         const a = (0.16 + 0.22 * Math.sin(now * 0.001 + d.p)) * glow;
         ctx.fillStyle = `rgba(150,190,230,${a})`;
         ctx.beginPath();
@@ -305,7 +316,7 @@ export default function GalaxyCanvas({ speed = 1, glow = 1, chain = true }: Gala
       ctx.globalCompositeOperation = "source-over";
     };
 
-    const gate = attachFrameGate(c, draw);
+    const gate = attachFrameGate(c, draw, { advance });
     return () => {
       gate.dispose();
       removeEventListener("resize", rs);

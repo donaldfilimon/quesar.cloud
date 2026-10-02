@@ -25,6 +25,7 @@ export interface ServerDeps {
   publicOrigin?: string;
   previewDomain?: string;
   allowNetwork?: boolean;
+  allocatePreviewPort?: (taken: (number | null)[]) => number | Promise<number>;
 }
 
 const CORS_HEADERS: Record<string, string> = { "Cache-Control": "no-store" };
@@ -290,7 +291,7 @@ export function createServer(deps: ServerDeps) {
       if (idx === -1) return { ok: false, response: notFound() };
 
       const takenPorts = sites.filter((s) => s.id !== id).map((s) => s.previewPort);
-      const port = allocatePort(takenPorts);
+      const port = await (deps.allocatePreviewPort ?? allocatePort)(takenPorts);
 
       sites[idx] = { ...sites[idx], previewPort: port };
       await writeRegistry(registryFile, sites);
@@ -300,6 +301,7 @@ export function createServer(deps: ServerDeps) {
 
     if (!reserved.ok) return reserved.response;
 
+    deps.preview.invalidate(id);
     proxy.revoke(id);
     await deps.preview.start(id, siteDirFor(reserved.slug), reserved.port);
     return json(externalStatus(id, serviceOrigin));
@@ -308,6 +310,7 @@ export function createServer(deps: ServerDeps) {
   async function previewStop(id: string): Promise<Response> {
     const sites = await readRegistry(registryFile);
     if (!sites.some((s) => s.id === id)) return notFound();
+    deps.preview.invalidate(id);
     proxy.revoke(id);
     await deps.preview.stop(id);
     return json(deps.preview.status(id));
@@ -318,6 +321,7 @@ export function createServer(deps: ServerDeps) {
     const idx = sites.findIndex((s) => s.id === id);
     if (idx === -1) return notFound();
 
+    deps.preview.invalidate(id);
     proxy.revoke(id);
     await deps.preview.stop(id);
     await rm(siteDirFor(sites[idx].slug), { recursive: true, force: true }).catch(() => {});
@@ -373,13 +377,14 @@ export function createServer(deps: ServerDeps) {
     }
 
     if (parts.length === 5 && parts[3] === "preview" && parts[4] === "ticket" && method === "POST") {
-      if (!deps.preview.transport(id)) return json({ error: "preview not running" }, { status: 409 });
+      const transport = deps.preview.transport(id);
+      if (!transport) return json({ error: "preview not running" }, { status: 409 });
       const origin = req.headers.get("origin");
       if (!origin || !allowedOrigins.has(origin)) return json({ error: "trusted browser origin required" }, { status: 403 });
       let target: string;
       try { target = previewOrigin(serviceOrigin, id, deps.previewDomain); }
       catch { return json({ error: "Preview origin not configured: remote previews require HTTPS and QUASAR_PREVIEW_DOMAIN with wildcard DNS/TLS" }, { status: 503 }); }
-      return json({ ticket: proxy.sessions.issue(id, origin), action: `${target}/preview/${encodeURIComponent(id)}/launch` });
+      return json({ ticket: proxy.sessions.issue(id, origin, transport.generation), action: `${target}/preview/${encodeURIComponent(id)}/launch` });
     }
     if (parts.length === 5 && parts[3] === "preview" && ["start", "stop"].includes(parts[4]!) && method !== "POST") return json({ error: "method not allowed" }, { status: 405 });
     if (parts.length === 5 && parts[3] === "preview" && parts[4] === "start" && method === "POST") {

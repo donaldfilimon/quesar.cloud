@@ -1,10 +1,10 @@
 // narration.tsx — Abbey / Aviva / Abi voiceover for the brand film.
 //
 // Ported from the design bundle's narration.jsx into a typed, self-contained
-// React module. Three "minds" host the film, synced to the timeline:
-//   · Abbey  — empathic polymath (proof / verified)   · green
-//   · Aviva  — research / vision                       · violet
-//   · Abi    — adaptive router (interactive / fast)    · cyan
+// React module. Three profiles host the film, synced to the timeline:
+//   · Abbey  — conversational and empathetic · green
+//   · Aviva  — direct and technical          · violet
+//   · Abi    — orchestration and routing     · cyan
 //
 // Speech is the on-device Kokoro model (neural-voice.ts); when it cannot run, or
 // the viewer plays without it, captions carry the words. No Web Speech fallback.
@@ -17,6 +17,7 @@ import { C, FONT, clamp, type PersonaKey } from "./tokens";
 import { SCRIPT, type ScriptLine } from "./narration-script";
 import { step, fade } from "./easing";
 import { useTimeline } from "./timeline-context";
+import { resolveNarrationSeek } from "./narration-seek";
 import {
   getSettings,
   lineSpeechDur,
@@ -44,7 +45,7 @@ const SPEAKERS: Record<
 
 function activeLine(time: number): ScriptLine | null {
   let cur: ScriptLine | null = null;
-  for (const l of SCRIPT) if (time >= l.t && time <= l.t + l.dur) cur = l;
+  for (const l of SCRIPT) if (time >= l.t && time < l.t + l.dur) cur = l;
   return cur;
 }
 
@@ -70,10 +71,10 @@ export function NarrationController() {
   useEffect(() => {
     const p = prev.current;
     prev.current = time;
-    if (time < p - 0.35) {
-      // seek / loop back
+    const pastCues = resolveNarrationSeek(p, time, SCRIPT, (line) => line.t);
+    if (pastCues) {
       stopSpeech();
-      spoken.current = new Set(SCRIPT.filter((l) => l.t <= time + 0.05).map((l) => l.t));
+      spoken.current = pastCues;
       return;
     }
     if (!playing) return;
@@ -245,7 +246,8 @@ export function VoiceToggle() {
   // Render into the Stage's unscaled root when there is one: inside the scaled
   // picture the toggle shrank with it (22×7 px at a 320 px viewport). Outside a
   // Stage it renders in place, as before.
-  const { chrome } = useTimeline();
+  const { chrome, capture } = useTimeline();
+  if (capture) return null;
   // Turning the voice on is a request for it, like Play: the model loads
   // then, never on an unrelated click.
   const toggle = () => {

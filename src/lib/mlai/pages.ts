@@ -28,19 +28,19 @@ export const homeBoundaries: readonly ({
 } & Status)[] = [
   {
     title: "Account-scoped access",
-    body: "Sign-in is Google, Apple, X, a passkey, or email and password, on Better Auth. Every server function runs behind the session middleware and scopes its queries by your user id. Admin rights need an allowlisted email and a linked Google or Apple account; an allowlisted email/password account is refused.",
+    body: "Protected console functions use Better Auth sessions and scope per-user records by user id. Admin access requires an allowlisted email and a linked Google or Apple account. Public inquiry and configuration functions have separate controls.",
     accent: "abi",
     status: "current",
   },
   {
     title: "One server-side model interface",
-    body: "Model calls go through one server interface: xAI, or Cloudflare AI Gateway to Gemini, chosen by configuration. Provider keys never reach the browser, your account email is not sent, and calls are rate-limited per user. With no provider configured the UI says so instead of inventing a reply.",
+    body: "Website model requests use a server-side interface configured for xAI or Cloudflare AI Gateway to Gemini. Console Chat checks provider availability and a per-user rate limit; the request builder does not automatically add account email. Provider and deployment acceptance require separate evidence.",
     accent: "abbey",
     status: "current",
   },
   {
     title: "Records you control",
-    body: "Data at rest is sealed with AES-256-GCM under APP_ENCRYPTION_KEY, bound to its owner and purpose. Without the key the feature refuses rather than storing plaintext. Console chat is consent-gated, and every exchange is stored as a sealed audit you can read, export and delete.",
+    body: "Conversation audits and workspace refresh tokens are sealed with AES-256-GCM under APP_ENCRYPTION_KEY, bound to their owner and purpose. Console Chat requires current audit consent and stores its sealed exchange before returning a reply. Contact inquiry fields are stored separately and are not covered by this application-level sealing.",
     accent: "wdbx",
     status: "current",
   },
@@ -50,31 +50,31 @@ export const homeRequestPath: readonly ({ n: string; title: string; body: string
   {
     n: "01",
     title: "Authenticate",
-    body: "A Better Auth session establishes who is asking. No session, no server function.",
+    body: "The protected console Chat function requires a Better Auth session and uses that user's id. This requirement does not apply to every public server function.",
     status: "current",
   },
   {
     n: "02",
     title: "Consent",
-    body: "The current audit policy must be accepted before content leaves the application.",
+    body: "Console Chat requires acceptance of the current audit policy before its provider request. Other website features have their own data and permission boundaries.",
     status: "current",
   },
   {
     n: "03",
     title: "Generate",
-    body: "The configured provider answers through the server interface, rate-limited per user. User email is not sent.",
+    body: "Console Chat requires a configured provider and checks a per-user rate limit before generation. The server request does not automatically include account email.",
     status: "current",
   },
   {
     n: "04",
     title: "Encrypt",
-    body: "Prompt and response are sealed with AES-256-GCM, bound to the owner. No key, no seal: the request refuses.",
+    body: "Console Chat refuses without a valid audit-encryption key. Its prompt and reply are sealed with AES-256-GCM, bound to the audit owner.",
     status: "current",
   },
   {
     n: "05",
     title: "Commit",
-    body: "The sealed audit is written before the response returns. Fail closed.",
+    body: "Console Chat stores the sealed audit before returning a successful reply. If audit storage fails, the generated reply is withheld.",
     status: "current",
   },
 ];
@@ -82,11 +82,11 @@ export const homeRequestPath: readonly ({ n: string; title: string; body: string
 export const homeProductBoundary = [
   {
     title: "What it is",
-    body: "Quesar is the large model that trains and improves Abbey, Aviva, and the other assistants. This website does not host the model, run training, or host assistant sessions.",
+    body: "Quesar's available source surface is the experimental Quasar website builder: a browser client paired to a separately running operator-owned service. Generation uses a configured provider; live provider acceptance remains unverified.",
   },
   {
-    title: "What it is not",
-    body: "A consumer chatbot, a benchmark scoreboard, or a place for unaudited model output. It does not invent compliance certifications. Lab demos and evidence stay linked, not in the primary marketing path.",
+    title: "Separate acceptance boundaries",
+    body: "Builder source does not establish a trained Quesar foundation model, a hosted Abbey product session, compliance certification, or a performance result. The configured website console is a separate model-request path.",
   },
 ] as const;
 
@@ -115,30 +115,30 @@ export { wdbxFacts } from "./wdbx-facts";
 
 export const aboutWhoWeAre = {
   title: "Rooted in research. Driven by reliability.",
-  body: "MLAI Corporation emerged from the intersection of deep neural research and the critical need for structural AI reliability. We don't just build models; we build the foundational layers that allow models to operate safely in demanding environments.",
+  body: "MLAI is founder-led AI engineering work focused on assistant workflows, memory systems, and developer tools. Source references and implementation limits make the current work inspectable; proposed service engagements need project-specific acceptance criteria.",
   identity: [
-    "Established 2024 · Orlando, FL",
-    "WDBX weighted-backtrace architecture",
-    "Traceable retrieval and agent safety focus",
-    "Security claims tied to source",
+    "Founder-led AI engineering",
+    "ABI runtime source in Rust",
+    "WDBX memory and retrieval source",
+    "Security assertions tied to implementation scope",
   ],
 } as const;
 
 export const aboutMission = {
-  title: "Ensuring the safety of autonomous progress.",
-  body: "As AI systems transition from generative tools to autonomous agents, the margin for error disappears. Our mission is to provide the structural integrity required for this transition: the guardrails, backtrace engines, and orchestration layers that make autonomous intelligence a force for positive, predictable change.",
+  title: "Make assistant workflows inspectable.",
+  body: "Define the source, data boundary, tool permissions, and release evidence before expanding an assistant workflow. Research and prototypes require separate implementation and operational acceptance.",
   facts: [
-    { k: "Founded", v: "2024" },
-    { k: "Private-first patterns", v: "Local" },
-    { k: "Research network", v: "Global" },
+    { k: "Service scope", v: "Proposed" },
+    { k: "Deployment boundary", v: "Agreed per project" },
+    { k: "Evidence", v: "Source and qualification" },
   ],
 } as const;
 
 /* ------------------------------------------------------------------ Team */
 
 export const teamIntro = {
-  title: "The mind behind Quesar.",
-  lede: "Quesar is founder-led today. It is the large model that trains and improves Abbey, Aviva, and the other assistants. This website does not host the model.",
+  title: "The founder behind MLAI.",
+  lede: "Donald Filimon leads MLAI's source work on assistant workflows, memory systems, and developer tools. The experimental Quasar builder, ABI, WDBX, and Abbey have separate implementation and acceptance boundaries.",
   join: {
     title: "Join the mission",
     body: "We're always looking for exceptional minds in neural research and systems safety.",
@@ -591,17 +591,17 @@ export const showcaseVoice = {
 export const securitySections = [
   {
     title: "Deployment boundary",
-    body: "The site runs on Vercel as serverless functions with no filesystem writes at runtime. Durable data lives in Postgres at DATABASE_URL; without it the app falls back to in-memory PGLite, which does not survive a restart. Rate limits are stored in the database, because serverless instances share no memory.",
+    body: "The static preview has no server functions, authentication, or database. The source also supports a configured server deployment. DATABASE_URL selects durable Postgres; without it, in-memory PGLite does not survive a process restart. Rate-limit counters use the database.",
     status: "current",
   },
   {
     title: "Identity, provider, and sealing controls",
-    body: "Sessions are Better Auth. Sign-in is limited to Google, Apple, X, passkeys and email and password. Admin rights require an allowlisted email plus a linked Google or Apple account, and an allowlisted email/password account is refused. Model calls cross one server-side interface that never sends your account email. Data at rest is sealed with AES-256-GCM under APP_ENCRYPTION_KEY, and without the key sealed features refuse. These are implemented controls, not a certification claim.",
+    body: "Protected console functions use Better Auth sessions. Supported sign-in methods are offered according to configuration. Admin access requires an allowlisted email plus a linked Google or Apple account. Conversation audits and workspace refresh tokens use AES-256-GCM under APP_ENCRYPTION_KEY with owner and purpose binding; inquiry fields are not covered by that application-level sealing.",
     status: "current",
   },
   {
     title: "Conversation audits and admin review",
-    body: "Console chat requires consent to the current audit policy. Each exchange is sealed with AES-256-GCM, bound to its owner, before the reply returns, and kept for 365 days. You can list, read, export and delete your own audits. Admin decryption requires an allowlisted, provider-verified identity and a stated reason, and every access is logged.",
+    body: "Website model requests from Console Chat, the persona chat, the configured desk, and workspace Ask Abbey require current audit consent and audit encryption. Each successful exchange is sealed and stored before its reply returns. Audits have a 365-day expiry; automatic deletion requires the configured expiry endpoint and scheduler. Owners can list, read, export, and delete their audits. Admin audit review requires the admin decision and a stated reason, with access events recorded.",
     status: "current",
   },
   {
@@ -618,23 +618,23 @@ export const LEGAL_UPDATED = "September 22, 2026";
 export const privacyPolicy = [
   {
     title: "Data collection",
-    body: "This site collects what it needs to operate: a theme preference in your browser, and, if you sign in, your account (name, email, sessions) and the field notes you write in the console. Rate-limit counters key on your user id or on a keyed hash of your IP address; the raw IP is not stored.",
+    body: "The static preview stores browser preferences and local preview data. A configured server can store account data, field notes, chat consent and audits, inquiries, telemetry events, and workspace connection records according to the features used. These records have different storage and retention boundaries.",
   },
   {
     title: "Account and authentication data",
-    body: "Authentication is Better Auth: Google, Apple, X, a passkey, or email and password. Session tokens stay server-side in an HttpOnly cookie. Your account email is not sent to a model provider.",
+    body: "Protected account features use Better Auth. Supported social methods depend on configured credentials; passkey and email/password paths are defined in source. Server model-request builders do not automatically add your account email; content you submit may still contain identifying information.",
   },
   {
     title: "Model calls",
-    body: "When you are signed in and a provider is configured, persona replies and desk questions are sent to that provider (xAI, or Gemini through Cloudflare AI Gateway) to be answered. They are processed under the provider's own terms. With no provider configured, nothing is sent and the page says the model is not configured.",
+    body: "Console Chat, persona chat, configured desk requests, and workspace Ask Abbey can send submitted content to xAI or Gemini through Cloudflare AI Gateway, after the shared consent and audit checks. Desk requests include catalog excerpts. Workspace Ask Abbey sends the document title, its first 800 body characters, and your question; editing alone stays in this browser. An unconfigured desk answers from the catalog without a model call or conversation audit. Static preview functions do not call the website model server. The separate local Quasar service uses its own configured Anthropic provider.",
   },
   {
     title: "Security and retention",
-    body: "Data at rest that needs protection is sealed with AES-256-GCM under a server key and bound to its owner. Without the key those features refuse rather than store plaintext. Console chat is used only after you accept the current audit policy. Each exchange is stored as a sealed audit for 365 days, then deleted by a scheduled job. You can list, read, export and delete your own audits at any time. Administrators can open an audit only with a stated reason, and every access is logged.",
+    body: "Conversation audits and workspace refresh tokens are sealed with AES-256-GCM and bound to owner and purpose. The four website model surfaces refuse without audit encryption and current consent, and withhold a model reply if its audit cannot be stored. Audits have a 365-day expiry; automatic deletion requires the configured expiry endpoint and scheduler. Owners can inspect, export, and delete their audits. Contact inquiries are separate unsealed application fields.",
   },
   {
     title: "Inquiries, telemetry and connected sources",
-    body: "The contact form stores your name, email, and message so we can reply; it is rate-limited, and may use a Cloudflare Turnstile check. Page telemetry records only an event name and a known route path, with no user id or IP address, and is skipped when your browser sends Do Not Track or Global Privacy Control. If you connect Google Drive or Microsoft SharePoint, only a sealed refresh token and the connected account email are stored, with read-only metadata access; disconnecting deletes them.",
+    body: "On the static preview, contact requests an email draft and does not confirm delivery. The configured server can store inquiry name, email, project context, and message after its validation and rate-limit checks, with Turnstile when configured. Workspace connections store a sealed refresh token and connected account metadata. Disconnect and expiry behavior depend on the respective configured features.",
   },
   {
     title: "Deleting your account",
@@ -665,7 +665,7 @@ export const termsSections = [
   },
   {
     title: "Conversation audit consent",
-    body: "Console chat requires explicit consent to the displayed one-year encrypted-audit policy. You may withdraw consent for future chats, and you may inspect, export, or delete your live records. Withdrawal does not retroactively erase records you have not deleted, or provider processing already completed.",
+    body: "Console Chat, persona chat, configured desk requests, and workspace Ask Abbey require explicit consent to the current displayed audit policy. Consent is checked when a request is admitted. Withdrawal blocks future admissions; it does not cancel requests already admitted or sent, erase existing audits, or reverse provider processing. You may inspect, export, or delete your available audits.",
   },
   {
     title: "Limitation of liability",

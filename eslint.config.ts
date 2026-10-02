@@ -26,6 +26,7 @@ export default tseslint.config(
       // Session-plugin state (git-ignored by its own .gitignore). Flat config
       // does not read .gitignore, and it writes a timestamp file named `*.ts`.
       ".remember/**",
+      ".superpowers/**",
       // Agent worktrees (Claude Code workflows) are full checkouts with their
       // own node_modules; linting them multiplies the run time.
       ".claude/worktrees/**",

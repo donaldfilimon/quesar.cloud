@@ -149,7 +149,7 @@ describe("product journeys", () => {
     expect(abi).toContain("CUDA and Vulkan dispatch are not linked");
     expect(abi).not.toContain("production router uses a learned classifier");
     expect(productJourneys.find((product) => product.slug === "quasar")?.limitation).toContain(
-      "without authentication",
+      "requires pairing for API operations",
     );
   });
 
@@ -168,7 +168,7 @@ describe("product journeys", () => {
       expect(href).not.toMatch(/localhost|127\.0\.0\.1|\/login|\/console/);
     }
     expect(startJourneys.find((journey) => journey.id === "mobile")?.description).toContain(
-      "signed-device acceptance",
+      "signed-device sync remains unverified",
     );
   });
 });

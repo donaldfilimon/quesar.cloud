@@ -12,6 +12,8 @@ import {
   type ReactNode,
   type CSSProperties,
 } from "react";
+import { flushSync } from "react-dom";
+import { isCapture, frameTime, settleCapture, CAPTURE_SEED } from "./capture";
 import { advance, frameDelta } from "@/lib/trailer-engine";
 import { clamp } from "./easing";
 import {
@@ -23,6 +25,7 @@ import {
 } from "./timeline-context";
 import { REDUCED_MOTION_QUERY, prefersReducedMotion, resolveSeek } from "./engine-utils";
 import type { VoiceGate } from "./speech";
+import { Link } from "@tanstack/react-router";
 
 /** Live `prefers-reduced-motion`, so an OS change applies without a remount. */
 function useReducedMotion(): boolean {
@@ -73,7 +76,7 @@ export function Stage({
   height = 1080,
   duration = 10,
   background = "#040406",
-  loop = true,
+  loop = false,
   autoplay = true,
   persistKey = "animstage",
   voice,
@@ -90,9 +93,12 @@ export function Stage({
   voice?: VoiceGate;
   children: ReactNode;
 }) {
+  const capture = isCapture();
+  const [captureRevision, setCaptureRevision] = useState(0);
   const ready = voice?.ready ?? true;
   const reducedMotion = useReducedMotion();
   const [time, setTime] = useState<number>(() => {
+    if (capture) return 0;
     try {
       const v = parseFloat(localStorage.getItem(persistKey + ":t") || "0");
       return isFinite(v) ? clamp(v, 0, duration) : 0;
@@ -103,13 +109,14 @@ export function Stage({
   // Autoplay only when nothing needs a decision first: under reduced motion,
   // or before a narrated film's voice is loaded, the viewer presses Play.
   const [playing, setPlaying] = useState(
-    () => autoplay && !prefersReducedMotion() && (voice?.ready ?? true),
+    () => !capture && autoplay && !prefersReducedMotion() && (voice?.ready ?? true),
   );
   const [started, setStarted] = useState(playing);
   const [hoverTime, setHoverTime] = useState<number | null>(null);
   const [scale, setScale] = useState(1);
   const [chrome, setChrome] = useState<HTMLElement | null>(null);
   const stageRef = useRef<HTMLDivElement>(null);
+  const pictureHostRef = useRef<HTMLDivElement>(null);
   const stageRefCb = useCallback((el: HTMLDivElement | null) => {
     stageRef.current = el;
     setChrome(el);
@@ -128,6 +135,7 @@ export function Stage({
   // localStorage every frame is needless main-thread work. Save at most ~1/s and
   // flush the final position when the Stage unmounts (e.g. navigating away).
   useEffect(() => {
+    if (capture) return;
     const now = performance.now();
     if (now - lastSaveRef.current >= 1000) {
       lastSaveRef.current = now;
@@ -137,24 +145,25 @@ export function Stage({
         /* ignore */
       }
     }
-  }, [time, persistKey]);
+  }, [time, persistKey, capture]);
   useEffect(
     () => () => {
+      if (capture) return;
       try {
         localStorage.setItem(persistKey + ":t", String(timeRef.current));
       } catch {
         /* ignore */
       }
     },
-    [persistKey],
+    [persistKey, capture],
   );
 
   useEffect(() => {
-    const el = stageRef.current;
+    if (capture) return;
+    const el = pictureHostRef.current;
     if (!el) return;
     const measure = () => {
-      const barH = 60;
-      setScale(Math.max(0.05, Math.min(el.clientWidth / width, (el.clientHeight - barH) / height)));
+      setScale(Math.max(0, Math.min(el.clientWidth / width, el.clientHeight / height)));
     };
     measure();
     const ro = new ResizeObserver(measure);
@@ -164,16 +173,21 @@ export function Stage({
       ro.disconnect();
       window.removeEventListener("resize", measure);
     };
-  }, [width, height]);
+  }, [width, height, capture]);
 
   useEffect(() => {
     // Hold the clock until the voice is ready, so no line is crossed before the
     // model can speak it (autoplay stays armed; it simply doesn't advance yet).
-    if (!playing || !ready) {
+    if (capture || !playing || !ready) {
       lastTsRef.current = null;
       return;
     }
     const stepFrame = (ts: number) => {
+      if (pictureHostRef.current?.querySelector("[data-capture-pending]")) {
+        lastTsRef.current = null;
+        rafRef.current = requestAnimationFrame(stepFrame);
+        return;
+      }
       if (lastTsRef.current == null) lastTsRef.current = ts;
       // frameDelta clamps the step — see MAX_FRAME_DT in easing.ts for why a
       // backgrounded tab would otherwise jump the playhead by the time away.
@@ -192,7 +206,7 @@ export function Stage({
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
       lastTsRef.current = null;
     };
-  }, [playing, ready, duration, loop]);
+  }, [playing, ready, duration, loop, capture]);
 
   // Pause when the tab goes away. rAF stops in a background tab but the
   // AudioContext does not, so without this the narration keeps advancing
@@ -212,16 +226,20 @@ export function Stage({
   // viewer chooses to watch. Until it is ready the clock holds (above).
   const requestVoice = voice?.request;
   const play = useCallback(() => {
+    setHoverTime(null);
+    if (timeRef.current >= duration) setTime(0);
     if (!ready) requestVoice?.();
     setStarted(true);
     setPlaying(true);
-  }, [ready, requestVoice]);
+  }, [duration, ready, requestVoice]);
   const skipVoice = voice?.skip;
   const playWithoutVoice = useCallback(() => {
+    setHoverTime(null);
+    if (timeRef.current >= duration) setTime(0);
     skipVoice?.();
     setStarted(true);
     setPlaying(true);
-  }, [skipVoice]);
+  }, [duration, skipVoice]);
   const togglePlay = useCallback(() => {
     if (playing) setPlaying(false);
     else play();
@@ -238,6 +256,7 @@ export function Stage({
   );
 
   useEffect(() => {
+    if (capture) return;
     const onKey = (e: KeyboardEvent) => {
       const target = e.target as HTMLElement | null;
       const tag = target?.tagName;
@@ -266,7 +285,55 @@ export function Stage({
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [duration, seekTo, togglePlay]);
+  }, [duration, seekTo, togglePlay, capture]);
+
+  useEffect(() => {
+    if (!capture) return;
+    let busy = false;
+    const lifetime = new AbortController();
+    const api = {
+      fps: 30 as const,
+      duration,
+      seed: CAPTURE_SEED,
+      async renderFrame(frame: number) {
+        lifetime.signal.throwIfAborted();
+        if (busy) throw new Error("Concurrent capture frames are forbidden");
+        const next = frameTime(frame, duration);
+        if (
+          window.innerWidth !== 1920 ||
+          window.innerHeight !== 1080 ||
+          window.devicePixelRatio !== 1
+        )
+          throw new Error("Capture requires 1920x1080 at device scale 1");
+        busy = true;
+        try {
+          flushSync(() => {
+            setTime(next);
+            setCaptureRevision((value) => value + 1);
+          });
+          const root = stageRef.current;
+          if (!root) throw new Error("Capture Stage is unavailable");
+          await settleCapture(root, next, lifetime.signal);
+          lifetime.signal.throwIfAborted();
+          if (stageRef.current !== root || !root.isConnected)
+            throw new Error("Capture Stage generation changed before receipt");
+          return {
+            frame,
+            time: next,
+            board:
+              root.querySelector<HTMLElement>("[data-design-board]")?.dataset.designBoard ?? null,
+          };
+        } finally {
+          busy = false;
+        }
+      },
+    };
+    window.__filmCapture = api;
+    return () => {
+      lifetime.abort(new Error("Capture Stage was unmounted"));
+      if (window.__filmCapture === api) delete window.__filmCapture;
+    };
+  }, [capture, duration]);
 
   const displayTime = hoverTime != null ? hoverTime : time;
   const ctxValue = useMemo<TimelineValue>(
@@ -280,13 +347,16 @@ export function Stage({
       chrome,
       reducedMotion,
       scale,
+      capture,
     }),
-    [displayTime, time, duration, playing, chrome, reducedMotion, scale],
+    [displayTime, time, duration, playing, chrome, reducedMotion, scale, capture],
   );
 
   return (
     <div
       ref={stageRefCb}
+      data-film-stage=""
+      data-capture={capture || undefined}
       style={{
         position: "absolute",
         inset: 0,
@@ -297,7 +367,12 @@ export function Stage({
         fontFamily: "var(--font-sans)",
       }}
     >
+      {capture && (
+        <style>{`[data-capture] *, [data-capture] *::before, [data-capture] *::after { transition: none !important; animation-play-state: paused !important; caret-color: transparent !important; }`}</style>
+      )}
       <div
+        ref={pictureHostRef}
+        className="mlai-picture-host"
         style={{
           flex: 1,
           width: "100%",
@@ -309,6 +384,7 @@ export function Stage({
         }}
       >
         <div
+          className="mlai-picture"
           style={{
             width,
             height,
@@ -321,19 +397,42 @@ export function Stage({
             overflow: "hidden",
           }}
         >
-          <TimelineContext.Provider value={ctxValue}>{children}</TimelineContext.Provider>
+          <TimelineContext.Provider key={capture ? captureRevision : "player"} value={ctxValue}>
+            {children}
+          </TimelineContext.Provider>
         </div>
       </div>
-      <PlaybackBar
-        time={displayTime}
-        duration={duration}
-        playing={playing}
-        onPlayPause={togglePlay}
-        onReset={() => setTime(0)}
-        onSeek={seekTo}
-        onHover={(t) => setHoverTime(t)}
-      />
-      {!started ? (
+      {!capture && started && !playing && time >= duration ? (
+        <nav
+          aria-label="Explore after the film"
+          className="flex shrink-0 flex-wrap justify-center gap-x-6 bg-[#0a0a0a] px-4 py-2 text-sm text-[#67f6f1]"
+        >
+          <Link
+            to="/abbey"
+            className="inline-flex min-h-11 items-center rounded-sm px-2 focus-visible:outline-2 focus-visible:outline-offset-2"
+          >
+            Meet Abbey →
+          </Link>
+          <Link
+            to="/developers"
+            className="inline-flex min-h-11 items-center rounded-sm px-2 focus-visible:outline-2 focus-visible:outline-offset-2"
+          >
+            Build with MLAI →
+          </Link>
+        </nav>
+      ) : null}
+      {!capture && (
+        <PlaybackBar
+          time={displayTime}
+          duration={duration}
+          playing={playing}
+          onPlayPause={togglePlay}
+          onReset={() => seekTo(0)}
+          onSeek={seekTo}
+          onHover={(t) => setHoverTime(t)}
+        />
+      )}
+      {!capture && !started ? (
         <StageOverlay>
           <p style={{ fontSize: 20, fontFamily: "var(--font-display)", color: "#f6f4ef" }}>
             {voice && !ready ? "Narrated film" : "Film"}
@@ -358,7 +457,7 @@ export function Stage({
             ) : null}
           </div>
         </StageOverlay>
-      ) : !ready ? (
+      ) : !capture && !ready ? (
         <StageOverlay>
           <div role="status" style={{ display: "grid", gap: 10, justifyItems: "center" }}>
             <p style={{ fontSize: 15, color: "#f6f4ef" }}>Preparing the voice</p>

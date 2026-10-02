@@ -269,7 +269,7 @@ export function QuasarSiteDetail({ id }: { id: string }) {
               </span>
             </div>
             <p className="mt-1 text-xs text-fg-subtle">
-              Starting runs <span className="font-mono">next dev</span> for this site on the service
+              Starting runs a protected Next development preview for this site on the service
               machine and can take up to two minutes the first time.
             </p>
             <div className="mt-4 flex flex-wrap gap-3">

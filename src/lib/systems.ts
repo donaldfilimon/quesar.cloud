@@ -92,22 +92,16 @@ export const askDesk = createServerFn({ method: "POST" })
       text: localReply(data.desk, hits),
       hits,
     };
-    const { complete, status } = await import("@/lib/server/llm");
+    const { status } = await import("@/lib/server/llm");
     // Unconfigured: the desk answers from the catalog and says so (localReply names it).
     if (!status().configured) return local;
-    const { hit, LIMITS } = await import("@/lib/server/rate-limit.server");
-    if (!(await hit("llm", context.userId, LIMITS.llm)).allowed) {
-      return { ...local, text: `Rate limit reached for model calls. ${local.text}` };
-    }
+    const { runChat } = await import("@/lib/console.server");
     const catalog = hits.map((item) => `${item.title} (${item.href}): ${item.excerpt}`).join("\n");
-    const result = await complete({
-      maxTokens: 320,
-      messages: [
-        { role: "system", content: SYSTEM[data.desk] },
-        { role: "user", content: `Catalog hits:\n${catalog}\n\nOperator: ${data.prompt}` },
-      ],
-    });
-    if (!result.ok)
-      return { ...local, text: `The model call failed (${result.message}). ${local.text}` };
-    return { ok: true as const, mode: "model" as const, desk: data.desk, text: result.text, hits };
+    const result = await runChat(
+      context.userId,
+      [{ role: "user", content: `Catalog hits:\n${catalog}\n\nOperator: ${data.prompt}` }],
+      { systemPrompt: SYSTEM[data.desk], maxTokens: 320 },
+    );
+    if (!result.ok) return result;
+    return { ...result, mode: "model" as const, desk: data.desk, hits };
   });

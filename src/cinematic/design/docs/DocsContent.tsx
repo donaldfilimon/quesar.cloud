@@ -207,7 +207,7 @@ export function ParamTable({ rows }: { rows: readonly ParamRow[] }): ReactNode {
         }}
       >
         <span>Parameter</span>
-        <span>Default</span>
+        <span>Sample</span>
         <span>Description</span>
       </div>
       {rows.map((r, i) => (

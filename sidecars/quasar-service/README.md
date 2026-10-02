@@ -92,7 +92,9 @@ wildcard DNS/TLS and forward those hosts to the service while preserving Host.
 Remote launch fails closed without a valid suffix. Preview responses have no
 CORS grant; upgrades require the exact preview Origin and a current session.
 Stop, delete, restart and online unpair revoke preview sessions; live sockets
-close on revocation or expiry.
+close on revocation or expiry. Tickets, sessions and live transport checks are
+bound to one child generation, and teardown invalidates transport before
+awaiting child exit. Delayed requests cannot authorize a replacement child.
 
 Preview children bind 127.0.0.1 on ports 4710 and up, with a random per-child
 credential checked before every HTTP request and WebSocket upgrade. The runner

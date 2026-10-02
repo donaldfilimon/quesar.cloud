@@ -61,11 +61,11 @@ interface Layer {
 
 const LAYERS: Layer[] = [
   { name: "Storage", sub: "WAL · snapshot · CRC32", st: "partial" },
-  { name: "Index", sub: "HNSW · temporal · causal", st: "partial" },
-  { name: "Compute", sub: "SIMD · GPU fallback", st: "partial" },
-  { name: "Security", sub: "SHA-256 chain · checksum", st: "current" },
-  { name: "Cluster", sub: "Raft core · in-process", st: "partial" },
-  { name: "Transport", sub: "stdio · loopback HTTP/SSE", st: "partial" },
+  { name: "Retrieval", sub: "explicit paths · no automatic recall", st: "vision" },
+  { name: "Compute", sub: "CPU primitives · accelerator contracts", st: "partial" },
+  { name: "Integrity", sub: "link-only / strict content checks", st: "current" },
+  { name: "Fabric", sub: "distributed direction", st: "vision" },
+  { name: "Persistence", sub: "completion persistence via MCP", st: "partial" },
 ];
 const ST_COLOR: Record<LayerStatus, string> = {
   current: C.green,
@@ -220,7 +220,7 @@ export function Scene3() {
           <span
             style={{ fontFamily: FONT.mono, fontSize: 14, color: C.dim2, letterSpacing: "0.16em" }}
           >
-            cognitive substrate
+            source foundations
           </span>
         </div>
       </div>
@@ -310,7 +310,7 @@ export function Scene3() {
               <span
                 style={{ fontFamily: FONT.mono, fontSize: 12, letterSpacing: "0.12em", color: c }}
               >
-                {L.st.toUpperCase()}
+                {L.st === "vision" ? "VISION" : "SOURCE"}
               </span>
             </span>
           </div>
@@ -342,8 +342,8 @@ export function Scene3() {
         </div>
         {(
           [
-            ["current", "Backed by source + tests"],
-            ["partial", "Implemented, scope-limited"],
+            ["current", "Source inspection only"],
+            ["partial", "Runtime acceptance separate"],
           ] as [LayerStatus, string][]
         ).map(([k, d]) => (
           <div key={k} style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 14 }}>
@@ -365,7 +365,7 @@ export function Scene3() {
                 letterSpacing: "0.08em",
               }}
             >
-              {k.toUpperCase()}
+              {k === "current" ? "SOURCE" : "SCOPED"}
             </span>
             <span style={{ fontFamily: FONT.sans, fontSize: 15, color: C.dim }}>{d}</span>
           </div>
@@ -392,9 +392,9 @@ export function Scene3() {
             lineHeight: 1.1,
           }}
         >
-          One runtime.
+          Inspect the source.
           <br />
-          Six honest layers.
+          Six scoped foundations.
         </div>
       </div>
     </SceneBox>

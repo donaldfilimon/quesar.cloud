@@ -63,7 +63,7 @@ export function SiteHeader() {
               key={item.to}
               to={item.to}
               className={cn(linkClass, "text-fg-muted hover:text-fg data-[status=active]:text-fg")}
-              activeOptions={{ exact: item.to !== "/docs" && item.to !== "/apps" }}
+              activeOptions={{ exact: false }}
             >
               {item.label}
             </Link>

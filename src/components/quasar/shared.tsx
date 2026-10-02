@@ -112,18 +112,16 @@ export function ServiceUnreachable({
         sites to show.
       </p>
       <p>
-        Start it on the machine that should hold the sites. It needs Anthropic credentials, either{" "}
-        <span className="font-mono">ANTHROPIC_API_KEY</span> in its environment or a prior{" "}
-        <span className="font-mono">ant auth login</span>. It listens on port 4700 (
-        <span className="font-mono">PORT</span> overrides) and keeps sites under{" "}
-        <span className="font-mono">~/.quasar</span>.
+        Start it on the machine that should hold the sites. Generation requires the operator&apos;s
+        <span className="font-mono"> ANTHROPIC_API_KEY</span> environment variable. The service
+        listens on loopback port 4700 (<span className="font-mono">PORT</span> overrides) and keeps
+        sites under <span className="font-mono">~/.quasar</span>.
       </p>
-      <p>From the mlai checkout, today:</p>
-      <Command>{START_COMMANDS.mlai}</Command>
-      <p>From this repository, once the service moves into it:</p>
+      <p>From the canonical quesar.cloud checkout:</p>
       <Command>{START_COMMANDS.sidecar}</Command>
       <p>
-        If it runs on another machine, set its origin in{" "}
+        If it runs on another machine, configure its HTTPS endpoint and allowed browser origins,
+        then save its origin and pairing token in{" "}
         <Link to="/quasar/settings" className="text-accent">
           Settings
         </Link>

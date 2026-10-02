@@ -46,7 +46,7 @@ export const appSurfaces = [
     path: "/quesar",
     status: "experimental" as StatusKind,
     kicker: "Local builder",
-    body: "Prompt to a Next.js project. This page runs a browser studio so you can see the loop without leaving the site.",
+    body: "Experimental browser client for a paired operator-owned site-builder service. Generation requires a running service and configured provider; live provider acceptance remains separate.",
   },
   {
     id: "workspace",
@@ -54,7 +54,7 @@ export const appSurfaces = [
     path: "/workspace",
     status: "current" as StatusKind,
     kicker: "Documents",
-    body: "Local document workspace with assistant context. The shipping app runs on your machine; this page is the in-browser orientation of that loop.",
+    body: "Browser document preview that stores its documents in localStorage. The static preview cannot call a model; source setup and acceptance for a separate Abbey app require their own evidence.",
   },
   {
     id: "mobile",
@@ -62,7 +62,7 @@ export const appSurfaces = [
     path: "/mobile",
     status: "partial" as StatusKind,
     kicker: "Vault",
-    body: "Expo companion with a private vault. Native CloudKit is a signed iOS build. This page is the web vault.",
+    body: "Browser vault preview with notes stored in localStorage. Separate Capacitor CloudKit source exposes availability and account-status checks; native build and signed-device sync acceptance remain unverified.",
   },
   {
     id: "console",
@@ -70,7 +70,7 @@ export const appSurfaces = [
     path: "/console",
     status: "current" as StatusKind,
     kicker: "Notes",
-    body: "Signed-in notes on architecture nodes. Not an Abbey session.",
+    body: "Protected field-note and Chat surfaces in the configured server. Console Chat requires consent and a sealed audit; the static preview has no server console.",
   },
   {
     id: "abbey-bot",
@@ -78,7 +78,7 @@ export const appSurfaces = [
     path: "/abbey-bot",
     status: "partial" as StatusKind,
     kicker: "Companion",
-    body: "Companion bot surface for Abbey. Watch Abi route Abbey and Aviva in the browser.",
+    body: "Browser persona-routing illustration with an optional server model-request path. This page does not establish deployment acceptance for the separate bot.",
   },
   {
     id: "companion",
@@ -86,7 +86,7 @@ export const appSurfaces = [
     path: "/companion",
     status: "partial" as StatusKind,
     kicker: "macOS",
-    body: "Native SwiftUI companion for Abbey Bot. Local surface, not a hosted session.",
+    body: "Browser orientation of companion concepts. A native build and device qualification require separate source and acceptance evidence.",
   },
   {
     id: "skill-creator",
@@ -94,7 +94,7 @@ export const appSurfaces = [
     path: "/skill-creator",
     status: "current" as StatusKind,
     kicker: "Integrity",
-    body: "Public agent skill for shipping this site without breaking Apple framing, provenance, Apache-2.0, or toolchain facts.",
+    body: "Browser composer that previews a SKILL.md file and the site's integrity rules. External skill attribution and release acceptance require separate evidence.",
   },
   {
     id: "gama",
@@ -102,7 +102,7 @@ export const appSurfaces = [
     path: "/gama",
     status: "research" as StatusKind,
     kicker: "Founder",
-    body: "Declarative Swift UI framework. Founder-owned. Not a Quesar product claim.",
+    body: "Related Swift framework source. Inspect its package and source separately from Quesar product or deployment claims.",
   },
   {
     id: "plugins",
@@ -110,7 +110,7 @@ export const appSurfaces = [
     path: "/plugins",
     status: "partial" as StatusKind,
     kicker: "abi-mega",
-    body: "Skills, assets, and scripts consumed by ABI sync. Founder tooling, not a hosted marketplace.",
+    body: "Orientation to plugin and CLI concepts. ABI's plugin implementation has its own source; this page does not establish a hosted marketplace or synchronized installation.",
   },
   {
     id: "demo",
@@ -118,7 +118,7 @@ export const appSurfaces = [
     path: "/demo",
     status: "experimental" as StatusKind,
     kicker: "Router",
-    body: "Type a message and watch Abi score the blend coefficient α. Illustrative heuristic, not a trained classifier.",
+    body: "Browser keyword-scoring illustration of a persona blend coefficient. It provides no trained-classifier or model-quality evidence.",
   },
   {
     id: "cell-machine",
@@ -126,7 +126,7 @@ export const appSurfaces = [
     path: "/cell-machine",
     status: "research" as StatusKind,
     kicker: "Automaton",
-    body: "Cellular-automaton experiment. Playable here.",
+    body: "Interactive browser cellular automaton with run, pause, reseed, clear, and cell-edit controls. A research demo with separate acceptance from any product runtime.",
   },
 ] as const;
 
@@ -174,7 +174,7 @@ export const repoDocs: Record<
   },
   nyon: {
     title: "NYON",
-    lede: "Founder voxel-world experiment. Not a Quesar product surface.",
+    lede: "A deterministic Rust strategy game with a separate offline Galaxy Workshop sandbox. A related source project.",
     status: "research",
     language: "Rust",
     sections: [

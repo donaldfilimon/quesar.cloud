@@ -34,8 +34,8 @@ const INQUIRY_EMAIL = "partnerships@mlai-corp.com";
 export const Route = createFileRoute("/contact")({
   head: () =>
     pageHead(
-      "Contact — MLAI Corporation",
-      "Send an inquiry about Quesar, ABI, WDBX, Abbey, or services without leaving this site.",
+      "Contact — MLAI",
+      "Discuss an MLAI engineering scope. The static preview requests an email draft; a configured server can accept an inquiry through the form.",
     ),
   validateSearch: contactSearch,
   component: ContactPage,
@@ -186,7 +186,7 @@ function ContactPage() {
         title="Discuss your project."
         lede={
           staticSite
-            ? `This static preview has no server, so sending opens your email app addressed to ${INQUIRY_EMAIL}. A copy of what you wrote stays on this device as an email draft; delivery is unconfirmed. For architecture questions, the pages themselves are the public path.`
+            ? `This static preview has no server, so submitting requests an email draft addressed to ${INQUIRY_EMAIL}. A copy of what you wrote stays on this device as an email draft; delivery is unconfirmed. For architecture questions, the pages themselves are the public path.`
             : "The server accepts and stores your inquiry with this site; if you are signed in, it is linked to your account. A local receipt records acceptance by the site. For architecture questions, the pages themselves are the public path."
         }
       />
@@ -307,7 +307,7 @@ function ContactPage() {
               {status === "done" ? (
                 <p role="status" className="text-sm text-fg-muted">
                   {staticSite
-                    ? "Email draft opened. Delivery is unconfirmed."
+                    ? "Email draft requested. Delivery is unconfirmed."
                     : "Inquiry accepted by the site. A receipt is kept on this device."}
                 </p>
               ) : null}
@@ -332,7 +332,9 @@ function ContactPage() {
                   <Link to="/source" className="text-accent">
                     Source catalog
                   </Link>
-                  <p className="text-fg-muted">Every public tree, described on this site.</p>
+                  <p className="text-fg-muted">
+                    Selected repositories and source references, described on this site.
+                  </p>
                 </li>
                 <li>
                   <Link to="/apps" className="text-accent">
@@ -362,7 +364,11 @@ function ContactPage() {
         <div className="mt-10">
           <NextUp
             items={[
-              { to: "/developers", label: "Developers", body: "Full repository index and gates." },
+              {
+                to: "/developers",
+                label: "Developers",
+                body: "Repository catalog, source references, and setup gates.",
+              },
               {
                 to: "/services",
                 label: "Services",

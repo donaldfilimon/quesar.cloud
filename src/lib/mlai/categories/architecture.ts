@@ -24,7 +24,7 @@ export const layers = [
     layer: "Storage",
     href: "/wdbx",
     accent: "wdbx" as const,
-    body: "Episodic substrate: durable records, vector retrieval, causal history, inspectable evidence.",
+    body: "Episodic substrate: durable records, vector retrieval, causal history, and structural provenance.",
   },
   {
     id: "abi",
@@ -32,7 +32,7 @@ export const layers = [
     layer: "Compute",
     href: "/abi",
     accent: "abi" as const,
-    body: "Orchestration: routing, context assembly, tools, honest capability reporting.",
+    body: "Deterministic persona routing, template completion, and source-defined tools.",
   },
   {
     id: "abbey",
@@ -40,7 +40,7 @@ export const layers = [
     layer: "Application",
     href: "/abbey",
     accent: "abbey" as const,
-    body: "Companion experience: personas, claims ledger, local workspace.",
+    body: "Assistant source: persona profiles, capability ledger, and local CLI.",
   },
   {
     id: "quesar",
@@ -48,7 +48,7 @@ export const layers = [
     layer: "Product",
     href: "/quesar",
     accent: "accent" as const,
-    body: "The large model that trains and improves Abbey, Aviva, and the other assistants. Not hosted on this website.",
+    body: "Experimental local website builder: browser client, paired operator-owned service, and separately configured model provider.",
   },
 ] as const;
 
@@ -67,7 +67,7 @@ export const architectureNodes: ArchNode[] = [
     status: "current",
     summary: "Operator on a machine you own.",
     detail:
-      "A local workspace, CLI, companion, or this website issues a request. This site does not become the runtime.",
+      "Explore browser previews or send a request through a configured server or separately running local service. Each path has its own source and acceptance requirements.",
     implemented: ["Local orientation", "Signed-in field console", "In-browser app surfaces"],
     notClaimed: ["Hosted Abbey sessions", "Cloud-provisioned identity as the product"],
     href: "/apps",
@@ -76,12 +76,12 @@ export const architectureNodes: ArchNode[] = [
     id: "quesar",
     name: "Quesar",
     layer: "experience",
-    status: "partial",
-    summary: "The large model behind the assistants.",
+    status: "experimental",
+    summary: "A browser client for a local website builder.",
     detail:
-      "Quesar is the large model that trains and improves Abbey, Aviva, and the other assistants. Public orientation is current. This site does not host the model or an assistant session.",
-    implemented: ["Public site", "Architecture map", "Status language"],
-    notClaimed: ["A hosted Quesar HTTP API", "Client SDKs for third-party SaaS"],
+      "The /quasar screens connect to a separately running service through origin-scoped pairing. The service scaffolds Next.js projects and uses a configured provider for generation. Source implementation does not establish live provider acceptance.",
+    implemented: ["Browser client", "Service pairing", "Local project scaffold and preview"],
+    notClaimed: ["A trained Quesar foundation model", "Live provider generation acceptance"],
     href: "/quesar",
   },
   {
@@ -91,8 +91,8 @@ export const architectureNodes: ArchNode[] = [
     status: "current",
     summary: "Nightly Rust orchestration.",
     detail:
-      "Routes requests, assembles inspectable context, coordinates tools. Requires the sibling WDBX workspace.",
-    implemented: ["CLI wrappers", "MCP stdio", "Exact model registry"],
+      "Routes persona requests and exposes source-defined tools. Its source workspace requires WDBX.",
+    implemented: ["CLI wrappers", "MCP stdio", "Deterministic persona routing"],
     notClaimed: ["Foundation-model quality from template completion", "Zig tree (removed)"],
     href: "/abi",
   },
@@ -110,13 +110,13 @@ export const architectureNodes: ArchNode[] = [
   },
   {
     id: "router",
-    name: "Model router",
+    name: "Persona router",
     layer: "runtime",
     status: "partial",
-    summary: "Exact registry, explicit device.",
+    summary: "Deterministic persona routing.",
     detail:
-      "An exact registry model and device are selected. Routing is a trace event, not a guess.",
-    implemented: ["Deterministic local routing", "Persona blend coefficient (design)"],
+      "ABI's local routing source selects persona profiles with deterministic rules. Local completion renders persona templates; this does not establish model execution or device selection.",
+    implemented: ["Deterministic local routing", "Local persona-template completion"],
     notClaimed: ["A trained classifier as product evidence", "Guaranteed multi-provider SLA"],
     href: "/demo",
   },
@@ -124,10 +124,11 @@ export const architectureNodes: ArchNode[] = [
     id: "context",
     name: "Context pack",
     layer: "runtime",
-    status: "partial",
-    summary: "Assembled before execution.",
-    detail: "Context is assembled before the model runs, not reconstructed in a post-hoc story.",
-    implemented: ["Inspectable context assembly in ABI"],
+    status: "planned",
+    summary: "Proposed inspectable context boundary.",
+    detail:
+      "Context assembled before execution is an architecture requirement; implementation and qualification need separate evidence.",
+    implemented: [],
     notClaimed: ["Perfect recall of every prior episode", "Silent prompt rewriting"],
     href: "/abi",
   },
@@ -138,7 +139,7 @@ export const architectureNodes: ArchNode[] = [
     status: "current",
     summary: "Episodic substrate.",
     detail:
-      "Durable records, embeddings, provenance. Retrieval can return what happened and why a record is trusted.",
+      "WDBX implements durable records, vector retrieval, and structural provenance. Evidence-weighted retrieval remains unimplemented.",
     implemented: ["Layered HNSW", "MVCC", "Content addressing"],
     notClaimed: ["Production sharding", "Evidence-weighted retrieval as current"],
     href: "/wdbx",
@@ -161,8 +162,8 @@ export const architectureNodes: ArchNode[] = [
     layer: "memory",
     status: "partial",
     summary: "Vectors with a contract.",
-    detail: `${sharedResearchCopy.retrieval} Collapsing every signal into one score is a documented limitation.`,
-    implemented: ["Cosine search", "Graph construction parameters as configuration"],
+    detail: sharedResearchCopy.retrieval,
+    implemented: ["Exact vector search", "Layered HNSW", "Pluggable scoring seam"],
     notClaimed: ["A published recall/QPS scoreboard", "Cross-encoder rerank as current"],
     href: "/research",
   },
@@ -171,7 +172,7 @@ export const architectureNodes: ArchNode[] = [
     name: "Provenance",
     layer: "memory",
     status: "partial",
-    summary: "Why this record is trusted.",
+    summary: "Structural provenance of a record.",
     detail: sharedResearchCopy.provenance,
     implemented: ["Content addressing", "Causal history"],
     notClaimed: [
@@ -185,11 +186,11 @@ export const architectureNodes: ArchNode[] = [
     name: "Compute",
     layer: "compute",
     status: "partial",
-    summary: "Local unless you send it.",
+    summary: "CPU primitives and optional accelerator source.",
     detail:
-      "CPU vector ops and optional macOS Metal DOT. CUDA and Vulkan dispatch are not linked in this implementation.",
-    implemented: ["CPU backends", "Honest gpu_status"],
-    notClaimed: ["Blanket GPU acceleration", "A 295× figure as a measured result"],
+      "The compute substrate provides deterministic CPU vector primitives and an accelerator contract. ABI's optional macOS Metal DOT source requires feature linking and successful pipeline initialization; device and workload qualification remain separate.",
+    implemented: ["CPU vector primitives", "Accelerator contract", "Optional Metal DOT source"],
+    notClaimed: ["Blanket GPU acceleration", "A measured GPU speedup"],
     href: "/platform",
   },
   {
@@ -197,9 +198,9 @@ export const architectureNodes: ArchNode[] = [
     name: "Output",
     layer: "experience",
     status: "current",
-    summary: "A response with a trace.",
+    summary: "Source-scoped output and claims.",
     detail:
-      "What you see is bound to a routing reason, a context pack, and whatever the ledger can prove.",
+      "The website exposes field notes and browser demos. Trace and context-pack guarantees require evidence from the specific runtime path.",
     implemented: ["Claims language", "Field notes console", "In-browser demos"],
     notClaimed: ["Ungrounded fluency as evidence", "Unlimited capability"],
   },
@@ -208,23 +209,23 @@ export const architectureNodes: ArchNode[] = [
 export const architectureSteps = [
   {
     title: "User → Quesar",
-    body: "A local workspace, CLI, or companion issues a request. Quesar is the large model that trains and improves the assistants. This website does not host that model.",
+    body: "For the experimental website builder, the browser pairs with an operator-owned Quasar service. Generation requires separate provider configuration.",
   },
   {
-    title: "Quesar → ABI + tools",
-    body: "ABI routes the request, assembles inspectable context, and may invoke contract-covered plugins.",
+    title: "ABI + tools: a separate integration path",
+    body: "ABI's inspected sources provide deterministic persona routing and MCP tools. The Quasar builder does not establish an integration with ABI.",
   },
   {
-    title: "Model router + context",
-    body: "An exact registry model and device are selected. Context is assembled before execution, not hidden after.",
+    title: "Persona routing and completion",
+    body: "The inspected local router selects a persona profile; template completion does not establish execution of a registry model on a selected device.",
   },
   {
     title: "WDBX",
-    body: "Durable records, embeddings, and provenance live here. Retrieval can return what happened and why a record is trusted.",
+    body: "WDBX implements durable records, vector retrieval, and structural provenance. Evidence-weighted retrieval remains unimplemented.",
   },
   {
     title: "Local / edge / remote compute",
-    body: "CPU SIMD is the honest fallback. Remote providers are optional. Nothing on this website is a compute plane.",
+    body: "The compute substrate provides CPU vector operations. Separately, configured website model requests and Quasar generation can send content to model providers.",
   },
   {
     title: "Output",

@@ -1,3 +1,4 @@
+import { FilmEvidence } from "../film/evidence";
 // Mega.tsx — the MLAI Mega-Trailer. A 282s "longest, hardest-hitting cut" that
 // interleaves kinetic trailer beats with the substantive film scenes over a
 // full-bleed 3D neural field, driven by a handheld + impact camera rig.
@@ -15,6 +16,7 @@ import { C, FONT } from "../film/tokens";
 import { clamp, fade } from "../film/easing";
 import { Stage, Sprite } from "../film/engine";
 import { useTime, useTimeline } from "../film/timeline-context";
+import { resolveNarrationSeek } from "../film/narration-seek";
 import { Grain, Vignette, GridBG } from "../film/primitives";
 import { NeuralLayer } from "../film/neural";
 import { VoiceToggle } from "../film/narration";
@@ -57,38 +59,11 @@ import { SceneGovernance as Scene6, SceneNorthStar as Scene7 } from "../film/sce
 import { MathScene } from "../film/scenes/math";
 import { MATH } from "../film/scenes/math-data";
 import { Transcript } from "../film/transcript";
+import { filmRecord, filmScript, filmTimeline, type NarrationLine } from "../catalog";
 
 /* ── timeline (seconds). Each entry [start, end]; scenes keep their length. ── */
-const M: Record<string, [number, number]> = {
-  open: [0, 3.5],
-  ask: [3.5, 7],
-  fixed: [7, 11],
-  oneRun: [11, 14.5],
-  s3: [14.5, 32.5],
-  stor: [32.5, 48.5],
-  temp: [48.5, 65.5],
-  threeM: [65.5, 69],
-  pAbbey: [69, 70.8],
-  pAviva: [70.8, 72.6],
-  pAbi: [72.6, 74.6],
-  s4: [74.6, 92.1],
-  pDeep: [92.1, 113.1],
-  verify: [113.1, 116.6],
-  s5: [116.6, 133.1],
-  mem: [133.1, 138.1],
-  s6: [138.1, 154.1],
-  claims: [154.1, 171.1],
-  reason: [171.1, 176.1],
-  roadW: [176.1, 179.6],
-  s7: [179.6, 198.1],
-  vis: [198.1, 204.1],
-  road: [204.1, 227.1],
-  manif: [227.1, 241.1],
-  math: [241.1, 273.1],
-  word: [273.1, 277.1],
-  close: [277.1, 282],
-};
-const DURATION = 282;
+const M = filmTimeline("mega");
+const DURATION = filmRecord("mega").duration;
 
 // fixed cinematic rig multipliers (no live Tweaks panel here)
 const RIG = { shake: 0.4, zoom: 0.6, drift: 0.4, flash: 0.4 };
@@ -132,7 +107,22 @@ function megaMode(t: number): string {
 }
 function MegaNeural() {
   const t = useTime();
-  return <NeuralLayer mode={megaMode(t)} opacity={1} />;
+  // The final wordmark holds while its decorative field recedes.
+  const close = clamp((t - M.close![0]) / 0.6, 0, 1);
+  const diagram = [
+    M.s3,
+    M.stor,
+    M.temp,
+    M.s4,
+    M.pDeep,
+    M.s5,
+    M.s6,
+    M.claims,
+    M.road,
+    M.manif,
+    M.math,
+  ].some((range) => range && t >= range[0] && t < range[1]);
+  return <NeuralLayer mode={megaMode(t)} opacity={diagram ? 0.16 : 1 - close * 0.84} />;
 }
 
 /* ── camera rig: continuous handheld drift + impact shake/zoom ──
@@ -192,57 +182,8 @@ function MegaFlash({ color = "#bfe0ff" }: { color?: string }) {
 }
 
 /* ── Abbey VO — one smooth utterance per line, aligned to the timeline ── */
-interface MLine {
-  t: number;
-  who: "abbey";
-  text: string;
-  dur: number;
-}
-const RAW: Array<{ t: number; text: string }> = [
-  { t: 0.9, text: "They gave you an answer." },
-  { t: 4.0, text: "But could it ever prove it?" },
-  { t: 7.6, text: "So we rebuilt the machine. From the substrate up." },
-  { t: 11.6, text: "One runtime. Six honest layers." },
-  { t: 15.5, text: "Durable storage. A write-ahead log. Every byte checksummed." },
-  { t: 24.5, text: "Fast vector compute, with a GPU fallback." },
-  { t: 33.5, text: "Storage that survives a crash." },
-  { t: 41.5, text: "Snapshots. Recovery. Built in." },
-  { t: 49.5, text: "Memory, indexed by meaning — and by time." },
-  { t: 58.0, text: "Recency, causality, persona. Weighed at once." },
-  { t: 66.0, text: "Not one model pretending to be everything." },
-  { t: 69.6, text: "Three minds." },
-  { t: 71.2, text: "Abbey. Aviva. Abi." },
-  { t: 75.5, text: "Every query, scored and routed." },
-  { t: 84.5, text: "Deterministic. Local. Explainable." },
-  { t: 93.5, text: "Each persona — its own voice, its own discipline." },
-  { t: 104.0, text: "One system. Three ways of thinking." },
-  { t: 113.6, text: "A memory you can verify." },
-  { t: 117.5, text: "Embeddings, searched by meaning." },
-  { t: 125.5, text: "Sealed into a cryptographic chain." },
-  { t: 133.6, text: "Tamper with one block —" },
-  { t: 135.8, text: "— and the chain rejects it." },
-  { t: 139.5, text: "Every answer, weighed against six principles." },
-  { t: 147.5, text: "Truth. Safety. Privacy. Enforced." },
-  { t: 155.5, text: "We claim only what our tests can prove." },
-  { t: 163.5, text: "Current. Partial. Vision. Labeled honestly." },
-  { t: 171.6, text: "It doesn't just respond. It reasons." },
-  { t: 176.6, text: "And this is only the beginning." },
-  { t: 180.5, text: "A distributed fabric." },
-  { t: 188.5, text: "Across every tier of hardware." },
-  { t: 198.6, text: "Still vision. Already in motion." },
-  { t: 205.5, text: "A roadmap — not a promise." },
-  { t: 215.0, text: "Built in the open. Proven in code." },
-  { t: 228.0, text: "This is how we build." },
-  { t: 242.5, text: "And the mathematics that makes it real." },
-  { t: 256.0, text: "Precision, all the way down." },
-  { t: 273.6, text: "This is MLAI." },
-  { t: 275.8, text: "Infrastructure for resilient intelligence." },
-];
-const MEGA_SCRIPT: MLine[] = RAW.map((l) => ({
-  ...l,
-  who: "abbey",
-  dur: clamp(l.text.length / 16 + 0.9, 2.2, 5.2),
-}));
+type MLine = NarrationLine;
+const MEGA_SCRIPT = filmScript("mega");
 
 function MegaNarration() {
   // Off the true playhead (clock), not the hover-preview time. See narration.tsx.
@@ -259,16 +200,17 @@ function MegaNarration() {
   useEffect(() => {
     const p = prev.current;
     prev.current = time;
-    if (time < p - 0.35) {
+    const pastCues = resolveNarrationSeek(p, time, MEGA_SCRIPT, (line) => line.t);
+    if (pastCues) {
       stopSpeech();
-      spoken.current = new Set(MEGA_SCRIPT.filter((l) => l.t <= time + 0.05).map((l) => l.t));
+      spoken.current = pastCues;
       return;
     }
     if (!playing) return;
     for (const line of MEGA_SCRIPT) {
       if (p < line.t && time >= line.t && !spoken.current.has(line.t)) {
         spoken.current.add(line.t);
-        speak("abbey", line.text);
+        speak(line.who, line.text);
       }
     }
   }, [time, playing]);
@@ -280,7 +222,7 @@ function MegaNarration() {
 
 function megaActiveLine(time: number): MLine | null {
   let cur: MLine | null = null;
-  for (const l of MEGA_SCRIPT) if (time >= l.t && time <= l.t + l.dur) cur = l;
+  for (const l of MEGA_SCRIPT) if (time >= l.t && time < l.t + l.dur) cur = l;
   return cur;
 }
 
@@ -414,23 +356,23 @@ export function Mega() {
           <BeatOpen />
         </Sprite>
         <Sprite start={0.4} end={M.open![1]}>
-          <SlamText text={"AN ANSWER."} size={150} x={960} y={862} color={C.text} />
+          <SlamText text={"A QUESTION."} size={150} x={960} y={862} color={C.text} />
         </Sprite>
         <Sprite start={M.ask![0]} end={M.ask![1]}>
           <div style={{ position: "absolute", inset: 0 }}>
-            <SlamText text={"CAN IT"} size={120} x={960} y={430} color={C.dim} chroma={false} />
+            <SlamText text={"WHAT IS"} size={120} x={960} y={430} color={C.dim} chroma={false} />
           </div>
         </Sprite>
         <Sprite start={M.ask![0] + 0.4} end={M.ask![1]}>
-          <Stamp text={"PROVE IT?"} color={C.red} x={960} y={604} rotate={-7} size={110} />
+          <Stamp text={"THE EVIDENCE?"} color={C.red} x={960} y={604} rotate={-7} size={110} />
         </Sprite>
         <Sprite start={M.fixed![0]} end={M.fixed![1]}>
-          <BeatBigWord word={"WE FIXED THAT."} size={150} />
+          <BeatBigWord word={"INSPECT THE SOURCE."} size={135} />
         </Sprite>
 
         {/* ACT I — the runtime */}
         <Sprite start={M.oneRun![0]} end={M.oneRun![1]}>
-          <BeatBigWord word={"ONE RUNTIME."} size={170} />
+          <BeatBigWord word={"SOURCE FOUNDATIONS."} size={135} />
         </Sprite>
         <Sprite start={M.s3![0]} end={M.s3![1]}>
           <Scene3 />
@@ -444,16 +386,16 @@ export function Mega() {
 
         {/* ACT II — three minds */}
         <Sprite start={M.threeM![0]} end={M.threeM![1]}>
-          <BeatBigWord word={"THREE MINDS."} size={200} />
+          <BeatBigWord word={"THREE PROFILES."} size={200} />
         </Sprite>
         <Sprite start={M.pAbbey![0]} end={M.pAbbey![1]}>
-          <BeatPersona name="Abbey" role="proof · verified" accent={C.green} />
+          <BeatPersona name="Abbey" role="conversational · empathetic" accent={C.green} />
         </Sprite>
         <Sprite start={M.pAviva![0]} end={M.pAviva![1]}>
-          <BeatPersona name="Aviva" role="research · vision" accent={C.purple} />
+          <BeatPersona name="Aviva" role="direct · technical" accent={C.purple} />
         </Sprite>
         <Sprite start={M.pAbi![0]} end={M.pAbi![1]}>
-          <BeatPersona name="Abi" role="interactive · fast" accent={C.cyan} />
+          <BeatPersona name="Abi" role="orchestration · routing" accent={C.cyan} />
         </Sprite>
         <Sprite start={M.s4![0]} end={M.s4![1]}>
           <Scene4 />
@@ -464,7 +406,7 @@ export function Mega() {
 
         {/* ACT III — the proof */}
         <Sprite start={M.verify![0]} end={M.verify![1]}>
-          <BeatBigWord word={"VERIFIABLE."} size={200} />
+          <BeatBigWord word={"INTEGRITY CHECKS."} size={200} />
         </Sprite>
         <Sprite start={M.s5![0]} end={M.s5![1]}>
           <Scene5 />
@@ -473,13 +415,15 @@ export function Mega() {
           <BeatMemory />
         </Sprite>
         <Sprite start={M.mem![0] + 1.9} end={M.mem![1] - 0.5}>
-          <Stamp text={"TAMPER-PROOF"} color={C.green} x={960} y={764} rotate={-6} size={70} />
+          <Stamp text={"AUDIT CHAIN"} color={C.green} x={960} y={764} rotate={-6} size={70} />
         </Sprite>
         <Sprite start={M.s6![0]} end={M.s6![1]}>
           <Scene6 />
         </Sprite>
         <Sprite start={M.s6![1] - 4} end={M.s6![1] - 0.5}>
-          <Stamp text={"GOVERNED"} color={C.cyan} x={960} y={880} rotate={5} size={72} />
+          <div data-audit-stamp="">
+            <Stamp text={"SCOPED AUDIT"} color={C.cyan} x={1600} y={760} rotate={-3} size={32} />
+          </div>
         </Sprite>
         <Sprite start={M.claims![0]} end={M.claims![1]}>
           <SceneClaims />
@@ -517,7 +461,9 @@ export function Mega() {
           <BeatBigWord word={"MLAI"} size={420} />
         </Sprite>
         <Sprite start={M.close![0]} end={M.close![1]}>
-          <BeatClose />
+          <div data-film-closing="mega">
+            <BeatClose hold />
+          </div>
         </Sprite>
       </MegaCamera>
 
@@ -529,6 +475,7 @@ export function Mega() {
       <ScreenLabel />
       <VoiceToggle />
       <Transcript lines={MEGA_SCRIPT} />
+      <FilmEvidence id="mega" />
     </Stage>
   );
 }

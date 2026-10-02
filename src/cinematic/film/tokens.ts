@@ -47,21 +47,21 @@ export const FONT = {
 export const PERSONAS = {
   abbey: {
     name: "Abbey",
-    role: "proof · verified",
+    role: "conversational · empathetic",
     color: C.green,
     voice: "af_heart",
     prosody: { speed: 1.0, gap: 0.2 },
   },
   aviva: {
     name: "Aviva",
-    role: "research · vision",
+    role: "direct · technical",
     color: C.violet,
     voice: "bf_emma",
     prosody: { speed: 1.12, gap: 0.14 },
   },
   abi: {
     name: "Abi",
-    role: "interactive · fast",
+    role: "orchestration · routing",
     color: C.cyan,
     voice: "am_michael",
     prosody: { speed: 1.04, gap: 0.17 },

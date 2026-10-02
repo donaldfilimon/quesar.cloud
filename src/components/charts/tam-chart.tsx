@@ -41,7 +41,7 @@ export function TamChart() {
               const label =
                 (item?.payload as { label?: string } | undefined)?.label ??
                 `$${String(value ?? "")}B`;
-              return [label, "Category sizing · target"];
+              return [label, "Illustrative design assumption · target"];
             }}
           />
           <Bar dataKey="value" fill="var(--accent)" radius={[0, 6, 6, 0]} maxBarSize={28} />

@@ -338,9 +338,8 @@ export default function DesignBoard(): ReactNode {
               <br />A real <span className="t-grad">system</span> underneath.
             </h1>
             <p className="mt-6 text-base sm:text-lg text-fg-muted leading-relaxed text-pretty">
-              The upgrade spec asks for things MLAI already ships. This is the version that actually
-              moves the needle: a reconciled palette, a four-tier elevation ramp, one declared light
-              direction, formal spacing rhythm, and the whole thing applied to a live page.
+              This concept board explores a reconciled palette, elevation, one light direction and
+              spacing rhythm, applied to a sample page for review.
             </p>
             <div className="flex flex-wrap gap-2.5 mt-8">
               {HERO_CHIPS.map((chip) => (

@@ -1,3 +1,4 @@
+import { FilmEvidence } from "../film/evidence";
 // Explainer.tsx — the MLAI "What is MLAI?" cut. A calm, ~2:12 explainer that
 // sits between the 62s vision trailer and the longer brand film. It is a pure
 // curation of the existing system — every scene, the engine, the neural field,
@@ -13,6 +14,7 @@ import { C, FONT, clamp } from "../film/tokens";
 import { fade } from "../film/easing";
 import { Stage, Sprite } from "../film/engine";
 import { useTime, useTimeline } from "../film/timeline-context";
+import { resolveNarrationSeek } from "../film/narration-seek";
 import { Grain, Vignette, GridBG } from "../film/primitives";
 import { NeuralLayer } from "../film/neural";
 import { VoiceToggle } from "../film/narration";
@@ -31,77 +33,19 @@ import { ScenePersonaRouting, SceneVerifiableMemory } from "../film/scenes/core"
 import { SceneGovernance, SceneNorthStar } from "../film/scenes/outro";
 import { BeatPersona } from "../film/scenes/beats";
 import { Transcript } from "../film/transcript";
+import { filmRecord, filmScript, filmTimeline, type NarrationLine } from "../catalog";
 
 /* ── scene slots [start, end] in seconds — aligned to the narration ── */
-const T = {
-  open: [0, 10],
-  runtime: [10, 28],
-  storage: [28, 43],
-  memory: [43, 60],
-  minds: [60, 76],
-  pAbbey: [76, 79],
-  pAviva: [79, 82],
-  pAbi: [82, 85],
-  govern: [85, 101],
-  vision: [101, 120],
-  close: [120, 132],
-} as const;
-const DURATION = 132;
+const T = filmTimeline("explainer");
+const DURATION = filmRecord("explainer").duration;
 
 /* ── narration: Abbey, clear register (one thought per beat) ── */
-interface ELine {
-  t: number;
-  text: string;
-  dur: number;
-}
-const RAW: Array<Omit<ELine, "dur">> = [
-  { t: 1.2, text: "This is MLAI — infrastructure for intelligence you can actually trust." },
-  { t: 5.6, text: "Let me walk you through it, calmly, one idea at a time." },
-  // the runtime
-  { t: 11.0, text: "Most AI is a single black box. We built something you can open." },
-  {
-    t: 16.4,
-    text: "One runtime, in honest layers — memory, compute, and safety, each doing one job.",
-  },
-  { t: 22.6, text: "Nothing hidden. Every layer is something you can name and inspect." },
-  // storage
-  { t: 29.0, text: "Underneath it all is WDBX — a memory that writes things down and keeps them." },
-  { t: 35.6, text: "Think of it as a notebook the system can never quietly erase." },
-  // verifiable memory
-  { t: 44.0, text: "And that memory is verifiable." },
-  { t: 47.8, text: "Every entry is sealed in a chain, each block signed by the one before it." },
-  { t: 53.6, text: "Change a single word, and the whole chain notices. Tampering can't hide." },
-  // three minds
-  {
-    t: 61.0,
-    text: "On top of that memory live three minds — not one model pretending to be everything.",
-  },
-  { t: 67.6, text: "Each question is scored, then sent to whoever should answer it." },
-  // Each persona beat is three seconds of picture, so each line must finish
-  // inside it: a longer line was cut off by the next one (speak() interrupts).
-  { t: 76.2, text: "Abbey, for verified answers." },
-  { t: 79.2, text: "Aviva, for research and vision." },
-  { t: 82.2, text: "Abi, routing every request." },
-  // governance
-  { t: 86.4, text: "Before any answer reaches you, it's weighed against six principles." },
-  { t: 92.0, text: "Truthfulness, safety, helpfulness, fairness, privacy, transparency." },
-  { t: 97.0, text: "Six checks. Every response, governed." },
-  // vision
-  {
-    t: 102.4,
-    text: "The longer-term aim is a fabric of intelligence across every kind of hardware.",
-  },
-  { t: 108.6, text: "That part is still vision — a direction we're honest about, not a promise." },
-  { t: 114.2, text: "What's real today is the runtime, the memory, and the three minds." },
-  // close
-  { t: 121.4, text: "That's MLAI." },
-  { t: 124.6, text: "Infrastructure for resilient intelligence — clear, verifiable, and yours." },
-];
-const SCRIPT: ELine[] = RAW.map((l) => ({ ...l, dur: clamp(l.text.length / 15 + 1.0, 3.0, 7.0) }));
+type ELine = NarrationLine;
+const SCRIPT = filmScript("explainer");
 
 function activeLine(time: number): ELine | null {
   let cur: ELine | null = null;
-  for (const l of SCRIPT) if (time >= l.t && time <= l.t + l.dur) cur = l;
+  for (const l of SCRIPT) if (time >= l.t && time < l.t + l.dur) cur = l;
   return cur;
 }
 
@@ -121,16 +65,17 @@ function ExplainerNarration() {
   useEffect(() => {
     const p = prev.current;
     prev.current = time;
-    if (time < p - 0.35) {
+    const pastCues = resolveNarrationSeek(p, time, SCRIPT, (line) => line.t);
+    if (pastCues) {
       stopSpeech();
-      spoken.current = new Set(SCRIPT.filter((l) => l.t <= time + 0.05).map((l) => l.t));
+      spoken.current = pastCues;
       return;
     }
     if (!playing) return;
     for (const line of SCRIPT) {
       if (p < line.t && time >= line.t && !spoken.current.has(line.t)) {
         spoken.current.add(line.t);
-        speak("abbey", line.text);
+        speak(line.who, line.text);
       }
     }
   }, [time, playing]);
@@ -244,7 +189,10 @@ function explainerMode(t: number): string {
 }
 function ExplainerNeural() {
   const t = useTime();
-  return <NeuralLayer mode={explainerMode(t)} opacity={0.6} />;
+  const diagram = [T.runtime, T.storage, T.memory, T.minds, T.govern, T.vision].some(
+    ([start, end]) => t >= start && t < end,
+  );
+  return <NeuralLayer mode={explainerMode(t)} opacity={diagram ? 0.16 : 0.6} />;
 }
 
 /* ── the cut ── */
@@ -281,13 +229,13 @@ export function Explainer() {
 
       {/* three minds — each reveals with its own motion signature */}
       <Sprite start={T.pAbbey[0]} end={T.pAbbey[1]}>
-        <BeatPersona name="Abbey" role="proof · verified" accent={C.green} />
+        <BeatPersona name="Abbey" role="conversational · empathetic" accent={C.green} />
       </Sprite>
       <Sprite start={T.pAviva[0]} end={T.pAviva[1]}>
-        <BeatPersona name="Aviva" role="research · vision" accent={C.purple} />
+        <BeatPersona name="Aviva" role="direct · technical" accent={C.purple} />
       </Sprite>
       <Sprite start={T.pAbi[0]} end={T.pAbi[1]}>
-        <BeatPersona name="Abi" role="interactive · fast" accent={C.cyan} />
+        <BeatPersona name="Abi" role="orchestration · routing" accent={C.cyan} />
       </Sprite>
 
       <Sprite start={T.govern[0]} end={T.govern[1]}>
@@ -307,6 +255,7 @@ export function Explainer() {
       <Transcript lines={SCRIPT} />
 
       <Grain />
+      <FilmEvidence id="explainer" />
     </Stage>
   );
 }

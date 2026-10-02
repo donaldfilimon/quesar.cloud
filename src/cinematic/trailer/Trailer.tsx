@@ -1,3 +1,4 @@
+import { FilmEvidence } from "../film/evidence";
 // Trailer.tsx — the MLAI "Vision Trailer". A high-octane, ~62s hype cut in the
 // MLAI visual system: kinetic typography that slams in, stamp punches, a fabric
 // build, a massive title drop — hosted by Abbey in trailer cadence. The honest
@@ -11,6 +12,7 @@ import { C, FONT, clamp } from "../film/tokens";
 import { step, fade, Easing } from "../film/easing";
 import { Stage, Sprite } from "../film/engine";
 import { useSprite, useTimeline } from "../film/timeline-context";
+import { resolveNarrationSeek } from "../film/narration-seek";
 import { Grain, Vignette, GridBG, Orb } from "../film/primitives";
 import { DiagramSVG, PulseRing, SignalDots } from "../film/fx";
 import {
@@ -23,45 +25,19 @@ import {
 } from "../film/speech";
 import { VoiceToggle } from "../film/narration";
 import { Transcript } from "../film/transcript";
+import { filmRecord, filmScript, filmTimeline, type NarrationLine } from "../catalog";
 
-const DURATION = 62;
+const DURATION = filmRecord("trailer").duration;
+const T = filmTimeline("trailer");
 
 /* ── trailer VO (Abbey, trailer cadence) ──────────────────────────── */
 
-interface TLine {
-  t: number;
-  text: string;
-  dur: number;
-}
-const RAW: Array<Omit<TLine, "dur">> = [
-  { t: 0.9, text: "They gave you an answer." },
-  { t: 4.0, text: "But could it ever prove it?" },
-  { t: 7.4, text: "So we rebuilt the machine." },
-  { t: 9.3, text: "From the substrate up." },
-  { t: 11.4, text: "One runtime. Six honest layers." },
-  { t: 14.6, text: "Memory. Compute. Security. Proven." },
-  { t: 17.4, text: "Not one model pretending to be everything." },
-  { t: 20.2, text: "Three minds. In concert." },
-  { t: 26.4, text: "A memory you can verify." },
-  { t: 29.6, text: "Tamper with one block. The chain rejects it." },
-  { t: 32.4, text: "Every answer, weighed against six principles." },
-  { t: 35.6, text: "Truth. Safety. Privacy. Enforced." },
-  { t: 38.4, text: "It doesn't just respond." },
-  { t: 40.6, text: "It reasons." },
-  { t: 43.4, text: "And this is only the beginning." },
-  { t: 47.2, text: "A fabric, across every tier of hardware." },
-  { t: 51.2, text: "Still vision. Already in motion." },
-  { t: 55.6, text: "This is MLAI." },
-  { t: 57.8, text: "Infrastructure for resilient intelligence." },
-];
-const TRAILER_SCRIPT: TLine[] = RAW.map((l) => ({
-  ...l,
-  dur: clamp(l.text.length / 16 + 0.8, 2.0, 4.4),
-}));
+type TLine = NarrationLine;
+const TRAILER_SCRIPT = filmScript("trailer");
 
 function activeLine(time: number): TLine | null {
   let cur: TLine | null = null;
-  for (const l of TRAILER_SCRIPT) if (time >= l.t && time <= l.t + l.dur) cur = l;
+  for (const l of TRAILER_SCRIPT) if (time >= l.t && time < l.t + l.dur) cur = l;
   return cur;
 }
 
@@ -80,16 +56,17 @@ function TrailerNarration() {
   useEffect(() => {
     const p = prev.current;
     prev.current = time;
-    if (time < p - 0.35) {
+    const pastCues = resolveNarrationSeek(p, time, TRAILER_SCRIPT, (line) => line.t);
+    if (pastCues) {
       stopSpeech();
-      spoken.current = new Set(TRAILER_SCRIPT.filter((l) => l.t <= time + 0.05).map((l) => l.t));
+      spoken.current = pastCues;
       return;
     }
     if (!playing) return;
     for (const line of TRAILER_SCRIPT) {
       if (p < line.t && time >= line.t && !spoken.current.has(line.t)) {
         spoken.current.add(line.t);
-        speak("abbey", line.text);
+        speak(line.who, line.text);
       }
     }
   }, [time, playing]);
@@ -349,9 +326,9 @@ function SpeedLines() {
 /* ── persona triad beat ───────────────────────────────────────────── */
 
 const TRIAD = [
-  { name: "Abbey", role: "PROOF · VERIFIED", color: C.green },
-  { name: "Aviva", role: "RESEARCH · VISION", color: C.violet },
-  { name: "Abi", role: "INTERACTIVE · FAST", color: C.cyan },
+  { name: "Abbey", role: "CONVERSATIONAL · EMPATHETIC", color: C.green },
+  { name: "Aviva", role: "DIRECT · TECHNICAL", color: C.violet },
+  { name: "Abi", role: "ORCHESTRATION · ROUTING", color: C.cyan },
 ];
 
 function TriadBeat() {
@@ -626,76 +603,76 @@ export function Trailer() {
 
       <ShakeRig beats={BEATS}>
         {/* opening provocation */}
-        <Sprite start={0.6} end={3.9}>
-          <Kinetic text={"They gave you\nan answer."} size={120} />
+        <Sprite start={T.open[0] + 0.6} end={T.open[1]}>
+          <Kinetic text={"Start with\na question."} size={120} />
         </Sprite>
-        <Sprite start={3.9} end={7.3}>
+        <Sprite start={T.ask[0]} end={T.ask[1]}>
           <Kinetic
-            text="But could it prove it?"
+            text="Where is the evidence?"
             size={104}
             gradient={`linear-gradient(100deg, ${C.red}, ${C.amber})`}
           />
         </Sprite>
 
         {/* rebuild */}
-        <Sprite start={7.3} end={11.3}>
-          <Kinetic text={"Rebuilt.\nFrom the substrate up."} size={92} />
+        <Sprite start={T.fixed[0]} end={T.fixed[1]}>
+          <Kinetic text={"Inspect.\nFrom the source up."} size={92} />
         </Sprite>
 
         {/* stamps */}
-        <Sprite start={11.3} end={17.3}>
+        <Sprite start={T.runtime[0]} end={T.runtime[1]}>
           <Kinetic
-            text="One runtime."
+            text="Source foundations."
             size={120}
             gradient={`linear-gradient(100deg, ${C.cyan}, ${C.blue})`}
           />
           <Stamp text="MEMORY" x={520} y={760} rot={-7} color={C.cyan} delay={0.4} />
           <Stamp text="COMPUTE" x={960} y={820} rot={4} color={C.blueHi} delay={0.9} />
-          <Stamp text="SECURITY" x={1410} y={760} rot={-5} color={C.green} delay={1.4} />
-          <Stamp text="PROVEN" x={960} y={300} rot={3} color={C.green} delay={2.6} />
+          <Stamp text="INTEGRITY" x={1410} y={760} rot={-5} color={C.green} delay={1.4} />
+          <Stamp text="SOURCE INSPECTION" x={960} y={300} rot={3} color={C.green} delay={2.6} />
         </Sprite>
 
         {/* three minds */}
-        <Sprite start={17.3} end={26.3}>
+        <Sprite start={T.personas[0]} end={T.personas[1]}>
           <TriadBeat />
         </Sprite>
 
         {/* verifiable memory */}
-        <Sprite start={26.3} end={32.3}>
+        <Sprite start={T.memory[0]} end={T.memory[1]}>
           <Kinetic
-            text={"A memory you\ncan verify."}
+            text={"Audit chain.\nIntegrity checks."}
             size={104}
             gradient={`linear-gradient(100deg, ${C.cyanHi}, ${C.cyan})`}
           />
-          <Stamp text="TAMPER-PROOF" x={960} y={300} rot={-4} color={C.cyan} delay={2.6} />
+          <Stamp text="INTEGRITY CHECKS" x={960} y={300} rot={-4} color={C.cyan} delay={2.6} />
         </Sprite>
 
         {/* governance */}
-        <Sprite start={32.3} end={38.3}>
+        <Sprite start={T.audit[0]} end={T.audit[1]}>
           <Kinetic
-            text="Six principles."
+            text="Scoped pattern audit."
             size={120}
             gradient={`linear-gradient(100deg, ${C.green}, ${C.cyan})`}
           />
-          <Stamp text="GOVERNED" x={960} y={300} rot={3} color={C.green} delay={2.4} />
+          <Stamp text="13 PATTERN CHECKS" x={960} y={300} rot={3} color={C.green} delay={2.4} />
         </Sprite>
 
         {/* it reasons */}
-        <Sprite start={38.3} end={43.3}>
+        <Sprite start={T.reason[0]} end={T.reason[1]}>
           <Kinetic
-            text="It reasons."
+            text="Reasoning / vision."
             size={150}
             gradient={`linear-gradient(100deg, ${C.blueHi}, ${C.cyan} 60%, ${C.violet})`}
           />
         </Sprite>
 
         {/* fabric / vision */}
-        <Sprite start={43.3} end={55.4}>
+        <Sprite start={T.vision[0]} end={T.vision[1]}>
           <FabricBeat />
         </Sprite>
 
         {/* title drop */}
-        <Sprite start={55.4} end={DURATION}>
+        <Sprite start={T.close[0]} end={T.close[1]}>
           <TitleDrop />
         </Sprite>
       </ShakeRig>
@@ -705,6 +682,7 @@ export function Trailer() {
       <VoiceToggle />
       <Transcript lines={TRAILER_SCRIPT} />
       <Grain />
+      <FilmEvidence id="trailer" />
     </Stage>
   );
 }

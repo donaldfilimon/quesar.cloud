@@ -112,7 +112,7 @@ export function VaultApp() {
                 persist(title, event.target.value);
               }}
               className="mt-4 min-h-64 w-full resize-y bg-transparent text-sm leading-relaxed text-fg-muted outline-none"
-              placeholder="Private note. Encrypted-local fallback on device builds; this web vault is localStorage only."
+              placeholder="Note stored in this browser's localStorage."
             />
           </>
         ) : (

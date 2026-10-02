@@ -1,3 +1,4 @@
+import { sceneRandom } from "../../film/capture";
 /* MLAI — Brand Guidelines board. Self-contained, typed React module. */
 import { useState, useRef, useEffect } from "react";
 import { attachFrameGate } from "../frame-gate";
@@ -161,6 +162,7 @@ interface Node {
 function NetworkCanvas(): ReactNode {
   const ref = useRef<HTMLCanvasElement>(null);
   useEffect(() => {
+    const random = sceneRandom("brand4387");
     const c = ref.current;
     if (!c) return;
     const ctx = c.getContext("2d");
@@ -178,10 +180,10 @@ function NetworkCanvas(): ReactNode {
       c.height = h * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       nodes = Array.from({ length: Math.min(48, Math.floor((w * h) / 9000)) }, () => ({
-        x: Math.random() * w,
-        y: Math.random() * h,
-        vx: (Math.random() - 0.5) * 0.3,
-        vy: (Math.random() - 0.5) * 0.3,
+        x: random() * w,
+        y: random() * h,
+        vx: (random() - 0.5) * 0.3,
+        vy: (random() - 0.5) * 0.3,
       }));
     };
     rs();
@@ -323,7 +325,7 @@ const CORE: readonly SwatchData[] = [
   { name: "Violet", hex: "#a855f7", sub: "depth / intensity", ink: true },
 ];
 const PERSONA: readonly SwatchData[] = [
-  { name: "Abi · Cyan", hex: "#22d3ee", sub: "moderator", ink: true },
+  { name: "Abi · Cyan", hex: "#22d3ee", sub: "orchestration", ink: true },
   { name: "Aviva · Violet", hex: "#a855f7", sub: "expert", ink: true },
   { name: "Abbey · Emerald", hex: "#34d399", sub: "polymath", ink: true },
 ];
@@ -357,22 +359,23 @@ const VOICE: readonly VoiceItem[] = [
     c: "emerald",
     desc: "Warm, encouraging, scaffolds hard ideas with metaphor before precision. Confident enough to hold an opinion.",
     sample:
-      "“Think of a vector database as a library that files books by meaning, not title. Here’s exactly how WDBX does it…”",
+      "“Think of a vector database as a library that files books by meaning, not title. Illustrative explanation; review retrieval evidence separately.”",
   },
   {
     icon: IZap,
     name: "Aviva",
-    role: "Unfiltered Expert",
+    role: "Direct Technical Profile",
     c: "violet",
-    desc: "Direct, concise, zero hedging or preamble. Optimized for technical density and speed.",
-    sample: "“Use HNSW. M=16, ef=32. Cosine for text, L2 for clustering. Done.”",
+    desc: "Direct and technically precise, with assumptions and uncertainty explicit.",
+    sample:
+      "“Illustrative reply: choose the metric and search breadth against a measured workload.”",
   },
   {
     icon: IFlow,
     name: "Abi",
-    role: "Adaptive Moderator",
+    role: "Orchestration Profile",
     c: "cyan",
-    desc: "Neutral and balanced. Classifies intent, routes, and blends the other two. The brand’s default register.",
+    desc: "Orchestration, policy and routing contract. Abbey is the neutral routing prior.",
     sample: "“Routing this to Abbey — it reads as a learning question with some frustration.”",
   },
 ];
@@ -415,7 +418,7 @@ const TYPE: readonly TypeSpec[] = [
     spec: "Space Grotesk · 56–72px · tracking-tight",
     el: (
       <span className="text-5xl font-bold text-fg" style={{ fontFamily: "var(--font-display)" }}>
-        Private by default
+        Private AI operations / vision
       </span>
     ),
   },
@@ -433,7 +436,7 @@ const TYPE: readonly TypeSpec[] = [
     spec: "System sans · 18–20px · gradient",
     el: (
       <span className="text-xl gtext" style={{ fontFamily: "system-ui" }}>
-        fast by design, private by default
+        inspect the source; qualify the intended path
       </span>
     ),
   },
@@ -778,9 +781,9 @@ export default function BrandBoard(): ReactNode {
           <div className="text-sm font-semibold text-fg mb-2">Brand register</div>
           <p className="text-fg-muted leading-relaxed text-sm">
             Terse, precise, and privacy-forward. We state what's true and useful without hype or
-            hedging. Confident, not loud. Technical depth delivered with clarity. Default to{" "}
-            <span className="text-accent">Abi's</span> neutral register; shift toward Abbey or Aviva
-            to match the audience.
+            unsupported certainty. Confident, not loud. Technical depth delivered with clarity.
+            Default to <span className="text-accent">Abbey</span> for the primary conversational
+            profile; select Aviva for a direct technical register.
           </p>
         </Card>
         <div className="grid md:grid-cols-3 gap-5">

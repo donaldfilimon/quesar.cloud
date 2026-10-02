@@ -6,18 +6,24 @@ import { pageHead } from "@/lib/seo";
 const packs = [
   {
     name: "claims",
-    body: "Ledger language, status labels, and refusal copy used across Abbey and this site.",
+    body: "Proposed grouping for capability-ledger language, status labels, and review boundaries.",
   },
-  { name: "wdbx-tools", body: "Scripts consumed by ABI sync. Not a hosted plugin store." },
-  { name: "site-integrity", body: "Apple sentence, provenance tags, Apache-2.0, toolchain facts." },
-  { name: "mcp-allowlist", body: "Contract-covered tool names. Unknown tools fail closed." },
+  { name: "wdbx-tools", body: "Proposed grouping for WDBX integration tools and scripts." },
+  {
+    name: "site-integrity",
+    body: "Site integrity concepts: source references, provenance tags, named repository licenses, and toolchain facts.",
+  },
+  {
+    name: "mcp-allowlist",
+    body: "Proposed grouping for source-defined MCP tools and permission review.",
+  },
 ];
 
 export const Route = createFileRoute("/plugins")({
   head: () =>
     pageHead(
       "Plugins — ABI",
-      "abi-mega: skills, assets, and scripts consumed by ABI sync. Founder tooling, not a marketplace.",
+      "Orientation to plugin and CLI concepts; synchronized installation requires separate source and acceptance evidence.",
     ),
   component: PluginsPage,
 });
@@ -27,14 +33,14 @@ function PluginsPage() {
     <>
       <PageHero
         eyebrow="Plugins"
-        title="Skills the runtime actually loads."
-        lede="abi-mega: skills, assets, and scripts consumed by /sync-clis. Founder tooling, not a hosted marketplace."
+        title="Explore plugin and CLI concepts."
+        lede="Orientation to plugin and CLI concepts; synchronized installation requires separate source and acceptance evidence."
       >
         <HeroStatus status="partial" />
       </PageHero>
       <Section>
         <NamedGrid items={packs} nameClass="text-abi" />
-        <p className="mt-10 text-xs text-fg-subtle">Frozen CLI surface</p>
+        <p className="mt-10 text-xs text-fg-subtle">CLI names shown in this orientation</p>
         <div className="mt-3">
           <ChipRow items={frozenCli} />
         </div>

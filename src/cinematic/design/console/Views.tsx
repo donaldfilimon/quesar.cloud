@@ -80,7 +80,7 @@ export function Overview() {
         <StatCard value="1,234" label="Sample metric" tint="#22d3ee" sub="sample data" />
         <StatCard value="56%" label="Sample ratio" tint="#60a5fa" sub="sample data" />
         <StatCard value="78" label="Sample count" tint="#34d399" sub="sample data" />
-        <StatCard value="3" label="Personas online" tint="#a855f7" sub="Abi · Abbey · Aviva" />
+        <StatCard value="3" label="Sample profiles" tint="#a855f7" sub="Abi · Abbey · Aviva" />
       </div>
       <div
         style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 16 }}
@@ -96,7 +96,7 @@ export function Overview() {
           }}
         >
           <div className="eyebrow" style={{ marginBottom: 14 }}>
-            Live · WDBX
+            CONCEPT · SAMPLE DATA
           </div>
           <Telemetry />
         </div>
@@ -110,7 +110,7 @@ export function Overview() {
           }}
         >
           <div className="eyebrow" style={{ marginBottom: 14 }}>
-            Recent activity
+            Illustrative activity
           </div>
           <div style={{ display: "flex", flexDirection: "column" }}>
             {events.map(([t, d, c, ago], i) => (
@@ -182,8 +182,8 @@ export function Memory() {
   return (
     <div style={{ maxWidth: 760 }}>
       <p style={{ fontSize: 15, color: "var(--text-dim)", lineHeight: 1.6, margin: "0 0 8px" }}>
-        Every write is hashed and linked to the previous block. Tamper with one and the chain
-        rejects it on the next read — memory that defends itself.
+        Illustrative hash-chain interaction. Strict checks recompute stored content hashes;
+        link-only checks verify predecessors. Hash links are not signatures.
       </p>
       <div
         style={{
@@ -193,7 +193,7 @@ export function Memory() {
           marginBottom: 22,
         }}
       >
-        Click a block to simulate a tamper.
+        Click a sample block to illustrate a mismatch. No store is connected.
       </div>
       <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
         {blocks.map((i) => {
@@ -254,7 +254,7 @@ export function Memory() {
                     border: `1px solid color-mix(in srgb, ${c} 35%, transparent)`,
                   }}
                 >
-                  {bad ? "TAMPERED" : broken ? "CHAIN BROKEN" : "VERIFIED"}
+                  {bad ? "SAMPLE MISMATCH" : broken ? "SAMPLE LINK BREAK" : "SAMPLE HASH"}
                 </span>
               </div>
               {i < blocks.length - 1 && (
@@ -325,9 +325,21 @@ export function Settings() {
     dense: false,
   });
   const rows: SettingRow[] = [
-    ["local", "Local-first execution", "Keep all inference and storage on this device."],
-    ["chain", "Verifiable memory", "SHA-256-chain every write; verify on read."],
-    ["telemetry", "Share anonymized telemetry", "Off by default — privacy-first."],
+    [
+      "local",
+      "Local-first execution",
+      "Concept preference; no inference or storage service is connected.",
+    ],
+    [
+      "chain",
+      "Verifiable memory",
+      "Concept preference; strict checks and link-only checks have different scope.",
+    ],
+    [
+      "telemetry",
+      "Share anonymized telemetry",
+      "Concept preference; this board submits no telemetry.",
+    ],
     ["dense", "Default to Aviva's dense mode", "Skip scaffolding; maximum technical density."],
   ];
   return (

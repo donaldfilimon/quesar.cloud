@@ -1,14 +1,9 @@
 import type { StatusKind } from "@/lib/site-identity";
 /**
- * The local Abbey app's toolchain, one fact per entry. The Abbey journey's
- * prerequisites sentence and the /abbey workspace facts both read from here, so
- * a version bump lands on every page at once.
+ * Requirements for the browser document preview, shared with its surface facts.
+ * Separate Abbey applications have their own source and acceptance boundaries.
  */
-export const abbeyRequirements = [
-  "Node 24, Bun 1.4",
-  "uv with Python 3.11–3.13",
-  "Java 21+ and LibreOffice",
-] as const;
+export const abbeyRequirements = ["A browser for this preview"] as const;
 
 /**
  * `status` is the claim-discipline status of each journey (data only, not
@@ -19,7 +14,8 @@ export const productJourneys = [
   {
     slug: "abi",
     name: "ABI",
-    purpose: "Route assistant requests and assemble inspectable context.",
+    purpose:
+      "Explore deterministic persona routing, template completion, and source-defined tools.",
     availability: "Local developer framework",
     status: "current" as StatusKind,
     prerequisites:
@@ -32,12 +28,14 @@ export const productJourneys = [
   {
     slug: "abbey",
     name: "Abbey",
-    purpose: "Work with documents in the local Abbey workspace and explore its assistant context.",
-    availability: "Local document workspace",
+    purpose:
+      "Explore a browser document workspace and its optional configured server model-request path.",
+    availability: "Browser document preview",
     status: "current" as StatusKind,
-    prerequisites: `${abbeyRequirements.join(", ")} as documented by the website-app setup; a local model is optional.`,
+    prerequisites:
+      "A browser. A configured server and model provider are required for model requests; the static preview cannot call a model.",
     limitation:
-      "Assistant behavior depends on the selected backend. The public website does not provision an Abbey session or a shared product account.",
+      "Documents are stored in this browser's localStorage. This preview does not establish setup or acceptance for a separate Abbey app.",
     setupHref: "/workspace",
     researchSlugs: ["ai-overview", "tui-overview"],
   },
@@ -63,12 +61,12 @@ export const productJourneys = [
     slug: "quasar",
     name: "Quasar",
     purpose: "Generate a Next.js website and preview it on your own machine.",
-    availability: "Local v1 website builder",
+    availability: "Experimental local website builder with a browser client",
     status: "experimental" as StatusKind,
     prerequisites:
-      "Bun 1.4, the Quasar workspace, Anthropic credentials and a separately running local service plus Expo app.",
+      "Bun 1.4, this repository's Quasar sidecar, service-side Anthropic credentials, and a browser paired to the separately running service.",
     limitation:
-      "Generation requires an available provider. Hosting, deploy adapters and authentication are outside the local v1 scope; the service listens on the LAN without authentication.",
+      "The service defaults to loopback and requires pairing for API operations. Generated project code runs as the operator. Live provider generation remains unverified; remote exposure requires operator-managed HTTPS and network opt-in.",
     setupHref: "/quesar",
     researchSlugs: ["mcp-overview"],
   },
@@ -88,9 +86,9 @@ export const startJourneys = [
     id: "abbey",
     title: "Explore Abbey's workspace",
     description:
-      "Try the browser-only document loop, then follow the source setup for the local Abbey app.",
-    availability: "Browser preview; local app runs from source",
-    prerequisites: `A browser for this preview. To run the app locally: ${productJourneys[1].prerequisites}`,
+      "Try the browser document loop. Model requests use a separate configured server path; documents are stored in this browser's localStorage.",
+    availability: "Browser document preview",
+    prerequisites: productJourneys[1].prerequisites,
     href: "/workspace",
     label: "Open browser workspace",
   },
@@ -98,11 +96,11 @@ export const startJourneys = [
     id: "mobile",
     title: "Explore the mobile companion",
     description:
-      "Run the Expo companion from source. Native CloudKit and the encrypted-local fallback are distinct paths; signed-device acceptance remains separate from a web export.",
-    availability: "Source-based Expo companion",
+      "Try the browser vault preview. This page stores notes in localStorage. The separate Capacitor CloudKit plugin exposes availability and account-status checks; signed-device sync remains unverified.",
+    availability: "Browser vault preview; partial native shell source",
     status: "partial" as StatusKind,
     prerequisites:
-      "Bun 1.4 and Expo tooling; native platform tooling for device builds. CloudKit requires an appropriately signed Apple build.",
+      "A browser for the preview. Native shell work requires the separate native package and platform tooling; the copied native projects are not built or synced in the source receipt.",
     href: "/mobile",
     label: "Open the web vault",
   },

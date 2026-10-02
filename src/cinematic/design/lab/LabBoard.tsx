@@ -1,8 +1,9 @@
+import { sceneRandom } from "../../film/capture";
 /* ════════════════════════════════════════════════════════════════
    MLAI — Design & Algorithmic Lab
    Self-contained, default-exported board. Reproduces the standalone
    in-browser Babel prototype (mlai-lab.html) as a typed React 19
-   module: a live WDBX telemetry panel plus a gallery of generative
+   module: a live Illustrative WDBX telemetry panel plus a gallery of generative
    canvases, all driven by a page-wide palette switcher.
 
    Board-specific CSS (page background, gradient-text helper, keyframes,
@@ -391,10 +392,10 @@ type Gauges = { thru: number; p99: number; recall: number; mem: number };
 function WDBXDashboard(): ReactNode {
   const [g, setG] = useState<Gauges>({ thru: 78, p99: 9.4, recall: 94.6, mem: 1.48 });
   const [thruHist, setThruHist] = useState<number[]>(() =>
-    Array.from({ length: 30 }, () => 76 + Math.random() * 8),
+    Array.from({ length: 30 }, sceneRandom("throughput-history")).map((n) => 76 + n * 8),
   );
   const [latHist, setLatHist] = useState<number[]>(() =>
-    Array.from({ length: 30 }, () => 8 + Math.random() * 3),
+    Array.from({ length: 30 }, sceneRandom("latency-history")).map((n) => 8 + n * 3),
   );
   const [shards, setShards] = useState<ShardStatus[]>(() =>
     Array.from({ length: 12 }, () => "ok" as ShardStatus),
@@ -403,20 +404,22 @@ function WDBXDashboard(): ReactNode {
   useEffect(() => {
     const el = rootRef.current;
     if (!el) return;
+    const random = sceneRandom("telemetry");
     return attachIntervalGate(
       el,
       () => {
+        const noise = Array.from({ length: 18 }, random);
         setG((p) => ({
-          thru: Math.max(60, Math.min(96, p.thru + (Math.random() - 0.5) * 7)),
-          p99: Math.max(6, Math.min(16, p.p99 + (Math.random() - 0.5) * 1.6)),
-          recall: Math.max(91, Math.min(97, p.recall + (Math.random() - 0.5) * 0.8)),
-          mem: Math.max(1.2, Math.min(1.9, p.mem + (Math.random() - 0.5) * 0.08)),
+          thru: Math.max(60, Math.min(96, p.thru + (noise[0]! - 0.5) * 7)),
+          p99: Math.max(6, Math.min(16, p.p99 + (noise[1]! - 0.5) * 1.6)),
+          recall: Math.max(91, Math.min(97, p.recall + (noise[2]! - 0.5) * 0.8)),
+          mem: Math.max(1.2, Math.min(1.9, p.mem + (noise[3]! - 0.5) * 0.08)),
         }));
-        setThruHist((h) => [...h.slice(1), 70 + Math.random() * 22]);
-        setLatHist((h) => [...h.slice(1), 7 + Math.random() * 6]);
+        setThruHist((h) => [...h.slice(1), 70 + noise[4]! * 22]);
+        setLatHist((h) => [...h.slice(1), 7 + noise[5]! * 6]);
         setShards((s) =>
-          s.map(() => {
-            const rnd = Math.random();
+          s.map((_, i) => {
+            const rnd = noise[6 + i]!;
             return rnd > 0.97 ? "warn" : rnd > 0.995 ? "down" : "ok";
           }),
         );
@@ -437,12 +440,12 @@ function WDBXDashboard(): ReactNode {
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-status-current opacity-75" />
             <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-status-current" />
           </span>
-          <span className="font-mono text-sm text-fg">wdbx-prod-01</span>
+          <span className="font-mono text-sm text-fg">sample-host-01</span>
           <span className="text-2xs px-2 py-0.5 rounded-full border border-status-partial/30 text-status-partial bg-status-partial/10">
             SIMULATED · ILLUSTRATIVE
           </span>
         </div>
-        <span className="font-mono text-xs text-fg-subtle">live · 900ms tick</span>
+        <span className="font-mono text-xs text-fg-subtle">simulated · 900ms animation</span>
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
         <ArcGauge label="Throughput" value={g.thru} max={100} unit="req/s" color="#22d3ee" />
@@ -469,7 +472,9 @@ function WDBXDashboard(): ReactNode {
         <Sparkline data={latHist} color="#a855f7" label="latency stream" unit="ms" />
       </div>
       <div>
-        <div className="text-fg-muted text-xs font-medium mb-2">shard health · 12 nodes</div>
+        <div className="text-fg-muted text-xs font-medium mb-2">
+          illustrative node health · 12 sample nodes
+        </div>
         <div className="flex gap-1.5 flex-wrap">
           {shards.map((s, i) => (
             <div
@@ -497,6 +502,7 @@ type CanvasDraw = (
   h: number,
   t: number,
   state: CanvasState,
+  random: () => number,
 ) => void;
 
 function useCanvas(draw: CanvasDraw) {
@@ -517,6 +523,7 @@ function useCanvas(draw: CanvasDraw) {
     let dpr = 1;
     let t = 0;
     const state: CanvasState = {};
+    const random = sceneRandom("lab-canvas");
     const resize = () => {
       dpr = Math.min(devicePixelRatio || 1, 2);
       w = c.clientWidth;
@@ -530,7 +537,7 @@ function useCanvas(draw: CanvasDraw) {
     addEventListener("resize", resize);
     const loop = () => {
       t += 1;
-      drawRef.current(ctx, w, h, t, state);
+      drawRef.current(ctx, w, h, t, state, random);
     };
     const gate = attachFrameGate(c, loop);
     return () => {
@@ -565,13 +572,13 @@ const Phyllotaxis = (): ReactNode => {
 
 type HarmonographState = CanvasState & { init?: boolean; p?: number[]; ph?: number[] };
 const Harmonograph = (): ReactNode => {
-  const ref = useCanvas((ctx, w, h, t, rawState) => {
+  const ref = useCanvas((ctx, w, h, t, rawState, random) => {
     const s = rawState as HarmonographState;
     if (!s.init) {
       ctx.fillStyle = "#0c0c09";
       ctx.fillRect(0, 0, w, h);
       s.init = true;
-      s.p = [1.001, 2.002, 3.003, 2.001].map((x) => x + Math.random() * 0.004);
+      s.p = [1.001, 2.002, 3.003, 2.001].map((x) => x + random() * 0.004);
       s.ph = [0, 1.2, 2.4, 0.6];
     }
     const p = s.p ?? [1, 2, 3, 2];
@@ -610,7 +617,7 @@ type LifeState = CanvasState & {
   stale?: number;
 };
 const Life = (): ReactNode => {
-  const ref = useCanvas((ctx, w, h, t, rawState) => {
+  const ref = useCanvas((ctx, w, h, t, rawState, random) => {
     const s = rawState as LifeState;
     const cell = 9;
     const cols = Math.floor(w / cell);
@@ -620,7 +627,7 @@ const Life = (): ReactNode => {
       s.cols = cols;
       s.rows = rows;
       s.grid = Array.from({ length: rows }, () =>
-        Array.from({ length: cols }, () => (Math.random() > 0.78 ? 1 : 0)),
+        Array.from({ length: cols }, () => (random() > 0.78 ? 1 : 0)),
       );
       s.tick = 0;
       s.pop = 0;
@@ -656,7 +663,7 @@ const Life = (): ReactNode => {
     s.pop = pop;
     if ((s.stale ?? 0) > 18 || pop < cols) {
       s.grid = Array.from({ length: rows }, () =>
-        Array.from({ length: cols }, () => (Math.random() > 0.78 ? 1 : 0)),
+        Array.from({ length: cols }, () => (random() > 0.78 ? 1 : 0)),
       );
       s.stale = 0;
     }
@@ -739,15 +746,15 @@ const Tesseract = (): ReactNode => {
 type NetNode = { x: number; y: number; vx: number; vy: number };
 type NetworkState = CanvasState & { init?: boolean; nodes?: NetNode[] };
 const NetworkCanvas = (): ReactNode => {
-  const ref = useCanvas((ctx, w, h, _t, rawState) => {
+  const ref = useCanvas((ctx, w, h, _t, rawState, random) => {
     const s = rawState as NetworkState;
     if (!s.init) {
       s.init = true;
       s.nodes = Array.from({ length: Math.min(60, Math.floor((w * h) / 18000)) }, () => ({
-        x: Math.random() * w,
-        y: Math.random() * h,
-        vx: (Math.random() - 0.5) * 0.3,
-        vy: (Math.random() - 0.5) * 0.3,
+        x: random() * w,
+        y: random() * h,
+        vx: (random() - 0.5) * 0.3,
+        vy: (random() - 0.5) * 0.3,
       }));
     }
     ctx.clearRect(0, 0, w, h);
@@ -859,15 +866,15 @@ function Lab(): ReactNode {
             Design & Animation Lab
           </h1>
           <p className="mt-3 text-fg-muted max-w-2xl">
-            A live WDBX telemetry panel and a gallery of generative canvases — every tile is real,
-            running code. Recolor the whole page from the palette switcher in the nav.
+            A simulated telemetry layout and a gallery of running generative canvases. The figures
+            are illustrative; no WDBX service is connected.
           </p>
         </div>
       </div>
 
       <section className="max-w-6xl mx-auto px-6 sm:px-10 py-12">
         <h3 className="text-sm font-bold uppercase tracking-widest text-accent mb-5">
-          WDBX telemetry
+          Illustrative WDBX telemetry
         </h3>
         <WDBXDashboard />
       </section>
@@ -880,7 +887,7 @@ function Lab(): ReactNode {
           <LabCard
             title="Phyllotaxis"
             tag="golden angle"
-            desc="Florets placed at the golden angle (137.5°) — nature's optimal packing, drifting over time."
+            desc="Florets placed at the golden angle (137.5°), drifting over time."
           >
             <Phyllotaxis />
           </LabCard>

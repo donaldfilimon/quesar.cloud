@@ -50,7 +50,12 @@ export async function getSessionUser(): Promise<VerifiedUser | null> {
   if (!authConfigured) return null;
   const request = getRequest();
   if (!request) return null;
-  const session = await getAuth().api.getSession({ headers: request.headers });
+  const session = await getAuth().api.getSession({
+    headers: request.headers,
+    // Protected work must observe expiry/revocation immediately, even while a
+    // signed display-session cookie remains valid in the browser.
+    query: { disableCookieCache: true },
+  });
   if (!session?.user) return null;
   return { id: session.user.id, email: session.user.email ?? null };
 }

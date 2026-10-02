@@ -1,0 +1,136 @@
+.neural-field {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 560 / 520;
+  isolation: isolate;
+  pointer-events: none;
+  background-color: #050508;
+}
+
+.neural-field-halo {
+  position: absolute;
+  inset: 12%;
+  background:
+    radial-gradient(ellipse at 46% 48%, rgb(0 212 255 / 8%), transparent 59%),
+    radial-gradient(ellipse at 73% 65%, rgb(124 58 237 / 7%), transparent 50%);
+  opacity: 1;
+  animation: neural-field-halo-reveal 3.8s ease-out both;
+}
+
+.neural-field-svg {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.neural-field-envelope {
+  stroke: #00d4ff;
+  stroke-width: 0.6;
+  stroke-dasharray: 2 10;
+  opacity: 0.13;
+  animation: neural-field-envelope-reveal 1.2s ease-out 2.6s both;
+}
+
+.neural-field-edge {
+  stroke: #00d4ff;
+  stroke-width: 0.8;
+  stroke-linecap: round;
+  opacity: var(--neural-opacity);
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+  animation: neural-field-connection-reveal 1.25s ease-out var(--neural-delay) both;
+}
+
+.neural-field-edge-distant {
+  stroke: #f8fafc;
+  stroke-width: 0.55;
+}
+
+.neural-field-branch {
+  stroke-width: 1;
+}
+
+.neural-field-edge-violet {
+  stroke: #7c3aed;
+}
+
+.neural-field-node {
+  fill: #00d4ff;
+  opacity: var(--neural-opacity);
+  animation: neural-field-node-reveal 0.8s ease-out var(--neural-delay) both;
+}
+
+.neural-field-node-inner {
+  fill: #f8fafc;
+}
+
+.neural-field-core {
+  fill: #00d4ff;
+  filter: drop-shadow(0 0 10px rgb(0 212 255 / 65%));
+}
+
+.neural-field-core-halo {
+  opacity: 0.05;
+}
+
+.neural-field-core-ring {
+  fill: none;
+  stroke: #00d4ff;
+  stroke-width: 0.8;
+  opacity: 0.3;
+}
+
+.neural-field-core-center {
+  fill: #f8fafc;
+}
+
+@keyframes neural-field-connection-reveal {
+  from {
+    opacity: 0;
+    stroke-dashoffset: 1;
+  }
+  to {
+    opacity: var(--neural-opacity);
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes neural-field-node-reveal {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: var(--neural-opacity);
+  }
+}
+
+@keyframes neural-field-envelope-reveal {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.13;
+  }
+}
+
+@keyframes neural-field-halo-reveal {
+  from {
+    opacity: 0;
+    transform: scale(0.15);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .neural-field-halo,
+  .neural-field-envelope,
+  .neural-field-edge,
+  .neural-field-node {
+    animation: none;
+  }
+}

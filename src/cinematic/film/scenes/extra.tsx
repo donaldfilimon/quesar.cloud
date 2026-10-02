@@ -42,7 +42,7 @@ export function SceneStorage() {
           color: C.dim2,
         }}
       >
-        APPEND-ONLY · CRC32 FRAMED
+        CRC-FRAMED WAL · ILLUSTRATIVE RECORDS
       </div>
       {[0, 1, 2, 3, 4, 5].map((i) => {
         const at = 0.8 + i * 0.5;
@@ -123,8 +123,8 @@ export function SceneStorage() {
           letterSpacing: "-0.01em",
         }}
       >
-        Durable by construction —{" "}
-        <span style={{ color: C.green }}>replayed and checksum-verified.</span>
+        WAL records, snapshots and recovery —{" "}
+        <span style={{ color: C.green }}>qualification needs failure-path evidence.</span>
       </div>
     </SceneBox>
   );
@@ -155,8 +155,8 @@ export function SceneTemporal() {
     rgap = 26;
   return (
     <SceneBox>
-      <SceneTag index="IDX" label="Hybrid ranking" reveal={head} />
-      <StatusBadge kind="partial" x={120} y={150} reveal={badge} />
+      <SceneTag index="IDX" label="Illustrative ranking / vision" reveal={head} />
+      <StatusBadge kind="vision" x={120} y={150} reveal={badge} />
       <Orb x={1300} y={520} size={560} color={C.purple} opacity={0.08} />
       {/* formula */}
       <div
@@ -315,8 +315,8 @@ export function SceneTemporal() {
           letterSpacing: "-0.01em",
         }}
       >
-        Memory ranked by{" "}
-        <span style={{ color: C.cyan }}>meaning, recency, cause, and persona.</span>
+        Illustrative ranking factors:{" "}
+        <span style={{ color: C.cyan }}>meaning, recency, cause and persona / vision.</span>
       </div>
     </SceneBox>
   );
@@ -333,19 +333,19 @@ const DEEP_PERSONAS: DeepPersona[] = [
   {
     name: "Abbey",
     role: "Empathic polymath",
-    traits: ["Structured explanation", "Safety-oriented review", "Scaffolding protocol"],
+    traits: ["Structured explanation", "Explicit uncertainty", "Collaborative explanation"],
     c: "#34d399",
   },
   {
     name: "Aviva",
-    role: "Unfiltered expert",
-    traits: ["Idea generation", "Alternative perspectives", "Concise + dense"],
+    role: "Direct technical profile",
+    traits: ["Concrete answers", "Assumption review", "Concise + dense"],
     c: "#a78bfa",
   },
   {
     name: "Abi",
-    role: "Adaptive moderator",
-    traits: ["Intent routing", "Response blending", "Action-oriented"],
+    role: "Orchestration profile",
+    traits: ["Intent routing", "Risk and context", "Action-oriented"],
     c: "#22d3ee",
   },
 ];
@@ -362,7 +362,7 @@ export function ScenePersonaDeep() {
   const blend = step(lt, 11.5, 1.0);
   return (
     <SceneBox>
-      <SceneTag index="A·A·A" label="Three minds" reveal={head} />
+      <SceneTag index="A·A·A" label="Three profiles / identity contracts" reveal={head} />
       <StatusBadge kind="current" x={120} y={150} reveal={badge} />
       {DEEP_PERSONAS.map((p, i) => {
         const at = 1.0 + i * 0.6;
@@ -467,7 +467,7 @@ export function ScenePersonaDeep() {
         R<span style={{ fontSize: 18 }}>final</span> ={" "}
         <span style={{ color: "#34d399" }}>α·Abbey</span> +{" "}
         <span style={{ color: "#a78bfa" }}>(1−α)·Aviva</span> —{" "}
-        <span style={{ color: "#22d3ee" }}>moderated by Abi</span>
+        <span style={{ color: "#22d3ee" }}>conceptual blend / ABI orchestration</span>
       </div>
     </SceneBox>
   );
@@ -481,19 +481,34 @@ interface ClaimCol {
 }
 const CLAIM_COLS: ClaimCol[] = [
   {
-    t: "CURRENT",
+    t: "SOURCE INSPECTION",
     c: C.green,
-    items: ["SHA-256 chain", "HNSW · SIMD search", "Persona routing", "Constitution"],
+    items: [
+      "Hash links / strict checks",
+      "CPU vector primitives",
+      "Local persona routing",
+      "13 audit patterns",
+    ],
   },
   {
-    t: "PARTIAL",
+    t: "ACCEPTANCE NEEDED",
     c: C.amber,
-    items: ["WAL + snapshots", "Temporal ranker", "GPU fallback", "In-process Raft"],
+    items: [
+      "Recovery qualification",
+      "Relevance evaluation",
+      "Accelerator execution",
+      "Deployment evidence",
+    ],
   },
   {
     t: "PROPOSED",
     c: C.purple,
-    items: ["Multi-host cluster", "NPU / TPU dispatch", "Neural compression", "Homomorphic query"],
+    items: [
+      "Distributed fabric",
+      "Hardware compatibility",
+      "Model-training delivery",
+      "Semantic safety proof",
+    ],
   },
 ];
 export function SceneClaims() {
@@ -524,7 +539,7 @@ export function SceneClaims() {
           letterSpacing: "-0.01em",
         }}
       >
-        We publish only what the source can prove.
+        Source inspection does not establish runtime acceptance.
       </div>
       {CLAIM_COLS.map((col, i) => {
         const at = 1.2 + i * 0.8;
@@ -729,8 +744,8 @@ export function SceneRoadmap() {
           color: C.dim,
         }}
       >
-        Phase 1 is real and tested. Everything beyond it is{" "}
-        <span style={{ color: C.purple }}>the plan.</span>
+        Foundations are visible in source. Delivery requires{" "}
+        <span style={{ color: C.purple }}>acceptance evidence.</span>
       </div>
     </SceneBox>
   );
@@ -739,10 +754,10 @@ export function SceneRoadmap() {
 // ── Manifesto ────────────────────────────────────────────────────────────────
 type ManifestoLine = [string, string, string];
 const MANIFESTO: ManifestoLine[] = [
-  ["Memory you can", "verify.", C.green],
-  ["Reasoning you can", "route.", C.cyan],
-  ["Limits you can", "enforce.", C.blueHi],
-  ["Intelligence that stays", "resilient.", C.purple],
+  ["Name the", "source.", C.green],
+  ["Inspect the", "implementation.", C.cyan],
+  ["Agree the", "checks.", C.blueHi],
+  ["Bring a", "scoped project.", C.purple],
 ];
 export function SceneManifesto() {
   const { localTime: lt } = useSprite();

@@ -6,29 +6,13 @@
  * case. Better Auth keeps one `name`, so the display name carries mlai's
  * per-field 80-character cap. Company and use case were WorkOS metadata and
  * have no column here; they are not ported. The name edit itself goes through
- * `authClient.updateUser` in the browser, so `validateDisplayName` is a client
- * check: Better Auth's own endpoint does not enforce the cap.
+ * `authClient.updateUser` in the browser, and `validateDisplayName` is shared by the client and Better Auth database
+ * hooks, including direct signup and update requests.
  */
 import { createServerFn } from "@tanstack/react-start";
 import { authMiddleware } from "@/lib/auth/middleware";
 
-/** mlai's per-field name limit (`firstName`/`lastName` were each capped at 80). */
-export const DISPLAY_NAME_MAX = 80;
-
-export type NameCheck = { ok: true; name: string } | { ok: false; error: string };
-
-/** Trim, then require 1..80 characters. Rejects rather than silently truncating. */
-export function validateDisplayName(input: string): NameCheck {
-  const name = input.trim();
-  if (!name) return { ok: false, error: "Enter a display name." };
-  if ([...name].length > DISPLAY_NAME_MAX) {
-    return {
-      ok: false,
-      error: `Keep the display name to ${DISPLAY_NAME_MAX} characters or fewer.`,
-    };
-  }
-  return { ok: true, name };
-}
+export { DISPLAY_NAME_MAX, validateDisplayName, type NameCheck } from "./profile-name";
 
 /** Human label for a Better Auth `account.providerId`. */
 export function providerLabel(providerId: string): string {

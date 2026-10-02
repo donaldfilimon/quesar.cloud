@@ -1,3 +1,4 @@
+import { FilmEvidence } from "../film/evidence";
 // AbbeyTrailer.tsx — the "MLAI & Abbey" trailer shell.
 //
 // The picture is a SceneSequencer over the extracted engine; this file owns
@@ -17,8 +18,10 @@ import { backingRatio } from "../film/engine-utils";
 import { Transcript } from "../film/transcript";
 import { VoiceToggle } from "../film/narration";
 import { primeNeural, setSpeechPlaying, speak, stopSpeech, useVoiceGate } from "../film/speech";
+import { resolveNarrationSeek } from "../film/narration-seek";
 import { Grain, Vignette } from "../film/primitives";
 import { buildAbbeyTimeline, captionAt, type AbbeyTimeline } from "./scenes";
+import { filmRecord } from "../catalog";
 
 const W = 1920,
   H = 1080;
@@ -55,7 +58,7 @@ function AbbeyCanvas({ timeline }: { timeline: AbbeyTimeline }) {
   const sizedTo = useRef(0);
   const [settled, setSettled] = useState(true);
   // The Stage owns the live reduced-motion query; the film plays either way.
-  const { time, reducedMotion: reduced, scale } = useTimeline();
+  const { time, reducedMotion: reduced, scale, capture } = useTimeline();
   const ratio = backingRatio(typeof window === "undefined" ? 1 : window.devicePixelRatio, scale);
 
   useEffect(() => {
@@ -86,6 +89,12 @@ function AbbeyCanvas({ timeline }: { timeline: AbbeyTimeline }) {
       s.renderer.resize(W, H, ratio);
       sizedTo.current = ratio;
       lastCue.current = null;
+    }
+
+    if (capture) {
+      s.sequencer.seek(time, W, H);
+      s.renderer.render(time);
+      return;
     }
 
     if (reduced) {
@@ -120,7 +129,7 @@ function AbbeyCanvas({ timeline }: { timeline: AbbeyTimeline }) {
       s.sequencer.setQuality(Math.min(1, q + QUALITY_STEP));
       frameMs.current = FAST_FRAME_MS * 1.4;
     }
-  }, [time, reduced, ratio]);
+  }, [time, reduced, ratio, capture]);
 
   const style: CSSProperties = {
     position: "absolute",
@@ -132,6 +141,36 @@ function AbbeyCanvas({ timeline }: { timeline: AbbeyTimeline }) {
     transition: reduced ? "opacity 400ms ease" : "none",
   };
   return <canvas ref={ref} style={style} aria-hidden="true" />;
+}
+
+function AbbeyClosing() {
+  const { time } = useTimeline();
+  const film = filmRecord("abbey");
+  const closing = film.chapters.at(-1)!;
+  if (time < closing.start) return null;
+  return (
+    <div
+      data-film-closing="abbey"
+      style={{
+        position: "absolute",
+        inset: 0,
+        textAlign: "center",
+        color: C.text,
+        fontFamily: FONT.display,
+        opacity: Math.min(1, (time - closing.start) / 0.6),
+        pointerEvents: "none",
+      }}
+    >
+      <div
+        style={{ position: "absolute", top: 200, left: 0, right: 0, fontSize: 54, fontWeight: 700 }}
+      >
+        {film.title}
+      </div>
+      <div style={{ position: "absolute", top: 840, left: 160, right: 160, fontSize: 32 }}>
+        {film.brief.closingAction}
+      </div>
+    </div>
+  );
 }
 
 function AbbeyCaption({ timeline }: { timeline: AbbeyTimeline }) {
@@ -193,8 +232,8 @@ function AbbeyCaption({ timeline }: { timeline: AbbeyTimeline }) {
 }
 
 // Fires each caption's line through the shared voice engine as the true
-// playhead (clock, not the hover-preview time) crosses its start; a seek back
-// stops speech and re-arms the lines behind the new position. Same contract as
+// playhead (clock, not the hover-preview time) crosses its start; any seek
+// stops old speech and re-arms the lines ahead of the new position. Same contract as
 // Trailer.tsx, so the voice toggle and reduced-motion gating behave the same.
 function AbbeyNarration({ timeline }: { timeline: AbbeyTimeline }) {
   const { clock: time, playing } = useTimeline();
@@ -212,11 +251,10 @@ function AbbeyNarration({ timeline }: { timeline: AbbeyTimeline }) {
   useEffect(() => {
     const p = prev.current;
     prev.current = time;
-    if (time < p - 0.35) {
+    const pastCues = resolveNarrationSeek(p, time, timeline.captions, (cue) => cue.start);
+    if (pastCues) {
       stopSpeech();
-      spoken.current = new Set(
-        timeline.captions.filter((c) => c.start <= time + 0.05).map((c) => c.start),
-      );
+      spoken.current = pastCues;
       return;
     }
     if (!playing) return;
@@ -247,11 +285,13 @@ export function AbbeyTrailer() {
     >
       <AbbeyCanvas timeline={timeline} />
       <Vignette />
+      <AbbeyClosing />
       <AbbeyCaption timeline={timeline} />
       <AbbeyNarration timeline={timeline} />
       <Transcript lines={timeline.captions} />
       <VoiceToggle />
       <Grain />
+      <FilmEvidence id="abbey" />
     </Stage>
   );
 }

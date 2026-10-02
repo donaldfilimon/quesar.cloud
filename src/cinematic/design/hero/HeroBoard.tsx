@@ -1,3 +1,4 @@
+import { sceneRandom, isCapture } from "../../film/capture";
 /* ════════════════════════════════════════════════════════════════
    MLAI — Home Hero
    Self-contained, default-exported board. Reproduces the standalone
@@ -108,13 +109,14 @@ type Point = { x: number; y: number; z: number; ci: number };
 
 // three persona clusters: bias each point toward a colored lobe for visible grouping
 function sphere(n: number, clustered: boolean): Point[] {
+  const random = sceneRandom("sphere");
   return Array.from({ length: n }, (): Point => {
-    const ci = Math.floor(Math.random() * 3);
-    const u = Math.random();
-    const v = Math.random();
+    const ci = Math.floor(random() * 3);
+    const u = random();
+    const v = random();
     const th = u * Math.PI * 2;
     const ph = Math.acos(2 * v - 1);
-    const r = 0.55 + Math.random() * 0.45;
+    const r = 0.55 + random() * 0.45;
     let x = r * Math.sin(ph) * Math.cos(th);
     let y = r * Math.cos(ph);
     let z = r * Math.sin(ph) * Math.sin(th);
@@ -154,7 +156,7 @@ type TweakState = {
 };
 
 const TWEAK_DEFAULTS: TweakState = {
-  headline: "private, high-performance AI",
+  headline: "private AI operations / vision",
   accent: "#22d3ee",
   abbey: "#4ade80",
   aviva: "#a855f7",
@@ -188,6 +190,7 @@ function HeroCanvas({ tweaks }: { tweaks: TweakState }): ReactNode {
 
   // pointer parallax target
   useEffect(() => {
+    if (isCapture()) return;
     const onMove = (e: PointerEvent): void => {
       const nx = (e.clientX / window.innerWidth - 0.5) * 2;
       const ny = (e.clientY / window.innerHeight - 0.5) * 2;
@@ -199,6 +202,7 @@ function HeroCanvas({ tweaks }: { tweaks: TweakState }): ReactNode {
   }, []);
 
   useEffect(() => {
+    const random = sceneRandom("hero");
     const c = ref.current;
     if (!c) return;
     const ctx = c.getContext("2d") as CanvasRenderingContext2D | null;
@@ -219,11 +223,11 @@ function HeroCanvas({ tweaks }: { tweaks: TweakState }): ReactNode {
       cloud = sphere(Math.min(720, Math.floor(((w * h) / 4200) * dens)), true);
       lat = sphere(46, false);
       dust = Array.from({ length: Math.floor(((w * h) / 13000) * dens) }, (): Dust => ({
-        x: Math.random() * w,
-        y: Math.random() * h,
-        r: Math.random() * 1.1 + 0.3,
-        p: Math.random() * 6.28,
-        vy: 0.04 + Math.random() * 0.08,
+        x: random() * w,
+        y: random() * h,
+        r: random() * 1.1 + 0.3,
+        p: random() * 6.28,
+        vy: 0.04 + random() * 0.08,
       }));
       curDensity = dens;
     };
@@ -267,9 +271,23 @@ function HeroCanvas({ tweaks }: { tweaks: TweakState }): ReactNode {
       return [x, y];
     };
 
+    const advance = () => {
+      const P = ptr.current;
+      P.x += (P.tx - P.x) * 0.05;
+      P.y += (P.ty - P.y) * 0.05;
+      for (const d of dust) {
+        d.y -= d.vy;
+        if (d.y < -2) {
+          d.y = h + 2;
+          d.x = random() * w;
+        }
+      }
+    };
+
     const draw = (now: number): void => {
       const T = tRef.current;
       if (T.density !== curDensity) build();
+      advance();
       const cols: readonly RGB[] = [hexRGB(T.abbey), hexRGB(T.aviva), hexRGB(T.abi)];
       const glow = T.glow;
       const speed = T.speed;
@@ -278,8 +296,6 @@ function HeroCanvas({ tweaks }: { tweaks: TweakState }): ReactNode {
 
       // eased pointer parallax
       const P = ptr.current;
-      P.x += (P.tx - P.x) * 0.05;
-      P.y += (P.ty - P.y) * 0.05;
       const par = T.parallax ? 1 : 0;
       const offX = P.x * 26 * par;
       const offY = P.y * 18 * par;
@@ -302,11 +318,6 @@ function HeroCanvas({ tweaks }: { tweaks: TweakState }): ReactNode {
 
       // drifting dust
       for (const d of dust) {
-        d.y -= d.vy;
-        if (d.y < -2) {
-          d.y = h + 2;
-          d.x = Math.random() * w;
-        }
         const a = (0.16 + 0.22 * Math.sin(now * 0.001 + d.p)) * glow;
         ctx.fillStyle = `rgba(150,190,230,${a})`;
         ctx.beginPath();
@@ -434,7 +445,7 @@ function HeroCanvas({ tweaks }: { tweaks: TweakState }): ReactNode {
 
       ctx.globalCompositeOperation = "source-over";
     };
-    const gate = attachFrameGate(c, draw);
+    const gate = attachFrameGate(c, draw, { advance });
     return () => {
       gate.dispose();
       window.removeEventListener("resize", resize);
@@ -563,18 +574,20 @@ export default function HeroBoard(): ReactNode {
           <span className="hover:text-fg transition-colors cursor-default">Personas</span>
           <span className="hover:text-fg transition-colors cursor-default">Research</span>
         </div>
-        <button
-          onClick={() => setOverlay((o) => !o)}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs transition-colors"
-          style={{
-            borderColor: "rgba(255,255,255,0.15)",
-            background: "rgba(255,255,255,0.05)",
-            color: "var(--text-dim)",
-          }}
-        >
-          {overlay ? <IEyeOff s={14} /> : <IEye s={14} />}
-          {overlay ? "Hide" : "Show"}
-        </button>
+        {!isCapture() && (
+          <button
+            onClick={() => setOverlay((o) => !o)}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs transition-colors"
+            style={{
+              borderColor: "rgba(255,255,255,0.15)",
+              background: "rgba(255,255,255,0.05)",
+              color: "var(--text-dim)",
+            }}
+          >
+            {overlay ? <IEyeOff s={14} /> : <IEye s={14} />}
+            {overlay ? "Hide" : "Show"}
+          </button>
+        )}
       </div>
 
       {/* center content */}
@@ -597,7 +610,7 @@ export default function HeroBoard(): ReactNode {
             Privacy-first AI infrastructure
             <span className="w-1 h-1 rounded-full" style={{ background: "var(--text-faint)" }} />
             <span style={{ fontFamily: "var(--font-mono)", letterSpacing: "0.04em" }}>
-              Zig · local-first
+              CONCEPT · SOURCE REVIEW
             </span>
           </div>
 
@@ -629,8 +642,8 @@ export default function HeroBoard(): ReactNode {
               animation: "hero-rise .7s ease-out .2s both",
             }}
           >
-            From the vector engine up — WDBX, the ABI framework, and three minds in one system. Fast
-            by design, private by default, verifiable by architecture.
+            WDBX and ABI source foundations: durable records, scoped integrity checks and three
+            profile contracts. Runtime and security acceptance remain separate.
           </p>
 
           <div
@@ -669,11 +682,11 @@ export default function HeroBoard(): ReactNode {
                 animation: "hero-rise .7s ease-out .42s both",
               }}
             >
-              <PersonaDot color={t.abbey} name="Abbey" role="proof · verified" />
+              <PersonaDot color={t.abbey} name="Abbey" role="conversational · empathetic" />
               <span className="w-px h-7" style={{ background: "rgba(255,255,255,0.1)" }} />
-              <PersonaDot color={t.aviva} name="Aviva" role="research · vision" />
+              <PersonaDot color={t.aviva} name="Aviva" role="direct · technical" />
               <span className="w-px h-7" style={{ background: "rgba(255,255,255,0.1)" }} />
-              <PersonaDot color={t.abi} name="Abi" role="interactive · fast" />
+              <PersonaDot color={t.abi} name="Abi" role="orchestration · routing" />
             </div>
           )}
         </div>

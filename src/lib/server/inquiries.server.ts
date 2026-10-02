@@ -30,11 +30,8 @@ export async function submitInquiry(
         error: "Too many inquiries from here. Try again in a few minutes.",
       };
     }
-  } catch (error) {
-    console.error(
-      "Inquiry rate limit unavailable:",
-      error instanceof Error ? error.message : "unknown error",
-    );
+  } catch {
+    console.error("Inquiry rate limit unavailable.");
     return {
       ok: false,
       code: "unavailable",
@@ -76,11 +73,8 @@ export async function submitInquiry(
       insert into inquiries (user_id, name, email, company, project_type, message)
       values (${ctx.userId}, ${name}, ${email}, ${company}, ${topic}, ${message})`;
     return { ok: true };
-  } catch (error) {
-    console.error(
-      "Database error saving inquiry:",
-      error instanceof Error ? error.message : "unknown error",
-    );
+  } catch {
+    console.error("Database error saving inquiry.");
     return {
       ok: false,
       code: "unavailable",

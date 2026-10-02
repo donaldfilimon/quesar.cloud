@@ -15,7 +15,8 @@ export interface TranscriptLine {
 }
 
 export function Transcript({ lines }: { lines: readonly TranscriptLine[] }) {
-  const { chrome } = useTimeline();
+  const { chrome, capture } = useTimeline();
+  if (capture) return null;
   const panel = (
     <details
       style={{

@@ -1,3 +1,4 @@
+import { createServer as createNetServer, type AddressInfo } from "node:net";
 import { test, expect, afterEach } from "bun:test";
 import { mkdtemp, mkdir, writeFile, readFile, realpath } from "node:fs/promises";
 import { tmpdir } from "node:os";
@@ -5,6 +6,16 @@ import path from "node:path";
 import type { GenerationEvent } from "../shared/index";
 import { createServer, type ServerDeps } from "./server";
 import { PreviewManager } from "./preview";
+import { PreviewProxy } from "./preview-proxy";
+
+// OS-selected loopback fixture port; no fixed 4710 collision with another review.
+async function testPreviewPort(): Promise<number> {
+  const listener = createNetServer();
+  await new Promise<void>((resolve, reject) => { listener.once("error", reject); listener.listen(0, "127.0.0.1", resolve); });
+  const port = (listener.address() as AddressInfo).port;
+  await new Promise<void>((resolve, reject) => listener.close(error => error ? reject(error) : resolve()));
+  return port;
+}
 
 function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -40,7 +51,7 @@ const pairedFetch = (url: string, init: RequestInit = {}) => fetch(url, { ...ini
 
 async function makeHarness(
   engine: EngineFn,
-  opts?: { templateDir?: string; makeClient?: ServerDeps["makeClient"] }
+  opts?: { templateDir?: string; makeClient?: ServerDeps["makeClient"]; preview?: PreviewManager }
 ): Promise<Harness> {
   const home = await realpath(await mkdtemp(path.join(tmpdir(), "quasar-home-")));
   let templateDir = opts?.templateDir;
@@ -49,7 +60,7 @@ async function makeHarness(
     await writeFile(path.join(templateDir, "marker.txt"), "template-marker");
   }
 
-  const preview = new PreviewManager({ command: previewCommand });
+  const preview = opts?.preview ?? new PreviewManager({ command: previewCommand });
   const server = createServer({
     home,
     templateDir,
@@ -59,6 +70,7 @@ async function makeHarness(
     scaffoldInstall: false,
     port: 0,
     pairingToken: TOKEN,
+    allocatePreviewPort: testPreviewPort,
   });
 
   const harness: Harness = { home, templateDir, baseUrl: `http://localhost:${server.port}`, server, preview };
@@ -467,3 +479,82 @@ test("preview launch requires one-use POST ticket; content/assets require site c
   await pairedFetch(baseUrl + "/api/unpair", { method: "POST" });
   expect((await previewFetch(baseUrl + prefix + "/", { headers: { cookie } })).status).toBe(401);
 });
+
+class PausedStopPreview extends PreviewManager {
+  private pause?: { reached: () => void; wait: Promise<void> };
+  pauseNextStop() {
+    let release!: () => void;
+    let reached!: () => void;
+    const wait = new Promise<void>(resolve => { release = resolve; });
+    const atStop = new Promise<void>(resolve => { reached = resolve; });
+    this.pause = { reached, wait };
+    return { release, atStop };
+  }
+  override async stop(id: string) {
+    const pause = this.pause;
+    this.pause = undefined;
+    if (pause) { pause.reached(); await pause.wait; }
+    await super.stop(id);
+  }
+}
+
+for (const operation of ["start", "stop"] as const) test(`${operation} fences ticket issuance/redemption before an awaited teardown and old sessions cannot read a replacement`, async () => {
+  const preview = new PausedStopPreview({ command: previewCommand });
+  const { baseUrl, home } = await makeHarness(stubEngine([{ type: "done" }], 1), { preview });
+  const site = await (await pairedFetch(baseUrl + "/api/sites", { method: "POST", body: JSON.stringify({ name: "Epoch", prompt: "p" }) })).json();
+  const api = (action: string) => pairedFetch(`${baseUrl}/api/sites/${site.id}/preview/${action}`, { method: "POST" });
+  expect((await (await api("start")).json()).state).toBe("running");
+  const host = `${site.id}.localhost:${new URL(baseUrl).port}`;
+  const get = (cookie: string) => fetch(`${baseUrl}/preview/${site.id}/`, { headers: { host, cookie } });
+  const ticket = async () => (await (await api("ticket")).json()).ticket as string;
+  const redeem = (value: string) => fetch(`${baseUrl}/preview/${site.id}/launch`, { method: "POST", redirect: "manual", headers: { host, origin: TRUSTED, "content-type": "application/x-www-form-urlencoded" }, body: new URLSearchParams({ ticket: value }) });
+  const oldCookie = (await redeem(await ticket())).headers.get("set-cookie")!.split(";")[0]!;
+  const pendingTicket = await ticket();
+  expect((await get(oldCookie)).status).toBe(200);
+  const gate = preview.pauseNextStop();
+  const lifecycle = api(operation);
+  try {
+    await gate.atStop;
+    expect(preview.transport(site.id)).toBeNull();
+    expect((await api("ticket")).status).toBe(409);
+    expect((await redeem(pendingTicket)).status).toBe(410);
+    expect((await get(oldCookie)).status).toBe(410);
+  } finally { gate.release(); }
+  await lifecycle;
+  if (operation === "stop") await api("start");
+  expect((await get(oldCookie)).status).toBe(401);
+  expect((await redeem(pendingTicket)).status).toBe(401);
+
+  // A direct manager restart does not call the server's revoke helper. The
+  // instance binding itself must still reject both old tickets and sessions.
+  const previousTicket = await ticket();
+  const previousCookie = (await redeem(await ticket())).headers.get("set-cookie")!.split(";")[0]!;
+  const generation = preview.transport(site.id)!.generation;
+  await preview.start(site.id, path.join(home, "sites", site.slug), await testPreviewPort());
+  expect(preview.transport(site.id)!.generation).not.toBe(generation);
+  expect((await get(previousCookie)).status).toBe(401);
+  expect((await redeem(previousTicket)).status).toBe(401);
+  const freshCookie = (await redeem(await ticket())).headers.get("set-cookie")!.split(";")[0]!;
+  expect((await get(freshCookie)).status).toBe(200);
+}, 20_000);
+
+
+test("a launch body delayed across child replacement cannot redeem its old generation ticket", async () => {
+  const { preview, home, server, baseUrl } = await makeHarness(stubEngine([], 0));
+  await preview.start("delayed", home, await testPreviewPort());
+  const proxy = new PreviewProxy(preview);
+  const generation = preview.transport("delayed")!.generation;
+  const ticket = proxy.sessions.issue("delayed", TRUSTED, generation);
+  let body!: ReadableStreamDefaultController<Uint8Array>;
+  const stream = new ReadableStream<Uint8Array>({ start(controller) { body = controller; } });
+  const request = new Request(`${baseUrl}/preview/delayed/launch`, { method: "POST", headers: { origin: TRUSTED, "content-type": "application/x-www-form-urlencoded" }, body: stream });
+  // handle reads the running generation synchronously, then waits on req.text().
+  const response = proxy.handle(request, server, `http://delayed.localhost:${server.port}`, new Set([TRUSTED]));
+  await preview.start("delayed", home, await testPreviewPort());
+  expect(preview.transport("delayed")!.generation).not.toBe(generation);
+  body.enqueue(new TextEncoder().encode(new URLSearchParams({ ticket }).toString()));
+  body.close();
+  const rejected = await response;
+  expect(rejected?.status).toBe(401);
+  expect(rejected?.headers.get("set-cookie")).toBeNull();
+}, 10_000);

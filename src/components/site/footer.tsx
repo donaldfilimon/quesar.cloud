@@ -51,11 +51,11 @@ export function SiteFooter() {
         <div>
           <Logo />
           <p className="mt-5 max-w-sm text-sm leading-relaxed text-fg-muted">
-            MLAI Corporation builds assistant workflows, memory systems, and developer tools with
-            inspectable sources and explicit implementation boundaries.
+            MLAI builds assistant workflows, memory systems, and developer tools with inspectable
+            sources and explicit implementation boundaries.
           </p>
           <p className="mt-6 text-xs text-fg-subtle">
-            QSR-WEB · Local orientation · No hosted session
+            QSR-WEB · Browser orientation and configured server features
           </p>
           <ProvLegend className="mt-6 max-w-sm" />
         </div>
@@ -78,10 +78,10 @@ export function SiteFooter() {
       </div>
       <div className="border-t border-border">
         <div className="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-5 text-xs text-fg-subtle sm:flex-row sm:items-center sm:justify-between sm:px-6">
-          <p>© {new Date().getFullYear()} MLAI Corporation. Apache-2.0 on core runtimes.</p>
+          <p>© {new Date().getFullYear()} MLAI. ABI and WDBX include Apache-2.0 licenses.</p>
           <p>
-            This site orients and offers a signed-in console for field notes. It does not host
-            assistant sessions.
+            The static preview provides orientation and browser demos. A configured server
+            separately supports protected field notes and consent-gated model requests.
           </p>
         </div>
       </div>

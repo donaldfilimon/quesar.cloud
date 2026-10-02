@@ -226,8 +226,11 @@ export function Shockwave({
 }
 
 // Trailer scene wrapper: hard-cut friendly (instant on, quick fade only at the very edges).
-export function Beat({ children }: { children: ReactNode }) {
+export function Beat({ children, hold = false }: { children: ReactNode; hold?: boolean }) {
   const { localTime, duration } = useSprite();
-  const op = Math.min(clamp(localTime / 0.12, 0, 1), clamp((duration - localTime) / 0.12, 0, 1));
+  const op = Math.min(
+    clamp(localTime / 0.12, 0, 1),
+    hold ? 1 : clamp((duration - localTime) / 0.12, 0, 1),
+  );
   return <div style={{ position: "absolute", inset: 0, opacity: op }}>{children}</div>;
 }

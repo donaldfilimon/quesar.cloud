@@ -17,7 +17,8 @@
  * `@/lib/auth/middleware`.
  */
 import { passkey } from "@better-auth/passkey";
-import { betterAuth } from "better-auth";
+import { betterAuth, APIError } from "better-auth";
+import { validateDisplayName } from "../profile-name";
 import { tanstackStartCookies } from "better-auth/tanstack-start";
 import { randomBytes } from "node:crypto";
 import { Pool } from "pg";
@@ -115,18 +116,55 @@ function createAuth() {
       encryptOAuthTokens: true,
       accountLinking: {
         enabled: true,
-        trustedProviders: ["google", "apple"],
+        // Require the actual provider assertion; trusting a provider by name
+        // bypasses Better Auth's emailVerified check.
+        trustedProviders: [],
       },
     },
 
-    // Cache the session in the short-lived signed `session_data` cookie so reads
-    // (incl. the client's `/get-session`) skip the database.
-    session: { cookieCache: { enabled: true, maxAge: 300 } },
+    // Native auth/plugin endpoints also use sessionMiddleware. A signed cookie
+    // cache can otherwise authorize profile writes after database revocation.
+    // Keep the database authoritative for every session read.
+    session: { cookieCache: { enabled: false } },
+
+    databaseHooks: {
+      user: {
+        create: {
+          before: async (user) => {
+            const checked = validateDisplayName(user.name);
+            if (!checked.ok) throw new APIError("BAD_REQUEST", { message: checked.error });
+            return { data: { ...user, name: checked.name } };
+          },
+        },
+        update: {
+          before: async (user) => {
+            if (user.name === undefined) return;
+            const checked = validateDisplayName(user.name);
+            if (!checked.ok) throw new APIError("BAD_REQUEST", { message: checked.error });
+            return { data: { ...user, name: checked.name } };
+          },
+        },
+      },
+    },
 
     // Account deletion. Additive edit authorized by Donald on 2026-09-22 (see
     // AGENTS.md). Purge per-user app data first; a DB failure there
     // throws, so Better Auth aborts rather than leaving orphaned data behind.
     user: {
+      // Provider names alone do not prove control of an email. Apply the
+      // assertion gate to provisioning, linking and returning OAuth sign-ins.
+      validateUserInfo: ({ user, source }) => {
+        if (
+          source.method === "oauth" &&
+          (source.oauth?.providerId === "google" || source.oauth?.providerId === "apple") &&
+          user.emailVerified !== true
+        ) {
+          return {
+            error: "provider_email_unverified",
+            errorDescription: "A verified provider email is required.",
+          };
+        }
+      },
       deleteUser: {
         enabled: true,
         beforeDelete: async (user) => {

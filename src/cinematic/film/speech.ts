@@ -4,6 +4,7 @@
 // consumer reads and writes it through the functions below.
 
 import { useEffect, useState, useSyncExternalStore } from "react";
+import { isCapture } from "./capture";
 import { clamp, type PersonaKey } from "./tokens";
 import { NeuralVoice } from "./neural-voice";
 
@@ -53,7 +54,7 @@ export function useSettings(): Settings {
    captions carry the words. There is no Web Speech fallback. ─────────────── */
 
 export function speak(who: PersonaKey, text: string) {
-  if (typeof window === "undefined" || !settings.voiceOn) return;
+  if (isCapture() || typeof window === "undefined" || !settings.voiceOn) return;
   if (!NeuralVoice.isSupported()) return; // no engine → captions carry the words
   // force: true — the film is an explicit opt-in surface (the user navigated to
   // it, the VoiceToggle is on, and the AudioContext is already gated behind a
@@ -103,7 +104,7 @@ const lineKey = (line: { who: string; text: string }) => `${line.who}\u0000${lin
  * one.
  */
 export function primeNeural(lines: Array<{ who?: PersonaKey | string; text: string }>): () => void {
-  if (typeof window === "undefined") return () => {};
+  if (isCapture() || typeof window === "undefined") return () => {};
   const queued = lines.map((l) => ({ who: (l.who ?? "abbey") as string, text: l.text }));
   if (!voiceRequested) {
     for (const line of queued) pendingWarm.set(lineKey(line), line);
@@ -121,7 +122,7 @@ export function primeNeural(lines: Array<{ who?: PersonaKey | string; text: stri
 
 /** Start the model download and warm the queued lines. Idempotent. */
 export function requestVoice() {
-  if (voiceRequested || typeof window === "undefined") return;
+  if (isCapture() || voiceRequested || typeof window === "undefined") return;
   voiceRequested = true;
   if (!NeuralVoice.isSupported()) return;
   NeuralVoice.load().catch(() => {});

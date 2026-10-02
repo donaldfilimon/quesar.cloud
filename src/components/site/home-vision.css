@@ -1,0 +1,118 @@
+.vision-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: #050508;
+  color: #f8fafc;
+  border-bottom: 1px solid #253044;
+}
+
+.vision-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.75;
+  letter-spacing: 0.045em;
+  color: #a8b9cb;
+}
+
+.vision-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.65rem, 4.8vw, 4.3rem);
+  font-weight: 500;
+  line-height: 1.08;
+  letter-spacing: -0.055em;
+}
+
+.vision-title span {
+  color: #67f6f1;
+}
+
+.vision-lede {
+  color: #b7c4d4;
+}
+
+.vision-hero .vision-primary {
+  background: #f8fafc;
+  color: #050508;
+  border: 1px solid #f8fafc;
+}
+
+.vision-hero .vision-primary:hover {
+  background: #67f6f1;
+  border-color: #67f6f1;
+}
+
+.vision-hero .vision-secondary {
+  background: transparent;
+  color: #f8fafc;
+  border: 1px solid #526075;
+}
+
+.vision-hero .vision-secondary:hover {
+  background: #151b26;
+}
+
+.vision-abbey {
+  color: #67f6f1;
+}
+
+.vision-section-link {
+  color: #b7c4d4;
+}
+
+.vision-section-link:hover {
+  color: #67f6f1;
+}
+
+.vision-hero a:focus-visible {
+  outline: 2px solid #00d4ff;
+  outline-offset: 5px;
+}
+
+.vision-product {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  border-top: 2px solid var(--accent);
+  padding-top: 1.5rem;
+}
+
+.vision-product-aviva {
+  border-color: var(--abi);
+}
+
+.vision-product-abi {
+  border-color: var(--persona-abi);
+}
+
+.vision-product > a {
+  margin-top: auto;
+  padding-top: 1.5rem;
+}
+
+.vision-product-role {
+  color: var(--accent);
+}
+
+.vision-product-aviva .vision-product-role {
+  color: var(--abi);
+}
+
+.vision-code pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 1023px) {
+  .vision-neural {
+    position: absolute;
+    inset: auto -8% 0 40%;
+    opacity: 0.16;
+    pointer-events: none;
+  }
+
+  .vision-title,
+  .vision-lede {
+    max-width: 38rem;
+  }
+}

@@ -10,7 +10,7 @@ export type StatusKind =
 export const site = {
   name: "Quesar",
   company: "MLAI",
-  legal: "Machine Learning Advanced Innovations, Inc.",
+  legal: "MLAI",
   description:
     "Build assistant workflows, memory systems, and developer tools with inspectable sources and explicit implementation boundaries.",
   mission:
@@ -22,9 +22,10 @@ export const site = {
 } as const;
 
 export const nav = [
-  { to: "/services", label: "Services" },
+  { to: "/products", label: "Products" },
   { to: "/platform", label: "Platform" },
-  { to: "/docs", label: "Docs" },
-  { to: "/apps", label: "Apps" },
+  { to: "/developers", label: "Developers" },
+  { to: "/research", label: "Research" },
+  { to: "/services", label: "Services" },
   { to: "/contact", label: "Contact" },
 ] as const;

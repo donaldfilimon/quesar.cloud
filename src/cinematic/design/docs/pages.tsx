@@ -15,18 +15,14 @@ export const PAGES: Record<string, DocPage> = {
     body: () => (
       <>
         <P>
-          MLAI runs <strong style={{ color: "var(--text)" }}>local-first</strong>: the WDBX runtime, the ABI
-          framework and the personas all execute on your own infrastructure. Nothing leaves the device unless
-          you opt in.
+          This is a <strong style={{ color: "var(--text)" }}>concept docs board</strong>. Inspect the intended data boundary and execution path before making a deployment claim.
         </P>
-        <Callout kind="proof" title="Private by default">
-          Telemetry is off until you enable it in Settings. Every memory write is SHA-256-chained and verified
-          on read.
+        <Callout kind="proof" title="Source inspection / scoped integrity">
+          WDBX has predecessor-link checks and strict stored-content hash checks. Hash links are not digital signatures. This board is not a live settings service.
         </Callout>
         <H2 id="install">Build from source</H2>
         <P>
-          WDBX is a Rust workspace consumed by ABI and Abbey through sibling path dependencies. Clone the
-          public source and run its declared verification gate:
+          These source commands are illustrative. Check the intended revision and its declared gate before running them:
         </P>
         <CodeBlock
           label="shell"
@@ -34,8 +30,7 @@ export const PAGES: Record<string, DocPage> = {
         />
         <H2 id="first-index">Verify the index</H2>
         <P>
-          The real-store integration test rebuilds a layered HNSW graph from stored vectors, validates the
-          graph, and compares approximate search with the exact index.
+          Qualification needs a reproducible workload and comparison against an exact reference. Commands displayed here do not establish that those tests have passed.
         </P>
         <CodeBlock
           label="shell"
@@ -60,21 +55,18 @@ export const PAGES: Record<string, DocPage> = {
     body: () => (
       <>
         <P>
-          WDBX is a purpose-built vector-database runtime — HNSW search, durable WAL-backed storage,
-          SHA-256-chained history and lock-free MVCC concurrency. Memory you can verify.
+          WDBX source contains CRC-framed write-ahead records, snapshots and recovery paths. Source inspection does not establish runtime or security acceptance.
         </P>
         <H2 id="model">Storage model</H2>
         <P>
-          Each store rebuilds its HNSW graph from a durable snapshot and records writes through a CRC-framed
-          write-ahead log. Cluster support provides replication and read repair; it is not production sharding.
+          Durable storage and recovery paths need failure-path qualification. Distributed deployment is a separate acceptance question.
         </P>
         <Callout kind="info" title="Replication">
-          Replication and read repair are substrate capabilities, not a claim of a hosted multi-node service.
+          This concept board does not establish a hosted multi-node service.
         </Callout>
         <H2 id="integrity">Verifiable memory</H2>
         <P>
-          Every write is hashed and chained to its predecessor. Tamper with one block and the chain rejects
-          everything downstream on the next read.
+          Strict verification recomputes stored block hashes. Link-only verification checks predecessor links. Neither proves that an entire chain cannot be rewritten.
         </P>
         <CodeBlock
           label="shell"
@@ -82,8 +74,7 @@ export const PAGES: Record<string, DocPage> = {
         />
         <H2 id="concurrency">Concurrency</H2>
         <P>
-          Readers never block writers. <IC>wdbx</IC> uses lock-free MVCC: each query sees a consistent snapshot
-          while upserts proceed.
+          Concurrency behavior needs evidence on the intended execution path. This layout does not establish lock-free operation or nonblocking guarantees.
         </P>
       </>
     ),
@@ -99,38 +90,36 @@ export const PAGES: Record<string, DocPage> = {
     body: () => (
       <>
         <P>
-          Hierarchical Navigable Small World graphs trade memory and build time for recall and latency. These
-          are the knobs that matter.
+          A concept layout for exploring graph-search parameters.
         </P>
         <H2 id="build">Build parameters</H2>
         <ParamTable
           rows={[
-            ["M", "16", "Edges per node. Higher = better recall, more memory."],
-            ["ef_construction", "40", "Candidate list size at build time. Higher = better graph, slower build."],
-            ["metric", "cosine", "cosine for text embeddings; L2 for clustering."],
+            ["M", "16", "Illustrative edge budget"],
+            ["ef_construction", "40", "Illustrative construction candidate budget"],
+            ["metric", "cosine", "Illustrative metric choice; evaluate against the workload"],
           ]}
         />
         <H2 id="query">Query parameters</H2>
         <ParamTable
           rows={[
-            ["k", "10", "Number of neighbors to return."],
-            ["ef", "32", "Search breadth. Higher = better recall, higher latency."],
+            ["k", "10", "Illustrative requested neighbor count"],
+            ["ef", "32", "Illustrative query candidate budget"],
           ]}
         />
         <H2 id="guidance">Guidance</H2>
-        <Callout kind="warn" title="Aviva says">
-          Use HNSW. M=16, ef=32. Cosine for text, L2 for clustering. Done.
+        <Callout kind="warn" title="Illustrative guidance">
+          Choose the metric and search breadth against the intended data and measured recall; these sample settings are not a recommendation.
         </Callout>
         <P>
-          Numbers above are defaults, not benchmarks. Publish measured latency/recall only against a
-          reproducible suite.
+          Numbers above are sample settings for this layout, not verified runtime defaults or benchmarks. Measure the intended workload.
         </P>
       </>
     ),
   },
   personas: {
     eyebrow: "Personas",
-    title: "Three minds, one system",
+    title: "Three profiles, one system",
     toc: [
       ["abi", "Abi · moderator"],
       ["abbey", "Abbey · polymath"],
@@ -139,22 +128,21 @@ export const PAGES: Record<string, DocPage> = {
     body: () => (
       <>
         <P>
-          The personas are three registers exposed by the ABI framework. <IC>Abi</IC> is the default — she
-          classifies intent and routes to the others.
+          ABI defines three profile contracts. <IC>Abbey</IC> is the neutral routing prior. A local keyword routing path exists, and explicit selection can bypass scoring.
         </P>
-        <H2 id="abi">Abi · Adaptive Moderator</H2>
+        <H2 id="abi">ABI · Orchestration Profile</H2>
         <Callout kind="info" title="Cyan · interactive">
           Neutral and balanced; the connective tissue. "Routing this to Abbey — it reads as a learning question
           with some frustration."
         </Callout>
         <H2 id="abbey">Abbey · Empathic Polymath</H2>
-        <Callout kind="proof" title="Emerald · proof">
+        <Callout kind="proof" title="Emerald · conversational">
           Warm, scaffolds with metaphor before precision. "Think of a vector database as a library that files
           books by meaning, not title."
         </Callout>
-        <H2 id="aviva">Aviva · Unfiltered Expert</H2>
-        <Callout kind="warn" title="Violet · vision">
-          Direct, dense, zero hedging. "Use HNSW. M=16, ef=32. Cosine for text, L2 for clustering. Done."
+        <H2 id="aviva">Aviva · Direct Technical Profile</H2>
+        <Callout kind="warn" title="Violet · technical">
+          Direct and technically precise; uncertainty remains explicit. "Choose the metric and search breadth against the intended data and measured recall; these sample settings are not a recommendation."
         </Callout>
       </>
     ),

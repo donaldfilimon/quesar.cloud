@@ -1,5 +1,6 @@
 import { useEffect, type ReactNode } from "react";
 import { createPortal } from "react-dom";
+import { isCapture } from "../film/capture";
 import { Link } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
 import "../design/mlai-ds-tokens.css";
@@ -51,13 +52,15 @@ export function CinematicShell({
   return createPortal(
     <div className="mlai-ds fixed inset-0 z-80" style={{ background }}>
       {children}
-      <Link
-        to="/showcase"
-        className="fixed top-3.5 left-3.5 z-100 flex items-center gap-2 rounded-full border border-border-strong bg-[#14141c]/80 px-4 py-2 font-mono text-xs tracking-[0.12em] text-fg/70 backdrop-blur-md transition-colors hover:text-fg"
-        title="Back to the showcase"
-      >
-        <ArrowLeft size={15} /> SHOWCASE
-      </Link>
+      {!isCapture() && (
+        <Link
+          to="/showcase"
+          className="fixed top-3.5 left-3.5 z-100 flex items-center gap-2 rounded-full border border-border-strong bg-[#14141c]/80 px-4 py-2 font-mono text-xs tracking-[0.12em] text-fg/70 backdrop-blur-md transition-colors hover:text-fg"
+          title="Back to the showcase"
+        >
+          <ArrowLeft size={15} /> SHOWCASE
+        </Link>
+      )}
     </div>,
     document.body,
   );

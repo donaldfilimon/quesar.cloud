@@ -21,6 +21,7 @@ function stoppedStatus(): PreviewStatus {
 }
 
 interface Entry {
+  generation: number;
   secret: string;
   proc: ReturnType<typeof Bun.spawn> | null;
   status: PreviewStatus;
@@ -69,14 +70,17 @@ async function pumpLines(stream: ReadableStream<Uint8Array> | null | undefined, 
 export class PreviewManager {
   private readonly command: CommandFn;
   private readonly procs = new Map<string, Entry>();
+  private nextGeneration = 0;
 
   constructor(opts?: { command?: CommandFn }) {
     this.command = opts?.command ?? defaultCommand;
   }
 
   async start(siteId: string, siteDir: string, port: number): Promise<PreviewStatus> {
+    this.invalidate(siteId);
     await this.stop(siteId);
 
+    const generation = ++this.nextGeneration;
     const secret = newSecret();
     const cmd = this.command(siteDir, port);
     const logTail: string[] = [];
@@ -92,12 +96,12 @@ export class PreviewManager {
     } catch (err) {
       pushLine(logTail, err instanceof Error ? err.message : String(err));
       const status: PreviewStatus = { state: "crashed", port, url: null, logTail };
-      this.procs.set(siteId, { proc: null, status, secret });
+      this.procs.set(siteId, { proc: null, status, secret, generation });
       return cloneStatus(status);
     }
 
     const entry: Entry = {
-      proc, secret,
+      proc, secret, generation,
       status: { state: "starting", port, url: null, logTail },
     };
     this.procs.set(siteId, entry);
@@ -158,7 +162,15 @@ export class PreviewManager {
     return cloneStatus(finalStatus);
   }
 
+  // Synchronous fence: no ticket, HTTP request or upgrade may use a child
+  // once teardown begins, even while awaiting its exit (or a subclass hook).
+  invalidate(siteId: string): void {
+    const entry = this.procs.get(siteId);
+    if (entry) entry.status = { state: "stopped", port: null, url: null, logTail: entry.status.logTail };
+  }
+
   async stop(siteId: string): Promise<void> {
+    this.invalidate(siteId);
     const entry = this.procs.get(siteId);
     if (!entry) return;
     const proc = entry.proc;
@@ -180,9 +192,9 @@ export class PreviewManager {
     return entry ? cloneStatus(entry.status) : stoppedStatus();
   }
 
-  transport(siteId: string): { port: number; secret: string } | null {
+  transport(siteId: string): { port: number; secret: string; generation: number } | null {
     const entry = this.procs.get(siteId);
-    return entry?.status.state === "running" && entry.status.port ? { port: entry.status.port, secret: entry.secret } : null;
+    return entry?.status.state === "running" && entry.status.port ? { port: entry.status.port, secret: entry.secret, generation: entry.generation } : null;
   }
 
   async stopAll(): Promise<void> {
