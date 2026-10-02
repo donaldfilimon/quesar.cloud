@@ -33,8 +33,10 @@ const storage = {
     return key === ORIGIN_KEY ? await fallback().catch(() => null) : null;
   },
   async setItem(key: string, value: string) {
-    memory.set(key, value);
+    // Publish the in-memory fallback only after persistence succeeds. Otherwise
+    // a rejected save silently becomes the origin on the next cold load.
     if (typeof localStorage !== "undefined") localStorage.setItem(key, value);
+    memory.set(key, value);
   },
 };
 

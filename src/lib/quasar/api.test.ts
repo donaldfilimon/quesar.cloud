@@ -186,6 +186,30 @@ describe("quasar api", () => {
     expect(await failing.hydrateOrigin()).toBe(DEFAULT_ORIGIN);
   });
 
+  test("a rejected device save preserves the origin across a cold load", async () => {
+    vi.resetModules();
+    const fresh = await import("./api");
+    fresh.setFallbackOrigin(async () => "http://fallback.test:4700");
+    expect(await fresh.hydrateOrigin()).toBe("http://fallback.test:4700");
+    vi.stubGlobal("localStorage", {
+      getItem: () => null,
+      setItem: () => {
+        throw new Error("Storage unavailable");
+      },
+    });
+    try {
+      await expect(fresh.setBaseUrl("http://rejected.test:4700")).rejects.toThrow(
+        "Storage unavailable",
+      );
+      expect(fresh.getBaseUrl()).toBe("http://fallback.test:4700");
+      expect(await fresh.storedOrigin()).toBeNull();
+      fresh.beginColdLoad();
+      expect(await fresh.hydrateOrigin()).toBe("http://fallback.test:4700");
+    } finally {
+      vi.unstubAllGlobals();
+    }
+  });
+
   test("previewHref points localhost previews at a remote service host and rejects non-HTTP", () => {
     expect(previewHref(null, DEFAULT_ORIGIN)).toBeNull();
     expect(previewHref("http://localhost:4710", DEFAULT_ORIGIN)).toBe("http://localhost:4710/");
