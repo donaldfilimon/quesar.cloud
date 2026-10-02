@@ -1,1 +1,0 @@
-import{dt as e}from"./index-i-jPcX47.js";var t=e({type:`function`});export{t};

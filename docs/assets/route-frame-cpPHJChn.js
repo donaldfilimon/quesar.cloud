@@ -1,0 +1,1 @@
+import{t as e}from"./jsx-runtime-BNakU3Ej.js";import{mt as t,pt as n}from"./index-cQpbX0A5.js";var r=e();function i({children:e}){return n().length>0?(0,r.jsx)(t,{}):e}export{i as t};
