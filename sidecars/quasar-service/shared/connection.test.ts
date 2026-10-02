@@ -96,3 +96,25 @@ test("fetch receives its browser global receiver rather than the Connection inst
   const client = new Connection(storage(), nativeLikeFetch);
   expect(await client.request<unknown[]>("/api/sites")).toEqual([]);
 });
+
+test("request preserves every HeadersInit form and an explicit body content type", async () => {
+  const forms: HeadersInit[] = [
+    { authorization: "Bearer test", "Content-Type": "text/plain" },
+    new Headers({ authorization: "Bearer test", "Content-Type": "text/plain" }),
+    [["authorization", "Bearer test"], ["Content-Type", "text/plain"]],
+  ];
+  for (const headers of forms) {
+    const client = new Connection(storage(), stub(async (_url, init) => {
+      const received = new Headers(init?.headers);
+      expect(received.get("authorization")).toBe("Bearer test");
+      expect(received.get("content-type")).toBe("text/plain");
+      return Response.json({ ok: true });
+    }));
+    await client.request("/api/sites", { method: "POST", headers, body: "payload" });
+  }
+  const client = new Connection(storage(), stub(async (_url, init) => {
+    expect(new Headers(init?.headers).get("content-type")).toBe("application/json");
+    return Response.json({ ok: true });
+  }));
+  await client.request("/api/sites", { method: "POST", body: "{}" });
+});

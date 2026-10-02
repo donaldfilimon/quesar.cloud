@@ -63,8 +63,10 @@ export class Connection {
         timer = setTimeout(() => { reject(new Error("Connection timed out. Refresh state before trying again.")); controller.abort(); }, timeout);
       });
       const work = async () => {
+        const headers = new Headers(init.headers);
+        if (init.body && !headers.has("content-type")) headers.set("content-type", "application/json");
         const response = await this.fetcher.call(globalThis, `${this.origin}${path}`, { ...init, signal: controller.signal,
-          headers: { ...(init.body ? { "content-type": "application/json" } : {}), ...init.headers } });
+          headers });
         if (!response.ok) throw new Error((await response.text()) || response.statusText);
         return response.status === 204 ? undefined as T : await response.json() as T;
       };
