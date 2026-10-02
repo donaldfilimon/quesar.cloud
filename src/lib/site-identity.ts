@@ -12,7 +12,7 @@ export const site = {
   company: "MLAI",
   legal: "Machine Learning Advanced Innovations, Inc.",
   description:
-    "Quesar is the large model that trains and improves Abbey, Aviva, and the other assistants. This website does not host the model, run training, or host assistant sessions.",
+    "Build assistant workflows, memory systems, and developer tools with inspectable sources and explicit implementation boundaries.",
   mission:
     "Build assistant workflows, memory systems, and developer tools with inspectable sources and explicit implementation boundaries.",
   origin:
@@ -22,9 +22,9 @@ export const site = {
 } as const;
 
 export const nav = [
-  { to: "/quesar", label: "Quesar" },
+  { to: "/services", label: "Services" },
   { to: "/platform", label: "Platform" },
   { to: "/docs", label: "Docs" },
   { to: "/apps", label: "Apps" },
-  { to: "/company", label: "Company" },
+  { to: "/contact", label: "Contact" },
 ] as const;

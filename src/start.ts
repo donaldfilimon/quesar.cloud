@@ -10,6 +10,13 @@ import { createCsrfMiddleware, createMiddleware, createStart } from "@tanstack/r
  */
 const csrf = createCsrfMiddleware({ filter: (ctx) => ctx.handlerType === "serverFn" });
 
+/** Entry modules may load first; keep their services lazy until this preflight passes. */
+const readiness = createMiddleware({ type: "request" }).server(async ({ next, request }) => {
+  const { checkRuntimeRequest } = await import("@/lib/server/readiness.server");
+  const response = checkRuntimeRequest(request, import.meta.env.VITE_STATIC_SITE === "true");
+  return response ?? next();
+});
+
 /** Report-only CSP on page and server-route responses (policy: `src/lib/server/csp.ts`). */
 const csp = createMiddleware({ type: "request" }).server(async ({ next, handlerType }) => {
   if (handlerType === "router") {
@@ -22,5 +29,5 @@ const csp = createMiddleware({ type: "request" }).server(async ({ next, handlerT
 });
 
 export const startInstance = createStart(() => ({
-  requestMiddleware: [csrf, csp],
+  requestMiddleware: [csrf, readiness, csp],
 }));

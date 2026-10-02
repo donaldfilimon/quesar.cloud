@@ -1,5 +1,5 @@
 import { getRequest } from "@tanstack/react-start/server";
-import { auth, authConfigured } from "./server";
+import { getAuth, authConfigured } from "./server";
 
 /**
  * Server-side session resolution (server-only).
@@ -50,7 +50,7 @@ export async function getSessionUser(): Promise<VerifiedUser | null> {
   if (!authConfigured) return null;
   const request = getRequest();
   if (!request) return null;
-  const session = await auth.api.getSession({ headers: request.headers });
+  const session = await getAuth().api.getSession({ headers: request.headers });
   if (!session?.user) return null;
   return { id: session.user.id, email: session.user.email ?? null };
 }

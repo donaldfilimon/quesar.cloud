@@ -14,6 +14,7 @@ import {
   getSite,
   isUncertain,
   previewHref,
+  openPreview,
   previewStart,
   previewStatus,
   previewStop,
@@ -288,10 +289,13 @@ export function QuasarSiteDetail({ id }: { id: string }) {
                 {busy === "stop" ? "Stopping…" : "Stop preview"}
               </Button>
               {href && running ? (
-                <Button asChild variant="ghost">
-                  <a href={href} target="_blank" rel="noopener noreferrer">
-                    Open in a new tab
-                  </a>
+                <Button
+                  variant="ghost"
+                  onClick={() => {
+                    void openPreview(id).catch(setActionError);
+                  }}
+                >
+                  Open in a new tab
                 </Button>
               ) : null}
             </div>
@@ -301,13 +305,10 @@ export function QuasarSiteDetail({ id }: { id: string }) {
                 <p className="border-b border-border px-4 py-2 font-mono text-2xs text-fg-subtle">
                   {href}
                 </p>
-                <iframe
-                  title={`Preview of ${site.name}`}
-                  src={href}
-                  sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
-                  referrerPolicy="no-referrer"
-                  className="h-[32rem] w-full bg-bg"
-                />
+                <p className="p-4 text-sm text-fg-muted">
+                  Open the preview in a new tab to establish a protected session. Sessions expire
+                  after 30 minutes and are revoked when the preview stops.
+                </p>
               </div>
             ) : (
               <p className="mt-5 text-sm text-fg-muted">

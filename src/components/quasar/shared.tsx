@@ -140,18 +140,18 @@ export function ServiceUnreachable({
 
 export function SecurityNote() {
   return (
-    <Notice tone="warn" title="Run it locally, on a trusted network">
+    <Notice tone="warn" title="Pair with your operator-owned service">
       <p>
-        The Quasar service has no authentication, answers every origin with{" "}
-        <span className="font-mono">Access-Control-Allow-Origin: *</span>, and binds to all
-        interfaces. Any web page open in your browser, and any device on the same network, can list
-        your sites, start generation jobs billed to your Anthropic credentials, and launch{" "}
-        <span className="font-mono">next dev</span> preview servers.
+        The service binds to loopback by default. Site operations require your pairing token and
+        browser requests must come from an explicitly allowed origin. Saving the token grants this
+        browser access to your sites and generation jobs billed to the operator&apos;s Anthropic
+        credentials.
       </p>
       <p>
-        Run it only on a machine and network you trust, never expose port 4700 (or the 4710+ preview
-        ports) to the internet, and stop it when you are done. This site calls it from your browser;
-        quesar.cloud&apos;s servers never contact the service or see its credentials.
+        Previews open in a new tab on a separate origin for each site, with a temporary private
+        session. Stop, delete, or unpair revokes preview access. Remote previews require
+        operator-configured HTTPS and wildcard preview DNS; local preview children accept only the
+        service&apos;s private transport credential.
       </p>
     </Notice>
   );

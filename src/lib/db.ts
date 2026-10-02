@@ -1,5 +1,4 @@
 import { pendingMigrations } from "../../scripts/migration-plan.ts";
-import { staticSite } from "./static-site";
 
 /** Which database backend is active. */
 export type DbSource = "neon" | "pglite";
@@ -175,7 +174,7 @@ async function createSql(): Promise<Sql> {
  * otherwise the local PGLite fallback. Memoized — safe to call per request.
  *
  * Schema comes from `migrations/*.sql`, auto-applied before the first query on
- * both backends — define tables there, never inline in server functions.
+ * PGLite; Postgres requires db:migrate before deployment — define tables there, never inline in server functions.
  */
 export function getSql(): Promise<Sql> {
   sqlPromise ??= createSql().catch((err) => {
@@ -207,25 +206,10 @@ export async function getPglite(): Promise<import("@electric-sql/pglite").PGlite
  *   `migrations/*.sql`. Idempotent — concurrent callers share one promise.
  * - **Neon**: no-op (pool is created lazily on first query).
  *
- * Vite `configureServer` awaits this at dev startup; production imports of this
- * module kick it off immediately (see bottom of file).
+ * Vite `configureServer` awaits this at dev startup. Runtime callers await
+ * lazy initialization, so importing the module does not connect before preflight.
  */
 export function ensureDbReady(): Promise<void> {
   if (dbSource !== "pglite") return Promise.resolve();
   return getSql().then(() => undefined);
-}
-
-// Server-only eager start: kick PGLite bootstrap as soon as this module loads in
-// Node. Client bundles never hit this path (`getSql` throws in the browser).
-// Skipped for the static build: its prerender server has no database and does
-// not ship PGLite's WASM assets, so an eager start only logs ENOENT.
-const globalBoot = globalThis as typeof globalThis & {
-  __pgBootstrapPromise__?: Promise<void>;
-};
-if (typeof window === "undefined" && dbSource === "pglite" && !staticSite) {
-  globalBoot.__pgBootstrapPromise__ ??= ensureDbReady().catch((err) => {
-    globalBoot.__pgBootstrapPromise__ = undefined;
-    console.error("[db] PGLite bootstrap failed:", err);
-    throw err;
-  });
 }

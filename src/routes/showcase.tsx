@@ -1,3 +1,4 @@
+import { clientExperience } from "@/lib/mlai/categories/client-experience";
 import { createFileRoute } from "@tanstack/react-router";
 import { PageClose, PageHero, RouteFrame, Section } from "@/components/site";
 import { ShowcaseWall } from "@/components/site/showcase-wall";
@@ -61,10 +62,23 @@ function ShowcasePage() {
   return (
     <RouteFrame>
       <PageHero
-        eyebrow="Showcase"
-        title="Look, then inspect."
-        lede="The projection room. Films and trailers drawn frame by frame by a timeline engine in your browser, narrated by the three Quesar minds. Atmosphere is not evidence: the films are orientation, and status lives on the product pages."
+        eyebrow={clientExperience.landingIntros.showcase.eyebrow}
+        title={clientExperience.landingIntros.showcase.title}
+        lede={clientExperience.landingIntros.showcase.lede}
       />
+      <Section>
+        <p className="max-w-3xl text-base leading-relaxed text-fg-muted">
+          {clientExperience.landingIntros.showcase.availability}
+        </p>
+        <a
+          href={clientExperience.landingIntros.showcase.sources[0]}
+          target="_blank"
+          rel="noreferrer"
+          className="mt-4 inline-block text-sm text-accent underline underline-offset-4"
+        >
+          Inspect the source behind this page
+        </a>
+      </Section>
       <Section>
         <Trailer full />
         <div className="mt-10">
@@ -72,7 +86,11 @@ function ShowcasePage() {
         </div>
       </Section>
       <PageClose
-        primary={{ to: "/architecture", label: "Architecture" }}
+        primary={{ to: "/contact", label: "Discuss your project" }}
+        secondary={[
+          { to: "/architecture", label: "Architecture" },
+          { to: "/docs", label: "Documentation" },
+        ]}
         next={[
           { to: "/quesar", label: "Quesar", body: "The product that the film orients." },
           { to: "/apps", label: "Apps", body: "Working surfaces, not stills." },

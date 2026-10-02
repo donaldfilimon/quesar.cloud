@@ -1,18 +1,27 @@
+import { fileURLToPath } from "node:url";
+import { newSecret } from "./security";
 import type { PreviewStatus } from "../shared/index";
 
 const LOG_TAIL_SIZE = 50;
-const HEALTH_POLL_TRIES = 30;
+const HEALTH_POLL_TRIES = 120;
 const HEALTH_POLL_INTERVAL_MS = 500;
 
 type CommandFn = (siteDir: string, port: number) => string[];
 
-const defaultCommand: CommandFn = (_siteDir, port) => ["bun", "x", "next", "dev", "--port", String(port)];
+const defaultCommand: CommandFn = () => ["node", fileURLToPath(new URL("./preview-runner.mjs", import.meta.url))];
+
+export function childEnvironment(secret: string, siteId: string, port: number): Record<string, string> {
+  const env: Record<string, string> = {};
+  for (const key of ["PATH", "HOME", "TMPDIR", "LANG", "SYSTEMROOT"]) if (process.env[key]) env[key] = process.env[key]!;
+  return { ...env, NODE_ENV: "development", NEXT_TELEMETRY_DISABLED: "1", QUASAR_CHILD_SECRET: secret, QUASAR_CHILD_PORT: String(port), QUASAR_PREVIEW_BASE_PATH: `/preview/${encodeURIComponent(siteId)}` };
+}
 
 function stoppedStatus(): PreviewStatus {
   return { state: "stopped", port: null, url: null, logTail: [] };
 }
 
 interface Entry {
+  secret: string;
   proc: ReturnType<typeof Bun.spawn> | null;
   status: PreviewStatus;
 }
@@ -68,6 +77,7 @@ export class PreviewManager {
   async start(siteId: string, siteDir: string, port: number): Promise<PreviewStatus> {
     await this.stop(siteId);
 
+    const secret = newSecret();
     const cmd = this.command(siteDir, port);
     const logTail: string[] = [];
 
@@ -75,18 +85,19 @@ export class PreviewManager {
     try {
       proc = Bun.spawn(cmd, {
         cwd: siteDir,
+        env: childEnvironment(secret, siteId, port),
         stdout: "pipe",
         stderr: "pipe",
       });
     } catch (err) {
       pushLine(logTail, err instanceof Error ? err.message : String(err));
       const status: PreviewStatus = { state: "crashed", port, url: null, logTail };
-      this.procs.set(siteId, { proc: null, status });
+      this.procs.set(siteId, { proc: null, status, secret });
       return cloneStatus(status);
     }
 
     const entry: Entry = {
-      proc,
+      proc, secret,
       status: { state: "starting", port, url: null, logTail },
     };
     this.procs.set(siteId, entry);
@@ -105,7 +116,7 @@ export class PreviewManager {
     for (let i = 0; i < HEALTH_POLL_TRIES; i++) {
       if (hasExited(proc)) break;
       try {
-        const res = await fetch(`http://localhost:${port}/`);
+        const res = await fetch(`http://127.0.0.1:${port}/__quasar_health`, { headers: { "x-quasar-preview": secret }, signal: AbortSignal.timeout(1000) });
         if (res.status === 200) {
           running = true;
           break;
@@ -127,7 +138,7 @@ export class PreviewManager {
     }
 
     const finalStatus: PreviewStatus = running
-      ? { state: "running", port, url: `http://localhost:${port}`, logTail }
+      ? { state: "running", port, url: `/preview/${encodeURIComponent(siteId)}/`, logTail }
       : { state: "crashed", port, url: null, logTail };
 
     // Another start()/stop() may have raced us while we were awaiting the
@@ -167,6 +178,11 @@ export class PreviewManager {
   status(siteId: string): PreviewStatus {
     const entry = this.procs.get(siteId);
     return entry ? cloneStatus(entry.status) : stoppedStatus();
+  }
+
+  transport(siteId: string): { port: number; secret: string } | null {
+    const entry = this.procs.get(siteId);
+    return entry?.status.state === "running" && entry.status.port ? { port: entry.status.port, secret: entry.secret } : null;
   }
 
   async stopAll(): Promise<void> {

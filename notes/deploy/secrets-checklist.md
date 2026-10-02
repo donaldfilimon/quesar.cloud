@@ -6,7 +6,7 @@ The static preview on GitHub Pages needs **none** of these. They are for the ser
 
 | Variable | Needed for | How to get it |
 |---|---|---|
-| `DATABASE_URL` | all persistence (without it data is in-memory and lost) | Vercel Marketplace → Neon Postgres, which injects it. Migrations run during `bun run build`. |
+| `DATABASE_URL` | all persistence (without it data is in-memory and lost) | Vercel Marketplace → Neon Postgres, which injects it. Run `bun run db:migrate` explicitly before deployment; builds never migrate. |
 | `BETTER_AUTH_SECRET` | signing sessions | `openssl rand -base64 32` |
 | `BETTER_AUTH_URL` | auth origin and passkey relying party | `https://quesar.cloud`, the production origin. Passkeys bind to this host name, so passkeys registered under one host do not work under another. |
 | `APP_ENCRYPTION_KEY` | sealed audits and workspace tokens | `openssl rand -base64 32`. **Back it up.** Losing it strands every sealed value. |
@@ -25,7 +25,11 @@ The static preview on GitHub Pages needs **none** of these. They are for the ser
 
 Sign-in methods appear only when their credentials exist: email/password and passkeys are always on (with a server); each of Google, Apple and X shows up once its variables are set, so a partly configured deployment never shows a button that fails.
 
-**Order when the server deployment goes live:** create the Vercel project, add Neon, set the variables above, deploy, and check `/login`, `/console` and `/admin`. Then move the `quesar.cloud` domain from GitHub Pages to Vercel.
+**Release order:** confirm the authorized staging project and isolated database, configure variables, run `bun run db:migrate` against that release database, verify `_migrations` and the expected schema, then deploy the separately built artifact. Check `/api/readiness`, `/login`, `/console` and `/admin`, and complete provider acceptance before requesting production cutover approval. Production requires a valid Postgres URL, a stable session signing secret of at least 32 characters, and an HTTPS auth origin without credentials/path/query/fragment. Auth-disabled durable databases refuse requests. Missing optional encryption remains unavailable; malformed encryption keys are reported as invalid.
+
+`/api/readiness` is configuration readiness, not a connectivity or migration probe. It returns only safe reason codes and optional key states with `Cache-Control: no-store`. Static builds bypass the runtime preflight through their compiled static flag; `TSS_PRERENDERING` does not bypass production validation.
+
+**Rollback:** retain the previous deploy artifact and a tested backup/restore receipt. Rolling back code does not undo migrations. Irreversible schema/data changes require a separately reviewed forward repair or restore, with downtime/data-loss consequences assessed before release.
 
 ## Local build check (2026-09-23)
 

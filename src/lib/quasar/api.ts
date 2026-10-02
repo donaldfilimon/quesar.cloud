@@ -38,6 +38,10 @@ const storage = {
     if (typeof localStorage !== "undefined") localStorage.setItem(key, value);
     memory.set(key, value);
   },
+  async removeItem(key: string) {
+    if (typeof localStorage !== "undefined") localStorage.removeItem(key);
+    memory.delete(key);
+  },
 };
 
 let connection = new Connection(storage);
@@ -72,6 +76,66 @@ export function getBaseUrl() {
 
 export function setBaseUrl(url: string) {
   return connection.save(url);
+}
+
+export const savePairing = (token: string) => connection.saveCredential(token);
+export const hasPairing = () => connection.hasCredential();
+export async function clearPairing() {
+  // Online revocation must succeed before claiming sessions were revoked.
+  await connection.request("/api/unpair", { method: "POST" });
+  await connection.clearCredential();
+}
+export const forgetPairingLocally = () => connection.clearCredential();
+
+export async function openPreview(id: string) {
+  const origin = connection.origin;
+  const name = `quasar-preview-${crypto.randomUUID()}`;
+  const popup = window.open("about:blank", name);
+  if (!popup) throw new Error("Allow a new tab to open this preview.");
+  popup.opener = null;
+  try {
+    const launch = await connection.request<{ ticket: string; action: string }>(
+      `/api/sites/${encodeURIComponent(id)}/preview/ticket`,
+      { method: "POST" },
+    );
+    const target = new URL(launch.action);
+    const service = new URL(origin);
+    const loopback = ["localhost", "127.0.0.1", "[::1]"].includes(service.hostname);
+    if (
+      connection.origin !== origin ||
+      target.protocol !== service.protocol ||
+      target.port !== service.port ||
+      target.username ||
+      target.password ||
+      target.search ||
+      target.hash ||
+      target.pathname !== `/preview/${encodeURIComponent(id)}/launch` ||
+      (loopback
+        ? target.hostname !== `${id}.localhost`
+        : target.protocol !== "https:" ||
+          !target.hostname.startsWith(`${id}.`) ||
+          target.origin === origin)
+    )
+      throw new Error("Preview connection changed.");
+    const form = document.createElement("form");
+    form.method = "POST";
+    form.action = target.href;
+    form.target = name;
+    const field = document.createElement("input");
+    field.type = "hidden";
+    field.name = "ticket";
+    field.value = launch.ticket;
+    form.append(field);
+    document.body.append(form);
+    try {
+      form.submit();
+    } finally {
+      form.remove();
+    }
+  } catch (error) {
+    popup.close();
+    throw error;
+  }
 }
 
 export function subscribeOrigin(listener: () => void) {
@@ -142,28 +206,35 @@ export function previewStop(id: string) {
   );
 }
 
-/**
- * The service reports previews as `http://localhost:<port>`. When the service
- * runs on another host (a LAN machine), point the URL at that host instead, as
- * the Quasar Expo app did. Returns null for anything that is not HTTP(S).
- */
+/** Accept only per-site preview origins and their protected path. */
 export function previewHref(url: string | null, serviceOrigin: string): string | null {
   if (!url) return null;
-  let parsed: URL;
   try {
-    parsed = new URL(url);
+    const target = new URL(url);
+    const service = new URL(serviceOrigin);
+    const match = /^\/preview\/([a-z0-9-]+)\/$/.exec(target.pathname);
+    if (
+      !match ||
+      target.username ||
+      target.password ||
+      target.search ||
+      target.hash ||
+      target.protocol !== service.protocol ||
+      target.port !== service.port
+    )
+      return null;
+    const site = match[1];
+    const loopback = ["localhost", "127.0.0.1", "[::1]"].includes(service.hostname);
+    if (
+      loopback
+        ? target.hostname !== `${site}.localhost`
+        : target.protocol !== "https:" ||
+          !target.hostname.startsWith(`${site}.`) ||
+          target.origin === service.origin
+    )
+      return null;
+    return target.href;
   } catch {
     return null;
   }
-  if (parsed.protocol !== "http:" && parsed.protocol !== "https:") return null;
-  const local = ["localhost", "127.0.0.1", "[::1]", "0.0.0.0"];
-  if (local.includes(parsed.hostname)) {
-    try {
-      const service = new URL(serviceOrigin);
-      if (!local.includes(service.hostname)) parsed.hostname = service.hostname;
-    } catch {
-      // Keep the service-reported host.
-    }
-  }
-  return parsed.toString();
 }

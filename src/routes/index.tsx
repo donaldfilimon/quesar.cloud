@@ -1,13 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import type { ReactNode } from "react";
-import { ChipCutaway } from "@/components/diagram/chip-cutaway";
+import { StatusBadge } from "@/components/site/status-badge";
+import { clientExperience } from "@/lib/mlai/categories/client-experience";
 import { Backtrace } from "@/components/site/backtrace";
-import { HomeResearchPreview } from "@/components/site/home-sections";
 import { Trailer } from "@/components/site/trailer";
 import { Button } from "@/components/ui/button";
-import { homePrivacy, homeStart } from "@/lib/home-content";
 import { site } from "@/lib/site-identity";
-import { wdbxFacts } from "@/lib/mlai/wdbx-facts";
 import { jsonLdScript } from "@/lib/mlai/structured-data";
 import { pageHead } from "@/lib/seo";
 import { cn } from "@/lib/utils";
@@ -29,9 +27,9 @@ const organizationLd = {
   ],
 };
 
-const HOME_TITLE = `${site.name}: AI memory that can show its sources`;
+const HOME_TITLE = `${site.company}: AI engineering`;
 const HOME_DESCRIPTION =
-  "Quesar is the large model that trains and improves Abbey, Aviva, and the other assistants. This website does not host the model, run training, or host assistant sessions.";
+  "AI engineering engagements for traceable retrieval, bounded agent workflows, and private deployment.";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -45,60 +43,82 @@ function Home() {
   return (
     <>
       <Hero />
-      <StartHere />
-      <Row id="problem" label="The problem" title="Sessions forget. A substrate keeps the record.">
-        <Transcripts />
-      </Row>
-      <Row
-        id="stack"
-        label="The stack"
-        title="Abbey runs on ABI, which runs on WDBX."
-        lede="Abbey is the assistant people talk to. ABI orchestrates the work. WDBX stores every episode with its provenance. Pick a layer to see what is in source today."
-        wide
-      >
-        <ChipCutaway />
-      </Row>
-      <Row
-        id="retrieval"
-        label="Retrieval"
-        title="Configuration facts, read from the implementation."
-        lede="These are the active Rust crate's settings, not recall, throughput or latency claims."
-      >
-        <dl className="divide-y divide-border border-y border-border">
-          {wdbxFacts.map((row) => (
-            <div
-              key={row.k}
-              className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 py-3.5"
-            >
-              <dt className="text-sm text-fg-muted">{row.k}</dt>
-              <dd className="font-mono text-sm text-fg">{row.v}</dd>
-            </div>
+      <Row id="engagements" label="Services" title="Choose the next engineering decision." wide>
+        <div className="grid gap-8 md:grid-cols-3">
+          {clientExperience.engagementPaths.map((path) => (
+            <article key={path.id} className="border-t border-border pt-6">
+              <StatusBadge status={path.status} />
+              <h3 className="mt-4 font-display text-2xl">{path.title}</h3>
+              <p className="mt-3 text-base leading-relaxed text-fg-muted">{path.body}</p>
+              <ul className="mt-5 space-y-2 text-sm text-fg-muted">
+                {path.services.map((service) => (
+                  <li key={service}>{service}</li>
+                ))}
+              </ul>
+              <Link to={path.href} className="mt-6 inline-block text-accent">
+                Explore services →
+              </Link>
+            </article>
           ))}
-        </dl>
+        </div>
+      </Row>
+      <Row id="evidence" label="Evidence" title="Inspect the work before choosing a path.">
+        <ul className="divide-y divide-border border-y border-border">
+          {clientExperience.evidenceDoors.map((door) => (
+            <li key={door.href} className="py-5">
+              <Link to={door.href} className="font-display text-xl text-accent">
+                {door.title}
+              </Link>
+              <p className="mt-2 text-base leading-relaxed text-fg-muted">{door.body}</p>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-6 text-sm leading-relaxed text-fg-muted">
+          {clientExperience.landingIntros.products.availability}
+        </p>
       </Row>
       <Row
         id="film"
         label="The film"
-        title="See the system before you read about it."
-        lede="The opening cut: the mark. The wafer and the board follow in the showcase. It plays when you press play, with labels rather than a live runtime."
+        title="See the direction. Inspect the evidence."
+        lede={clientExperience.landingIntros.showcase.availability}
       >
         <Trailer />
+        <Link to="/showcase" className="mt-5 inline-block text-accent">
+          Explore the showcase →
+        </Link>
       </Row>
-      <HomeResearchPreview />
       <Row
-        id="privacy"
-        label="Privacy"
-        title="Privacy is a mechanism, and every mechanism has a scope."
+        id="process"
+        label="Engagement process"
+        title="Agree on the evidence before implementation."
       >
-        <dl className="grid gap-x-10 gap-y-8 sm:grid-cols-2">
-          {homePrivacy.map((item) => (
-            <div key={item.title}>
-              <dt className="font-display text-lg tracking-tight">{item.title}</dt>
-              <dd className="mt-2 text-base leading-relaxed text-fg-muted">{item.body}</dd>
-            </div>
+        <ol className="divide-y divide-border border-y border-border">
+          {clientExperience.engagementProcess.map((step, index) => (
+            <li key={step.title} className="py-5">
+              <h3 className="font-display text-xl">
+                <span className="mr-3 font-mono text-sm text-fg-subtle">0{index + 1}</span>
+                {step.title}
+              </h3>
+              <p className="mt-3 text-base leading-relaxed text-fg-muted">{step.body}</p>
+            </li>
           ))}
-        </dl>
-        <p className="mt-8 text-sm text-fg-subtle">{site.apple}</p>
+        </ol>
+      </Row>
+      <Row
+        id="contact"
+        label="Next step"
+        title="Discuss your project."
+        lede={clientExperience.landingIntros.company.availability}
+      >
+        <div className="flex flex-wrap gap-3">
+          <Button asChild size="lg">
+            <Link to="/contact">Discuss your project</Link>
+          </Button>
+          <Button asChild variant="secondary" size="lg">
+            <Link to="/services">Explore services</Link>
+          </Button>
+        </div>
       </Row>
     </>
   );
@@ -109,21 +129,21 @@ function Hero() {
     <section className="border-b border-border">
       <div className="mx-auto grid max-w-6xl gap-12 px-4 pt-14 pb-16 sm:px-6 sm:pt-20 sm:pb-24 lg:grid-cols-12 lg:items-end lg:gap-10">
         <div className="lg:col-span-7">
-          <p className="eyebrow">Quesar by MLAI</p>
-          <h1 className="display-title mt-6 lg:max-w-[14ch]">
-            AI memory that can show its sources.
-          </h1>
+          <p className="eyebrow">{clientExperience.hero.eyebrow}</p>
+          <h1 className="display-title mt-6 lg:max-w-[14ch]">{clientExperience.hero.title}</h1>
           <p className="mt-7 max-w-[54ch] text-lg leading-8 text-fg-muted">
-            Quesar is the large model that trains and improves Abbey, Aviva, and the other
-            assistants. This website does not host the model, run training, or host assistant
-            sessions.
+            {clientExperience.hero.lede}
           </p>
           <div className="mt-9 flex flex-wrap gap-3">
             <Button asChild size="lg">
-              <Link to="/architecture">See how it works</Link>
+              <Link to={clientExperience.hero.primaryCta.href}>
+                {clientExperience.hero.primaryCta.label}
+              </Link>
             </Button>
             <Button asChild variant="secondary" size="lg">
-              <Link to="/developers">Read the source</Link>
+              <Link to={clientExperience.hero.secondaryCta.href}>
+                {clientExperience.hero.secondaryCta.label}
+              </Link>
             </Button>
           </div>
         </div>
@@ -176,94 +196,6 @@ function Row({
           ) : null}
         </header>
         <div className={cn("min-w-0", wide ? "" : "lg:col-span-7")}>{children}</div>
-      </div>
-    </section>
-  );
-}
-
-function Transcripts() {
-  return (
-    <div className="grid gap-4 sm:grid-cols-2">
-      <figure className="rounded-lg bg-bg-elevated p-5 shadow-border">
-        <figcaption className="text-sm text-fg-muted">A conventional session</figcaption>
-        <p className="mt-3 font-mono text-[0.8125rem] leading-7 text-fg">
-          you: remember the deploy target
-          <br />
-          model: noted
-          <br />
-          <span className="text-status-partial">session ends</span>
-          <br />
-          you: what was the target?
-          <br />
-          model: I don't have that
-        </p>
-      </figure>
-      <figure className="rounded-lg bg-bg-elevated p-5 shadow-border">
-        <figcaption className="text-sm text-fg-muted">With WDBX underneath</figcaption>
-        <p className="mt-3 font-mono text-[0.8125rem] leading-7 text-fg">
-          episode: deploy target recorded
-          <br />
-          provenance: signed, content-addressed
-          <br />
-          retrieval: causal and semantic
-          <br />
-          you: what was the target?
-          <br />
-          <span className="text-status-current">answer cites the recorded episode</span>
-        </p>
-      </figure>
-      <p className="text-sm text-fg-subtle sm:col-span-2">
-        Memory here is a system capability: persistence, retrieval and provenance. It is not a claim
-        of sentience.
-      </p>
-    </div>
-  );
-}
-
-function StartHere() {
-  return (
-    <section
-      id="start"
-      aria-labelledby="start-title"
-      className="scroll-mt-20 border-b border-border"
-    >
-      <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24">
-        <p className="eyebrow">Start here</p>
-        <h2 id="start-title" className="section-title mt-4 max-w-[20ch]">
-          Find your way into the work.
-        </h2>
-        <p className="mt-4 max-w-2xl text-base leading-relaxed text-fg-muted">
-          These paths are open on the public site. Running the software starts from its source and
-          setup guides.
-        </p>
-        <ul className="mt-10 grid border-t border-border sm:grid-cols-2">
-          {homeStart.map((item) => (
-            <li
-              key={item.href}
-              className="border-b border-border sm:odd:border-r sm:odd:pr-8 sm:even:pl-8"
-            >
-              <Link
-                to={item.href}
-                className="group block rounded-sm py-6 no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-              >
-                <span className="font-display text-xl tracking-tight text-fg group-hover:text-accent">
-                  {item.title}
-                </span>
-                <span className="mt-2 block text-base leading-relaxed text-fg-muted">
-                  {item.body}
-                </span>
-              </Link>
-            </li>
-          ))}
-        </ul>
-        <div className="mt-10 flex flex-wrap gap-3">
-          <Button asChild size="lg">
-            <Link to="/get-started">Get started</Link>
-          </Button>
-          <Button asChild variant="secondary" size="lg">
-            <Link to="/contact">Start an inquiry</Link>
-          </Button>
-        </div>
       </div>
     </section>
   );

@@ -1,3 +1,4 @@
+import { clientExperience } from "@/lib/mlai/categories/client-experience";
 import { createFileRoute } from "@tanstack/react-router";
 import {
   FaqList,
@@ -30,10 +31,23 @@ function CompanyPage() {
   return (
     <>
       <PageHero
-        eyebrow="Company"
-        title="Three voices. One substrate. Yours alone."
-        lede={site.origin}
+        eyebrow={clientExperience.landingIntros.company.eyebrow}
+        title={clientExperience.landingIntros.company.title}
+        lede={clientExperience.landingIntros.company.lede}
       />
+      <Section>
+        <p className="max-w-3xl text-base leading-relaxed text-fg-muted">
+          {clientExperience.landingIntros.company.availability}
+        </p>
+        <a
+          href={clientExperience.landingIntros.company.sources[0]}
+          target="_blank"
+          rel="noreferrer"
+          className="mt-4 inline-block text-sm text-accent underline underline-offset-4"
+        >
+          Inspect the source behind this page
+        </a>
+      </Section>
 
       <Section eyebrow="Entity" title="Who ships this.">
         <div className="grid gap-4 md:grid-cols-2">
@@ -94,17 +108,17 @@ function CompanyPage() {
       <Section eyebrow="Questions" title="Short answers. No borrowed benchmarks.">
         <FaqList items={faqs} />
       </Section>
-      <Section eyebrow="Public work" title="Source is the contact path.">
+      <Section eyebrow="Public work" title="Choose the right contact path.">
         <p className="max-w-2xl text-sm leading-relaxed text-fg-muted">
-          Issues, setup questions, and patches belong on the pages that implement each surface.
-          There is an inquiry form on this site. It does not send mail; signed-in notes land in the
-          field console.
+          Discuss a project through the contact form. The public static site opens an email draft; a
+          configured server accepts and stores inquiries. Setup questions and patches belong with
+          the source for the relevant product.
         </p>
       </Section>
       <PageClose
-        primary={{ to: "/source", label: "Source catalog" }}
+        primary={{ to: "/contact", label: "Discuss your project" }}
         secondary={[
-          { to: "/contact", label: "Contact" },
+          { to: "/source", label: "Source catalog" },
           { to: "/investors", label: "Investors" },
         ]}
         next={[

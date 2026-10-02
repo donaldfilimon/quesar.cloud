@@ -34,6 +34,9 @@ interface Harness {
 }
 
 const harnesses: Harness[] = [];
+const TOKEN = "t".repeat(43);
+const TRUSTED = "http://localhost:8080";
+const pairedFetch = (url: string, init: RequestInit = {}) => fetch(url, { ...init, headers: { authorization: `Bearer ${TOKEN}`, origin: TRUSTED, ...init.headers } });
 
 async function makeHarness(
   engine: EngineFn,
@@ -55,6 +58,7 @@ async function makeHarness(
     preview,
     scaffoldInstall: false,
     port: 0,
+    pairingToken: TOKEN,
   });
 
   const harness: Harness = { home, templateDir, baseUrl: `http://localhost:${server.port}`, server, preview };
@@ -76,7 +80,7 @@ afterEach(async () => {
 async function pollUntilIdle(baseUrl: string, id: string, timeoutMs = 3000): Promise<any> {
   const deadline = Date.now() + timeoutMs;
   while (Date.now() < deadline) {
-    const res = await fetch(`${baseUrl}/api/sites/${id}`);
+    const res = await pairedFetch(`${baseUrl}/api/sites/${id}`);
     const body = await res.json();
     if (body.status !== "generating") return body;
     await sleep(20);
@@ -89,7 +93,7 @@ test("POST /api/sites scaffolds the site, runs the job to idle, and replays even
     stubEngine([{ type: "text", text: "hi" }, { type: "done" }], 10)
   );
 
-  const createRes = await fetch(`${baseUrl}/api/sites`, {
+  const createRes = await pairedFetch(`${baseUrl}/api/sites`, {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify({ name: "My Site", prompt: "p" }),
@@ -106,7 +110,7 @@ test("POST /api/sites scaffolds the site, runs the job to idle, and replays even
   const idleSite = await pollUntilIdle(baseUrl, site.id);
   expect(idleSite.status).toBe("idle");
 
-  const eventsRes = await fetch(`${baseUrl}/api/sites/${site.id}/events?since=0`);
+  const eventsRes = await pairedFetch(`${baseUrl}/api/sites/${site.id}/events?since=0`);
   expect(eventsRes.status).toBe(200);
   const eventsBody = await eventsRes.json();
   expect(eventsBody).toEqual({
@@ -114,7 +118,7 @@ test("POST /api/sites scaffolds the site, runs the job to idle, and replays even
     next: 2,
   });
 
-  const emptyRes = await fetch(`${baseUrl}/api/sites/${site.id}/events?since=2`);
+  const emptyRes = await pairedFetch(`${baseUrl}/api/sites/${site.id}/events?since=2`);
   const emptyBody = await emptyRes.json();
   expect(emptyBody).toEqual({ events: [], next: 2 });
 });
@@ -127,7 +131,7 @@ test("an error event sets status 'error' and records lastError; a later success 
   };
   const { baseUrl } = await makeHarness(engine);
 
-  const createRes = await fetch(`${baseUrl}/api/sites`, {
+  const createRes = await pairedFetch(`${baseUrl}/api/sites`, {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify({ name: "Boom Site", prompt: "p" }),
@@ -139,7 +143,7 @@ test("an error event sets status 'error' and records lastError; a later success 
   expect(failed.lastError).toBe("boom");
 
   events = [{ type: "done" }];
-  const editRes = await fetch(`${baseUrl}/api/sites/${site.id}/edit`, {
+  const editRes = await pairedFetch(`${baseUrl}/api/sites/${site.id}/edit`, {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify({ prompt: "retry" }),
@@ -158,7 +162,7 @@ test("a throwing makeClient() still drives the site to a terminal 'error' state,
     },
   });
 
-  const createRes = await fetch(`${baseUrl}/api/sites`, {
+  const createRes = await pairedFetch(`${baseUrl}/api/sites`, {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify({ name: "No Creds Site", prompt: "p" }),
@@ -176,7 +180,7 @@ test("a throwing makeClient() still drives the site to a terminal 'error' state,
 
   // The site must not be wedged: a subsequent edit is accepted (not a
   // permanent 409), proving status genuinely reached a terminal state.
-  const editRes = await fetch(`${baseUrl}/api/sites/${site.id}/edit`, {
+  const editRes = await pairedFetch(`${baseUrl}/api/sites/${site.id}/edit`, {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify({ prompt: "retry" }),
@@ -191,7 +195,7 @@ test("an engine promise rejection (instead of an onEvent error) still reaches a 
   };
   const { baseUrl } = await makeHarness(rejectingEngine);
 
-  const createRes = await fetch(`${baseUrl}/api/sites`, {
+  const createRes = await pairedFetch(`${baseUrl}/api/sites`, {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify({ name: "Rejects Site", prompt: "p" }),
@@ -203,7 +207,7 @@ test("an engine promise rejection (instead of an onEvent error) still reaches a 
   expect(settled.status).toBe("error");
   expect(settled.lastError).toBe("engine crashed before emitting anything");
 
-  const editRes = await fetch(`${baseUrl}/api/sites/${site.id}/edit`, {
+  const editRes = await pairedFetch(`${baseUrl}/api/sites/${site.id}/edit`, {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify({ prompt: "retry" }),
@@ -214,7 +218,7 @@ test("an engine promise rejection (instead of an onEvent error) still reaches a 
 test("POST edit while a job is running returns 409, and edit updates promptHistory", async () => {
   const { baseUrl } = await makeHarness(stubEngine([{ type: "done" }], 200));
 
-  const createRes = await fetch(`${baseUrl}/api/sites`, {
+  const createRes = await pairedFetch(`${baseUrl}/api/sites`, {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify({ name: "Slow Site", prompt: "p1" }),
@@ -222,7 +226,7 @@ test("POST edit while a job is running returns 409, and edit updates promptHisto
   const site = await createRes.json();
   await pollUntilIdle(baseUrl, site.id);
 
-  const edit1 = await fetch(`${baseUrl}/api/sites/${site.id}/edit`, {
+  const edit1 = await pairedFetch(`${baseUrl}/api/sites/${site.id}/edit`, {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify({ prompt: "p2" }),
@@ -235,7 +239,7 @@ test("POST edit while a job is running returns 409, and edit updates promptHisto
     { prompt: "p2", at: edited.promptHistory[1].at },
   ]);
 
-  const edit2 = await fetch(`${baseUrl}/api/sites/${site.id}/edit`, {
+  const edit2 = await pairedFetch(`${baseUrl}/api/sites/${site.id}/edit`, {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify({ prompt: "p3" }),
@@ -250,7 +254,7 @@ test("POST edit while a job is running returns 409, and edit updates promptHisto
 test("preview start reports running and preview stop reports stopped", async () => {
   const { baseUrl } = await makeHarness(stubEngine([{ type: "done" }], 5));
 
-  const createRes = await fetch(`${baseUrl}/api/sites`, {
+  const createRes = await pairedFetch(`${baseUrl}/api/sites`, {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify({ name: "Preview Site", prompt: "p" }),
@@ -258,13 +262,13 @@ test("preview start reports running and preview stop reports stopped", async () 
   const site = await createRes.json();
   await pollUntilIdle(baseUrl, site.id);
 
-  const startRes = await fetch(`${baseUrl}/api/sites/${site.id}/preview/start`, { method: "POST" });
+  const startRes = await pairedFetch(`${baseUrl}/api/sites/${site.id}/preview/start`, { method: "POST" });
   expect(startRes.status).toBe(200);
   const startBody = await startRes.json();
   expect(startBody.state).toBe("running");
   expect(typeof startBody.port).toBe("number");
 
-  const stopRes = await fetch(`${baseUrl}/api/sites/${site.id}/preview/stop`, { method: "POST" });
+  const stopRes = await pairedFetch(`${baseUrl}/api/sites/${site.id}/preview/stop`, { method: "POST" });
   expect(stopRes.status).toBe(200);
   const stopBody = await stopRes.json();
   expect(stopBody.state).toBe("stopped");
@@ -273,7 +277,7 @@ test("preview start reports running and preview stop reports stopped", async () 
 test("DELETE removes the site: 204, then GET is 404", async () => {
   const { baseUrl } = await makeHarness(stubEngine([{ type: "done" }], 5));
 
-  const createRes = await fetch(`${baseUrl}/api/sites`, {
+  const createRes = await pairedFetch(`${baseUrl}/api/sites`, {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify({ name: "Delete Me", prompt: "p" }),
@@ -281,10 +285,10 @@ test("DELETE removes the site: 204, then GET is 404", async () => {
   const site = await createRes.json();
   await pollUntilIdle(baseUrl, site.id);
 
-  const deleteRes = await fetch(`${baseUrl}/api/sites/${site.id}`, { method: "DELETE" });
+  const deleteRes = await pairedFetch(`${baseUrl}/api/sites/${site.id}`, { method: "DELETE" });
   expect(deleteRes.status).toBe(204);
 
-  const getRes = await fetch(`${baseUrl}/api/sites/${site.id}`);
+  const getRes = await pairedFetch(`${baseUrl}/api/sites/${site.id}`);
   expect(getRes.status).toBe(404);
   const getBody = await getRes.json();
   expect(getBody).toEqual({ error: "not found" });
@@ -293,7 +297,7 @@ test("DELETE removes the site: 204, then GET is 404", async () => {
 test("POST /api/sites with an invalid body returns 400", async () => {
   const { baseUrl } = await makeHarness(stubEngine([{ type: "done" }], 5));
 
-  const res = await fetch(`${baseUrl}/api/sites`, {
+  const res = await pairedFetch(`${baseUrl}/api/sites`, {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify({ name: "", prompt: "" }),
@@ -305,7 +309,7 @@ test("POST /api/sites with an invalid body returns 400", async () => {
 
 test("GET on an unknown site id returns 404", async () => {
   const { baseUrl } = await makeHarness(stubEngine([{ type: "done" }], 5));
-  const res = await fetch(`${baseUrl}/api/sites/does-not-exist`);
+  const res = await pairedFetch(`${baseUrl}/api/sites/does-not-exist`);
   expect(res.status).toBe(404);
   const body = await res.json();
   expect(body).toEqual({ error: "not found" });
@@ -314,33 +318,33 @@ test("GET on an unknown site id returns 404", async () => {
 test("OPTIONS returns 204 with CORS headers, and GET responses carry Access-Control-Allow-Origin", async () => {
   const { baseUrl } = await makeHarness(stubEngine([{ type: "done" }], 5));
 
-  const optionsRes = await fetch(`${baseUrl}/api/sites`, { method: "OPTIONS" });
+  const optionsRes = await pairedFetch(`${baseUrl}/api/sites`, { method: "OPTIONS", headers: { "access-control-request-method": "GET" } });
   expect(optionsRes.status).toBe(204);
-  expect(optionsRes.headers.get("Access-Control-Allow-Origin")).toBe("*");
-  expect(optionsRes.headers.get("Access-Control-Allow-Methods")).toBe("GET,POST,DELETE,OPTIONS");
-  expect(optionsRes.headers.get("Access-Control-Allow-Headers")).toBe("content-type");
+  expect(optionsRes.headers.get("Access-Control-Allow-Origin")).toBe(TRUSTED);
+  expect(optionsRes.headers.get("Access-Control-Allow-Methods")).toBe("GET,POST,DELETE");
+  expect(optionsRes.headers.get("Access-Control-Allow-Headers")).toBe("authorization,content-type");
 
-  const getRes = await fetch(`${baseUrl}/api/sites`);
-  expect(getRes.headers.get("Access-Control-Allow-Origin")).toBe("*");
+  const getRes = await pairedFetch(`${baseUrl}/api/sites`);
+  expect(getRes.headers.get("Access-Control-Allow-Origin")).toBe(TRUSTED);
 
-  const notFoundRes = await fetch(`${baseUrl}/api/sites/nope`);
-  expect(notFoundRes.headers.get("Access-Control-Allow-Origin")).toBe("*");
+  const notFoundRes = await pairedFetch(`${baseUrl}/api/sites/nope`);
+  expect(notFoundRes.headers.get("Access-Control-Allow-Origin")).toBe(TRUSTED);
 });
 
 test("GET /api/sites lists all sites in the registry", async () => {
   const { baseUrl } = await makeHarness(stubEngine([{ type: "done" }], 5));
 
-  const listBefore = await (await fetch(`${baseUrl}/api/sites`)).json();
+  const listBefore = await (await pairedFetch(`${baseUrl}/api/sites`)).json();
   expect(listBefore).toEqual([]);
 
-  const createRes = await fetch(`${baseUrl}/api/sites`, {
+  const createRes = await pairedFetch(`${baseUrl}/api/sites`, {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify({ name: "Listed Site", prompt: "p" }),
   });
   const site = await createRes.json();
 
-  const listAfter = await (await fetch(`${baseUrl}/api/sites`)).json();
+  const listAfter = await (await pairedFetch(`${baseUrl}/api/sites`)).json();
   expect(listAfter).toHaveLength(1);
   expect(listAfter[0].id).toBe(site.id);
 
@@ -351,7 +355,7 @@ test("slug collisions append -2, -3, ...", async () => {
   const { baseUrl } = await makeHarness(stubEngine([{ type: "done" }], 5));
 
   const post = () =>
-    fetch(`${baseUrl}/api/sites`, {
+    pairedFetch(`${baseUrl}/api/sites`, {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ name: "Same Name", prompt: "p" }),
@@ -378,7 +382,7 @@ test("POST /api/sites when scaffolding fails returns 500 and leaves no orphaned 
     templateDir: missingTemplateDir,
   });
 
-  const res = await fetch(`${baseUrl}/api/sites`, {
+  const res = await pairedFetch(`${baseUrl}/api/sites`, {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify({ name: "Broken Site", prompt: "p" }),
@@ -388,7 +392,7 @@ test("POST /api/sites when scaffolding fails returns 500 and leaves no orphaned 
   expect(typeof body.error).toBe("string");
   expect(body.error.length).toBeGreaterThan(0);
 
-  const list = await (await fetch(`${baseUrl}/api/sites`)).json();
+  const list = await (await pairedFetch(`${baseUrl}/api/sites`)).json();
   expect(list).toEqual([]);
 
   await expect(
@@ -400,7 +404,7 @@ test("concurrent creates with the same name do not lose any site to a stale regi
   const { baseUrl } = await makeHarness(stubEngine([{ type: "done" }], 5));
 
   const post = () =>
-    fetch(`${baseUrl}/api/sites`, {
+    pairedFetch(`${baseUrl}/api/sites`, {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ name: "Same Name", prompt: "p" }),
@@ -421,8 +425,45 @@ test("concurrent creates with the same name do not lose any site to a stale regi
     pollUntilIdle(baseUrl, s3.id),
   ]);
 
-  const list = await (await fetch(`${baseUrl}/api/sites`)).json();
+  const list = await (await pairedFetch(`${baseUrl}/api/sites`)).json();
   expect(list).toHaveLength(3);
   const listIds = new Set(list.map((s: { id: string }) => s.id));
   expect(listIds).toEqual(ids);
+});
+
+test("all API operation classes reject absent/wrong tokens and hostile origins or hosts", async () => {
+  const { baseUrl } = await makeHarness(stubEngine([], 0));
+  const operations = [["GET", "/api/sites"], ["POST", "/api/sites"], ["GET", "/api/sites/id"], ["DELETE", "/api/sites/id"], ["POST", "/api/sites/id/edit"], ["GET", "/api/sites/id/events"], ["GET", "/api/sites/id/preview"], ["POST", "/api/sites/id/preview/start"], ["POST", "/api/sites/id/preview/stop"], ["POST", "/api/sites/id/preview/ticket"], ["POST", "/api/unpair"]];
+  for (const [method, endpoint] of operations) {
+    for (const authorization of ["", "Bearer incorrect"]) expect((await fetch(baseUrl + endpoint, { method, headers: { authorization } })).status).toBe(401);
+    expect((await pairedFetch(baseUrl + endpoint, { method, headers: { origin: "https://hostile.example" } })).status).toBe(403);
+  }
+  expect((await pairedFetch(baseUrl + "/api/sites", { headers: { host: "rebind.example" } })).status).toBe(403);
+  expect(await (await fetch(baseUrl + "/health")).json()).toEqual({ status: "ok" });
+  for (const endpoint of ["start", "stop"]) expect((await pairedFetch(baseUrl + `/api/sites/id/preview/${endpoint}`)).status).toBe(405);
+  for (const headers of [{ origin: "null", "access-control-request-method": "GET", "access-control-request-headers": "" }, { origin: TRUSTED, "access-control-request-method": "PUT", "access-control-request-headers": "" }, { origin: TRUSTED, "access-control-request-method": "POST", "access-control-request-headers": "x-evil" }]) expect((await fetch(baseUrl + "/api/sites", { method: "OPTIONS", headers })).status).toBe(403);
+});
+
+test("preview launch requires one-use POST ticket; content/assets require site cookie and unpair revokes it", async () => {
+  const { baseUrl } = await makeHarness(stubEngine([{ type: "done" }], 1));
+  const site = await (await pairedFetch(baseUrl + "/api/sites", { method: "POST", body: JSON.stringify({ name: "Private", prompt: "p" }) })).json();
+  await pairedFetch(`${baseUrl}/api/sites/${site.id}/preview/start`, { method: "POST" });
+  const prefix = `/preview/${site.id}`;
+  const previewHost = `${site.id}.localhost:${new URL(baseUrl).port}`;
+  const previewFetch = (url: string, init: RequestInit = {}) => fetch(url, { ...init, headers: { ...Object.fromEntries(new Headers(init.headers)), host: previewHost } });
+  expect((await fetch(baseUrl + prefix + "/")).status).toBe(403);
+  expect((await previewFetch(baseUrl + prefix + "/")).status).toBe(401);
+  const launch = await (await pairedFetch(`${baseUrl}/api/sites/${site.id}/preview/ticket`, { method: "POST" })).json();
+  const redeem = () => previewFetch(baseUrl + new URL(launch.action).pathname, { method: "POST", redirect: "manual", headers: { origin: TRUSTED, "content-type": "application/x-www-form-urlencoded" }, body: new URLSearchParams({ ticket: launch.ticket }) });
+  expect((await previewFetch(baseUrl + new URL(launch.action).pathname)).status).toBe(405);
+  const response = await redeem();
+  expect(response.status).toBe(303);
+  expect(response.headers.get("location")).toBe(prefix + "/");
+  const cookie = response.headers.get("set-cookie")!;
+  expect(cookie).toContain("HttpOnly"); expect(cookie).toContain("SameSite=Lax"); expect(cookie).toContain(`Path=${prefix};`);
+  expect((await redeem()).status).toBe(401);
+  for (const route of ["/", "/_next/static/test.js"]) expect((await previewFetch(baseUrl + prefix + route, { headers: { cookie } })).status).toBe(200);
+  expect((await previewFetch(baseUrl + prefix + "/", { headers: { cookie, origin: "https://evil.example" } })).status).toBe(403);
+  await pairedFetch(baseUrl + "/api/unpair", { method: "POST" });
+  expect((await previewFetch(baseUrl + prefix + "/", { headers: { cookie } })).status).toBe(401);
 });

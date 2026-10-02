@@ -1,3 +1,4 @@
+import { clientExperience } from "@/lib/mlai/categories/client-experience";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { PageClose, PageHero, RouteFrame, Section, Surface } from "@/components/site";
 import { AppLink } from "@/components/site/app-link";
@@ -18,10 +19,23 @@ function ProductsPage() {
   return (
     <RouteFrame>
       <PageHero
-        eyebrow="Products"
-        title="Four entries. Each with a limit."
-        lede="Assistant orchestration, local assistance, durable memory and website creation. Each has its own setup and availability boundary. Local completion does not establish foundation-model quality."
+        eyebrow={clientExperience.landingIntros.products.eyebrow}
+        title={clientExperience.landingIntros.products.title}
+        lede={clientExperience.landingIntros.products.lede}
       />
+      <Section>
+        <p className="max-w-3xl text-base leading-relaxed text-fg-muted">
+          {clientExperience.landingIntros.products.availability}
+        </p>
+        <a
+          href={clientExperience.landingIntros.products.sources[0]}
+          target="_blank"
+          rel="noreferrer"
+          className="mt-4 inline-block text-sm text-accent underline underline-offset-4"
+        >
+          Inspect the source behind this page
+        </a>
+      </Section>
       <Section>
         <div className="grid gap-4 md:grid-cols-2">
           {productPages.map((product) => {
@@ -73,25 +87,33 @@ function ProductsPage() {
         </div>
         <p className="mt-10 text-sm text-fg-muted">
           Choose by what you want to do:{" "}
-          <Link to="/get-started" className="text-accent">
+          <Link to="/get-started" className="text-accent underline underline-offset-4">
             Get started
           </Link>
           . Inspect the supporting{" "}
-          <Link to="/research" className="text-accent">
+          <Link to="/research" className="text-accent underline underline-offset-4">
             research collection
           </Link>
           .
         </p>
       </Section>
       <PageClose
-        primary={{ to: "/architecture", label: "Architecture" }}
+        primary={{ to: "/contact", label: "Discuss your project" }}
+        secondary={[
+          { to: "/architecture", label: "Architecture" },
+          { to: "/docs", label: "Documentation" },
+        ]}
         next={[
           {
             to: "/quesar",
             label: "Quesar",
-            body: "The large model that trains and improves Abbey, Aviva, and the other assistants.",
+            body: "Inspect the product overview and its implementation boundaries.",
           },
-          { to: "/apps", label: "Apps", body: "Working orientations of the shipping surfaces." },
+          {
+            to: "/apps",
+            label: "Apps",
+            body: "Preview app surfaces and inspect their setup requirements.",
+          },
         ]}
       />
     </RouteFrame>

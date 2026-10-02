@@ -1,0 +1,14 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "'/Users/donaldfilimon/dev/active/quesar.cloud/.codex/hooks/session-start.sh'"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -10,7 +10,7 @@ test("hydration precedes requests and persistence survives recreation", async ()
   let release!: (value: string) => void;
   const calls: string[] = [];
   const saved = storage();
-  const client = new Connection({ ...saved, getItem: () => new Promise(resolve => { release = resolve; }) }, stub(async url => { calls.push(String(url)); return Response.json([]); }));
+  const client = new Connection({ ...saved, getItem: (key) => key !== "quasar.serviceOrigin" ? Promise.resolve(null) : new Promise(resolve => { release = resolve; }) }, stub(async url => { calls.push(String(url)); return Response.json([]); }));
   const pending = client.request("/api/sites");
   expect(calls).toEqual([]);
   release("http://lan:4700/");
@@ -99,14 +99,14 @@ test("fetch receives its browser global receiver rather than the Connection inst
 
 test("request preserves every HeadersInit form and an explicit body content type", async () => {
   const forms: HeadersInit[] = [
-    { authorization: "Bearer test", "Content-Type": "text/plain" },
-    new Headers({ authorization: "Bearer test", "Content-Type": "text/plain" }),
-    [["authorization", "Bearer test"], ["Content-Type", "text/plain"]],
+    { "x-request-id": "test", "Content-Type": "text/plain" },
+    new Headers({ "x-request-id": "test", "Content-Type": "text/plain" }),
+    [["x-request-id", "test"], ["Content-Type", "text/plain"]],
   ];
   for (const headers of forms) {
     const client = new Connection(storage(), stub(async (_url, init) => {
       const received = new Headers(init?.headers);
-      expect(received.get("authorization")).toBe("Bearer test");
+      expect(received.get("x-request-id")).toBe("test");
       expect(received.get("content-type")).toBe("text/plain");
       return Response.json({ ok: true });
     }));
@@ -117,4 +117,22 @@ test("request preserves every HeadersInit form and an explicit body content type
     return Response.json({ ok: true });
   }));
   await client.request("/api/sites", { method: "POST", body: "{}" });
+});
+
+test("pairing credentials are origin-scoped, clearable and never transmitted over remote HTTP", async () => {
+  const values = new Map<string, string>();
+  const saved = { getItem: async (key: string) => values.get(key) ?? null, setItem: async (key: string, value: string) => { values.set(key, value); }, removeItem: async (key: string) => { values.delete(key); } };
+  const sent: string[] = [];
+  const client = new Connection(saved, stub(async (_url, init) => { sent.push(new Headers(init?.headers).get("authorization") ?? ""); return Response.json([]); }));
+  const token = "s".repeat(43);
+  await client.save("https://one.example"); await client.saveCredential(token);
+  await client.request("/api/sites"); expect(sent.pop()).toBe(`Bearer ${token}`);
+  await client.save("https://two.example"); expect(await client.hasCredential()).toBe(false);
+  await client.request("/api/sites"); expect(sent.pop()).toBe("");
+  await client.save("https://one.example"); await client.clearCredential(); expect(await client.hasCredential()).toBe(false);
+  await client.save("http://remote.example");
+  await expect(client.saveCredential(token)).rejects.toThrow("HTTPS");
+  values.set("quasar.pairing:http://remote.example", token);
+  await expect(client.request("/api/sites")).rejects.toThrow("HTTPS"); expect(sent).toEqual([]);
+  for (const origin of ["http://localhost:4700", "http://127.0.0.1:4700", "http://[::1]:4700"]) { await client.save(origin); await client.saveCredential(token); expect(await client.hasCredential()).toBe(true); }
 });

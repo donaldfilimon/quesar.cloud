@@ -5,7 +5,17 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { getBaseUrl, hydrateOrigin, listSites, setBaseUrl, storedOrigin } from "@/lib/quasar/api";
+import {
+  savePairing,
+  hasPairing,
+  clearPairing,
+  forgetPairingLocally,
+  getBaseUrl,
+  hydrateOrigin,
+  listSites,
+  setBaseUrl,
+  storedOrigin,
+} from "@/lib/quasar/api";
 import { quasarDefaultOrigin } from "@/lib/quasar/config";
 import { DEFAULT_ORIGIN, ORIGIN_KEY } from "@/lib/quasar";
 import { probeSidecar } from "@/lib/quasar/sidecars";
@@ -16,6 +26,8 @@ import { errorText, isUnreachable } from "./util";
 type Health = "unknown" | "checking" | "available" | "unavailable";
 
 export function QuasarSettings() {
+  const [token, setToken] = useState("");
+  const [paired, setPaired] = useState(false);
   const [url, setUrl] = useState("");
   const [ready, setReady] = useState(false);
   const [pending, setPending] = useState(false);
@@ -31,11 +43,12 @@ export function QuasarSettings() {
       async (origin) => {
         const local = await storedOrigin();
         if (cancelled) return;
+        setPaired(await hasPairing());
         setUrl(origin);
         setSaved(local);
         setReady(true);
         setHealth("checking");
-        const result = await probeSidecar(`${origin}/api/sites`);
+        const result = await probeSidecar(`${origin}/health`);
         if (!cancelled) setHealth(result);
       },
       () => {
@@ -57,8 +70,8 @@ export function QuasarSettings() {
 
   async function check(origin: string) {
     setHealth("checking");
-    // The service has no /health route; its site list is the cheapest read.
-    setHealth(await probeSidecar(`${origin}/api/sites`));
+    // Health reveals no site data and does not require pairing.
+    setHealth(await probeSidecar(`${origin}/health`));
   }
 
   async function save(test: boolean) {
@@ -68,6 +81,11 @@ export function QuasarSettings() {
     setTestError(null);
     try {
       await setBaseUrl(url);
+      if (token) {
+        await savePairing(token);
+        setToken("");
+      }
+      setPaired(await hasPairing());
       const origin = getBaseUrl();
       setUrl(origin);
       setSaved(await storedOrigin());
@@ -137,6 +155,25 @@ export function QuasarSettings() {
                 machine&apos;s LAN address when the service runs elsewhere.
               </p>
             </div>
+            <div className="space-y-2">
+              <Label htmlFor="quasar-token">Pairing token</Label>
+              <Input
+                id="quasar-token"
+                type="password"
+                autoComplete="off"
+                spellCheck={false}
+                value={token}
+                onChange={(event) => setToken(event.target.value)}
+                disabled={!ready || pending}
+              />
+              <p className="text-xs text-fg-subtle">
+                Saved explicitly in this browser for this exact service origin. Obtain the token
+                from the operator&apos;s protected pairing-token file.{" "}
+                {paired
+                  ? "A credential is saved for the active origin."
+                  : "This origin is not paired."}
+              </p>
+            </div>
             <div className="flex flex-wrap gap-3">
               <Button
                 type="button"
@@ -145,6 +182,44 @@ export function QuasarSettings() {
                 onClick={() => void save(false)}
               >
                 Save
+              </Button>
+              <Button
+                type="button"
+                variant="secondary"
+                disabled={!ready || pending || !paired}
+                onClick={() => {
+                  setPending(true);
+                  clearPairing()
+                    .then(
+                      () => {
+                        setPaired(false);
+                        setMessage({
+                          tone: "ok",
+                          text: "Credential cleared and preview sessions revoked.",
+                        });
+                      },
+                      (error) => setMessage({ tone: "error", text: errorText(error) }),
+                    )
+                    .finally(() => setPending(false));
+                }}
+              >
+                Unpair and revoke previews
+              </Button>
+              <Button
+                type="button"
+                variant="ghost"
+                disabled={!ready || pending || !paired}
+                onClick={() => {
+                  void forgetPairingLocally().then(() => {
+                    setPaired(false);
+                    setMessage({
+                      tone: "ok",
+                      text: "Local credential removed. Existing preview sessions remain until expiry or service restart.",
+                    });
+                  });
+                }}
+              >
+                Forget locally
               </Button>
               <Button type="submit" disabled={!ready || pending}>
                 {pending ? "Connecting…" : "Save and test connection"}
@@ -204,8 +279,8 @@ export function QuasarSettings() {
             <dd className="font-mono text-xs break-all text-fg">{fallbackLabel}</dd>
           </dl>
           <p className="text-xs text-fg-subtle">
-            The health check is a 1.5 s read of <span className="font-mono">/api/sites</span>. It
-            only reports whether this browser got an answer; it starts nothing.
+            The health check is a 1.5 s read of <span className="font-mono">/health</span>. It only
+            reports whether this browser got an answer; it starts nothing.
           </p>
         </div>
 

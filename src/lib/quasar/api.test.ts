@@ -210,13 +210,18 @@ describe("quasar api", () => {
     }
   });
 
-  test("previewHref points localhost previews at a remote service host and rejects non-HTTP", () => {
+  test("previewHref accepts only isolated per-site preview origins", () => {
     expect(previewHref(null, DEFAULT_ORIGIN)).toBeNull();
-    expect(previewHref("http://localhost:4710", DEFAULT_ORIGIN)).toBe("http://localhost:4710/");
-    expect(previewHref("http://localhost:4710", "http://192.168.1.20:4700")).toBe(
-      "http://192.168.1.20:4710/",
+    expect(previewHref("http://site-1.localhost:4700/preview/site-1/", DEFAULT_ORIGIN)).toBe(
+      "http://site-1.localhost:4700/preview/site-1/",
     );
+    expect(previewHref("http://localhost:4700/preview/site-1/", DEFAULT_ORIGIN)).toBeNull();
+    expect(previewHref("http://site-2.localhost:4700/preview/site-1/", DEFAULT_ORIGIN)).toBeNull();
+    expect(
+      previewHref("https://site-1.previews.example/preview/site-1/", "https://service.example"),
+    ).toBe("https://site-1.previews.example/preview/site-1/");
+    expect(previewHref("http://localhost:4710", DEFAULT_ORIGIN)).toBeNull();
     expect(previewHref("javascript:alert(1)", DEFAULT_ORIGIN)).toBeNull();
-    expect(previewHref("not a url", DEFAULT_ORIGIN)).toBeNull();
+    expect(previewHref("//evil.test/preview/site-1/", DEFAULT_ORIGIN)).toBeNull();
   });
 });

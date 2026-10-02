@@ -12,7 +12,19 @@ test.beforeEach(async ({ page }) => {
 });
 
 for (const theme of ["light", "dark"] as const) {
-  for (const route of ["/", "/docs", "/research", "/developers", "/showcase"]) {
+  for (const route of [
+    "/",
+    "/docs",
+    "/research",
+    "/developers",
+    "/showcase",
+    "/services",
+    "/contact",
+    "/platform",
+    "/products",
+    "/apps",
+    "/company",
+  ]) {
     test(`${theme} accessibility and layout: ${route}`, async ({ page }, testInfo) => {
       await page.addInitScript((theme) => localStorage.setItem("mlai-theme", theme), theme);
       const errors: string[] = [];
@@ -24,6 +36,11 @@ for (const theme of ["light", "dark"] as const) {
           page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1),
         )
         .toBe(true);
+      if (route === "/contact") {
+        const submit = page.getByRole("button", { name: "Open email draft" });
+        await expect(submit).toBeEnabled();
+        await submit.hover();
+      }
       const result = await new AxeBuilder({ page })
         .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
         .analyze();
