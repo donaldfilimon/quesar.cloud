@@ -1,0 +1,23 @@
+Human imagination. Adaptive intelligence. Quesar by MLAI introduces assistant workflows, memory systems and developer tools with inspectable sources.
+Source: src/lib/home-vision.ts / SOURCE
+
+Three roles. One conversation. Abbey is a human-facing companion contract. Aviva is a direct expert mode. Abi coordinates intent, risk, context and response style.
+Source: src/lib/home-vision.ts / SOURCE
+
+Memory. Keep its provenance. WDBX local Rust storage and retrieval components preserve durable records, vectors and causal history.
+Source: src/lib/home-vision.ts / SOURCE
+
+Developers. Start with source. Explore the ABI Rust framework, local CLI and MCP contracts. Follow setup and verification guidance before connecting tools or memory.
+Source: src/lib/home-vision.ts / SOURCE
+
+Two names. Two distinct scopes. Quesar is the MLAI website and broader direction. Quasar is the separately configured local website builder service.
+Source: src/routes/quasar.new.tsx / SOURCE
+
+A new site. Begin with a prompt. The local service copies a Next.js template into its sites directory and runs a Claude generation job using that machine’s Anthropic credentials.
+Source: src/components/quasar/new-site.tsx / SOURCE
+
+Preview. A separate opening. Preview launch obtains a ticket and checks the returned target against the configured service before opening it.
+Source: src/lib/quasar/api.ts / SOURCE
+
+Build thoughtfully. quesar.cloud Explore the architecture. Follow the source. Define the evidence your project needs. Quesar by MLAI.
+Source: src/lib/home-vision.ts / SOURCE

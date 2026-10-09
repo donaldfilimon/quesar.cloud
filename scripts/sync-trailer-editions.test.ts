@@ -2,7 +2,7 @@ import { existsSync, mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { createHash } from "node:crypto";
-import { spawnSync } from "node:child_process";
+import { spawnSync, execFileSync } from "node:child_process";
 import { expect, it } from "vitest";
 
 it.each([undefined, "", "f".repeat(63), "z".repeat(64), "0".repeat(64), "valid"])(
@@ -248,4 +248,63 @@ it("rejects an unverified technical receipt before writing any output", () => {
   } finally {
     rmSync(fixture.root, { recursive: true, force: true });
   }
+});
+
+it("adds all native30 editions idempotently and validates every master before writing", () => {
+  const result = execFileSync(
+    "python3",
+    [
+      "-c",
+      `
+import importlib.util, tempfile, json
+from pathlib import Path
+from unittest.mock import patch
+spec = importlib.util.spec_from_file_location("sync", "scripts/sync-trailer-editions.py")
+sync = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(sync)
+with tempfile.TemporaryDirectory() as temporary:
+    root = Path(temporary)
+    sync.ROOT = root
+    sync.DEST = root / "catalog.json"
+    existing = [{"id": "neural", "video": "unchanged"}]
+    sync.DEST.write_text(json.dumps(existing))
+    for candidate in sync.candidates(False, root):
+        if candidate[1] != "Quesar":
+            continue
+        name, _, _, seconds, _, folder, filename, status = candidate
+        folder.mkdir(parents=True)
+        (folder / filename).write_bytes(b"verified master")
+        (folder / f"sample-{seconds * 15}.jpg").write_bytes(b"poster")
+        (folder / "captions.vtt").write_text("WEBVTT\\n")
+        (folder / "transcript.txt").write_text("Samantha narration")
+        receipt = dict(status=status, sha256=sync.digest(folder / filename), renderSamplingFps=30, outputFps=30, browserErrors=[], probe={"streams": [dict(codec_type="video", width=1920, height=1080, avg_frame_rate="30/1", nb_read_frames=seconds * 30, duration=seconds), dict(codec_type="audio")]})
+        (folder / "verification.json").write_text(json.dumps(receipt))
+    with patch("sys.argv", ["sync", "--native30"]):
+        sync.main()
+        first = sync.DEST.read_bytes()
+        assert json.loads(first)[0] == existing[0]
+        assert len(json.loads(first)) == 9
+        sync.main()
+        assert sync.DEST.read_bytes() == first
+        assets = {str(p): p.read_bytes() for p in (root / "public").rglob("*") if p.is_file()}
+        last = sync.candidates(False, root)[-1]
+        master = last[5] / last[6]
+        for failure in ("invalid", "missing"):
+            if failure == "invalid":
+                master.write_bytes(b"changed")
+            else:
+                master.unlink()
+            try:
+                sync.main()
+                raise AssertionError("invalid master accepted")
+            except ValueError:
+                pass
+            assert sync.DEST.read_bytes() == first
+            assert {str(p): p.read_bytes() for p in (root / "public").rglob("*") if p.is_file()} == assets
+print("additive sync and failure-before-write verified")
+`,
+    ],
+    { encoding: "utf8" },
+  );
+  expect(result).toContain("additive sync and failure-before-write verified");
 });

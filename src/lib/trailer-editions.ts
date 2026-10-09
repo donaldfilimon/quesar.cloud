@@ -2,6 +2,7 @@ import verifiedEditions from "./trailer-editions.generated.json";
 
 export type TrailerEdition = {
   id: string;
+  edition?: string;
   brand: string;
   style: string;
   title: string;
