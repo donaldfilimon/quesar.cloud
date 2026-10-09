@@ -1,4 +1,4 @@
-import { README_NAMES } from "./github-readmes";
+import { README_NAMES } from "./github-readmes.ts";
 
 export type LiveRepo = {
   name: string;
