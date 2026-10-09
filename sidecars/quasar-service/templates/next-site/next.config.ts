@@ -1,0 +1,15 @@
+import type { NextConfig } from "next";
+const config: NextConfig = {
+  // Generated sites are independent of any surrounding repository lockfiles.
+  turbopack: { root: process.cwd() },
+  basePath: process.env.QUASAR_PREVIEW_BASE_PATH ?? "",
+  assetPrefix: process.env.QUASAR_PREVIEW_BASE_PATH ?? "",
+  // Next 16's `next dev` writes AGENTS.md/CLAUDE.md pointing at
+  // node_modules/next/dist/docs, which Quasar's path guard never lets the model
+  // read. Opt out so previews do not add those files to generated sites.
+  agentRules: false,
+  // Memoize components automatically (babel-plugin-react-compiler).
+  reactCompiler: true,
+};
+
+export default config;

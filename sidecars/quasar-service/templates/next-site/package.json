@@ -5,7 +5,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint .",
+    "lint": "eslint --flag unstable_native_nodejs_ts_config .",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
@@ -23,5 +23,9 @@
     "eslint-config-next": "^16.3.6",
     "tailwindcss": "^4.3.3",
     "typescript": "^6.0.3"
+  },
+  "type": "module",
+  "engines": {
+    "node": ">=24"
   }
 }

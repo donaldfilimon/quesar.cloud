@@ -16,7 +16,7 @@
     "db:migrate": "node scripts/migrate.ts",
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.migration.json",
     "test": "vitest run",
     "test:e2e": "playwright test",
     "check:static": "node scripts/check-static.ts",

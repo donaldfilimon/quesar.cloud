@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.json",
+  "include": [
+    "notes/launch/**/*.ts",
+    "notes/launch/**/*.tsx",
+    "notes/verification/2026-10-09-finishing/evidence/**/*.ts",
+    "notes/verification/2026-10-09-reexport-444eb888/evidence/**/*.ts"
+  ]
+}

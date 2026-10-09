@@ -8,7 +8,7 @@ const HEALTH_POLL_INTERVAL_MS = 500;
 
 type CommandFn = (siteDir: string, port: number) => string[];
 
-const defaultCommand: CommandFn = () => ["node", fileURLToPath(new URL("./preview-runner.mjs", import.meta.url))];
+const defaultCommand: CommandFn = () => ["node", fileURLToPath(new URL("./preview-runner.ts", import.meta.url))];
 
 export function childEnvironment(secret: string, siteId: string, port: number): Record<string, string> {
   const env: Record<string, string> = {};

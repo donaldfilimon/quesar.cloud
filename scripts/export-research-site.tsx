@@ -1085,16 +1085,17 @@ try {
           name: artifactName,
           private: true,
           type: "module",
+          engines: { node: ">=24" },
           description:
             "Generated static artifact. Edit research source in the canonical MLAI repository; do not edit this snapshot.",
-          scripts: { build: "node scripts/build-research-site.mjs" },
+          scripts: { build: "node scripts/build-research-site.ts" },
         },
         null,
         2,
       )}\n`,
     );
     await writeText(
-      path.join(stage, "scripts", "build-research-site.mjs"),
+      path.join(stage, "scripts", "build-research-site.ts"),
       `import { cp, rm } from "node:fs/promises";\n\nawait rm("out", { recursive: true, force: true });\nawait cp("public", "out", { recursive: true });\n`,
     );
     await writeText(

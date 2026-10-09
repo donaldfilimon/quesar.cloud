@@ -137,7 +137,7 @@ async function createPgliteSql(): Promise<Sql> {
     const doneRows = await pg.query<{ name: string }>("select name from _migrations");
     const done = doneRows.rows.map((r) => r.name);
     for (const { name, path } of pendingMigrations(Object.keys(migrations), done)) {
-      // Apply + record atomically (parity with scripts/migrate.mjs) so a failed
+      // Apply + record atomically (parity with scripts/migrate.ts) so a failed
       // statement can't leave a file half-applied but untracked.
       await pg.transaction(async (tx) => {
         await tx.exec(migrations[path]);

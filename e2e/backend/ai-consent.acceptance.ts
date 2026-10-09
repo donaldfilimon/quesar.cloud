@@ -81,7 +81,7 @@ async function start(provider = true, encryption = true) {
     process.execPath,
     [
       "--import",
-      "./e2e/backend/ai-provider-fixture.mjs",
+      "./e2e/backend/ai-provider-fixture.ts",
       "node_modules/vite/bin/vite.js",
       "--host",
       "localhost",

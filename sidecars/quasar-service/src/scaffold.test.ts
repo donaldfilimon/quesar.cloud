@@ -53,9 +53,9 @@ test("scaffoldSite with install:true actually runs `bun install` in siteDir", as
   await mkdir(path.join(templateDir, "local-dep"), { recursive: true });
   await writeFile(
     path.join(templateDir, "local-dep", "package.json"),
-    JSON.stringify({ name: "local-dep", version: "1.0.0", main: "index.js" })
+    JSON.stringify({ name: "local-dep", version: "1.0.0", main: "index.ts" })
   );
-  await writeFile(path.join(templateDir, "local-dep", "index.js"), "module.exports = 42;");
+  await writeFile(path.join(templateDir, "local-dep", "index.ts"), "module.exports = 42;");
   await writeFile(
     path.join(templateDir, "package.json"),
     JSON.stringify({ name: "site", private: true, dependencies: { "local-dep": "file:./local-dep" } })
