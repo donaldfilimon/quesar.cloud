@@ -1,8 +1,8 @@
 # Local brand distribution acceptance — 2026-10-03
 
-**Current:** reproducible local package of existing Quesar identity assets, source references and licensed font software. **Current review:** independent Standards and Spec review both passed with zero open findings. **Partial:** final creative/claims and external rights approval are not asserted. **Out of scope:** publication, production source changes, redesign and film regeneration.
+**At 2026-10-03 acceptance:** a reproducible local package of existing Quesar identity assets, source references and licensed font software. Independent Standards and Spec review passed with zero open findings at that time. **Partial:** final creative/claims and external rights approval are not asserted. **Out of scope:** publication, production source changes, redesign and film regeneration.
 
-[Archive](brand-distribution-2026-10-03.tar.gz) · [README](2026-10-03-brand-distribution-README.md) · [guidelines](2026-10-03-brand-distribution-guidelines.md) · [pinned inputs](2026-10-03-brand-package-inputs.json) · [verification JSON](2026-10-03-brand-package-verification.json).
+The private local evidence set retains `brand-distribution-2026-10-03.tar.gz`, `2026-10-03-brand-distribution-README.md`, `2026-10-03-brand-package-inputs.json` and `2026-10-03-brand-package-verification.json`. The public [guidelines](2026-10-03-brand-distribution-guidelines.md) describe the package boundaries.
 
 Archive: **842,867 bytes**. SHA-256:
 
@@ -32,7 +32,7 @@ No repository-wide reuse license or separate brand/trademark grant was found in 
 | Canonical media references | All 54 actual sizes and SHA-256 values match |
 | git diff --check | Exit 0 |
 
-Runtime: Node v26.10.0, zlib 1.2.12, TypeScript 6.0.3. Same-input reproducibility was measured on this runtime; cross-version gzip byte equality is not asserted. The full final gate log is [retained locally](2026-10-03-brand-package-check.log). Terminal tool result: session 62761, exit 0. No brand task process remains running.
+Runtime: Node v26.10.0, zlib 1.2.12, TypeScript 6.0.3. Same-input reproducibility was measured on this runtime; cross-version gzip byte equality is not asserted. The full final gate log is retained privately as `2026-10-03-brand-package-check.log`. Terminal tool result: session 62761, exit 0. No brand task process remains running.
 
 Reproduction command (output must not already exist):
 
@@ -40,6 +40,6 @@ Reproduction command (output must not already exist):
 node scripts/package-brand.ts notes/verification/2026-10-03-brand-package-inputs.json /tmp/quesar-brand-reproduced.tar.gz
 ```
 
-The source scope is two new scripts and brand-only verification additions. [Review patch](2026-10-03-brand-package-scoped.patch) and [source/hash snapshot](2026-10-03-brand-package-source-snapshot.json) freeze that scope. Existing film artifacts, product source, docs/ static output and other agents' dirty work were preserved. No new dependency, network download, commit, push or publication occurred. Because this slice changes only offline packaging and notes, it does not change the already-verified static site or require regenerating its media.
+The source scope is two new scripts and brand-only verification additions. Private local evidence files `2026-10-03-brand-package-scoped.patch` and `2026-10-03-brand-package-source-snapshot.json` freeze that scope. Existing film artifacts, product source, docs/ static output and other agents' dirty work were preserved. No new dependency, network download, commit, push or publication occurred. Because this slice changes only offline packaging and notes, it does not change the already-verified static site or require regenerating its media.
 
-Independent report: [Quesar brand package review](../../../wdbx/docs/reviews/2026-10-03-quesar-brand-package.md). This acceptance-note update does not change the frozen package inputs or archive.
+An independent Quesar brand package review was retained in the sibling WDBX repository at `docs/reviews/2026-10-03-quesar-brand-package.md`; that sibling record is outside this repository. This acceptance-note update does not change the frozen package inputs or archive.

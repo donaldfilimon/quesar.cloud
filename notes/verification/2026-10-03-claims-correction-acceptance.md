@@ -17,7 +17,7 @@ Receipts, exact command durations/log hashes and before/after source manifests a
 
 ## Corrected local archive
 
-[Download the corrected brand archive](brand-distribution-2026-10-03-claims-reviewed.tar.gz).
+The corrected brand archive, `brand-distribution-2026-10-03-claims-reviewed.tar.gz`, remains in the private local evidence set; this public record is not a download link or a redistribution grant.
 
 - Size: 839,614 bytes.
 - SHA256: `c5026c4c5b3b7c2ae6196cab63162b08b6c1dc91e6addce330281441a3af1f9d`.
@@ -25,7 +25,7 @@ Receipts, exact command durations/log hashes and before/after source manifests a
 - Reproduced twice with identical bytes using the installed Node/packager runtime; cross-runtime gzip identity is not asserted.
 - Only the Quesar JPG and bundled README differ as payloads. The README now reproduces this manifest/archive and identifies the card correction. Distribution metadata and checksums update accordingly.
 
-[Input manifest](2026-10-03-brand-package-claims-inputs.json) and [bundled README source](2026-10-03-brand-distribution-claims-README.md) provide the exact reproduction command. `artifacts/quesar-claims-20261003/package-reviewed-verification.json` records the archive comparison and verification.
+The private local evidence set also retains `2026-10-03-brand-package-claims-inputs.json` and `2026-10-03-brand-distribution-claims-README.md` for reproduction. `artifacts/quesar-claims-20261003/package-reviewed-verification.json` records the archive comparison and verification.
 
 The earlier 842,867-byte archive and its README/input manifest remain historical, unchanged evidence. The intermediate 839,435-byte claims archive predates the bundled-README correction and is superseded by the archive linked here. Neither is the current distribution candidate.
 

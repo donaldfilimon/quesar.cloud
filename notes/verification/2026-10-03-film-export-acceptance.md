@@ -17,7 +17,7 @@ All six movies are 1920×1080, 30 fps, with 24 kHz AAC narration. Each MP4 is be
 | [mega](../../public/media/films/mega.mp4) | 282 | 8,460 | 38 | 90,286,650 |
 | [design](../../public/media/films/design.mp4) | 80 | 2,400 | 8 | 13,160,292 |
 
-[Artifact manifest and hashes](../../public/media/films/manifest.json) · [offline review player](2026-10-03-film-review.html) · [brand release index](2026-10-03-brand-release-index.md) · [brand manifest](2026-10-03-brand-release-manifest.json).
+[Artifact manifest and hashes](../../public/media/films/manifest.json) · [brand release index](2026-10-03-brand-release-index.md) · [dated brand manifest](2026-10-03-brand-release-manifest.json). The offline review player (`2026-10-03-film-review.html`) remains in the private local evidence set.
 
 The output directory contains 42 per-film assets plus the manifest. The brand inventory references 77 canonical existing assets/source files without duplicating them. The offline HTML player was opened directly through file:// with all HTTP requests blocked: video played, 15 embedded captions loaded in the first film, and zero network requests occurred. Full media verification covered all six films separately.
 

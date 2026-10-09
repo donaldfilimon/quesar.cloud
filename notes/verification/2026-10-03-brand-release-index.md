@@ -1,6 +1,6 @@
 # Local brand release index — 2026-10-03
 
-Current local asset inventory. This index references canonical files and records hashes in [the manifest](2026-10-03-brand-release-manifest.json). It does not publish the site or imply human approval of narration or final claims.
+Historical local asset inventory captured on 2026-10-03. This index records the files and hashes at that time in [the manifest](2026-10-03-brand-release-manifest.json); `current_file` means present at capture, not verified against today's tree. The Quesar social card was regenerated after this snapshot and is now 50,484 bytes, so its 54,185-byte entry and hash below remain historical. This record does not publish the site or imply human approval of narration or final claims.
 
 ## Brand use
 
@@ -10,9 +10,9 @@ Display: Space Grotesk Variable. Body: IBM Plex Sans Variable. Code: IBM Plex Mo
 
 The [site mark component](../../src/components/site/logo.tsx) draws the weighted-graph M. The [favicon SVG](../../public/favicon.svg) is a distinct nested-square icon; it is not a vector master of the site mark. Older design-board tokens are reference material, not the token authority.
 
-[Open the offline film review player](2026-10-03-film-review.html) for local playback, embedded captions, transcripts and downloads.
+The offline film review player, `2026-10-03-film-review.html`, is retained in the private local evidence set. The public showcase has playback, captions, transcripts and downloads.
 
-## Referenced assets
+## Referenced assets at capture
 
 | Group | File | Local status | Bytes |
 | --- | --- | --- | ---: |
@@ -96,7 +96,7 @@ The [site mark component](../../src/components/site/logo.tsx) draws the weighted
 
 ## Acceptance boundaries
 
-- All indexed Current files are read and hashed locally; missing film outputs stay pending until produced.
+- All indexed files were read and hashed at capture; the manifest is a dated receipt, not a live asset check.
 - Film captions/transcripts/chapters derive from the same current cue catalog; technical checks are in the film export receipt.
 - Existing social cards, room posters, and teaser assets are indexed without regenerating or altering them.
 - This inventory preceded the [completed local brand distribution](2026-10-03-brand-package-acceptance.md), which includes source-derived site-mark SVG geometry and a reproducible archive. A separately approved primary-logo master, human listening, final claims/design and rights approval, and publication remain separate work.
