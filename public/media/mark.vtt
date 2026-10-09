@@ -1,7 +1,4 @@
 WEBVTT
 
-00:00.000 --> 00:04.000
-The M is the stack.
-
-00:04.000 --> 00:10.040
-Experience, then runtime, then memory. Labels, not a live runtime.
+00:00.000 --> 00:04.300
+The M is the stack: experience, then runtime, then memory.

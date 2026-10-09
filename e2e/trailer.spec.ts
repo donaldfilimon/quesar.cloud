@@ -128,8 +128,8 @@ test("descriptions toggle, and mute only where a cut has sound", async ({ page }
   await expect(toggle).toHaveAttribute("aria-pressed", "true");
   await toggle.click();
   await expect(toggle).toHaveAttribute("aria-pressed", "false");
-  // The mark is silent: no mute control that would do nothing.
-  await expect(page.getByRole("button", { name: "Mute trailer" })).toHaveCount(0);
+  // The mark carries Abbey's spoken line, so mute is available.
+  await expect(page.getByRole("button", { name: "Mute trailer" })).toBeVisible();
   await page.getByRole("button", { name: "2. The wafer" }).click();
   await expect(page.getByRole("button", { name: "Mute trailer" })).toBeVisible();
   await expect(page.locator("video source").first()).toHaveAttribute(

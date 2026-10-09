@@ -6,10 +6,11 @@
  * MP4 everywhere else. `hasAudio` is whether the file carries sound at all;
  * the player hides its mute control for a silent cut rather than offering a
  * button that does nothing. Wafer and board keep the ambient track of their
- * source renders (notes/grok-export/imagine_videos); the mark never had one.
+ * source renders (notes/grok-export/imagine_videos). The mark's picture is
+ * unchanged and now carries Abbey's spoken line.
  *
- * The text tracks describe silent or ambient footage, so they are
- * `descriptions`, not captions of speech.
+ * Wafer and board tracks describe ambient footage. The mark track captions
+ * that spoken line. The player mounts every track as `descriptions`.
  */
 export type FilmSource = { src: string; type: string };
 
@@ -20,12 +21,12 @@ export const filmCuts = [
     id: "mark",
     title: "The mark",
     sources: [
-      { src: "/media/quesar-trailer.webm", type: AV1(false) },
+      { src: "/media/quesar-trailer.webm", type: AV1(true) },
       { src: "/media/quesar-trailer.mp4", type: "video/mp4" },
     ],
     track: "/media/mark.vtt",
     poster: "/media/quesar-trailer.webp",
-    hasAudio: false,
+    hasAudio: true,
     duration: 10.04,
     caption: "The M is the stack: experience, then runtime, then memory.",
   },
