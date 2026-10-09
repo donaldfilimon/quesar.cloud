@@ -250,6 +250,54 @@ it("rejects an unverified technical receipt before writing any output", () => {
   }
 });
 
+it("keeps recut, unchanged, and native30 masters on separate release tags", () => {
+  const catalog = JSON.parse(
+    readFileSync("src/lib/trailer-editions.generated.json", "utf8"),
+  ) as Array<{ id: string; edition?: string; video: string; sha256: string }>;
+  const recut = new Set([
+    "editorial-60",
+    "technical-120",
+    "technical-180",
+    "technical-600",
+    "design-180",
+    "design-600",
+    "quesar-architecture-120",
+    "quesar-architecture-180",
+    "quesar-architecture-600",
+    "quesar-studio-120",
+    "quesar-studio-180",
+    "quesar-studio-600",
+  ]);
+  const unchanged = new Set([
+    "kinetic-60",
+    "design-120",
+    "quesar-architecture-60",
+    "quesar-studio-60",
+  ]);
+  const tag = (video: string) => {
+    const match = video.match(/\/releases\/download\/([^/]+)\//);
+    expect(match, video).not.toBeNull();
+    return match?.[1];
+  };
+  const seen = new Set<string>();
+  for (const row of catalog) {
+    expect(row.sha256).toMatch(/^[a-f0-9]{64}$/);
+    const release = tag(row.video);
+    if (recut.has(row.id)) {
+      seen.add(row.id);
+      expect(release).toBe("trailer-editions-2026-10-09-abbey-neural-v8");
+    } else if (unchanged.has(row.id)) {
+      expect(release).toBe("trailer-editions-2026-10-09-abbey-neural");
+    }
+    if (row.edition === "native30") {
+      expect(row.video).toContain("trailer-editions-2026-10-09/");
+      expect(row.video).not.toContain("abbey-neural");
+      expect(release).toBe("trailer-editions-2026-10-09");
+    }
+  }
+  expect(seen).toEqual(recut);
+});
+
 it("adds all native30 editions idempotently and validates every master before writing", () => {
   const result = execFileSync(
     "python3",
