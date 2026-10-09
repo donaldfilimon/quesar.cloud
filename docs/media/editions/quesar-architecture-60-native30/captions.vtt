@@ -1,0 +1,17 @@
+WEBVTT
+
+1
+00:00:00.000 --> 00:00:15.000
+Human imagination. Adaptive intelligence. Quesar by MLAI introduces assistant workflows, memory systems and developer tools with inspectable sources.
+
+2
+00:00:15.000 --> 00:00:30.000
+Two names. Two distinct scopes. Quesar is the MLAI website and broader direction. Quasar is the separately configured local website builder service.
+
+3
+00:00:30.000 --> 00:00:45.000
+A new site. Begin with a prompt. The local service copies a Next.js template into its sites directory and runs a Claude generation job using that machine’s Anthropic credentials.
+
+4
+00:00:45.000 --> 00:01:00.000
+Build thoughtfully. quesar.cloud Explore the architecture. Follow the source. Define the evidence your project needs. Quesar by MLAI.

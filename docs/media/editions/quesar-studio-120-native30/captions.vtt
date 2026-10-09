@@ -1,0 +1,33 @@
+WEBVTT
+
+1
+00:00:00.000 --> 00:00:15.000
+Human imagination. Adaptive intelligence. Quesar by MLAI introduces assistant workflows, memory systems and developer tools with inspectable sources.
+
+2
+00:00:15.000 --> 00:00:30.000
+Three roles. One conversation. Abbey is a human-facing companion contract. Aviva is a direct expert mode. Abi coordinates intent, risk, context and response style.
+
+3
+00:00:30.000 --> 00:00:45.000
+Memory. Keep its provenance. WDBX local Rust storage and retrieval components preserve durable records, vectors and causal history.
+
+4
+00:00:45.000 --> 00:01:00.000
+Developers. Start with source. Explore the ABI Rust framework, local CLI and MCP contracts. Follow setup and verification guidance before connecting tools or memory.
+
+5
+00:01:00.000 --> 00:01:15.000
+Two names. Two distinct scopes. Quesar is the MLAI website and broader direction. Quasar is the separately configured local website builder service.
+
+6
+00:01:15.000 --> 00:01:30.000
+A new site. Begin with a prompt. The local service copies a Next.js template into its sites directory and runs a Claude generation job using that machine’s Anthropic credentials.
+
+7
+00:01:30.000 --> 00:01:45.000
+Preview. A separate opening. Preview launch obtains a ticket and checks the returned target against the configured service before opening it.
+
+8
+00:01:45.000 --> 00:02:00.000
+Build thoughtfully. quesar.cloud Explore the architecture. Follow the source. Define the evidence your project needs. Quesar by MLAI.

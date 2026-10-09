@@ -1,0 +1,1 @@
+import{dt as e}from"./index-DQvbosDK.js";var t=e({type:`function`});export{t};
