@@ -3,6 +3,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { PageClose, PageHero, Section, Surface } from "@/components/site";
 import { Callout, StepList } from "@/components/site/lab";
 import { Button } from "@/components/ui/button";
+import { EngineeringEngagements } from "@/components/site/engineering-engagements";
 import { engagement, refusals, services } from "@/lib/mlai/categories/services";
 import { pageHead } from "@/lib/seo";
 
@@ -35,6 +36,10 @@ function ServicesPage() {
         >
           Inspect the source behind this page
         </a>
+      </Section>
+
+      <Section>
+        <EngineeringEngagements />
       </Section>
 
       <Section eyebrow="Core" title="Nine proposed engagement scopes.">

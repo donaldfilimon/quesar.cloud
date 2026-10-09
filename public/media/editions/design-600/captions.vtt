@@ -1,0 +1,373 @@
+WEBVTT
+
+1
+00:00:00.700 --> 00:00:09.600
+Begin with the brand board. This walkthrough presents design concepts for review.
+
+2
+00:00:10.700 --> 00:00:19.600
+The system board explores visual foundations. Treat its proposals as design direction.
+
+3
+00:00:20.700 --> 00:00:29.600
+The showcase board explores presentation. Its imagery is not benchmark evidence.
+
+4
+00:00:30.700 --> 00:00:39.600
+The hero board explores an introduction. Read product promises against their sources.
+
+5
+00:00:40.700 --> 00:00:49.600
+The lab board explores interactions. A demonstration does not qualify a deployment.
+
+6
+00:00:50.700 --> 00:00:59.600
+The marketing board explores a story. Customer outcomes require separate evidence.
+
+7
+00:01:00.700 --> 00:01:09.600
+The console board is a concept. Its displays do not establish live service operations.
+
+8
+00:01:10.700 --> 00:01:19.600
+The docs board explores navigation. Discuss a scoped project and review the evidence.
+
+9
+00:01:20.800 --> 00:01:23.400
+What kind of help fits?
+
+10
+00:01:23.600 --> 00:01:25.800
+Make the style explicit.
+
+11
+00:01:26.400 --> 00:01:29.700
+Three profiles in ABI.
+
+12
+00:01:30.600 --> 00:01:34.600
+ABI. Orchestration and routing.
+
+13
+00:01:35.600 --> 00:01:39.600
+Aviva. Direct, technical, candid.
+
+14
+00:01:40.600 --> 00:01:44.600
+Abbey. Conversational, empathetic, technical.
+
+15
+00:01:45.800 --> 00:01:50.400
+An explicit address can select a profile.
+
+16
+00:01:51.800 --> 00:01:54.400
+Bring your project’s scope.
+
+17
+00:01:54.600 --> 00:01:57.800
+We’ll review its evidence.
+
+18
+00:01:58.000 --> 00:02:01.400
+I’m Abbey, the conversational profile.
+
+19
+00:02:01.600 --> 00:02:05.600
+Quesar. Private AI operations. Evidence first.
+
+20
+00:02:06.600 --> 00:02:10.500
+ABI has a local keyword routing path.
+
+21
+00:02:10.800 --> 00:02:14.900
+An explicit persona address can bypass scoring.
+
+22
+00:02:15.200 --> 00:02:18.600
+Three distinct profiles.
+
+23
+00:02:19.800 --> 00:02:24.300
+WDBX: snapshots, recovery, vector search.
+
+24
+00:02:24.400 --> 00:02:28.900
+Audit blocks hash predecessor links and metadata.
+
+25
+00:02:29.200 --> 00:02:33.600
+Strict checks recompute hashes. Links alone do not.
+
+26
+00:02:34.800 --> 00:02:39.100
+ABI’s scoped audit uses thirteen phrase patterns.
+
+27
+00:02:39.400 --> 00:02:43.700
+Six principles contribute to its audit score.
+
+28
+00:02:44.000 --> 00:02:47.600
+Pattern checks do not establish semantic truth.
+
+29
+00:02:48.600 --> 00:02:52.900
+A distributed cognitive fabric remains our vision.
+
+30
+00:02:53.200 --> 00:02:56.600
+Compatibility still needs qualification.
+
+31
+00:02:57.600 --> 00:03:01.400
+Bring a defined problem and an evidence requirement.
+
+32
+00:03:01.800 --> 00:03:05.600
+Discuss your project. Review the scope together.
+
+33
+00:03:06.900 --> 00:03:09.200
+Answers are a starting point.
+
+34
+00:03:10.000 --> 00:03:12.700
+Ask what supports the claim.
+
+35
+00:03:13.600 --> 00:03:16.700
+Follow the source.
+
+36
+00:03:17.600 --> 00:03:20.200
+Keep component boundaries visible.
+
+37
+00:03:21.500 --> 00:03:29.900
+WDBX has CPU primitives: dot products, norms, cosine and top-k.
+
+38
+00:03:30.500 --> 00:03:38.100
+Accelerator capability states separate availability, initialization, execution and runtime verification.
+
+39
+00:03:39.500 --> 00:03:46.900
+The durable store integrates snapshots, write-ahead recovery and HNSW search.
+
+40
+00:03:47.500 --> 00:03:54.100
+WAL frames checksum JSON bytes. Bad checksums report corruption.
+
+41
+00:03:55.500 --> 00:04:03.400
+Recovery treats an incomplete final frame differently from a bad checksum.
+
+42
+00:04:04.000 --> 00:04:11.100
+Store-facing completion persistence belongs to MCP, outside the pure AI core.
+
+43
+00:04:12.000 --> 00:04:14.700
+Three persona profiles.
+
+44
+00:04:15.200 --> 00:04:16.600
+Abbey.
+
+45
+00:04:17.000 --> 00:04:18.400
+Aviva.
+
+46
+00:04:18.800 --> 00:04:20.300
+Abi.
+
+47
+00:04:21.500 --> 00:04:29.900
+The local router adjusts weights using keyword prefixes, then selects a profile.
+
+48
+00:04:30.500 --> 00:04:37.700
+An explicit leading persona address bypasses that scoring path.
+
+49
+00:04:39.500 --> 00:04:49.400
+Abbey combines conversation and technical care. Aviva leads directly. ABI handles orchestration.
+
+50
+00:04:50.000 --> 00:04:58.700
+The training path records metadata and profile vectors; model weights remain unchanged.
+
+51
+00:04:59.600 --> 00:05:02.300
+Inspect the integrity boundary.
+
+52
+00:05:03.500 --> 00:05:10.900
+A block hash includes its predecessor, timestamp, sequence, profile and metadata.
+
+53
+00:05:11.500 --> 00:05:18.700
+That SHA-256 construction is a hash chain, not a digital signature.
+
+54
+00:05:19.600 --> 00:05:23.700
+Strict checks recompute hashes; link-only checks do not.
+
+55
+00:05:25.500 --> 00:05:32.900
+ABI’s audit matches thirteen case-insensitive patterns and scores six principles.
+
+56
+00:05:33.500 --> 00:05:39.700
+Responses avoiding those phrases can escape its checks.
+
+57
+00:05:41.500 --> 00:05:49.000
+Source inspection establishes what is implemented, with runtime qualification still separate.
+
+58
+00:05:49.500 --> 00:05:56.700
+Ask for the test, the environment, and the precise scope behind a result.
+
+59
+00:05:57.600 --> 00:06:01.700
+Broader reasoning is a research direction.
+
+60
+00:06:02.600 --> 00:06:05.300
+Keep the roadmap visible.
+
+61
+00:06:06.500 --> 00:06:14.000
+Our vision is a distributed cognitive fabric.
+
+62
+00:06:14.500 --> 00:06:23.700
+That vision does not establish support across every device or hardware tier.
+
+63
+00:06:24.600 --> 00:06:29.700
+Compatibility needs execution evidence on each intended path.
+
+64
+00:06:31.500 --> 00:06:40.400
+A proposed direction becomes an engineering task when its acceptance evidence is defined.
+
+65
+00:06:41.000 --> 00:06:52.700
+For a project, define the workload, data boundary, failure behavior and review process before promising delivery.
+
+66
+00:06:54.000 --> 00:07:06.700
+Start with a bounded question. Name the source, inspect the implementation, and agree how the result will be checked.
+
+67
+00:07:08.500 --> 00:07:21.400
+These equations illustrate concepts. They do not establish a benchmark, semantic truth or a deployment guarantee.
+
+68
+00:07:22.000 --> 00:07:38.700
+Use the illustration to frame questions: which inputs matter, which assumptions hold, and what evidence would change the decision?
+
+69
+00:07:39.600 --> 00:07:42.700
+Bring a scoped project.
+
+70
+00:07:43.400 --> 00:07:47.600
+Let’s review the evidence together.
+
+71
+00:07:49.200 --> 00:07:53.300
+Quesar. Private AI operations.
+
+72
+00:07:53.600 --> 00:07:57.600
+Follow the boundaries, one idea at a time.
+
+73
+00:07:59.000 --> 00:08:04.100
+ABI separates its pure AI core from storage I/O.
+
+74
+00:08:04.400 --> 00:08:10.300
+MCP owns the store-facing completion persistence tail.
+
+75
+00:08:10.600 --> 00:08:15.600
+Vector primitives and accelerator contracts.
+
+76
+00:08:17.000 --> 00:08:23.300
+The durable store integrates snapshots, WAL recovery and HNSW search.
+
+77
+00:08:23.600 --> 00:08:30.600
+Recovery can report corruption or I/O failure. Durability has limits.
+
+78
+00:08:32.000 --> 00:08:35.500
+Audit blocks carry predecessor hashes.
+
+79
+00:08:35.800 --> 00:08:41.300
+The block hash covers time, sequence, profile and metadata.
+
+80
+00:08:41.600 --> 00:08:47.600
+Strict verification recomputes content hashes. Link-only verification does not.
+
+81
+00:08:49.000 --> 00:08:55.300
+Abbey, Aviva and ABI are persona profiles with identity contracts.
+
+82
+00:08:55.600 --> 00:09:03.600
+Keyword routing is a local path. Explicit leading names can select a profile.
+
+83
+00:09:04.200 --> 00:09:06.700
+Abbey: conversational.
+
+84
+00:09:07.200 --> 00:09:09.700
+Aviva: direct, technical.
+
+85
+00:09:10.200 --> 00:09:12.700
+Abi: routing.
+
+86
+00:09:14.400 --> 00:09:19.700
+The scoped audit matches thirteen case-insensitive phrase patterns.
+
+87
+00:09:20.000 --> 00:09:24.700
+Six principles contribute, including safety and privacy.
+
+88
+00:09:25.000 --> 00:09:28.600
+Harm outside those phrases can escape detection.
+
+89
+00:09:30.500 --> 00:09:36.300
+A distributed cognitive fabric is a longer-term vision.
+
+90
+00:09:36.600 --> 00:09:41.900
+Compatibility and delivery require separate qualification.
+
+91
+00:09:42.200 --> 00:09:47.600
+Treat the roadmap as a direction, with questions still open.
+
+92
+00:09:49.400 --> 00:09:52.300
+Begin with a defined project.
+
+93
+00:09:52.600 --> 00:09:59.600
+Discuss the scope, inspect the sources, and agree on the evidence needed.

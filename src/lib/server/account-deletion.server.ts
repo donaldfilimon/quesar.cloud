@@ -7,7 +7,8 @@
  *   sealed refresh tokens are deleted (revocation is best effort; deletion is not).
  * - Per-user rows go: consents, audits (and their access log), field notes,
  *   rate-limit counters.
- * - Contact inquiries are business records: kept, but unlinked (user_id NULL).
+ * - Contact inquiries and invoices are business records: kept, but unlinked.
+ * - Invoice audit actors are unlinked; settlement actors become deleted-account.
  *
  * Throws on a database failure so Better Auth aborts the deletion instead of
  * leaving an account-less remnant of the user's data behind.
@@ -35,6 +36,8 @@ export async function purgeUserData(
   userId: string,
   revoke: RevokeFn = defaultRevoke,
 ): Promise<PurgeReport> {
+  const { unlinkCommerceAccount } = await import("./commerce.server");
+  await unlinkCommerceAccount(userId);
   const sql = await getSql();
   const connected = await sql<{ provider: "google" | "microsoft" }>`
     select provider from workspace_connections where user_id = ${userId}`;

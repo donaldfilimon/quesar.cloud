@@ -1,0 +1,35 @@
+from pathlib import Path
+import json
+p=Path(__file__).parent
+chapters=[
+('Human imagination.','Adaptive intelligence.','Quesar by MLAI introduces assistant workflows, memory systems and developer tools with inspectable sources.','src/lib/home-vision.ts','SOURCE','/'),
+('A place to begin.','Read the architecture.','The website brings products, platform, developers, research, services and contact into one navigation.','src/lib/site-identity.ts','SOURCE','/products'),
+('Three roles.','One conversation.','Abbey is a human-facing companion contract. Aviva is a direct expert mode. Abi coordinates intent, risk, context and response style.','src/lib/home-vision.ts','SOURCE','/abbey'),
+('Abbey.','Care in the interface.','Thoughtful teaching, creative work and technical collaboration are the intended role. Actual assistant behavior depends on its configured backend.','src/lib/home-vision.ts','SOURCE','/abbey'),
+('Aviva.','Clarity with boundaries.','Concrete next actions and explicit uncertainty define the local persona profile. A role alone does not establish model quality.','src/lib/home-vision.ts','SOURCE','/abi'),
+('Abi.','Coordination, inspected.','Local routing and scheduler helpers select a persona or controlled blend. Broader governance remains partial.','src/lib/home-vision.ts','PARTIAL','/abi'),
+('Memory.','Keep its provenance.','WDBX local Rust storage and retrieval components preserve durable records, vectors and causal history.','src/lib/home-vision.ts','SOURCE','/wdbx'),
+('Integrity.','Truth needs evidence.','Storage integrity does not make a statement true. Production multi-host WDBX deployment is not established by this website.','src/lib/home-vision.ts','BOUNDARY','/wdbx'),
+('Developers.','Start with source.','Explore the ABI Rust framework, local CLI and MCP contracts. Follow setup and verification guidance before connecting tools or memory.','src/lib/home-vision.ts','SOURCE','/developers'),
+('APIs.','State availability.','Hosted Quesar APIs and platform SDKs are not published. The website points to local frameworks and contracts.','src/lib/home-vision.ts','BOUNDARY','/developers'),
+('Two names.','Two distinct scopes.','Quesar is the MLAI website and broader direction. Quasar is the separately configured local website builder service.','src/routes/quasar.new.tsx','SOURCE','/quasar/new'),
+('Quasar.','Browser to your service.','The Quasar screens call the configured service directly from the browser. This website does not spawn that service.','src/lib/quasar/api.ts','SOURCE','/quasar/settings'),
+('Connect.','Choose an origin.','Settings lets the browser reach a local service and check that it answers. The deployment may supply a default origin.','src/routes/quasar.settings.tsx','SOURCE','/quasar/settings'),
+('Pairing.','A deliberate connection.','The settings screen includes a pairing token. Saving a connection and revoking an online pairing are explicit operations.','src/components/quasar/settings.tsx','SOURCE','/quasar/settings'),
+('A new site.','Begin with a prompt.','The local service copies a Next.js template into its sites directory and runs a Claude generation job using that machine’s Anthropic credentials.','src/components/quasar/new-site.tsx','SOURCE','/quasar/new'),
+('A local library.','Read live sites.','The sites screen reads generated sites from the configured local service, directly through the browser.','src/routes/quasar.sites.tsx','SOURCE','/quasar/sites'),
+('Generation.','Follow the feed.','The site detail screen polls service feed and preview state every second. A generation is a job to inspect, not an invisible promise.','src/components/quasar/site-detail.tsx','SOURCE','/quasar/site'),
+('Refinement.','Send a change request.','The site detail screen offers an edit prompt. The route follows generation, sends edits and previews the site on your machine.','src/routes/quasar.site.$id.tsx','SOURCE','/quasar/site'),
+('Preview.','A separate opening.','Preview launch obtains a ticket and checks the returned target against the configured service before opening it.','src/lib/quasar/api.ts','SOURCE','/quasar/site'),
+('Recovery.','Uncertainty is visible.','The connection API exposes uncertain mutation state and recovery so screens can offer Retry rather than silently assuming success.','src/lib/quasar/api.ts','SOURCE','/quasar/settings'),
+('Research.','Ideas beside evidence.','Source-backed work covers memory, retrieval, orchestration and provenance, with implementation status beside the research.','src/lib/home-vision.ts','SOURCE','/research'),
+('NYON.','Deterministic worlds.','NYON is a related Rust strategy game with a separate offline Galaxy Workshop sandbox. Desktop and browser qualification remain in progress.','src/lib/home-vision.ts','PARTIAL','/nyon'),
+('The open workshop.','Build with the source.','Public repositories, documentation and plugins invite exploration through each project’s own contribution workflow.','src/lib/home-vision.ts','SOURCE','/developers'),
+('The future studio.','Visual orchestration.','MLAI Studio is a proposed workspace for visual agent design, prompt experiments and inspecting context, memory and execution.','src/lib/home-vision.ts','VISION / ROADMAP','/'),
+('Many modalities.','Explicit boundaries.','Text, images, audio, code and spatial environments are a direction for future collaboration with explicit data boundaries.','src/lib/home-vision.ts','VISION / ROADMAP','/'),
+('MLAI Network.','A proposed community.','The future network would let builders share agents, plugins, research, projects and extensions. It remains proposed.','src/lib/home-vision.ts','VISION / ROADMAP','/'),
+('Static and server.','Different capabilities.','The static website renders notices for server features. A configured server deployment is needed for server-backed capabilities.','AGENTS.md','BOUNDARY','/platform'),
+('Model configuration.','Honest availability.','The site uses one model interface. When no provider is configured, its model state is not configured rather than an invented response.','AGENTS.md','BOUNDARY','/platform'),
+('Services.','Define the evidence.','Explore the services and contact pages to discuss a project. Scope, verification and operational boundaries should be explicit.','src/lib/site-identity.ts','SOURCE','/services'),
+('Build thoughtfully.','quesar.cloud','Explore the architecture. Follow the source. Define the evidence your project needs. Quesar by MLAI.','src/lib/home-vision.ts','SOURCE','/')]
+(p/'chapters.json').write_text(json.dumps(chapters,indent=2))

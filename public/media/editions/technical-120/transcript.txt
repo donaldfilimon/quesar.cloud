@@ -1,0 +1,20 @@
+Quesar. Private AI operations.
+Follow the boundaries, one idea at a time.
+ABI separates its pure AI core from storage I/O.
+MCP owns the store-facing completion persistence tail.
+Vector primitives and accelerator contracts.
+The durable store integrates snapshots, WAL recovery and HNSW search.
+Recovery can report corruption or I/O failure. Durability has limits.
+Audit blocks carry predecessor hashes.
+The block hash covers time, sequence, profile and metadata.
+Strict verification recomputes content hashes. Link-only verification does not.
+Abbey, Aviva and ABI are persona profiles with identity contracts.
+Keyword routing is a local path. Explicit leading names can select a profile.
+The scoped audit matches thirteen case-insensitive phrase patterns.
+Six principles contribute, including safety and privacy.
+Harm outside those phrases can escape detection.
+A distributed cognitive fabric is a longer-term vision.
+Compatibility and delivery require separate qualification.
+Treat the roadmap as a direction, with questions still open.
+Begin with a defined project.
+Discuss the scope, inspect the sources, and agree on the evidence needed.

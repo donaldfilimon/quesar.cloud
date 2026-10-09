@@ -3,6 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { PageClose, PageHero, RouteFrame, Section } from "@/components/site";
 import { ShowcaseWall } from "@/components/site/showcase-wall";
 import { Trailer } from "@/components/site/trailer";
+import { TrailerEditions } from "@/components/site/trailer-editions";
 import { NarratedFilms } from "@/components/site/narrated-films";
 import { FILM_PUBLISHED, filmCuts } from "@/components/site/film-cuts";
 import { ogImage } from "@/lib/og-image";
@@ -79,6 +80,9 @@ function ShowcasePage() {
         >
           Inspect the source behind this page
         </a>
+      </Section>
+      <Section>
+        <TrailerEditions />
       </Section>
       <Section>
         <NarratedFilms />

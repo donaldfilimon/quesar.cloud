@@ -1,0 +1,133 @@
+WEBVTT
+
+1
+00:00:01.000 --> 00:00:04.400
+I’m Abbey, the conversational profile.
+
+2
+00:00:04.600 --> 00:00:08.600
+Quesar. Private AI operations. Evidence first.
+
+3
+00:00:09.600 --> 00:00:13.500
+ABI has a local keyword routing path.
+
+4
+00:00:13.800 --> 00:00:17.900
+An explicit persona address can bypass scoring.
+
+5
+00:00:18.200 --> 00:00:21.600
+Three distinct profiles.
+
+6
+00:00:22.800 --> 00:00:27.300
+WDBX: snapshots, recovery, vector search.
+
+7
+00:00:27.400 --> 00:00:31.900
+Audit blocks hash predecessor links and metadata.
+
+8
+00:00:32.200 --> 00:00:36.600
+Strict checks recompute hashes. Links alone do not.
+
+9
+00:00:37.800 --> 00:00:42.100
+ABI’s scoped audit uses thirteen phrase patterns.
+
+10
+00:00:42.400 --> 00:00:46.700
+Six principles contribute to its audit score.
+
+11
+00:00:47.000 --> 00:00:50.600
+Pattern checks do not establish semantic truth.
+
+12
+00:00:51.600 --> 00:00:55.400
+Bring a defined problem and an evidence requirement.
+
+13
+00:00:55.800 --> 00:00:59.600
+Discuss your project. Review the scope together.
+
+14
+00:01:00.000 --> 00:01:04.100
+Quesar. Private AI operations.
+
+15
+00:01:04.400 --> 00:01:08.400
+Follow the boundaries, one idea at a time.
+
+16
+00:01:08.400 --> 00:01:13.500
+ABI separates its pure AI core from storage I/O.
+
+17
+00:01:13.800 --> 00:01:19.700
+MCP owns the store-facing completion persistence tail.
+
+18
+00:01:20.000 --> 00:01:25.000
+Vector primitives and accelerator contracts.
+
+19
+00:01:26.400 --> 00:01:32.700
+The durable store integrates snapshots, WAL recovery and HNSW search.
+
+20
+00:01:33.000 --> 00:01:40.000
+Recovery can report corruption or I/O failure. Durability has limits.
+
+21
+00:01:41.400 --> 00:01:44.900
+Audit blocks carry predecessor hashes.
+
+22
+00:01:45.200 --> 00:01:50.700
+The block hash covers time, sequence, profile and metadata.
+
+23
+00:01:51.000 --> 00:01:57.000
+Strict verification recomputes content hashes. Link-only verification does not.
+
+24
+00:01:58.400 --> 00:02:04.700
+Abbey, Aviva and ABI are persona profiles with identity contracts.
+
+25
+00:02:05.000 --> 00:02:13.000
+Keyword routing is a local path. Explicit leading names can select a profile.
+
+26
+00:02:14.800 --> 00:02:20.100
+The scoped audit matches thirteen case-insensitive phrase patterns.
+
+27
+00:02:20.400 --> 00:02:25.100
+Six principles contribute, including safety and privacy.
+
+28
+00:02:25.400 --> 00:02:29.000
+Harm outside those phrases can escape detection.
+
+29
+00:02:30.900 --> 00:02:36.700
+A distributed cognitive fabric is a longer-term vision.
+
+30
+00:02:37.000 --> 00:02:42.300
+Compatibility and delivery require separate qualification.
+
+31
+00:02:42.600 --> 00:02:48.000
+Treat the roadmap as a direction, with questions still open.
+
+32
+00:02:49.800 --> 00:02:52.700
+Begin with a defined project.
+
+33
+00:02:53.000 --> 00:03:00.000
+Discuss the scope, inspect the sources, and agree on the evidence needed.

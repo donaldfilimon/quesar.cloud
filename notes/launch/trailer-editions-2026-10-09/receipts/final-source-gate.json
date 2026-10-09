@@ -1,0 +1,38 @@
+{
+  "date": "2026-10-09",
+  "base": "568a4410a652a09880bf87a5c9be2646885a5f3e",
+  "gate": {
+    "command": "bun run check",
+    "exitCode": 0,
+    "testFiles": 93,
+    "tests": 763,
+    "log": "/private/tmp/quesar-task2-full-gate.log"
+  },
+  "ownedSourceSha256": {
+    "src/lib/commerce.ts": "ee66bef3fbdd9d6fcfc86b986988fa2137bfd6216f1ada67b7610c01b4329998",
+    "src/lib/server/commerce.server.ts": "253f357491ad2dc80f966023c69d94a421587ec3615cacbaa11ff84fe61e282d",
+    "src/lib/server/commerce-wdbx.server.ts": "ecd64837a3a896daae23b3aa623bb518c59dad95a1db1124d8763c8546e7b65f",
+    "src/lib/server/account-deletion.server.ts": "26935cc487e786ff4a75401b27e0793bf3f730c452be41955b93bb8033dc6684",
+    "src/components/site/engineering-engagements.tsx": "46d317aff4a663d86b1043ffbfcd8da4aa97fb8ea9e5faab340fc2ba6eb314a4",
+    "src/components/site/trailer-editions.tsx": "632b8ec069537232023d7097445f6f0787bcfd34f7226154193d2232c5e4cc26",
+    "src/lib/trailer-editions.generated.json": "0b80ffc1418144c78b3d3c1656f1f607c3d5ff77c41a7896d9e938bbffe1d3c0",
+    "scripts/sync-trailer-editions.py": "8b3db751f3eeec7cb7eeba7f3409bbf4bed24586e8d1af6c622c3b7ff6c72e86",
+    "notes/launch/quesar-editorial-2026-10-09/main.jsx": "2137adb9222664885916be30b11da8ebfe3d0a56c83d72acd5c8885f9591f47f"
+  },
+  "nativeBrowser": {
+    "passed": 8,
+    "incompleteSkipped": 0,
+    "exitCode": 0
+  },
+  "mlaiBrowser": {
+    "passed": 8,
+    "exitCode": 0
+  },
+  "commerceBrowser": {
+    "passed": 6,
+    "fixture": "isolated PostgreSQL17 + installed nativeWDBX + synthetic provider-linked admin",
+    "productionFundsVerified": false
+  },
+  "publication": "pending",
+  "backendHosting": "not configured"
+}

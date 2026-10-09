@@ -1,0 +1,16 @@
+{
+  "date": "2026-10-09",
+  "buildStaticExitCode": 0,
+  "checkStaticExitCode": 0,
+  "htmlPagesChecked": 129,
+  "browserCommand": "bun run test:e2e",
+  "browserExitCode": 0,
+  "browserPassed": 226,
+  "homepagePreloadsBefore": 16,
+  "homepagePreloadsAfter": 16,
+  "masters": 16,
+  "remoteAssetSha256Verified": true,
+  "publication": "pending",
+  "persistentBackendHost": "unconfigured",
+  "livePaymentCollection": false
+}
