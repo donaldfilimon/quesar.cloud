@@ -6,9 +6,8 @@ import "./trailer-editions.css";
 const defaultFilm =
   trailerEditions.find((film) => film.id === "quesar-architecture-60") ?? trailerEditions[0];
 const durations = [60, 120, 180, 600] as const;
-const neuralRelease = trailerEditions.every((film) =>
-  film.video.includes("/trailer-editions-2026-10-09-abbey-neural/"),
-);
+const editionLabel = (film: TrailerEdition) =>
+  film.edition === "native30" ? "Native30 · Samantha narration" : "Neural performance";
 
 function FilmPlayer({ film }: { film: TrailerEdition }) {
   const [opened, setOpened] = useState(false);
@@ -81,14 +80,11 @@ export function TrailerEditions() {
     <div id="editions" className="edition-gallery scroll-mt-28">
       <div className="edition-intro">
         <p className="eyebrow">The film library</p>
-        <h2>One ecosystem. Sixteen perspectives.</h2>
+        <h2>One ecosystem. {trailerEditions.length} perspectives.</h2>
         <p>
-          Four running times.{" "}
-          {neuralRelease
-            ? "Quesar films pair a new Abbey browser neural performance with a revised scene grammar. MLAI films retain their complete original neural performances with restrained mastering. "
-            : "Explore Quesar and MLAI through their current narrated editions. "}
-          These films describe vision and roadmap; current capabilities are documented on the
-          product pages.
+          Four running times. Neural editions feature browser neural performances. Native30 Quesar
+          editions pair native 30 fps motion with macOS Samantha narration. These films describe
+          vision and roadmap; current capabilities are documented on the product pages.
         </p>
       </div>
       <div role="group" aria-label="Filter films by duration" className="edition-filters">
@@ -105,7 +101,7 @@ export function TrailerEditions() {
             }}
           >
             {duration === null
-              ? "All 16 films"
+              ? `All ${trailerEditions.length} films`
               : `${duration / 60} min · ${trailerEditions.filter((film) => film.seconds === duration).length}`}
           </button>
         ))}
@@ -114,7 +110,7 @@ export function TrailerEditions() {
         <div className="edition-feature" aria-live="polite">
           <div className="edition-feature-topline">
             <span>
-              {selected.brand} / {selected.style}
+              {selected.brand} / {selected.style} / {editionLabel(selected)}
             </span>
             <span>{selected.seconds / 60} min · 1080p</span>
           </div>
@@ -138,7 +134,7 @@ export function TrailerEditions() {
                 <button
                   type="button"
                   aria-pressed={selected.id === film.id}
-                  aria-label={`Select ${film.title}, ${film.brand}`}
+                  aria-label={`Select ${film.title}, ${film.brand}, ${editionLabel(film)}`}
                   onClick={() => setSelectedId(film.id)}
                 >
                   <span className="edition-index-number">{String(index + 1).padStart(2, "0")}</span>
@@ -153,7 +149,7 @@ export function TrailerEditions() {
                   <span className="edition-index-copy">
                     <strong>{film.title}</strong>
                     <small>
-                      {film.brand} / {film.style}
+                      {film.brand} / {film.style} / {editionLabel(film)}
                     </small>
                   </span>
                   <span className="edition-index-duration">{film.seconds / 60}m</span>

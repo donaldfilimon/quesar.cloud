@@ -7,6 +7,9 @@
   border: 1px solid #98775455;
   padding: clamp(1.25rem, 4vw, 3.5rem);
 }
+.edition-gallery .eyebrow {
+  color: #57584f;
+}
 .edition-intro {
   max-width: 52rem;
 }
@@ -174,7 +177,7 @@
 .edition-index-duration,
 .edition-index-copy small {
   font: 0.7rem var(--font-mono);
-  color: #66675e;
+  color: #57584f;
 }
 .edition-index img {
   width: 5.5rem;

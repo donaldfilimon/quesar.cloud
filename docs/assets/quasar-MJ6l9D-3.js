@@ -1,1 +1,0 @@
-import{n as e,t}from"./schemas-BKFnRWM-.js";var n=t({name:e().min(1).max(60),prompt:e().min(1).max(4e3)}),r=t({prompt:e().min(1).max(4e3)});export{r as n,n as t};

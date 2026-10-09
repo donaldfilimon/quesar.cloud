@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Stage verified gallery sidecars. Upgrade: --input-dir DIR --release-tag TAG.
+Add native30 Quesar editions without replacing the catalog: --native30.
 The no-argument legacy mode retains the existing partial-sync behavior.
 """
 import argparse
@@ -42,7 +43,7 @@ def candidates(upgrade, input_dir):
     return result
 
 
-def verified(candidate, tag, upgrade):
+def verified(candidate, tag, upgrade, native30=False):
     name, brand, style, seconds, title, folder, filename, status = candidate
     receipt = json.loads((folder / "verification.json").read_text())
     video = folder / filename
@@ -94,8 +95,11 @@ def verified(candidate, tag, upgrade):
         expected_input = {"sourceDigest": source_digest, "id": filename.removesuffix(".mp4"), "version": receipt.get("version"), "inheritedInput": inherited}
         input_digest = hashlib.sha256(json.dumps(expected_input, separators=(",", ":"), ensure_ascii=False).encode()).hexdigest()
         require(receipt.get("inputDigest") == input_digest, f"{name}: input digest mismatch")
+    if native30:
+        name = f"{name}-native30"
     base = f"/media/editions/{name}"
-    description = ("New Abbey browser Kokoro narration and a revised editorial scene grammar for Quesar." if upgrade and brand == "Quesar" else
+    description = ("Native 30 fps editorial motion with macOS Samantha narration, exploring Quesar's architecture and product direction." if native30 else
+                   "New Abbey browser Kokoro narration and a revised editorial scene grammar for Quesar." if upgrade and brand == "Quesar" else
                    "The complete original browser neural performance, retained with restrained mastering." if upgrade else
                    "Warm editorial motion exploring Quesar's architecture and product direction." if brand == "Quesar" else
                    "A React-rendered perspective on the MLAI ecosystem and its implementation boundaries.")
@@ -104,6 +108,11 @@ def verified(candidate, tag, upgrade):
                   captions=f"{base}/captions.vtt", transcript=f"{base}/transcript.txt",
                   proof=f"public{base}/verification.json", master=filename, sha256=sha)
     summary = dict(status=receipt["status"], sha256=sha, probe={"streams": [dict(codec_type="video", width=1920, height=1080, avg_frame_rate="30/1", nb_read_frames=seconds * 30, duration=seconds)]})
+    if native30:
+        record["edition"] = "native30"
+        summary.update(narration=receipt.get("narration"), listeningReview=receipt.get("listeningReview", "unknown"), visualReview=receipt.get("visualReview", "unknown"),
+                       sidecarHashes={key: digest(path) for key, path in (("poster.jpg", poster), ("captions.vtt", captions), ("transcript.txt", transcript))})
+        summary["probe"]["streams"] = receipt["probe"]["streams"]
     if brand == "Quesar":
         summary.update(renderSamplingFps=30, outputFps=30, browserErrors=[])
     if upgrade:
@@ -116,10 +125,12 @@ def verified(candidate, tag, upgrade):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--native30", action="store_true", help="Add all eight verified native30 Quesar editions without replacing neural editions")
     parser.add_argument("--input-dir", type=Path)
     parser.add_argument("--release-tag")
     args = parser.parse_args()
     require(bool(args.input_dir) == bool(args.release_tag), "Provide both --input-dir and --release-tag for an upgrade")
+    require(not args.native30 or not args.input_dir, "--native30 uses the October 9 native30 artifacts, not upgrade inputs")
     upgrade = bool(args.input_dir)
     tag = args.release_tag if upgrade else LEGACY
     require(re.fullmatch("[a-z0-9][a-z0-9-]{0,99}", tag) is not None, "Invalid release tag")
@@ -129,15 +140,23 @@ def main():
     records = {record["id"]: record for record in existing}
     prepared = {}
     all_candidates = candidates(upgrade, input_dir)
+    if args.native30:
+        all_candidates = [candidate for candidate in all_candidates if candidate[1] == "Quesar"]
     for candidate in all_candidates:
         name, _, _, _, _, folder, _, _ = candidate
         if not (folder / "verification.json").is_file():
-            require(not upgrade, f"{name}: missing verification receipt; all 16 required")
+            require(not (upgrade or args.native30), f"{name}: missing verification receipt; all {8 if args.native30 else 16} required")
             continue
-        prepared[name] = verified(candidate, tag, upgrade)
-        records[name] = prepared[name][0]
+        item = verified(candidate, tag, upgrade, args.native30)
+        name = item[0]["id"]
+        prepared[name] = item
+        records[name] = item[0]
     require(not upgrade or len(prepared) == 16, "Upgrade requires all 16 verified masters")
     ordered = [records[c[0]] for c in all_candidates if c[0] in records]
+    if args.native30:
+        require(len(prepared) == 8, "Native30 requires all eight verified masters")
+        ordered = [record for record in existing if record["id"] not in prepared] + [item[0] for item in prepared.values()]
+        require(len({r["id"] for r in ordered}) == len(ordered), "Duplicate edition ids")
     if upgrade:
         require(len(ordered) == 16 and len({r["id"] for r in ordered}) == 16, "Invalid edition inventory")
         require(all(sum(r["seconds"] == duration for r in ordered) == 4 for duration in (60, 120, 180, 600)), "Invalid duration inventory")
