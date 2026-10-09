@@ -1,0 +1,93 @@
+I’m Abbey, the conversational profile.
+Quesar. Private AI operations. Evidence first.
+ABI has a local keyword routing path.
+An explicit persona address can bypass scoring.
+Three distinct profiles.
+WDBX: snapshots, recovery, vector search.
+Audit blocks hash predecessor links and metadata.
+Strict checks recompute hashes. Links alone do not.
+ABI’s scoped audit uses thirteen phrase patterns.
+Six principles contribute to its audit score.
+Pattern checks do not establish semantic truth.
+A distributed cognitive fabric remains our vision.
+Compatibility still needs qualification.
+Bring a defined problem and an evidence requirement.
+Discuss your project. Review the scope together.
+Quesar. Private AI operations.
+Follow the boundaries, one idea at a time.
+ABI separates its pure AI core from storage I/O.
+MCP owns the store-facing completion persistence tail.
+Vector primitives and accelerator contracts.
+The durable store integrates snapshots, WAL recovery and HNSW search.
+Recovery can report corruption or I/O failure. Durability has limits.
+Audit blocks carry predecessor hashes.
+The block hash covers time, sequence, profile and metadata.
+Strict verification recomputes content hashes. Link-only verification does not.
+Abbey, Aviva and ABI are persona profiles with identity contracts.
+Keyword routing is a local path. Explicit leading names can select a profile.
+Abbey: conversational.
+Aviva: direct, technical.
+Abi: routing.
+The scoped audit matches thirteen case-insensitive phrase patterns.
+Six principles contribute, including safety and privacy.
+Harm outside those phrases can escape detection.
+A distributed cognitive fabric is a longer-term vision.
+Compatibility and delivery require separate qualification.
+Treat the roadmap as a direction, with questions still open.
+Begin with a defined project.
+Discuss the scope, inspect the sources, and agree on the evidence needed.
+Answers are a starting point.
+Ask what supports the claim.
+Follow the source.
+Keep component boundaries visible.
+WDBX has CPU primitives: dot products, norms, cosine and top-k.
+Accelerator capability states separate availability, initialization, execution and runtime verification.
+The durable store integrates snapshots, write-ahead recovery and HNSW search.
+WAL frames checksum JSON bytes. Bad checksums report corruption.
+Recovery treats an incomplete final frame differently from a bad checksum.
+Store-facing completion persistence belongs to MCP, outside the pure AI core.
+Three persona profiles.
+Abbey.
+Aviva.
+Abi.
+The local router adjusts weights using keyword prefixes, then selects a profile.
+An explicit leading persona address bypasses that scoring path.
+Abbey combines conversation and technical care. Aviva leads directly. ABI handles orchestration.
+The training path records metadata and profile vectors; model weights remain unchanged.
+Inspect the integrity boundary.
+A block hash includes its predecessor, timestamp, sequence, profile and metadata.
+That SHA-256 construction is a hash chain, not a digital signature.
+Strict checks recompute hashes; link-only checks do not.
+ABI’s audit matches thirteen case-insensitive patterns and scores six principles.
+Responses avoiding those phrases can escape its checks.
+Source inspection establishes what is implemented, with runtime qualification still separate.
+Ask for the test, the environment, and the precise scope behind a result.
+Broader reasoning is a research direction.
+Keep the roadmap visible.
+Our vision is a distributed cognitive fabric.
+That vision does not establish support across every device or hardware tier.
+Compatibility needs execution evidence on each intended path.
+A proposed direction becomes an engineering task when its acceptance evidence is defined.
+For a project, define the workload, data boundary, failure behavior and review process before promising delivery.
+Start with a bounded question. Name the source, inspect the implementation, and agree how the result will be checked.
+These equations illustrate concepts. They do not establish a benchmark, semantic truth or a deployment guarantee.
+Use the illustration to frame questions: which inputs matter, which assumptions hold, and what evidence would change the decision?
+Bring a scoped project.
+Let’s review the evidence together.
+What kind of help fits?
+Make the style explicit.
+Three profiles in ABI.
+ABI. Orchestration and routing.
+Aviva. Direct, technical, candid.
+Abbey. Conversational, empathetic, technical.
+An explicit address can select a profile.
+Bring your project’s scope.
+We’ll review its evidence.
+Begin with the brand board. This walkthrough presents design concepts for review.
+The system board explores visual foundations. Treat its proposals as design direction.
+The showcase board explores presentation. Its imagery is not benchmark evidence.
+The hero board explores an introduction. Read product promises against their sources.
+The lab board explores interactions. A demonstration does not qualify a deployment.
+The marketing board explores a story. Customer outcomes require separate evidence.
+The console board is a concept. Its displays do not establish live service operations.
+The docs board explores navigation. Discuss a scoped project and review the evidence.

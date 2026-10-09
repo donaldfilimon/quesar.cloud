@@ -1,0 +1,17 @@
+Begin with the brand board. This walkthrough presents design concepts for review.
+The system board explores visual foundations. Treat its proposals as design direction.
+The showcase board explores presentation. Its imagery is not benchmark evidence.
+The hero board explores an introduction. Read product promises against their sources.
+The lab board explores interactions. A demonstration does not qualify a deployment.
+The marketing board explores a story. Customer outcomes require separate evidence.
+The console board is a concept. Its displays do not establish live service operations.
+The docs board explores navigation. Discuss a scoped project and review the evidence.
+What kind of help fits?
+Make the style explicit.
+Three profiles in ABI.
+ABI. Orchestration and routing.
+Aviva. Direct, technical, candid.
+Abbey. Conversational, empathetic, technical.
+An explicit address can select a profile.
+Bring a defined problem and an evidence requirement.
+Discuss your project. Review the scope together.

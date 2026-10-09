@@ -1,0 +1,1 @@
+import{parseSnapshot as e}from"./github-data-s_yv0E6f.js";var t=`/assets/github-snapshot-Y8hq-MsG.json`,n;function r(){return t?(n??=fetch(t,{signal:AbortSignal.timeout(1e4)}).then(e=>e.ok?e.json():null).then(e).catch(()=>null),n):Promise.resolve(null)}export{r as loadGithubSnapshot};
