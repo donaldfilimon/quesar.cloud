@@ -1,0 +1,19 @@
+{
+  "checkedAt": "2026-10-09T07:54:21.730Z",
+  "sources": {
+    "src/lib/home-vision.ts": "ab4d0ab772dceed0a31b7a49058799bafec66d78cd05b9e3433007717930fcf3",
+    "src/lib/site-identity.ts": "25a6021f1a0ebb403e6d6279ffeae9a7308dd80343bbb55e8abcb625d6e56475",
+    "src/routes/quasar.new.tsx": "4a1ed4c1c61944083426bf8a3f212c3489bf7a2c3951e7f0e8f855de2f83e370",
+    "src/lib/quasar/api.ts": "ce3f06fc3075bd168a024c9cd419669b856487f55a8ba33a176679e5b428d180",
+    "src/routes/quasar.settings.tsx": "7d55591dcb526ff5c7c49f03a7f9c9fcffdd6f1efadddd702f70e944d47c6ca6",
+    "src/components/quasar/settings.tsx": "9796b26e7431cfea11276dbce9cc3742e209aba2de1f8fdc6ff2d308f8b44627",
+    "src/components/quasar/new-site.tsx": "9297047bde9c5f37fa09e8d48ad01e9bd9b02c4319ad247d824c5a39c252f2cd",
+    "src/routes/quasar.sites.tsx": "e300b0540793f88d0f5f37782bda216f674fd1ac9ad64cb2fffdec6b81bb74f6",
+    "src/components/quasar/site-detail.tsx": "c6aa09e40de848968a514ed420ea129fe563237f50f228e5267c4ad0ac4edb00",
+    "src/routes/quasar.site.$id.tsx": "e7d8f84a4c47ddd2333d47088868435f30fb962cdd8880590600e17841a0201e",
+    "AGENTS.md": "fa62a55f6c9d764a0af28b13873a454bdeb4489f502a862fc3a9c33cb6434693"
+  },
+  "chapters": 30,
+  "status": "source_paths_and_timeline_passed",
+  "qualification": "Source-backed presentation. No service, provider or model runtime qualification."
+}

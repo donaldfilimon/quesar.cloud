@@ -242,7 +242,7 @@ function Home() {
       >
         <Trailer />
         <Link to="/showcase" className="mt-5 inline-block text-accent">
-          Explore the showcase →
+          Watch the trailer editions →
         </Link>
       </Row>
       <Row

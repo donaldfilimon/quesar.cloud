@@ -1,0 +1,136 @@
+{
+  "generatedAt": "2026-10-09T08:23:56.011Z",
+  "status": "passed",
+  "results": [
+    {
+      "name": "quesar-architecture-60",
+      "duration": 60,
+      "sha256": "9e0f977b4902db24011b3116532699a2ce52e5d93721e670a39a86a779d325b5",
+      "hashVerified": true,
+      "status": "passed",
+      "width": 1920,
+      "height": 1080,
+      "decodedFrames": 183,
+      "captionCues": 4,
+      "seeks": [
+        30,
+        59
+      ]
+    },
+    {
+      "name": "quesar-architecture-120",
+      "duration": 120,
+      "sha256": "acd9b2a5a65d892ff0a6c25832634c37fc7355d9516fcc11e90f6fa506d158ae",
+      "hashVerified": true,
+      "status": "passed",
+      "width": 1920,
+      "height": 1080,
+      "decodedFrames": 134,
+      "captionCues": 8,
+      "seeks": [
+        60,
+        119
+      ]
+    },
+    {
+      "name": "quesar-architecture-180",
+      "duration": 180,
+      "sha256": "75bdff6d3bf3c55a9803127adfeeab65fc34cb84790e4dd054f6c442c21c973d",
+      "hashVerified": true,
+      "status": "passed",
+      "width": 1920,
+      "height": 1080,
+      "decodedFrames": 334,
+      "captionCues": 12,
+      "seeks": [
+        90,
+        179
+      ]
+    },
+    {
+      "name": "quesar-architecture-600",
+      "duration": 600,
+      "sha256": "cf4e78d476edded74d410905db3a3e06d144e512693df496839233a0fc7ec9a7",
+      "hashVerified": true,
+      "status": "passed",
+      "width": 1920,
+      "height": 1080,
+      "decodedFrames": 234,
+      "captionCues": 30,
+      "seeks": [
+        300,
+        599
+      ]
+    },
+    {
+      "name": "quesar-studio-60",
+      "duration": 60,
+      "sha256": "c829e1cfdcb54cc64bcb2c40bf10c6373168a4ee213652022621ba84e8dbb74c",
+      "hashVerified": true,
+      "status": "passed",
+      "width": 1920,
+      "height": 1080,
+      "decodedFrames": 184,
+      "captionCues": 4,
+      "seeks": [
+        30,
+        59
+      ]
+    },
+    {
+      "name": "quesar-studio-120",
+      "duration": 120,
+      "sha256": "ac0f5c643f4c72ca3bcc31855a21c1dca00fe25d233e401fbd8159d0e7e9ffe5",
+      "hashVerified": true,
+      "status": "passed",
+      "width": 1920,
+      "height": 1080,
+      "decodedFrames": 134,
+      "captionCues": 8,
+      "seeks": [
+        60,
+        119
+      ]
+    },
+    {
+      "name": "quesar-studio-180",
+      "duration": 180,
+      "sha256": "acb31c613e36b92a02621229d2eba65e0bd2ecbb3637ba5d3903ce3703ed6b68",
+      "hashVerified": true,
+      "status": "passed",
+      "width": 1920,
+      "height": 1080,
+      "decodedFrames": 334,
+      "captionCues": 12,
+      "seeks": [
+        90,
+        179
+      ]
+    },
+    {
+      "name": "quesar-studio-600",
+      "duration": 600,
+      "sha256": "ad3b0f225b3cc24b89046f3656498c999a715680851de58d3b46eb31dec7a81d",
+      "hashVerified": true,
+      "status": "passed",
+      "width": 1920,
+      "height": 1080,
+      "decodedFrames": 234,
+      "captionCues": 30,
+      "seeks": [
+        300,
+        599
+      ]
+    }
+  ],
+  "skipped": [],
+  "browserErrors": [],
+  "server": {
+    "root": "/Users/donaldfilimon/dev/active/quesar.cloud/notes/launch/quesar-editorial-2026-10-09/artifacts-native30",
+    "pid": 44940,
+    "origin": "http://127.0.0.1:59320",
+    "closed": true
+  },
+  "listeningAccepted": false,
+  "fullPlaybackAccepted": false
+}

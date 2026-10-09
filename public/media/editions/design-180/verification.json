@@ -1,0 +1,16 @@
+{
+  "status": "encoded_and_full_decode_verified",
+  "sha256": "af1ab61d2f48892aaff0499e1c54bf411cd7268f16d4026f279cb6264ac33a14",
+  "probe": {
+    "streams": [
+      {
+        "codec_type": "video",
+        "width": 1920,
+        "height": 1080,
+        "avg_frame_rate": "30/1",
+        "nb_read_frames": 5400,
+        "duration": 180
+      }
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+Human imagination. Adaptive intelligence. Quesar by MLAI introduces assistant workflows, memory systems and developer tools with inspectable sources.
+Source: src/lib/home-vision.ts / SOURCE
+
+Two names. Two distinct scopes. Quesar is the MLAI website and broader direction. Quasar is the separately configured local website builder service.
+Source: src/routes/quasar.new.tsx / SOURCE
+
+A new site. Begin with a prompt. The local service copies a Next.js template into its sites directory and runs a Claude generation job using that machine’s Anthropic credentials.
+Source: src/components/quasar/new-site.tsx / SOURCE
+
+Build thoughtfully. quesar.cloud Explore the architecture. Follow the source. Define the evidence your project needs. Quesar by MLAI.
+Source: src/lib/home-vision.ts / SOURCE

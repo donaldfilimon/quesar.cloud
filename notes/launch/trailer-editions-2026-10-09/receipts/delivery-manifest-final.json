@@ -1,0 +1,102 @@
+{
+  "date": "2026-10-09",
+  "masters": [
+    {
+      "file": "mlai-quesar-design-120.mp4",
+      "bytes": 25832563,
+      "sha256": "91737935bc82a18ceb512363f670fc2d62f7bfa148fc4d2e74d834482a47ed8b",
+      "receipt": "design-120/verification.json"
+    },
+    {
+      "file": "mlai-quesar-design-180.mp4",
+      "bytes": 30030421,
+      "sha256": "af1ab61d2f48892aaff0499e1c54bf411cd7268f16d4026f279cb6264ac33a14",
+      "receipt": "design-180/verification.json"
+    },
+    {
+      "file": "mlai-quesar-design-600.mp4",
+      "bytes": 306316853,
+      "sha256": "8e3dfbb7b681b3a9550853483ab108934e1829ab2d9670d39d107692c8a41881",
+      "receipt": "design-600/verification.json"
+    },
+    {
+      "file": "mlai-quesar-editorial-60.mp4",
+      "bytes": 4155577,
+      "sha256": "442fd28d00dc56820edf738dc67d7e945116cf3b02b7c0c004a1ab2121c52079",
+      "receipt": "editorial-60/verification.json"
+    },
+    {
+      "file": "mlai-quesar-kinetic-60.mp4",
+      "bytes": 4570311,
+      "sha256": "a9429d5d29ca481f1c2e83f44717dfe51a09bd4b6cf08fac3f8b830882382f84",
+      "receipt": "kinetic-60/verification.json"
+    },
+    {
+      "file": "mlai-quesar-technical-120.mp4",
+      "bytes": 86847986,
+      "sha256": "1d4a1ef2eb8da0ecb19602c7b9a9cdc03fdf3b98044a21d2fe5951b079be820d",
+      "receipt": "technical-120/verification.json"
+    },
+    {
+      "file": "mlai-quesar-technical-180.mp4",
+      "bytes": 91008339,
+      "sha256": "a5f3217ad9f8fd8494082421e8b0d9134c1fa7a8e0af7073ae61f6391a8a24f8",
+      "receipt": "technical-180/verification.json"
+    },
+    {
+      "file": "mlai-quesar-technical-600.mp4",
+      "bytes": 306735191,
+      "sha256": "2db809790f81022ecac5577730b3ed5bd3b0e1c1ac61efe436ff074cb292f19c",
+      "receipt": "technical-600/verification.json"
+    },
+    {
+      "file": "quesar-architecture-120.mp4",
+      "bytes": 14345827,
+      "sha256": "acd9b2a5a65d892ff0a6c25832634c37fc7355d9516fcc11e90f6fa506d158ae",
+      "receipt": "quesar-architecture-120/verification.json"
+    },
+    {
+      "file": "quesar-architecture-180.mp4",
+      "bytes": 21534112,
+      "sha256": "75bdff6d3bf3c55a9803127adfeeab65fc34cb84790e4dd054f6c442c21c973d",
+      "receipt": "quesar-architecture-180/verification.json"
+    },
+    {
+      "file": "quesar-architecture-60.mp4",
+      "bytes": 7237521,
+      "sha256": "9e0f977b4902db24011b3116532699a2ce52e5d93721e670a39a86a779d325b5",
+      "receipt": "quesar-architecture-60/verification.json"
+    },
+    {
+      "file": "quesar-architecture-600.mp4",
+      "bytes": 69626589,
+      "sha256": "cf4e78d476edded74d410905db3a3e06d144e512693df496839233a0fc7ec9a7",
+      "receipt": "quesar-architecture-600/verification.json"
+    },
+    {
+      "file": "quesar-studio-120.mp4",
+      "bytes": 18615080,
+      "sha256": "ac0f5c643f4c72ca3bcc31855a21c1dca00fe25d233e401fbd8159d0e7e9ffe5",
+      "receipt": "quesar-studio-120/verification.json"
+    },
+    {
+      "file": "quesar-studio-180.mp4",
+      "bytes": 27951006,
+      "sha256": "acb31c613e36b92a02621229d2eba65e0bd2ecbb3637ba5d3903ce3703ed6b68",
+      "receipt": "quesar-studio-180/verification.json"
+    },
+    {
+      "file": "quesar-studio-60.mp4",
+      "bytes": 9360874,
+      "sha256": "c829e1cfdcb54cc64bcb2c40bf10c6373168a4ee213652022621ba84e8dbb74c",
+      "receipt": "quesar-studio-60/verification.json"
+    },
+    {
+      "file": "quesar-studio-600.mp4",
+      "bytes": 90928993,
+      "sha256": "ad3b0f225b3cc24b89046f3656498c999a715680851de58d3b46eb31dec7a81d",
+      "receipt": "quesar-studio-600/verification.json"
+    }
+  ],
+  "acceptanceLimits": "Full decode and frame/duration/hash checks; browser playback and seeking are sampled. Full subjective listening not claimed."
+}
