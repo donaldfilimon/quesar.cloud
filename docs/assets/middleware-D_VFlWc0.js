@@ -1,1 +1,0 @@
-import{ht as e}from"./index-CO2OGyOd.js";var t=e({type:`function`});export{t};

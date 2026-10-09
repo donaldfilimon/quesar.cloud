@@ -1,0 +1,1 @@
+import{ht as e}from"./index-BEDjKgav.js";var t=e({type:`function`});export{t};
