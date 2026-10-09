@@ -13,7 +13,11 @@ const csrf = createCsrfMiddleware({ filter: (ctx) => ctx.handlerType === "server
 /** Entry modules may load first; keep their services lazy until this preflight passes. */
 const readiness = createMiddleware({ type: "request" }).server(async ({ next, request }) => {
   const { checkRuntimeRequest } = await import("@/lib/server/readiness.server");
-  const response = checkRuntimeRequest(request, import.meta.env.VITE_STATIC_SITE === "true");
+  const response = checkRuntimeRequest(
+    request,
+    import.meta.env.VITE_STATIC_SITE === "true",
+    import.meta.env.MODE === "persistent",
+  );
   return response ?? next();
 });
 

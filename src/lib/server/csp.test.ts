@@ -68,6 +68,11 @@ describe("CSP policy (ported from mlai)", () => {
     expect(directive(prod, "connect-src")).toContain("https://cdn.jsdelivr.net");
     expect(directive(prod, "connect-src")).toContain("https://huggingface.co");
     expect(directive(prod, "img-src")).toContain("https://avatars.githubusercontent.com");
+    for (const csp of [prod, dev]) {
+      expect(directive(csp, "media-src")).toBe(
+        "media-src 'self' blob: https://github.com https://release-assets.githubusercontent.com",
+      );
+    }
     // Fonts are self-hosted: no third-party font origin.
     expect(directive(prod, "style-src")).not.toContain("fonts.googleapis.com");
     expect(directive(prod, "font-src")).toBe("font-src 'self' data:");

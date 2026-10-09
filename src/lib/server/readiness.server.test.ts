@@ -14,6 +14,22 @@ describe("runtime readiness", () => {
       "auth_origin_invalid",
     ]);
   });
+  it("requires production identity in persistent mode without NODE_ENV", () => {
+    expect(runtimeReadiness({}, false, true).reasons).toEqual([
+      "database_unavailable",
+      "session_secret_invalid",
+      "auth_origin_invalid",
+    ]);
+    expect(runtimeReadiness(configured, false, true).ready).toBe(true);
+  });
+  it("never lets persistent mode inherit the static bypass", () => {
+    expect(runtimeReadiness({}, true, true).reasons).toEqual([
+      "static_mode_forbidden",
+      "database_unavailable",
+      "session_secret_invalid",
+      "auth_origin_invalid",
+    ]);
+  });
   it("accepts configured production and local development", () => {
     expect(runtimeReadiness(configured).ready).toBe(true);
     expect(runtimeReadiness({}).ready).toBe(true);
@@ -74,6 +90,24 @@ describe("runtime readiness", () => {
 });
 
 describe("incoming readiness requests", () => {
+  it("refuses missing identity through the persistent request preflight without NODE_ENV", () => {
+    const names = ["NODE_ENV", "DATABASE_URL", "BETTER_AUTH_SECRET", "BETTER_AUTH_URL"] as const;
+    const previous = names.map((name) => process.env[name]);
+    try {
+      for (const name of names) delete process.env[name];
+      const response = checkRuntimeRequest(
+        new Request("https://site.invalid/api/readiness"),
+        false,
+        true,
+      );
+      expect(response?.status).toBe(503);
+    } finally {
+      names.forEach((name, index) => {
+        if (previous[index] === undefined) delete process.env[name];
+        else process.env[name] = previous[index];
+      });
+    }
+  });
   it("refuses ordinary production requests before next handler", () => {
     const old = process.env.NODE_ENV;
     process.env.NODE_ENV = "production";

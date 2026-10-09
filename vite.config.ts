@@ -1,7 +1,7 @@
 import { readdirSync } from "node:fs";
 import { join } from "node:path";
 import type { Plugin } from "vite";
-import { defineConfig } from "vite";
+import { defineConfig, loadEnv } from "vite";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import viteReact from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
@@ -10,6 +10,7 @@ import { isMigrationFile } from "./scripts/migration-plan.ts";
 import { searchRetryPlugin } from "./scripts/search-retry-plugin.ts";
 import { searchCatalogPlugin } from "./scripts/search-catalog-plugin.ts";
 import { githubSnapshotPlugin } from "./scripts/github-snapshot-plugin.ts";
+import { assertPersistentBuildMode } from "./scripts/persistent-build-mode.ts";
 
 /** The files `src/lib/db.ts` globs — same directory, same non-recursive scope. */
 function hasGlobbedMigrations(root: string): boolean {
@@ -56,6 +57,11 @@ export default defineConfig(({ command, isPreview, mode }) => {
   // `bun run build:static` (mode "static"): prerender every page to plain files
   // for GitHub Pages. No server exists there; see src/lib/static-site.ts.
   const isStatic = mode === "static";
+  const isPersistent = mode === "persistent";
+  assertPersistentBuildMode(
+    mode,
+    loadEnv(mode, process.cwd(), "VITE_STATIC_SITE").VITE_STATIC_SITE,
+  );
   return {
     server: {
       host: "0.0.0.0",
@@ -117,8 +123,9 @@ export default defineConfig(({ command, isPreview, mode }) => {
             }
           : undefined,
       ),
-      ...(isStatic
-        ? // The prerenderer drives a local Nitro node server; only the HTML is published.
+      ...(isStatic || isPersistent
+        ? // Static prerender drives a temporary Node server; persistent mode
+          // publishes the Node server itself for a filesystem-backed host.
           [nitro({ preset: "node-server" })]
         : command === "build" || isPreview
           ? [

@@ -23,6 +23,8 @@
  * - avatars.githubusercontent.com: team avatars (`src/lib/mlai/categories/team.ts`).
  * - fonts: all self-hosted (fontsource), so no font origin is allowed.
  * - challenges.cloudflare.com (script, frame, connect): the Turnstile widget.
+ * - github.com and release-assets.githubusercontent.com (media): release-hosted
+ *   trailer videos; GitHub redirects the media request to its asset origin.
  *
  * Extend the specific directive when a surface gains a new external origin;
  * never widen to a bare https: wildcard.
@@ -69,7 +71,7 @@ export function buildCsp({ dev }: { dev: boolean }): string {
     "font-src 'self' data:",
     "img-src 'self' data: blob: https://avatars.githubusercontent.com",
     connectSrc,
-    "media-src 'self' blob:",
+    "media-src 'self' blob: https://github.com https://release-assets.githubusercontent.com",
     "worker-src 'self' blob:",
     `frame-src ${TURNSTILE}`,
     "object-src 'none'",
