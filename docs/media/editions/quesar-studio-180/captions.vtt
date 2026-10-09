@@ -13,169 +13,169 @@ Adaptive intelligence.
 Quesar by MLAI introduces assistant workflows, memory systems and developer tools with inspectable sources.
 
 4
-00:00:15.294 --> 00:00:17.109
+00:00:15.285 --> 00:00:17.100
 A place to begin.
 
 5
-00:00:17.409 --> 00:00:19.374
+00:00:17.400 --> 00:00:19.365
 Read the architecture.
 
 6
-00:00:19.674 --> 00:00:26.914
+00:00:19.665 --> 00:00:26.905
 The website brings products, platform, developers, research, services and contact into one navigation.
 
 7
-00:00:28.533 --> 00:00:30.123
+00:00:28.516 --> 00:00:30.106
 Three roles.
 
 8
-00:00:30.423 --> 00:00:32.338
+00:00:30.406 --> 00:00:32.321
 One conversation.
 
 9
-00:00:32.638 --> 00:00:36.128
+00:00:32.621 --> 00:00:36.111
 Abbey is a human-facing companion contract.
 
 10
-00:00:36.428 --> 00:00:39.118
+00:00:36.411 --> 00:00:39.101
 Aviva is a direct expert mode.
 
 11
-00:00:39.418 --> 00:00:43.933
+00:00:39.401 --> 00:00:43.916
 Abi coordinates intent, risk, context and response style.
 
 12
-00:00:45.551 --> 00:00:47.016
+00:00:45.526 --> 00:00:46.991
 Memory.
 
 13
-00:00:47.316 --> 00:00:49.031
+00:00:47.291 --> 00:00:49.006
 Keep its provenance.
 
 14
-00:00:49.331 --> 00:00:57.696
+00:00:49.306 --> 00:00:57.671
 WDBX local Rust storage and retrieval components preserve durable records, vectors and causal history.
 
 15
-00:00:59.315 --> 00:01:00.980
+00:00:59.282 --> 00:01:00.947
 Developers.
 
 16
-00:01:01.280 --> 00:01:02.945
+00:01:01.247 --> 00:01:02.912
 Start with source.
 
 17
-00:01:03.245 --> 00:01:08.610
+00:01:03.212 --> 00:01:08.677
 Explore the ABI Rust framework, local CLI and MCP contracts.
 
 18
-00:01:08.910 --> 00:01:14.275
+00:01:08.977 --> 00:01:14.342
 Follow setup and verification guidance before connecting tools or memory.
 
 19
-00:01:15.894 --> 00:01:17.434
+00:01:15.952 --> 00:01:17.492
 Two names.
 
 20
-00:01:17.734 --> 00:01:19.549
+00:01:17.792 --> 00:01:19.607
 Two distinct scopes.
 
 21
-00:01:19.849 --> 00:01:23.989
+00:01:19.907 --> 00:01:24.047
 Quesar is the MLAI website and broader direction.
 
 22
-00:01:24.289 --> 00:01:29.129
+00:01:24.347 --> 00:01:29.187
 Quasar is the separately configured local website builder service.
 
 23
-00:01:30.748 --> 00:01:32.163
+00:01:30.798 --> 00:01:32.213
 Connect.
 
 24
-00:01:32.463 --> 00:01:34.278
+00:01:32.513 --> 00:01:34.328
 Choose an origin.
 
 25
-00:01:34.578 --> 00:01:39.393
+00:01:34.628 --> 00:01:39.443
 Settings lets the browser reach a local service and check that it answers.
 
 26
-00:01:39.693 --> 00:01:43.008
+00:01:39.743 --> 00:01:43.058
 The deployment may supply a default origin.
 
 27
-00:01:44.626 --> 00:01:46.266
+00:01:44.668 --> 00:01:46.308
 A new site.
 
 28
-00:01:46.566 --> 00:01:48.356
+00:01:46.608 --> 00:01:48.398
 Begin with a prompt.
 
 29
-00:01:48.656 --> 00:01:58.871
+00:01:48.698 --> 00:01:58.913
 The local service copies a Next.js template into its sites directory and runs a Claude generation job using that machine’s Anthropic credentials.
 
 30
-00:02:00.490 --> 00:02:02.180
+00:02:00.523 --> 00:02:02.213
 Generation.
 
 31
-00:02:02.480 --> 00:02:04.195
+00:02:02.513 --> 00:02:04.228
 Follow the feed.
 
 32
-00:02:04.495 --> 00:02:09.535
+00:02:04.528 --> 00:02:09.568
 The site detail screen polls service feed and preview state every second.
 
 33
-00:02:09.835 --> 00:02:14.625
+00:02:09.868 --> 00:02:14.658
 A generation is a job to inspect, not an invisible promise.
 
 34
-00:02:16.244 --> 00:02:17.734
+00:02:16.269 --> 00:02:17.759
 Preview.
 
 35
-00:02:18.034 --> 00:02:19.874
+00:02:18.059 --> 00:02:19.899
 A separate opening.
 
 36
-00:02:20.174 --> 00:02:27.089
+00:02:20.199 --> 00:02:27.114
 Preview launch obtains a ticket and checks the returned target against the configured service before opening it.
 
 37
-00:02:28.708 --> 00:02:30.548
+00:02:28.724 --> 00:02:30.564
 The future studio.
 
 38
-00:02:30.848 --> 00:02:32.913
+00:02:30.864 --> 00:02:32.929
 Visual orchestration.
 
 39
-00:02:33.213 --> 00:02:43.128
+00:02:33.229 --> 00:02:43.144
 MLAI Studio is a proposed workspace for visual agent design, prompt experiments and inspecting context, memory and execution.
 
 40
-00:02:44.746 --> 00:02:46.536
+00:02:44.755 --> 00:02:46.545
 Build thoughtfully.
 
 41
-00:02:46.836 --> 00:02:48.776
+00:02:46.845 --> 00:02:48.785
 quesar.cloud
 
 42
-00:02:49.076 --> 00:02:51.216
+00:02:49.085 --> 00:02:51.225
 Explore the architecture.
 
 43
-00:02:51.516 --> 00:02:53.281
+00:02:51.525 --> 00:02:53.290
 Follow the source.
 
 44
-00:02:53.581 --> 00:02:56.421
+00:02:53.590 --> 00:02:56.430
 Define the evidence your project needs.
 
 45
-00:02:56.721 --> 00:02:58.911
+00:02:56.730 --> 00:02:58.920
 Quesar by MLAI.
