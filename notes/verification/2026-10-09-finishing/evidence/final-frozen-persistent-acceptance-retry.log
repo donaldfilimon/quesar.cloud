@@ -1,0 +1,31 @@
+
+Running 1 test using 1 worker
+
+(node:57089) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[persistent acceptance] owned Node process, TLS proxy/cert, pools, two databases and seeded dump removed; parent PG untouched
+  ✘  1 e2e/backend/persistent.acceptance.ts:225:1 › persistent Node artifact: fail closed, migrations, secure sessions, isolation, restart and seeded restore (320ms)
+
+
+  1) e2e/backend/persistent.acceptance.ts:225:1 › persistent Node artifact: fail closed, migrations, secure sessions, isolation, restart and seeded restore 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 503
+    Received: 200
+
+      227 | }) => {
+      228 |   let response = await start();
+    > 229 |   expect(response.status).toBe(503);
+          |                           ^
+      230 |   expect((await response.json()).reasons.sort()).toEqual([
+      231 |     "auth_origin_invalid",
+      232 |     "database_unavailable",
+        at /Users/donaldfilimon/dev/active/quesar.cloud/e2e/backend/persistent.acceptance.ts:229:27
+
+    Error Context: test-results/persistent-acceptance/persistent.acceptance.ts-p-b0169--restart-and-seeded-restore/error-context.md
+
+    Error Context: test-results/persistent-acceptance/persistent.acceptance.ts-p-b0169--restart-and-seeded-restore/error-context.md
+
+  1 failed
+    e2e/backend/persistent.acceptance.ts:225:1 › persistent Node artifact: fail closed, migrations, secure sessions, isolation, restart and seeded restore 

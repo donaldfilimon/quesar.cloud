@@ -1,0 +1,54 @@
+
+Running 1 test using 1 worker
+
+(node:7840) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[persistent acceptance] compiled artifact root /Users/donaldfilimon/Documents/Codex/2026-10-09/new-chat-2/work/qualified-node-artifact-v4; full-tree SHA256 58e05945b0a7a26f84ae56c56e222e8e786f557cd17baf35c9993a2e841fbe87
+[persistent acceptance] missing required config refused with NODE_ENV absent, readiness/auth both 503
+[migrate] applied 0001_auth.sql
+[migrate] applied 0002_field_notes.sql
+[migrate] applied 0003_inquiries.sql
+[migrate] applied 0004_telemetry.sql
+[migrate] applied 0005_console_audits.sql
+[migrate] applied 0006_workspace_connections.sql
+[migrate] applied 0007_rate_limits.sql
+[migrate] applied 0008_passkeys.sql
+[migrate] applied 0009_oauth_verification.sql
+[migrate] done — 9 migration(s) applied.
+[migrate] up to date.
+[persistent acceptance] config/connectivity separated; Node startup did not migrate; explicit/repeat migration exact 9 root filenames
+[persistent acceptance] compiled HTTPS Console: secure auth cookies; seeded notes/audit account isolation; owner decrypt, known foreign read and transplanted ciphertext refusal
+[persistent acceptance] compiled artifact full-tree SHA256 unchanged 58e05945b0a7a26f84ae56c56e222e8e786f557cd17baf35c9993a2e841fbe87
+[persistent acceptance] owned Node process, TLS proxy/cert, pools, two databases and seeded dump removed; parent PG untouched
+  ✘  1 e2e/backend/persistent.acceptance.ts:280:1 › persistent Node artifact: fail closed, migrations, secure sessions, isolation, restart and seeded restore (42.8s)
+
+
+  1) e2e/backend/persistent.acceptance.ts:280:1 › persistent Node artifact: fail closed, migrations, secure sessions, isolation, restart and seeded restore 
+
+    Error: expect(locator).toHaveValue(expected) failed
+
+    Locator: getByLabel('Display name')
+    Expected: "Synthetic owner"
+    Timeout: 20000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toHaveValue" getByLabel('Display name') with timeout 20000ms
+      - waiting for getByLabel('Display name')
+
+
+      493 |     await start({ ...settings(), DATABASE_URL: urlFor(names[1]) });
+      494 |     await page.goto(`${origin}/profile`);
+    > 495 |     await expect(page.getByLabel("Display name")).toHaveValue("Synthetic owner");
+          |                                                   ^
+      496 |     await page.goto(`${origin}/console`);
+      497 |     await expect(page.getByText("artifact owner note", { exact: true })).toBeVisible();
+      498 |     await page.getByRole("tab", { name: "My audits", exact: true }).click();
+        at /Users/donaldfilimon/dev/active/quesar.cloud/e2e/backend/persistent.acceptance.ts:495:51
+
+    Error Context: test-results/persistent-acceptance/persistent.acceptance.ts-p-b0169--restart-and-seeded-restore/error-context.md
+
+    Error Context: test-results/persistent-acceptance/persistent.acceptance.ts-p-b0169--restart-and-seeded-restore/error-context.md
+
+  1 failed
+    e2e/backend/persistent.acceptance.ts:280:1 › persistent Node artifact: fail closed, migrations, secure sessions, isolation, restart and seeded restore 

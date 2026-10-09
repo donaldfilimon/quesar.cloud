@@ -5,6 +5,7 @@ import { products } from "./categories/products";
 import { projects } from "./categories/projects";
 import { research } from "./categories/research";
 import { team } from "./categories/team";
+import { site } from "@/lib/site-identity";
 import {
   SITE_URL,
   blogPostingLd,
@@ -20,6 +21,13 @@ import {
 // Ported from mlai src/__tests__/structured-data.test.ts, plus the serializer
 // and the doc/project builders quesar now emits.
 describe("structured-data", () => {
+  it("uses the public contact details for the existing publisher identity", () => {
+    expect(blogPostingLd(blog[0]!).publisher).toMatchObject({
+      name: site.company,
+      email: site.contact.email,
+      telephone: site.contact.phoneInternational,
+    });
+  });
   it("blogPostingLd produces a valid, serializable BlogPosting", () => {
     const post = blog[0];
     if (!post) throw new Error("fixture: no blog post");
@@ -66,7 +74,7 @@ describe("structured-data", () => {
     if (!base) throw new Error("fixture: no research publication");
     expect(researchArticleLd({ ...base, authors: "  ·  " }).author).toMatchObject({
       "@type": "Organization",
-      name: "MLAI Corporation",
+      name: site.company,
     });
   });
 

@@ -1,0 +1,72 @@
+{
+  "observed_at_utc": "2026-10-09T19:29:06.072Z",
+  "baseline": "444eb88855be95aa384984612eba9611f2e543f3",
+  "qualified_source_sha256": "891ca37676728aa25fd1113fe708e7735d6b734c2b5db5fdf56735bcc14d00f3",
+  "current_source_sha256": "7b2c46d1795b676243a286550f9f123db8016fd5acfa3342221888c11a65d51d",
+  "source_delta": [
+    "bun.lock",
+    "package.json",
+    "sidecars/quasar-service/src/publication.test.ts"
+  ],
+  "unowned_site_source_delta": [
+    "bun.lock",
+    "package.json"
+  ],
+  "mutable_checkout_matches_qualified_snapshot": false,
+  "mutable_checkout_gate_status": "Partial: concurrent checkout/toolchain/media drift; no new integrated acceptance claimed",
+  "installed_manifests_unchanged": true,
+  "package_and_lock_unchanged": false,
+  "docs_unchanged": false,
+  "public_unchanged": false,
+  "frozen_compiled_tree_unchanged": true,
+  "qualified_baseline": "d154e480760706a39745d9b5299dd1be8a8d0f5d",
+  "qualified_docs_sha256": "5a871fd48e4e4259dddef1fd4bd2deec572fe545f4d5bd21f8ada00c49b667b3",
+  "observed_toolchain": {
+    "node": "v26.11.1",
+    "bun": "1.4.2"
+  },
+  "qualified_toolchain": {
+    "node": "v26.11.0",
+    "bun": "1.4.2"
+  },
+  "publication_patch_sha256": "04d9a529937bc1623388664765b44b896bf9ec73a91b12da1d7b4b89b10b4bfd",
+  "docs_sha256": "9e13b6ca6a168a425b75bfed60234859e7cf0fba4d0ba88f659e95fe3d3ab9cb",
+  "persistent_sha256": "1b83249443d2aa2144402bd592cba37846a37b44b3a3d748db53610dc157dd34",
+  "archive": "/Users/donaldfilimon/dev/active/quesar.cloud/artifacts/qualified-releases/persistent-node-1b83249443d2aa21-2026-10-09.tar.gz",
+  "archive_sha256": "ae4685539c3b5963b90c6875d8f8ff7bd1257948e8453821bfdbc2c96464d275",
+  "controlled_publication_order": "Current: observed actual success/error emitter entry, real implementation forwarded; no production seam. Crash/power-loss durability unqualified.",
+  "sidecar": {
+    "exit": 0,
+    "files": 15,
+    "tests": 113,
+    "expectations": 486
+  },
+  "worksheet": {
+    "exit": 0,
+    "exact_hash_masters": 16,
+    "full_review_fields_pending": 32
+  },
+  "passing_site_gate_reruns": 0,
+  "logs": {
+    "latest-node-archive.log": {
+      "exit": 0,
+      "sha256": "c68fd5dd1d2fc194fdeb9df7ee6c834a6ef2b937bae449ad64e5a4cf75d21d04"
+    },
+    "publication-order-focused.log": {
+      "exit": 0,
+      "sha256": "fac5be73cff5e4962a8982679f8035bdf39efd247a727e87e19fddfa5e9e43bc"
+    },
+    "publication-order-typecheck.log": {
+      "exit": 0,
+      "sha256": "8366207267355d3e3d5bf3bf6e8c94c5f93f6078c34f08973fa2b38cdda6cc92"
+    },
+    "publication-order-sidecar-gate.log": {
+      "exit": 0,
+      "sha256": "63509b4a6877a881162d0db054ab77c0c0a00568ee6f7060186a3d5e7996d78d"
+    },
+    "film-worksheet-current.log": {
+      "exit": 0,
+      "sha256": "30f628474fe4e5f6139ec8a2cd76f616923d77cb08c5105d644fde9452b2d63f"
+    }
+  }
+}

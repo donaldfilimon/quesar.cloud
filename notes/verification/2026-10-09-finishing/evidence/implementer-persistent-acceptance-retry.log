@@ -1,0 +1,48 @@
+
+Running 1 test using 1 worker
+
+[persistent acceptance] compiled artifact root /Users/donaldfilimon/dev/active/quesar.cloud/.superpowers/sdd/2026-10-09-finish-approved-delivery/implementer-persistent-artifact; full-tree SHA256 58e05945b0a7a26f84ae56c56e222e8e786f557cd17baf35c9993a2e841fbe87
+[persistent acceptance] missing required config refused with NODE_ENV absent, readiness/auth both 503
+[migrate] applied 0001_auth.sql
+[migrate] applied 0002_field_notes.sql
+[migrate] applied 0003_inquiries.sql
+[migrate] applied 0004_telemetry.sql
+[migrate] applied 0005_console_audits.sql
+[migrate] applied 0006_workspace_connections.sql
+[migrate] applied 0007_rate_limits.sql
+[migrate] applied 0008_passkeys.sql
+[migrate] applied 0009_oauth_verification.sql
+[migrate] done — 9 migration(s) applied.
+[migrate] up to date.
+[persistent acceptance] config/connectivity separated; Node startup did not migrate; explicit/repeat migration exact 9 root filenames
+[persistent acceptance] compiled HTTPS Console: secure auth cookies; seeded notes/audit account isolation; owner decrypt, known foreign read and transplanted ciphertext refusal
+[persistent acceptance] compiled artifact full-tree SHA256 unchanged 58e05945b0a7a26f84ae56c56e222e8e786f557cd17baf35c9993a2e841fbe87
+[persistent acceptance] owned Node process, TLS proxy/cert, pools, two databases and seeded dump removed; parent PG untouched
+  ✘  1 e2e/backend/persistent.acceptance.ts:280:1 › persistent Node artifact: fail closed, migrations, secure sessions, isolation, restart and seeded restore (34.9s)
+
+
+  1) e2e/backend/persistent.acceptance.ts:280:1 › persistent Node artifact: fail closed, migrations, secure sessions, isolation, restart and seeded restore 
+
+    TimeoutError: locator.click: Timeout 20000ms exceeded.
+    Call log:
+      - waiting for getByRole('button', { name: 'View audit', exact: true })
+        - locator resolved to <button aria-label="View audit" class="inline-flex items-center justify-center gap-2 border border-transparent font-medium whitespace-nowrap no-underline transition-[background-color,color,box-shadow,opacity,transform] duration-150 ease-out select-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring disabled:pointer-events-none disabled:opacity-50 active:not-disabled:translate-y-px bg-transparent text-muted-foreground hover:bg-muted hover:text-foreground h-9 rounded-s…>…</button>
+      - attempting click action
+        - waiting for element to be visible, enabled and stable
+
+
+      454 |     await expect(page.getByText("artifact owner note", { exact: true })).toBeVisible();
+      455 |     await page.getByRole("tab", { name: "My audits", exact: true }).click();
+    > 456 |     await page.getByRole("button", { name: "View audit", exact: true }).click();
+          |                                                                         ^
+      457 |     await expect(
+      458 |       page.getByText("Persistent artifact decrypted fixture", { exact: true }),
+      459 |     ).toBeVisible();
+        at /Users/donaldfilimon/dev/active/quesar.cloud/e2e/backend/persistent.acceptance.ts:456:73
+
+    Error Context: test-results/persistent-acceptance/persistent.acceptance.ts-p-b0169--restart-and-seeded-restore/error-context.md
+
+    Error Context: test-results/persistent-acceptance/persistent.acceptance.ts-p-b0169--restart-and-seeded-restore/error-context.md
+
+  1 failed
+    e2e/backend/persistent.acceptance.ts:280:1 › persistent Node artifact: fail closed, migrations, secure sessions, isolation, restart and seeded restore 

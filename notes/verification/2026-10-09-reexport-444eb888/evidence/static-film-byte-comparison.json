@@ -1,0 +1,174 @@
+[
+  {
+    "path": "docs/media/films/trailer.timing.json",
+    "matches": true
+  },
+  {
+    "path": "docs/media/films/abbey.chapters.json",
+    "matches": true
+  },
+  {
+    "path": "docs/media/films/film.encoding.json",
+    "matches": true
+  },
+  {
+    "path": "docs/media/films/mega.poster.png",
+    "matches": true
+  },
+  {
+    "path": "docs/media/films/explainer.encoding.json",
+    "matches": true
+  },
+  {
+    "path": "docs/media/films/explainer.timing.json",
+    "matches": true
+  },
+  {
+    "path": "docs/media/films/mega.transcript.txt",
+    "matches": true
+  },
+  {
+    "path": "docs/media/films/trailer.mp4",
+    "matches": true
+  },
+  {
+    "path": "docs/media/films/design.chapters.json",
+    "matches": true
+  },
+  {
+    "path": "docs/media/films/film.timing.json",
+    "matches": true
+  },
+  {
+    "path": "docs/media/films/design.vtt",
+    "matches": true
+  },
+  {
+    "path": "docs/media/films/film.mp4",
+    "matches": true
+  },
+  {
+    "path": "docs/media/films/design.poster.png",
+    "matches": true
+  },
+  {
+    "path": "docs/media/films/abbey.transcript.txt",
+    "matches": true
+  },
+  {
+    "path": "docs/media/films/mega.encoding.json",
+    "matches": true
+  },
+  {
+    "path": "docs/media/films/trailer.transcript.txt",
+    "matches": true
+  },
+  {
+    "path": "docs/media/films/mega.vtt",
+    "matches": true
+  },
+  {
+    "path": "docs/media/films/trailer.encoding.json",
+    "matches": true
+  },
+  {
+    "path": "docs/media/films/explainer.mp4",
+    "matches": true
+  },
+  {
+    "path": "docs/media/films/abbey.vtt",
+    "matches": true
+  },
+  {
+    "path": "docs/media/films/explainer.poster.png",
+    "matches": true
+  },
+  {
+    "path": "docs/media/films/explainer.chapters.json",
+    "matches": true
+  },
+  {
+    "path": "docs/media/films/abbey.encoding.json",
+    "matches": true
+  },
+  {
+    "path": "docs/media/films/film.chapters.json",
+    "matches": true
+  },
+  {
+    "path": "docs/media/films/film.transcript.txt",
+    "matches": true
+  },
+  {
+    "path": "docs/media/films/trailer.poster.png",
+    "matches": true
+  },
+  {
+    "path": "docs/media/films/manifest.json",
+    "matches": true
+  },
+  {
+    "path": "docs/media/films/trailer.vtt",
+    "matches": true
+  },
+  {
+    "path": "docs/media/films/film.poster.png",
+    "matches": true
+  },
+  {
+    "path": "docs/media/films/design.transcript.txt",
+    "matches": true
+  },
+  {
+    "path": "docs/media/films/mega.chapters.json",
+    "matches": true
+  },
+  {
+    "path": "docs/media/films/design.encoding.json",
+    "matches": true
+  },
+  {
+    "path": "docs/media/films/mega.timing.json",
+    "matches": true
+  },
+  {
+    "path": "docs/media/films/film.vtt",
+    "matches": true
+  },
+  {
+    "path": "docs/media/films/design.mp4",
+    "matches": true
+  },
+  {
+    "path": "docs/media/films/explainer.transcript.txt",
+    "matches": true
+  },
+  {
+    "path": "docs/media/films/explainer.vtt",
+    "matches": true
+  },
+  {
+    "path": "docs/media/films/mega.mp4",
+    "matches": true
+  },
+  {
+    "path": "docs/media/films/design.timing.json",
+    "matches": true
+  },
+  {
+    "path": "docs/media/films/abbey.timing.json",
+    "matches": true
+  },
+  {
+    "path": "docs/media/films/abbey.poster.png",
+    "matches": true
+  },
+  {
+    "path": "docs/media/films/abbey.mp4",
+    "matches": true
+  },
+  {
+    "path": "docs/media/films/trailer.chapters.json",
+    "matches": true
+  }
+]

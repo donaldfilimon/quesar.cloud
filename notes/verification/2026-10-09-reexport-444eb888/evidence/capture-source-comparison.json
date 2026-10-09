@@ -1,0 +1,686 @@
+[
+  {
+    "path": "e2e/film/capture.acceptance.ts",
+    "baseline_sha256": "7d5c0c3ab05f975196d9a91b7a39d2862be7494a76c07c52f6ee9589b0f49338",
+    "current_sha256": "7d5c0c3ab05f975196d9a91b7a39d2862be7494a76c07c52f6ee9589b0f49338",
+    "changed": false
+  },
+  {
+    "path": "e2e/film/guard.acceptance.ts",
+    "baseline_sha256": "81a7341471bde6cb1b7d24fa3a9ba3639567831256116a1745c178076e116069",
+    "current_sha256": "81a7341471bde6cb1b7d24fa3a9ba3639567831256116a1745c178076e116069",
+    "changed": false
+  },
+  {
+    "path": "e2e/film/playwright.config.ts",
+    "baseline_sha256": "68a622d0a1960564685850d193e37003c4811c86879fc8c9fadfdd83b254b48d",
+    "current_sha256": "68a622d0a1960564685850d193e37003c4811c86879fc8c9fadfdd83b254b48d",
+    "changed": false
+  },
+  {
+    "path": "e2e/film/vite.config.ts",
+    "baseline_sha256": "550f835dc94cac8772fbb58b4709a6b5cbdb093c688344d2b4ae21b9caa3fd69",
+    "current_sha256": "550f835dc94cac8772fbb58b4709a6b5cbdb093c688344d2b4ae21b9caa3fd69",
+    "changed": false
+  },
+  {
+    "path": "scripts/export-films.ts",
+    "baseline_sha256": "c22887b19608b3f91adae4b4ee0b301a7b11b4619a23bd8413cb36cc39b3d088",
+    "current_sha256": "c22887b19608b3f91adae4b4ee0b301a7b11b4619a23bd8413cb36cc39b3d088",
+    "changed": false
+  },
+  {
+    "path": "scripts/narrated-film.ts",
+    "baseline_sha256": "87be232c7dbc03ff3d3d08f82996c818f12114aeead3661a625ae79ad51765ca",
+    "current_sha256": "87be232c7dbc03ff3d3d08f82996c818f12114aeead3661a625ae79ad51765ca",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/abbey-trailer/AbbeyTrailer.tsx",
+    "baseline_sha256": "c5aff6201c415151876b9d743aa57d63fd957f3ee37ab6c8f9011cc3e2e44439",
+    "current_sha256": "c5aff6201c415151876b9d743aa57d63fd957f3ee37ab6c8f9011cc3e2e44439",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/abbey-trailer/scenes.ts",
+    "baseline_sha256": "b1dd915c815a175c44298697d549ba7ae8db29483c8f66d4da8675aa4679e8bd",
+    "current_sha256": "b1dd915c815a175c44298697d549ba7ae8db29483c8f66d4da8675aa4679e8bd",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/catalog-consumers.test.tsx",
+    "baseline_sha256": "adf64eedfb413a86f75e539da8883e7ec3efd5ef5b9ab1f0d1a60e93ac7ca5b6",
+    "current_sha256": "adf64eedfb413a86f75e539da8883e7ec3efd5ef5b9ab1f0d1a60e93ac7ca5b6",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/catalog.test.ts",
+    "baseline_sha256": "e30e0750decbb550770587a9f7456b56a1a80475254fccdb5d3577087166390b",
+    "current_sha256": "e30e0750decbb550770587a9f7456b56a1a80475254fccdb5d3577087166390b",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/catalog.ts",
+    "baseline_sha256": "5d0223fa82a878591efdb861c4f04651ffa3fae51602b56a9606361763344447",
+    "current_sha256": "5d0223fa82a878591efdb861c4f04651ffa3fae51602b56a9606361763344447",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/components/CinematicFallback.tsx",
+    "baseline_sha256": "2c00a2b4ba2209fc192655f5dfc0b82f5fb879f38f19fae2aca959be75880074",
+    "current_sha256": "2c00a2b4ba2209fc192655f5dfc0b82f5fb879f38f19fae2aca959be75880074",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/components/CinematicShell.tsx",
+    "baseline_sha256": "a291a5e1f209e2497d3119f4c7c819c5b443925f8738809c6cbea62225a2fc9c",
+    "current_sha256": "a291a5e1f209e2497d3119f4c7c819c5b443925f8738809c6cbea62225a2fc9c",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/design/DesignHub.tsx",
+    "baseline_sha256": "0fe4ffd57dd87f06de377353d7388d3f5a0dfbcea851eb8443809f3257e6fe44",
+    "current_sha256": "0fe4ffd57dd87f06de377353d7388d3f5a0dfbcea851eb8443809f3257e6fe44",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/design/DesignWalkthrough.tsx",
+    "baseline_sha256": "ff69ccd794a3550d141ccaefac38df746e352cc1ca9fc0310fdad3df249df8f0",
+    "current_sha256": "ff69ccd794a3550d141ccaefac38df746e352cc1ca9fc0310fdad3df249df8f0",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/design/board/DesignBoard.tsx",
+    "baseline_sha256": "1fdb81eb5e2e014960f4f89a049d9aac70b458bb21e53cf721a0461ca30d9817",
+    "current_sha256": "1fdb81eb5e2e014960f4f89a049d9aac70b458bb21e53cf721a0461ca30d9817",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/design/board/core.tsx",
+    "baseline_sha256": "dc1858da18b62fccbdb6abfa590810616b7e521473cb9794e68aeca6c0854b87",
+    "current_sha256": "dc1858da18b62fccbdb6abfa590810616b7e521473cb9794e68aeca6c0854b87",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/design/board/depth.tsx",
+    "baseline_sha256": "31ec64734c5545350cf50c509d9c9f0af548bfcb587002057c65cd1966cf1ddc",
+    "current_sha256": "31ec64734c5545350cf50c509d9c9f0af548bfcb587002057c65cd1966cf1ddc",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/design/board/foundations.tsx",
+    "baseline_sha256": "811a490f5793512b76b62fd21f04be05b14dddfb0188255fb94e93a3b9bfe2ce",
+    "current_sha256": "811a490f5793512b76b62fd21f04be05b14dddfb0188255fb94e93a3b9bfe2ce",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/design/board/shell/TweaksPanel.tsx",
+    "baseline_sha256": "bfc5e4a5c38bba77d98531f86be3143d003fb6ad04f0bd58c0491f59b9fc2b7a",
+    "current_sha256": "bfc5e4a5c38bba77d98531f86be3143d003fb6ad04f0bd58c0491f59b9fc2b7a",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/design/board/shell/use-tweaks.ts",
+    "baseline_sha256": "8892670d8b2aa16077e1260ad2a83971b58e70fad243f05bc256f9b7ec5ec606",
+    "current_sha256": "8892670d8b2aa16077e1260ad2a83971b58e70fad243f05bc256f9b7ec5ec606",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/design/board/tokens.ts",
+    "baseline_sha256": "7a5b9021490e42925bb9524cfa29f3edd241cad44c7fc7d3842949f19e12c09e",
+    "current_sha256": "7a5b9021490e42925bb9524cfa29f3edd241cad44c7fc7d3842949f19e12c09e",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/design/boards.ts",
+    "baseline_sha256": "286f612d2cbfc8dad9abf50dd6cd75f0220177cb00fa50bfff6a30c4c26fb0e1",
+    "current_sha256": "286f612d2cbfc8dad9abf50dd6cd75f0220177cb00fa50bfff6a30c4c26fb0e1",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/design/brand/BrandBoard.tsx",
+    "baseline_sha256": "8071e198363eb0ced5abcca4490a9ca2ee848081f7f811bf61e2fc637cc7b4bf",
+    "current_sha256": "8071e198363eb0ced5abcca4490a9ca2ee848081f7f811bf61e2fc637cc7b4bf",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/design/console/Chat.tsx",
+    "baseline_sha256": "2d78b8ec590a4a649509be59d67bab3ae91099c793e5072bffae53a2723dbd7a",
+    "current_sha256": "2d78b8ec590a4a649509be59d67bab3ae91099c793e5072bffae53a2723dbd7a",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/design/console/Console.tsx",
+    "baseline_sha256": "82c9bd40eb49f6a9647238b58462e5083639b3623c272cba32e6c78c73301a3c",
+    "current_sha256": "82c9bd40eb49f6a9647238b58462e5083639b3623c272cba32e6c78c73301a3c",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/design/console/Icons.tsx",
+    "baseline_sha256": "57bfb60027f32a08f520311a2f859b54b6095528d793b5d4e5b94c92e68ab321",
+    "current_sha256": "57bfb60027f32a08f520311a2f859b54b6095528d793b5d4e5b94c92e68ab321",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/design/console/Shell.tsx",
+    "baseline_sha256": "faefa3a0c79c1ac8188dcab907d0985072cabac3ca468b8732c7a7dddb8466c4",
+    "current_sha256": "faefa3a0c79c1ac8188dcab907d0985072cabac3ca468b8732c7a7dddb8466c4",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/design/console/Telemetry.tsx",
+    "baseline_sha256": "99f697ec70303aa73a6e6276e4bc61fd7a970a34f6cd7f8d1e42fc4fe141d919",
+    "current_sha256": "99f697ec70303aa73a6e6276e4bc61fd7a970a34f6cd7f8d1e42fc4fe141d919",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/design/console/Views.tsx",
+    "baseline_sha256": "17035668e4f1127d56c4cf189520835fb4a02589365eb6a5be3a9b410bc34bb0",
+    "current_sha256": "17035668e4f1127d56c4cf189520835fb4a02589365eb6a5be3a9b410bc34bb0",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/design/console/nav.ts",
+    "baseline_sha256": "f7b012d7bbdbfd43304ba418af996859ba7f60bccccd1251a1ff9d80fb73b94a",
+    "current_sha256": "f7b012d7bbdbfd43304ba418af996859ba7f60bccccd1251a1ff9d80fb73b94a",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/design/docs/Docs.tsx",
+    "baseline_sha256": "c1d6c4d7e84d67fefd758a13e9248c184a229d86e2fd8a8cd5cbc58afee86f5f",
+    "current_sha256": "c1d6c4d7e84d67fefd758a13e9248c184a229d86e2fd8a8cd5cbc58afee86f5f",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/design/docs/DocsContent.tsx",
+    "baseline_sha256": "0b71c3389206801ecbe9bd6026097546bd0e9b17de66c51130bfddb1349e2bad",
+    "current_sha256": "0b71c3389206801ecbe9bd6026097546bd0e9b17de66c51130bfddb1349e2bad",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/design/docs/DocsShell.tsx",
+    "baseline_sha256": "d6c6af7ffd0673f9163fbec1d10da917a55935973681a97900ff853c068ce533",
+    "current_sha256": "d6c6af7ffd0673f9163fbec1d10da917a55935973681a97900ff853c068ce533",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/design/docs/Icons.tsx",
+    "baseline_sha256": "d3f020e742da961e21e684532e3c5d00af56d1c132f822e1bae4cac1ecb28929",
+    "current_sha256": "d3f020e742da961e21e684532e3c5d00af56d1c132f822e1bae4cac1ecb28929",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/design/docs/pages.tsx",
+    "baseline_sha256": "c6bf0defa17c0c5e865e7ca677c75c22cf1af295576859e01803f5f0ca3cef52",
+    "current_sha256": "c6bf0defa17c0c5e865e7ca677c75c22cf1af295576859e01803f5f0ca3cef52",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/design/docs/tree.ts",
+    "baseline_sha256": "5ad51d5cc52fea021b58c964eff68ba1735867e84a6b9f9be6824abf7da079c4",
+    "current_sha256": "5ad51d5cc52fea021b58c964eff68ba1735867e84a6b9f9be6824abf7da079c4",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/design/frame-gate.test.ts",
+    "baseline_sha256": "9eb1980d24ba7dc1536d2f363f09eb15ccf6507b85eed284ffcacc248a3a036e",
+    "current_sha256": "9eb1980d24ba7dc1536d2f363f09eb15ccf6507b85eed284ffcacc248a3a036e",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/design/frame-gate.ts",
+    "baseline_sha256": "dd4582755b9ac367c93ddb31f9dfa2ee8956dbd32bc6f1a3f3e776077e003743",
+    "current_sha256": "dd4582755b9ac367c93ddb31f9dfa2ee8956dbd32bc6f1a3f3e776077e003743",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/design/hero/HeroBoard.tsx",
+    "baseline_sha256": "6078623bc7b67eca39069bc651ac5b2f63de263142c91f4bf6d10b8eb1dd088a",
+    "current_sha256": "6078623bc7b67eca39069bc651ac5b2f63de263142c91f4bf6d10b8eb1dd088a",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/design/lab/LabBoard.tsx",
+    "baseline_sha256": "179e49c5a53341402e3b45d94422e46517ca61eccd7a1d88f843db00cdbee757",
+    "current_sha256": "179e49c5a53341402e3b45d94422e46517ca61eccd7a1d88f843db00cdbee757",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/design/marketing/Features.tsx",
+    "baseline_sha256": "e16d214ed30fc70afba229153b5023cec204588dc77741a2952b70ead516211f",
+    "current_sha256": "e16d214ed30fc70afba229153b5023cec204588dc77741a2952b70ead516211f",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/design/marketing/GalaxyCanvas.tsx",
+    "baseline_sha256": "554e6ebca1c64e33ca4a2252c265cc5c2f90306a197bf52ee4c62e276b1feaf3",
+    "current_sha256": "554e6ebca1c64e33ca4a2252c265cc5c2f90306a197bf52ee4c62e276b1feaf3",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/design/marketing/Hero.tsx",
+    "baseline_sha256": "e9e265c0eaf1cb5dfe5848aa6dcbcb9be4e4b1c7afb01f8efaf2e017e49bd53e",
+    "current_sha256": "e9e265c0eaf1cb5dfe5848aa6dcbcb9be4e4b1c7afb01f8efaf2e017e49bd53e",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/design/marketing/Icons.tsx",
+    "baseline_sha256": "0729e6acc2e644b672c0eacefd7daa04bc56bac27f967bd75f220feea8627254",
+    "current_sha256": "0729e6acc2e644b672c0eacefd7daa04bc56bac27f967bd75f220feea8627254",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/design/marketing/Marketing.tsx",
+    "baseline_sha256": "279003029e2fa1e99128589ed0c60d5f209b6e78eebe8302fc25de256913784d",
+    "current_sha256": "279003029e2fa1e99128589ed0c60d5f209b6e78eebe8302fc25de256913784d",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/design/marketing/Nav.tsx",
+    "baseline_sha256": "470c9532a485191cd414fcca1c7491f037628318dc466f73a7c9f959a35fcb63",
+    "current_sha256": "470c9532a485191cd414fcca1c7491f037628318dc466f73a7c9f959a35fcb63",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/design/marketing/Personas.tsx",
+    "baseline_sha256": "4e1a9bcf8a01106e02ba9d448965ff18c79975d8108c7dcd2b4fa07ce8732397",
+    "current_sha256": "4e1a9bcf8a01106e02ba9d448965ff18c79975d8108c7dcd2b4fa07ce8732397",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/design/mlai-ds-tokens.css",
+    "baseline_sha256": "09889dc06f54bba0813c396958388dac3fb2b6e7519ec7b9bc6981098fcd68ed",
+    "current_sha256": "09889dc06f54bba0813c396958388dac3fb2b6e7519ec7b9bc6981098fcd68ed",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/design/mlai-mark.svg",
+    "baseline_sha256": "839f6e635f80ed79e4b85656500471bfa301051f8510ccc1baeb7c735087dacf",
+    "current_sha256": "839f6e635f80ed79e4b85656500471bfa301051f8510ccc1baeb7c735087dacf",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/design/showcase/ShowcaseBoard.tsx",
+    "baseline_sha256": "a26ec67a32e74db7bc0230328eb3e6d8a784069131a724805f5216940cce5a91",
+    "current_sha256": "a26ec67a32e74db7bc0230328eb3e6d8a784069131a724805f5216940cce5a91",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/explainer/Explainer.tsx",
+    "baseline_sha256": "fa3f3df980f43ac34cd60b4b9b96f3b0b31be0f8c454de37015512a264341188",
+    "current_sha256": "fa3f3df980f43ac34cd60b4b9b96f3b0b31be0f8c454de37015512a264341188",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/film/Film.tsx",
+    "baseline_sha256": "f43c4ee5c50b41834017e7b4dc012b464c7bdabff0cba596ebf3515dd8bfce12",
+    "current_sha256": "f43c4ee5c50b41834017e7b4dc012b464c7bdabff0cba596ebf3515dd8bfce12",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/film/capture.test.ts",
+    "baseline_sha256": "13ac6f4196d1132e1e3a206049e55046ef406966262e7918300536084ae4d1b3",
+    "current_sha256": "13ac6f4196d1132e1e3a206049e55046ef406966262e7918300536084ae4d1b3",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/film/capture.ts",
+    "baseline_sha256": "de577390c538a128c1f35b2a4a96ef6ad7e13df86d7c915d9d8ba94ea37bf9e3",
+    "current_sha256": "de577390c538a128c1f35b2a4a96ef6ad7e13df86d7c915d9d8ba94ea37bf9e3",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/film/chrome.tsx",
+    "baseline_sha256": "e68f67cefcb651d8b93ff52b4432027cba55d2ccb96e8d0f190ee8c3a5f43fea",
+    "current_sha256": "e68f67cefcb651d8b93ff52b4432027cba55d2ccb96e8d0f190ee8c3a5f43fea",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/film/easing.ts",
+    "baseline_sha256": "0b607536f7aba057b056afb5a8449c907b32944e3cf4f54fd7a45e3ffda6ebaa",
+    "current_sha256": "0b607536f7aba057b056afb5a8449c907b32944e3cf4f54fd7a45e3ffda6ebaa",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/film/engine-utils.test.ts",
+    "baseline_sha256": "c92686589b3a4b2a1f16552664f1b6b91dda0fd3270b2068370271cd5cc14b5b",
+    "current_sha256": "c92686589b3a4b2a1f16552664f1b6b91dda0fd3270b2068370271cd5cc14b5b",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/film/engine-utils.ts",
+    "baseline_sha256": "61297aebd096509d797e8354e0c63a0b742867350d9d3d958f69092883ea67fb",
+    "current_sha256": "61297aebd096509d797e8354e0c63a0b742867350d9d3d958f69092883ea67fb",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/film/engine.tsx",
+    "baseline_sha256": "0e798fee7c21852be1c83e4e8d91d74a3ed5e61af85ffdca12db3acca4b7fa0b",
+    "current_sha256": "0e798fee7c21852be1c83e4e8d91d74a3ed5e61af85ffdca12db3acca4b7fa0b",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/film/evidence.tsx",
+    "baseline_sha256": "b0f2bc766ad66b44e9484dab117845196a0287fcf5480df72220b2a259851020",
+    "current_sha256": "b0f2bc766ad66b44e9484dab117845196a0287fcf5480df72220b2a259851020",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/film/fx-utils.ts",
+    "baseline_sha256": "05037149c1189dc7a2e9d4b59407d3e75370ee97770cf3190e0ff9daf76a7b9c",
+    "current_sha256": "05037149c1189dc7a2e9d4b59407d3e75370ee97770cf3190e0ff9daf76a7b9c",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/film/fx.tsx",
+    "baseline_sha256": "40ca78159aa95c9f6cb6223f0d4400333bcf37b0f01380eb785aa5809b4506e4",
+    "current_sha256": "40ca78159aa95c9f6cb6223f0d4400333bcf37b0f01380eb785aa5809b4506e4",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/film/kokoro-loader.test.ts",
+    "baseline_sha256": "7981d3409315ad6c7dcf1443eb41e9448791c717fb9feeff124ff0facff660c4",
+    "current_sha256": "7981d3409315ad6c7dcf1443eb41e9448791c717fb9feeff124ff0facff660c4",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/film/kokoro-loader.ts",
+    "baseline_sha256": "0ca4554ea741fcc9b43f13d9fdfb349afe546197b86b9d44b3ce396043ed7b5a",
+    "current_sha256": "0ca4554ea741fcc9b43f13d9fdfb349afe546197b86b9d44b3ce396043ed7b5a",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/film/narration-script.ts",
+    "baseline_sha256": "0028bb8aa32c3d043f296dd61f6c19cfd74811d57dc3f9f36a26043f2b502cd2",
+    "current_sha256": "0028bb8aa32c3d043f296dd61f6c19cfd74811d57dc3f9f36a26043f2b502cd2",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/film/narration-seek.test.ts",
+    "baseline_sha256": "120cb6c0d71edacac45f5aab715ddf17723fa5d2278af8858f3df1b9dc70b609",
+    "current_sha256": "120cb6c0d71edacac45f5aab715ddf17723fa5d2278af8858f3df1b9dc70b609",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/film/narration-seek.ts",
+    "baseline_sha256": "c5c7975ed3c3a9991d98c7972a65b2e4fc5c12b5912f2430eb37c369f1ddc0ee",
+    "current_sha256": "c5c7975ed3c3a9991d98c7972a65b2e4fc5c12b5912f2430eb37c369f1ddc0ee",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/film/narration.tsx",
+    "baseline_sha256": "2b41443bcea6a468e9a7b57863e485130daac057e342c6c04ae959a7d5380494",
+    "current_sha256": "2b41443bcea6a468e9a7b57863e485130daac057e342c6c04ae959a7d5380494",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/film/neural-mode.ts",
+    "baseline_sha256": "b98bc72dc36efb2255e682a8633b7083b63644a6b13e3ec95b459233b6a15c57",
+    "current_sha256": "b98bc72dc36efb2255e682a8633b7083b63644a6b13e3ec95b459233b6a15c57",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/film/neural-voice.ts",
+    "baseline_sha256": "3edf5f19dd431353ac847aeba39d35c58107807a3f4e8aed6f5532424c983550",
+    "current_sha256": "3edf5f19dd431353ac847aeba39d35c58107807a3f4e8aed6f5532424c983550",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/film/neural.tsx",
+    "baseline_sha256": "689129d3cf9b1c181a366f82ed69b1172d52bfbde4473d09418675d3ea0296db",
+    "current_sha256": "689129d3cf9b1c181a366f82ed69b1172d52bfbde4473d09418675d3ea0296db",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/film/primitives.tsx",
+    "baseline_sha256": "88942e1a0d39abdd9f313c07412ba6a5b011721acdc8ac4b1ae53248b233eff2",
+    "current_sha256": "88942e1a0d39abdd9f313c07412ba6a5b011721acdc8ac4b1ae53248b233eff2",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/film/pronunciation.test.ts",
+    "baseline_sha256": "ea9cda5525071e8f596259c387a8ec5c55786657658f264e5b6510e242ca924c",
+    "current_sha256": "ea9cda5525071e8f596259c387a8ec5c55786657658f264e5b6510e242ca924c",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/film/pronunciation.ts",
+    "baseline_sha256": "2596f462764803978f08f70685e6f1bf822c873d4f0e82ff836201acddfe4042",
+    "current_sha256": "2596f462764803978f08f70685e6f1bf822c873d4f0e82ff836201acddfe4042",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/film/scenes/_shared.tsx",
+    "baseline_sha256": "64191ca30399ada137d0e4ecb521aeb07dc73001cbb12fe8d2804e79f183ca92",
+    "current_sha256": "64191ca30399ada137d0e4ecb521aeb07dc73001cbb12fe8d2804e79f183ca92",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/film/scenes/beats.tsx",
+    "baseline_sha256": "599606de898e17583bf5a9844caa2aaf482ef9109e94c8a3af210865c1406fb9",
+    "current_sha256": "599606de898e17583bf5a9844caa2aaf482ef9109e94c8a3af210865c1406fb9",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/film/scenes/core.tsx",
+    "baseline_sha256": "4e1ee04760bc6d7c91e037ab5f93884ed8d2eb066011bef61938957f700956b3",
+    "current_sha256": "4e1ee04760bc6d7c91e037ab5f93884ed8d2eb066011bef61938957f700956b3",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/film/scenes/extra.tsx",
+    "baseline_sha256": "54341bef2aebf0d2e4a8e7f112936b3e5a3e8ddf38b856966c95470553894712",
+    "current_sha256": "54341bef2aebf0d2e4a8e7f112936b3e5a3e8ddf38b856966c95470553894712",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/film/scenes/impacts.ts",
+    "baseline_sha256": "a8a194849a6ef47341c5392d62ed5db3ef58bf1f412b77785472ac32787eaa42",
+    "current_sha256": "a8a194849a6ef47341c5392d62ed5db3ef58bf1f412b77785472ac32787eaa42",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/film/scenes/intro.tsx",
+    "baseline_sha256": "b37fd1b9d301e519d16c413a216fd9c3ec1ab13265aa910135569ece3f549897",
+    "current_sha256": "b37fd1b9d301e519d16c413a216fd9c3ec1ab13265aa910135569ece3f549897",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/film/scenes/math-data.tsx",
+    "baseline_sha256": "1169e0cabd084a18a516d5b7748db7c7ff45e8e38bac10eaf4664e6bec3dc2dc",
+    "current_sha256": "1169e0cabd084a18a516d5b7748db7c7ff45e8e38bac10eaf4664e6bec3dc2dc",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/film/scenes/math-tex.tsx",
+    "baseline_sha256": "ff2ae339729d0b809680a550b941554ce2d23f30c156052b77a2751f071a8a50",
+    "current_sha256": "ff2ae339729d0b809680a550b941554ce2d23f30c156052b77a2751f071a8a50",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/film/scenes/math.tsx",
+    "baseline_sha256": "e24318d5769aca6a1018ae507393c4f71cb2d03002aa1c3f00ffe04fba83796e",
+    "current_sha256": "e24318d5769aca6a1018ae507393c4f71cb2d03002aa1c3f00ffe04fba83796e",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/film/scenes/outro.tsx",
+    "baseline_sha256": "7805ed526bd24a300c5290ba30a8f93d6c8328c9c2c892a0e985db40a06c01e7",
+    "current_sha256": "7805ed526bd24a300c5290ba30a8f93d6c8328c9c2c892a0e985db40a06c01e7",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/film/scenes/title.tsx",
+    "baseline_sha256": "ee8ae0fb9e0d5be412a1c7e7b324d7a330b23f47b92ac6e3cbb057ed9fcd34ff",
+    "current_sha256": "ee8ae0fb9e0d5be412a1c7e7b324d7a330b23f47b92ac6e3cbb057ed9fcd34ff",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/film/scenes/trailer_fx.tsx",
+    "baseline_sha256": "7c7ee17a1549396e8f01f780c8228a00936e82651a66085d70a53414066a3a5f",
+    "current_sha256": "7c7ee17a1549396e8f01f780c8228a00936e82651a66085d70a53414066a3a5f",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/film/speech.test.ts",
+    "baseline_sha256": "bed5e9b3d30db01089ca3798ffbfdb3407edb2090afba880cfd6dd6f98ba4bf5",
+    "current_sha256": "bed5e9b3d30db01089ca3798ffbfdb3407edb2090afba880cfd6dd6f98ba4bf5",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/film/speech.ts",
+    "baseline_sha256": "af0cf964909dcce59624c57fadca21a0e929e3a8be033d3b851d94f9088b3b2d",
+    "current_sha256": "af0cf964909dcce59624c57fadca21a0e929e3a8be033d3b851d94f9088b3b2d",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/film/timeline-context.ts",
+    "baseline_sha256": "b7a65d8c8d644030b329a7dd64279ad24b19156e8bf7e6fb6a9572482c0f7c67",
+    "current_sha256": "b7a65d8c8d644030b329a7dd64279ad24b19156e8bf7e6fb6a9572482c0f7c67",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/film/tokens.ts",
+    "baseline_sha256": "bf84d6852eda7a317f6de60d8d825a36ad33efc8ab177ed86a48fa2b0d1f1ab6",
+    "current_sha256": "bf84d6852eda7a317f6de60d8d825a36ad33efc8ab177ed86a48fa2b0d1f1ab6",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/film/transcript.tsx",
+    "baseline_sha256": "d2e096c7042bbd42d2fa50a0a969542ae49425eaaa15e4b8f40e420a6e6072b5",
+    "current_sha256": "d2e096c7042bbd42d2fa50a0a969542ae49425eaaa15e4b8f40e420a6e6072b5",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/mega/Mega.tsx",
+    "baseline_sha256": "770e410090509a5d13a7060ad14bfed6801b6a7f771970ac9fc399e476f73c9f",
+    "current_sha256": "770e410090509a5d13a7060ad14bfed6801b6a7f771970ac9fc399e476f73c9f",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/rooms/abbey.tsx",
+    "baseline_sha256": "68d6387372de3138558edd59b91df079b075d2d023165317fed35a054be0a093",
+    "current_sha256": "68d6387372de3138558edd59b91df079b075d2d023165317fed35a054be0a093",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/rooms/design.tsx",
+    "baseline_sha256": "72551837db558367be18854863e8e38b27433044de61f8650b0fc9faf48b64f7",
+    "current_sha256": "72551837db558367be18854863e8e38b27433044de61f8650b0fc9faf48b64f7",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/rooms/explainer.tsx",
+    "baseline_sha256": "7c455bfeda8991aa4c9ffe03f9051536ca979a8e9c07c22171ff12db3407311f",
+    "current_sha256": "7c455bfeda8991aa4c9ffe03f9051536ca979a8e9c07c22171ff12db3407311f",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/rooms/film.tsx",
+    "baseline_sha256": "3557e1a12dc830f67a3605b0f687bfc5b809d9bb7d64d3e8ce342c944ccf61a5",
+    "current_sha256": "3557e1a12dc830f67a3605b0f687bfc5b809d9bb7d64d3e8ce342c944ccf61a5",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/rooms/mega.tsx",
+    "baseline_sha256": "7d7ba46904b460cfe94a18385093ba2e0dc81cb7159d63157e58a57caf1c09b2",
+    "current_sha256": "7d7ba46904b460cfe94a18385093ba2e0dc81cb7159d63157e58a57caf1c09b2",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/rooms/trailer.tsx",
+    "baseline_sha256": "d765aa06b1be53aeb5ef7ce36c197369dc8efa042fc65591a00f1c6effb57d9c",
+    "current_sha256": "d765aa06b1be53aeb5ef7ce36c197369dc8efa042fc65591a00f1c6effb57d9c",
+    "changed": false
+  },
+  {
+    "path": "src/cinematic/trailer/Trailer.tsx",
+    "baseline_sha256": "42932960641f1055aa2caae0308014d258356bac91bb3dc1ffc1daf42f4addfb",
+    "current_sha256": "42932960641f1055aa2caae0308014d258356bac91bb3dc1ffc1daf42f4addfb",
+    "changed": false
+  },
+  {
+    "path": "src/components/site/narrated-films.tsx",
+    "baseline_sha256": "2161a0026dd508e29ae7ba6c669ae98a4a263ed7c199a73d98b26308d7517815",
+    "current_sha256": "2161a0026dd508e29ae7ba6c669ae98a4a263ed7c199a73d98b26308d7517815",
+    "changed": false
+  },
+  {
+    "path": "src/lib/mlai/categories/film-collection.ts",
+    "baseline_sha256": "cb298f8938c82ec0562713920945e3517a5ecc59638b6660b54004b07c4076f5",
+    "current_sha256": "cb298f8938c82ec0562713920945e3517a5ecc59638b6660b54004b07c4076f5",
+    "changed": false
+  },
+  {
+    "path": "src/lib/trailer-engine/audio.test.ts",
+    "baseline_sha256": "2bec38c386a9624f084ed95d775b2fc555982bb8d0ba0c355f4af8fe72c12dff",
+    "current_sha256": "2bec38c386a9624f084ed95d775b2fc555982bb8d0ba0c355f4af8fe72c12dff",
+    "changed": false
+  },
+  {
+    "path": "src/lib/trailer-engine/audio.ts",
+    "baseline_sha256": "1d8f26dd668333bcc0530b044defe345b0bd9567416d2d37dd144a50a25edbac",
+    "current_sha256": "1d8f26dd668333bcc0530b044defe345b0bd9567416d2d37dd144a50a25edbac",
+    "changed": false
+  },
+  {
+    "path": "src/lib/trailer-engine/clock.ts",
+    "baseline_sha256": "7caddb1bd810d0dafe8cf1510a097c06fda4ab9e8a90d12792976f18db64c8b2",
+    "current_sha256": "7caddb1bd810d0dafe8cf1510a097c06fda4ab9e8a90d12792976f18db64c8b2",
+    "changed": false
+  },
+  {
+    "path": "src/lib/trailer-engine/easing.ts",
+    "baseline_sha256": "b0efb84ea1cdf2b480f6c7515f1e46ca8de1b8537c9ba67006f438337f1090b6",
+    "current_sha256": "b0efb84ea1cdf2b480f6c7515f1e46ca8de1b8537c9ba67006f438337f1090b6",
+    "changed": false
+  },
+  {
+    "path": "src/lib/trailer-engine/index.ts",
+    "baseline_sha256": "d5b0030e876866c9f74afcd945a86d465212c0bdefd152586e2b80abcceb60b8",
+    "current_sha256": "d5b0030e876866c9f74afcd945a86d465212c0bdefd152586e2b80abcceb60b8",
+    "changed": false
+  },
+  {
+    "path": "src/lib/trailer-engine/neural-scene.ts",
+    "baseline_sha256": "d5a1ebf8336f7068da1aafe42e090768cf5b2285e41d7cb631048e6c74a61ead",
+    "current_sha256": "d5a1ebf8336f7068da1aafe42e090768cf5b2285e41d7cb631048e6c74a61ead",
+    "changed": false
+  },
+  {
+    "path": "src/lib/trailer-engine/particles.ts",
+    "baseline_sha256": "96f82990ee4deda132ff77a6384b808741553c40c5c67cd953e3c194c31b772b",
+    "current_sha256": "96f82990ee4deda132ff77a6384b808741553c40c5c67cd953e3c194c31b772b",
+    "changed": false
+  },
+  {
+    "path": "src/lib/trailer-engine/playback.ts",
+    "baseline_sha256": "6bcbb65f929c101f7afefc085f2d18f512da27e91d68a4884ed29f6a17c170da",
+    "current_sha256": "6bcbb65f929c101f7afefc085f2d18f512da27e91d68a4884ed29f6a17c170da",
+    "changed": false
+  },
+  {
+    "path": "src/lib/trailer-engine/random.ts",
+    "baseline_sha256": "645ba3785c73b8c8fe70dcbe645877750b3620b411515ac913816b370d13d01d",
+    "current_sha256": "645ba3785c73b8c8fe70dcbe645877750b3620b411515ac913816b370d13d01d",
+    "changed": false
+  },
+  {
+    "path": "src/lib/trailer-engine/renderer.ts",
+    "baseline_sha256": "640c4d6169b7f92f286685f2cb2790b26f2cb769cea72d4c28662e21aded3202",
+    "current_sha256": "640c4d6169b7f92f286685f2cb2790b26f2cb769cea72d4c28662e21aded3202",
+    "changed": false
+  },
+  {
+    "path": "src/lib/trailer-engine/sequencer.ts",
+    "baseline_sha256": "8f26bc5be33ce4ec7b283c29cbd83963d655daceb13d7d0e422b6efaae53aa0b",
+    "current_sha256": "8f26bc5be33ce4ec7b283c29cbd83963d655daceb13d7d0e422b6efaae53aa0b",
+    "changed": false
+  },
+  {
+    "path": "src/lib/trailer-engine/timeline.ts",
+    "baseline_sha256": "b37b1a93311bc6a7295b449f31a5df79d3acc2264bee8d43436144e1387f7c4f",
+    "current_sha256": "b37b1a93311bc6a7295b449f31a5df79d3acc2264bee8d43436144e1387f7c4f",
+    "changed": false
+  }
+]

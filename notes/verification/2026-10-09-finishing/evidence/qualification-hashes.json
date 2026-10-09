@@ -1,0 +1,28 @@
+{
+  "observed_at_utc": "2026-10-09T17:52:53.771012+00:00",
+  "baseline": "8c61884c62db7a5f8d34baa05e293e28d6fdcf83",
+  "status": "Current local qualification; full delivery Partial",
+  "source": {
+    "e2e/backend/commerce.acceptance.ts": "714ce58fda94389b83cf59e63ee1cabf4e9502bb7dfe3b2995a657a6e42486f6",
+    "e2e/backend/durable.acceptance.ts": "ea5c5dc1a992f3b8e0e656ec46de0a9b441839c7adad53f7c6971c13b24edfd4",
+    "e2e/backend/persistent.acceptance.ts": "d037bd3ae440fa6da4de1e6a3aaee06aa8ac4d7bcb2a1f53de6cc8f3384ba7fd",
+    "e2e/backend/persistent.config.ts": "edefb579a286e748ab6b744a4b0187b005fb366079c7f2bcb5dc35c6e4e7e581",
+    "sidecars/quasar-service/src/job.test.ts": "6771d0b2f0da9f392f3745dce8db5ce3042f58829beee4b10ab31b962be6b2d0",
+    "sidecars/quasar-service/src/server.test.ts": "178c82bb7b31522353c7f8afbbc34e2fe01a2a36a5fcf4b3a7427ccaa959caeb",
+    "sidecars/quasar-service/src/server.ts": "bbb1ee6928e2033b707920512f351d8a32ab26eb8375ae12c44ac3e503110255",
+    "src/components/site/trailer-editions.css": "702f92534f4ad8eee29623c7588936d4a8f306708807c88978682be78ec50aff",
+    "src/routes/api/cron/audits-expire.ts": "a7cac47c9bc54f4d28f2df4186e916af8efb6e966a74f5277b57cc0cb79914d8",
+    "src/routes/api/cron/-audits-expire.test.ts": "1eb0fc61d817aec4438448c5c1c80cc8d8a807fa220d1b3522aff48aa1d9b3fc"
+  },
+  "dependency_snapshot": {
+    "package.json": "ea52493b657ec0e327f268ba9f80d513b0ade9c37d53f1be157adb0874931f1a",
+    "bun.lock": "a38fc69b05efe9fb9b40e3d1bb4e7e81d8af5243dba3eb7e3b1e945d9f6e947f"
+  },
+  "unowned_preserved_files": {
+    "package-lock.json": "b1010f905f3b498c878d20ce8e9bfb5881e0d6d0f70558dfc3b72ed58e125e7e"
+  },
+  "static_artifact_manifest": "qualified-static-artifact-hashes.json",
+  "node_artifact_manifest": "qualified-node-artifact-hashes.json",
+  "node_full_tree_sha256": "58e05945b0a7a26f84ae56c56e222e8e786f557cd17baf35c9993a2e841fbe87",
+  "cleanup": "Follow-up: known acceptance processes terminal; zero client backends; owned PostgreSQL stopped exit0. Cluster files and an unowned acceptance database preserved offline."
+}

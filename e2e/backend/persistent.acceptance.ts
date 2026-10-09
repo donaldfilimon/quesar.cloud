@@ -360,16 +360,39 @@ test("persistent Node artifact: fail closed, migrations, secure sessions, isolat
   }
   try {
     const ids: string[] = [];
-    for (const [context, suffix] of [
-      [owner, "owner"],
-      [other, "other"],
+    const page = await owner.newPage();
+    const bystander = await other.newPage();
+    for (const [context, active, suffix] of [
+      [owner, page, "owner"],
+      [other, bystander, "other"],
     ] as const) {
-      const signup = await context.request.post(`${origin}/api/auth/sign-up/email`, {
-        headers: { origin },
-        data: { email: `${name}-${suffix}@example.invalid`, password, name: `Synthetic ${suffix}` },
+      await active.goto(`${origin}/signup`);
+      await expect(
+        active.getByRole("heading", { name: "Create an account", exact: true }),
+      ).toBeVisible();
+      await active.waitForFunction(() => {
+        const form = document.querySelector("form");
+        return form && Object.keys(form).some((key) => key.startsWith("__reactProps$"));
       });
+      await expect(active.getByLabel("Password", { exact: true })).toHaveAttribute(
+        "autocomplete",
+        "new-password",
+      );
+      await active.getByLabel("Name", { exact: true }).fill(`Synthetic ${suffix}`);
+      await active.getByLabel("Email", { exact: true }).fill(`${name}-${suffix}@example.invalid`);
+      await active.getByLabel("Password", { exact: true }).fill(password);
+      const submitted = active.waitForResponse(
+        (response) =>
+          response.url().endsWith("/api/auth/sign-up/email") &&
+          response.request().method() === "POST",
+      );
+      await active.getByRole("button", { name: "Create account", exact: true }).click();
+      const signup = await submitted;
       if (signup.status() !== 200) console.log("[persistent diagnostic]", diagnostic);
       expect(signup.status()).toBe(200);
+      await expect(active).toHaveURL(`${origin}/console`);
+      await active.goto(`${origin}/profile`);
+      await expect(active.getByLabel("Display name")).toHaveValue(`Synthetic ${suffix}`);
       const cookies = await context.cookies();
       expect(
         cookies.some(
@@ -385,8 +408,139 @@ test("persistent Node artifact: fail closed, migrations, secure sessions, isolat
         ).rows[0].id,
       );
     }
-    const page = await owner.newPage();
-    const bystander = await other.newPage();
+    // Compiled UI only: failed header signout preserves the session and offers retry.
+    const signOutURL = `${origin}/api/auth/sign-out`;
+    const refuseSignOut = (route: import("@playwright/test").Route) =>
+      route.fulfill({
+        status: 503,
+        contentType: "application/json",
+        body: JSON.stringify({ message: "Synthetic sign-out unavailable" }),
+      });
+    await page.route(signOutURL, refuseSignOut);
+    await page
+      .getByRole("button", { name: "Account menu for Synthetic owner", exact: true })
+      .click();
+    await page.getByRole("menuitem", { name: "Sign out", exact: true }).click();
+    await expect(page.getByRole("alert").filter({ hasText: "Sign-out failed" })).toBeVisible();
+    expect(new URL(page.url()).pathname).toBe("/profile");
+    const activeOwner = (await (
+      await owner.request.get(`${origin}/api/auth/get-session`)
+    ).json()) as { user: { id: string } };
+    expect(activeOwner.user.id).toBe(ids[0]);
+    await page.unroute(signOutURL, refuseSignOut);
+    await page.getByRole("menuitem", { name: "Sign out", exact: true }).click();
+    await expect(page).toHaveURL(`${origin}/`);
+    expect(
+      (await owner.cookies()).some((cookie) => cookie.name === "__Host-quesar.session_token"),
+    ).toBe(false);
+    await page.goto(`${origin}/profile`);
+    await expect(page.getByRole("heading", { name: "Sign in", exact: true })).toBeVisible();
+    expect(new URL(page.url()).searchParams.get("next")).toBe("/profile");
+
+    // Local callback-error fixture: no provider credentials or live OAuth call.
+    await page.goto(
+      `${origin}/login?${new URLSearchParams({ next: "/profile", error: "access_denied", error_description: "must-not-display-provider-detail" })}`,
+    );
+    await expect(page.getByRole("alert")).toContainText("Provider sign-in was cancelled or denied");
+    await expect(page.locator("body")).not.toContainText("must-not-display-provider-detail", {
+      useInnerText: true,
+    });
+    await page.getByLabel("Email", { exact: true }).fill(`${name}-owner@example.invalid`);
+    await page.getByLabel("Password", { exact: true }).fill("synthetic-wrong-password");
+    await page.getByRole("button", { name: "Sign in with email", exact: true }).click();
+    await expect(page.locator("form").getByRole("alert")).toBeVisible();
+    expect(
+      (await owner.cookies()).some((cookie) => cookie.name === "__Host-quesar.session_token"),
+    ).toBe(false);
+    await page.getByLabel("Password", { exact: true }).fill(password);
+    let releaseSignIn!: () => void;
+    const signInGate = new Promise<void>((resolve) => {
+      releaseSignIn = resolve;
+    });
+    const holdSignIn = async (route: import("@playwright/test").Route) => {
+      await signInGate;
+      await route.continue();
+    };
+    await page.route(`${origin}/api/auth/sign-in/email`, holdSignIn);
+    try {
+      await page.getByRole("button", { name: "Sign in with email", exact: true }).click();
+      await expect(page.getByRole("button", { name: "Working…", exact: true })).toBeDisabled();
+      await expect(
+        page.getByRole("button", { name: "Sign in with a passkey", exact: true }),
+      ).toBeDisabled();
+      await expect(
+        page.getByRole("button", { name: "Need an account? Create one", exact: true }),
+      ).toBeDisabled();
+      releaseSignIn();
+      await expect(page).toHaveURL(`${origin}/profile`);
+    } finally {
+      releaseSignIn();
+      await page.unroute(`${origin}/api/auth/sign-in/email`, holdSignIn);
+    }
+    await page.reload();
+    await expect(page.getByLabel("Display name")).toHaveValue("Synthetic owner");
+    const ownerCookie = (await owner.cookies()).find(
+      (cookie) => cookie.name === "__Host-quesar.session_token",
+    );
+    expect(ownerCookie?.secure && ownerCookie.httpOnly).toBe(true);
+    await bystander.reload();
+    await expect(bystander.getByLabel("Display name")).toHaveValue("Synthetic other");
+    const activeOther = (await (
+      await other.request.get(`${origin}/api/auth/get-session`)
+    ).json()) as { user: { id: string } };
+    expect(activeOther.user.id).toBe(ids[1]);
+
+    // Profile signout has the same visible failure/retry contract as the header.
+    await page.route(signOutURL, refuseSignOut);
+    await page.getByRole("button", { name: "Sign out", exact: true }).click();
+    await expect(page.getByRole("alert").filter({ hasText: "Sign-out failed" })).toBeVisible();
+    await page.unroute(signOutURL, refuseSignOut);
+    await page.getByRole("button", { name: "Sign out", exact: true }).click();
+    await expect(page).toHaveURL(`${origin}/`);
+    await page.goto(`${origin}/login?next=%2Fprofile`);
+    await page.getByLabel("Email", { exact: true }).fill(`${name}-owner@example.invalid`);
+    await page.getByLabel("Password", { exact: true }).fill(password);
+    await page.getByRole("button", { name: "Sign in with email", exact: true }).click();
+    await expect(page).toHaveURL(`${origin}/profile`);
+    await expect(page.getByLabel("Display name")).toHaveValue("Synthetic owner");
+    for (const next of ["/\t/attacker.example", "/docs/../signup", "/%6cogin"]) {
+      await page.goto(`${origin}/login?${new URLSearchParams({ next })}`);
+      await expect(page).toHaveURL(`${origin}/console`);
+    }
+    receipt(
+      "compiled UI: direct signup in independent contexts, header/profile failed signout and retry, wrong-password then email signin, shared busy controls, secure session reload and sanitized return targets",
+    );
+
+    await page.goto(`${origin}/contact`);
+    await page.getByLabel("Name", { exact: true }).fill("Synthetic contact");
+    await page.getByLabel("Email", { exact: true }).fill(`${name}-receipt@example.invalid`);
+    await page
+      .getByLabel("Message", { exact: true })
+      .fill("Synthetic accepted inquiry with denied device storage.");
+    await expect(page.getByRole("button", { name: "Send inquiry", exact: true })).toBeEnabled();
+    await page.evaluate(() => {
+      Storage.prototype.setItem = () => {
+        throw new DOMException("Synthetic storage denial", "QuotaExceededError");
+      };
+    });
+    await page.getByRole("button", { name: "Send inquiry", exact: true }).click();
+    await expect(page.locator("form").getByRole("status")).toContainText(
+      "Inquiry accepted by the site",
+    );
+    await expect(page.locator("form").getByRole("status")).toContainText(
+      "local copy could not be saved",
+    );
+    await expect(page.getByRole("button", { name: "Send inquiry", exact: true })).toBeEnabled();
+    expect(
+      (
+        await db.query("select count(*)::int as n from inquiries where email=$1", [
+          `${name}-receipt@example.invalid`,
+        ])
+      ).rows[0].n,
+    ).toBe(1);
+    receipt(
+      "compiled contact: server acceptance remains honest and form settles after localStorage throws; exactly one accepted inquiry",
+    );
     for (const [id, body] of [
       [ids[0], "artifact owner note"],
       [ids[1], "artifact other note"],

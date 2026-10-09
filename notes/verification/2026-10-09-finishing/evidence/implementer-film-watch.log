@@ -1,0 +1,182 @@
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "../../vite.config" without a file extension (e2e/film/vite.config.ts:2:24). Add the file extension
+[WebServer]   - import "./github-readmes" without a file extension (src/lib/github-data.ts:1:30). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+[WebServer]   vite:deps (client) removing old cache dir /Users/donaldfilimon/dev/active/quesar.cloud/node_modules/.vite-film-51210/deps +0ms
+[WebServer]   vite:deps scanning for dependencies... +0ms
+[WebServer]   vite:deps Crawling dependencies using entries: 
+[WebServer]   vite:deps   /Users/donaldfilimon/dev/active/quesar.cloud/node_modules/@tanstack/react-start/dist/plugin/default-entry/client.tsx
+[WebServer]   vite:deps   /Users/donaldfilimon/dev/active/quesar.cloud/src/router.tsx +0ms
+[WebServer]   vite:deps static imports crawl ended +52ms
+[WebServer]   vite:deps Scan completed in 194.18ms: 
+[WebServer]   vite:deps   @better-auth/passkey -> /Users/donaldfilimon/dev/active/quesar.cloud/node_modules/@better-auth/passkey/dist/index.mjs
+[WebServer]   vite:deps   @better-auth/passkey/client -> /Users/donaldfilimon/dev/active/quesar.cloud/node_modules/@better-auth/passkey/dist/client.mjs
+[WebServer]   vite:deps   @electric-sql/pglite -> /Users/donaldfilimon/dev/active/quesar.cloud/node_modules/@electric-sql/pglite/dist/index.js
+[WebServer]   vite:deps   @hookform/resolvers/zod -> /Users/donaldfilimon/dev/active/quesar.cloud/node_modules/@hookform/resolvers/zod/dist/zod.mjs
+[WebServer]   vite:deps   @radix-ui/react-accordion -> /Users/donaldfilimon/dev/active/quesar.cloud/node_modules/@radix-ui/react-accordion/dist/index.mjs
+[WebServer]   vite:deps   @radix-ui/react-alert-dialog -> /Users/donaldfilimon/dev/active/quesar.cloud/node_modules/@radix-ui/react-alert-dialog/dist/index.mjs
+[WebServer]   vite:deps   @radix-ui/react-dialog -> /Users/donaldfilimon/dev/active/quesar.cloud/node_modules/@radix-ui/react-dialog/dist/index.mjs
+[WebServer]   vite:deps   @radix-ui/react-dropdown-menu -> /Users/donaldfilimon/dev/active/quesar.cloud/node_modules/@radix-ui/react-dropdown-menu/dist/index.mjs
+[WebServer]   vite:deps   @radix-ui/react-label -> /Users/donaldfilimon/dev/active/quesar.cloud/node_modules/@radix-ui/react-label/dist/index.mjs
+[WebServer]   vite:deps   @radix-ui/react-radio-group -> /Users/donaldfilimon/dev/active/quesar.cloud/node_modules/@radix-ui/react-radio-group/dist/index.mjs
+[WebServer]   vite:deps   @radix-ui/react-scroll-area -> /Users/donaldfilimon/dev/active/quesar.cloud/node_modules/@radix-ui/react-scroll-area/dist/index.mjs
+[WebServer]   vite:deps   @radix-ui/react-select -> /Users/donaldfilimon/dev/active/quesar.cloud/node_modules/@radix-ui/react-select/dist/index.mjs
+[WebServer]   vite:deps   @radix-ui/react-separator -> /Users/donaldfilimon/dev/active/quesar.cloud/node_modules/@radix-ui/react-separator/dist/index.mjs
+[WebServer]   vite:deps   @radix-ui/react-slot -> /Users/donaldfilimon/dev/active/quesar.cloud/node_modules/@radix-ui/react-slot/dist/index.mjs
+[WebServer]   vite:deps   @radix-ui/react-tabs -> /Users/donaldfilimon/dev/active/quesar.cloud/node_modules/@radix-ui/react-tabs/dist/index.mjs
+[WebServer]   vite:deps   @radix-ui/react-toggle -> /Users/donaldfilimon/dev/active/quesar.cloud/node_modules/@radix-ui/react-toggle/dist/index.mjs
+[WebServer]   vite:deps   @radix-ui/react-toggle-group -> /Users/donaldfilimon/dev/active/quesar.cloud/node_modules/@radix-ui/react-toggle-group/dist/index.mjs
+[WebServer]   vite:deps   @radix-ui/react-tooltip -> /Users/donaldfilimon/dev/active/quesar.cloud/node_modules/@radix-ui/react-tooltip/dist/index.mjs
+[WebServer]   vite:deps   @tensorflow-models/posenet -> /Users/donaldfilimon/dev/active/quesar.cloud/node_modules/@tensorflow-models/posenet/dist/posenet.esm.js
+[WebServer]   vite:deps   @tensorflow/tfjs -> /Users/donaldfilimon/dev/active/quesar.cloud/node_modules/@tensorflow/tfjs/dist/index.js
+[WebServer]   vite:deps   class-variance-authority -> /Users/donaldfilimon/dev/active/quesar.cloud/node_modules/class-variance-authority/dist/index.mjs
+[WebServer]   vite:deps   clsx -> /Users/donaldfilimon/dev/active/quesar.cloud/node_modules/clsx/dist/clsx.mjs
+[WebServer]   vite:deps   cmdk -> /Users/donaldfilimon/dev/active/quesar.cloud/node_modules/cmdk/dist/index.mjs
+[WebServer]   vite:deps   date-fns -> /Users/donaldfilimon/dev/active/quesar.cloud/node_modules/date-fns/index.js
+[WebServer]   vite:deps   katex -> /Users/donaldfilimon/dev/active/quesar.cloud/node_modules/katex/dist/katex.mjs
+[WebServer]   vite:deps   kysely -> /Users/donaldfilimon/dev/active/quesar.cloud/node_modules/kysely/dist/index.js
+[WebServer]   vite:deps   lucide-react -> /Users/donaldfilimon/dev/active/quesar.cloud/node_modules/lucide-react/dist/esm/lucide-react.mjs
+[WebServer]   vite:deps   pg -> /Users/donaldfilimon/dev/active/quesar.cloud/node_modules/pg/esm/index.mjs
+[WebServer]   vite:deps   react -> /Users/donaldfilimon/dev/active/quesar.cloud/node_modules/react/index.js
+[WebServer]   vite:deps   react-dom -> /Users/donaldfilimon/dev/active/quesar.cloud/node_modules/react-dom/index.js
+[WebServer]   vite:deps   react-dom/client -> /Users/donaldfilimon/dev/active/quesar.cloud/node_modules/react-dom/client.js
+[WebServer]   vite:deps   react-hook-form -> /Users/donaldfilimon/dev/active/quesar.cloud/node_modules/react-hook-form/dist/index.esm.mjs
+[WebServer]   vite:deps   react/jsx-dev-runtime -> /Users/donaldfilimon/dev/active/quesar.cloud/node_modules/react/jsx-dev-runtime.js
+[WebServer]   vite:deps   recharts -> /Users/donaldfilimon/dev/active/quesar.cloud/node_modules/recharts/es6/index.js
+[WebServer]   vite:deps   sonner -> /Users/donaldfilimon/dev/active/quesar.cloud/node_modules/sonner/dist/index.mjs
+[WebServer]   vite:deps   tailwind-merge -> /Users/donaldfilimon/dev/active/quesar.cloud/node_modules/tailwind-merge/dist/bundle-mjs.mjs
+[WebServer]   vite:deps   zod -> /Users/donaldfilimon/dev/active/quesar.cloud/node_modules/zod/index.js +183ms
+[WebServer]   vite:deps creating package.json in /Users/donaldfilimon/dev/active/quesar.cloud/node_modules/.vite-film-51210/deps_temp_2e062994 +221ms
+[WebServer]   vite:deps Dependencies bundled in 1670.97ms +2s
+[WebServer]   vite:deps using post-scan optimizer result, the scanner found every used dependency +2s
+[WebServer]   vite:deps creating _metadata.json in /Users/donaldfilimon/dev/active/quesar.cloud/node_modules/.vite-film-51210/deps_temp_2e062994 +0ms
+[WebServer]   vite:deps renaming /Users/donaldfilimon/dev/active/quesar.cloud/node_modules/.vite-film-51210/deps_temp_2e062994 to /Users/donaldfilimon/dev/active/quesar.cloud/node_modules/.vite-film-51210/deps +0ms
+[WebServer]   vite:deps dependencies optimized +1ms
+
+Running 1 test using 1 worker
+
+[WebServer]   vite:hmr [self-accepts] src/components/site/trailer-editions.css +0ms
+[WebServer]   vite:hmr [detected api usage] node_modules/@tanstack/start-client-core/dist/esm/client/hydrateStart.js?v=b1771aa7 +337ms
+[WebServer]   vite:hmr [self-accepts] src/lib/error-component.tsx +215ms
+[WebServer]   vite:hmr [self-accepts] src/routes/admin.tsx +1s
+[WebServer]   vite:hmr [self-accepts] src/routes/financial-model.tsx +1ms
+[WebServer]   vite:hmr [self-accepts] src/routes/tf-pose-demo.tsx +4ms
+[WebServer]   vite:hmr [self-accepts] src/routes/signup.tsx +12ms
+[WebServer]   vite:hmr [self-accepts] src/routes/abbey-bot.tsx +1ms
+[WebServer]   vite:hmr [self-accepts] src/routes/about.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/routes/apps.tsx +1ms
+[WebServer]   vite:hmr [self-accepts] src/routes/benchmarks.tsx +1ms
+[WebServer]   vite:hmr [self-accepts] src/routes/blog.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/routes/cell-machine.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/routes/changelog.tsx +1ms
+[WebServer]   vite:hmr [self-accepts] src/routes/companion.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/routes/company.tsx +1ms
+[WebServer]   vite:hmr [self-accepts] src/routes/dashboard.tsx +1ms
+[WebServer]   vite:hmr [self-accepts] src/routes/demo.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/routes/developers.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/routes/gama.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/routes/get-started.tsx +1ms
+[WebServer]   vite:hmr [self-accepts] src/routes/investors.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/routes/links.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/routes/mobile.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/routes/plugins.tsx +1ms
+[WebServer]   vite:hmr [self-accepts] src/routes/products.tsx +1ms
+[WebServer]   vite:hmr [self-accepts] src/routes/research.implementations.tsx +1ms
+[WebServer]   vite:hmr [self-accepts] src/routes/showcase.abbey.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/routes/showcase.design.tsx +1ms
+[WebServer]   vite:hmr [self-accepts] src/routes/showcase.explainer.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/routes/showcase.film.tsx +1ms
+[WebServer]   vite:hmr [self-accepts] src/routes/showcase.mega.tsx +1ms
+[WebServer]   vite:hmr [self-accepts] src/routes/showcase.trailer.tsx +1ms
+[WebServer]   vite:hmr [self-accepts] src/routes/quasar.site.$id.tsx +2ms
+[WebServer]   vite:hmr [self-accepts] src/routes/skill-creator.tsx +1ms
+[WebServer]   vite:hmr [self-accepts] src/routes/source.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/routes/terms.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/routes/unauthorized.tsx +2ms
+[WebServer]   vite:hmr [self-accepts] src/routes/workspace.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/routes/console.workspace.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/routes/team.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/routes/quasar.new.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/routes/quasar.settings.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/routes/quasar.sites.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/routes/privacy.tsx +2ms
+[WebServer]   vite:hmr [self-accepts] src/routes/projects.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/routes/profile.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/routes/services.tsx +1ms
+[WebServer]   vite:hmr [self-accepts] src/routes/security.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/routes/abbey.tsx +4ms
+[WebServer]   vite:hmr [self-accepts] src/routes/abi.tsx +1ms
+[WebServer]   vite:hmr [self-accepts] src/routes/architecture.tsx +1ms
+[WebServer]   vite:hmr [self-accepts] src/routes/contact.tsx +2ms
+[WebServer]   vite:hmr [self-accepts] src/routes/docs.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/routes/platform.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/routes/wdbx.tsx +2ms
+[WebServer]   vite:hmr [self-accepts] src/routes/quesar.tsx +4ms
+[WebServer]   vite:hmr [self-accepts] src/routes/research.tsx +1ms
+[WebServer]   vite:hmr [self-accepts] src/routes/console.tsx +5ms
+[WebServer]   vite:hmr [self-accepts] src/routes/source.$name.tsx +3ms
+[WebServer]   vite:hmr [self-accepts] src/routes/research.implementations.$slug.tsx +15ms
+[WebServer]   vite:hmr [self-accepts] src/routes/team.$slug.tsx +3ms
+[WebServer]   vite:hmr [self-accepts] src/routes/blog.$slug.tsx +1ms
+[WebServer]   vite:hmr [self-accepts] src/routes/projects.$slug.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/routes/docs.$slug.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/routes/products.$slug.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/routes/research.$slug.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/routes/showcase.tsx +3ms
+[WebServer]   vite:hmr [self-accepts] src/routes/login.tsx +2ms
+[WebServer]   vite:hmr [self-accepts] src/routes/index.tsx +3ms
+[WebServer]   vite:hmr [self-accepts] src/routes/__root.tsx +22ms
+[WebServer]   vite:hmr [self-accepts] src/components/site/home-vision.css +4ms
+[WebServer]   vite:hmr [self-accepts] src/lib/auth/provider.tsx +19ms
+[WebServer]   vite:hmr [self-accepts] src/components/site/not-found.tsx +18ms
+[WebServer]   vite:hmr [self-accepts] src/components/site/shell.tsx +9ms
+[WebServer]   vite:hmr [self-accepts] src/components/site/footer.tsx +16ms
+[WebServer]   vite:hmr [self-accepts] src/components/site/prov-tag.tsx +9ms
+[WebServer]   vite:hmr [self-accepts] src/components/site/logo.tsx +2ms
+[WebServer]   vite:hmr [self-accepts] src/components/site/header.tsx +3ms
+[WebServer]   vite:hmr [self-accepts] src/components/site/auth-slot.tsx +15ms
+[WebServer]   vite:hmr [self-accepts] src/components/site/search.tsx +4ms
+[WebServer]   vite:hmr [self-accepts] src/components/site/theme-toggle.tsx +2ms
+[WebServer]   vite:hmr [self-accepts] src/components/site/auth-slot-skeleton.tsx +2ms
+[WebServer]   vite:hmr [self-accepts] src/components/ui/toggle.tsx +4ms
+[WebServer]   vite:hmr [self-accepts] src/routes/showcase.tsx?tsr-split=component---loader +66ms
+[WebServer]   vite:hmr [self-accepts] src/components/site/narrated-films.tsx +17ms
+[WebServer]   vite:hmr [self-accepts] src/components/site/showcase-wall.tsx +2ms
+[WebServer]   vite:hmr [self-accepts] src/components/site/trailer-editions.tsx +8ms
+[WebServer]   vite:hmr [self-accepts] src/components/site/trailer.tsx +9ms
+[WebServer]   vite:hmr [self-accepts] src/components/site/status-badge.tsx +30ms
+[WebServer]   vite:hmr [self-accepts] src/components/site/route-frame.tsx +1ms
+[WebServer]   vite:hmr [self-accepts] src/components/site/section.tsx +2ms
+[WebServer]   vite:hmr [self-accepts] src/components/site/app-link.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/components/site/journey-rail.tsx +1ms
+[WebServer]   vite:hmr [self-accepts] src/components/site/lab.tsx +9ms
+[WebServer]   vite:hmr [self-accepts] src/components/ui/scroll-area.tsx +2ms
+[WebServer]   vite:hmr [self-accepts] src/components/ui/accordion.tsx +9ms
+[WebServer]   vite:hmr [self-accepts] src/components/site/catalog.tsx +3ms
+[WebServer]   vite:hmr [self-accepts] src/components/ui/button.tsx +9ms
+[WebServer]   vite:hmr [self-accepts] src/routes/showcase.film.tsx?tsr-split=component +36ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/components/CinematicFallback.tsx +5ms
+[WebServer]   vite:hmr [self-accepts] src/components/site/toaster.tsx +3ms
+[WebServer]   vite:hmr [self-accepts] src/components/site/header-menus.tsx +12ms
+[WebServer]   vite:hmr [self-accepts] src/components/ui/tooltip.tsx +11ms
+[WebServer]   vite:hmr [self-accepts] src/components/ui/dropdown-menu.tsx +1ms
+[WebServer]   vite:hmr [self-accepts] src/components/site/search-dialog.tsx +21ms
+[WebServer]   vite:hmr [self-accepts] src/components/ui/dialog.tsx +14ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/rooms/film.tsx +243ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/components/CinematicShell.tsx +6ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/design/mlai-ds-tokens.css +8ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/film/Film.tsx +6ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/film/primitives.tsx +24ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/film/transcript.tsx +3ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/film/evidence.tsx +3ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/film/scenes/title.tsx +3ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/film/scenes/outro.tsx +2ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/film/scenes/core.tsx +7ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/film/narration.tsx +4ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/film/engine.tsx +3ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/film/fx.tsx +6ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/film/chrome.tsx +3ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/film/scenes/_shared.tsx +2ms
+  ✓  1 [capture] › e2e/film/capture.acceptance.ts:296:1 › qualification receipts do not reload a suspended capture (6.2s)
+
+  1 passed (14.8s)

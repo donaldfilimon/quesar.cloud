@@ -1,0 +1,20 @@
+node:internal/modules/run_main:111
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
++ actual - expected
+
++ '444eb88855be95aa384984612eba9611f2e543f3'
+- 'd154e480760706a39745d9b5299dd1be8a8d0f5d'
+
+    at file:///Users/donaldfilimon/dev/active/quesar.cloud/notes/verification/2026-10-09-finishing/evidence/closure-current-check.mjs:11:8 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: '444eb88855be95aa384984612eba9611f2e543f3',
+  expected: 'd154e480760706a39745d9b5299dd1be8a8d0f5d',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v26.11.1

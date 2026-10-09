@@ -1,0 +1,37 @@
+$ bun run format:check && bun run typecheck && bun run lint && bun run test && bun run build
+$ prettier --check .
+Checking formatting...
+All matched files use Prettier code style!
+$ tsc --noEmit
+e2e/accessibility.spec.ts(44,45): error TS2322: Type 'import("/Users/donaldfilimon/dev/active/quesar.cloud/node_modules/playwright/node_modules/playwright-core/types/types").Page' is not assignable to type 'import("/Users/donaldfilimon/dev/active/quesar.cloud/node_modules/playwright-core/types/types").Page'.
+  The types returned by 'evaluateHandle(...)' are incompatible between these types.
+    Type 'Promise<import("/Users/donaldfilimon/dev/active/quesar.cloud/node_modules/playwright/node_modules/playwright-core/types/types").ElementHandle<any>>' is not assignable to type 'Promise<import("/Users/donaldfilimon/dev/active/quesar.cloud/node_modules/playwright-core/types/types").ElementHandle<any>>'.
+      Type 'import("/Users/donaldfilimon/dev/active/quesar.cloud/node_modules/playwright/node_modules/playwright-core/types/types").ElementHandle<any>' is not assignable to type 'import("/Users/donaldfilimon/dev/active/quesar.cloud/node_modules/playwright-core/types/types").ElementHandle<any>'.
+        The types returned by '$(...)' are incompatible between these types.
+          Type 'Promise<ElementHandleForTag<any> | null>' is not assignable to type 'Promise<ElementHandle<HTMLElement | SVGElement> | null>'.
+            Type 'ElementHandleForTag<any> | null' is not assignable to type 'ElementHandle<HTMLElement | SVGElement> | null'.
+              Type 'ElementHandleForTag<any>' is not assignable to type 'ElementHandle<HTMLElement | SVGElement>'.
+                Types of property 'waitForSelector' are incompatible.
+                  Type '{ <K extends keyof HTMLElementTagNameMap>(selector: K, options?: ElementHandleWaitForSelectorOptionsNotHidden | undefined): Promise<import("/Users/donaldfilimon/dev/active/quesar.cloud/node_modules/playwright/node_modules/playwright-core/types/structs").ElementHandleForTag<...>>; (selector: string, options?: Element...' is not assignable to type '{ <K extends keyof HTMLElementTagNameMap>(selector: K, options?: ElementHandleWaitForSelectorOptionsNotHidden | undefined): Promise<import("/Users/donaldfilimon/dev/active/quesar.cloud/node_modules/playwright-core/types/structs").ElementHandleForTag<...>>; (selector: string, options?: ElementHandleWaitForSelectorOpt...'.
+                    Types of parameters 'options' and 'options' are incompatible.
+                      Type 'ElementHandleWaitForSelectorOptions' is not assignable to type 'ElementHandleWaitForSelectorOptionsNotHidden'.
+                        Type 'ElementHandleWaitForSelectorOptions' is not assignable to type '{ state?: "visible" | "attached" | undefined; }'.
+                          Types of property 'state' are incompatible.
+                            Type '"hidden" | "visible" | "attached" | "detached" | undefined' is not assignable to type '"visible" | "attached" | undefined'.
+                              Type '"hidden"' is not assignable to type '"visible" | "attached" | undefined'.
+e2e/accessibility.spec.ts(63,43): error TS2322: Type 'import("/Users/donaldfilimon/dev/active/quesar.cloud/node_modules/playwright/node_modules/playwright-core/types/types").Page' is not assignable to type 'import("/Users/donaldfilimon/dev/active/quesar.cloud/node_modules/playwright-core/types/types").Page'.
+  The types returned by 'evaluateHandle(...)' are incompatible between these types.
+    Type 'Promise<import("/Users/donaldfilimon/dev/active/quesar.cloud/node_modules/playwright/node_modules/playwright-core/types/types").ElementHandle<any>>' is not assignable to type 'Promise<import("/Users/donaldfilimon/dev/active/quesar.cloud/node_modules/playwright-core/types/types").ElementHandle<any>>'.
+      Type 'import("/Users/donaldfilimon/dev/active/quesar.cloud/node_modules/playwright/node_modules/playwright-core/types/types").ElementHandle<any>' is not assignable to type 'import("/Users/donaldfilimon/dev/active/quesar.cloud/node_modules/playwright-core/types/types").ElementHandle<any>'.
+        The types returned by '$(...)' are incompatible between these types.
+          Type 'Promise<ElementHandleForTag<any> | null>' is not assignable to type 'Promise<ElementHandle<HTMLElement | SVGElement> | null>'.
+            Type 'ElementHandleForTag<any> | null' is not assignable to type 'ElementHandle<HTMLElement | SVGElement> | null'.
+              Type 'ElementHandleForTag<any>' is not assignable to type 'ElementHandle<HTMLElement | SVGElement>'.
+                Types of property 'waitForSelector' are incompatible.
+                  Type '{ <K extends keyof HTMLElementTagNameMap>(selector: K, options?: ElementHandleWaitForSelectorOptionsNotHidden | undefined): Promise<import("/Users/donaldfilimon/dev/active/quesar.cloud/node_modules/playwright/node_modules/playwright-core/types/structs").ElementHandleForTag<...>>; (selector: string, options?: Element...' is not assignable to type '{ <K extends keyof HTMLElementTagNameMap>(selector: K, options?: ElementHandleWaitForSelectorOptionsNotHidden | undefined): Promise<import("/Users/donaldfilimon/dev/active/quesar.cloud/node_modules/playwright-core/types/structs").ElementHandleForTag<...>>; (selector: string, options?: ElementHandleWaitForSelectorOpt...'.
+                    Types of parameters 'options' and 'options' are incompatible.
+                      Type 'ElementHandleWaitForSelectorOptions' is not assignable to type 'ElementHandleWaitForSelectorOptionsNotHidden'.
+                        Type 'ElementHandleWaitForSelectorOptions' is not assignable to type '{ state?: "visible" | "attached" | undefined; }'.
+                          Types of property 'state' are incompatible.
+                            Type '"hidden" | "visible" | "attached" | "detached" | undefined' is not assignable to type '"visible" | "attached" | undefined'.
+                              Type '"hidden"' is not assignable to type '"visible" | "attached" | undefined'.

@@ -9,6 +9,7 @@ import {
   parseContentDate,
 } from "./feed";
 import { SITE_URL } from "./structured-data";
+import { site } from "@/lib/site-identity";
 
 // Ported from mlai src/__tests__/feed.test.ts.
 describe("feed", () => {
@@ -60,5 +61,9 @@ describe("feed", () => {
   it("keeps the Abbey/ABI tagline off the channel (brand split)", () => {
     const channel = buildRssFeed().split("<item>")[0] ?? "";
     expect(channel).not.toMatch(/Intelligence Without Limits/i);
+    expect(channel).toContain(
+      `<title>${site.company} — Lab Notes, Research &amp; Releases</title>`,
+    );
+    expect(channel).not.toContain("MLAI Corporation");
   });
 });

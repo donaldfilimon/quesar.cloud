@@ -1,0 +1,43 @@
+
+Running 1 test using 1 worker
+
+[migrate] applied 0001_auth.sql
+[migrate] applied 0002_field_notes.sql
+[migrate] applied 0003_inquiries.sql
+[migrate] applied 0004_telemetry.sql
+[migrate] applied 0005_console_audits.sql
+[migrate] applied 0006_workspace_connections.sql
+[migrate] applied 0007_rate_limits.sql
+[migrate] applied 0008_passkeys.sql
+[migrate] applied 0009_oauth_verification.sql
+[migrate] done — 9 migration(s) applied.
+[migrate] up to date.
+[backend acceptance] fresh + repeat + two fresh concurrent migrators: exact 9 root filenames, concurrent exits 0/0
+[migrate] applied 0001_auth.sql
+[migrate] applied 0002_field_notes.sql
+[migrate] done — 2 migration(s) applied.
+[migrate] applied 0003_inquiries.sql
+[migrate] applied 0004_telemetry.sql
+[migrate] applied 0005_console_audits.sql
+[migrate] applied 0006_workspace_connections.sql
+[migrate] applied 0007_rate_limits.sql
+[migrate] applied 0008_passkeys.sql
+[migrate] applied 0009_oauth_verification.sql
+[migrate] done — 7 migration(s) applied.
+[migrate] error applying 0001_fixture.sql
+[migrate] applied 0001_fixture.sql
+[migrate] done — 1 migration(s) applied.
+[backend acceptance] seeded earlier-schema upgrade + failed migration rollback/recovery + nested exclusion passed
+[backend acceptance] Chromium virtual WebAuthn registration and sign-in passed (no physical authenticator claim)
+[backend acceptance] browser signup/profile, direct duplicate/wrong-password/name bounds, protected notes isolation passed
+[backend acceptance] browser consent/withdraw + real no-provider refusal + contact attribution, invalid/rate refusal passed
+[backend acceptance] synthetic sealed audits: owner list/read/export/delete, transplant/expiry refusal and access receipts passed
+[backend acceptance] expiry + revocation/native profile refusal, signout/relogin + app restart with stable keys passed
+[backend acceptance] seeded pg_dump/pg_restore exits 0/0; all 15 public tables match
+[backend acceptance] real Postgres late purge failure preserved local audit/consent/inquiry rows before retry
+[backend acceptance] browser wrong-password then successful deletion: own auth/app purge, inquiry unlink, bystander preserved
+[backend acceptance] owned app signal exit completed before teardown
+[backend acceptance] owned app, pools, databases and scratch cleanup completed
+  ✓  1 e2e/backend/durable.acceptance.ts:213:1 › disposable Postgres and real browser durable account/workflow acceptance (28.8s)
+
+  1 passed (29.8s)

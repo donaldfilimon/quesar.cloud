@@ -1,0 +1,12 @@
+$ vite build --mode persistent && node scripts/copy-pglite-assets.ts --persistent
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - import "./github-readmes" without a file extension (src/lib/github-data.ts:1:30). Add the file extension
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+error during build:
+[Error: ENOTEMPTY: directory not empty, rmdir '/Users/donaldfilimon/dev/active/quesar.cloud/.output//server/_libs'] {
+  errno: -66,
+  code: 'ENOTEMPTY',
+  syscall: 'rmdir',
+  path: '/Users/donaldfilimon/dev/active/quesar.cloud/.output//server/_libs'
+}
+error: script "build:persistent" exited with code 1

@@ -1,0 +1,66 @@
+
+Running 1 test using 1 worker
+
+[migrate] applied 0001_auth.sql
+[migrate] applied 0002_field_notes.sql
+[migrate] applied 0003_inquiries.sql
+[migrate] applied 0004_telemetry.sql
+[migrate] applied 0005_console_audits.sql
+[migrate] applied 0006_workspace_connections.sql
+[migrate] applied 0007_rate_limits.sql
+[migrate] applied 0008_passkeys.sql
+[migrate] applied 0009_oauth_verification.sql
+[migrate] done — 9 migration(s) applied.
+[AI synthetic acceptance] authenticated synthetic owners ready
+[AI synthetic acceptance] checking /abbey-bot
+  ✘  1 e2e/backend/ai-consent.acceptance.ts:174:1 › all four AI surfaces enforce consent and sealed audits over real HTTP and durable PostgreSQL (11.2s)
+
+
+  1) e2e/backend/ai-consent.acceptance.ts:174:1 › all four AI surfaces enforce consent and sealed audits over real HTTP and durable PostgreSQL 
+
+    error: terminating connection due to administrator command
+        at parseErrorMessage (/Users/donaldfilimon/dev/active/quesar.cloud/node_modules/pg-protocol/src/parser.ts:395:9)
+        at Parser.handlePacket (/Users/donaldfilimon/dev/active/quesar.cloud/node_modules/pg-protocol/src/parser.ts:212:19)
+        at Parser.parse (/Users/donaldfilimon/dev/active/quesar.cloud/node_modules/pg-protocol/src/parser.ts:105:30)
+        at Socket.<anonymous> (/Users/donaldfilimon/dev/active/quesar.cloud/node_modules/pg-protocol/src/index.ts:7:48)
+
+    Error: Acceptance cleanup failed for 1 owned resource(s).
+
+       at process-cleanup.ts:63
+
+      61 |     }
+      62 |   }
+    > 63 |   if (failed) throw new Error(`Acceptance cleanup failed for ${failed} owned resource(s).`);
+         |                     ^
+      64 | }
+      65 |
+        at cleanupOwnedResources (/Users/donaldfilimon/dev/active/quesar.cloud/e2e/backend/process-cleanup.ts:63:21)
+        at /Users/donaldfilimon/dev/active/quesar.cloud/e2e/backend/ai-consent.acceptance.ts:165:3
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText('Synthetic provider reply; local acceptance only.', { exact: true })
+    Expected: visible
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByText('Synthetic provider reply; local acceptance only.', { exact: true }) with timeout 20000ms
+      - waiting for getByText('Synthetic provider reply; local acceptance only.', { exact: true })
+      - Test ended.
+
+
+      284 |     await expect(
+      285 |       page.getByText("Synthetic provider reply; local acceptance only.", { exact: true }),
+    > 286 |     ).toBeVisible();
+          |       ^
+      287 |     expect((await providerCalls()).length).toBe(before + 1);
+      288 |     const rows = await sql(
+      289 |       "select id,sealed,expires_at,policy_version from conversation_audits where user_id=$1 order by created_at desc",
+        at /Users/donaldfilimon/dev/active/quesar.cloud/e2e/backend/ai-consent.acceptance.ts:286:7
+
+    Error Context: test-results/ai-consent-acceptance/ai-consent.acceptance.ts-a-fb73f-HTTP-and-durable-PostgreSQL/error-context.md
+
+    Error Context: test-results/ai-consent-acceptance/ai-consent.acceptance.ts-a-fb73f-HTTP-and-durable-PostgreSQL/error-context.md
+
+  1 failed
+    e2e/backend/ai-consent.acceptance.ts:174:1 › all four AI surfaces enforce consent and sealed audits over real HTTP and durable PostgreSQL 

@@ -1,0 +1,3 @@
+Client backends:0; known acceptance pids missing. Owned PostgreSQL stop exit0. Data directory preserved including an unowned disposable acceptance database. No database dropped or workspace removed.
+waiting for server to shut down.... done
+server stopped

@@ -1,0 +1,32 @@
+[WebServer] (node:72480) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "../../vite.config" without a file extension (e2e/film/vite.config.ts:2:24). Add the file extension
+[WebServer]   - import "./github-readmes" without a file extension (src/lib/github-data.ts:1:30). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+[WebServer] Warning: Route file "/Users/donaldfilimon/dev/active/quesar.cloud/src/routes/auth-entry.test.tsx" does not export a Route. This file will not be included in the route tree.
+[WebServer] 
+[WebServer] If this file is not intended to be a route, you can exclude it using one of these options:
+[WebServer]   1. Rename the file to "/Users/donaldfilimon/dev/active/quesar.cloud/src/routes/-auth-entry.test.tsx" (prefix with "-")
+[WebServer]   2. Use 'routeFileIgnorePattern' in your config to match this file
+[WebServer] 
+[WebServer] Current configuration:
+[WebServer]   routeFileIgnorePrefix: "-"
+[WebServer]   routeFileIgnorePattern: undefined
+[WebServer] Warning: Route file "/Users/donaldfilimon/dev/active/quesar.cloud/src/routes/contact.test.tsx" does not export a Route. This file will not be included in the route tree.
+[WebServer] 
+[WebServer] If this file is not intended to be a route, you can exclude it using one of these options:
+[WebServer]   1. Rename the file to "/Users/donaldfilimon/dev/active/quesar.cloud/src/routes/-contact.test.tsx" (prefix with "-")
+[WebServer]   2. Use 'routeFileIgnorePattern' in your config to match this file
+[WebServer] 
+[WebServer] Current configuration:
+[WebServer]   routeFileIgnorePrefix: "-"
+[WebServer]   routeFileIgnorePattern: undefined
+
+Running 1 test using 1 worker
+
+(node:73458) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 [capture-disabled] › e2e/film/guard.acceptance.ts:2:1 › a normal build ignores a capture query and retains playback and saved position (6.1s)
+
+  1 passed (18.7s)

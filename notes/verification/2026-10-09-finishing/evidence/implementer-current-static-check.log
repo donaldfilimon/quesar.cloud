@@ -1,0 +1,8 @@
+$ node scripts/check-static.ts
+/: 16/21 preloads; 162730/225362 gzip bytes
+/docs/: 16/21 preloads; 165601/264643 gzip bytes
+/research/: 18/23 preloads; 184412/247971 gzip bytes
+/developers/: 21/25 preloads; 172176/235878 gzip bytes
+Checked 129 HTML pages; 25 external references excluded from network checks.
+built media differs from public source: /media/mark.vtt
+error: script "check:static" exited with code 1

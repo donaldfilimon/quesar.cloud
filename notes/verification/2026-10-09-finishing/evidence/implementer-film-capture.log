@@ -1,0 +1,61 @@
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "./github-readmes" without a file extension (src/lib/github-data.ts:1:30). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 23 tests using 1 worker
+
+  ✓   1 [capture] › e2e/film/capture.acceptance.ts:14:3 › film: independently repeated and revisited controlled frames (5.8s)
+  ✓   2 [capture] › e2e/film/capture.acceptance.ts:14:3 › trailer: independently repeated and revisited controlled frames (3.6s)
+  ✓   3 [capture] › e2e/film/capture.acceptance.ts:14:3 › abbey: independently repeated and revisited controlled frames (4.1s)
+  ✓   4 [capture] › e2e/film/capture.acceptance.ts:14:3 › explainer: independently repeated and revisited controlled frames (4.4s)
+  ✓   5 [capture] › e2e/film/capture.acceptance.ts:14:3 › mega: independently repeated and revisited controlled frames (4.7s)
+  ✓   6 [capture] › e2e/film/capture.acceptance.ts:14:3 › design: independently repeated and revisited controlled frames (12.8s)
+  ✓   7 [capture] › e2e/film/capture.acceptance.ts:47:1 › capture has no controls, persisted position, voice requests or global API after navigation (1.6s)
+  ✓   8 [capture] › e2e/film/capture.acceptance.ts:105:1 › all Design shots commit the requested real scroll position (7.7s)
+  ✓   9 [capture] › e2e/film/capture.acceptance.ts:145:1 › capture-enabled assets refuse a non-loopback page origin (1.9s)
+  ✓  10 [capture] › e2e/film/capture.acceptance.ts:162:3 › abbey: closing title remains readable through the final frame (1.4s)
+  ✓  11 [capture] › e2e/film/capture.acceptance.ts:162:3 › mega: closing title remains readable through the final frame (1.9s)
+  ✓  12 [capture] › e2e/film/capture.acceptance.ts:294:1 › SPA teardown immediately rejects a suspended capture and its retired API (1.4s)
+  ✘  13 [capture] › e2e/film/capture.acceptance.ts:334:3 › the shared deadline bounds suspended fonts and permits recovery (4.4s)
+  ✓  14 [capture] › e2e/film/capture.acceptance.ts:334:3 › the shared deadline bounds suspended image and permits recovery (31.6s)
+  ✓  15 [capture] › e2e/film/capture.acceptance.ts:334:3 › the shared deadline bounds suspended required font and permits recovery (31.8s)
+  ✓  16 [capture] › e2e/film/capture.acceptance.ts:364:1 › closing a page releases an outstanding browser capture evaluation (1.4s)
+  ✓  17 [capture] › e2e/film/capture.acceptance.ts:378:1 › Mega audit stamp stays clear of qualifications throughout its visible interval (12.2s)
+  ✓  18 [capture] › e2e/film/capture.acceptance.ts:420:1 › diagram scenes retain readable foreground over a restrained moving field (5.1s)
+  ✓  19 [capture] › e2e/film/capture.acceptance.ts:460:1 › failed required local fonts reject frame 600; a fresh context recovers (3.2s)
+  ✓  20 [capture] › e2e/film/capture.acceptance.ts:525:1 › required font frame 600 matches cold, revisit, fresh and delayed loads (7.1s)
+  ✓  21 [capture] › e2e/film/capture.acceptance.ts:616:1 › SPA teardown aborts the explicit required font load before late completion (1.3s)
+  ✓  22 [capture] › e2e/film/capture.acceptance.ts:641:1 › normal interactive playback retains fallback when local fonts fail (2.7s)
+  ✓  23 [capture] › e2e/film/capture.acceptance.ts:657:1 › newly mounted Design boards validate used fonts without requiring an unused failed subset (4.7s)
+
+
+  1) [capture] › e2e/film/capture.acceptance.ts:334:3 › the shared deadline bounds suspended fonts and permits recovery 
+
+    Error: page.evaluate: TypeError: Cannot read properties of undefined (reading 'status')
+        at eval (eval at evaluate (:311:30), <anonymous>:4:19)
+        at UtilityScript.evaluate (<anonymous>:313:16)
+        at UtilityScript.<anonymous> (<anonymous>:1:44)
+        at eval (eval at evaluate (:311:30), <anonymous>:4:19)
+        at UtilityScript.evaluate (<anonymous>:313:16)
+        at UtilityScript.<anonymous> (<anonymous>:1:44)
+        at captureProbe (/Users/donaldfilimon/dev/active/quesar.cloud/e2e/film/capture.acceptance.ts:283:8)
+        at expect.poll.timeout (/Users/donaldfilimon/dev/active/quesar.cloud/e2e/film/capture.acceptance.ts:342:32)
+        at /Users/donaldfilimon/dev/active/quesar.cloud/e2e/film/capture.acceptance.ts:341:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/implementer-film-capture/film-capture.acceptance.ts-d6cae--fonts-and-permits-recovery-capture/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/implementer-film-capture/film-capture.acceptance.ts-d6cae--fonts-and-permits-recovery-capture/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/implementer-film-capture/film-capture.acceptance.ts-d6cae--fonts-and-permits-recovery-capture/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/implementer-film-capture/film-capture.acceptance.ts-d6cae--fonts-and-permits-recovery-capture/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [capture] › e2e/film/capture.acceptance.ts:334:3 › the shared deadline bounds suspended fonts and permits recovery 
+  22 passed (2.8m)

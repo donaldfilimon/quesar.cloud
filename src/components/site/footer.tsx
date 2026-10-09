@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { ProvLegend } from "./prov-tag";
 import { Logo } from "./logo";
+import { site } from "@/lib/site-identity";
 
 const groups = [
   {
@@ -54,6 +55,18 @@ export function SiteFooter() {
             MLAI builds assistant workflows, memory systems, and developer tools with inspectable
             sources and explicit implementation boundaries.
           </p>
+          <ul className="mt-4 space-y-2 text-sm">
+            <li>
+              <a href={`mailto:${site.contact.email}`} className="break-words text-accent">
+                {site.contact.email}
+              </a>
+            </li>
+            <li>
+              <a href={`tel:${site.contact.phoneInternational}`} className="text-accent">
+                {site.contact.phone}
+              </a>
+            </li>
+          </ul>
           <p className="mt-6 text-xs text-fg-subtle">
             QSR-WEB · Browser orientation and configured server features
           </p>

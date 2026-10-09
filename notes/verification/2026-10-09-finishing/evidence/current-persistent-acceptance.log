@@ -1,0 +1,24 @@
+
+Running 1 test using 1 worker
+
+(node:33446) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[persistent acceptance] missing required config refused with NODE_ENV absent, readiness/auth both 503
+[migrate] applied 0001_auth.sql
+[migrate] applied 0002_field_notes.sql
+[migrate] applied 0003_inquiries.sql
+[migrate] applied 0004_telemetry.sql
+[migrate] applied 0005_console_audits.sql
+[migrate] applied 0006_workspace_connections.sql
+[migrate] applied 0007_rate_limits.sql
+[migrate] applied 0008_passkeys.sql
+[migrate] applied 0009_oauth_verification.sql
+[migrate] done — 9 migration(s) applied.
+[migrate] up to date.
+[persistent acceptance] config/connectivity separated; Node startup did not migrate; explicit/repeat migration exact 9 root filenames
+[persistent acceptance] compiled HTTPS Console: secure auth cookies; seeded notes/audit account isolation; owner decrypt, known foreign read and transplanted ciphertext refusal
+[persistent acceptance] Node restart preserved session/note/decryption; seeded pg_dump/restore exits 0/0, 15 public table hashes equal; restored Node artifact accepted same secure session and decrypted audit
+[persistent acceptance] owned Node process, TLS proxy/cert, pools, two databases and seeded dump removed; parent PG untouched
+  ✓  1 e2e/backend/persistent.acceptance.ts:225:1 › persistent Node artifact: fail closed, migrations, secure sessions, isolation, restart and seeded restore (23.2s)
+
+  1 passed (29.0s)

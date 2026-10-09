@@ -11,6 +11,6 @@ export const Route = createFileRoute("/signup")({
   }),
   component: function Signup() {
     if (staticSite) return <ServerOnlyNotice feature="Sign-up" className="my-24" />;
-    return <Navigate to="/login" search={{ next: "/console" }} />;
+    return <Navigate to="/login" search={{ next: "/console", mode: "signup" }} />;
   },
 });

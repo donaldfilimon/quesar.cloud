@@ -1,0 +1,7 @@
+$ bun test src shared
+bun test v1.4.2 (744846f84)
+
+ 113 pass
+ 0 fail
+ 486 expect() calls
+Ran 113 tests across 15 files. [20.98s]

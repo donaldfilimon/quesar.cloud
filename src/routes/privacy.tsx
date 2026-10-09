@@ -17,17 +17,16 @@ function PrivacyPage() {
     <>
       <PageHero
         eyebrow="Privacy"
-        title="This site does not take your data because it cannot."
-        lede="The public Quesar website is orientation plus an optional console. It does not host Abbey sessions or accept document uploads. Signed-in persona replies reach a model provider only when one is configured. Product privacy lives in the architecture you run locally."
+        title="Privacy follows the deployment boundary."
+        lede="The static preview stores browser preferences and local copies; its contact form requests an email draft without confirming delivery. A configured server can store accounts, inquiries, field notes, and consent-gated model exchanges. It is not a hosted Abbey session or WDBX store."
       />
       <Section title="What this website collects">
         <p className="max-w-2xl text-sm leading-relaxed text-fg-muted">
-          This product site stores a theme preference in your browser when you toggle light or dark.
-          If you sign in, it stores an account and the field notes you write in the console. Notes
-          are scoped to your account on the server. They are not Abbey memory and not a hosted WDBX
-          store. If you click through to GitHub, GitHub's own policies apply. Optional live
-          repository metadata is requested from GitHub's public API in your browser; if that request
-          fails, the page falls back to verified links with no statistics.
+          This product site stores browser preferences and local preview data. A configured server
+          stores account-scoped records and accepted inquiries according to the policy below; model
+          exchanges require current audit consent and encryption. If you click through to GitHub,
+          GitHub's own policies apply. Repository metadata is requested from GitHub's public API;
+          unavailable data may use a labelled build-time snapshot.
         </p>
         <p className="mt-4 max-w-2xl text-sm leading-relaxed text-fg-muted">
           We do not invent a hosted analytics program here. If this deployment injects platform
@@ -78,7 +77,7 @@ function PrivacyPage() {
             },
             {
               title: "Permissions",
-              body: "Local builder has no authentication and binds to the LAN. That is a documented hazard, not a privacy feature. Run it on a trusted network.",
+              body: "The separate local Quasar service binds to loopback by default and requires a pairing token for its APIs. Non-loopback exposure requires explicit opt-in and an HTTPS public origin. Generated code runs as the operator; pairing is not an operating-system sandbox.",
             },
             {
               title: "Model selection",

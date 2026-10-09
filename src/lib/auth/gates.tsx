@@ -103,6 +103,7 @@ export function UserButton() {
   // Sign-out can take a moment (and can fail when deployed), so the control
   // shows it is working and cannot be fired twice.
   const [signingOut, setSigningOut] = useState(false);
+  const [signOutFailed, setSignOutFailed] = useState(false);
   if (!user) return null;
   const label = user.displayName ?? user.primaryEmail ?? "Account";
   const initial = label.charAt(0).toUpperCase();
@@ -150,11 +151,20 @@ export function UserButton() {
               onSelect={(event) => {
                 event.preventDefault();
                 setSigningOut(true);
-                void signOut().catch(() => setSigningOut(false));
+                setSignOutFailed(false);
+                void signOut().catch(() => {
+                  setSigningOut(false);
+                  setSignOutFailed(true);
+                });
               }}
             >
               {signingOut ? "Signing out…" : "Sign out"}
             </DropdownMenuItem>
+            {signOutFailed ? (
+              <p role="alert" className="px-3 py-2 text-sm text-destructive">
+                Sign-out failed. You are still signed in. Try again.
+              </p>
+            ) : null}
           </>
         ) : null}
       </DropdownMenuContent>

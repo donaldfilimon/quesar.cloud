@@ -1,0 +1,65 @@
+diff --git a/src/components/site/trailer-editions.css b/src/components/site/trailer-editions.css
+index 98b41d65..a5919a52 100644
+--- a/src/components/site/trailer-editions.css
++++ b/src/components/site/trailer-editions.css
+@@ -1,24 +1,27 @@
+ .edition-gallery {
+   --edition-paper: #f1ede3;
+   --edition-ink: #262920;
+   --edition-copper: #955c38;
+   color: var(--edition-ink);
+   background: var(--edition-paper);
+   border: 1px solid #98775455;
+   padding: clamp(1.25rem, 4vw, 3.5rem);
+ }
++.edition-gallery .eyebrow {
++  color: #57584f;
++}
+ .edition-intro {
+   max-width: 52rem;
+ }
+ .edition-intro h2,
+ .edition-feature h3 {
+   font-family: Georgia, serif;
+   letter-spacing: -0.035em;
+ }
+ .edition-intro h2 {
+   font-size: clamp(2.3rem, 5vw, 4.5rem);
+   line-height: 1.04;
+   margin: 1rem 0;
+ }
+ .edition-intro > p:last-child {
+   max-width: 43rem;
+@@ -162,31 +165,31 @@
+   gap: 0.75rem;
+   padding: 0.6rem;
+   text-align: left;
+ }
+ .edition-index li button:hover,
+ .edition-index li button[aria-pressed="true"] {
+   background: #955c3819;
+ }
+ .edition-index li button[aria-pressed="true"] {
+   box-shadow: inset 3px 0 var(--edition-copper);
+ }
+ .edition-index-number,
+ .edition-index-duration,
+ .edition-index-copy small {
+   font: 0.7rem var(--font-mono);
+-  color: #66675e;
++  color: #57584f;
+ }
+ .edition-index img {
+   width: 5.5rem;
+   height: 3.1rem;
+   flex: none;
+   object-fit: cover;
+ }
+ .edition-index-copy {
+   flex: 1;
+   min-width: 0;
+ }
+ .edition-index-copy strong,
+ .edition-index-copy small {
+   display: block;
+ }

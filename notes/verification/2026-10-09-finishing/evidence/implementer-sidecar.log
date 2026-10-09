@@ -1,0 +1,147 @@
+$ tsc --noEmit
+$ bun test src shared
+bun test v1.4.2 (744846f84)
+
+shared/index.test.ts:
+(pass) slugify normalizes names [1.69ms]
+(pass) CreateSiteBody rejects empty prompt [1.46ms]
+
+shared/connection.test.ts:
+(pass) strict normalized origins [1.77ms]
+(pass) hydration precedes requests and persistence survives recreation [4.37ms]
+(pass) storage failure preserves current origin [0.34ms]
+(pass) timeouts and cancellation bound an uncooperative transport [7.09ms]
+(pass) synchronous double-action guard and explicit recovery after uncertain outcome [0.21ms]
+(pass) cursor catchup excludes duplicate pages and handles a restarted buffer [0.05ms]
+(pass) exclusive retries cannot clear uncertainty from a later failed mutation [0.12ms]
+(pass) read-only recovery excludes mutations and releases on origin change [0.05ms]
+(pass) fetch receives its browser global receiver rather than the Connection instance [0.04ms]
+(pass) request preserves every HeadersInit form and an explicit body content type [0.30ms]
+(pass) pairing credentials are origin-scoped, clearable and never transmitted over remote HTTP [1.35ms]
+
+src/security.test.ts:
+(pass) persistent operator credential is private and insecure existing files fail closed [3.08ms]
+(pass) loopback is default; network access and exact public host require explicit configuration [0.28ms]
+(pass) launch tickets are one-use, origin/site bound, expiring; sessions expire and revoke [0.22ms]
+(pass) preview environment carries only selected OS variables and its own transport credential [0.14ms]
+(pass) preview origins isolate sites and remote previews require explicit HTTPS DNS configuration [0.57ms]
+(pass) tickets and sessions never authorize a replacement preview generation [0.22ms]
+
+src/events.test.ts:
+(pass) emit buffers events in order [0.16ms]
+(pass) since(0) returns all buffered events and next equals count [0.02ms]
+(pass) since(next) after catching up returns empty
+(pass) subscribe receives subsequent emits; unsubscribe stops delivery [0.02ms]
+(pass) EventBus.get returns the same JobEvents instance for a given siteId [0.03ms]
+(pass) EventBus.get returns distinct JobEvents per siteId
+(pass) EventBus.reset replaces the epoch and isolates stale producers [0.01ms]
+(pass) inactive retention evicts oldest feeds without extending retention on polls [0.11ms]
+(pass) running feeds survive retention pressure and become eligible after finish [0.02ms]
+(pass) delete removes the retained feed and obsolete finish cannot affect replacements [0.02ms]
+
+src/scaffold.test.ts:
+(pass) scaffoldSite copies files recursively, skipping node_modules/.next/.git [2.79ms]
+(pass) scaffoldSite defaults to no install when opts omitted: no node_modules is created [0.93ms]
+(pass) scaffoldSite with install:true actually runs `bun install` in siteDir [10.81ms]
+(pass) scaffoldSite rejects when `bun install` fails, surfacing exit code + stderr tail [7.63ms]
+
+src/engine.test.ts:
+(pass) emits text events per assistant message, then done [3.87ms]
+(pass) maps a throwing runner to a single error event [0.55ms]
+(pass) passes model, prompt, and stream:true through to the runner [0.16ms]
+(pass) a throwing onEvent on the terminal event does not escape and does not double-emit [0.23ms]
+(pass) streaming regression: a real Anthropic client against a local stub actually sends the request and never throws client-side [10.28ms]
+(pass) streaming regression: a real Anthropic client against a 429 stub maps to the rate-limit message end to end [2.57ms]
+(pass) mapEngineError maps typed SDK errors to user-readable messages [0.05ms]
+(pass) write_file tool rejects a traversal path and emits no tool event [0.67ms]
+(pass) actual SDK SSE stop end_turn is classified without raw provider errors [1.73ms]
+(pass) actual SDK SSE stop refusal is classified without raw provider errors [1.39ms]
+(pass) actual SDK SSE stop max_tokens is classified without raw provider errors [2.35ms]
+(pass) actual SDK SSE stop model_context_window_exceeded is classified without raw provider errors [1.07ms]
+(pass) actual SDK SSE stop unexpected is classified without raw provider errors [1.26ms]
+(pass) actual SDK SSE stop null is classified without raw provider errors [1.29ms]
+(pass) actual SDK stalled SSE is aborted by the shared job signal [102.11ms]
+
+src/preview-real.test.ts:
+(pass) real installed Next: raw HTTP and HMR are protected before and after authenticated rendering; proxy serves HTML/assets/HMR and revokes sessions [3133.79ms]
+
+src/job.test.ts:
+(pass) cancel fences admission and drain retains accepted operations [0.17ms]
+(pass) kernel reservation refuses same-home second owner and releases [0.43ms]
+(pass) home ownership excludes a separate process and recovers after crash [14.34ms]
+(pass) process crash during generation recovers interrupted durable state and permits retry [40.47ms]
+(pass) terminal persistence permission failure publishes no done, retains ownership, and recovers after restart [37.07ms]
+
+src/ports.test.ts:
+(pass) allocatePort with no taken ports returns default base 4710 [0.03ms]
+(pass) allocatePort skips taken ports and ignores nulls [0.01ms]
+(pass) allocatePort respects a custom base [0.02ms]
+(pass) allocatePort finds first gap when ports are non-contiguous
+
+src/preview.test.ts:
+(pass) start spawns a working server and reports running, stop tears it down [503.17ms]
+(pass) start reports crashed when the process exits immediately [501.99ms]
+(pass) start resolves crashed (not a rejected promise) when the command itself cannot spawn [0.40ms]
+(pass) concurrent start() calls for the same siteId leave exactly one tracked entry and no orphaned process [503.39ms]
+(pass) stop() racing a still-polling start() leaves the entry stopped, not resurrected to crashed [501.90ms]
+(pass) status returns a default stopped status for unknown siteId [0.06ms]
+
+src/registry.test.ts:
+(pass) readRegistry returns [] when file is missing [0.20ms]
+(pass) writeRegistry then readRegistry round-trips [0.37ms]
+(pass) writeRegistry leaves no .tmp file behind [0.31ms]
+(pass) writeRegistry creates parent directories [0.33ms]
+
+src/siteFs.test.ts:
+(pass) listSiteFiles returns sorted relative paths, skipping blocked dirs [1.48ms]
+(pass) writeSiteFile creates parent dirs and round-trips with readSiteFile [0.59ms]
+(pass) writeSiteFile rejects content larger than MAX_FILE_BYTES [0.30ms]
+(pass) readSiteFile rejects path traversal [0.13ms]
+(pass) readSiteFile rejects a file larger than MAX_FILE_BYTES [0.41ms]
+
+src/paths.test.ts:
+(pass) resolves a normal relative path [0.20ms]
+(pass) rejects absolute paths [0.13ms]
+(pass) rejects .. traversal [0.13ms]
+(pass) rejects blocked segments [0.12ms]
+(pass) rejects case-insensitive blocked segments [0.12ms]
+(pass) rejects symlink escape [0.43ms]
+
+src/server.test.ts:
+(pass) POST /api/sites scaffolds the site, runs the job to idle, and replays events [75.35ms]
+(pass) events replay replacement with 1 events despite old offset 2 [98.72ms]
+(pass) events replay replacement with 2 events despite old offset 2 [106.77ms]
+(pass) events replay replacement with 3 events despite old offset 2 [98.57ms]
+(pass) cancel is job-bound, authenticated, origin-restricted and fences late completion [102.23ms]
+(pass) whole-job deadline settles an abort-ignoring engine and ignores its late success [170.62ms]
+(pass) startup recovers a persisted generating row without rerunning provider [53.39ms]
+(pass) an error event sets status 'error' and records lastError; a later success clears it [96.50ms]
+(pass) a throwing makeClient() still drives the site to a terminal 'error' state, not a permanent wedge [75.20ms]
+(pass) an engine promise rejection (instead of an onEvent error) still reaches a terminal 'error' state [76.55ms]
+(pass) POST edit while a job is running returns 409, and edit updates promptHistory [494.52ms]
+(pass) preview start reports running and preview stop reports stopped [580.16ms]
+(pass) delete drains an admitted preview start before removing its site [610.97ms]
+(pass) DELETE removes the site: 204, then GET is 404 [75.90ms]
+(pass) POST /api/sites with an invalid body returns 400 [51.81ms]
+(pass) GET on an unknown site id returns 404 [52.56ms]
+(pass) OPTIONS returns 204 with CORS headers, and GET responses carry Access-Control-Allow-Origin [52.45ms]
+(pass) GET /api/sites lists all sites in the registry [74.54ms]
+(pass) slug collisions append -2, -3, ... [83.28ms]
+(pass) POST /api/sites when scaffolding fails returns 500 and leaves no orphaned registry entry or site dir [74.79ms]
+(pass) concurrent creates with the same name do not lose any site to a stale registry write [79.29ms]
+(pass) all API operation classes reject absent/wrong tokens and hostile origins or hosts [125.04ms]
+(pass) preview launch requires one-use POST ticket; content/assets require site cookie and unpair revokes it [558.90ms]
+(pass) start fences ticket issuance/redemption before an awaited teardown and old sessions cannot read a replacement [1564.74ms]
+(pass) stop fences ticket issuance/redemption before an awaited teardown and old sessions cannot read a replacement [1564.73ms]
+(pass) a launch body delayed across child replacement cannot redeem its old generation ticket [1084.06ms]
+(pass) shutdown retains home ownership until an admitted delete finishes [105.88ms]
+(pass) failed pairing construction releases home for immediate same-process retry [52.60ms]
+(pass) failed HTTP bind settles recovery before releasing home and preserves the occupied listener [86.31ms]
+(pass) deletion drains an accepted filesystem write before removing the directory [86.36ms]
+(pass) filesystem deletion failure preserves registry and slug until retry succeeds [98.92ms]
+(pass) registry mutex serializes HTTP events with settled state and immediate retry [623.37ms]
+
+ 111 pass
+ 0 fail
+ 470 expect() calls
+Ran 111 tests across 14 files. [14.64s]

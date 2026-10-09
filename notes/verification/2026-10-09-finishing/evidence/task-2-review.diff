@@ -1,0 +1,410 @@
+diff --git a/sidecars/quasar-service/src/job.test.ts b/sidecars/quasar-service/src/job.test.ts
+index 547cc1c5..676ab238 100644
+--- a/sidecars/quasar-service/src/job.test.ts
++++ b/sidecars/quasar-service/src/job.test.ts
+@@ -17,35 +17,73 @@ test("cancel fences admission and drain retains accepted operations", async () =
+   expect(drained).toBe(false);
+   release();
+   await operation;
+   await drain;
+   expect(drained).toBe(true);
+ });
+ 
+ test("kernel reservation refuses same-home second owner and releases", async () => {
+   const home = await mkdtemp(path.join(tmpdir(), "quasar-owner-"));
+   const release = ownHome(home);
+   try { expect(() => ownHome(home)).toThrow("ownership unavailable"); }
+   finally { release(); }
+   ownHome(home)();
+   await rm(home, { recursive: true });
+ });
+ 
+ test("home ownership excludes a separate process and recovers after crash", async () => {
+   const home = await mkdtemp(path.join(tmpdir(), "quasar-cross-process-"));
+   const module = new URL("./ownership.ts", import.meta.url).pathname;
+   const child = Bun.spawn([process.execPath, "-e", `import {ownHome} from ${JSON.stringify(module)};ownHome(${JSON.stringify(home)});console.log('ready');setInterval(()=>{},1000);`], { stdout: "pipe", stderr: "ignore" });
+   try {
+     const reader = child.stdout.getReader();
+     const first = await reader.read();
+     expect(new TextDecoder().decode(first.value)).toContain("ready");
+     expect(() => ownHome(home)).toThrow("ownership unavailable");
+     child.kill("SIGKILL");
+     await child.exited;
+     reader.releaseLock();
+     ownHome(home)();
+   } finally {
+     child.kill();
+     await child.exited;
+     await rm(home, { recursive: true });
+   }
+ });
++
++test("process crash during generation recovers interrupted durable state and permits retry", async () => {
++  const { mkdir, writeFile, readFile } = await import("node:fs/promises");
++  const { createServer } = await import("./server");
++  const { PreviewManager } = await import("./preview");
++  const home = await mkdtemp(path.join(tmpdir(), "quasar-crash-job-"));
++  const template = path.join(home, "template");
++  await mkdir(template);
++  await writeFile(path.join(template, "marker.txt"), "fixture");
++  const module = new URL("./server.ts", import.meta.url).pathname;
++  const previewModule = new URL("./preview.ts", import.meta.url).pathname;
++  const token = "t".repeat(43);
++  const child = Bun.spawn([process.execPath, "-e", `import {createServer} from ${JSON.stringify(module)};import {PreviewManager} from ${JSON.stringify(previewModule)};const server=createServer({home:${JSON.stringify(home)},templateDir:${JSON.stringify(template)},preview:new PreviewManager(),scaffoldInstall:false,port:0,pairingToken:${JSON.stringify(token)},makeClient:()=>({}),engine:async()=>{console.log('generating');await new Promise(()=>{});}});await fetch('http://localhost:'+server.port+'/api/sites',{method:'POST',headers:{authorization:'Bearer '+${JSON.stringify(token)}},body:JSON.stringify({name:'Crash job',prompt:'test'})});`], { stdout: "pipe", stderr: "ignore" });
++  let server: ReturnType<typeof createServer> | undefined;
++  try {
++    const reader = child.stdout.getReader();
++    expect(new TextDecoder().decode((await reader.read()).value)).toContain("generating");
++    child.kill("SIGKILL");
++    await child.exited;
++    reader.releaseLock();
++    const original = JSON.parse(await readFile(path.join(home, "registry.json"), "utf8"))[0];
++    expect(original.status).toBe("generating");
++    server = createServer({ home, templateDir: template, preview: new PreviewManager(), scaffoldInstall: false, port: 0, pairingToken: token, makeClient: () => ({} as never), engine: async ({ onEvent }) => onEvent({ type: "done" }) });
++    const origin = `http://localhost:${server.port}`;
++    await fetch(`${origin}/health`);
++    const recovered = JSON.parse(await readFile(path.join(home, "registry.json"), "utf8"))[0];
++    expect(recovered.job.outcome).toBe("interrupted");
++    expect(recovered.job.id).toBe(original.job.id);
++    const response = await fetch(`${origin}/api/sites/${original.id}/edit`, { method: "POST", headers: { authorization: `Bearer ${token}` }, body: JSON.stringify({ prompt: "retry" }) });
++    expect(response.status).toBe(202);
++    expect((await response.json()).job.id).not.toBe(original.job.id);
++  } finally {
++    child.kill();
++    await child.exited;
++    await server?.shutdown();
++    await rm(home, { recursive: true, force: true });
++  }
++});
+diff --git a/sidecars/quasar-service/src/server.test.ts b/sidecars/quasar-service/src/server.test.ts
+index 69eb85bb..8275d35e 100644
+--- a/sidecars/quasar-service/src/server.test.ts
++++ b/sidecars/quasar-service/src/server.test.ts
+@@ -1,38 +1,38 @@
+ import { createServer as createNetServer, type AddressInfo } from "node:net";
+ import { test, expect, afterEach } from "bun:test";
+-import { mkdtemp, mkdir, writeFile, readFile, realpath } from "node:fs/promises";
++import { mkdtemp, mkdir, writeFile, readFile, realpath, chmod, access } from "node:fs/promises";
+ import { tmpdir } from "node:os";
+ import path from "node:path";
+ import type { GenerationEvent } from "../shared/index";
+ import { createServer, type ServerDeps } from "./server";
+ import { PreviewManager } from "./preview";
+ import { PreviewProxy } from "./preview-proxy";
+ 
+ // OS-selected loopback fixture port; no fixed 4710 collision with another review.
+ async function testPreviewPort(): Promise<number> {
+   const listener = createNetServer();
+   await new Promise<void>((resolve, reject) => { listener.once("error", reject); listener.listen(0, "127.0.0.1", resolve); });
+   const port = (listener.address() as AddressInfo).port;
+   await new Promise<void>((resolve, reject) => listener.close(error => error ? reject(error) : resolve()));
+   return port;
+ }
+ 
+ function sleep(ms: number): Promise<void> {
+   return new Promise((resolve) => setTimeout(resolve, ms));
+ }
+ 
+ type EngineFn = ServerDeps["engine"];
+ 
+ function stubEngine(events: GenerationEvent[], delayMs: number): EngineFn {
+   return async ({ onEvent }) => {
+     await sleep(delayMs);
+     for (const ev of events) onEvent(ev);
+   };
+ }
+ 
+ const previewCommand = (_siteDir: string, port: number): string[] => [
+   "bun",
+   "-e",
+   `Bun.serve({ port: ${port}, fetch: () => new Response("ok") }); setInterval(() => {}, 1e9);`,
+ ];
+ 
+@@ -637,35 +637,119 @@ for (const operation of ["start", "stop"] as const) test(`${operation} fences ti
+   expect((await redeem(pendingTicket)).status).toBe(401);
+ 
+   // A direct manager restart does not call the server's revoke helper. The
+   // instance binding itself must still reject both old tickets and sessions.
+   const previousTicket = await ticket();
+   const previousCookie = (await redeem(await ticket())).headers.get("set-cookie")!.split(";")[0]!;
+   const generation = preview.transport(site.id)!.generation;
+   await preview.start(site.id, path.join(home, "sites", site.slug), await testPreviewPort());
+   expect(preview.transport(site.id)!.generation).not.toBe(generation);
+   expect((await get(previousCookie)).status).toBe(401);
+   expect((await redeem(previousTicket)).status).toBe(401);
+   const freshCookie = (await redeem(await ticket())).headers.get("set-cookie")!.split(";")[0]!;
+   expect((await get(freshCookie)).status).toBe(200);
+ }, 20_000);
+ 
+ 
+ test("a launch body delayed across child replacement cannot redeem its old generation ticket", async () => {
+   const { preview, home, server, baseUrl } = await makeHarness(stubEngine([], 0));
+   await preview.start("delayed", home, await testPreviewPort());
+   const proxy = new PreviewProxy(preview);
+   const generation = preview.transport("delayed")!.generation;
+   const ticket = proxy.sessions.issue("delayed", TRUSTED, generation);
+   let body!: ReadableStreamDefaultController<Uint8Array>;
+   const stream = new ReadableStream<Uint8Array>({ start(controller) { body = controller; } });
+   const request = new Request(`${baseUrl}/preview/delayed/launch`, { method: "POST", headers: { origin: TRUSTED, "content-type": "application/x-www-form-urlencoded" }, body: stream });
+   // handle reads the running generation synchronously, then waits on req.text().
+   const response = proxy.handle(request, server, `http://delayed.localhost:${server.port}`, new Set([TRUSTED]));
+   await preview.start("delayed", home, await testPreviewPort());
+   expect(preview.transport("delayed")!.generation).not.toBe(generation);
+   body.enqueue(new TextEncoder().encode(new URLSearchParams({ ticket }).toString()));
+   body.close();
+   const rejected = await response;
+   expect(rejected?.status).toBe(401);
+   expect(rejected?.headers.get("set-cookie")).toBeNull();
+ }, 10_000);
++
++test("shutdown retains home ownership until an admitted delete finishes", async () => {
++  const h = await makeHarness(stubEngine([{ type: "done" }], 0));
++  const site = await (await pairedFetch(`${h.baseUrl}/api/sites`, { method: "POST", body: JSON.stringify({ name: "Drain delete", prompt: "test" }) })).json();
++  await pollUntilIdle(h.baseUrl, site.id);
++  let entered!: () => void;
++  const stopping = new Promise<void>(resolve => { entered = resolve; });
++  let resume!: () => void;
++  const held = new Promise<void>(resolve => { resume = resolve; });
++  const originalStop = h.preview.stop.bind(h.preview);
++  h.preview.stop = async (id: string) => { entered(); await held; await originalStop(id); };
++  const deleting = pairedFetch(`${h.baseUrl}/api/sites/${site.id}`, { method: "DELETE" });
++  await stopping;
++  let closed = false;
++  const shutdown = h.server.shutdown().then(() => { closed = true; });
++  await sleep(30);
++  expect(closed).toBe(false);
++  expect(() => createServer({ home: h.home, templateDir: h.templateDir, engine: stubEngine([], 0), makeClient: () => ({} as never), preview: new PreviewManager(), scaffoldInstall: false, port: 0, pairingToken: TOKEN })).toThrow("ownership unavailable");
++  expect((await pairedFetch(`${h.baseUrl}/api/sites`)).status).toBe(503);
++  resume();
++  expect((await deleting).status).toBe(204);
++  await shutdown;
++  expect(JSON.parse(await readFile(path.join(h.home, "registry.json"), "utf8"))).toEqual([]);
++});
++
++test("failed pairing construction releases home for immediate same-process retry", async () => {
++  const h = await makeHarness(stubEngine([], 0));
++  await h.server.shutdown();
++  const deps = { home: h.home, templateDir: h.templateDir, engine: stubEngine([], 0), makeClient: () => ({} as never), preview: new PreviewManager(), scaffoldInstall: false, port: 0, pairingToken: "invalid" };
++  expect(() => createServer(deps)).toThrow();
++  const retry = createServer({ ...deps, pairingToken: TOKEN });
++  await retry.shutdown();
++});
++
++test("failed HTTP bind settles recovery before releasing home and preserves the occupied listener", async () => {
++  const occupied = await makeHarness(stubEngine([], 0));
++  const h = await makeHarness(stubEngine([], 0));
++  await h.server.shutdown();
++  const deps = { home: h.home, templateDir: h.templateDir, engine: stubEngine([], 0), makeClient: () => ({} as never), preview: new PreviewManager(), scaffoldInstall: false, port: occupied.server.port!, pairingToken: TOKEN };
++  expect(() => createServer(deps)).toThrow();
++  // Constructor cleanup deliberately retains ownership until async recovery settles.
++  await sleep(30);
++  const retry = createServer({ ...deps, port: 0 });
++  expect((await fetch(`${occupied.baseUrl}/health`)).status).toBe(200);
++  await retry.shutdown();
++});
++
++test("deletion drains an accepted filesystem write before removing the directory", async () => {
++  let entered!: () => void;
++  const writing = new Promise<void>(resolve => { entered = resolve; });
++  let resume!: () => void;
++  const held = new Promise<void>(resolve => { resume = resolve; });
++  const h = await makeHarness(async ({ scope, siteDir, onEvent }) => {
++    await scope!.accept(async () => { entered(); await held; await writeFile(path.join(siteDir, "accepted.txt"), "owned write"); });
++    onEvent({ type: "done" });
++  });
++  const site = await (await pairedFetch(`${h.baseUrl}/api/sites`, { method: "POST", body: JSON.stringify({ name: "Held write", prompt: "test" }) })).json();
++  await writing;
++  let deleted = false;
++  const deleting = pairedFetch(`${h.baseUrl}/api/sites/${site.id}`, { method: "DELETE" }).then(response => { deleted = true; return response; });
++  await sleep(30);
++  expect(deleted).toBe(false);
++  expect((await pairedFetch(`${h.baseUrl}/api/sites/${site.id}/edit`, { method: "POST", body: JSON.stringify({ prompt: "replacement" }) })).status).toBe(409);
++  resume();
++  expect((await deleting).status).toBe(204);
++  expect(await access(path.join(h.home, "sites", site.slug)).then(() => true, () => false)).toBe(false);
++});
++
++test("filesystem deletion failure preserves registry and slug until retry succeeds", async () => {
++  const h = await makeHarness(stubEngine([{ type: "done" }], 0));
++  const create = () => pairedFetch(`${h.baseUrl}/api/sites`, { method: "POST", body: JSON.stringify({ name: "Delete permissions", prompt: "test" }) });
++  const site = await (await create()).json();
++  await pollUntilIdle(h.baseUrl, site.id);
++  const sitesDir = path.join(h.home, "sites");
++  await chmod(sitesDir, 0o500);
++  try {
++    expect((await pairedFetch(`${h.baseUrl}/api/sites/${site.id}`, { method: "DELETE" })).status).toBe(500);
++    expect((await pairedFetch(`${h.baseUrl}/api/sites/${site.id}`)).status).toBe(200);
++  } finally { await chmod(sitesDir, 0o700); }
++  const replacement = await (await create()).json();
++  expect(replacement.slug).toBe(`${site.slug}-2`);
++  await pollUntilIdle(h.baseUrl, replacement.id);
++  expect((await pairedFetch(`${h.baseUrl}/api/sites/${site.id}`, { method: "DELETE" })).status).toBe(204);
++});
+diff --git a/sidecars/quasar-service/src/server.ts b/sidecars/quasar-service/src/server.ts
+index cd8c6daf..2b799058 100644
+--- a/sidecars/quasar-service/src/server.ts
++++ b/sidecars/quasar-service/src/server.ts
+@@ -59,70 +59,71 @@ async function readJsonBody(req: Request): Promise<{ ok: true; body: unknown } |
+ // Serializes every read-modify-write against the registry file within this
+ // process. `readRegistry`/`writeRegistry` alone aren't safe under concurrent
+ // callers: two overlapping HTTP requests (or a request racing a background
+ // job's completion write) can each read the same snapshot and one write
+ // silently clobbers the other's update. A plain "re-read right before write"
+ // narrows that window but doesn't close it. This mutex closes it: every
+ // mutation below runs to completion before the next one starts.
+ function makeMutex(): <T>(fn: () => Promise<T>) => Promise<T> {
+   let tail: Promise<unknown> = Promise.resolve();
+   return function withLock<T>(fn: () => Promise<T>): Promise<T> {
+     const result = tail.then(fn, fn);
+     tail = result.then(
+       () => undefined,
+       () => undefined
+     );
+     return result;
+   };
+ }
+ 
+ export function createServer(deps: ServerDeps) {
+   const policy = networkPolicy({ QUASAR_HOST: deps.hostname, QUASAR_ALLOW_NETWORK: String(deps.allowNetwork), QUASAR_PUBLIC_ORIGIN: deps.publicOrigin });
+   const releaseHome = ownHome(deps.home);
+   let token: string;
+   try { token = pairingSecret(deps.home, deps.pairingToken); }
+   catch (error) { releaseHome(); throw error; }
+   const allowedOrigins = new Set(deps.allowedOrigins ?? policy.allowedOrigins);
+   const proxy = new PreviewProxy(deps.preview);
+   const registryFile = path.join(deps.home, "registry.json");
+   const sitesDir = path.join(deps.home, "sites");
+   const eventBus = new EventBus();
+   const withRegistryLock = makeMutex();
+   const jobs = new Map<string, { id: string; scope: JobScope; completion: Promise<void>; cancel: (reason: string, outcome?: "cancelled" | "error" | "interrupted") => void }>();
+   const deleting = new Set<string>();
+   const previewStarts = new Map<string, Set<Promise<unknown>>>();
+   let closing = false;
++  const requests = new Set<Promise<void>>();
+   const ready = withRegistryLock(async () => {
+     const sites = await readRegistry(registryFile);
+     let changed = false;
+     for (const site of sites) {
+       if (site.previewPort !== null) { site.previewPort = null; changed = true; }
+       if (site.status !== "generating") continue;
+       changed = true;
+       site.status = "error";
+       site.lastError = "Generation interrupted by service restart. Partial files retained; inspect before retrying.";
+       site.job = { id: site.job?.id ?? crypto.randomUUID(), startedAt: site.job?.startedAt ?? site.createdAt, outcome: "interrupted", finishedAt: new Date().toISOString() };
+     }
+     if (changed) await writeRegistry(registryFile, sites);
+   });
+   // Keep rejection observed; every request still awaits the rejecting barrier.
+   void ready.catch(() => {});
+ 
+   function siteDirFor(slug: string): string {
+     return path.join(sitesDir, slug);
+   }
+ 
+   function uniqueSlug(base: string, sites: Site[]): string {
+     const existing = new Set(sites.map((s) => s.slug));
+     if (!existing.has(base)) return base;
+     let n = 2;
+     while (existing.has(`${base}-${n}`)) n++;
+     return `${base}-${n}`;
+   }
+ 
+   async function finalizeJob(siteId: string, jobId: string, outcome: "done" | "error" | "cancelled" | "interrupted", ev: GenerationEvent): Promise<void> {
+     if (ev.type !== "done" && ev.type !== "error") return;
+     await withRegistryLock(async () => {
+       const sites = await readRegistry(registryFile);
+       const idx = sites.findIndex((s) => s.id === siteId);
+       if (idx === -1 || sites[idx].job?.id !== jobId || sites[idx].job?.finishedAt) return;
+       if (ev.type === "done") {
+@@ -456,81 +457,91 @@ export function createServer(deps: ServerDeps) {
+     }
+ 
+     if (parts.length === 4 && parts[3] === "preview" && (method === "GET" || method === "POST")) {
+       return previewStatus(id, serviceOrigin);
+     }
+ 
+     if (parts.length === 5 && parts[3] === "preview" && parts[4] === "ticket" && method === "POST") {
+       const transport = deps.preview.transport(id);
+       if (!transport) return json({ error: "preview not running" }, { status: 409 });
+       const origin = req.headers.get("origin");
+       if (!origin || !allowedOrigins.has(origin)) return json({ error: "trusted browser origin required" }, { status: 403 });
+       let target: string;
+       try { target = previewOrigin(serviceOrigin, id, deps.previewDomain); }
+       catch { return json({ error: "Preview origin not configured: remote previews require HTTPS and QUASAR_PREVIEW_DOMAIN with wildcard DNS/TLS" }, { status: 503 }); }
+       return json({ ticket: proxy.sessions.issue(id, origin, transport.generation), action: `${target}/preview/${encodeURIComponent(id)}/launch` });
+     }
+     if (parts.length === 5 && parts[3] === "preview" && ["start", "stop"].includes(parts[4]!) && method !== "POST") return json({ error: "method not allowed" }, { status: 405 });
+     if (parts.length === 5 && parts[3] === "preview" && parts[4] === "start" && method === "POST") {
+       return previewStart(id, serviceOrigin);
+     }
+ 
+     if (parts.length === 5 && parts[3] === "preview" && parts[4] === "stop" && method === "POST") {
+       return previewStop(id);
+     }
+ 
+     return notFound();
+   }
+ 
+   const server = (() => { try { return Bun.serve<SocketData>({
+     port: deps.port,
+     hostname: policy.hostname,
+     idleTimeout: 120,
+     maxRequestBodySize: 1024 * 1024,
+     websocket: proxy.websocket,
+     async fetch(req, server) {
++      if (closing) return json({ error: "service stopping" }, { status: 503 });
++      let settled!: () => void;
++      const pending = new Promise<void>(resolve => { settled = resolve; });
++      requests.add(pending);
+       try {
+         const url = new URL(req.url);
+         const serviceOrigin = deps.publicOrigin ?? `http://${policy.hostname.includes(":") ? `[${policy.hostname}]` : policy.hostname}:${server.port}`;
+         const acceptedHosts = new Set([new URL(serviceOrigin).host]);
+         if (!deps.publicOrigin) { acceptedHosts.add(`localhost:${server.port}`); acceptedHosts.add(`127.0.0.1:${server.port}`); }
+         if (url.pathname.startsWith("/preview/")) {
+           const site = url.pathname.split("/")[2] ?? "";
+           let target: string;
+           try { target = previewOrigin(serviceOrigin, site, deps.previewDomain); }
+           catch { return json({ error: "preview origin unavailable" }, { status: 403 }); }
+           if (req.headers.get("host") !== new URL(target).host) return json({ error: "forbidden preview host" }, { status: 403 });
+           return await proxy.handle(req, server, target, allowedOrigins);
+         }
+         if (!acceptedHosts.has(req.headers.get("host") ?? "")) return json({ error: "forbidden host" }, { status: 403 });
+         const origin = req.headers.get("origin");
+         if (origin && !allowedOrigins.has(origin)) return json({ error: "forbidden origin" }, { status: 403 });
+         let response: Response;
+         if (req.method === "OPTIONS") {
+           const requestedMethod = req.headers.get("access-control-request-method") ?? "";
+           const requestedHeaders = (req.headers.get("access-control-request-headers") ?? "").split(",").map(v => v.trim().toLowerCase()).filter(Boolean);
+           if (!origin || !["GET", "POST", "DELETE"].includes(requestedMethod) || requestedHeaders.some(v => !["authorization", "content-type"].includes(v))) return json({ error: "forbidden preflight" }, { status: 403 });
+           response = new Response(null, { status: 204, headers: { "Access-Control-Allow-Methods": "GET,POST,DELETE", "Access-Control-Allow-Headers": "authorization,content-type" } });
+         } else response = await route(req, serviceOrigin);
+         if (origin) { response.headers.set("Access-Control-Allow-Origin", origin); response.headers.set("Vary", "Origin"); }
+         return response;
+       } catch {
+         return json({ error: "service request failed" }, { status: 500 });
++      } finally {
++        requests.delete(pending);
++        settled();
+       }
+     },
+   }); } catch (error) { void ready.then(releaseHome, releaseHome); throw error; } })();
+   const stop = server.stop.bind(server);
+   let shutdownPromise: Promise<void> | undefined;
+   const shutdown = () => shutdownPromise ??= (async () => {
+     closing = true;
+     await ready;
++    // Existing requests may be parsing bodies, deleting files, or stopping a
++    // preview outside the registry lock. They retain home ownership until done.
++    await Promise.all([...requests]);
+     await withRegistryLock(async () => {});
+     await Promise.allSettled([...previewStarts.values()].flatMap(starts => [...starts]));
+     for (const job of jobs.values()) job.cancel("Generation interrupted by service shutdown. Partial files retained.", "interrupted");
+     await Promise.all([...jobs.values()].map(job => job.completion));
+     await deps.preview.stopAll();
+     await stop(true);
+     releaseHome();
+   })();
+   server.stop = (() => { void shutdown().catch(() => console.error("quasar: shutdown cleanup failed; ownership retained")); }) as typeof server.stop;
+   return Object.assign(server, { shutdown });
+ }

@@ -1,0 +1,26 @@
+
+Running 1 test using 1 worker
+
+[persistent acceptance] owned Node process, TLS proxy/cert, pools, two databases and seeded dump removed; parent PG untouched
+  ✘  1 e2e/backend/persistent.acceptance.ts:280:1 › persistent Node artifact: fail closed, migrations, secure sessions, isolation, restart and seeded restore (0ms)
+
+
+  1) e2e/backend/persistent.acceptance.ts:280:1 › persistent Node artifact: fail closed, migrations, secure sessions, isolation, restart and seeded restore 
+
+    Error: ENOENT: no such file or directory, lstat '/Users/donaldfilimon/dev/active/quesar.cloud/.output/server/index.mjs'
+
+      181 |   artifactRoot = await realpath(requestedArtifact ?? resolve(".output"));
+      182 |   if (
+    > 183 |     !(await lstat(join(artifactRoot, "server/index.mjs"))).isFile() ||
+          |       ^
+      184 |     !(await lstat(join(artifactRoot, "public"))).isDirectory()
+      185 |   )
+      186 |     throw new Error(
+        at /Users/donaldfilimon/dev/active/quesar.cloud/e2e/backend/persistent.acceptance.ts:183:7
+
+    Error Context: test-results/persistent-acceptance/persistent.acceptance.ts-p-b0169--restart-and-seeded-restore/error-context.md
+
+    Error Context: test-results/persistent-acceptance/persistent.acceptance.ts-p-b0169--restart-and-seeded-restore/error-context.md
+
+  1 failed
+    e2e/backend/persistent.acceptance.ts:280:1 › persistent Node artifact: fail closed, migrations, secure sessions, isolation, restart and seeded restore 

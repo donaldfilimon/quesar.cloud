@@ -1,0 +1,38 @@
+[
+  {
+    "id": "film",
+    "cues": 15,
+    "textAndPronouncedHashesMatch": true,
+    "voicesAndSpeedsMatch": true
+  },
+  {
+    "id": "trailer",
+    "cues": 17,
+    "textAndPronouncedHashesMatch": true,
+    "voicesAndSpeedsMatch": true
+  },
+  {
+    "id": "abbey",
+    "cues": 9,
+    "textAndPronouncedHashesMatch": true,
+    "voicesAndSpeedsMatch": true
+  },
+  {
+    "id": "explainer",
+    "cues": 23,
+    "textAndPronouncedHashesMatch": true,
+    "voicesAndSpeedsMatch": true
+  },
+  {
+    "id": "mega",
+    "cues": 38,
+    "textAndPronouncedHashesMatch": true,
+    "voicesAndSpeedsMatch": true
+  },
+  {
+    "id": "design",
+    "cues": 8,
+    "textAndPronouncedHashesMatch": true,
+    "voicesAndSpeedsMatch": true
+  }
+]

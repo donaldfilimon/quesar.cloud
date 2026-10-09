@@ -1,0 +1,28 @@
+
+Running 1 test using 1 worker
+
+(node:84228) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[migrate] applied 0001_auth.sql
+[migrate] applied 0002_field_notes.sql
+[migrate] applied 0003_inquiries.sql
+[migrate] applied 0004_telemetry.sql
+[migrate] applied 0005_console_audits.sql
+[migrate] applied 0006_workspace_connections.sql
+[migrate] applied 0007_rate_limits.sql
+[migrate] applied 0008_passkeys.sql
+[migrate] applied 0009_oauth_verification.sql
+[migrate] done — 9 migration(s) applied.
+[AI synthetic acceptance] authenticated synthetic owners ready
+[AI synthetic acceptance] checking /abbey-bot
+[AI synthetic acceptance] checking /console
+[AI synthetic acceptance] checking /workspace
+[AI synthetic acceptance] checking /console/workspace
+[AI synthetic acceptance] checking /dashboard
+[AI synthetic acceptance] five reachable routes: shared policy adoption, actual provider failures preserve input, retry creates sealed owner audits; exact workspace disclosure/content verified
+[AI synthetic acceptance] stale/withdrawn consent blocked outbound; provider timeout and SQL fault withheld reply; owner export/read/delete and bystander isolation passed
+[AI synthetic acceptance] restart durability, missing-key no-outbound and providerless catalog without audits passed; SYNTHETIC provider only, live acceptance remains blocked
+[AI synthetic acceptance] owned child/database/scratch removed; parent cluster untouched
+  ✓  1 e2e/backend/ai-consent.acceptance.ts:174:1 › all four AI surfaces enforce consent and sealed audits over real HTTP and durable PostgreSQL (1.1m)
+
+  1 passed (1.1m)

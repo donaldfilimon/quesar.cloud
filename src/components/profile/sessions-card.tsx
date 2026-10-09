@@ -95,7 +95,8 @@ export function SessionsCard({
         </ul>
       ) : null}
       <p className="mt-4 text-xs text-fg-subtle">
-        A revoked device can stay signed in for up to five minutes while its cached session expires.
+        Revoked sessions are refused on the next server session check. An already-open page may need
+        a refresh.
       </p>
       <div className="mt-4 flex flex-wrap gap-2">
         <Button

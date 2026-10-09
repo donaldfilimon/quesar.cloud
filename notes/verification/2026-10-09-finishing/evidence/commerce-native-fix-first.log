@@ -1,0 +1,61 @@
+
+Running 7 tests using 1 worker
+
+(node:55316) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[commerce browser acceptance] installed native WDBX SHA256 cf33858e3787a3a045678c90272f0dfb56e7119d1d57a877b4f12fee3587e6de
+[migrate] applied 0001_auth.sql
+[migrate] applied 0002_field_notes.sql
+[migrate] applied 0003_inquiries.sql
+[migrate] applied 0004_telemetry.sql
+[migrate] applied 0005_console_audits.sql
+[migrate] applied 0006_workspace_connections.sql
+[migrate] applied 0007_rate_limits.sql
+[migrate] applied 0008_passkeys.sql
+[migrate] applied 0009_oauth_verification.sql
+[migrate] done — 9 migration(s) applied.
+[commerce browser acceptance] non-mutating login/profile/commerce dependency warmup completed before signup
+[commerce browser acceptance] three real browser signup sessions established on disposable identity database
+  ✓  1 e2e/backend/commerce.acceptance.ts:226:1 › anonymous browser cannot create or list invoices (652ms)
+[commerce browser acceptance] real HTTP invoice create/replay and strict money-field rejection passed
+  ✓  2 e2e/backend/commerce.acceptance.ts:237:1 › HTTP replay creates one native invoice and rejects client-owned money (2.4s)
+  ✓  3 e2e/backend/commerce.acceptance.ts:251:1 › bystander cannot list or cancel owner invoice and owner cancellation is replayable (575ms)
+[commerce browser acceptance] real authorization denies password-only admin; trusted synthetic linked-identity settlement/replay passed
+  ✓  4 e2e/backend/commerce.acceptance.ts:261:1 › allowlisted password account cannot settle before verified linked identity (689ms)
+[commerce browser acceptance] owned app, browser contexts, identity database and native ledger scratch cleaned
+  ✘  5 e2e/backend/commerce.acceptance.ts:298:1 › browser sessions and complete WDBX invoice state survive backend replacement (50.0s)
+  -  6 e2e/backend/commerce.acceptance.ts:322:1 › quiescent paired PostgreSQL and complete native WDBX backup restores sessions and invoice isolation
+  -  7 e2e/backend/commerce.acceptance.ts:470:1 › real account deletion unlinks invoice history and replacement account cannot inherit it
+
+
+  1) e2e/backend/commerce.acceptance.ts:298:1 › browser sessions and complete WDBX invoice state survive backend replacement 
+
+    Error: expect(locator).toHaveValue(expected) failed
+
+    Locator: getByLabel('Display name')
+    Expected: "Synthetic Commerce Acceptance"
+    Timeout: 20000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toHaveValue" getByLabel('Display name') with timeout 20000ms
+      - waiting for getByLabel('Display name')
+
+
+      311 |   await start();
+      312 |   await buyer.goto(`${origin}/profile`, { waitUntil: "networkidle" });
+    > 313 |   await expect(buyer.getByLabel("Display name")).toHaveValue("Synthetic Commerce Acceptance");
+          |                                                  ^
+      314 |   expect(await call(buyer, "listCommerceOrders")).toEqual(before);
+      315 |   await bystander.goto(`${origin}/profile`, { waitUntil: "networkidle" });
+      316 |   expect(await call(bystander, "listCommerceOrders")).toEqual([]);
+        at /Users/donaldfilimon/dev/active/quesar.cloud/e2e/backend/commerce.acceptance.ts:313:50
+
+    Error Context: test-results/commerce-acceptance/commerce.acceptance.ts-bro-fe0fe-survive-backend-replacement/error-context.md
+
+    Error Context: test-results/commerce-acceptance/commerce.acceptance.ts-bro-fe0fe-survive-backend-replacement/error-context.md
+
+  1 failed
+    e2e/backend/commerce.acceptance.ts:298:1 › browser sessions and complete WDBX invoice state survive backend replacement 
+  2 did not run
+  4 passed (2.5m)

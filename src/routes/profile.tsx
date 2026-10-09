@@ -127,19 +127,31 @@ function ProfileInner({ user }: { user: AppUser }) {
 
 function SignOutButton() {
   const [signingOut, setSigningOut] = useState(false);
+  const [failed, setFailed] = useState(false);
   return (
-    <Button
-      type="button"
-      variant="secondary"
-      className="mt-4"
-      disabled={signingOut}
-      onClick={() => {
-        setSigningOut(true);
-        void signOut("/").catch(() => setSigningOut(false));
-      }}
-    >
-      {signingOut ? "Signing out…" : "Sign out"}
-    </Button>
+    <>
+      <Button
+        type="button"
+        variant="secondary"
+        className="mt-4"
+        disabled={signingOut}
+        onClick={() => {
+          setSigningOut(true);
+          setFailed(false);
+          void signOut("/").catch(() => {
+            setSigningOut(false);
+            setFailed(true);
+          });
+        }}
+      >
+        {signingOut ? "Signing out…" : "Sign out"}
+      </Button>
+      {failed ? (
+        <p role="alert" className="mt-2 text-sm text-destructive">
+          Sign-out failed. You are still signed in. Try again.
+        </p>
+      ) : null}
+    </>
   );
 }
 

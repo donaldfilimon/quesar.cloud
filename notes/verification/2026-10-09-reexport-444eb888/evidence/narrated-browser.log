@@ -1,0 +1,19 @@
+[WebServer] (node:78453) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 6 tests using 1 worker
+
+(node:78458) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 [desktop] › e2e/narrated-films.spec.ts:4:1 › the six exported films load on intent with captions and working downloads (2.5s)
+  ✓  2 [desktop] › e2e/narrated-films.spec.ts:51:1 › a failed export keeps transcript access and can reset its player (445ms)
+(node:78535) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  3 [mobile] › e2e/narrated-films.spec.ts:4:1 › the six exported films load on intent with captions and working downloads (1.9s)
+  ✓  4 [mobile] › e2e/narrated-films.spec.ts:51:1 › a failed export keeps transcript access and can reset its player (401ms)
+(node:78667) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  5 [short-mobile] › e2e/narrated-films.spec.ts:4:1 › the six exported films load on intent with captions and working downloads (1.7s)
+  ✓  6 [short-mobile] › e2e/narrated-films.spec.ts:51:1 › a failed export keeps transcript access and can reset its player (371ms)
+
+  6 passed (9.5s)

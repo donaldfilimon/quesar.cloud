@@ -11,6 +11,11 @@ export const site = {
   name: "Quesar",
   company: "MLAI",
   legal: "MLAI",
+  contact: {
+    email: "cbkshadow@icloud.com",
+    phone: "813-755-0156",
+    phoneInternational: "+18137550156",
+  },
   description:
     "Build assistant workflows, memory systems, and developer tools with inspectable sources and explicit implementation boundaries.",
   mission:

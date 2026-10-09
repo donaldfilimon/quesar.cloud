@@ -1,0 +1,35 @@
+[WebServer] (node:26905) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "./github-readmes" without a file extension (src/lib/github-data.ts:1:30). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 23 tests using 1 worker
+
+(node:28371) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 [capture] › e2e/film/capture.acceptance.ts:14:3 › film: independently repeated and revisited controlled frames (8.1s)
+  ✓   2 [capture] › e2e/film/capture.acceptance.ts:14:3 › trailer: independently repeated and revisited controlled frames (4.8s)
+  ✓   3 [capture] › e2e/film/capture.acceptance.ts:14:3 › abbey: independently repeated and revisited controlled frames (6.0s)
+  ✓   4 [capture] › e2e/film/capture.acceptance.ts:14:3 › explainer: independently repeated and revisited controlled frames (6.4s)
+  ✓   5 [capture] › e2e/film/capture.acceptance.ts:14:3 › mega: independently repeated and revisited controlled frames (8.8s)
+  ✓   6 [capture] › e2e/film/capture.acceptance.ts:14:3 › design: independently repeated and revisited controlled frames (16.4s)
+  ✓   7 [capture] › e2e/film/capture.acceptance.ts:47:1 › capture has no controls, persisted position, voice requests or global API after navigation (2.4s)
+  ✓   8 [capture] › e2e/film/capture.acceptance.ts:105:1 › all Design shots commit the requested real scroll position (8.7s)
+  ✓   9 [capture] › e2e/film/capture.acceptance.ts:145:1 › capture-enabled assets refuse a non-loopback page origin (3.4s)
+  ✓  10 [capture] › e2e/film/capture.acceptance.ts:162:3 › abbey: closing title remains readable through the final frame (1.8s)
+  ✓  11 [capture] › e2e/film/capture.acceptance.ts:162:3 › mega: closing title remains readable through the final frame (2.3s)
+  ✓  12 [capture] › e2e/film/capture.acceptance.ts:294:1 › SPA teardown immediately rejects a suspended capture and its retired API (1.7s)
+  ✓  13 [capture] › e2e/film/capture.acceptance.ts:334:3 › the shared deadline bounds suspended fonts and permits recovery (31.9s)
+  ✓  14 [capture] › e2e/film/capture.acceptance.ts:334:3 › the shared deadline bounds suspended image and permits recovery (32.6s)
+  ✓  15 [capture] › e2e/film/capture.acceptance.ts:334:3 › the shared deadline bounds suspended required font and permits recovery (32.4s)
+  ✓  16 [capture] › e2e/film/capture.acceptance.ts:364:1 › closing a page releases an outstanding browser capture evaluation (1.3s)
+  ✓  17 [capture] › e2e/film/capture.acceptance.ts:378:1 › Mega audit stamp stays clear of qualifications throughout its visible interval (13.1s)
+  ✓  18 [capture] › e2e/film/capture.acceptance.ts:420:1 › diagram scenes retain readable foreground over a restrained moving field (5.5s)
+  ✓  19 [capture] › e2e/film/capture.acceptance.ts:460:1 › failed required local fonts reject frame 600; a fresh context recovers (3.3s)
+  ✓  20 [capture] › e2e/film/capture.acceptance.ts:525:1 › required font frame 600 matches cold, revisit, fresh and delayed loads (7.3s)
+  ✓  21 [capture] › e2e/film/capture.acceptance.ts:616:1 › SPA teardown aborts the explicit required font load before late completion (1.3s)
+  ✓  22 [capture] › e2e/film/capture.acceptance.ts:641:1 › normal interactive playback retains fallback when local fonts fail (2.8s)
+  ✓  23 [capture] › e2e/film/capture.acceptance.ts:657:1 › newly mounted Design boards validate used fonts without requiring an unused failed subset (4.9s)
+
+  23 passed (3.7m)

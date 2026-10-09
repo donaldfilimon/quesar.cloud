@@ -12,7 +12,7 @@
  * built carries `status: "development"` and is rendered with a status badge,
  * never as shipping.
  */
-import type { StatusKind } from "@/lib/site-identity";
+import { site, type StatusKind } from "@/lib/site-identity";
 
 import { docsMcpTools, docsModuleMap, docsWdbxCapabilities } from "./categories/abi-runtime";
 import { wdbxGraphDefaults, wdbxGraphParams } from "./wdbx-facts";
@@ -142,8 +142,8 @@ export const teamIntro = {
   join: {
     title: "Join the mission",
     body: "We're always looking for exceptional minds in neural research and systems safety.",
-    href: "mailto:careers@mlai-corp.com",
-    label: "careers@mlai-corp.com",
+    href: `mailto:${site.contact.email}`,
+    label: site.contact.email,
   },
 } as const;
 
@@ -606,7 +606,7 @@ export const securitySections = [
   },
   {
     title: "Responsible disclosure",
-    body: "If you discover a vulnerability in Quesar infrastructure, demos, or integration materials, contact security@mlai-corp.com with reproduction details and impact notes.",
+    body: `If you discover a vulnerability in Quesar infrastructure, demos, or integration materials, contact ${site.contact.email} with reproduction details and impact notes.`,
     status: "current",
   },
 ] as const satisfies readonly ({ title: string; body: string } & Status)[];
@@ -642,7 +642,7 @@ export const privacyPolicy = [
   },
   {
     title: "Contact",
-    body: "For privacy requests, security questions, or data-handling reviews, contact privacy@mlai-corp.com or security@mlai-corp.com.",
+    body: `For privacy requests, security questions, or data-handling reviews, contact ${site.contact.email} or ${site.contact.phone}.`,
   },
 ] as const;
 

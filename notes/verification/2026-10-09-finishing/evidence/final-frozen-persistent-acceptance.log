@@ -1,0 +1,29 @@
+
+Running 1 test using 1 worker
+
+(node:53792) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[persistent acceptance] owned Node process, TLS proxy/cert, pools, two databases and seeded dump removed; parent PG untouched
+  ✘  1 e2e/backend/persistent.acceptance.ts:225:1 › persistent Node artifact: fail closed, migrations, secure sessions, isolation, restart and seeded restore (253ms)
+
+
+  1) e2e/backend/persistent.acceptance.ts:225:1 › persistent Node artifact: fail closed, migrations, secure sessions, isolation, restart and seeded restore 
+
+    Error: Owned persistent artifact exited before readiness
+
+      78 |   for (let attempt = 0; attempt < 120; attempt++) {
+      79 |     if (spawnFailed || child.exitCode !== null || child.signalCode !== null)
+    > 80 |       throw new Error("Owned persistent artifact exited before readiness");
+         |             ^
+      81 |     if (/EADDRINUSE|EACCES/.test(diagnostic))
+      82 |       throw new Error("Owned persistent artifact could not bind its listener");
+      83 |     // Observed from this artifact: "➜ Listening on: http://127.0.0.1:<port>/".
+        at start (/Users/donaldfilimon/dev/active/quesar.cloud/e2e/backend/persistent.acceptance.ts:80:13)
+        at /Users/donaldfilimon/dev/active/quesar.cloud/e2e/backend/persistent.acceptance.ts:228:18
+
+    Error Context: test-results/persistent-acceptance/persistent.acceptance.ts-p-b0169--restart-and-seeded-restore/error-context.md
+
+    Error Context: test-results/persistent-acceptance/persistent.acceptance.ts-p-b0169--restart-and-seeded-restore/error-context.md
+
+  1 failed
+    e2e/backend/persistent.acceptance.ts:225:1 › persistent Node artifact: fail closed, migrations, secure sessions, isolation, restart and seeded restore 

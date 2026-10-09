@@ -22,7 +22,51 @@ describe("safeInternalPath", () => {
   it("never sends the visitor back into the sign-in page (nested ?next= loop)", () => {
     expect(safeInternalPath("/login")).toBe("/console");
     expect(safeInternalPath("/login?next=%2Fprofile")).toBe("/console");
+    expect(safeInternalPath("/login#form")).toBe("/console");
+    expect(safeInternalPath("/signup")).toBe("/console");
+    expect(safeInternalPath("/signup?next=%2Fprofile")).toBe("/console");
+    expect(safeInternalPath("/signup/")).toBe("/console");
+    expect(safeInternalPath("/signup#form")).toBe("/console");
     expect(safeInternalPath("/loginx")).toBe("/loginx");
+    expect(safeInternalPath("/signupx")).toBe("/signupx");
+  });
+
+  it("rejects controls, backslashes, encoded separators and normalized auth loops", () => {
+    for (const path of [
+      "/\t/attacker.example",
+      "/\n/attacker.example",
+      "/\r/attacker.example",
+      "/console\u0000",
+      "/console\u007f",
+      "/docs\\../login",
+      "/%2f/attacker.example",
+      "/%5cattacker.example",
+      "/%09/attacker.example",
+      "/docs/../login",
+      "/docs/%2e%2e/signup",
+      "/%6cogin",
+      "/%73ignup",
+      "/LOGIN",
+      "/docs/../api/auth",
+      "/docs/../auth/callback",
+      "/broken%zz",
+    ])
+      expect(safeInternalPath(path)).toBe("/console");
+    const decoded = new URLSearchParams("next=%2F%09%2Fattacker.example").get("next")!;
+    expect(new URL(decoded, "https://quesar.cloud").origin).toBe("https://attacker.example");
+    expect(safeInternalPath(decoded)).toBe("/console");
+  });
+
+  it("returns canonical safe paths while preserving ordinary query and fragment intent", () => {
+    expect(safeInternalPath("/docs/../profile?tab=sessions#devices")).toBe(
+      "/profile?tab=sessions#devices",
+    );
+    expect(safeInternalPath("/console?next=https%3A%2F%2Fexample.invalid#notes")).toBe(
+      "/console?next=https%3A%2F%2Fexample.invalid#notes",
+    );
+    expect(safeInternalPath("/contact?service=Private AI Deployment")).toBe(
+      "/contact?service=Private%20AI%20Deployment",
+    );
   });
 });
 

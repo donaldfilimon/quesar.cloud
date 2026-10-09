@@ -1,0 +1,245 @@
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "./github-readmes" without a file extension (src/lib/github-data.ts:1:30). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+[WebServer]   vite:deps (client) Hash is consistent. Skipping. Use --force to override. +0ms
+
+Running 23 tests using 1 worker
+
+[WebServer]   vite:hmr [self-accepts] src/components/site/trailer-editions.css +0ms
+[WebServer]   vite:hmr [detected api usage] node_modules/@tanstack/start-client-core/dist/esm/client/hydrateStart.js?v=cc7c0ae1 +263ms
+[WebServer]   vite:hmr [self-accepts] src/lib/error-component.tsx +267ms
+[WebServer]   vite:hmr [self-accepts] src/routes/admin.tsx +1s
+[WebServer]   vite:hmr [self-accepts] src/routes/financial-model.tsx +2ms
+[WebServer]   vite:hmr [self-accepts] src/routes/tf-pose-demo.tsx +3ms
+[WebServer]   vite:hmr [self-accepts] src/routes/signup.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/routes/abbey-bot.tsx +18ms
+[WebServer]   vite:hmr [self-accepts] src/routes/about.tsx +1ms
+[WebServer]   vite:hmr [self-accepts] src/routes/apps.tsx +2ms
+[WebServer]   vite:hmr [self-accepts] src/routes/benchmarks.tsx +3ms
+[WebServer]   vite:hmr [self-accepts] src/routes/blog.tsx +1ms
+[WebServer]   vite:hmr [self-accepts] src/routes/cell-machine.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/routes/changelog.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/routes/companion.tsx +1ms
+[WebServer]   vite:hmr [self-accepts] src/routes/company.tsx +1ms
+[WebServer]   vite:hmr [self-accepts] src/routes/demo.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/routes/dashboard.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/routes/developers.tsx +1ms
+[WebServer]   vite:hmr [self-accepts] src/routes/gama.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/routes/investors.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/routes/links.tsx +3ms
+[WebServer]   vite:hmr [self-accepts] src/routes/mobile.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/routes/privacy.tsx +1ms
+[WebServer]   vite:hmr [self-accepts] src/routes/products.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/routes/plugins.tsx +1ms
+[WebServer]   vite:hmr [self-accepts] src/routes/profile.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/routes/security.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/routes/projects.tsx +1ms
+[WebServer]   vite:hmr [self-accepts] src/routes/services.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/routes/skill-creator.tsx +1ms
+[WebServer]   vite:hmr [self-accepts] src/routes/source.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/routes/team.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/routes/terms.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/routes/unauthorized.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/routes/console.workspace.tsx +1ms
+[WebServer]   vite:hmr [self-accepts] src/routes/quasar.new.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/routes/quasar.settings.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/routes/quasar.sites.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/routes/get-started.tsx +4ms
+[WebServer]   vite:hmr [self-accepts] src/routes/research.implementations.tsx +2ms
+[WebServer]   vite:hmr [self-accepts] src/routes/showcase.abbey.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/routes/showcase.design.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/routes/showcase.film.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/routes/showcase.explainer.tsx +1ms
+[WebServer]   vite:hmr [self-accepts] src/routes/showcase.mega.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/routes/showcase.trailer.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/routes/quasar.site.$id.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/routes/workspace.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/routes/platform.tsx +4ms
+[WebServer]   vite:hmr [self-accepts] src/routes/research.tsx +1ms
+[WebServer]   vite:hmr [self-accepts] src/routes/wdbx.tsx +1ms
+[WebServer]   vite:hmr [self-accepts] src/routes/quesar.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/routes/abbey.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/routes/abi.tsx +1ms
+[WebServer]   vite:hmr [self-accepts] src/routes/architecture.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/routes/console.tsx +3ms
+[WebServer]   vite:hmr [self-accepts] src/routes/contact.tsx +2ms
+[WebServer]   vite:hmr [self-accepts] src/routes/docs.tsx +1ms
+[WebServer]   vite:hmr [self-accepts] src/routes/source.$name.tsx +8ms
+[WebServer]   vite:hmr [self-accepts] src/routes/research.implementations.$slug.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/routes/blog.$slug.tsx +29ms
+[WebServer]   vite:hmr [self-accepts] src/routes/docs.$slug.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/routes/products.$slug.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/routes/projects.$slug.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/routes/research.$slug.tsx +1ms
+[WebServer]   vite:hmr [self-accepts] src/routes/team.$slug.tsx +1ms
+[WebServer]   vite:hmr [self-accepts] src/routes/showcase.tsx +1ms
+[WebServer]   vite:hmr [self-accepts] src/routes/index.tsx +11ms
+[WebServer]   vite:hmr [self-accepts] src/components/site/home-vision.css +26ms
+[WebServer]   vite:hmr [self-accepts] src/routes/login.tsx +1ms
+[WebServer]   vite:hmr [self-accepts] src/routes/__root.tsx +11ms
+[WebServer]   vite:hmr [self-accepts] src/lib/auth/provider.tsx +16ms
+[WebServer]   vite:hmr [self-accepts] src/components/site/not-found.tsx +10ms
+[WebServer]   vite:hmr [self-accepts] src/components/site/shell.tsx +6ms
+[WebServer]   vite:hmr [self-accepts] src/components/site/footer.tsx +6ms
+[WebServer]   vite:hmr [self-accepts] src/components/site/prov-tag.tsx +6ms
+[WebServer]   vite:hmr [self-accepts] src/components/site/logo.tsx +3ms
+[WebServer]   vite:hmr [self-accepts] src/components/site/header.tsx +9ms
+[WebServer]   vite:hmr [self-accepts] src/components/site/auth-slot.tsx +14ms
+[WebServer]   vite:hmr [self-accepts] src/components/site/search.tsx +8ms
+[WebServer]   vite:hmr [self-accepts] src/components/site/auth-slot-skeleton.tsx +1ms
+[WebServer]   vite:hmr [self-accepts] src/components/site/theme-toggle.tsx +1ms
+[WebServer]   vite:hmr [self-accepts] src/components/ui/toggle.tsx +6ms
+[WebServer]   vite:hmr [self-accepts] src/routes/showcase.tsx?tsr-split=component---loader +89ms
+[WebServer]   vite:hmr [self-accepts] src/components/site/narrated-films.tsx +28ms
+[WebServer]   vite:hmr [self-accepts] src/components/site/showcase-wall.tsx +14ms
+[WebServer]   vite:hmr [self-accepts] src/components/site/trailer-editions.tsx +7ms
+[WebServer]   vite:hmr [self-accepts] src/components/site/trailer.tsx +5ms
+[WebServer]   vite:hmr [self-accepts] src/components/site/route-frame.tsx +25ms
+[WebServer]   vite:hmr [self-accepts] src/components/site/app-link.tsx +2ms
+[WebServer]   vite:hmr [self-accepts] src/components/site/status-badge.tsx +1ms
+[WebServer]   vite:hmr [self-accepts] src/components/site/section.tsx +1ms
+[WebServer]   vite:hmr [self-accepts] src/components/site/journey-rail.tsx +4ms
+[WebServer]   vite:hmr [self-accepts] src/components/site/lab.tsx +5ms
+[WebServer]   vite:hmr [self-accepts] src/components/ui/scroll-area.tsx +6ms
+[WebServer]   vite:hmr [self-accepts] src/components/site/catalog.tsx +5ms
+[WebServer]   vite:hmr [self-accepts] src/components/ui/accordion.tsx +4ms
+[WebServer]   vite:hmr [self-accepts] src/components/ui/button.tsx +23ms
+[WebServer]   vite:hmr [self-accepts] src/routes/showcase.film.tsx?tsr-split=component +44ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/components/CinematicFallback.tsx +9ms
+[WebServer]   vite:hmr [self-accepts] src/components/site/toaster.tsx +7ms
+[WebServer]   vite:hmr [self-accepts] src/components/site/header-menus.tsx +13ms
+[WebServer]   vite:hmr [self-accepts] src/components/ui/tooltip.tsx +21ms
+[WebServer]   vite:hmr [self-accepts] src/components/ui/dropdown-menu.tsx +2ms
+[WebServer]   vite:hmr [self-accepts] src/components/site/search-dialog.tsx +17ms
+[WebServer]   vite:hmr [self-accepts] src/components/ui/dialog.tsx +10ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/rooms/film.tsx +231ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/components/CinematicShell.tsx +12ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/design/mlai-ds-tokens.css +36ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/film/Film.tsx +11ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/film/primitives.tsx +34ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/film/transcript.tsx +4ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/film/evidence.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/film/scenes/title.tsx +7ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/film/scenes/outro.tsx +10ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/film/scenes/core.tsx +5ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/film/engine.tsx +4ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/film/narration.tsx +1ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/film/fx.tsx +2ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/film/chrome.tsx +12ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/film/scenes/_shared.tsx +1ms
+  ✓   1 [capture] › e2e/film/capture.acceptance.ts:14:3 › film: independently repeated and revisited controlled frames (6.7s)
+[WebServer]   vite:hmr [self-accepts] src/routes/showcase.trailer.tsx?tsr-split=component +3s
+[WebServer]   vite:hmr [self-accepts] src/cinematic/rooms/trailer.tsx +309ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/trailer/Trailer.tsx +14ms
+[WebServer]   vite:hmr [file change] notes/verification/2026-10-09-finishing/evidence/qualification-hashes.json +483ms
+[WebServer]   vite:hmr (ssr) [no modules matched] notes/verification/2026-10-09-finishing/evidence/qualification-hashes.json +3ms
+[WebServer]   vite:hmr [file change] notes/verification/2026-10-09-finishing/evidence/receipt-hashes.json +266ms
+[WebServer]   vite:hmr (ssr) [no modules matched] notes/verification/2026-10-09-finishing/evidence/receipt-hashes.json +1ms
+  ✘   2 [capture] › e2e/film/capture.acceptance.ts:14:3 › trailer: independently repeated and revisited controlled frames (1.9s)
+[WebServer]   vite:hmr [self-accepts] src/routes/showcase.abbey.tsx?tsr-split=component +2s
+[WebServer]   vite:hmr [self-accepts] src/cinematic/rooms/abbey.tsx +308ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/abbey-trailer/AbbeyTrailer.tsx +17ms
+  ✓   3 [capture] › e2e/film/capture.acceptance.ts:14:3 › abbey: independently repeated and revisited controlled frames (4.1s)
+[WebServer]   vite:hmr [self-accepts] src/routes/showcase.explainer.tsx?tsr-split=component +4s
+[WebServer]   vite:hmr [self-accepts] src/cinematic/rooms/explainer.tsx +309ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/explainer/Explainer.tsx +16ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/film/scenes/intro.tsx +26ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/film/neural.tsx +2ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/film/scenes/beats.tsx +2ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/film/scenes/extra.tsx +9ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/film/scenes/trailer_fx.tsx +4ms
+  ✓   4 [capture] › e2e/film/capture.acceptance.ts:14:3 › explainer: independently repeated and revisited controlled frames (4.2s)
+[WebServer]   vite:hmr [self-accepts] src/routes/showcase.mega.tsx?tsr-split=component +4s
+[WebServer]   vite:hmr [self-accepts] src/cinematic/rooms/mega.tsx +304ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/mega/Mega.tsx +18ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/film/scenes/math-tex.tsx +22ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/film/scenes/math.tsx +2ms
+  ✓   5 [capture] › e2e/film/capture.acceptance.ts:14:3 › mega: independently repeated and revisited controlled frames (4.5s)
+[WebServer]   vite:hmr [self-accepts] src/routes/showcase.design.tsx?tsr-split=component +4s
+[WebServer]   vite:hmr [self-accepts] src/cinematic/rooms/design.tsx +310ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/design/DesignWalkthrough.tsx +11ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/design/DesignHub.tsx +7ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/design/brand/BrandBoard.tsx +44ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/design/board/DesignBoard.tsx +432ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/design/board/core.tsx +18ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/design/board/shell/TweaksPanel.tsx +1ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/design/board/depth.tsx +2ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/design/board/foundations.tsx +1ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/design/showcase/ShowcaseBoard.tsx +380ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/design/hero/HeroBoard.tsx +1s
+[WebServer]   vite:hmr [self-accepts] src/cinematic/design/lab/LabBoard.tsx +432ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/design/marketing/Marketing.tsx +467ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/design/marketing/Icons.tsx +12ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/design/marketing/Personas.tsx +1ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/design/marketing/Hero.tsx +1ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/design/marketing/Nav.tsx +1ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/design/marketing/Features.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/design/marketing/GalaxyCanvas.tsx +6ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/design/console/Console.tsx +383ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/design/console/Chat.tsx +13ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/design/console/Views.tsx +1ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/design/console/Telemetry.tsx +3ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/design/console/Icons.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/design/console/Shell.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/design/docs/Docs.tsx +395ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/design/docs/DocsShell.tsx +15ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/design/docs/Icons.tsx +6ms
+[WebServer]   vite:hmr [self-accepts] src/cinematic/design/docs/DocsContent.tsx +0ms
+  ✓   6 [capture] › e2e/film/capture.acceptance.ts:14:3 › design: independently repeated and revisited controlled frames (13.2s)
+[WebServer]   vite:hmr [self-accepts] src/routes/index.tsx?tsr-split=component +10s
+[WebServer]   vite:hmr [self-accepts] src/components/site/neural-field.tsx +17ms
+[WebServer]   vite:hmr [self-accepts] src/components/site/backtrace.tsx +0ms
+[WebServer]   vite:hmr [self-accepts] src/components/site/neural-field.css +8ms
+  ✓   7 [capture] › e2e/film/capture.acceptance.ts:47:1 › capture has no controls, persisted position, voice requests or global API after navigation (1.7s)
+  ✓   8 [capture] › e2e/film/capture.acceptance.ts:105:1 › all Design shots commit the requested real scroll position (8.3s)
+  ✓   9 [capture] › e2e/film/capture.acceptance.ts:145:1 › capture-enabled assets refuse a non-loopback page origin (1.9s)
+  ✓  10 [capture] › e2e/film/capture.acceptance.ts:162:3 › abbey: closing title remains readable through the final frame (1.4s)
+  ✓  11 [capture] › e2e/film/capture.acceptance.ts:162:3 › mega: closing title remains readable through the final frame (1.8s)
+  ✓  12 [capture] › e2e/film/capture.acceptance.ts:294:1 › SPA teardown immediately rejects a suspended capture and its retired API (1.3s)
+  ✓  13 [capture] › e2e/film/capture.acceptance.ts:334:3 › the shared deadline bounds suspended fonts and permits recovery (31.6s)
+[WebServer]   vite:hmr [file change] notes/verification/2026-10-09-finishing/evidence/final-blocked-audit.md +47s
+[WebServer]   vite:hmr (client) [no modules matched] notes/verification/2026-10-09-finishing/evidence/final-blocked-audit.md +1ms
+[WebServer]   vite:hmr (ssr) [no modules matched] notes/verification/2026-10-09-finishing/evidence/final-blocked-audit.md +0ms
+  ✓  14 [capture] › e2e/film/capture.acceptance.ts:334:3 › the shared deadline bounds suspended image and permits recovery (31.9s)
+  ✓  15 [capture] › e2e/film/capture.acceptance.ts:334:3 › the shared deadline bounds suspended required font and permits recovery (31.9s)
+  ✓  16 [capture] › e2e/film/capture.acceptance.ts:364:1 › closing a page releases an outstanding browser capture evaluation (1.2s)
+  ✓  17 [capture] › e2e/film/capture.acceptance.ts:378:1 › Mega audit stamp stays clear of qualifications throughout its visible interval (12.1s)
+  ✓  18 [capture] › e2e/film/capture.acceptance.ts:420:1 › diagram scenes retain readable foreground over a restrained moving field (5.2s)
+  ✓  19 [capture] › e2e/film/capture.acceptance.ts:460:1 › failed required local fonts reject frame 600; a fresh context recovers (3.2s)
+  ✓  20 [capture] › e2e/film/capture.acceptance.ts:525:1 › required font frame 600 matches cold, revisit, fresh and delayed loads (7.3s)
+  ✓  21 [capture] › e2e/film/capture.acceptance.ts:616:1 › SPA teardown aborts the explicit required font load before late completion (1.3s)
+  ✓  22 [capture] › e2e/film/capture.acceptance.ts:641:1 › normal interactive playback retains fallback when local fonts fail (2.7s)
+  ✓  23 [capture] › e2e/film/capture.acceptance.ts:657:1 › newly mounted Design boards validate used fonts without requiring an unused failed subset (4.8s)
+
+
+  1) [capture] › e2e/film/capture.acceptance.ts:14:3 › trailer: independently repeated and revisited controlled frames 
+
+    Error: trailer frame 930, run 0
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "5dfd6df9a9d28fbf1f723fbc474e65421a548cd97d661e8109e089e1e7aecbf8"
+    Received: "4006def9f59d743cca99b52fb60116fd0d1fd4020c9fcd1c4675eea8f7f1fcc9"
+
+      28 |           const hash = createHash("sha256").update(png).digest("hex");
+      29 |           if (hashes.has(frame))
+    > 30 |             expect(hash, `${film} frame ${frame}, run ${run}`).toBe(hashes.get(frame));
+         |                                                                ^
+      31 |           else {
+      32 |             hashes.set(frame, hash);
+      33 |             await testInfo.attach(`${film}-${frame}.png`, { body: png, contentType: "image/png" });
+        at /Users/donaldfilimon/dev/active/quesar.cloud/e2e/film/capture.acceptance.ts:30:64
+
+    Error Context: test-results/implementer-film-capture-qualified/film-capture.acceptance.ts-bebab-revisited-controlled-frames-capture/error-context.md
+
+    attachment #5: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/implementer-film-capture-qualified/film-capture.acceptance.ts-bebab-revisited-controlled-frames-capture/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/implementer-film-capture-qualified/film-capture.acceptance.ts-bebab-revisited-controlled-frames-capture/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [capture] › e2e/film/capture.acceptance.ts:14:3 › trailer: independently repeated and revisited controlled frames 
+  22 passed (3.2m)

@@ -1,0 +1,81 @@
+$ bun run format:check && bun run typecheck && bun run lint && bun run test && bun run build
+$ prettier --check .
+Checking formatting...
+All matched files use Prettier code style!
+$ tsc --noEmit
+$ eslint . --max-warnings 0
+$ vitest run
+
+ RUN  v5.0.3 /Users/donaldfilimon/dev/active/quesar.cloud
+
+stdout | src/components/site/engineering-engagements.test.tsx
+1:23:02 PM [vite] (client) Re-optimizing dependencies because vite config has changed
+
+ ❯ src/components/site/engineering-engagements.test.tsx (2 tests | 2 skipped) 111ms
+ ❯ src/lib/auth/lazy-auth.server.test.ts (3 tests | 2 failed) 690ms
+   ❯ installed Better Auth lazy initialization (3)
+     × runs real installed init/schema connection only after valid production preflight 34ms
+     × starts embedded migrations only when local auth is actually requested 24ms
+(node:7678) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/components/site/engineering-engagements.test.tsx [ src/components/site/engineering-engagements.test.tsx ]
+Error: browserType.launch: Executable doesn't exist at /Users/donaldfilimon/Library/Caches/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-mac-arm64/chrome-headless-shell
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     npx playwright install                                 ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝
+ ❯ src/components/site/engineering-engagements.test.tsx:94:28
+     92|   if (!address || typeof address === "string") throw new Error("Missin…
+     93|   origin = `http://127.0.0.1:${address.port}`;
+     94|   browser = await chromium.launch({ headless: true });
+       |                            ^
+     95| });
+     96| afterAll(async () => {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/lib/auth/lazy-auth.server.test.ts > installed Better Auth lazy initialization > runs real installed init/schema connection only after valid production preflight
+AssertionError: expected "vi.fn()" to be called at least once
+ ❯ src/lib/auth/lazy-auth.server.test.ts:72:28
+     70|     expect(probes.pool).toHaveBeenCalledOnce();
+     71|     expect(probes.providers).toHaveBeenCalledOnce();
+     72|     expect(probes.connect).toHaveBeenCalled();
+       |                            ^
+     73|   });
+     74|   it("starts embedded migrations only when local auth is actually requ…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  src/lib/auth/lazy-auth.server.test.ts > installed Better Auth lazy initialization > starts embedded migrations only when local auth is actually requested
+AssertionError: expected "vi.fn()" to be called at least once
+ ❯ src/lib/auth/lazy-auth.server.test.ts:80:30
+     78|     await getAuth().$context;
+     79|     await new Promise((resolve) => setTimeout(resolve, 20));
+     80|     expect(probes.bootstrap).toHaveBeenCalled();
+       |                              ^
+     81|   });
+     82| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
+
+ Test Files  2 failed | 95 passed (97)
+      Tests  2 failed | 787 passed | 2 skipped (791)
+   Start at  13:23:01
+   Duration  12.19s (tests 82%, import 12%, transform 5%, worker 1%)
+
+    Isolate  97 workers spawned · ~161ms startup each (spawn + environment, per file)
+             at least ~3.75s faster with isolate: false — reuses workers across files instead of one per file
+
+error: script "test" exited with code 1
+error: script "check" exited with code 1

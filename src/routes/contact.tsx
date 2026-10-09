@@ -18,8 +18,10 @@ import {
 } from "@/lib/inquiries";
 import {
   contactSearch,
+  contactOutcomeMessage,
   readReceipts,
   receiptLabel,
+  saveContactReceipt,
   submitContact,
   type InquiryReceipt,
 } from "@/lib/contact-context";
@@ -27,9 +29,7 @@ import { readStore, writeStore } from "@/lib/local-store";
 import { pageHead } from "@/lib/seo";
 import { track } from "@/lib/telemetry";
 import { staticSite } from "@/lib/static-site";
-
-/** Static preview has no server: inquiries go out as an email instead. */
-const INQUIRY_EMAIL = "partnerships@mlai-corp.com";
+import { site } from "@/lib/site-identity";
 
 export const Route = createFileRoute("/contact")({
   head: () =>
@@ -60,6 +60,7 @@ function ContactPage() {
   const [saved, setSaved] = useState<InquiryReceipt[]>([]);
   const [status, setStatus] = useState<"idle" | "saving" | "done" | "error">("idle");
   const [error, setError] = useState("");
+  const [receiptPersisted, setReceiptPersisted] = useState(false);
   // The static build has no server to ask: Turnstile is off from the start.
   const [turnstile, setTurnstile] = useState<TurnstileConfig | "loading" | "unreachable">(() =>
     staticSite ? { state: "off" } : "loading",
@@ -110,6 +111,13 @@ function ContactPage() {
     (typeof turnstile === "object" && turnstile.state === "misconfigured") ||
     (needsToken && !turnstileToken);
 
+  function keepReceipt(receipt: InquiryReceipt) {
+    const result = saveContactReceipt(receipt, saved, (receipts) => writeStore(KEY, receipts));
+    setSaved(result.receipts);
+    setReceiptPersisted(result.persisted);
+    setStatus(result.status);
+  }
+
   async function onSubmit(event: FormEvent) {
     event.preventDefault();
     const trimmed = message.trim();
@@ -132,7 +140,7 @@ function ContactPage() {
         `[${topic}] Inquiry from ${name.trim() || "the Quesar site"}`,
       );
       const body = encodeURIComponent(`${inquiryMessage}\n\n— ${name.trim()} <${email.trim()}>`);
-      window.location.href = `mailto:${INQUIRY_EMAIL}?subject=${subject}&body=${body}`;
+      window.location.href = `mailto:${site.contact.email}?subject=${subject}&body=${body}`;
       const draft: InquiryReceipt = {
         delivery: "draft",
         id: crypto.randomUUID(),
@@ -142,11 +150,8 @@ function ContactPage() {
         message: inquiryMessage,
         created: Date.now(),
       };
-      const kept = [draft, ...saved].slice(0, 20);
-      writeStore(KEY, kept);
-      setSaved(kept);
-      setStatus("done");
-      toast.success(`Opening your email app to send this to ${INQUIRY_EMAIL}.`);
+      keepReceipt(draft);
+      toast.success(`Opening your email app to send this to ${site.contact.email}.`);
       return;
     }
     const result = await submitContact(
@@ -171,11 +176,8 @@ function ContactPage() {
       message: inquiryMessage,
       created: Date.now(),
     };
-    const next = [inquiry, ...saved].slice(0, 20);
-    writeStore(KEY, next);
-    setSaved(next);
+    keepReceipt(inquiry);
     setMessage("");
-    setStatus("done");
     toast.success("Inquiry accepted by the site.");
   }
 
@@ -186,8 +188,8 @@ function ContactPage() {
         title="Discuss your project."
         lede={
           staticSite
-            ? `This static preview has no server, so submitting requests an email draft addressed to ${INQUIRY_EMAIL}. A copy of what you wrote stays on this device as an email draft; delivery is unconfirmed. For architecture questions, the pages themselves are the public path.`
-            : "The server accepts and stores your inquiry with this site; if you are signed in, it is linked to your account. A local receipt records acceptance by the site. For architecture questions, the pages themselves are the public path."
+            ? `This static preview has no server, so submitting requests an email draft addressed to ${site.contact.email}. A local copy is saved when device storage is available; delivery is unconfirmed. For architecture questions, the pages themselves are the public path.`
+            : "The server accepts and stores your inquiry with this site; if you are signed in, it is linked to your account. A local receipt records acceptance when device storage is available. For architecture questions, the pages themselves are the public path."
         }
       />
       <Section>
@@ -306,9 +308,7 @@ function ContactPage() {
               </Button>
               {status === "done" ? (
                 <p role="status" className="text-sm text-fg-muted">
-                  {staticSite
-                    ? "Email draft requested. Delivery is unconfirmed."
-                    : "Inquiry accepted by the site. A receipt is kept on this device."}
+                  {contactOutcomeMessage(staticSite ? "draft" : "accepted", receiptPersisted)}
                 </p>
               ) : null}
               {status === "error" && error ? (
@@ -322,6 +322,16 @@ function ContactPage() {
             <Surface>
               <h2 className="font-display text-2xl">Direct paths</h2>
               <ul className="mt-4 space-y-3 text-sm">
+                <li>
+                  <a href={`mailto:${site.contact.email}`} className="break-words text-accent">
+                    {site.contact.email}
+                  </a>
+                </li>
+                <li>
+                  <a href={`tel:${site.contact.phoneInternational}`} className="text-accent">
+                    {site.contact.phone}
+                  </a>
+                </li>
                 <li>
                   <Link to="/services" className="text-accent">
                     Services

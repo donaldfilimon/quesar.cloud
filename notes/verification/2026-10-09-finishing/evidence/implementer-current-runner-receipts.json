@@ -1,0 +1,50 @@
+[
+  {
+    "name": "persistent-acceptance",
+    "path": "notes/verification/2026-10-09-finishing/evidence/implementer-current-persistent-acceptance.log",
+    "started": "2026-10-09T18:28:14.418Z",
+    "ended": "2026-10-09T18:28:41.998Z",
+    "exit": 0,
+    "signal": null
+  },
+  {
+    "name": "durable",
+    "path": "notes/verification/2026-10-09-finishing/evidence/implementer-current-durable.log",
+    "started": "2026-10-09T18:28:42.000Z",
+    "ended": "2026-10-09T18:29:21.757Z",
+    "exit": 0,
+    "signal": null
+  },
+  {
+    "name": "consent",
+    "path": "notes/verification/2026-10-09-finishing/evidence/implementer-current-consent.log",
+    "started": "2026-10-09T18:29:21.758Z",
+    "ended": "2026-10-09T18:30:44.826Z",
+    "exit": 0,
+    "signal": null
+  },
+  {
+    "name": "commerce",
+    "path": "notes/verification/2026-10-09-finishing/evidence/implementer-current-commerce.log",
+    "started": "2026-10-09T18:30:44.829Z",
+    "ended": "2026-10-09T18:31:55.924Z",
+    "exit": 0,
+    "signal": null
+  },
+  {
+    "name": "film",
+    "path": "notes/verification/2026-10-09-finishing/evidence/implementer-current-film.log",
+    "started": "2026-10-09T18:31:55.925Z",
+    "ended": "2026-10-09T18:35:31.348Z",
+    "exit": 0,
+    "signal": null
+  },
+  {
+    "name": "film-guard",
+    "path": "notes/verification/2026-10-09-finishing/evidence/implementer-current-film-guard.log",
+    "started": "2026-10-09T18:35:31.355Z",
+    "ended": "2026-10-09T18:35:48.312Z",
+    "exit": 0,
+    "signal": null
+  }
+]

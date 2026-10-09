@@ -1,0 +1,137 @@
+{
+  "observed_at_utc": "2026-10-09T18:21:48.141Z",
+  "provenance": "Exit values observed from executing commands in this implementer continuation, not inferred from a pipe or truncated log.",
+  "sourceDelta": [
+    "e2e/film/capture.acceptance.ts",
+    "e2e/film/playwright.config.ts",
+    "e2e/film/vite.config.ts"
+  ],
+  "unchanged_installed_manifests": true,
+  "unchanged_docs": true,
+  "unchanged_frozen_persistent": true,
+  "unchanged_native_through_final_commerce": true,
+  "receipts": {
+    "implementer-persistent-build.log": {
+      "exit": 0,
+      "log_sha256": "d04dce44b581697f4961ea3e5bd74b2f31c97783efa4bf6a341d9e08d89306ff"
+    },
+    "implementer-freeze.log": {
+      "exit": 0,
+      "log_sha256": "cd058988af3cd427be84dbb487307c14727abe74b2e77b6c4f02ce4dbd623af0"
+    },
+    "implementer-persistent-acceptance.log": {
+      "exit": 1,
+      "superseded": "missing local PG username in scrubbed environment",
+      "log_sha256": "c1748113a5396aa8ce108c1a33ab031cf0636ec5791511c5638d61b61f62e3fa"
+    },
+    "implementer-persistent-acceptance-retry.log": {
+      "exit": 1,
+      "superseded": "audit button actionability timeout; unchanged rerun passed; cause unproven",
+      "log_sha256": "2cb5db1912b14062f997676bc51f43ecf4c8d1c2300adb1c56206214191fb007"
+    },
+    "implementer-persistent-acceptance-final.log": {
+      "exit": 0,
+      "passed": 1,
+      "log_sha256": "76e6700bcb90169ad50192751a53f0e7a11e994071bd11f615d58c782bce7055"
+    },
+    "implementer-durable.log": {
+      "exit": 0,
+      "passed": 1,
+      "log_sha256": "b994b13165eb7d0f77508763e11314bcc69905873e035ab0cb5abaa100cf3263"
+    },
+    "implementer-consent.log": {
+      "exit": 1,
+      "superseded": "shared PG controller stopped its cluster mid-test",
+      "log_sha256": "44b6adbe58da63daf360f4f12f0f095f49cd484abc5a71641993328194a431bc"
+    },
+    "implementer-consent-retry.log": {
+      "exit": 0,
+      "passed": 1,
+      "log_sha256": "7cbdcaba7bac25b3dcdede0b6f7cc2c86eaf89bc4933555ab9879a09e1e785eb"
+    },
+    "implementer-commerce.log": {
+      "exit": 0,
+      "passed": 7,
+      "binary": "5a66d6765780fd0b134444293197d723dd7aaf77614dcb65702c57a2fb23624c",
+      "log_sha256": "a493f259fe241af6e0aa075064969ec6fd149eff062017aa662dc9a059b30e64"
+    },
+    "implementer-commerce-final.log": {
+      "exit": 0,
+      "passed": 7,
+      "binary": "be2e5b562356caf0471ea38d9a6efacc21c166074c9c268799f185f0b2439f53",
+      "log_sha256": "d2bafe300960a0e9b5db5dd918cd596fe05639a57d02a30f7379fa5fa322d38c"
+    },
+    "implementer-film-capture.log": {
+      "exit": 1,
+      "passed": 22,
+      "failed": 1,
+      "superseded": "browser probe lost across reload",
+      "log_sha256": "ca04b75960d55fd31f1bf0243363874faddd86d864b922e744749fa1ee7096ba"
+    },
+    "implementer-film-capture-final.log": {
+      "exit": 1,
+      "passed": 21,
+      "failed": 2,
+      "superseded": "execution context/probe lost across reload",
+      "log_sha256": "b858444f5e43de662a91916a6f6251f421121d2e2b0afd429b9250b9b5df846e"
+    },
+    "implementer-film-capture-qualified.log": {
+      "exit": 1,
+      "passed": 22,
+      "failed": 1,
+      "superseded": "repeated frame mismatch during concurrent receipt changes",
+      "log_sha256": "09be6f4c13cab63e2091144a0253977701bed95617bcd5bb3afb4b6b4921c551"
+    },
+    "implementer-film-debug.log": {
+      "exit": 0,
+      "passed": 1,
+      "log_sha256": "0823e643c0582865bdb3f62b8bb64907e1c9c4070434676e2c76d07b0e57d18e"
+    },
+    "implementer-film-watch.log": {
+      "exit": 0,
+      "passed": 1,
+      "log_sha256": "63e205ffec4bbffcf894829b47a0a862d80aa3ed70b76cb4fb6b86eef1d3875b"
+    },
+    "implementer-film-isolated.log": {
+      "exit": 0,
+      "passed": 24,
+      "log_sha256": "010f9585be6e57fb01823f953e1697e1d13245e304702f2c00b50470cf79645f"
+    },
+    "implementer-film-guard.log": {
+      "exit": 0,
+      "passed": 1,
+      "log_sha256": "8a664c38be15c39c02975525e5f42e62529df9dea5d630c0c1f7f53abf9b81ba"
+    },
+    "implementer-check.log": {
+      "exit": 0,
+      "files": 97,
+      "passed": 791,
+      "log_sha256": "edb9873500214c426b66c6e6e485f0e954c0ea6dc6035c548154f28e622895ca"
+    },
+    "implementer-sidecar.log": {
+      "exit": 0,
+      "files": 14,
+      "passed": 111,
+      "expectations": 470,
+      "log_sha256": "335d70ec9790896fed9fee67eddebe58beee8f05833d711158e8ffb873852692"
+    },
+    "implementer-static-check.log": {
+      "exit": 0,
+      "pages": 129,
+      "log_sha256": "ac754c66a0d1770499840aee8fcfc8532e089fc0afb371877656b5a3045a033c"
+    },
+    "implementer-static-browser.log": {
+      "exit": 0,
+      "passed": 226,
+      "log_sha256": "5c512822221a9d5fc576e378e76518f6d951c33bfac88005c73ad37cc3bd85d1"
+    },
+    "implementer-postgres-init.log": {
+      "exit": 0,
+      "log_sha256": "10ec213b16c0b7fba4b1af6792d76e0c91fbe6a4071bd4546a15c54cdb4bd9fc"
+    },
+    "implementer-postgres-stop.log": {
+      "exit": 0,
+      "log_sha256": "ca19178a35ab4153b75b494963b66ce8243e1b94c173107c87b44d09db23652d"
+    }
+  }
+}

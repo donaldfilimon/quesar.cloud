@@ -1,0 +1,210 @@
+diff --git a/notes/deploy/persistent-node-staging.md b/notes/deploy/persistent-node-staging.md
+new file mode 100644
+index 00000000..926683dc
+--- /dev/null
++++ b/notes/deploy/persistent-node-staging.md
+@@ -0,0 +1,204 @@
++# Persistent Node staging operating checklist
++
++Prepared 2026-10-09. **Proposed operating procedure; no host deployment or
++cutover is authorized or recorded here.** Host OS, machine, staging origin and
++resource owners remain unselected. The public site remains GitHub Pages.
++Use this checklist after the target record below is approved. Do not infer a
++Linux service manager, install resources, change DNS/callbacks or import private
++production data from this document.
++
++## Target and release record
++
++Record the approver, operator, host identity and OS, service account, isolated
++HTTPS origin, proxy/certificate owner, private filesystem paths, approved
++listener port, PostgreSQL owner/database/backup destination, WDBX executable
++owner and checksum, scheduler owner, monitoring owner, retention policy,
++recovery objectives and rollback approver. Record provider identities and spend
++authorization separately; leave unapproved providers disabled. Identify the
++separate Quasar service owner and its approved browser pairing origin if used.
++Do not reuse another application's database, directory or listener.
++
++The release record must identify the exact source revision **and dirty diff**,
++lockfile and toolchain versions, migration filenames/checksums, native executable
++checksum and immutable archive/checksum of the entire persistent `.output/`
++tree. Attach gate logs and backup/restore receipts by private reference. A Git
++revision alone does not identify the currently dirty delivery. Record both the
++previous accepted artifact and the candidate; never overwrite the only copy.
++No deployment ID exists until the selected host actually accepts a release.
++
++## Prepare private configuration and ownership
++
++- Use Node >=24 and Bun >=1.4.2 for repository build/migration tooling. The
++  runtime command is `node .output/server/index.mjs` from the retained release
++  directory. Keep `.output/public/`, `.output/nitro.json` and
++  `.output/server/_libs/` with the server entry point.
++- Inject `NODE_ENV=production`, `NITRO_HOST=127.0.0.1` and the approved
++  `NITRO_PORT` through the chosen supervisor's private environment facility.
++  Set `DATABASE_URL`, stable `BETTER_AUTH_SECRET` (at least 32 characters),
++  and `BETTER_AUTH_URL` to the exact public HTTPS origin without credentials,
++  path, query or fragment. Enable auth; never carry a static/auth bypass into
++  staging. Do not print environment values or put them in process arguments.
++- Provide a valid 32-byte `APP_ENCRYPTION_KEY` for sealed audits, connector
++  tokens and invoice snapshots. Retain the same signing/encryption keys across
++  restarts and restores. Retain any required previous encryption key separately.
++  Key rotation is a distinct reviewed operation, not part of release or rollback.
++- WDBX uses a separate 32-byte binary host HMAC key. Set absolute paths for
++  `WDBX_BINARY`, `WDBX_COMMERCE_DIRECTORY` (existing mode 0700),
++  `WDBX_COMMERCE_CONFIG` (existing mode 0600) and
++  `WDBX_COMMERCE_HOST_KEY` (existing mode 0600). Restrict parent directories,
++  backup files and secret configuration to approved accounts. Store keys outside
++  public/build directories and retain protected recovery copies with separately
++  controlled access. Preserve host configuration, namespace, principal/writer,
++  policy/consent epochs and historical grants; see
++  [persistent-server.md](../commerce/persistent-server.md).
++- The Node app owns its listener and native subprocess calls; PostgreSQL owns
++  identity/application/rate-limit rows; native WDBX owns invoice and account
++  ledgers. The Quasar sidecar has a separate lifecycle, private `QUASAR_HOME`
++  and pairing/preview authority. Node supervision must not stop or restart an
++  unrelated database, sidecar or native writer. Root application checks exclude
++  sidecar/native build scopes.
++- Preserve one WDBX writer. Do not overlap old/new Node writers or add replicas
++  sharing the native store. After an interrupted writer, inspect admission locks
++  with the authorized operator; no automatic stale takeover is supported.
++  Do not delete locks merely to make readiness green.
++
++## Build, back up, migrate, start
++
++1. Freeze and review the intended source and dirty diff. Run `bun run check`,
++   then the applicable static/browser and sidecar gates recorded in
++   [staging-qualification.md](staging-qualification.md). A normal root gate
++   produces a Vercel build, so build the persistent artifact **after** that gate
++   using `bun run build:persistent`, with `VITE_STATIC_SITE` unset or false and
++   auth enabled. The persistent build refuses `VITE_STATIC_SITE=true`.
++   Archive/checksum its intact output before another build replaces `.output/`.
++   Review the artifact contract and receipts against that exact archive.
++2. For an existing staging service, remove it from traffic, pause expiry jobs
++   and block new mutations. Drain active requests and await native subprocess
++   writes; close application/browser clients. Stop only the recorded Node
++   process through the selected supervisor. Verify its listener is closed and
++   no owned native writer remains. Record a bounded drain deadline; on timeout
++   keep traffic closed and investigate. A signal/exit alone does not prove a
++   coherent drained backup. Host-specific supervision/drain commands must be
++   written and rehearsed once the OS is selected.
++3. Take a reviewed PostgreSQL backup and copy the **complete quiescent** WDBX
++   invoice/account-ledger tree, WAL, private host configuration and host key.
++   Record a common backup boundary, hashes and permissions. Preserve required
++   signing/encryption keys through protected references. Restore the pair to
++   isolated authorized targets and prove identities, sessions, decryptability,
++   invoice reads, settlement replay and cross-user denial before trusting it.
++   Do not copy a live writer's tree and call it an atomic online backup.
++4. From the matching reviewed source release, inject only the approved staging
++   connection and run `bun run db:migrate`. Verify exit status and `_migrations`
++   against the exact root `migrations/*.sql` set; current local receipt contains
++   nine including `0009_oauth_verification.sql`. Review per-file transactions
++   and the advisory lock; reapplication must be a no-op. Builds/startup do not
++   migrate PostgreSQL. Never fabricate historical OAuth verification rows.
++5. Install the frozen artifact through the selected host's private process.
++   Configure supervision with recorded working directory, environment source,
++   executable, service account, bounded restart/backoff and private log sink.
++   Start one Node process on the approved loopback listener; verify process and
++   bind ownership before proxying traffic. Record start/stop/restart receipts.
++6. Route the approved HTTPS origin through its proxy to that listener. Verify
++   public certificate chain/hostname/expiry, redirects, origin preservation and
++   same-origin CSRF behavior. Verify secure HTTP-only `__Host-quesar.*` cookies
++   through a real browser, auth callbacks and passkey relying-party origin.
++   Local certificate exceptions do not qualify public TLS. Keep the listener,
++   native store/config/keys and database private. Set `TRUSTED_PROXY=cloudflare`
++   only if direct origin access is blocked and Cloudflare is the sole ingress;
++   reject forged client-IP headers. Review the actual chosen proxy's forwarded
++   header behavior rather than assuming Vercel's headers. Preserve report-only
++   CSP; this procedure does not authorize enforcement.
++7. Complete the checks below, restore traffic only to isolated staging, then
++   resume scheduling. Record the exact artifact, configuration version (names
++   and status only), backup boundary and outcomes. Production cutover needs a
++   separate approved target and release decision.
++
++## Acceptance and alerts
++
++`GET /api/readiness` checks **configuration shape only**: HTTP 200 does not
++prove SQL reachability/schema, native connectivity/grants, writable durable
++storage or proxy/TLS health. A valid disconnected SQL URL returned configuration
++readiness 200 in local qualification. Treat missing required configuration 503
++as a refusal, not a reason to enable ephemeral PGLite fallback.
++
++Check SQL connectivity and the migration ledger through the approved private
++operator connection, then synthetic browser signup/session/profile/revocation,
++audit decrypt/isolation/expiry and restart. Exercise native invoice read/create,
++idempotency, bystander denial and synthetic authorized settlement on staging
++fixtures; `getCommerceReadiness()` is also configuration-only. Qualify the
++installed executable/config/WAL through actual application calls. This runbook
++supplies no invented WDBX backup, repair or inspection CLI invocation.
++
++Alert on HTTPS/readiness failures, auth failures, database/schema failures,
++native admission/WAL/capacity failures, unexpected exits/restart loops, disk
++exhaustion, certificate expiry, failed/overdue expiry sweeps and missing backup
++or restore receipts. Choose thresholds/on-call routing in the target record.
++Monitor the documented native limits: 1000 invoice directories, 4096 versions
++and 64 MiB journal per invoice ledger, 8192-byte values and four snapshot audit
++events. See [manual-invoicing.md](../commerce/manual-invoicing.md).
++
++Send bounded, redacted operational events to a private retained sink. Never log
++authorization/cookie headers, database URLs, OAuth tokens, key material, sealed
++record plaintext, invoice contents or raw provider/SQL errors. Redaction must
++cover proxy, scheduler, supervisor and application logs; verify with synthetic
++failure cases. Receipts contain status, timings and opaque private references.
++
++## Audit expiry scheduling
++
++The persistent Node artifact does not run Vercel's declared cron. Have the
++approved scheduler issue GET or POST to `/api/cron/audits-expire` with
++`Authorization: Bearer <CRON_SECRET>` drawn from its protected secret facility.
++Keep the header out of command arguments, URLs, shell traces and logs. Match
++the declared daily `17 3 * * *` cadence only after recording the scheduler's
++timezone and approving the resulting wall-clock time; no scheduler is selected
++here. Serialize jobs and bound retries (the endpoint limits five calls/minute
++per client). Record sanitized HTTP status, completion time and deleted count;
++alert on missed runs and repeated failures. Missing secret returns 503, wrong
++authorization 401, rate limiting 429 and operation failure 500. Test refusal
++and expiry against synthetic records; do not enable a live retention job until
++its database and retention scope are approved.
++
++## Restore and rollback
++
++Pause traffic/jobs and drain/stop the single writer before reverting. Old code
++does not undo SQL migrations, native writes, account deletion or provider
++effects. If the old artifact is compatible with the current schema/native
++format, switch to the retained verified artifact with stable private inputs
++and repeat all readiness/auth/native checks. Otherwise retain the failed pair
++for investigation and obtain approval to restore the coherent backup into
++isolated targets. Reconcile later writes and deletion/provenance effects before
++reopening traffic; never silently resurrect deleted identities or synthesize
++admin evidence. Verify SQL hashes/ledger, complete native tree and permissions,
++host configuration/key identity, original sessions, decrypted records and
++cross-user denial. Retain both pairs until acceptance. Lost keys or incompatible
++native configuration are blockers, not repair instructions.
++
++## Current evidence and unresolved gates
++
++The 2026-10-09 Task 4 reports in
++`.superpowers/sdd/2026-10-09-finish-approved-delivery/` are local qualification
++receipts, not host acceptance. `task-4-report.md` records actual compiled Node
++HTTPS sessions/secure cookies, audit decrypt/isolation, process replacement and
++quiescent `pg_dump`/`pg_restore` (0/0), with all 15 public tables hash-equal.
++Its final persistent ownership rerun passed one case in 29.6s.
++`task-4-native-restore-report.md` records seven passing commerce cases (1.6m),
++including paired quiescent PostgreSQL/native restore: all 15 SQL tables, full
++native tree/config/key hashes and permissions, original sessions, identical
++invoice states, paid replay, bystander denial and subsequent account deletion.
++The latter used the actual Vite backend/native executable; it is distinct from
++compiled Node qualification. Signing/encryption keys were retained fixture
++inputs, not production escrow proof.
++
++Recorded tested commands are `bun run build:persistent`,
++`bunx playwright test -c e2e/backend/persistent.config.ts` and
++`bunx playwright test -c e2e/backend/commerce.config.ts` under the reports'
++opt-in guarded, disposable local database setup. These harnesses create/drop
++databases and must not target a shared/production instance. No acceptance
++command in this document was executed against a remote host.
++
++**Partial/unqualified:** remote persistent host and public TLS/proxy, live
++OAuth/provider generation/payment, production secret/key retention, online or
++concurrent-writer backup, abrupt power loss/crash/corruption recovery, external
++rollback attestation and real hardware passkeys. Historical provenance and
++human full-film listening/independent acceptance remain release gates. The
++local restore receipt does not resolve these or authorize DNS/deploy changes.

@@ -1,0 +1,9 @@
+
+ RUN  v5.0.2 /Users/donaldfilimon/dev/active/quesar.cloud
+
+
+ Test Files  3 passed (3)
+      Tests  6 passed (6)
+   Start at  16:43:21
+   Duration  6.85s (import 80%, transform 13%, tests 7%)
+

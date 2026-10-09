@@ -1,0 +1,27 @@
+[
+  {
+    "name": "guard",
+    "command": "FILM_CAPTURE_BUILD=0 bunx playwright test --config e2e/film/playwright.config.ts --project capture-disabled",
+    "exit": 0
+  },
+  {
+    "name": "root-check",
+    "command": "bun run check",
+    "exit": 1
+  },
+  {
+    "name": "static-build",
+    "command": "bun run build:static",
+    "exit": 0
+  },
+  {
+    "name": "static-check",
+    "command": "bun run check:static",
+    "exit": 0
+  },
+  {
+    "name": "narrated-browser",
+    "command": "bunx playwright test e2e/narrated-films.spec.ts",
+    "exit": 0
+  }
+]

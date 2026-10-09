@@ -47,6 +47,35 @@ export function readReceipts(value: unknown): InquiryReceipt[] {
     }));
 }
 
+/** Device storage is optional and must never undo a known submission outcome. */
+export function saveContactReceipt(
+  receipt: InquiryReceipt,
+  previous: InquiryReceipt[],
+  persist: (receipts: InquiryReceipt[]) => void,
+) {
+  const receipts = [receipt, ...previous].slice(0, 20);
+  let persisted = false;
+  try {
+    persist(receipts);
+    persisted = true;
+  } catch {
+    // Keep the receipt in memory even when storage is denied or full.
+  }
+  return { receipts, persisted, status: "done" as const };
+}
+
+export function contactOutcomeMessage(delivery: "draft" | "accepted", persisted: boolean) {
+  const outcome =
+    delivery === "draft"
+      ? "Email draft requested. Delivery is unconfirmed."
+      : "Inquiry accepted by the site.";
+  return `${outcome} ${
+    persisted
+      ? "A local copy is kept on this device."
+      : "The local copy could not be saved; it is available only while this page stays open."
+  }`;
+}
+
 /** Submission produces an outcome; failed requests never mutate the caller's form. */
 export async function submitContact<T>(
   fields: T,

@@ -145,7 +145,8 @@ describe("SessionsCard", () => {
     expect(html.match(/This device/g)).toHaveLength(1);
     expect(html.match(/>Revoke</g)).toHaveLength(1);
     expect(html).toContain("Sign out everywhere");
-    expect(html).toContain("up to five minutes");
+    expect(html).toContain("Revoked sessions are refused on the next server session check");
+    expect(html).not.toContain("up to five minutes");
   });
 
   it("asks for a fresh sign-in when Better Auth refuses to list sessions", () => {

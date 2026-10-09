@@ -1,0 +1,55 @@
+[WebServer] (node:42819) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "../../vite.config" without a file extension (e2e/film/vite.config.ts:2:24). Add the file extension
+[WebServer]   - import "./github-readmes" without a file extension (src/lib/github-data.ts:1:30). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+[WebServer] Warning: Route file "/Users/donaldfilimon/dev/active/quesar.cloud/src/routes/auth-entry.test.tsx" does not export a Route. This file will not be included in the route tree.
+[WebServer] 
+[WebServer] If this file is not intended to be a route, you can exclude it using one of these options:
+[WebServer]   1. Rename the file to "/Users/donaldfilimon/dev/active/quesar.cloud/src/routes/-auth-entry.test.tsx" (prefix with "-")
+[WebServer]   2. Use 'routeFileIgnorePattern' in your config to match this file
+[WebServer] 
+[WebServer] Current configuration:
+[WebServer]   routeFileIgnorePrefix: "-"
+[WebServer]   routeFileIgnorePattern: undefined
+[WebServer] Warning: Route file "/Users/donaldfilimon/dev/active/quesar.cloud/src/routes/contact.test.tsx" does not export a Route. This file will not be included in the route tree.
+[WebServer] 
+[WebServer] If this file is not intended to be a route, you can exclude it using one of these options:
+[WebServer]   1. Rename the file to "/Users/donaldfilimon/dev/active/quesar.cloud/src/routes/-contact.test.tsx" (prefix with "-")
+[WebServer]   2. Use 'routeFileIgnorePattern' in your config to match this file
+[WebServer] 
+[WebServer] Current configuration:
+[WebServer]   routeFileIgnorePrefix: "-"
+[WebServer]   routeFileIgnorePattern: undefined
+
+Running 24 tests using 1 worker
+
+(node:43637) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 [capture] › e2e/film/capture.acceptance.ts:16:3 › film: independently repeated and revisited controlled frames (33.1s)
+  ✓   2 [capture] › e2e/film/capture.acceptance.ts:16:3 › trailer: independently repeated and revisited controlled frames (24.2s)
+  ✓   3 [capture] › e2e/film/capture.acceptance.ts:16:3 › abbey: independently repeated and revisited controlled frames (14.4s)
+  ✓   4 [capture] › e2e/film/capture.acceptance.ts:16:3 › explainer: independently repeated and revisited controlled frames (7.9s)
+  ✓   5 [capture] › e2e/film/capture.acceptance.ts:16:3 › mega: independently repeated and revisited controlled frames (15.3s)
+  ✓   6 [capture] › e2e/film/capture.acceptance.ts:16:3 › design: independently repeated and revisited controlled frames (21.2s)
+  ✓   7 [capture] › e2e/film/capture.acceptance.ts:49:1 › capture has no controls, persisted position, voice requests or global API after navigation (2.3s)
+  ✓   8 [capture] › e2e/film/capture.acceptance.ts:107:1 › all Design shots commit the requested real scroll position (8.7s)
+  ✓   9 [capture] › e2e/film/capture.acceptance.ts:147:1 › capture-enabled assets refuse a non-loopback page origin (2.5s)
+  ✓  10 [capture] › e2e/film/capture.acceptance.ts:164:3 › abbey: closing title remains readable through the final frame (1.6s)
+  ✓  11 [capture] › e2e/film/capture.acceptance.ts:164:3 › mega: closing title remains readable through the final frame (2.0s)
+  ✓  12 [capture] › e2e/film/capture.acceptance.ts:296:1 › qualification receipts do not reload a suspended capture (2.4s)
+  ✓  13 [capture] › e2e/film/capture.acceptance.ts:315:1 › SPA teardown immediately rejects a suspended capture and its retired API (1.5s)
+  ✓  14 [capture] › e2e/film/capture.acceptance.ts:355:3 › the shared deadline bounds suspended fonts and permits recovery (31.5s)
+  ✓  15 [capture] › e2e/film/capture.acceptance.ts:355:3 › the shared deadline bounds suspended image and permits recovery (31.9s)
+  ✓  16 [capture] › e2e/film/capture.acceptance.ts:355:3 › the shared deadline bounds suspended required font and permits recovery (31.7s)
+  ✓  17 [capture] › e2e/film/capture.acceptance.ts:385:1 › closing a page releases an outstanding browser capture evaluation (1.4s)
+  ✓  18 [capture] › e2e/film/capture.acceptance.ts:399:1 › Mega audit stamp stays clear of qualifications throughout its visible interval (14.0s)
+  ✓  19 [capture] › e2e/film/capture.acceptance.ts:441:1 › diagram scenes retain readable foreground over a restrained moving field (5.2s)
+  ✓  20 [capture] › e2e/film/capture.acceptance.ts:481:1 › failed required local fonts reject frame 600; a fresh context recovers (3.2s)
+  ✓  21 [capture] › e2e/film/capture.acceptance.ts:546:1 › required font frame 600 matches cold, revisit, fresh and delayed loads (7.9s)
+  ✓  22 [capture] › e2e/film/capture.acceptance.ts:637:1 › SPA teardown aborts the explicit required font load before late completion (1.5s)
+  ✓  23 [capture] › e2e/film/capture.acceptance.ts:662:1 › normal interactive playback retains fallback when local fonts fail (2.7s)
+  ✓  24 [capture] › e2e/film/capture.acceptance.ts:678:1 › newly mounted Design boards validate used fonts without requiring an unused failed subset (4.8s)
+
+  24 passed (4.7m)

@@ -1,0 +1,43 @@
+
+Running 1 test using 1 worker
+
+(node:14529) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[migrate] applied 0001_auth.sql
+[migrate] applied 0002_field_notes.sql
+[migrate] applied 0003_inquiries.sql
+[migrate] applied 0004_telemetry.sql
+[migrate] applied 0005_console_audits.sql
+[migrate] applied 0006_workspace_connections.sql
+[migrate] applied 0007_rate_limits.sql
+[migrate] applied 0008_passkeys.sql
+[migrate] applied 0009_oauth_verification.sql
+[migrate] done — 9 migration(s) applied.
+[migrate] up to date.
+[backend acceptance] owned app, pools, databases and scratch cleanup completed
+  ✘  1 e2e/backend/durable.acceptance.ts:213:1 › disposable Postgres and real browser durable account/workflow acceptance (648ms)
+
+
+  1) e2e/backend/durable.acceptance.ts:213:1 › disposable Postgres and real browser durable account/workflow acceptance 
+
+    Error: expect(received).toHaveLength(expected)
+
+    Expected length: 8
+    Received length: 9
+    Received array:  [{"name": "0001_auth.sql"}, {"name": "0002_field_notes.sql"}, {"name": "0003_inquiries.sql"}, {"name": "0004_telemetry.sql"}, {"name": "0005_console_audits.sql"}, {"name": "0006_workspace_connections.sql"}, {"name": "0007_rate_limits.sql"}, {"name": "0008_passkeys.sql"}, {"name": "0009_oauth_verification.sql"}]
+
+      225 |     await Promise.all(children.map(async (process) => (await once(process, "exit"))[0])),
+      226 |   ).toEqual([0, 0]);
+    > 227 |   expect(await sql("select name from _migrations")).toHaveLength(8);
+          |                                                     ^
+      228 |   const concurrent = new pg.Pool({ connectionString: urlFor(names[4]) });
+      229 |   expect((await concurrent.query("select name from _migrations")).rows).toHaveLength(8);
+      230 |   await concurrent.end();
+        at /Users/donaldfilimon/dev/active/quesar.cloud/e2e/backend/durable.acceptance.ts:227:53
+
+    Error Context: test-results/backend-acceptance/durable.acceptance.ts-disp-464a1-account-workflow-acceptance/error-context.md
+
+    Error Context: test-results/backend-acceptance/durable.acceptance.ts-disp-464a1-account-workflow-acceptance/error-context.md
+
+  1 failed
+    e2e/backend/durable.acceptance.ts:213:1 › disposable Postgres and real browser durable account/workflow acceptance 

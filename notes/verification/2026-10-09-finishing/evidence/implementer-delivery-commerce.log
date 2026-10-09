@@ -1,0 +1,31 @@
+
+Running 7 tests using 1 worker
+
+[commerce browser acceptance] installed native WDBX SHA256 97271fee550a0b88e85033ec4dfad1c9157bfad9cea6beca3f3c6113ea60400b
+[migrate] applied 0001_auth.sql
+[migrate] applied 0002_field_notes.sql
+[migrate] applied 0003_inquiries.sql
+[migrate] applied 0004_telemetry.sql
+[migrate] applied 0005_console_audits.sql
+[migrate] applied 0006_workspace_connections.sql
+[migrate] applied 0007_rate_limits.sql
+[migrate] applied 0008_passkeys.sql
+[migrate] applied 0009_oauth_verification.sql
+[migrate] done — 9 migration(s) applied.
+[commerce browser acceptance] non-mutating login/profile/commerce dependency warmup completed before signup
+[commerce browser acceptance] three real browser signup sessions established on disposable identity database
+  ✓  1 e2e/backend/commerce.acceptance.ts:226:1 › anonymous browser cannot create or list invoices (20ms)
+[commerce browser acceptance] real HTTP invoice create/replay and strict money-field rejection passed
+  ✓  2 e2e/backend/commerce.acceptance.ts:237:1 › HTTP replay creates one native invoice and rejects client-owned money (70ms)
+  ✓  3 e2e/backend/commerce.acceptance.ts:251:1 › bystander cannot list or cancel owner invoice and owner cancellation is replayable (62ms)
+[commerce browser acceptance] real authorization denies password-only admin; trusted synthetic linked-identity settlement/replay passed
+  ✓  4 e2e/backend/commerce.acceptance.ts:261:1 › allowlisted password account cannot settle before verified linked identity (55ms)
+[commerce browser acceptance] owned Vite backend stopped/restarted; durable Better Auth cookie and all native WDBX states match
+  ✓  5 e2e/backend/commerce.acceptance.ts:298:1 › browser sessions and complete WDBX invoice state survive backend replacement (5.8s)
+[commerce browser acceptance] quiescent paired backup: pg_dump/pg_restore exits 0/0, 15 PostgreSQL table hashes match, complete native tree/config/key/modes preserved; restored actual app accepts owner/operator sessions and identical restored native invoice states, foreign awaiting-invoice refusal with unchanged owner inventory and owner cancellation positive control; original pair retained
+  ✓  6 e2e/backend/commerce.acceptance.ts:322:1 › quiescent paired PostgreSQL and complete native WDBX backup restores sessions and invoice isolation (7.1s)
+[commerce browser acceptance] actual Better Auth deletion removed buyer; fresh same-email identity sees no old invoices; bystander survives
+[commerce browser acceptance] owned app, browser contexts, identity database and native ledger scratch cleaned
+  ✓  7 e2e/backend/commerce.acceptance.ts:470:1 › real account deletion unlinks invoice history and replacement account cannot inherit it (1.9s)
+
+  7 passed (32.5s)

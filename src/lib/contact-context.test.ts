@@ -1,5 +1,15 @@
-import { describe, expect, it } from "vitest";
-import { contactSearch, readReceipts, receiptLabel, submitContact } from "./contact-context";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import {
+  contactSearch,
+  contactOutcomeMessage,
+  readReceipts,
+  receiptLabel,
+  saveContactReceipt,
+  submitContact,
+} from "./contact-context";
+import { writeStore } from "./local-store";
+
+afterEach(() => vi.unstubAllGlobals());
 describe("contact context and delivery evidence", () => {
   it("accepts exact catalog services and ignores unknown or malformed input", () => {
     expect(contactSearch({ service: "WDBX Retrieval Architecture" })).toEqual({
@@ -34,6 +44,57 @@ describe("contact context and delivery evidence", () => {
     expect(receiptLabel("accepted")).toContain("accepted");
     expect(readReceipts([null, { id: "bad" }, { ...copy, created: 1e100 }])).toEqual([]);
   });
+});
+
+it.each(["draft", "accepted"] as const)(
+  "preserves %s evidence when local receipt storage throws",
+  (delivery) => {
+    const setItem = vi.fn(() => {
+      throw new Error("Storage denied");
+    });
+    vi.stubGlobal("window", { localStorage: { setItem } });
+    const receipt = {
+      id: "synthetic-receipt",
+      name: "Fixture",
+      email: "fixture@example.invalid",
+      topic: "Quesar",
+      message: "Synthetic inquiry",
+      created: 1,
+      delivery,
+    };
+    const result = saveContactReceipt(receipt, [], (receipts) =>
+      writeStore("mlai-inquiries", receipts),
+    );
+    expect(setItem).toHaveBeenCalledOnce();
+    expect(result).toEqual({ receipts: [receipt], persisted: false, status: "done" });
+    const notice = contactOutcomeMessage(delivery, result.persisted);
+    expect(notice).toContain(
+      delivery === "draft" ? "Delivery is unconfirmed" : "Inquiry accepted by the site",
+    );
+    expect(notice).toContain("could not be saved");
+    expect(notice).not.toContain("Sending");
+  },
+);
+
+it("keeps bounded device receipts when storage succeeds", () => {
+  const receipt = {
+    id: "one",
+    name: "Fixture",
+    email: "fixture@example.invalid",
+    topic: "Quesar",
+    message: "Fixture",
+    created: 1,
+    delivery: "accepted" as const,
+  };
+  const persist = vi.fn();
+  const result = saveContactReceipt(
+    receipt,
+    Array.from({ length: 25 }, () => receipt),
+    persist,
+  );
+  expect(result.persisted).toBe(true);
+  expect(result.receipts).toHaveLength(20);
+  expect(persist).toHaveBeenCalledWith(result.receipts);
 });
 
 describe("failed submission", () => {

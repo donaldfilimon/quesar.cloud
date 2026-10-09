@@ -1,6 +1,8 @@
 import { passkeyClient } from "@better-auth/passkey/client";
 import { createAuthClient } from "better-auth/react";
 import { SOCIAL_PROVIDERS, type SocialProviderId } from "./providers";
+import { safeInternalPath } from "@/lib/internal";
+import { signInErrorURL } from "./callback";
 
 /**
  * Better Auth client (browser-side). Talks to this app's own Better Auth at
@@ -17,14 +19,15 @@ export async function signInWithProvider(
   provider: SocialProviderId,
   opts: { callbackURL?: string; errorCallbackURL?: string } = {},
 ): Promise<void> {
-  const callbackURL = opts.callbackURL ?? "/";
+  const callbackURL = safeInternalPath(opts.callbackURL ?? "/");
   const { data, error } = await authClient.signIn.social({
     provider,
     callbackURL,
-    errorCallbackURL: opts.errorCallbackURL ?? "/login",
+    errorCallbackURL: opts.errorCallbackURL ?? signInErrorURL(callbackURL),
   });
   if (error) throw new Error(error.message ?? "Sign-in failed");
-  if (data?.url) window.location.href = data.url;
+  if (!data?.url) throw new Error("Sign-in did not start. Try again.");
+  window.location.href = data.url;
 }
 
 /** Sign in with a passkey already registered on this device or synced to it. */

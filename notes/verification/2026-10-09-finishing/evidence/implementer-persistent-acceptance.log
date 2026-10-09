@@ -1,0 +1,41 @@
+
+Running 1 test using 1 worker
+
+[persistent acceptance] compiled artifact root /Users/donaldfilimon/dev/active/quesar.cloud/.superpowers/sdd/2026-10-09-finish-approved-delivery/implementer-persistent-artifact; full-tree SHA256 58e05945b0a7a26f84ae56c56e222e8e786f557cd17baf35c9993a2e841fbe87
+[persistent acceptance] compiled artifact full-tree SHA256 unchanged 58e05945b0a7a26f84ae56c56e222e8e786f557cd17baf35c9993a2e841fbe87
+  ✘  1 e2e/backend/persistent.acceptance.ts:280:1 › persistent Node artifact: fail closed, migrations, secure sessions, isolation, restart and seeded restore (0ms)
+
+
+  1) e2e/backend/persistent.acceptance.ts:280:1 › persistent Node artifact: fail closed, migrations, secure sessions, isolation, restart and seeded restore 
+
+    error: no PostgreSQL user name specified in startup packet
+
+      190 |   receipt(`compiled artifact root ${artifactRoot}; full-tree SHA256 ${artifactHash}`);
+      191 |   scratch = await mkdtemp(join(tmpdir(), "quesar-artifact-"));
+    > 192 |   databaseRole = (await admin.query("select current_user as role")).rows[0].role;
+          |                   ^
+      193 |   for (const database of names) await admin.query(`create database "${database}"`);
+      194 |   port = await freePort();
+      195 |   const tlsPort = await freePort();
+        at /Users/donaldfilimon/dev/active/quesar.cloud/node_modules/pg-pool/index.js:45:11
+        at /Users/donaldfilimon/dev/active/quesar.cloud/e2e/backend/persistent.acceptance.ts:192:19
+
+    Error: Acceptance cleanup failed for 2 owned resource(s).
+
+       at process-cleanup.ts:63
+
+      61 |     }
+      62 |   }
+    > 63 |   if (failed) throw new Error(`Acceptance cleanup failed for ${failed} owned resource(s).`);
+         |                     ^
+      64 | }
+      65 |
+        at cleanupOwnedResources (/Users/donaldfilimon/dev/active/quesar.cloud/e2e/backend/process-cleanup.ts:63:21)
+        at /Users/donaldfilimon/dev/active/quesar.cloud/e2e/backend/persistent.acceptance.ts:250:3
+
+    Error Context: test-results/persistent-acceptance/persistent.acceptance.ts-p-b0169--restart-and-seeded-restore/error-context.md
+
+    Error Context: test-results/persistent-acceptance/persistent.acceptance.ts-p-b0169--restart-and-seeded-restore/error-context.md
+
+  1 failed
+    e2e/backend/persistent.acceptance.ts:280:1 › persistent Node artifact: fail closed, migrations, secure sessions, isolation, restart and seeded restore 

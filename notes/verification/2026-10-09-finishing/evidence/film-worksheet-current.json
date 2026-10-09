@@ -1,0 +1,155 @@
+{
+  "observed_at_utc": "2026-10-09T19:29:05.809382+00:00",
+  "worksheet": "/Users/donaldfilimon/dev/active/quesar.cloud/notes/verification/2026-10-09-finishing/film-review.md",
+  "masters": [
+    {
+      "master": "mlai-quesar-design-120",
+      "local": "/Users/donaldfilimon/dev/active/quesar.cloud/notes/launch/quesar-editorial-2026-10-09/artifacts/abbey-neural-v7/mlai-quesar-design-120/mlai-quesar-design-120.mp4",
+      "published_catalog_url": "https://github.com/donaldfilimon/quesar.cloud/releases/download/trailer-editions-2026-10-09-abbey-neural/mlai-quesar-design-120.mp4",
+      "sha256": "7fd8a4cf5fe30ec12e89a8237d74c297a097b6801bc5305e757bcd9edc882fac",
+      "bytes": 27665421,
+      "full_listening": "Pending",
+      "full_motion": "Pending"
+    },
+    {
+      "master": "mlai-quesar-design-180",
+      "local": "/Users/donaldfilimon/dev/active/quesar.cloud/notes/launch/quesar-editorial-2026-10-09/artifacts/abbey-neural-v7/mlai-quesar-design-180/mlai-quesar-design-180.mp4",
+      "published_catalog_url": "https://github.com/donaldfilimon/quesar.cloud/releases/download/trailer-editions-2026-10-09-abbey-neural/mlai-quesar-design-180.mp4",
+      "sha256": "3958bdcb2415fab3a820f985594a8a7b6ac5abf31722ab4857bcb9d0a391dd2f",
+      "bytes": 32314326,
+      "full_listening": "Pending",
+      "full_motion": "Pending"
+    },
+    {
+      "master": "mlai-quesar-design-600",
+      "local": "/Users/donaldfilimon/dev/active/quesar.cloud/notes/launch/quesar-editorial-2026-10-09/artifacts/abbey-neural-v7/mlai-quesar-design-600/mlai-quesar-design-600.mp4",
+      "published_catalog_url": "https://github.com/donaldfilimon/quesar.cloud/releases/download/trailer-editions-2026-10-09-abbey-neural/mlai-quesar-design-600.mp4",
+      "sha256": "27de0c56d3f776380174132599c3ae96e67b7b058216c139c048e977be8bc89e",
+      "bytes": 311721097,
+      "full_listening": "Pending",
+      "full_motion": "Pending"
+    },
+    {
+      "master": "mlai-quesar-editorial-60",
+      "local": "/Users/donaldfilimon/dev/active/quesar.cloud/notes/launch/quesar-editorial-2026-10-09/artifacts/abbey-neural-v7/mlai-quesar-editorial-60/mlai-quesar-editorial-60.mp4",
+      "published_catalog_url": "https://github.com/donaldfilimon/quesar.cloud/releases/download/trailer-editions-2026-10-09-abbey-neural/mlai-quesar-editorial-60.mp4",
+      "sha256": "805104de9bc259ac3c69c83fb0039a41db0adbd7ae4c0352cc055c8b963b420b",
+      "bytes": 4627913,
+      "full_listening": "Pending",
+      "full_motion": "Pending"
+    },
+    {
+      "master": "mlai-quesar-kinetic-60",
+      "local": "/Users/donaldfilimon/dev/active/quesar.cloud/notes/launch/quesar-editorial-2026-10-09/artifacts/abbey-neural-v7/mlai-quesar-kinetic-60/mlai-quesar-kinetic-60.mp4",
+      "published_catalog_url": "https://github.com/donaldfilimon/quesar.cloud/releases/download/trailer-editions-2026-10-09-abbey-neural/mlai-quesar-kinetic-60.mp4",
+      "sha256": "6ec25dc6e0d08dc3281039e08c527680bc1757bc8a2b4f2df59ba282dd6911a4",
+      "bytes": 5187081,
+      "full_listening": "Pending",
+      "full_motion": "Pending"
+    },
+    {
+      "master": "mlai-quesar-technical-120",
+      "local": "/Users/donaldfilimon/dev/active/quesar.cloud/notes/launch/quesar-editorial-2026-10-09/artifacts/abbey-neural-v7/mlai-quesar-technical-120/mlai-quesar-technical-120.mp4",
+      "published_catalog_url": "https://github.com/donaldfilimon/quesar.cloud/releases/download/trailer-editions-2026-10-09-abbey-neural/mlai-quesar-technical-120.mp4",
+      "sha256": "21e2ce9afcf704f1c9f1faa156806aec9b669821907493949e546cbef8cf788b",
+      "bytes": 88094920,
+      "full_listening": "Pending",
+      "full_motion": "Pending"
+    },
+    {
+      "master": "mlai-quesar-technical-180",
+      "local": "/Users/donaldfilimon/dev/active/quesar.cloud/notes/launch/quesar-editorial-2026-10-09/artifacts/abbey-neural-v7/mlai-quesar-technical-180/mlai-quesar-technical-180.mp4",
+      "published_catalog_url": "https://github.com/donaldfilimon/quesar.cloud/releases/download/trailer-editions-2026-10-09-abbey-neural/mlai-quesar-technical-180.mp4",
+      "sha256": "d085f2fb139f9d71cb090747e56efae67a946d3fb208576c304d26b125fc2721",
+      "bytes": 92738732,
+      "full_listening": "Pending",
+      "full_motion": "Pending"
+    },
+    {
+      "master": "mlai-quesar-technical-600",
+      "local": "/Users/donaldfilimon/dev/active/quesar.cloud/notes/launch/quesar-editorial-2026-10-09/artifacts/abbey-neural-v7/mlai-quesar-technical-600/mlai-quesar-technical-600.mp4",
+      "published_catalog_url": "https://github.com/donaldfilimon/quesar.cloud/releases/download/trailer-editions-2026-10-09-abbey-neural/mlai-quesar-technical-600.mp4",
+      "sha256": "e1bf0506db9133dc565596b1dc4124293667ebb6ca560dd996061d636c2e1859",
+      "bytes": 311973651,
+      "full_listening": "Pending",
+      "full_motion": "Pending"
+    },
+    {
+      "master": "quesar-architecture-120",
+      "local": "/Users/donaldfilimon/dev/active/quesar.cloud/notes/launch/quesar-editorial-2026-10-09/artifacts/abbey-neural-v7/quesar-architecture-120/quesar-architecture-120.mp4",
+      "published_catalog_url": "https://github.com/donaldfilimon/quesar.cloud/releases/download/trailer-editions-2026-10-09-abbey-neural/quesar-architecture-120.mp4",
+      "sha256": "309780c3e2ca3ab5c93ed1ff2bbf0cdff5bf599451a2bc09004a6d623524057c",
+      "bytes": 19568287,
+      "full_listening": "Pending",
+      "full_motion": "Pending"
+    },
+    {
+      "master": "quesar-architecture-180",
+      "local": "/Users/donaldfilimon/dev/active/quesar.cloud/notes/launch/quesar-editorial-2026-10-09/artifacts/abbey-neural-v7/quesar-architecture-180/quesar-architecture-180.mp4",
+      "published_catalog_url": "https://github.com/donaldfilimon/quesar.cloud/releases/download/trailer-editions-2026-10-09-abbey-neural/quesar-architecture-180.mp4",
+      "sha256": "98c59e27a5e90de4afe1dfab114a54916468aace4038fb63957811cec88dcce9",
+      "bytes": 29618202,
+      "full_listening": "Pending",
+      "full_motion": "Pending"
+    },
+    {
+      "master": "quesar-architecture-60",
+      "local": "/Users/donaldfilimon/dev/active/quesar.cloud/notes/launch/quesar-editorial-2026-10-09/artifacts/abbey-neural-v7/quesar-architecture-60/quesar-architecture-60.mp4",
+      "published_catalog_url": "https://github.com/donaldfilimon/quesar.cloud/releases/download/trailer-editions-2026-10-09-abbey-neural/quesar-architecture-60.mp4",
+      "sha256": "abd4ea3691d4693bd50ec9b67d134d0c1cab6acdf59d7ec4e31d5e1ba4929533",
+      "bytes": 9405227,
+      "full_listening": "Pending",
+      "full_motion": "Pending"
+    },
+    {
+      "master": "quesar-architecture-600",
+      "local": "/Users/donaldfilimon/dev/active/quesar.cloud/notes/launch/quesar-editorial-2026-10-09/artifacts/abbey-neural-v7/quesar-architecture-600/quesar-architecture-600.mp4",
+      "published_catalog_url": "https://github.com/donaldfilimon/quesar.cloud/releases/download/trailer-editions-2026-10-09-abbey-neural/quesar-architecture-600.mp4",
+      "sha256": "979381439b03ee0f29b954881228f5a17b54c57b724e0bc1050b9671272798e4",
+      "bytes": 81809880,
+      "full_listening": "Pending",
+      "full_motion": "Pending"
+    },
+    {
+      "master": "quesar-studio-120",
+      "local": "/Users/donaldfilimon/dev/active/quesar.cloud/notes/launch/quesar-editorial-2026-10-09/artifacts/abbey-neural-v7/quesar-studio-120/quesar-studio-120.mp4",
+      "published_catalog_url": "https://github.com/donaldfilimon/quesar.cloud/releases/download/trailer-editions-2026-10-09-abbey-neural/quesar-studio-120.mp4",
+      "sha256": "05e63db799cfce9d255f20f88a456328655d5d04730b6c1466cfd711deb5a8fb",
+      "bytes": 26671540,
+      "full_listening": "Pending",
+      "full_motion": "Pending"
+    },
+    {
+      "master": "quesar-studio-180",
+      "local": "/Users/donaldfilimon/dev/active/quesar.cloud/notes/launch/quesar-editorial-2026-10-09/artifacts/abbey-neural-v7/quesar-studio-180/quesar-studio-180.mp4",
+      "published_catalog_url": "https://github.com/donaldfilimon/quesar.cloud/releases/download/trailer-editions-2026-10-09-abbey-neural/quesar-studio-180.mp4",
+      "sha256": "6a4ac16529955f1066351f7c7213c5b5192a7cc25e8376cdded79c7401c59dec",
+      "bytes": 40472645,
+      "full_listening": "Pending",
+      "full_motion": "Pending"
+    },
+    {
+      "master": "quesar-studio-60",
+      "local": "/Users/donaldfilimon/dev/active/quesar.cloud/notes/launch/quesar-editorial-2026-10-09/artifacts/abbey-neural-v7/quesar-studio-60/quesar-studio-60.mp4",
+      "published_catalog_url": "https://github.com/donaldfilimon/quesar.cloud/releases/download/trailer-editions-2026-10-09-abbey-neural/quesar-studio-60.mp4",
+      "sha256": "ecd275523aebb7f8b7bc278d450247ab8f14853da1979ff8b5673ebeb49c8390",
+      "bytes": 13260562,
+      "full_listening": "Pending",
+      "full_motion": "Pending"
+    },
+    {
+      "master": "quesar-studio-600",
+      "local": "/Users/donaldfilimon/dev/active/quesar.cloud/notes/launch/quesar-editorial-2026-10-09/artifacts/abbey-neural-v7/quesar-studio-600/quesar-studio-600.mp4",
+      "published_catalog_url": "https://github.com/donaldfilimon/quesar.cloud/releases/download/trailer-editions-2026-10-09-abbey-neural/quesar-studio-600.mp4",
+      "sha256": "06c65b802d71c0a8e120e32402f9000c535cfb02bd0ec709876ee8c517331489",
+      "bytes": 110966969,
+      "full_listening": "Pending",
+      "full_motion": "Pending"
+    }
+  ],
+  "count": 16,
+  "total_bytes": 1206096453,
+  "local_hashes_match_current_catalog_and_proof": true,
+  "remote_download_or_audiovisual_review": false,
+  "exit": 0
+}

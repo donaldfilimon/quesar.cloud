@@ -1,0 +1,1289 @@
+diff --git a/e2e/backend/commerce.acceptance.ts b/e2e/backend/commerce.acceptance.ts
+index 546edd68..f847baa6 100644
+--- a/e2e/backend/commerce.acceptance.ts
++++ b/e2e/backend/commerce.acceptance.ts
+@@ -1,9 +1,19 @@
+ import { expect, test, type BrowserContext, type Page } from "@playwright/test";
+ import { randomBytes, randomUUID, createHash } from "node:crypto";
+-import { spawn, type ChildProcess } from "node:child_process";
++import { spawn, spawnSync, type ChildProcess } from "node:child_process";
+ import { once } from "node:events";
+ import { createServer } from "node:net";
+-import { mkdtemp, mkdir, writeFile, rm, readFile, realpath } from "node:fs/promises";
++import {
++  mkdtemp,
++  mkdir,
++  writeFile,
++  rm,
++  readFile,
++  realpath,
++  cp,
++  readdir,
++  lstat,
++} from "node:fs/promises";
+ import { tmpdir } from "node:os";
+ import { join } from "node:path";
+ import pg from "pg";
+@@ -26,8 +36,9 @@ const binary = "/Users/donaldfilimon/dev/active/wdbx/zig-out/bin/wdbx";
+ const databaseUrl = new URL(adminUrl);
+ databaseUrl.pathname = `/${run}`;
+ const admin = new pg.Pool({ connectionString: adminUrl.href });
+-const db = new pg.Pool({ connectionString: databaseUrl.href });
+-let scratch: string, directory: string, origin: string, port: number;
++let db = new pg.Pool({ connectionString: databaseUrl.href });
++let scratch: string, directory: string, configurationRoot: string, origin: string, port: number;
++const restoreName = `${run}_restore`;
+ let child: ChildProcess | undefined;
+ let buyer: Page, bystander: Page, anonymous: Page, operator: Page;
+ const contexts: BrowserContext[] = [];
+@@ -52,8 +63,8 @@ async function start() {
+     ADMIN_EMAILS: adminEmail,
+     WDBX_BINARY: binary,
+     WDBX_COMMERCE_DIRECTORY: directory,
+-    WDBX_COMMERCE_CONFIG: join(scratch, "config.json"),
+-    WDBX_COMMERCE_HOST_KEY: join(scratch, "host.bin"),
++    WDBX_COMMERCE_CONFIG: join(configurationRoot, "config.json"),
++    WDBX_COMMERCE_HOST_KEY: join(configurationRoot, "host.bin"),
+   };
+   // Never inherit real provider credentials or external payment configuration.
+   for (const name of [
+@@ -142,11 +153,12 @@ async function create(page: Page, key = randomUUID()) {
+ }
+ test.beforeAll(async ({ browser }) => {
+   scratch = await realpath(await mkdtemp(join(tmpdir(), "quesar-commerce-browser-")));
++  configurationRoot = scratch;
+   directory = join(scratch, "invoices");
+   await mkdir(directory, { mode: 0o700 });
+-  await writeFile(join(scratch, "host.bin"), randomBytes(32), { mode: 0o600 });
++  await writeFile(join(configurationRoot, "host.bin"), randomBytes(32), { mode: 0o600 });
+   await writeFile(
+-    join(scratch, "config.json"),
++    join(configurationRoot, "config.json"),
+     JSON.stringify({
+       schema: "wdbx-typed-host-config-v1",
+       namespace: Array(32).fill(1),
+@@ -179,17 +191,17 @@ test.beforeAll(async ({ browser }) => {
+   await start();
+   for (let i = 0; i < 4; i++) contexts.push(await browser.newContext());
+   [buyer, bystander, anonymous, operator] = await Promise.all(contexts.map((c) => c.newPage()));
+-  // Discover dev dependencies before auth mutations; Vite optimization can reload.
+-  for (let attempt = 0; attempt < 3; attempt++) {
+-    try {
+-      await anonymous.goto(`${origin}/login`, { waitUntil: "networkidle" });
+-      await call(anonymous, "getCommerceReadiness");
+-      await anonymous.waitForLoadState("networkidle");
+-      break;
+-    } catch (error) {
+-      if (attempt === 2) throw error;
+-    }
++  // The cold failure destroyed the anonymous execution context after signup
++  // first reached /profile; the previous warmup omitted that route and its
++  // lazy profile/billing/passkey dependencies. Visit both routes and import the read-only
++  // commerce transport before any account or invoice mutation; do not retry
++  // failed journey assertions or replay writes.
++  for (const route of ["/login", "/profile", "/login"]) {
++    await anonymous.goto(`${origin}${route}`, { waitUntil: "networkidle" });
+   }
++  await call(anonymous, "getCommerceReadiness");
++  await anonymous.waitForLoadState("networkidle");
++  receipt("non-mutating login/profile/commerce dependency warmup completed before signup");
+   buyerId = await signup(buyer, buyerEmail);
+   await signup(bystander, `${run}-other@example.invalid`);
+   operatorId = await signup(operator, adminEmail);
+@@ -200,7 +212,9 @@ test.afterAll(async () => {
+     ...contexts.map((context) => () => context.close()),
+     stop,
+     () => db.end(),
+-    () => admin.query(`drop database if exists "${run}" with (force)`),
++    ...[run, restoreName].map(
++      (name) => () => admin.query(`drop database if exists "${name}" with (force)`),
++    ),
+     () => admin.end(),
+     async () => {
+       if (scratch) await rm(scratch, { recursive: true, force: true });
+@@ -305,7 +319,156 @@ test("browser sessions and complete WDBX invoice state survive backend replaceme
+   );
+ });
+ 
++test("quiescent paired PostgreSQL and complete native WDBX backup restores sessions and invoice isolation", async () => {
++  const bystanderOrder = await create(bystander);
++  const buyerBefore = (await call(buyer, "listCommerceOrders")) as CommerceOrder[];
++  const bystanderBefore = await call(bystander, "listCommerceOrders");
++  expect(bystanderBefore).toEqual([bystanderOrder]);
++  const paid = buyerBefore.find((order) => order.status === "paid");
++  const awaiting = buyerBefore.find((order) => order.status === "awaiting_payment");
++  expect(paid).toBeTruthy();
++  expect(awaiting).toBeTruthy();
++  // Disconnect all browser/HMR clients and stop the only owned application
++  // writer before taking this coordinated local pair snapshot.
++  await Promise.all(
++    [buyer, bystander, anonymous, operator].map((page) => page.goto("about:blank")),
++  );
++  await stop();
++  const backup = join(scratch, "backup");
++  const restoredNative = join(scratch, "restored");
++  await mkdir(backup, { mode: 0o700 });
++  await cp(directory, join(backup, "invoices"), { recursive: true, preserveTimestamps: true });
++  for (const filename of ["config.json", "host.bin"])
++    await cp(join(configurationRoot, filename), join(backup, filename), {
++      preserveTimestamps: true,
++    });
++  const dump = join(backup, "identity.dump");
++  expect(
++    spawnSync(
++      "/opt/homebrew/opt/postgresql@17/bin/pg_dump",
++      ["-Fc", "-f", dump, databaseUrl.href],
++      { stdio: "ignore" },
++    ).status,
++  ).toBe(0);
++  await admin.query(`create database "${restoreName}"`);
++  const restoredUrl = new URL(databaseUrl);
++  restoredUrl.pathname = `/${restoreName}`;
++  expect(
++    spawnSync(
++      "/opt/homebrew/opt/postgresql@17/bin/pg_restore",
++      ["--exit-on-error", "-d", restoredUrl.href, dump],
++      { stdio: "ignore" },
++    ).status,
++  ).toBe(0);
++  await mkdir(restoredNative, { mode: 0o700 });
++  await cp(join(backup, "invoices"), join(restoredNative, "invoices"), {
++    recursive: true,
++    preserveTimestamps: true,
++  });
++  for (const filename of ["config.json", "host.bin"])
++    await cp(join(backup, filename), join(restoredNative, filename), { preserveTimestamps: true });
++  // Verify the complete native tree, including account ledgers and private
++  // permission modes. Assertions expose only hashes, never host key bytes.
++  async function inventory(root: string, path = ""): Promise<unknown[]> {
++    const entries = await readdir(join(root, path), { withFileTypes: true });
++    const rows: unknown[] = [];
++    for (const entry of entries.sort((a, b) => a.name.localeCompare(b.name))) {
++      const relative = join(path, entry.name);
++      const stat = await lstat(join(root, relative));
++      expect(stat.isSymbolicLink()).toBe(false);
++      rows.push({
++        path: relative,
++        mode: stat.mode & 0o777,
++        hash: stat.isFile()
++          ? createHash("sha256")
++              .update(await readFile(join(root, relative)))
++              .digest("hex")
++          : null,
++      });
++      if (stat.isDirectory()) rows.push(...(await inventory(root, relative)));
++    }
++    return rows;
++  }
++  expect((await lstat(join(restoredNative, "invoices"))).mode & 0o777).toBe(
++    (await lstat(directory)).mode & 0o777,
++  );
++  expect(await inventory(join(restoredNative, "invoices"))).toEqual(await inventory(directory));
++  for (const filename of ["config.json", "host.bin"]) {
++    const original = join(configurationRoot, filename);
++    const restored = join(restoredNative, filename);
++    expect((await lstat(restored)).mode & 0o777).toBe((await lstat(original)).mode & 0o777);
++    expect(
++      createHash("sha256")
++        .update(await readFile(restored))
++        .digest("hex"),
++    ).toBe(
++      createHash("sha256")
++        .update(await readFile(original))
++        .digest("hex"),
++    );
++  }
++  const restoredPool = new pg.Pool({ connectionString: restoredUrl.href });
++  let tables: number;
++  try {
++    const publicTables = (
++      await db.query("select tablename from pg_tables where schemaname='public' order by tablename")
++    ).rows;
++    tables = publicTables.length;
++    for (const { tablename } of publicTables) {
++      const query = `select row_to_json(t)::text as row from "${tablename}" t order by row_to_json(t)::text`;
++      const hash = (rows: unknown) =>
++        createHash("sha256").update(JSON.stringify(rows)).digest("hex");
++      expect(hash((await restoredPool.query(query)).rows)).toBe(hash((await db.query(query)).rows));
++    }
++  } finally {
++    await restoredPool.end();
++  }
++  await db.end();
++  databaseUrl.pathname = `/${restoreName}`;
++  db = new pg.Pool({ connectionString: databaseUrl.href });
++  configurationRoot = restoredNative;
++  directory = join(restoredNative, "invoices");
++  await start();
++  for (const [page, id] of [
++    [buyer, buyerId],
++    [operator, operatorId],
++  ] as const) {
++    await page.goto(`${origin}/profile`, { waitUntil: "networkidle" });
++    await expect(page.getByLabel("Display name")).toHaveValue("Synthetic Commerce Acceptance");
++    const sessionUser = await page.evaluate(async () => {
++      const response = await fetch("/api/auth/get-session");
++      return response.ok ? (await response.json()).user?.id : null;
++    });
++    expect(sessionUser).toBe(id);
++  }
++  await bystander.goto(`${origin}/profile`, { waitUntil: "networkidle" });
++  expect(await call(buyer, "listCommerceOrders")).toEqual(buyerBefore);
++  expect(await call(bystander, "listCommerceOrders")).toEqual(bystanderBefore);
++  expect(await call(bystander, "cancelCommerceOrder", { orderId: awaiting!.id })).toMatchObject({
++    thrown: "Invoice unavailable or no longer awaiting payment.",
++  });
++  expect(await call(buyer, "listCommerceOrders")).toEqual(buyerBefore);
++  const cancelled = await call(buyer, "cancelCommerceOrder", { orderId: awaiting!.id });
++  expect(cancelled).toMatchObject({ id: awaiting!.id, status: "cancelled" });
++  expect(await call(buyer, "listCommerceOrders")).toEqual(
++    buyerBefore.map((order) => (order.id === awaiting!.id ? cancelled : order)),
++  );
++  expect(await call(bystander, "listCommerceOrders")).toEqual(bystanderBefore);
++  // Same synthetic operator identity/grant and idempotent settled receipt
++  // survive the paired restore; no new payment or funds movement occurs.
++  expect(
++    await call(operator, "adminSettleCommerceOrder", {
++      orderId: paid!.id,
++      paymentReference: "synthetic-wire",
++    }),
++  ).toEqual(paid);
++  receipt(
++    `quiescent paired backup: pg_dump/pg_restore exits 0/0, ${tables} PostgreSQL table hashes match, complete native tree/config/key/modes preserved; restored actual app accepts owner/operator sessions and identical restored native invoice states, foreign awaiting-invoice refusal with unchanged owner inventory and owner cancellation positive control; original pair retained`,
++  );
++});
++
+ test("real account deletion unlinks invoice history and replacement account cannot inherit it", async () => {
++  const priorBystanderOrders = (await call(bystander, "listCommerceOrders")) as CommerceOrder[];
+   const survivingOrder = await create(bystander);
+   const previousOrders = (await call(buyer, "listCommerceOrders")) as CommerceOrder[];
+   const status = await buyer.evaluate(async (password) => {
+@@ -322,7 +485,11 @@ test("real account deletion unlinks invoice history and replacement account cann
+   const replacementId = await signup(buyer, buyerEmail);
+   expect(replacementId).not.toBe(buyerId);
+   expect(await call(buyer, "listCommerceOrders")).toEqual([]);
+-  expect(await call(bystander, "listCommerceOrders")).toEqual([survivingOrder]);
++  const survivingOrders = await call(bystander, "listCommerceOrders");
++  expect(survivingOrders).toHaveLength(priorBystanderOrders.length + 1);
++  expect(survivingOrders).toEqual(
++    expect.arrayContaining([...priorBystanderOrders, survivingOrder]),
++  );
+   // Business receipts remain in native ledgers even after identity association is removed.
+   for (const order of previousOrders)
+     expect((await readFile(join(directory, order.id, "zig-v4.wal"))).length).toBeGreaterThan(0);
+diff --git a/e2e/backend/durable.acceptance.ts b/e2e/backend/durable.acceptance.ts
+index f7d62584..f062b21f 100644
+--- a/e2e/backend/durable.acceptance.ts
++++ b/e2e/backend/durable.acceptance.ts
+@@ -3,7 +3,7 @@ import { randomBytes, randomUUID, createCipheriv, createHmac, createHash } from
+ import { spawn, spawnSync, type ChildProcess } from "node:child_process";
+ import { once } from "node:events";
+ import { createServer } from "node:net";
+-import { mkdtemp, cp, mkdir, writeFile, rm } from "node:fs/promises";
++import { mkdtemp, cp, mkdir, writeFile, rm, readdir } from "node:fs/promises";
+ import { existsSync } from "node:fs";
+ import { tmpdir } from "node:os";
+ import { join } from "node:path";
+@@ -224,12 +224,18 @@ test("disposable Postgres and real browser durable account/workflow acceptance",
+   expect(
+     await Promise.all(children.map(async (process) => (await once(process, "exit"))[0])),
+   ).toEqual([0, 0]);
+-  expect(await sql("select name from _migrations")).toHaveLength(8);
++  const expectedMigrations = (await readdir("migrations", { withFileTypes: true }))
++    .filter((entry) => entry.isFile() && entry.name.endsWith(".sql"))
++    .map((entry) => ({ name: entry.name }))
++    .sort((a, b) => a.name.localeCompare(b.name));
++  expect(await sql("select name from _migrations order by name")).toEqual(expectedMigrations);
+   const concurrent = new pg.Pool({ connectionString: urlFor(names[4]) });
+-  expect((await concurrent.query("select name from _migrations")).rows).toHaveLength(8);
++  expect((await concurrent.query("select name from _migrations order by name")).rows).toEqual(
++    expectedMigrations,
++  );
+   await concurrent.end();
+   receipt(
+-    "fresh + repeat + two fresh concurrent migrators: eight unique migrations, concurrent exits 0/0",
++    `fresh + repeat + two fresh concurrent migrators: exact ${expectedMigrations.length} root filenames, concurrent exits 0/0`,
+   );
+   const earlier = join(scratch, "earlier");
+   await mkdir(earlier);
+diff --git a/sidecars/quasar-service/src/job.test.ts b/sidecars/quasar-service/src/job.test.ts
+index 547cc1c5..356fcb15 100644
+--- a/sidecars/quasar-service/src/job.test.ts
++++ b/sidecars/quasar-service/src/job.test.ts
+@@ -49,3 +49,126 @@ test("home ownership excludes a separate process and recovers after crash", asyn
+     await rm(home, { recursive: true });
+   }
+ });
++
++test("process crash during generation recovers interrupted durable state and permits retry", async () => {
++  const { mkdir, writeFile, readFile } = await import("node:fs/promises");
++  const { createServer } = await import("./server");
++  const { PreviewManager } = await import("./preview");
++  const home = await mkdtemp(path.join(tmpdir(), "quasar-crash-job-"));
++  const template = path.join(home, "template");
++  await mkdir(template);
++  await writeFile(path.join(template, "marker.txt"), "fixture");
++  const module = new URL("./server.ts", import.meta.url).pathname;
++  const previewModule = new URL("./preview.ts", import.meta.url).pathname;
++  const token = "t".repeat(43);
++  const child = Bun.spawn([process.execPath, "-e", `import {createServer} from ${JSON.stringify(module)};import {PreviewManager} from ${JSON.stringify(previewModule)};const server=createServer({home:${JSON.stringify(home)},templateDir:${JSON.stringify(template)},preview:new PreviewManager(),scaffoldInstall:false,port:0,pairingToken:${JSON.stringify(token)},makeClient:()=>({}),engine:async()=>{console.log('generating');await new Promise(()=>{});}});await fetch('http://localhost:'+server.port+'/api/sites',{method:'POST',headers:{authorization:'Bearer '+${JSON.stringify(token)}},body:JSON.stringify({name:'Crash job',prompt:'test'})});`], { stdout: "pipe", stderr: "ignore" });
++  let server: ReturnType<typeof createServer> | undefined;
++  const reader = child.stdout.getReader();
++  try {
++    expect(new TextDecoder().decode((await reader.read()).value)).toContain("generating");
++    child.kill("SIGKILL");
++    await child.exited;
++    const original = JSON.parse(await readFile(path.join(home, "registry.json"), "utf8"))[0];
++    expect(original.status).toBe("generating");
++    server = createServer({ home, templateDir: template, preview: new PreviewManager(), scaffoldInstall: false, port: 0, pairingToken: token, makeClient: () => ({} as never), engine: async ({ onEvent }) => onEvent({ type: "done" }) });
++    const origin = `http://localhost:${server.port}`;
++    await fetch(`${origin}/health`);
++    const recovered = JSON.parse(await readFile(path.join(home, "registry.json"), "utf8"))[0];
++    expect(recovered.job.outcome).toBe("interrupted");
++    expect(recovered.job.id).toBe(original.job.id);
++    const response = await fetch(`${origin}/api/sites/${original.id}/edit`, { method: "POST", headers: { authorization: `Bearer ${token}` }, body: JSON.stringify({ prompt: "retry" }) });
++    expect(response.status).toBe(202);
++    expect((await response.json()).job.id).not.toBe(original.job.id);
++  } finally {
++    child.kill();
++    await child.exited;
++    reader.releaseLock();
++    try { await server?.shutdown(); }
++    finally { await rm(home, { recursive: true, force: true }); }
++  }
++});
++
++test("terminal persistence permission failure publishes no done, retains ownership, and recovers after restart", async () => {
++  const { mkdir, writeFile, readFile, chmod } = await import("node:fs/promises");
++  const { createServer } = await import("./server");
++  const { PreviewManager } = await import("./preview");
++  const home = await mkdtemp(path.join(tmpdir(), "quasar-terminal-fault-"));
++  const template = path.join(home, "template");
++  const token = "t".repeat(43);
++  let child: ReturnType<typeof Bun.spawn> | undefined;
++  let retry: ReturnType<typeof createServer> | undefined;
++  let reader: ReadableStreamDefaultReader<Uint8Array> | undefined;
++  const bounded = <T>(promise: Promise<T>, label: string): Promise<T> => {
++    let timer: ReturnType<typeof setTimeout>;
++    return Promise.race([promise, new Promise<never>((_, reject) => { timer = setTimeout(() => reject(new Error(`Timeout: ${label}`)), 4000); })]).finally(() => clearTimeout(timer!));
++  };
++  try {
++    await mkdir(template);
++    await writeFile(path.join(template, "marker.txt"), "fixture");
++    const serverModule = new URL("./server.ts", import.meta.url).pathname;
++    const previewModule = new URL("./preview.ts", import.meta.url).pathname;
++    const ownershipModule = new URL("./ownership.ts", import.meta.url).pathname;
++    const script = `
++      import {createServer} from ${JSON.stringify(serverModule)};
++      import {PreviewManager} from ${JSON.stringify(previewModule)};
++      import {ownHome} from ${JSON.stringify(ownershipModule)};
++      import {chmod,readFile} from 'node:fs/promises';
++      const home=${JSON.stringify(home)}, token=${JSON.stringify(token)};
++      let release, admitted, failed;
++      const held=new Promise(resolve=>release=resolve), entered=new Promise(resolve=>admitted=resolve), failure=new Promise(resolve=>failed=resolve);
++      const originalError=console.error;
++      console.error=(message)=>{originalError(message);if(message==='quasar: terminal persistence failed; site remains fenced until restart')failed();};
++      let server;
++      try {
++        server=createServer({home,templateDir:${JSON.stringify(template)},preview:new PreviewManager(),scaffoldInstall:false,port:0,pairingToken:token,makeClient:()=>({}),engine:async({onEvent})=>{admitted();await held;onEvent({type:'done'});}});
++        const origin='http://localhost:'+server.port, headers={authorization:'Bearer '+token};
++        const site=await (await fetch(origin+'/api/sites',{method:'POST',headers,body:JSON.stringify({name:'Durability fault',prompt:'test'})})).json();
++        await entered;
++        await chmod(home,0o500);
++        release();
++        await Promise.race([failure,new Promise((_,reject)=>setTimeout(()=>reject(new Error('missing persistence diagnostic')),3000))]);
++        const persisted=JSON.parse(await readFile(home+'/registry.json','utf8'))[0];
++        const events=await (await fetch(origin+'/api/sites/'+site.id+'/events', {headers})).json();
++        const edit=await fetch(origin+'/api/sites/'+site.id+'/edit',{method:'POST',headers,body:JSON.stringify({prompt:'retry'})});
++        await chmod(home,0o700);
++        let shutdownRejected=false;try{await server.shutdown();}catch{shutdownRejected=true;}
++        let ownershipRetained=false;try{ownHome(home)();}catch{ownershipRetained=true;}
++        console.log(JSON.stringify({persisted,events,editStatus:edit.status,shutdownRejected,ownershipRetained}));
++        setInterval(()=>{},1000);
++      } catch(error) { console.error('fixture failed'); process.exitCode=1; }
++      finally {release();await chmod(home,0o700);}
++    `;
++    child = Bun.spawn([process.execPath, "-e", script], { stdout: "pipe", stderr: "pipe" });
++    reader = (child.stdout as ReadableStream<Uint8Array>).getReader();
++    const first = await bounded(reader.read(), "child fault receipt");
++    const receipt = JSON.parse(new TextDecoder().decode(first.value));
++    expect(receipt.persisted.status).toBe("generating");
++    expect(receipt.events.events.some((event: { type: string }) => event.type === "done")).toBe(false);
++    expect(receipt.editStatus).toBe(409);
++    expect(receipt.shutdownRejected).toBe(true);
++    expect(receipt.ownershipRetained).toBe(true);
++    child.kill("SIGKILL");
++    await bounded(child.exited, "fault child exit");
++    const diagnostic = await bounded(new Response(child.stderr as ReadableStream).text(), "failure diagnostic");
++    expect(diagnostic.trim()).toBe("quasar: terminal persistence failed; site remains fenced until restart");
++    retry = createServer({ home, templateDir: template, preview: new PreviewManager(), scaffoldInstall: false, port: 0, pairingToken: token, makeClient: () => ({} as never), engine: async ({ onEvent }) => onEvent({ type: "done" }) });
++    const origin = `http://localhost:${retry.port}`;
++    await bounded(fetch(`${origin}/health`), "restart recovery");
++    const recovered = JSON.parse(await readFile(path.join(home, "registry.json"), "utf8"))[0];
++    expect(recovered.job.outcome).toBe("interrupted");
++    const response = await bounded(fetch(`${origin}/api/sites/${recovered.id}/edit`, { method: "POST", headers: { authorization: `Bearer ${token}` }, body: JSON.stringify({ prompt: "retry" }) }), "retry admission");
++    expect(response.status).toBe(202);
++    expect((await response.json()).job.id).not.toBe(receipt.persisted.job.id);
++  } finally {
++    try { await chmod(home, 0o700); }
++    finally {
++      child?.kill("SIGKILL");
++      try { if (child) await bounded(child.exited, "cleanup child exit"); }
++      finally {
++        reader?.releaseLock();
++        try { if (retry) await bounded(retry.shutdown(), "retry shutdown"); }
++        finally { await rm(home, { recursive: true, force: true }); }
++      }
++    }
++  }
++}, 15_000);
+diff --git a/sidecars/quasar-service/src/server.test.ts b/sidecars/quasar-service/src/server.test.ts
+index 69eb85bb..a8b6d487 100644
+--- a/sidecars/quasar-service/src/server.test.ts
++++ b/sidecars/quasar-service/src/server.test.ts
+@@ -1,6 +1,6 @@
+ import { createServer as createNetServer, type AddressInfo } from "node:net";
+ import { test, expect, afterEach } from "bun:test";
+-import { mkdtemp, mkdir, writeFile, readFile, realpath } from "node:fs/promises";
++import { mkdtemp, mkdir, writeFile, readFile, realpath, chmod, access } from "node:fs/promises";
+ import { tmpdir } from "node:os";
+ import path from "node:path";
+ import type { GenerationEvent } from "../shared/index";
+@@ -51,7 +51,7 @@ const pairedFetch = (url: string, init: RequestInit = {}) => fetch(url, { ...ini
+ 
+ async function makeHarness(
+   engine: EngineFn,
+-  opts?: { templateDir?: string; makeClient?: ServerDeps["makeClient"]; preview?: PreviewManager; jobTimeoutMs?: number }
++  opts?: { templateDir?: string; makeClient?: ServerDeps["makeClient"]; preview?: PreviewManager; jobTimeoutMs?: number; allocatePreviewPort?: ServerDeps["allocatePreviewPort"] }
+ ): Promise<Harness> {
+   const home = await realpath(await mkdtemp(path.join(tmpdir(), "quasar-home-")));
+   let templateDir = opts?.templateDir;
+@@ -71,7 +71,7 @@ async function makeHarness(
+     port: 0,
+     pairingToken: TOKEN,
+     jobTimeoutMs: opts?.jobTimeoutMs,
+-    allocatePreviewPort: testPreviewPort,
++    allocatePreviewPort: opts?.allocatePreviewPort ?? testPreviewPort,
+   });
+ 
+   const harness: Harness = { home, templateDir, baseUrl: `http://localhost:${server.port}`, server, preview };
+@@ -669,3 +669,151 @@ test("a launch body delayed across child replacement cannot redeem its old gener
+   expect(rejected?.status).toBe(401);
+   expect(rejected?.headers.get("set-cookie")).toBeNull();
+ }, 10_000);
++
++test("shutdown retains home ownership until an admitted delete finishes", async () => {
++  const h = await makeHarness(stubEngine([{ type: "done" }], 0));
++  const site = await (await pairedFetch(`${h.baseUrl}/api/sites`, { method: "POST", body: JSON.stringify({ name: "Drain delete", prompt: "test" }) })).json();
++  await pollUntilIdle(h.baseUrl, site.id);
++  let entered!: () => void;
++  const stopping = new Promise<void>(resolve => { entered = resolve; });
++  let resume!: () => void;
++  const held = new Promise<void>(resolve => { resume = resolve; });
++  const originalStop = h.preview.stop.bind(h.preview);
++  h.preview.stop = async (id: string) => { entered(); await held; await originalStop(id); };
++  const deleting = pairedFetch(`${h.baseUrl}/api/sites/${site.id}`, { method: "DELETE" });
++  void deleting.catch(() => {});
++  let shutdown: Promise<void> | undefined;
++  try {
++    await stopping;
++    let closed = false;
++    shutdown = h.server.shutdown().then(() => { closed = true; });
++    void shutdown.catch(() => {});
++    await sleep(30);
++    expect(closed).toBe(false);
++    expect(() => createServer({ home: h.home, templateDir: h.templateDir, engine: stubEngine([], 0), makeClient: () => ({} as never), preview: new PreviewManager(), scaffoldInstall: false, port: 0, pairingToken: TOKEN })).toThrow("ownership unavailable");
++    expect((await pairedFetch(`${h.baseUrl}/api/sites`)).status).toBe(503);
++    resume();
++    expect((await deleting).status).toBe(204);
++    await shutdown;
++    expect(JSON.parse(await readFile(path.join(h.home, "registry.json"), "utf8"))).toEqual([]);
++  } finally {
++    resume();
++    await Promise.allSettled([deleting, ...(shutdown ? [shutdown] : [])]);
++    h.preview.stop = originalStop;
++  }
++});
++
++test("failed pairing construction releases home for immediate same-process retry", async () => {
++  const h = await makeHarness(stubEngine([], 0));
++  await h.server.shutdown();
++  const deps = { home: h.home, templateDir: h.templateDir, engine: stubEngine([], 0), makeClient: () => ({} as never), preview: new PreviewManager(), scaffoldInstall: false, port: 0, pairingToken: "invalid" };
++  expect(() => createServer(deps)).toThrow();
++  const retry = createServer({ ...deps, pairingToken: TOKEN });
++  await retry.shutdown();
++});
++
++test("failed HTTP bind settles recovery before releasing home and preserves the occupied listener", async () => {
++  const occupied = await makeHarness(stubEngine([], 0));
++  const h = await makeHarness(stubEngine([], 0));
++  await h.server.shutdown();
++  const deps = { home: h.home, templateDir: h.templateDir, engine: stubEngine([], 0), makeClient: () => ({} as never), preview: new PreviewManager(), scaffoldInstall: false, port: occupied.server.port!, pairingToken: TOKEN };
++  expect(() => createServer(deps)).toThrow();
++  // Constructor cleanup deliberately retains ownership until async recovery settles.
++  await sleep(30);
++  const retry = createServer({ ...deps, port: 0 });
++  try { expect((await fetch(`${occupied.baseUrl}/health`)).status).toBe(200); }
++  finally { await retry.shutdown(); }
++});
++
++test("deletion drains an accepted filesystem write before removing the directory", async () => {
++  let entered!: () => void;
++  const writing = new Promise<void>(resolve => { entered = resolve; });
++  let resume!: () => void;
++  const held = new Promise<void>(resolve => { resume = resolve; });
++  const h = await makeHarness(async ({ scope, siteDir, onEvent }) => {
++    await scope!.accept(async () => { entered(); await held; await writeFile(path.join(siteDir, "accepted.txt"), "owned write"); });
++    onEvent({ type: "done" });
++  });
++  let deleting: Promise<Response> | undefined;
++  try {
++    const site = await (await pairedFetch(`${h.baseUrl}/api/sites`, { method: "POST", body: JSON.stringify({ name: "Held write", prompt: "test" }) })).json();
++    await writing;
++    let deleted = false;
++    deleting = pairedFetch(`${h.baseUrl}/api/sites/${site.id}`, { method: "DELETE" }).then(response => { deleted = true; return response; });
++    void deleting.catch(() => {});
++    await sleep(30);
++    expect(deleted).toBe(false);
++    expect((await pairedFetch(`${h.baseUrl}/api/sites/${site.id}/edit`, { method: "POST", body: JSON.stringify({ prompt: "replacement" }) })).status).toBe(409);
++    resume();
++    expect((await deleting).status).toBe(204);
++    expect(await access(path.join(h.home, "sites", site.slug)).then(() => true, () => false)).toBe(false);
++  } finally {
++    resume();
++    if (deleting) await Promise.allSettled([deleting]);
++  }
++});
++
++test("filesystem deletion failure preserves registry and slug until retry succeeds", async () => {
++  const h = await makeHarness(stubEngine([{ type: "done" }], 0));
++  const create = () => pairedFetch(`${h.baseUrl}/api/sites`, { method: "POST", body: JSON.stringify({ name: "Delete permissions", prompt: "test" }) });
++  const site = await (await create()).json();
++  await pollUntilIdle(h.baseUrl, site.id);
++  const sitesDir = path.join(h.home, "sites");
++  await chmod(sitesDir, 0o500);
++  try {
++    expect((await pairedFetch(`${h.baseUrl}/api/sites/${site.id}`, { method: "DELETE" })).status).toBe(500);
++    expect((await pairedFetch(`${h.baseUrl}/api/sites/${site.id}`)).status).toBe(200);
++  } finally { await chmod(sitesDir, 0o700); }
++  const replacement = await (await create()).json();
++  expect(replacement.slug).toBe(`${site.slug}-2`);
++  await pollUntilIdle(h.baseUrl, replacement.id);
++  expect((await pairedFetch(`${h.baseUrl}/api/sites/${site.id}`, { method: "DELETE" })).status).toBe(204);
++});
++
++test("registry mutex serializes HTTP events with settled state and immediate retry", async () => {
++  const bounded = <T>(promise: Promise<T>, label: string): Promise<T> => {
++    let timer: ReturnType<typeof setTimeout>;
++    return Promise.race([promise, new Promise<never>((_, reject) => { timer = setTimeout(() => reject(new Error(`Timeout: ${label}`)), 3000); })]).finally(() => clearTimeout(timer!));
++  };
++  let releaseEngine!: () => void;
++  const heldEngine = new Promise<void>(resolve => { releaseEngine = resolve; });
++  let admitted!: () => void;
++  const engineEntered = new Promise<void>(resolve => { admitted = resolve; });
++  let releaseLock!: () => void;
++  const heldLock = new Promise<void>(resolve => { releaseLock = resolve; });
++  let enteredLock!: () => void;
++  const lockEntered = new Promise<void>(resolve => { enteredLock = resolve; });
++  const h = await makeHarness(async ({ onEvent }) => { admitted(); await heldEngine; onEvent({ type: "done" }); }, {
++    allocatePreviewPort: async () => { enteredLock(); await heldLock; return testPreviewPort(); },
++  });
++  let preview: Promise<Response> | undefined;
++  let events: Promise<Response> | undefined;
++  try {
++    const site = await (await bounded(pairedFetch(`${h.baseUrl}/api/sites`, { method: "POST", body: JSON.stringify({ name: "Mutex finalization", prompt: "test" }) }), "create")).json();
++    await bounded(engineEntered, "engine admission");
++    preview = pairedFetch(`${h.baseUrl}/api/sites/${site.id}/preview/start`, { method: "POST" });
++    void preview.catch(() => {});
++    await bounded(lockEntered, "preview reservation lock");
++    releaseEngine();
++    await sleep(30);
++    const persisted = JSON.parse(await readFile(path.join(h.home, "registry.json"), "utf8"))[0];
++    expect(persisted.status).toBe("generating");
++    // getEvents also takes this lock: pending HTTP proves serialization,
++    // not the internal bus publication order.
++    let delivered = false;
++    events = pairedFetch(`${h.baseUrl}/api/sites/${site.id}/events`).then(response => { delivered = true; return response; });
++    void events.catch(() => {});
++    await sleep(30);
++    expect(delivered).toBe(false);
++    releaseLock();
++    const page = await (await bounded(events, "terminal events")).json();
++    expect(page.events.map((event: GenerationEvent) => event.type)).toEqual(["done"]);
++    expect(page.job.outcome).toBe("done");
++    expect(JSON.parse(await readFile(path.join(h.home, "registry.json"), "utf8"))[0].status).toBe("idle");
++    expect((await bounded(pairedFetch(`${h.baseUrl}/api/sites/${site.id}/edit`, { method: "POST", body: JSON.stringify({ prompt: "immediate retry" }) }), "retry")).status).toBe(202);
++  } finally {
++    releaseEngine();
++    releaseLock();
++    await bounded(Promise.allSettled([...(preview ? [preview] : []), ...(events ? [events] : [])]), "fixture requests cleanup");
++  }
++}, 12_000);
+diff --git a/sidecars/quasar-service/src/server.ts b/sidecars/quasar-service/src/server.ts
+index cd8c6daf..2b799058 100644
+--- a/sidecars/quasar-service/src/server.ts
++++ b/sidecars/quasar-service/src/server.ts
+@@ -91,6 +91,7 @@ export function createServer(deps: ServerDeps) {
+   const deleting = new Set<string>();
+   const previewStarts = new Map<string, Set<Promise<unknown>>>();
+   let closing = false;
++  const requests = new Set<Promise<void>>();
+   const ready = withRegistryLock(async () => {
+     const sites = await readRegistry(registryFile);
+     let changed = false;
+@@ -488,6 +489,10 @@ export function createServer(deps: ServerDeps) {
+     maxRequestBodySize: 1024 * 1024,
+     websocket: proxy.websocket,
+     async fetch(req, server) {
++      if (closing) return json({ error: "service stopping" }, { status: 503 });
++      let settled!: () => void;
++      const pending = new Promise<void>(resolve => { settled = resolve; });
++      requests.add(pending);
+       try {
+         const url = new URL(req.url);
+         const serviceOrigin = deps.publicOrigin ?? `http://${policy.hostname.includes(":") ? `[${policy.hostname}]` : policy.hostname}:${server.port}`;
+@@ -515,6 +520,9 @@ export function createServer(deps: ServerDeps) {
+         return response;
+       } catch {
+         return json({ error: "service request failed" }, { status: 500 });
++      } finally {
++        requests.delete(pending);
++        settled();
+       }
+     },
+   }); } catch (error) { void ready.then(releaseHome, releaseHome); throw error; } })();
+@@ -523,6 +531,9 @@ export function createServer(deps: ServerDeps) {
+   const shutdown = () => shutdownPromise ??= (async () => {
+     closing = true;
+     await ready;
++    // Existing requests may be parsing bodies, deleting files, or stopping a
++    // preview outside the registry lock. They retain home ownership until done.
++    await Promise.all([...requests]);
+     await withRegistryLock(async () => {});
+     await Promise.allSettled([...previewStarts.values()].flatMap(starts => [...starts]));
+     for (const job of jobs.values()) job.cancel("Generation interrupted by service shutdown. Partial files retained.", "interrupted");
+diff --git a/src/components/site/trailer-editions.css b/src/components/site/trailer-editions.css
+index 98b41d65..a5919a52 100644
+--- a/src/components/site/trailer-editions.css
++++ b/src/components/site/trailer-editions.css
+@@ -7,6 +7,9 @@
+   border: 1px solid #98775455;
+   padding: clamp(1.25rem, 4vw, 3.5rem);
+ }
++.edition-gallery .eyebrow {
++  color: #57584f;
++}
+ .edition-intro {
+   max-width: 52rem;
+ }
+@@ -174,7 +177,7 @@
+ .edition-index-duration,
+ .edition-index-copy small {
+   font: 0.7rem var(--font-mono);
+-  color: #66675e;
++  color: #57584f;
+ }
+ .edition-index img {
+   width: 5.5rem;
+diff --git a/src/routes/api/cron/audits-expire.ts b/src/routes/api/cron/audits-expire.ts
+index 5ef378ad..6c53afdd 100644
+--- a/src/routes/api/cron/audits-expire.ts
++++ b/src/routes/api/cron/audits-expire.ts
+@@ -20,8 +20,8 @@ async function expire(request: Request): Promise<Response> {
+   try {
+     const deleted = await expireAudits();
+     return Response.json({ ok: true, deleted }, { headers });
+-  } catch (error) {
+-    console.error("Audit expiry failed:", error);
++  } catch {
++    console.error("Audit expiry failed");
+     return Response.json({ error: "Audit expiry failed" }, { status: 500, headers });
+   }
+ }
+
+--- NEW FILE e2e/backend/persistent.acceptance.ts ---
+import { test, expect } from "@playwright/test";
+import { randomBytes, randomUUID, createCipheriv, createHmac, createHash } from "node:crypto";
+import { spawn, spawnSync, type ChildProcess } from "node:child_process";
+import { once } from "node:events";
+import { createServer as netServer } from "node:net";
+import { createServer as httpsServer, type Server } from "node:https";
+import { request } from "node:http";
+import { mkdtemp, readFile, readdir, rm, realpath, readlink, lstat } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join, resolve, isAbsolute, relative, sep } from "node:path";
+import pg from "pg";
+import { migrate } from "../../scripts/migrate.ts";
+import { acceptanceTarget } from "./guard";
+import { cleanupOwnedResources, stopOwnedChild } from "./process-cleanup";
+
+// Run build:persistent separately, serially with every Vite acceptance harness.
+// Only fresh owned DBs and process handles are ever destroyed. No traces include credentials.
+const target = acceptanceTarget();
+// Optional controller-frozen compiled output, never a URL or source checkout.
+// The existing guarded .output contract remains the default.
+const requestedArtifact = process.env.QUESAR_ACCEPTANCE_ARTIFACT_ROOT;
+if (
+  requestedArtifact !== undefined &&
+  (!requestedArtifact.trim() || !isAbsolute(requestedArtifact))
+)
+  throw new Error(
+    "QUESAR_ACCEPTANCE_ARTIFACT_ROOT must be an absolute local compiled-artifact directory.",
+  );
+let artifactRoot: string;
+let artifactHash: string;
+async function hashArtifact(root: string): Promise<string> {
+  const hash = createHash("sha256");
+  async function walk(path: string) {
+    for (const entry of (await readdir(join(root, path), { withFileTypes: true })).sort((a, b) =>
+      a.name.localeCompare(b.name),
+    )) {
+      const name = join(path, entry.name);
+      if (entry.isSymbolicLink()) {
+        const destination = relative(root, await realpath(join(root, name)));
+        if (destination === ".." || destination.startsWith(`..${sep}`) || isAbsolute(destination))
+          throw new Error("Compiled artifact symlinks must remain inside its frozen root.");
+        hash.update(JSON.stringify(["link", name, await readlink(join(root, name))]));
+      } else if (entry.isDirectory()) {
+        hash.update(JSON.stringify(["directory", name]));
+        await walk(name);
+      } else if (entry.isFile()) {
+        const content = await readFile(join(root, name));
+        hash.update(JSON.stringify(["file", name, content.length]));
+        hash.update(content);
+      } else throw new Error("Compiled artifact contains an unsupported filesystem entry.");
+    }
+  }
+  await walk("");
+  return hash.digest("hex");
+}
+
+const name = `quesar_artifact_${randomBytes(6).toString("hex")}`;
+const names = [name, `${name}_restore`];
+const admin = new pg.Pool({ connectionString: target.href });
+const urlFor = (database: string) => {
+  const url = new URL(target);
+  url.pathname = `/${database}`;
+  return url.href;
+};
+const db = new pg.Pool({ connectionString: urlFor(name) });
+const key = randomBytes(32);
+const secret = randomBytes(32).toString("hex");
+const password = randomBytes(24).toString("base64url");
+let scratch: string;
+let databaseRole: string;
+let port: number;
+let origin: string;
+let proxy: Server | undefined;
+let child: ChildProcess | undefined;
+let diagnostic = "";
+const receipt = (message: string) => console.log(`[persistent acceptance] ${message}`);
+async function freePort() {
+  const server = netServer();
+  server.listen(0, "127.0.0.1");
+  await once(server, "listening");
+  const address = server.address();
+  if (!address || typeof address === "string") throw new Error("No owned port");
+  await new Promise<void>((resolve) => server.close(() => resolve()));
+  return address.port;
+}
+async function stop() {
+  if (child) await stopOwnedChild(child);
+  child = undefined;
+}
+async function start(settings: Record<string, string> = {}) {
+  await stop();
+  // Runtime allowlist, deliberately no inherited credentials or NODE_ENV.
+  diagnostic = "";
+  let output = "";
+  let spawnFailed = false;
+  child = spawn(process.execPath, [join(artifactRoot, "server/index.mjs")], {
+    cwd: requestedArtifact === undefined ? undefined : artifactRoot,
+    env: {
+      PATH: process.env.PATH,
+      HOST: "127.0.0.1",
+      PORT: String(port),
+      ...settings,
+    },
+    stdio: ["ignore", "pipe", "pipe"],
+  });
+  child.once("error", () => {
+    spawnFailed = true;
+  });
+  child.stdout?.on("data", (chunk: Buffer) => {
+    output = (output + chunk.toString()).slice(-4000);
+  });
+  child.stderr?.on("data", (chunk: Buffer) => {
+    diagnostic = (diagnostic + chunk.toString()).slice(-4000);
+    for (const value of [password, secret, key.toString("base64")])
+      diagnostic = diagnostic.replaceAll(value, "[redacted]");
+  });
+  for (let attempt = 0; attempt < 120; attempt++) {
+    if (spawnFailed || child.exitCode !== null || child.signalCode !== null)
+      throw new Error("Owned persistent artifact exited before readiness");
+    if (/EADDRINUSE|EACCES/.test(diagnostic))
+      throw new Error("Owned persistent artifact could not bind its listener");
+    // Observed from this artifact: "➜ Listening on: http://127.0.0.1:<port>/".
+    // No HTTP response can establish ownership before this owned child receipt.
+    if (!output.includes(`Listening on: http://127.0.0.1:${port}/`)) {
+      await new Promise((resolve) => setTimeout(resolve, 250));
+      continue;
+    }
+    try {
+      const response = await fetch(`http://127.0.0.1:${port}/api/readiness`, {
+        signal: AbortSignal.timeout(1000),
+      });
+      if (child.exitCode !== null || child.signalCode !== null)
+        throw new Error("Owned persistent artifact exited during readiness");
+      if ([200, 503].includes(response.status)) return response;
+    } catch {
+      /* starting */
+    }
+    await new Promise((resolve) => setTimeout(resolve, 250));
+  }
+  throw new Error("Persistent artifact did not bind owned loopback port");
+}
+const settings = () => ({
+  DATABASE_URL: urlFor(name),
+  PGUSER: databaseRole,
+  BETTER_AUTH_SECRET: secret,
+  BETTER_AUTH_URL: origin,
+  APP_ENCRYPTION_KEY: key.toString("base64"),
+  VITE_AUTH_ENABLED: "true",
+});
+async function seedAudit(userId: string, model: string, transplanted?: string) {
+  const id = randomUUID();
+  const content = JSON.stringify({
+    messages: [{ role: "user", content: "Synthetic artifact" }],
+    reply: "Persistent artifact decrypted fixture",
+  });
+  const iv = randomBytes(12);
+  const cipher = createCipheriv(
+    "aes-256-gcm",
+    createHmac("sha256", key).update("quesar:seal").digest(),
+    iv,
+  );
+  cipher.setAAD(Buffer.from(`audit:${id}:${userId}`));
+  const ciphertext = Buffer.concat([cipher.update(content), cipher.final()]);
+  const sealed =
+    transplanted ??
+    [
+      "v1",
+      iv.toString("base64url"),
+      ciphertext.toString("base64url"),
+      cipher.getAuthTag().toString("base64url"),
+    ].join(".");
+  expect(sealed.includes("Persistent artifact decrypted fixture")).toBe(false);
+  await db.query(
+    "insert into conversation_audits (id,user_id,provider,model,policy_version,sealed,content_digest,expires_at) values ($1,$2,'fixture',$3,'2026-09-22.1',$4,$5,now()+interval '1 day')",
+    [id, userId, model, sealed, createHash("sha256").update(content).digest("base64url")],
+  );
+  return { id, sealed };
+}
+
+test.beforeAll(async () => {
+  artifactRoot = await realpath(requestedArtifact ?? resolve(".output"));
+  if (
+    !(await lstat(join(artifactRoot, "server/index.mjs"))).isFile() ||
+    !(await lstat(join(artifactRoot, "public"))).isDirectory()
+  )
+    throw new Error(
+      "Compiled artifact requires server/index.mjs and its public resource directory.",
+    );
+  artifactHash = await hashArtifact(artifactRoot);
+  receipt(`compiled artifact root ${artifactRoot}; full-tree SHA256 ${artifactHash}`);
+  scratch = await mkdtemp(join(tmpdir(), "quesar-artifact-"));
+  databaseRole = (await admin.query("select current_user as role")).rows[0].role;
+  for (const database of names) await admin.query(`create database "${database}"`);
+  port = await freePort();
+  const tlsPort = await freePort();
+  origin = `https://127.0.0.1:${tlsPort}`;
+  const cert = join(scratch, "cert.pem");
+  const privateKey = join(scratch, "key.pem");
+  expect(
+    spawnSync(
+      "openssl",
+      [
+        "req",
+        "-x509",
+        "-newkey",
+        "rsa:2048",
+        "-nodes",
+        "-days",
+        "1",
+        "-subj",
+        "/CN=127.0.0.1",
+        "-addext",
+        "subjectAltName=IP:127.0.0.1",
+        "-keyout",
+        privateKey,
+        "-out",
+        cert,
+      ],
+      { stdio: "ignore" },
+    ).status,
+  ).toBe(0);
+  proxy = httpsServer(
+    { key: await readFile(privateKey), cert: await readFile(cert) },
+    (incoming, outgoing) => {
+      // Preserve HTTPS Host/Origin and secure cookie semantics through private proxy.
+      const upstream = request(
+        {
+          hostname: "127.0.0.1",
+          port,
+          path: incoming.url,
+          method: incoming.method,
+          headers: { ...incoming.headers, "x-forwarded-proto": "https" },
+        },
+        (response) => {
+          outgoing.writeHead(response.statusCode ?? 502, response.headers);
+          response.pipe(outgoing);
+        },
+      );
+      upstream.on("error", () => {
+        if (!outgoing.headersSent) outgoing.writeHead(502);
+        outgoing.end();
+      });
+      incoming.pipe(upstream);
+    },
+  );
+  proxy.listen(tlsPort, "127.0.0.1");
+  await once(proxy, "listening");
+});
+test.afterAll(async () => {
+  await cleanupOwnedResources([
+    stop,
+    async () => {
+      if (artifactHash) {
+        expect(await hashArtifact(artifactRoot)).toBe(artifactHash);
+        receipt(`compiled artifact full-tree SHA256 unchanged ${artifactHash}`);
+      }
+    },
+    async () => {
+      if (proxy) {
+        proxy.closeAllConnections();
+        await new Promise<void>((resolve, reject) =>
+          proxy!.close((error) => (error ? reject(error) : resolve())),
+        );
+      }
+    },
+    () => db.end(),
+    ...names.map(
+      (database) => () => admin.query(`drop database if exists "${database}" with (force)`),
+    ),
+    () => admin.end(),
+    async () => {
+      if (scratch) await rm(scratch, { recursive: true, force: true });
+    },
+  ]);
+  receipt(
+    "owned Node process, TLS proxy/cert, pools, two databases and seeded dump removed; parent PG untouched",
+  );
+});
+
+test("persistent Node artifact: fail closed, migrations, secure sessions, isolation, restart and seeded restore", async ({
+  browser,
+}) => {
+  let response = await start();
+  expect(response.status).toBe(503);
+  expect((await response.json()).reasons.sort()).toEqual([
+    "auth_origin_invalid",
+    "database_unavailable",
+    "session_secret_invalid",
+  ]);
+  expect((await fetch(`http://127.0.0.1:${port}/api/auth/ok`)).status).toBe(503);
+  receipt("missing required config refused with NODE_ENV absent, readiness/auth both 503");
+  const disconnected = netServer((socket) => socket.destroy());
+  disconnected.listen(0, "127.0.0.1");
+  await once(disconnected, "listening");
+  const address = disconnected.address();
+  if (!address || typeof address === "string") throw new Error("No owned disconnected probe port");
+  const unavailable = new URL(urlFor(name));
+  unavailable.port = String(address.port);
+  const unreachable = new pg.Pool({
+    connectionString: unavailable.href,
+    connectionTimeoutMillis: 1000,
+  });
+  try {
+    response = await start({ ...settings(), DATABASE_URL: unavailable.href });
+    expect(response.status).toBe(200);
+    // A held non-Postgres listener refuses every socket; no unrelated process
+    // can acquire this port during the configuration/connectivity probe.
+    await expect(unreachable.query("select 1")).rejects.toThrow();
+    const disconnectedAuth = await fetch(`http://127.0.0.1:${port}/api/auth/sign-up/email`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        origin,
+        host: new URL(origin).host,
+        "x-forwarded-proto": "https",
+      },
+      body: JSON.stringify({
+        email: `${name}-disconnected@example.invalid`,
+        password,
+        name: "Synthetic disconnected",
+      }),
+      signal: AbortSignal.timeout(15000),
+    });
+    expect(disconnectedAuth.status).toBe(500);
+  } finally {
+    await cleanupOwnedResources([
+      stop,
+      () => unreachable.end(),
+      () =>
+        new Promise<void>((resolve, reject) =>
+          disconnected.close((error) => (error ? reject(error) : resolve())),
+        ),
+    ]);
+  }
+  expect(
+    (await db.query("select count(*)::int as n from pg_tables where schemaname='public'")).rows[0]
+      .n,
+  ).toBe(0);
+  await start(settings());
+  expect(
+    (await db.query("select count(*)::int as n from pg_tables where schemaname='public'")).rows[0]
+      .n,
+  ).toBe(0);
+  await migrate(urlFor(name));
+  await migrate(urlFor(name));
+  const expected = (await readdir("migrations", { withFileTypes: true }))
+    .filter((entry) => entry.isFile() && entry.name.endsWith(".sql"))
+    .map((entry) => ({ name: entry.name }))
+    .sort((a, b) => a.name.localeCompare(b.name));
+  expect((await db.query("select name from _migrations order by name")).rows).toEqual(expected);
+  receipt(
+    `config/connectivity separated; Node startup did not migrate; explicit/repeat migration exact ${expected.length} root filenames`,
+  );
+  const owner = await browser.newContext({ ignoreHTTPSErrors: true });
+  const other = await browser.newContext({ ignoreHTTPSErrors: true });
+  for (const context of [owner, other]) {
+    await context.route("**/*", (route) =>
+      new URL(route.request().url()).origin === origin ? route.continue() : route.abort(),
+    );
+  }
+  try {
+    const ids: string[] = [];
+    for (const [context, suffix] of [
+      [owner, "owner"],
+      [other, "other"],
+    ] as const) {
+      const signup = await context.request.post(`${origin}/api/auth/sign-up/email`, {
+        headers: { origin },
+        data: { email: `${name}-${suffix}@example.invalid`, password, name: `Synthetic ${suffix}` },
+      });
+      if (signup.status() !== 200) console.log("[persistent diagnostic]", diagnostic);
+      expect(signup.status()).toBe(200);
+      const cookies = await context.cookies();
+      expect(
+        cookies.some(
+          (cookie) =>
+            cookie.name === "__Host-quesar.session_token" && cookie.secure && cookie.httpOnly,
+        ),
+      ).toBe(true);
+      ids.push(
+        (
+          await db.query('select id from "user" where email=$1', [
+            `${name}-${suffix}@example.invalid`,
+          ])
+        ).rows[0].id,
+      );
+    }
+    const page = await owner.newPage();
+    const bystander = await other.newPage();
+    for (const [id, body] of [
+      [ids[0], "artifact owner note"],
+      [ids[1], "artifact other note"],
+    ])
+      await db.query("insert into field_notes (user_id,node_id,body) values ($1,'quesar',$2)", [
+        id,
+        body,
+      ]);
+    const audit = await seedAudit(ids[0], "owner-only");
+    const transplant = await seedAudit(ids[1], "transplanted", audit.sealed);
+    for (const [active, own, absent] of [
+      [page, "artifact owner note", "artifact other note"],
+      [bystander, "artifact other note", "artifact owner note"],
+    ] as const) {
+      await active.goto(`${origin}/console`);
+      await expect(active.getByText(own, { exact: true })).toBeVisible();
+      await expect(active.getByText(absent, { exact: true })).toHaveCount(0);
+      await active.getByRole("tab", { name: "My audits", exact: true }).click();
+      await expect(active.getByRole("button", { name: "View audit", exact: true })).toHaveCount(1);
+      await active.getByRole("button", { name: "View audit", exact: true }).click();
+    }
+    await expect(
+      page.getByText("Persistent artifact decrypted fixture", { exact: true }),
+    ).toBeVisible();
+    await expect(bystander.getByRole("alert")).toContainText("could not be decrypted");
+    // Replay the compiled read transport with a known foreign ID. The account
+    // scope must refuse it even when the caller bypasses the inventory UI.
+    const outgoing = bystander.waitForRequest(
+      (request) =>
+        request.method() === "POST" && Boolean(request.postData()?.includes(transplant.id)),
+    );
+    await bystander.getByRole("button", { name: "View audit", exact: true }).click();
+    const transport = await outgoing;
+    const foreignResponse = await bystander.evaluate(
+      async ({ url, body, contentType }) => {
+        const response = await fetch(url, {
+          method: "POST",
+          headers: {
+            "content-type": contentType,
+            "x-tsr-serverFn": "true",
+            accept: "application/json",
+          },
+          body,
+        });
+        return { status: response.status, refused: (await response.text()).includes("not_found") };
+      },
+      {
+        url: transport.url(),
+        body: transport.postData()!.replaceAll(transplant.id, audit.id),
+        contentType: transport.headers()["content-type"],
+      },
+    );
+    expect(foreignResponse).toEqual({ status: 200, refused: true });
+
+    await expect(bystander.getByText("fixture · owner-only", { exact: true })).toHaveCount(0);
+    receipt(
+      "compiled HTTPS Console: secure auth cookies; seeded notes/audit account isolation; owner decrypt, known foreign read and transplanted ciphertext refusal",
+    );
+    await Promise.all([page, bystander].map((active) => active.goto("about:blank")));
+    await stop();
+    await start(settings());
+    await page.goto(`${origin}/profile`);
+    await expect(page.getByLabel("Display name")).toHaveValue("Synthetic owner");
+    await page.goto(`${origin}/console`);
+    await expect(page.getByText("artifact owner note", { exact: true })).toBeVisible();
+    await page.getByRole("tab", { name: "My audits", exact: true }).click();
+    await page.getByRole("button", { name: "View audit", exact: true }).click();
+    await expect(
+      page.getByText("Persistent artifact decrypted fixture", { exact: true }),
+    ).toBeVisible();
+    await Promise.all([page, bystander].map((active) => active.goto("about:blank")));
+    await stop();
+    const dump = join(scratch, "seeded.dump");
+    expect(
+      spawnSync("/opt/homebrew/opt/postgresql@17/bin/pg_dump", ["-Fc", "-f", dump, urlFor(name)], {
+        stdio: "ignore",
+      }).status,
+    ).toBe(0);
+    expect(
+      spawnSync(
+        "/opt/homebrew/opt/postgresql@17/bin/pg_restore",
+        ["--exit-on-error", "-d", urlFor(names[1]), dump],
+        { stdio: "ignore" },
+      ).status,
+    ).toBe(0);
+    const restored = new pg.Pool({ connectionString: urlFor(names[1]) });
+    let tables = 0;
+    try {
+      const rows = (
+        await db.query(
+          "select tablename from pg_tables where schemaname='public' order by tablename",
+        )
+      ).rows;
+      tables = rows.length;
+      for (const { tablename } of rows) {
+        const query = `select row_to_json(t)::text as row from "${tablename}" t order by row_to_json(t)::text`;
+        const hash = (value: unknown) =>
+          createHash("sha256").update(JSON.stringify(value)).digest("hex");
+        expect(hash((await restored.query(query)).rows)).toBe(hash((await db.query(query)).rows));
+      }
+    } finally {
+      await restored.end();
+    }
+    await start({ ...settings(), DATABASE_URL: urlFor(names[1]) });
+    await page.goto(`${origin}/profile`);
+    await expect(page.getByLabel("Display name")).toHaveValue("Synthetic owner");
+    await page.goto(`${origin}/console`);
+    await expect(page.getByText("artifact owner note", { exact: true })).toBeVisible();
+    await page.getByRole("tab", { name: "My audits", exact: true }).click();
+    await page.getByRole("button", { name: "View audit", exact: true }).click();
+    await expect(
+      page.getByText("Persistent artifact decrypted fixture", { exact: true }),
+    ).toBeVisible();
+    receipt(
+      `Node restart preserved session/note/decryption; seeded pg_dump/restore exits 0/0, ${tables} public table hashes equal; restored Node artifact accepted same secure session and decrypted audit`,
+    );
+  } finally {
+    await owner.close();
+    await other.close();
+  }
+});
+
+--- NEW FILE e2e/backend/persistent.config.ts ---
+import { defineConfig } from "@playwright/test";
+import { acceptanceTarget } from "./guard";
+acceptanceTarget();
+export default defineConfig({
+  testDir: ".",
+  testMatch: "persistent.acceptance.ts",
+  workers: 1,
+  timeout: 240_000,
+  expect: { timeout: 20_000 },
+  outputDir: "../../test-results/persistent-acceptance",
+  reporter: "list",
+  use: { browserName: "chromium", actionTimeout: 20_000, trace: "off", screenshot: "off" },
+});
+
+--- NEW FILE src/routes/api/cron/-audits-expire.test.ts ---
+import { afterEach, describe, expect, it, vi } from "vitest";
+
+type Handler = (context: { request: Request }) => Promise<Response>;
+const mocks = vi.hoisted(() => ({
+  expireAudits: vi.fn(),
+  authorizeCron: vi.fn(() => 200),
+  hit: vi.fn(async () => ({ allowed: true })),
+  handlers: {} as Record<"GET" | "POST", Handler>,
+}));
+
+vi.mock("@tanstack/react-router", () => ({
+  createFileRoute: () => (options: { server: { handlers: Record<"GET" | "POST", Handler> } }) => {
+    mocks.handlers = options.server.handlers;
+    return { options };
+  },
+}));
+vi.mock("@/lib/console.server", () => ({
+  authorizeCron: mocks.authorizeCron,
+  expireAudits: mocks.expireAudits,
+}));
+vi.mock("@/lib/server/rate-limit.server", () => ({
+  clientSubject: () => "test-client",
+  hit: mocks.hit,
+}));
+import "./audits-expire";
+
+afterEach(() => {
+  vi.restoreAllMocks();
+  vi.clearAllMocks();
+});
+
+describe("audit expiry failure logging", () => {
+  it.each(["GET", "POST"] as const)(
+    "keeps secret-bearing %s failures out of logs and responses",
+    async (method) => {
+      const secret = "synthetic-database-password";
+      const record = "synthetic-private-audit-record";
+      const failure = Object.assign(new Error(`postgres://user:${secret}@db.invalid/app`), {
+        detail: record,
+      });
+      mocks.expireAudits.mockRejectedValueOnce(failure);
+      const logged = vi.spyOn(console, "error").mockImplementation(() => {});
+
+      const response = await mocks.handlers[method]({
+        request: new Request("https://example.invalid/api/cron/audits-expire", { method }),
+      });
+
+      expect(response.status).toBe(500);
+      expect(response.headers.get("Cache-Control")).toBe("no-store");
+      expect(await response.json()).toEqual({ error: "Audit expiry failed" });
+      expect(logged).toHaveBeenCalledExactlyOnceWith("Audit expiry failed");
+      expect(logged.mock.calls.flat()).not.toContain(failure);
+      expect(JSON.stringify(logged.mock.calls)).not.toContain(secret);
+      expect(JSON.stringify(logged.mock.calls)).not.toContain(record);
+      expect(mocks.expireAudits).toHaveBeenCalledOnce();
+    },
+  );
+});

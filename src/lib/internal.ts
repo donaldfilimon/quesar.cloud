@@ -52,14 +52,27 @@ export function safeInternalPath(path: string, fallback = "/console") {
   if (
     !path.startsWith("/") ||
     path.startsWith("//") ||
-    path.startsWith("/\\") ||
-    path.includes("://")
+    path.includes("\\") ||
+    [...path].some((character) => character.charCodeAt(0) < 32 || character.charCodeAt(0) === 127)
   ) {
     return fallback;
   }
-  if (path.startsWith("/api") || path.startsWith("/auth/")) return fallback;
-  // Never bounce back into the sign-in page itself (a nested ?next= loop).
-  if (path === "/login" || path.startsWith("/login?") || path.startsWith("/login/"))
+  try {
+    const base = "https://quesar.cloud";
+    const url = new URL(path, base);
+    if (url.origin !== base) return fallback;
+    // Encoded separators or controls must not gain meaning in a route decoder.
+    if (/%(?:2f|5c|0[0-9a-f]|1[0-9a-f]|7f)/i.test(url.pathname)) return fallback;
+    const pathname = decodeURIComponent(url.pathname).toLowerCase();
+    // Check the normalized route, including encoded names and dot segments.
+    if (
+      ["/api", "/auth", "/login", "/signup"].some(
+        (entry) => pathname === entry || pathname.startsWith(`${entry}/`),
+      )
+    )
+      return fallback;
+    return `${url.pathname}${url.search}${url.hash}`;
+  } catch {
     return fallback;
-  return path;
+  }
 }

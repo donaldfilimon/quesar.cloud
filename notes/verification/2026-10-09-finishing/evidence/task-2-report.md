@@ -1,0 +1,38 @@
+# Task 2 service lifecycle qualification — 2026-10-09
+
+Status: **Partial qualification**. Current lifecycle controls were reconciled against the historical review. One demonstrated residual shutdown defect was fixed: an admitted deletion could outlive home ownership because shutdown drained jobs and preview starts but not HTTP handlers. Shutdown now rejects new handlers and waits for admitted handlers before releasing ownership. Historical findings are not blanket closure claims.
+
+Owned edits: `sidecars/quasar-service/src/server.ts`, `sidecars/quasar-service/src/server.test.ts`, `sidecars/quasar-service/src/job.test.ts`, this report. Existing source and other agents' work preserved. No dependencies, provider calls, commits, worktrees or deployment changes.
+
+## Historical finding reconciliation against current source
+
+| Finding | Current source evidence | Qualification |
+| --- | --- | --- |
+| R1 cancellation / resurrection | `src/job.ts:1-18` synchronously closes admission and drains accepted operations; `src/engine.ts:66` wraps write tools in scope acceptance; `src/scaffold.ts:5-46` observes abort and owns installer; `src/server.ts:190-200,374-406` drains before terminal publication/deletion. | Current accepted-write deletion regression holds an actual filesystem write, proves edit stays fenced and deletion waits, then checks the directory is absent after completion. Scope drain, deadline, late completion and preview-start deletion regressions pass. Scaffold cancellation/hung installer matrix remains unqualified. |
+| R2 bounded generation / truthful result | `src/engine.ts:99-125` sets 24 iterations, disables eager tools, passes AbortSignal and permits success only for end_turn. `src/server.ts:178-205` whole-job timeout and silent-engine failure fallback. | Current controlled SDK streaming/stop-reason/stalled SSE fixtures and fake deadline tests pass. No live provider acceptance. |
+| R3 restart / exclusive ownership | `src/ownership.ts:7-19` canonical home kernel loopback reservation; `src/server.ts:80,95-109` holds ownership before recovering generating rows to interrupted; `src/index.ts:20-28` forces process termination after 15 seconds rather than releasing ownership early. | Current subprocess regression kills the owner during admitted generation, verifies generating was durable, restarts the same home, verifies interrupted recovery and accepts retry with a new job id. Separate-process exclusion/crash release and seeded recovery also pass. Single-host homes only; conservative reservation hash collisions may refuse separate homes. |
+| R4 durable terminal ordering | `src/server.ts:121-143` matches job identity/finishedAt under mutex; `src/server.ts:190-205` awaits persistence before publishing, retains fence on write failure; event callback checks job identity/cancellation/terminal. | Partial: current source fixes the historical ordering; late-success and immediate retry fixtures pass. Injected delayed/failed terminal registry write and crash between commit/publication remain proof gaps. |
+| R5 legacy OAuth admin | Outside assigned service ownership; root/backend owner must reconcile. | Out of scope. No closure claim. |
+| R6 failed filesystem deletion | `src/server.ts:392-406` awaits rm before deleting registry row; outer request catch returns 500 and finally clears deletion admission for retry. | Current real permission fault regression makes the sites parent unwritable, verifies delete returns 500 and row survives, restores permissions, verifies same-name create uses suffix -2 and retry deletes the original. Arbitrary storage I/O failure matrix remains unqualified. |
+| R7 epoch / retention | `src/events.ts:4,25-69` fresh epochs and max 128 inactive feeds; polling does not extend retention and running feeds survive pruning. `src/server.ts:302-311` epoch mismatch replays from zero. | Current service fixtures cover replacement event counts below/equal/above prior offset; stale producer/subscriber isolation, retention pressure and delete/replacement tests pass. Entire active feed size is not byte-bounded; streams are in-memory and eviction creates a new empty epoch. Client end-to-end reconciliation is separately owned. |
+| R8 narrated films | Outside assigned service ownership. | Out of scope. No closure claim. |
+| R9 admission / shutdown | `src/server.ts:228-245,272-296,330-363` closing checks fence job/preview admission; added `src/server.ts:492-527,531-544` handler admission and drain before job/preview cleanup and release. | Current regression holds deletion in preview teardown, proves shutdown remains pending/home stays exclusively owned, rejects new requests with 503, then confirms registry removal precedes shutdown completion. Create/edit delayed body matrix not independently exercised. |
+| R10 failed constructor release | `src/server.ts:79-83` policy validation precedes ownership and pairing failure releases synchronously; `src/server.ts:528` failed HTTP bind waits for ready success/failure before release. | Current pairing-failure immediate retry and occupied-bind recovery/retry regressions pass; unrelated occupied listener remains healthy. Filesystem-failed startup recovery matrix remains unqualified. |
+
+## Security and local runtime evidence
+
+Existing full-suite tests exercise pairing rejection across API classes, hostile origin/host rejection, POST one-use preview tickets, site-bound cookies, revocation, child-generation replacement and delayed launch bodies. The installed Next integration checks raw HTTP and HMR protection, authenticated HTML/assets/HMR through proxy and session revocation. Tests use local fixtures; they do not qualify remote DNS/TLS, deployed service ownership, production OAuth or provider billing.
+
+Shutdown intentionally retains ownership while an admitted operation hangs. Standalone `src/index.ts` provides the bounded 15-second process termination path. Constructor bind cleanup is asynchronous to avoid releasing home before startup recovery settles. Neither path advertises completed cleanup when durability fails.
+
+## Validation receipts
+
+Baseline: `bun run typecheck` exit 0; `bun run test` exit 0, 103 pass, 0 fail, 433 assertions across 14 files.
+
+Final frozen service: `bun run typecheck` exit 0; `bun run test` exit 0, **109 pass, 0 fail, 455 assertions across 14 files**, 22.61 seconds. `git diff --check` for all three owned source/test files exit 0. Commands run from `sidecars/quasar-service`; its script uses Bun's runner, unlike root Vitest. Root public/backend gates belong to the controller.
+
+## Independent review fix round 1
+
+Q1 (P2 fixture cleanup) addressed. Both held deletion/write fixtures now release their gates in `finally`, observe pending deletion/shutdown promises, and restore the substituted preview stop method. The occupied-bind retry server shuts down in `finally` even when health verification fails. The generation-crash fixture releases its stdout reader and removes temporary state even if retry shutdown fails. Permission restoration already uses `finally` and remains intact. Production code unchanged in this round.
+
+Frozen validation: sidecar `bun run typecheck` exit 0; focused `bun test src/server.test.ts src/job.test.ts` exit 0, 35 pass / 0 fail / 214 assertions; full sidecar `bun run test` exit 0, **109 pass / 0 fail / 455 assertions / 14 files**, 13.45 seconds. Scoped `git diff --check` exit 0. An initial cwd selection also ran read-only root typecheck and the same focused Bun file selectors; subsequent receipts above were run from the intended sidecar directory. No root build/gate or backend edits performed.

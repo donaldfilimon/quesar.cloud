@@ -1,0 +1,1148 @@
+Current diff statistics:
+ docs/404.html                                      |   2 +-
+ docs/abbey-bot/index.html                          |   2 +-
+ docs/abbey/index.html                              |   4 +-
+ docs/abi/index.html                                |   4 +-
+ docs/about/index.html                              |   2 +-
+ docs/admin/index.html                              |   2 +-
+ docs/apps/index.html                               |   2 +-
+ docs/architecture/index.html                       |   2 +-
+ docs/assets/Combination-CJox_jd4.js                |  41 ----
+ docs/assets/abbey-D-evZQEC.js                      |   1 -
+ docs/assets/abbey-DNYXkrgz.js                      |   5 -
+ docs/assets/abbey-bot-8r73PfF3.js                  |   1 -
+ docs/assets/abi-Chklts_u.js                        |  11 --
+ docs/assets/about-B6B1lysj.js                      |   1 -
+ docs/assets/about-BXtluZzT.js                      |   1 -
+ docs/assets/admin-Cyv3YT_V.js                      |   1 -
+ docs/assets/ai-CA6trlkU.js                         |   1 -
+ docs/assets/apps-BVENN86R.js                       |   1 -
+ docs/assets/architecture-BngOogUn.js               |   1 -
+ docs/assets/article-9skDq-41.js                    |   1 -
+ docs/assets/audit-view-Bgt5C_vs.js                 |   1 -
+ docs/assets/auth-slot-live-DSk8pE0H.js             |   1 -
+ docs/assets/beats-CzsvR8V-.js                      |   1 -
+ docs/assets/benchmarks-CQ0BvtgR.js                 |   1 -
+ docs/assets/blog-D34uQejZ.js                       |   1 -
+ docs/assets/blog._slug-BQxl5aXx.js                 |   1 -
+ docs/assets/button-Crg_OHOm.js                     |   1 -
+ docs/assets/catalog-Bm1ob-2h.js                    |   1 -
+ docs/assets/cell-machine-BKUy_6iv.js               |   1 -
+ docs/assets/cell-machine-vktwf-YN.js               |   1 -
+ docs/assets/changelog-CJ9UVmxw.js                  |   1 -
+ docs/assets/commerce-gzB0ZKeW.js                   |   1 -
+ docs/assets/companion-jIwHY3R3.js                  |   1 -
+ docs/assets/company-6HPz0z6w.js                    |   1 -
+ docs/assets/console-CwOm-xvR.js                    |   1 -
+ docs/assets/console-xGDaFT32.js                    |   1 -
+ docs/assets/console.workspace-eAX-SS4k.js          |   1 -
+ docs/assets/contact-BEeuyWVL.js                    |   1 -
+ docs/assets/dashboard-CFZXOFyZ.js                  |   1 -
+ docs/assets/demo-BSgSG5Ev.js                       |   1 -
+ docs/assets/design-Bo-fnms1.js                     |   2 -
+ docs/assets/developers-DuAa5grr.js                 |   1 -
+ docs/assets/dist-BBmXFuE6.js                       |   1 -
+ docs/assets/dist-BVqPg21q.js                       |   1 -
+ docs/assets/dist-CieQR9G5.js                       |   1 -
+ docs/assets/dist-D4Rv5_HW.js                       |   1 -
+ docs/assets/dist-D7xwcl03.js                       |   1 -
+ docs/assets/dist-DR_Cj40c.js                       |   1 -
+ docs/assets/dist-DVelZnlQ.js                       |   1 -
+ docs/assets/dist-ke28LmnQ.js                       |   1 -
+ docs/assets/docs-UZF9cPsY.js                       |   1 -
+ docs/assets/docs-hub-DxUETHjq.js                   |  11 --
+ docs/assets/docs._slug-BLppWz6x.js                 |   1 -
+ docs/assets/dropdown-menu-DTDjkD9o.js              |   1 -
+ docs/assets/explainer-CyXWVrc8.js                  |   1 -
+ docs/assets/film-D-PFsBhF.js                       |   1 -
+ docs/assets/financial-model-BnU61hdF.js            |   1 -
+ docs/assets/fx-BTA-v7sO.js                         |   1 -
+ docs/assets/gama-LVeeAMRE.js                       |   1 -
+ docs/assets/gates-CAu0iII8.js                      |   1 -
+ docs/assets/get-started-CJlYaJFy.js                |   1 -
+ docs/assets/github-snapshot-CJO7c69B.js            |   1 -
+ docs/assets/github-snapshot-CSuBwNMG.json          |   1 -
+ docs/assets/header-menus-CDatCJH2.js               |   1 -
+ docs/assets/index-c5ueOa4T.js                      |  13 --
+ docs/assets/input-B6JlW6Ho.js                      |   1 -
+ docs/assets/investor-BttaEk3G.js                   |   1 -
+ docs/assets/investors-DwryPOPv.js                  |  55 ------
+ docs/assets/journey-rail-TPPurlsX.js               |   1 -
+ docs/assets/lab-aEUQJ-hp.js                        |   1 -
+ docs/assets/label-BsJzeRGh.js                      |   1 -
+ docs/assets/links-DjpRSFH8.js                      |   1 -
+ docs/assets/login-Eg3eYtbF.js                      |   1 -
+ docs/assets/math-Om1a31KX.js                       |   1 -
+ docs/assets/math-article-BWz3GQX_.js               |   1 -
+ docs/assets/mega-Dcyu5GOK.js                       |   1 -
+ docs/assets/middleware-CzWDC96B.js                 |   1 -
+ docs/assets/mobile-BvYjhzgK.js                     |   1 -
+ docs/assets/narration-ClpATlHV.js                  |   1 -
+ docs/assets/outro-rB2SeaeC.js                      |   1 -
+ docs/assets/persona-router-BiIl9qfF.js             |   1 -
+ docs/assets/platform-B8AAEjgs.js                   |   1 -
+ docs/assets/plugins-BO18_9Lf.js                    |   1 -
+ docs/assets/primitives-Da8j1Upl.js                 |   1 -
+ docs/assets/privacy-DayxdIqI.js                    |   1 -
+ docs/assets/products-B85yZicY.js                   |   1 -
+ docs/assets/products._slug-C69Zsl6-.js             |   1 -
+ docs/assets/profile-1aizBtEL.js                    |   1 -
+ docs/assets/projects-CO-DrGKi.js                   |   1 -
+ docs/assets/projects._slug-CDPpTRh8.js             |   1 -
+ docs/assets/quasar-MJ6l9D-3.js                     |   1 -
+ docs/assets/quasar.new-CJGBDR7m.js                 |   1 -
+ docs/assets/quasar.settings-f9bJbQcR.js            |   1 -
+ docs/assets/quasar.site._id-DQvDDruV.js            |   2 -
+ docs/assets/quasar.sites-C-znm5MS.js               |   1 -
+ docs/assets/quesar-D9janY_L.js                     |  23 ---
+ docs/assets/radio-group-DBpO-wfB.js                |   1 -
+ docs/assets/repo-list-qY9Zk1G2.js                  |   1 -
+ docs/assets/research-BbKsCCaU.js                   |   1 -
+ docs/assets/research-nav-DwPei5-j.js               |   1 -
+ docs/assets/research._slug-CLDmSdHl.js             |   1 -
+ docs/assets/research.implementations-DlwThcLr.js   |   1 -
+ .../research.implementations._slug-DX8iQVsC.js     |   1 -
+ docs/assets/route-frame-DNPjLFix.js                |   1 -
+ docs/assets/routes-BSFTdIpf.js                     |   2 -
+ docs/assets/schemas-BKFnRWM-.js                    |  55 ------
+ docs/assets/search-panel-DPq932lf.js               |   1 -
+ docs/assets/section-BoYu75fu.js                    |   1 -
+ docs/assets/security-DMvH1b98.js                   |   1 -
+ docs/assets/separator-B97z7aRL.js                  |   1 -
+ docs/assets/services-CUmHWWP5.js                   |   1 -
+ docs/assets/shared-CEGATj7Y.js                     |   1 -
+ docs/assets/showcase-Yt1cPvDQ.js                   |   1 -
+ docs/assets/showcase-_8mPilea.css                  |   1 -
+ docs/assets/showcase.abbey-BBkaWuHj.js             |   2 -
+ docs/assets/showcase.design-YDVs6hlb.js            |   2 -
+ docs/assets/showcase.explainer-CmCZP3SD.js         |   2 -
+ docs/assets/showcase.film-7OnJ4b3X.js              |   2 -
+ docs/assets/showcase.mega-DYvHoWVQ.js              |   2 -
+ docs/assets/showcase.trailer-dHjCzKxU.js           |   2 -
+ docs/assets/skill-creator-DAS2dqPT.js              |  15 --
+ docs/assets/source-Bc3y1dBM.js                     |   1 -
+ docs/assets/source._name-CwfghkLE.js               |   1 -
+ docs/assets/status-badge-BKcl64Qz.js               |   1 -
+ docs/assets/styles-Cb-aJ4y4.css                    |   2 -
+ docs/assets/tabs-B3U8p6PI.js                       |   1 -
+ docs/assets/team-CEfO89K9.js                       |   1 -
+ docs/assets/team-KJrdjWcb.js                       |   1 -
+ docs/assets/team._slug-KG-hbb1l.js                 |   1 -
+ docs/assets/terms-ChKoYMGT.js                      |   1 -
+ docs/assets/textarea-CRdzZOAu.js                   |   1 -
+ docs/assets/tf-pose-demo-DRr8ATdU.js               |   2 -
+ docs/assets/tf-pose-demo-TiPW9Sf_.js               |   2 -
+ docs/assets/title-B03ywA_U.js                      |   1 -
+ docs/assets/tooltip-B093U2vs.js                    |   1 -
+ docs/assets/trailer-Co-FEmXl.js                    |   1 -
+ docs/assets/trailer-WNQkm8OO.js                    |   4 -
+ docs/assets/unauthorized-DWlOwWwg.js               |   1 -
+ docs/assets/use-ai-consent-DilGFll-.js             |   1 -
+ docs/assets/use-github-data-BWwv9kRo.js            |   2 -
+ docs/assets/wdbx-DA1PSAeB.js                       |   1 -
+ docs/assets/workspace-Bo0Xe6U4.js                  |   1 -
+ docs/assets/workspace-app-DAQr7d4s.js              |   5 -
+ docs/benchmarks/index.html                         |   2 +-
+ docs/blog/abi-is-rust-now/index.html               |   2 +-
+ docs/blog/calm-control-surfaces/index.html         |   2 +-
+ docs/blog/explainable-last-move/index.html         |   2 +-
+ docs/blog/incident-reviews-from-ai-logs/index.html |   2 +-
+ docs/blog/index.html                               |   2 +-
+ docs/blog/inside-wdbx-hybrid-ranker/index.html     |   2 +-
+ docs/blog/neural-backtracking/index.html           |   4 +-
+ docs/blog/on-saying-im-not-sure/index.html         |   2 +-
+ .../blog/private-ai-is-not-invisible-ai/index.html |   2 +-
+ .../blog/production-ready-agent-metrics/index.html |   2 +-
+ .../separate-planning-review-execution/index.html  |   2 +-
+ .../vector-search-to-backtrace-graphs/index.html   |   2 +-
+ docs/blog/wdbx-v2-release/index.html               |   2 +-
+ docs/blog/weights-behind-the-personas/index.html   |   2 +-
+ docs/blog/what-the-model-sees-sea/index.html       |   2 +-
+ docs/blog/why-zig/index.html                       |   4 +-
+ docs/blog/zig-016-migration/index.html             |   4 +-
+ docs/cell-machine/index.html                       |   2 +-
+ docs/changelog/index.html                          |   2 +-
+ docs/companion/index.html                          |   2 +-
+ docs/company/index.html                            |   2 +-
+ docs/console/index.html                            |   2 +-
+ docs/console/workspace/index.html                  |   2 +-
+ docs/contact/index.html                            |   2 +-
+ docs/dashboard/index.html                          |   2 +-
+ docs/demo/index.html                               |   2 +-
+ docs/developers/index.html                         |   4 +-
+ docs/docs/api/index.html                           |   2 +-
+ docs/docs/architecture/index.html                  |   2 +-
+ docs/docs/deployment/index.html                    |   2 +-
+ docs/docs/evidence/index.html                      |   2 +-
+ docs/docs/gama/index.html                          |   2 +-
+ docs/docs/getting-started/index.html               |   4 +-
+ docs/docs/identity/index.html                      |   2 +-
+ docs/docs/index.html                               |   4 +-
+ docs/docs/mcp/index.html                           |   2 +-
+ docs/docs/personas/index.html                      |   2 +-
+ docs/docs/runtime/index.html                       |   4 +-
+ docs/docs/trust/index.html                         |   2 +-
+ docs/docs/wdbx-v2/index.html                       |   2 +-
+ docs/docs/wdbx/index.html                          |   2 +-
+ docs/feed.xml                                      |   2 +-
+ docs/financial-model/index.html                    |   2 +-
+ docs/gama/index.html                               |   2 +-
+ docs/get-started/index.html                        |   2 +-
+ docs/index.html                                    |   4 +-
+ docs/investors/index.html                          |   2 +-
+ docs/links/index.html                              |   2 +-
+ docs/login/index.html                              |   2 +-
+ docs/mobile/index.html                             |   2 +-
+ docs/platform/index.html                           |   2 +-
+ docs/plugins/index.html                            |   2 +-
+ docs/privacy/index.html                            |   2 +-
+ docs/products/abbey/index.html                     |   2 +-
+ docs/products/abi/index.html                       |   2 +-
+ docs/products/index.html                           |   2 +-
+ docs/products/quasar/index.html                    |   2 +-
+ docs/products/wdbx/index.html                      |   2 +-
+ docs/profile/index.html                            |   2 +-
+ docs/projects/abbey/index.html                     |   2 +-
+ docs/projects/abi/index.html                       |   2 +-
+ docs/projects/gama/index.html                      |   2 +-
+ docs/projects/index.html                           |   2 +-
+ docs/projects/wdbx/index.html                      |   2 +-
+ docs/quasar/new/index.html                         |   2 +-
+ docs/quasar/settings/index.html                    |   2 +-
+ docs/quasar/sites/index.html                       |   2 +-
+ docs/quesar/index.html                             |   4 +-
+ docs/research/ai-overview/index.html               |   2 +-
+ .../index.html                                     |   2 +-
+ .../index.html                                     |   2 +-
+ docs/research/gpu-implementation-guide/index.html  |   4 +-
+ docs/research/gpu-overview/index.html              |   2 +-
+ .../human-approval-gates-operators-use/index.html  |   2 +-
+ .../abbey-executable-capability-ledger/index.html  |   2 +-
+ .../index.html                                     |   2 +-
+ docs/research/implementations/index.html           |   2 +-
+ .../index.html                                     |   2 +-
+ .../index.html                                     |   2 +-
+ .../index.html                                     |   2 +-
+ .../six-layer-evidence-aware-platform/index.html   |   2 +-
+ .../index.html                                     |   2 +-
+ docs/research/index.html                           |   2 +-
+ .../index.html                                     |   2 +-
+ docs/research/mcp-implementation-guide/index.html  |   4 +-
+ docs/research/mcp-overview/index.html              |   2 +-
+ .../index.html                                     |   2 +-
+ .../offline-first-ai-sensitive-data/index.html     |   2 +-
+ .../policy-locked-tool-use-multi-agent/index.html  |   2 +-
+ .../index.html                                     |   2 +-
+ docs/research/sea-overview/index.html              |   2 +-
+ .../index.html                                     |   2 +-
+ docs/research/tui-implementation-guide/index.html  |   4 +-
+ docs/research/tui-overview/index.html              |   2 +-
+ .../index.html                                     |   2 +-
+ .../index.html                                     |   2 +-
+ docs/research/wdbx-overview/index.html             |   2 +-
+ .../index.html                                     |   2 +-
+ docs/security/index.html                           |   2 +-
+ docs/services/index.html                           |   2 +-
+ docs/showcase/abbey/index.html                     |   2 +-
+ docs/showcase/design/index.html                    |   2 +-
+ docs/showcase/explainer/index.html                 |   2 +-
+ docs/showcase/film/index.html                      |   2 +-
+ docs/showcase/index.html                           |   2 +-
+ docs/showcase/mega/index.html                      |   2 +-
+ docs/showcase/trailer/index.html                   |   2 +-
+ docs/signup/index.html                             |   2 +-
+ docs/skill-creator/index.html                      |   4 +-
+ docs/source/cell-lang/index.html                   |   2 +-
+ docs/source/cell-machine/index.html                |   2 +-
+ docs/source/index.html                             |   2 +-
+ docs/source/nyon/index.html                        |   2 +-
+ docs/source/wdbx-py/index.html                     |   2 +-
+ docs/team/donald-filimon/index.html                |   2 +-
+ docs/team/index.html                               |   2 +-
+ docs/terms/index.html                              |   2 +-
+ docs/tf-pose-demo/index.html                       |   2 +-
+ docs/unauthorized/index.html                       |   2 +-
+ docs/wdbx/index.html                               |   2 +-
+ docs/workspace/index.html                          |   2 +-
+ e2e/backend/commerce.acceptance.ts                 | 207 +++++++++++++++++++--
+ e2e/backend/durable.acceptance.ts                  |  14 +-
+ sidecars/quasar-service/src/job.test.ts            | 123 ++++++++++++
+ sidecars/quasar-service/src/server.test.ts         | 154 ++++++++++++++-
+ sidecars/quasar-service/src/server.ts              |  11 ++
+ src/components/site/trailer-editions.css           |   5 +-
+ src/routes/api/cron/audits-expire.ts               |   4 +-
+ 272 files changed, 633 insertions(+), 550 deletions(-)
+
+
+--- CURRENT FILE e2e/backend/persistent.acceptance.ts ---
+import { test, expect } from "@playwright/test";
+import { randomBytes, randomUUID, createCipheriv, createHmac, createHash } from "node:crypto";
+import { spawn, spawnSync, type ChildProcess } from "node:child_process";
+import { once } from "node:events";
+import { createServer as netServer } from "node:net";
+import { createServer as httpsServer, type Server } from "node:https";
+import { request } from "node:http";
+import { mkdtemp, readFile, readdir, rm, realpath, readlink, lstat } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join, resolve, isAbsolute, relative, sep } from "node:path";
+import pg from "pg";
+import { migrate } from "../../scripts/migrate.ts";
+import { acceptanceTarget } from "./guard";
+import { cleanupOwnedResources, stopOwnedChild } from "./process-cleanup";
+
+// Run build:persistent separately, serially with every Vite acceptance harness.
+// Only fresh owned DBs and process handles are ever destroyed. No traces include credentials.
+const target = acceptanceTarget();
+// Optional controller-frozen compiled output, never a URL or source checkout.
+// The existing guarded .output contract remains the default.
+const requestedArtifact = process.env.QUESAR_ACCEPTANCE_ARTIFACT_ROOT;
+if (
+  requestedArtifact !== undefined &&
+  (!requestedArtifact.trim() || !isAbsolute(requestedArtifact))
+)
+  throw new Error(
+    "QUESAR_ACCEPTANCE_ARTIFACT_ROOT must be an absolute local compiled-artifact directory.",
+  );
+let artifactRoot: string;
+let artifactHash: string;
+async function hashArtifact(root: string): Promise<string> {
+  const hash = createHash("sha256");
+  async function walk(path: string) {
+    for (const entry of (await readdir(join(root, path), { withFileTypes: true })).sort((a, b) =>
+      a.name.localeCompare(b.name),
+    )) {
+      const name = join(path, entry.name);
+      if (entry.isSymbolicLink()) {
+        const destination = relative(root, await realpath(join(root, name)));
+        if (destination === ".." || destination.startsWith(`..${sep}`) || isAbsolute(destination))
+          throw new Error("Compiled artifact symlinks must remain inside its frozen root.");
+        hash.update(JSON.stringify(["link", name, await readlink(join(root, name))]));
+      } else if (entry.isDirectory()) {
+        hash.update(JSON.stringify(["directory", name]));
+        await walk(name);
+      } else if (entry.isFile()) {
+        const content = await readFile(join(root, name));
+        hash.update(JSON.stringify(["file", name, content.length]));
+        hash.update(content);
+      } else throw new Error("Compiled artifact contains an unsupported filesystem entry.");
+    }
+  }
+  await walk("");
+  return hash.digest("hex");
+}
+
+const name = `quesar_artifact_${randomBytes(6).toString("hex")}`;
+const names = [name, `${name}_restore`];
+const admin = new pg.Pool({ connectionString: target.href });
+const urlFor = (database: string) => {
+  const url = new URL(target);
+  url.pathname = `/${database}`;
+  return url.href;
+};
+const db = new pg.Pool({ connectionString: urlFor(name) });
+const key = randomBytes(32);
+const secret = randomBytes(32).toString("hex");
+const password = randomBytes(24).toString("base64url");
+let scratch: string;
+let databaseRole: string;
+let port: number;
+let origin: string;
+let proxy: Server | undefined;
+let child: ChildProcess | undefined;
+let diagnostic = "";
+const receipt = (message: string) => console.log(`[persistent acceptance] ${message}`);
+async function freePort() {
+  const server = netServer();
+  server.listen(0, "127.0.0.1");
+  await once(server, "listening");
+  const address = server.address();
+  if (!address || typeof address === "string") throw new Error("No owned port");
+  await new Promise<void>((resolve) => server.close(() => resolve()));
+  return address.port;
+}
+async function stop() {
+  if (child) await stopOwnedChild(child);
+  child = undefined;
+}
+async function start(settings: Record<string, string> = {}) {
+  await stop();
+  // Runtime allowlist, deliberately no inherited credentials or NODE_ENV.
+  diagnostic = "";
+  let output = "";
+  let spawnFailed = false;
+  child = spawn(process.execPath, [join(artifactRoot, "server/index.mjs")], {
+    cwd: requestedArtifact === undefined ? undefined : artifactRoot,
+    env: {
+      PATH: process.env.PATH,
+      HOST: "127.0.0.1",
+      PORT: String(port),
+      ...settings,
+    },
+    stdio: ["ignore", "pipe", "pipe"],
+  });
+  child.once("error", () => {
+    spawnFailed = true;
+  });
+  child.stdout?.on("data", (chunk: Buffer) => {
+    output = (output + chunk.toString()).slice(-4000);
+  });
+  child.stderr?.on("data", (chunk: Buffer) => {
+    diagnostic = (diagnostic + chunk.toString()).slice(-4000);
+    for (const value of [password, secret, key.toString("base64")])
+      diagnostic = diagnostic.replaceAll(value, "[redacted]");
+  });
+  for (let attempt = 0; attempt < 120; attempt++) {
+    if (spawnFailed || child.exitCode !== null || child.signalCode !== null)
+      throw new Error("Owned persistent artifact exited before readiness");
+    if (/EADDRINUSE|EACCES/.test(diagnostic))
+      throw new Error("Owned persistent artifact could not bind its listener");
+    // Observed from this artifact: "➜ Listening on: http://127.0.0.1:<port>/".
+    // No HTTP response can establish ownership before this owned child receipt.
+    if (!output.includes(`Listening on: http://127.0.0.1:${port}/`)) {
+      await new Promise((resolve) => setTimeout(resolve, 250));
+      continue;
+    }
+    try {
+      const response = await fetch(`http://127.0.0.1:${port}/api/readiness`, {
+        signal: AbortSignal.timeout(1000),
+      });
+      if (child.exitCode !== null || child.signalCode !== null)
+        throw new Error("Owned persistent artifact exited during readiness");
+      if ([200, 503].includes(response.status)) return response;
+    } catch {
+      /* starting */
+    }
+    await new Promise((resolve) => setTimeout(resolve, 250));
+  }
+  throw new Error("Persistent artifact did not bind owned loopback port");
+}
+const settings = () => ({
+  DATABASE_URL: urlFor(name),
+  PGUSER: databaseRole,
+  BETTER_AUTH_SECRET: secret,
+  BETTER_AUTH_URL: origin,
+  APP_ENCRYPTION_KEY: key.toString("base64"),
+  VITE_AUTH_ENABLED: "true",
+});
+async function seedAudit(userId: string, model: string, transplanted?: string) {
+  const id = randomUUID();
+  const content = JSON.stringify({
+    messages: [{ role: "user", content: "Synthetic artifact" }],
+    reply: "Persistent artifact decrypted fixture",
+  });
+  const iv = randomBytes(12);
+  const cipher = createCipheriv(
+    "aes-256-gcm",
+    createHmac("sha256", key).update("quesar:seal").digest(),
+    iv,
+  );
+  cipher.setAAD(Buffer.from(`audit:${id}:${userId}`));
+  const ciphertext = Buffer.concat([cipher.update(content), cipher.final()]);
+  const sealed =
+    transplanted ??
+    [
+      "v1",
+      iv.toString("base64url"),
+      ciphertext.toString("base64url"),
+      cipher.getAuthTag().toString("base64url"),
+    ].join(".");
+  expect(sealed.includes("Persistent artifact decrypted fixture")).toBe(false);
+  await db.query(
+    "insert into conversation_audits (id,user_id,provider,model,policy_version,sealed,content_digest,expires_at) values ($1,$2,'fixture',$3,'2026-09-22.1',$4,$5,now()+interval '1 day')",
+    [id, userId, model, sealed, createHash("sha256").update(content).digest("base64url")],
+  );
+  return { id, sealed };
+}
+
+test.beforeAll(async () => {
+  artifactRoot = await realpath(requestedArtifact ?? resolve(".output"));
+  if (
+    !(await lstat(join(artifactRoot, "server/index.mjs"))).isFile() ||
+    !(await lstat(join(artifactRoot, "public"))).isDirectory()
+  )
+    throw new Error(
+      "Compiled artifact requires server/index.mjs and its public resource directory.",
+    );
+  artifactHash = await hashArtifact(artifactRoot);
+  receipt(`compiled artifact root ${artifactRoot}; full-tree SHA256 ${artifactHash}`);
+  scratch = await mkdtemp(join(tmpdir(), "quesar-artifact-"));
+  databaseRole = (await admin.query("select current_user as role")).rows[0].role;
+  for (const database of names) await admin.query(`create database "${database}"`);
+  port = await freePort();
+  const tlsPort = await freePort();
+  origin = `https://127.0.0.1:${tlsPort}`;
+  const cert = join(scratch, "cert.pem");
+  const privateKey = join(scratch, "key.pem");
+  expect(
+    spawnSync(
+      "openssl",
+      [
+        "req",
+        "-x509",
+        "-newkey",
+        "rsa:2048",
+        "-nodes",
+        "-days",
+        "1",
+        "-subj",
+        "/CN=127.0.0.1",
+        "-addext",
+        "subjectAltName=IP:127.0.0.1",
+        "-keyout",
+        privateKey,
+        "-out",
+        cert,
+      ],
+      { stdio: "ignore" },
+    ).status,
+  ).toBe(0);
+  proxy = httpsServer(
+    { key: await readFile(privateKey), cert: await readFile(cert) },
+    (incoming, outgoing) => {
+      // Preserve HTTPS Host/Origin and secure cookie semantics through private proxy.
+      const upstream = request(
+        {
+          hostname: "127.0.0.1",
+          port,
+          path: incoming.url,
+          method: incoming.method,
+          headers: { ...incoming.headers, "x-forwarded-proto": "https" },
+        },
+        (response) => {
+          outgoing.writeHead(response.statusCode ?? 502, response.headers);
+          response.pipe(outgoing);
+        },
+      );
+      upstream.on("error", () => {
+        if (!outgoing.headersSent) outgoing.writeHead(502);
+        outgoing.end();
+      });
+      incoming.pipe(upstream);
+    },
+  );
+  proxy.listen(tlsPort, "127.0.0.1");
+  await once(proxy, "listening");
+});
+test.afterAll(async () => {
+  await cleanupOwnedResources([
+    stop,
+    async () => {
+      if (artifactHash) {
+        expect(await hashArtifact(artifactRoot)).toBe(artifactHash);
+        receipt(`compiled artifact full-tree SHA256 unchanged ${artifactHash}`);
+      }
+    },
+    async () => {
+      if (proxy) {
+        proxy.closeAllConnections();
+        await new Promise<void>((resolve, reject) =>
+          proxy!.close((error) => (error ? reject(error) : resolve())),
+        );
+      }
+    },
+    () => db.end(),
+    ...names.map(
+      (database) => () => admin.query(`drop database if exists "${database}" with (force)`),
+    ),
+    () => admin.end(),
+    async () => {
+      if (scratch) await rm(scratch, { recursive: true, force: true });
+    },
+  ]);
+  receipt(
+    "owned Node process, TLS proxy/cert, pools, two databases and seeded dump removed; parent PG untouched",
+  );
+});
+
+test("persistent Node artifact: fail closed, migrations, secure sessions, isolation, restart and seeded restore", async ({
+  browser,
+}) => {
+  let response = await start();
+  expect(response.status).toBe(503);
+  expect((await response.json()).reasons.sort()).toEqual([
+    "auth_origin_invalid",
+    "database_unavailable",
+    "session_secret_invalid",
+  ]);
+  expect((await fetch(`http://127.0.0.1:${port}/api/auth/ok`)).status).toBe(503);
+  receipt("missing required config refused with NODE_ENV absent, readiness/auth both 503");
+  const disconnected = netServer((socket) => socket.destroy());
+  disconnected.listen(0, "127.0.0.1");
+  await once(disconnected, "listening");
+  const address = disconnected.address();
+  if (!address || typeof address === "string") throw new Error("No owned disconnected probe port");
+  const unavailable = new URL(urlFor(name));
+  unavailable.port = String(address.port);
+  const unreachable = new pg.Pool({
+    connectionString: unavailable.href,
+    connectionTimeoutMillis: 1000,
+  });
+  try {
+    response = await start({ ...settings(), DATABASE_URL: unavailable.href });
+    expect(response.status).toBe(200);
+    // A held non-Postgres listener refuses every socket; no unrelated process
+    // can acquire this port during the configuration/connectivity probe.
+    await expect(unreachable.query("select 1")).rejects.toThrow();
+    const disconnectedAuth = await fetch(`http://127.0.0.1:${port}/api/auth/sign-up/email`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        origin,
+        host: new URL(origin).host,
+        "x-forwarded-proto": "https",
+      },
+      body: JSON.stringify({
+        email: `${name}-disconnected@example.invalid`,
+        password,
+        name: "Synthetic disconnected",
+      }),
+      signal: AbortSignal.timeout(15000),
+    });
+    expect(disconnectedAuth.status).toBe(500);
+  } finally {
+    await cleanupOwnedResources([
+      stop,
+      () => unreachable.end(),
+      () =>
+        new Promise<void>((resolve, reject) =>
+          disconnected.close((error) => (error ? reject(error) : resolve())),
+        ),
+    ]);
+  }
+  expect(
+    (await db.query("select count(*)::int as n from pg_tables where schemaname='public'")).rows[0]
+      .n,
+  ).toBe(0);
+  await start(settings());
+  expect(
+    (await db.query("select count(*)::int as n from pg_tables where schemaname='public'")).rows[0]
+      .n,
+  ).toBe(0);
+  await migrate(urlFor(name));
+  await migrate(urlFor(name));
+  const expected = (await readdir("migrations", { withFileTypes: true }))
+    .filter((entry) => entry.isFile() && entry.name.endsWith(".sql"))
+    .map((entry) => ({ name: entry.name }))
+    .sort((a, b) => a.name.localeCompare(b.name));
+  expect((await db.query("select name from _migrations order by name")).rows).toEqual(expected);
+  receipt(
+    `config/connectivity separated; Node startup did not migrate; explicit/repeat migration exact ${expected.length} root filenames`,
+  );
+  const owner = await browser.newContext({ ignoreHTTPSErrors: true });
+  const other = await browser.newContext({ ignoreHTTPSErrors: true });
+  for (const context of [owner, other]) {
+    await context.route("**/*", (route) =>
+      new URL(route.request().url()).origin === origin ? route.continue() : route.abort(),
+    );
+  }
+  try {
+    const ids: string[] = [];
+    for (const [context, suffix] of [
+      [owner, "owner"],
+      [other, "other"],
+    ] as const) {
+      const signup = await context.request.post(`${origin}/api/auth/sign-up/email`, {
+        headers: { origin },
+        data: { email: `${name}-${suffix}@example.invalid`, password, name: `Synthetic ${suffix}` },
+      });
+      if (signup.status() !== 200) console.log("[persistent diagnostic]", diagnostic);
+      expect(signup.status()).toBe(200);
+      const cookies = await context.cookies();
+      expect(
+        cookies.some(
+          (cookie) =>
+            cookie.name === "__Host-quesar.session_token" && cookie.secure && cookie.httpOnly,
+        ),
+      ).toBe(true);
+      ids.push(
+        (
+          await db.query('select id from "user" where email=$1', [
+            `${name}-${suffix}@example.invalid`,
+          ])
+        ).rows[0].id,
+      );
+    }
+    const page = await owner.newPage();
+    const bystander = await other.newPage();
+    for (const [id, body] of [
+      [ids[0], "artifact owner note"],
+      [ids[1], "artifact other note"],
+    ])
+      await db.query("insert into field_notes (user_id,node_id,body) values ($1,'quesar',$2)", [
+        id,
+        body,
+      ]);
+    const audit = await seedAudit(ids[0], "owner-only");
+    const transplant = await seedAudit(ids[1], "transplanted", audit.sealed);
+    for (const [active, own, absent] of [
+      [page, "artifact owner note", "artifact other note"],
+      [bystander, "artifact other note", "artifact owner note"],
+    ] as const) {
+      await active.goto(`${origin}/console`);
+      await expect(active.getByText(own, { exact: true })).toBeVisible();
+      await expect(active.getByText(absent, { exact: true })).toHaveCount(0);
+      await active.getByRole("tab", { name: "My audits", exact: true }).click();
+      await expect(active.getByRole("button", { name: "View audit", exact: true })).toHaveCount(1);
+      await active.getByRole("button", { name: "View audit", exact: true }).click();
+    }
+    await expect(
+      page.getByText("Persistent artifact decrypted fixture", { exact: true }),
+    ).toBeVisible();
+    await expect(bystander.getByRole("alert")).toContainText("could not be decrypted");
+    // Replay the compiled read transport with a known foreign ID. The account
+    // scope must refuse it even when the caller bypasses the inventory UI.
+    const outgoing = bystander.waitForRequest(
+      (request) =>
+        request.method() === "POST" && Boolean(request.postData()?.includes(transplant.id)),
+    );
+    await bystander.getByRole("button", { name: "View audit", exact: true }).click();
+    const transport = await outgoing;
+    const foreignResponse = await bystander.evaluate(
+      async ({ url, body, contentType }) => {
+        const response = await fetch(url, {
+          method: "POST",
+          headers: {
+            "content-type": contentType,
+            "x-tsr-serverFn": "true",
+            accept: "application/json",
+          },
+          body,
+        });
+        return { status: response.status, refused: (await response.text()).includes("not_found") };
+      },
+      {
+        url: transport.url(),
+        body: transport.postData()!.replaceAll(transplant.id, audit.id),
+        contentType: transport.headers()["content-type"],
+      },
+    );
+    expect(foreignResponse).toEqual({ status: 200, refused: true });
+
+    await expect(bystander.getByText("fixture · owner-only", { exact: true })).toHaveCount(0);
+    receipt(
+      "compiled HTTPS Console: secure auth cookies; seeded notes/audit account isolation; owner decrypt, known foreign read and transplanted ciphertext refusal",
+    );
+    await Promise.all([page, bystander].map((active) => active.goto("about:blank")));
+    await stop();
+    await start(settings());
+    await page.goto(`${origin}/profile`);
+    await expect(page.getByLabel("Display name")).toHaveValue("Synthetic owner");
+    await page.goto(`${origin}/console`);
+    await expect(page.getByText("artifact owner note", { exact: true })).toBeVisible();
+    await page.getByRole("tab", { name: "My audits", exact: true }).click();
+    await page.getByRole("button", { name: "View audit", exact: true }).click();
+    await expect(
+      page.getByText("Persistent artifact decrypted fixture", { exact: true }),
+    ).toBeVisible();
+    await Promise.all([page, bystander].map((active) => active.goto("about:blank")));
+    await stop();
+    const dump = join(scratch, "seeded.dump");
+    expect(
+      spawnSync("/opt/homebrew/opt/postgresql@17/bin/pg_dump", ["-Fc", "-f", dump, urlFor(name)], {
+        stdio: "ignore",
+      }).status,
+    ).toBe(0);
+    expect(
+      spawnSync(
+        "/opt/homebrew/opt/postgresql@17/bin/pg_restore",
+        ["--exit-on-error", "-d", urlFor(names[1]), dump],
+        { stdio: "ignore" },
+      ).status,
+    ).toBe(0);
+    const restored = new pg.Pool({ connectionString: urlFor(names[1]) });
+    let tables = 0;
+    try {
+      const rows = (
+        await db.query(
+          "select tablename from pg_tables where schemaname='public' order by tablename",
+        )
+      ).rows;
+      tables = rows.length;
+      for (const { tablename } of rows) {
+        const query = `select row_to_json(t)::text as row from "${tablename}" t order by row_to_json(t)::text`;
+        const hash = (value: unknown) =>
+          createHash("sha256").update(JSON.stringify(value)).digest("hex");
+        expect(hash((await restored.query(query)).rows)).toBe(hash((await db.query(query)).rows));
+      }
+    } finally {
+      await restored.end();
+    }
+    await start({ ...settings(), DATABASE_URL: urlFor(names[1]) });
+    await page.goto(`${origin}/profile`);
+    await expect(page.getByLabel("Display name")).toHaveValue("Synthetic owner");
+    await page.goto(`${origin}/console`);
+    await expect(page.getByText("artifact owner note", { exact: true })).toBeVisible();
+    await page.getByRole("tab", { name: "My audits", exact: true }).click();
+    await page.getByRole("button", { name: "View audit", exact: true }).click();
+    await expect(
+      page.getByText("Persistent artifact decrypted fixture", { exact: true }),
+    ).toBeVisible();
+    receipt(
+      `Node restart preserved session/note/decryption; seeded pg_dump/restore exits 0/0, ${tables} public table hashes equal; restored Node artifact accepted same secure session and decrypted audit`,
+    );
+  } finally {
+    await owner.close();
+    await other.close();
+  }
+});
+
+
+--- CURRENT FILE notes/verification/2026-10-09-finishing-ledger.md ---
+# Quesar finishing ledger — 2026-10-09
+
+**Overall delivery: Partial. Current local source, static/browser and frozen compiled Node gates are green; full film acceptance and external staging remain Blocked.**
+
+Source baseline: `8c61884c62db7a5f8d34baa05e293e28d6fdcf83`, canonical main. User authorized the finishing plan and subagent-driven implementation; no commit, push, release, remote migration, paid call or production cutover authority.
+
+Labels: Current = direct current-source verification; Partial = implementation or historical receipt with an explicit proof gap; Blocked = named external prerequisite or unavailable review modality. This ledger supersedes old unchecked plan boxes for this run, not the historical receipts themselves.
+
+| Requirement | State | Evidence / remaining boundary |
+| --- | --- | --- |
+| Public source gate | Current | External owner restored baseline manifests and installed graph. `bun run check` (`current-installed-check.log`) exit 0: 97 files/791 tests; format/type/lint/default build exit 0. Earlier failed concurrent-update attempts retained; tests were not weakened. |
+| Static links/assets/budgets | Current | Latest rebuilt static artifact: `bun run check:static` exit 0, 129 HTML pages; home 16/21 preload, 162715/225362 gzip bytes (qualified-static-check.log). Prior tested artifact home gzip was 162734 bytes. This receipt qualifies that artifact, not a new build under current dependencies. Controller records final artifact hashes separately. |
+| Public browser journeys/accessibility | Partial | Initial 217 passed/9 failed; eight contrast defects repaired and artifact outputs isolated. Repeat 226 passed/6.9m, exit 0 against the rebuilt, retained static artifact. The controller reports a subsequent static rebuild and static checker exited 0 (129 pages; home gzip 163067 bytes); final browser acceptance passed 226 cases/5.6m against a coherent frozen 565-file copy using E2E_STATIC_ROOT; canonical docs hash delta is 0. |
+| Service lifecycle/security | Partial | Shutdown/delete ownership race fixed; typecheck and111tests/470assertions pass. Reviewed real registry permission failure, held request shutdown, startup retry and SIGKILL/restart fixtures. Internal event publication ordering remains source-inspected; held-mutex HTTP checks establish settled consistency only. |
+| Published 16 film technical qualification | Current | All16 v7 masters/64min fully decoded; master/provenance hashes and64sidecars match,724caption cues match. Controlled capture23+normal guard1pass. Full subjective review remains separate. |
+| Full narration/listening and motion acceptance | Blocked | No full audiovisual review modality available in this run. Timing, audio decode, hashes and stills cannot establish pronunciation or complete subjective quality. Exact-hash review worksheet will retain this prerequisite. |
+| Auth/data/provider provenance | Partial | Migration 0009 and exact-subject admin admission present; guarded browser/Postgres qualification passed. Existing-database identity provenance needs real re-verification. |
+| Disposable durable backend/browser | Current | Stale8migration expectation repaired to exact9rootfilenames. Earlier dependency snapshot: durable 1 scenario passed, including migration concurrency, virtual passkey, restart and 15-table restore; consent 1 passed; native commerce 7 passed with paired restore. These local receipts precede concurrent dependency changes; the installed baseline is now restored, while final artifact qualification is separately recorded. |
+| Persistent Node artifact | Current | Final coherent 716-entry Node artifact accepted: helper full-tree SHA256 `58e05945b0a7a26f84ae56c56e222e8e786f557cd17baf35c9993a2e841fbe87` unchanged, isolated retry exit 0/1 passed/27.8s. Config refusal without NODE_ENV, readiness vs DB, exact nine explicit migrations, secure sessions/scoped decrypt, restart, dump/restore 0/0/15 tables and restored same cookie/audit passed. Earlier failed build/copy/refusal and 42.8s profile-timeout receipts retained; local TLS does not qualify public TLS. |
+| Native WDBX commerce | Partial | Earlier dependency snapshot native browser harness 7 passed against existing WDBX binary, including replay, scope with owner positive cancellation control, admin denial, restart, paired PostgreSQL/native backup-restore and deletion. Trusted operator assertion/settlement fixture is synthetic; no actual funds moved. |
+| Persistent host staging operations | Partial | Node selected; exact host/origin/database/identity/spend unconfirmed. Reviewed host-neutral runbook prepared; expiry raw-error logging repaired and GET/POST secret-bearing regression2pass; task review approved. |
+| Remote staged runtime | Blocked | Exact approved target and private runtime configuration absent. No remote provisioning or deployment performed. |
+| Live OAuth/workspace/LLM/generation | Blocked | Authorized provider identities/credentials/spending and changed billing status not established. No secret discovery or unchanged paid-provider retry. |
+| Production cutover | Blocked | Separate release approval after staged and live qualification. Current public Pages deployment retained. |
+
+## Rulings
+
+- Use canonical main and sequential implementation workers, per user instructions. No worktree or commit despite generic skill template.
+- Run backend and film Vite harnesses serially to prevent shared dev-cache interference; independent static serving and media decode can overlap.
+- Preserve current creative direction; regenerate only demonstrated media defects. Missing listening evidence does not justify a cosmetic rewrite.
+- Configuration readiness is separate from DB reachability, schema state, TLS, native WDBX admission and provider acceptance.
+
+## Shared checkout boundary
+
+At 17:18:54 UTC package.json and bun.lock changed concurrently; an untracked package-lock.json subsequently appeared. The external changes include a shadcn ^1.0.0 change and divergent installed Better Auth core versions. This finishing task did not perform or authorize these edits and preserves them. Controller will preserve a manifest of final owned source, current dependencies and retained generated output plus the dirty diff. Baseline revision alone cannot identify this delivery. Earlier static, compiled Node and native receipts used preceding dependency snapshots; the final root gate is green; final frozen artifact qualification passed. The dependency owner was contacted asynchronously and no answer is assumed. No new dependencies were added by this task.
+
+## Evidence preservation
+
+Durable final synthesis: [finishing-report.md](2026-10-09-finishing/finishing-report.md). Sanitized task reports/reviews and gate logs are retained under [evidence/](2026-10-09-finishing/evidence/) by the controller before scratch cleanup; the report identifies exact receipt names and proof boundaries. Source changes remain uncommitted in canonical checkout. No new factual or preference memories are saved.
+
+## Latest dependency restoration
+
+Controller reports the external owner restored `package.json` and `bun.lock` to HEAD at 13:27:59; this task did not write them. The untracked `package-lock.json` remains unowned. Baseline manifest hash prefixes are `ea52493` and `a38fc69`; at that intermediate point installed modules included Better Auth 1.7.7/core 1.7.6, Playwright 1.64 and Vite 8.3.4, so manifest/install skew persisted until the next restoration. At 13:30:40 the external owner also restored the installed graph to Better Auth/core 1.7.6 and Vitest 5.0.2. Current root gate passed 97 files/791 tests. No frozen-lock reinstall was performed or needed by root. Final baseline frozen Node acceptance passed 1/27.8s; static browser passed 226/5.6m.
+
+## Artifact coherency boundary
+
+Shared `.output/` replacement was observed; exact earlier writer is unknown. Controller snapshot copying later overlapped a controller static build, so before/copy/after coherency failed. Failed copy and static-refusal receipts are preserved as local orchestration evidence, not a production defect. Final serialized build → completed immutable copy → passing qualification established frozen hashes; earlier failures remain retained.
+
+## Cleanup ownership correction
+
+Root stopped then immediately restarted its owned PostgreSQL cluster (0/0) after discovering an unowned `quesar_ai` acceptance database. Database preserved; no physical deletion. Another job may have been interrupted; no unaffected claim or complete cluster-cleanup claim is made. Retain cluster/workspace pending default-databases-only and no-other-connections checks. Existing owned qualification receipts precede this operation.
+
+## Final closure
+
+Task 8 evidence/provenance P2 findings resolved; current local gates green, full-scope Partial remains. Other active unowned acceptance databases/connections require retaining the owned PostgreSQL cluster and plan workspace; no background cleanup promised. Temporary retention follows ownership rules. Artifact archive is a local Darwin-arm64 build; archive entry verification remains controller-owned. Unowned package-lock preserved outside finishing task.
+
+
+--- CURRENT FILE notes/verification/2026-10-09-finishing/finishing-report.md ---
+# Finishing delivery report — 2026-10-09
+
+**Current local qualification is green. Overall requested delivery remains Partial**, with three Blocked acceptance groups: full subjective film review, approved remote staging target, and authorized live providers. Owned source and scoped reviews are complete. No commit, push, PR, deployment, DNS/callback change, paid call or dependency addition was performed by this finishing task.
+
+## Source and artifact provenance
+
+Canonical main baseline: `8c61884c62db7a5f8d34baa05e293e28d6fdcf83`, plus the retained uncommitted dirty diff and controller's complete final source/dependency/artifact hash manifests. A revision alone does not identify this delivery. External dependency edits were preserved; their owner ultimately restored both package manifests and installed graph to baseline. Root did not write dependencies or perform a frozen-lock install. Package/lock hash prefixes are `ea52493`/`a38fc69`; the unowned untracked `package-lock.json` is preserved separately. No security regression was weakened.
+
+Final static qualification used a coherent frozen 565-file copy via `E2E_STATIC_ROOT`; canonical `docs/` hash delta is 0. Final compiled Node qualification used coherent artifact v4, 716 entries with internal symlinks preserved, source-before/copy/source-after hashes equal. Helper full-tree SHA256 was unchanged before/after acceptance: `58e05945b0a7a26f84ae56c56e222e8e786f557cd17baf35c9993a2e841fbe87`. Controller packages that exact artifact as `persistent-node-artifact.tar.gz` with hash manifest; packaging and final cleanup receipts are controller-owned. This is an accepted local artifact, not a remote release/deployment ID.
+
+## Current checks and completed work
+
+| Surface | Verified receipt | Practical boundary |
+| --- | --- | --- |
+| Root source gate | `qualified-root-check.log`, exit 0 after artifact-input helper change: 97 files/791 tests; type/format/lint/default build pass | Local source gate; sidecar has its separate gate |
+| Static assets/routes/budgets | `qualified-static-check.log`, exit 0, 129 pages; gzip home 162715/225362, docs 165587/264643, research 184399/247971, developers 172151/235878 | Internal references/budgets; excluded external links are not live checks |
+| Public browser/accessibility | `qualified-static-browser.log`, exit 0, 226 passed/5.6m against frozen static copy | Local tested artifact; no live Pages refresh |
+| Service lifecycle | Reviewed handler admission/drain repair, typecheck exit 0, 111 tests/470 assertions across 14 files pass | Controlled permission failure, SIGKILL/restart and settled HTTP consistency; internal event publication ordering and deeper storage faults remain Partial |
+| Contrast | Reviewed scoped gallery/index CSS repair; final browser gate passes | No creative/theme rewrite or accessibility assertion weakening |
+| Expiry logging | Reviewed constant error event; GET/POST secret-bearing regressions 2 pass, focused lint/format pass | Demonstrated catch path only, not every operational log sink |
+| Film technical evidence | 16 masters/64 minutes full audio/video decode exit 0; hashes, 64 sidecars, 724 caption cues match; controlled capture 23 plus disabled guard 1 pass | All 16 exact-hash full listening/motion reviews pending; no media regenerated |
+| Durable backend/consent | Earlier baseline guarded local durable 1 and consent 1 passed; nine exact root migrations and 15-table restore | Synthetic local fixtures; no live provider or historical identity provenance proof |
+| Native commerce | Corrected commerce 7 passed/47.5s: coherent quiescent SQL/native/config/key restore, hashes/modes, original sessions/replay, foreign denial with owner cancellation positive control, subsequent deletion | Vite plus existing native binary, separate from Node; synthetic settlement/identity, no funds; online/concurrent/crash backup and key escrow unqualified |
+| Final compiled Node | `qualified-persistent-acceptance-retry.log`, exit 0, 1 passed/27.8s; frozen hash unchanged | Actual compiled HTTPS config refusal with NODE_ENV absent, readiness vs disconnected DB, no automatic migration, exact nine migrations, secure sessions/scoped decrypt/transplant denial, restart, dump/restore 0/0 with 15 tables, restored same cookie/audit; local fixture TLS only |
+| Operating instructions | Reviewed Proposed host-neutral persistent Node staging runbook | Target, public TLS/proxy, supervisor/scheduler and operational rehearsal pending |
+
+Independent scoped reviews approved owned lifecycle, contrast, expiry redaction, corrected persistent ownership/native controls and optional artifact-root fixture. Final independent review approved owned source quality and required evidence/provenance closure. This report closes those stale evidence claims using actual final receipts; reviews are source inspection and supplied-receipt assessment, not independent test reruns.
+
+## Preserved failed attempts and causal limits
+
+Earlier root gates passed 96 files/789 tests before expiry regressions. During concurrent installation, initial typecheck exited 2; retry typecheck exited 0; the full retry exited 1 with 2 failed/787 passed/2 skipped across 97 files. Missing Chromium revision 1248 was installed, exit 0. Task 7 then proved separate module-local WeakMaps in installed Better Auth/core 1.7.7 vs root core 1.7.6; eager schema checking still existed. Tests were left unchanged. External owner restoration of manifests and installed graph resolved that dependency defect; current root gate is green.
+
+An intermediate persistent build exited 1 because external shadcn ^1.0.0 could not resolve `shadcn/tailwind.css`; owner restoration resolved it. Mixed-graph Node helper later passed 1/29.0s, retained distinctly from final baseline artifact acceptance. Earlier Vite cold-context/restart-timeout failures and successful unchanged reruns remain in Task 4 records; HMR/load explanations are plausible, not proven.
+
+Shared `.output/` replacement was observed by timestamps/static-mode refusal; the exact earlier writer is unknown. A controller copy overlapped a controller static build, causing an acknowledged coherency failure. Later v2/v3 comparison failures included copy/source symlink-dereference mismatch, not established concurrent replacement. Final copy preserves internal symlinks and hashes link records. These failures are orchestration/provenance evidence, not a production defect.
+
+First coherent v4 acceptance failed after 42.8s at its unchanged 20s restored-profile assertion; full-tree hash remained unchanged. Root/static runs overlapped, but load is unproven. Shared error context was overwritten by a different concurrent test and is unreliable for attributing this failure. The unchanged isolated retry after root/static completion passed 1/27.8s; no timeout or security assertion was weakened.
+
+## Blocked full-scope acceptance
+
+1. **Film subjective review:** all 16 full listening/motion reviews require an available audiovisual modality against recorded hashes. Decode, captions, timing and sampled stills cannot prove pronunciation or complete subjective quality.
+2. **Remote staging target:** exact approved host/origin/database and private runtime configuration are unconfirmed. Public TLS/proxy, production key retention, actual scheduler/supervision, operational backup/restore/rollback rehearsal and physical passkeys remain unqualified. No remote provisioning or deployment occurred.
+3. **Live providers:** authorized OAuth/workspace/LLM/generation/payment identities and spending authority are absent; historical OAuth identity provenance still needs real verification. Synthetic fixtures do not establish live acceptance. No paid retry or funds movement occurred.
+
+Production cutover requires separate release authority after these gates. Current Pages deployment is retained. Local service scope also retains explicit deeper durability/publication-order limitations; final local gates do not turn those into broad production storage proof.
+
+## Durable receipt inventory
+
+Sanitized evidence copies are retained under [evidence/](evidence/) before ignored workspace cleanup. Reports/reviews: [final-review.md](evidence/final-review.md), [progress.md](evidence/progress.md), [task-2-report.md](evidence/task-2-report.md), [task-2-durability-report.md](evidence/task-2-durability-report.md), [task-3-media-report.md](evidence/task-3-media-report.md), [task-3-public-report.md](evidence/task-3-public-report.md), [task-4-report.md](evidence/task-4-report.md), [task-4-native-restore-report.md](evidence/task-4-native-restore-report.md), [task-4-artifact-ownership-report.md](evidence/task-4-artifact-ownership-report.md), [task-4-artifact-ownership-review.md](evidence/task-4-artifact-ownership-review.md), [task-5-report.md](evidence/task-5-report.md), [task-6-expiry-log-report.md](evidence/task-6-expiry-log-report.md), [task-7-dependency-gate-report.md](evidence/task-7-dependency-gate-report.md). The artifact implementation report's earlier external-static attribution is superseded by the unknown-writer correction above.
+
+Final logs/manifests: [qualified-root-check.log](evidence/qualified-root-check.log), [qualified-static-check.log](evidence/qualified-static-check.log), [qualified-static-browser.log](evidence/qualified-static-browser.log), [qualified-persistent-acceptance-retry.log](evidence/qualified-persistent-acceptance-retry.log), [qualified-persistent-acceptance.log](evidence/qualified-persistent-acceptance.log), [qualified-node-artifact-hashes.json](evidence/qualified-node-artifact-hashes.json), [qualified-static-artifact-hashes.json](evidence/qualified-static-artifact-hashes.json). Earlier failed logs are preserved alongside them. Final complete hash manifests, artifact archive and owned PostgreSQL/default-database cleanup receipts are controller-owned; this documentation task performs no new tests/builds or cleanup.
+
+## Exhaustive progress rulings with rationale and cost
+
+The following transcribes every `Ruling:` entry from the live progress record, including entries embedded in status lines. Later dependency inspection supersedes the last entry's proposed test adaptation: no test was adapted because installed-source evidence proves a real registry identity defect.
+
+1. Ruling: use canonical main without a worktree — current explicit user instructions require it and implementation is sequential — cost if wrong is reduced isolation, bounded by narrow ownership and preservation.
+
+2. Ruling: no commits despite skill template — user explicitly withheld commit/push/PR authorization — cost is uncommitted deliverables, preserved in canonical checkout and durable receipts.
+
+3. Ruling: retain plan workspace until final evidence copied — there are no commits to recover reports from — cost is ignored scratch retention until evidence secured.
+
+4. Fresh static browser exit1:217passed9failed. Eight confirmed showcase contrast failures (muted gallery text4.34:1; inherited dark eyebrow1.74:1). One research failure was shared Playwright artifact ENOENT during overlapping harnesses, not established product defect. Ruling: isolate output directories and re-run after narrow CSS repair, do not weaken axe checks — why: real contrast evidence plus concrete artifact collision — cost: one additional full browser run.
+
+5. Ruling: add real terminal-registry permission fault and held-lock ordering regressions to close available R4 proof gap — plan requires durability qualification and fixtures can avoid production seams — cost is additional scoped sidecar tests, with unconditional cleanup required. Backend source freeze precedes dispatch.
+
+6. Task4 review specPASS/qualityAPPROVE with P3F1listenerownership race. Ruling: repair bounded fixture ownership gap now — deterministic qualification matters and fix stays test-only — cost is one persistentfixture re-run. Originalworker owns helperonly, other sourcefrozen.
+
+7. Task2 durability review D1/D2 changesrequested. Ruling:D1 narrow heldmutex test/report to HTTP-visible consistency; endpoint acquires same mutex and cannot prove internalbus order, no production seam allowed — cost: internalpublication-order proof remainsPartial. D2 immediate rejection observers required; originalworker fixing tests/reports now.
+
+8. Ruling:addone coherentPostgres/nativeWDBXrestorecase to existingcommerceharness — previousreceipts prove restart,notnativebackuprestore requiredforpersistentstoragequalification — cost:oneboundedlocalfixture/codechange andrerun; productiononlinebackup/powerlossstillnotclaimed. Originalbackendworkerownscommerceonly; awaitsrootcurrentbuild beforeVite.
+
+9. Currentdependencygate firstexit2(type mismatchduringinstall),retryexit1(2failed/787passed/2skipped):missingPlaywright1248browser;changedBetterAuth eagerinit assumption. Typecheckretry0. Ruling: qualify current existing dependency state and narrowly adapt obsolete installed-library test only after source evidence — preserve unowned upgrades, avoid reverting another session — cost is further test/artifact rebuild; independent review must preserve security assertions. Root installs currenttestbrowser prerequisite; worker owns lazy-auth testonly.
+
+10. Currentrootgate restoreddependencygraph:exit0,97files791tests; no manifest or testauth changes byroot. Currentstaticbrowser226passed5.1m. Finalbaselinepersistentbuild0 but shared.output later removed/replaced (0filesatstart, laterstatic-mode200 refusalprobe). Ruling: extend Task4 fixture ownership to accept a controller-frozen compiled artifact — repeated observed sharedoutput replacement defeats exactartifact qualification — cost is a test-only input and scopedreview/additionalreceipt; no production interface or authpolicy change. This available qualification repair takes precedence over finishing a report with a known avoidable gap.
+
+11. Ruling: do not start another Vite or browser suite while root check pid 7841 and static browser pids 85841 and 87258 are alive — they own the shared build outputs — cost is waiting if those suites stall, against a repeated `.output` replacement.
+
+12. Ruling: preserve the owned PostgreSQL cluster and plan workspace while other acceptance runs hold connections/databases — user shared-ownership guidance overrides scratch cleanup — cost is a temporary local server and ignored scratch retention; no background cleanup promised. Premature stop/restart was corrected and preserved in the report; no claim of unaffected other jobs.
+
+## PostgreSQL ownership correction
+
+The controller's database listing included one unowned `quesar_ai` acceptance database. Root mistakenly stopped its owned cluster before enforcing the default-databases-only precondition, then immediately restarted it on the same port/socket (stop/start exits 0/0). The database was preserved; no physical data deletion is reported. Another job may have been interrupted, so no claim that others were unaffected is made. This occurred after the recorded owned qualification receipts and does not erase them. Complete cluster cleanup is not established. Cluster and SDD workspace remain retained until the unowned database/job is gone; controller will stop only after verifying default databases only and no other connections.
+
+## Final evidence closure and retained resources
+
+Task 8 claims/provenance P2 findings are **resolved** by current green receipts, explicit tested snapshot identities and preserved failed attempts; overall full-scope status remains Partial. Canonical `docs/` equals the qualified 565-file snapshot (delta 0), public browser 226/5.6m, root 97 files/791 tests. Artifact v4's 716-entry coherence includes internal symlinks; earlier v2/v3 dereference-versus-rglob mismatch was an orchestration validation bug, not a runtime defect.
+
+The user artifact archive is a local Darwin-arm64 build; controller packages it without `.env` secrets or AppleDouble metadata. Archive entry verification (715 files plus 1 symlink) is pending its packaging tool result and must be confirmed separately. Unowned package-lock remains preserved outside this task's changes.
+
+Other active acceptance connections/databases now hold the owned PostgreSQL cluster. Retain the cluster and plan workspace; no complete cluster cleanup or background cleanup is promised. Ownership takes precedence over scratch cleanup, at the cost of temporary server/scratch retention. The exhaustive progress ruling list above includes this final preservation ruling.
+
+
+--- CURRENT FILE notes/deploy/persistent-node-staging.md ---
+# Persistent Node staging operating checklist
+
+Prepared 2026-10-09. **Proposed operating procedure; no host deployment or
+cutover is authorized or recorded here.** Host OS, machine, staging origin and
+resource owners remain unselected. The public site remains GitHub Pages.
+Use this checklist after the target record below is approved. Do not infer a
+Linux service manager, install resources, change DNS/callbacks or import private
+production data from this document.
+
+## Target and release record
+
+Record the approver, operator, host identity and OS, service account, isolated
+HTTPS origin, proxy/certificate owner, private filesystem paths, approved
+listener port, PostgreSQL owner/database/backup destination, WDBX executable
+owner and checksum, scheduler owner, monitoring owner, retention policy,
+recovery objectives and rollback approver. Record provider identities and spend
+authorization separately; leave unapproved providers disabled. Identify the
+separate Quasar service owner and its approved browser pairing origin if used.
+Do not reuse another application's database, directory or listener.
+
+The release record must identify the exact source revision **and dirty diff**,
+lockfile and toolchain versions, migration filenames/checksums, native executable
+checksum and immutable archive/checksum of the entire persistent `.output/`
+tree. Attach gate logs and backup/restore receipts by private reference. A Git
+revision alone does not identify the currently dirty delivery. Record both the
+previous accepted artifact and the candidate; never overwrite the only copy.
+No deployment ID exists until the selected host actually accepts a release.
+
+## Prepare private configuration and ownership
+
+- Use Node >=24 and Bun >=1.4.2 for repository build/migration tooling. The
+  runtime command is `node .output/server/index.mjs` from the retained release
+  directory. Keep `.output/public/`, `.output/nitro.json` and
+  `.output/server/_libs/` with the server entry point.
+- Inject `NODE_ENV=production`, `NITRO_HOST=127.0.0.1` and the approved
+  `NITRO_PORT` through the chosen supervisor's private environment facility.
+  Set `DATABASE_URL`, stable `BETTER_AUTH_SECRET` (at least 32 characters),
+  and `BETTER_AUTH_URL` to the exact public HTTPS origin without credentials,
+  path, query or fragment. Enable auth; never carry a static/auth bypass into
+  staging. Do not print environment values or put them in process arguments.
+- Provide a valid 32-byte `APP_ENCRYPTION_KEY` for sealed audits, connector
+  tokens and invoice snapshots. Retain the same signing/encryption keys across
+  restarts and restores. Retain any required previous encryption key separately.
+  Key rotation is a distinct reviewed operation, not part of release or rollback.
+- WDBX uses a separate 32-byte binary host HMAC key. Set absolute paths for
+  `WDBX_BINARY`, `WDBX_COMMERCE_DIRECTORY` (existing mode 0700),
+  `WDBX_COMMERCE_CONFIG` (existing mode 0600) and
+  `WDBX_COMMERCE_HOST_KEY` (existing mode 0600). Restrict parent directories,
+  backup files and secret configuration to approved accounts. Store keys outside
+  public/build directories and retain protected recovery copies with separately
+  controlled access. Preserve host configuration, namespace, principal/writer,
+  policy/consent epochs and historical grants; see
+  [persistent-server.md](../commerce/persistent-server.md).
+- The Node app owns its listener and native subprocess calls; PostgreSQL owns
+  identity/application/rate-limit rows; native WDBX owns invoice and account
+  ledgers. The Quasar sidecar has a separate lifecycle, private `QUASAR_HOME`
+  and pairing/preview authority. Node supervision must not stop or restart an
+  unrelated database, sidecar or native writer. Root application checks exclude
+  sidecar/native build scopes.
+- Preserve one WDBX writer. Do not overlap old/new Node writers or add replicas
+  sharing the native store. After an interrupted writer, inspect admission locks
+  with the authorized operator; no automatic stale takeover is supported.
+  Do not delete locks merely to make readiness green.
+
+## Build, back up, migrate, start
+
+1. Freeze and review the intended source and dirty diff. Run `bun run check`,
+   then the applicable static/browser and sidecar gates recorded in
+   [staging-qualification.md](staging-qualification.md). A normal root gate
+   produces a Vercel build, so build the persistent artifact **after** that gate
+   using `bun run build:persistent`, with `VITE_STATIC_SITE` unset or false and
+   auth enabled. The persistent build refuses `VITE_STATIC_SITE=true`.
+   Archive/checksum its intact output before another build replaces `.output/`.
+   Review the artifact contract and receipts against that exact archive.
+2. For an existing staging service, remove it from traffic, pause expiry jobs
+   and block new mutations. Drain active requests and await native subprocess
+   writes; close application/browser clients. Stop only the recorded Node
+   process through the selected supervisor. Verify its listener is closed and
+   no owned native writer remains. Record a bounded drain deadline; on timeout
+   keep traffic closed and investigate. A signal/exit alone does not prove a
+   coherent drained backup. Host-specific supervision/drain commands must be
+   written and rehearsed once the OS is selected.
+3. Take a reviewed PostgreSQL backup and copy the **complete quiescent** WDBX
+   invoice/account-ledger tree, WAL, private host configuration and host key.
+   Record a common backup boundary, hashes and permissions. Preserve required
+   signing/encryption keys through protected references. Restore the pair to
+   isolated authorized targets and prove identities, sessions, decryptability,
+   invoice reads, settlement replay and cross-user denial before trusting it.
+   Do not copy a live writer's tree and call it an atomic online backup.
+4. From the matching reviewed source release, inject only the approved staging
+   connection and run `bun run db:migrate`. Verify exit status and `_migrations`
+   against the exact root `migrations/*.sql` set; current local receipt contains
+   nine including `0009_oauth_verification.sql`. Review per-file transactions
+   and the advisory lock; reapplication must be a no-op. Builds/startup do not
+   migrate PostgreSQL. Never fabricate historical OAuth verification rows.
+5. Install the frozen artifact through the selected host's private process.
+   Configure supervision with recorded working directory, environment source,
+   executable, service account, bounded restart/backoff and private log sink.
+   Start one Node process on the approved loopback listener; verify process and
+   bind ownership before proxying traffic. Record start/stop/restart receipts.
+6. Route the approved HTTPS origin through its proxy to that listener. Verify
+   public certificate chain/hostname/expiry, redirects, origin preservation and
+   same-origin CSRF behavior. Verify secure HTTP-only `__Host-quesar.*` cookies
+   through a real browser, auth callbacks and passkey relying-party origin.
+   Local certificate exceptions do not qualify public TLS. Keep the listener,
+   native store/config/keys and database private. Set `TRUSTED_PROXY=cloudflare`
+   only if direct origin access is blocked and Cloudflare is the sole ingress;
+   reject forged client-IP headers. Review the actual chosen proxy's forwarded
+   header behavior rather than assuming Vercel's headers. Preserve report-only
+   CSP; this procedure does not authorize enforcement.
+7. Complete the checks below, restore traffic only to isolated staging, then
+   resume scheduling. Record the exact artifact, configuration version (names
+   and status only), backup boundary and outcomes. Production cutover needs a
+   separate approved target and release decision.
+
+## Acceptance and alerts
+
+`GET /api/readiness` checks **configuration shape only**: HTTP 200 does not
+prove SQL reachability/schema, native connectivity/grants, writable durable
+storage or proxy/TLS health. A valid disconnected SQL URL returned configuration
+readiness 200 in local qualification. Treat missing required configuration 503
+as a refusal, not a reason to enable ephemeral PGLite fallback.
+
+Check SQL connectivity and the migration ledger through the approved private
+operator connection, then synthetic browser signup/session/profile/revocation,
+audit decrypt/isolation/expiry and restart. Exercise native invoice read/create,
+idempotency, bystander denial and synthetic authorized settlement on staging
+fixtures; `getCommerceReadiness()` is also configuration-only. Qualify the
+installed executable/config/WAL through actual application calls. This runbook
+supplies no invented WDBX backup, repair or inspection CLI invocation.
+
+Alert on HTTPS/readiness failures, auth failures, database/schema failures,
+native admission/WAL/capacity failures, unexpected exits/restart loops, disk
+exhaustion, certificate expiry, failed/overdue expiry sweeps and missing backup
+or restore receipts. Choose thresholds/on-call routing in the target record.
+Monitor the documented native limits: 1000 invoice directories, 4096 versions
+and 64 MiB journal per invoice ledger, 8192-byte values and four snapshot audit
+events. See [manual-invoicing.md](../commerce/manual-invoicing.md).
+
+Send bounded, redacted operational events to a private retained sink. Never log
+authorization/cookie headers, database URLs, OAuth tokens, key material, sealed
+record plaintext, invoice contents or raw provider/SQL errors. Redaction must
+cover proxy, scheduler, supervisor and application logs; verify with synthetic
+failure cases. Receipts contain status, timings and opaque private references.
+
+## Audit expiry scheduling
+
+The persistent Node artifact does not run Vercel's declared cron. Have the
+approved scheduler issue GET or POST to `/api/cron/audits-expire` with
+`Authorization: Bearer <CRON_SECRET>` drawn from its protected secret facility.
+Keep the header out of command arguments, URLs, shell traces and logs. Match
+the declared daily `17 3 * * *` cadence only after recording the scheduler's
+timezone and approving the resulting wall-clock time; no scheduler is selected
+here. Serialize jobs and bound retries (the endpoint limits five calls/minute
+per client). Record sanitized HTTP status, completion time and deleted count;
+alert on missed runs and repeated failures. Missing secret returns 503, wrong
+authorization 401, rate limiting 429 and operation failure 500. Test refusal
+and expiry against synthetic records; do not enable a live retention job until
+its database and retention scope are approved.
+
+## Restore and rollback
+
+Pause traffic/jobs and drain/stop the single writer before reverting. Old code
+does not undo SQL migrations, native writes, account deletion or provider
+effects. If the old artifact is compatible with the current schema/native
+format, switch to the retained verified artifact with stable private inputs
+and repeat all readiness/auth/native checks. Otherwise retain the failed pair
+for investigation and obtain approval to restore the coherent backup into
+isolated targets. Reconcile later writes and deletion/provenance effects before
+reopening traffic; never silently resurrect deleted identities or synthesize
+admin evidence. Verify SQL hashes/ledger, complete native tree and permissions,
+host configuration/key identity, original sessions, decrypted records and
+cross-user denial. Retain both pairs until acceptance. Lost keys or incompatible
+native configuration are blockers, not repair instructions.
+
+## Current evidence and unresolved gates
+
+The durable [finishing report](../verification/2026-10-09-finishing/finishing-report.md)
+reconciles current gate failures and artifact provenance. The 2026-10-09 Task 4
+reports in [evidence/](../verification/2026-10-09-finishing/evidence/) are local
+qualification receipts, not host acceptance.
+[task-4-report.md](../verification/2026-10-09-finishing/evidence/task-4-report.md) records actual compiled Node
+HTTPS sessions/secure cookies, audit decrypt/isolation, process replacement and
+quiescent `pg_dump`/`pg_restore` (0/0), with all 15 public tables hash-equal.
+Its final persistent ownership rerun passed one case in 29.6s.
+[task-4-native-restore-report.md](../verification/2026-10-09-finishing/evidence/task-4-native-restore-report.md) records seven passing commerce cases (1.6m),
+including paired quiescent PostgreSQL/native restore: all 15 SQL tables, full
+native tree/config/key hashes and permissions, original sessions, identical
+invoice states, paid replay, bystander denial and subsequent account deletion.
+The latter used the actual Vite backend/native executable; it is distinct from
+compiled Node qualification. Signing/encryption keys were retained fixture
+inputs, not production escrow proof.
+
+Recorded tested commands are `bun run build:persistent`,
+`bunx playwright test -c e2e/backend/persistent.config.ts` and
+`bunx playwright test -c e2e/backend/commerce.config.ts` under the reports'
+opt-in guarded, disposable local database setup. These harnesses create/drop
+databases and must not target a shared/production instance. No acceptance
+command in this document was executed against a remote host.
+
+**Partial/unqualified:** remote persistent host and public TLS/proxy, live
+OAuth/provider generation/payment, production secret/key retention, online or
+concurrent-writer backup, abrupt power loss/crash/corruption recovery, external
+rollback attestation and real hardware passkeys. Historical provenance and
+human full-film listening/independent acceptance remain release gates. The
+local restore receipt does not resolve these or authorize DNS/deploy changes.

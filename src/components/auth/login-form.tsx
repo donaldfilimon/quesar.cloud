@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { getRouteApi, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -16,6 +16,7 @@ import {
 } from "@/lib/auth/client";
 import type { SocialProviderId } from "@/lib/auth/providers";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
+import { signInFailureCopy } from "@/lib/auth/callback";
 
 /**
  * The /login form. Kept out of the route file: the router's code splitter
@@ -34,31 +35,38 @@ type FormValues = z.infer<typeof schema>;
 
 export function LoginForm() {
   const { user, isPending } = useCurrentUserState();
-  const { next = "/dashboard" } = Route.useSearch();
+  const { next = "/dashboard", mode = "signin", error } = Route.useSearch();
+  const navigate = Route.useNavigate();
   const methods = Route.useLoaderData();
-  const [mode, setMode] = useState<"signin" | "signup">("signin");
-  const [pending, setPending] = useState<SocialProviderId | "passkey" | null>(null);
+  const [pending, setPending] = useState<SocialProviderId | "passkey" | "email" | null>(null);
+  const inFlight = useRef(false);
   const offeredProviders = SOCIAL_PROVIDERS.filter((provider) =>
     methods.social.includes(provider.id),
   );
 
   async function continueWith(provider: SocialProviderId) {
+    if (inFlight.current) return;
+    inFlight.current = true;
     setPending(provider);
     try {
       await signInWithProvider(provider, { callbackURL: next });
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Sign-in failed.");
+      inFlight.current = false;
       setPending(null);
     }
   }
 
   async function continueWithPasskey() {
+    if (inFlight.current) return;
+    inFlight.current = true;
     setPending("passkey");
     try {
       await signInWithPasskey();
       window.location.assign(next);
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Passkey sign-in failed.");
+      inFlight.current = false;
       setPending(null);
     }
   }
@@ -69,13 +77,17 @@ export function LoginForm() {
   });
 
   async function onSubmit(values: FormValues) {
+    if (inFlight.current) return;
+    inFlight.current = true;
+    setPending("email");
+    let succeeded = false;
     try {
       const result =
         mode === "signup"
           ? await authClient.signUp.email({
               email: values.email,
               password: values.password,
-              name: values.name || values.email.split("@")[0],
+              name: values.name?.trim() || values.email.split("@")[0],
             })
           : await authClient.signIn.email({ email: values.email, password: values.password });
       if (result.error) {
@@ -86,15 +98,23 @@ export function LoginForm() {
       }
       toast.success(mode === "signup" ? "Account created." : "Signed in.");
       window.location.assign(next);
+      succeeded = true;
     } catch {
       form.setError("root", { message: "Sign-in failed. Try again." });
       toast.error("Sign-in failed. Try again.");
+    } finally {
+      if (!succeeded) {
+        inFlight.current = false;
+        setPending(null);
+      }
     }
   }
 
   useEffect(() => {
     if (!isPending && user) window.location.assign(next);
   }, [isPending, user, next]);
+
+  const busy = pending !== null || form.formState.isSubmitting;
 
   if (!isPending && user) {
     return (
@@ -136,6 +156,11 @@ export function LoginForm() {
             The desk calls Abbey, Aviva, Abi, Quesar, and WDBX through the site API. Field notes
             stay on the same account.
           </p>
+          {error ? (
+            <p role="alert" className="mt-3 text-sm text-destructive">
+              {signInFailureCopy[error]}
+            </p>
+          ) : null}
         </header>
 
         {!authEnabled ? (
@@ -149,7 +174,7 @@ export function LoginForm() {
                     <Button
                       type="button"
                       variant="secondary"
-                      disabled={pending !== null}
+                      disabled={busy}
                       onClick={() => void continueWithPasskey()}
                     >
                       {pending === "passkey"
@@ -162,7 +187,7 @@ export function LoginForm() {
                       key={provider.id}
                       type="button"
                       variant="secondary"
-                      disabled={pending !== null}
+                      disabled={busy}
                       onClick={() => void continueWith(provider.id)}
                     >
                       {pending === provider.id
@@ -176,7 +201,10 @@ export function LoginForm() {
               </>
             ) : null}
 
-            <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-3">
+            <form
+              onSubmit={(event) => void form.handleSubmit(onSubmit)(event)}
+              className="flex flex-col gap-3"
+            >
               {mode === "signup" ? (
                 <div>
                   <Label htmlFor="name">Name</Label>
@@ -245,7 +273,7 @@ export function LoginForm() {
                   {form.formState.errors.root.message}
                 </p>
               ) : null}
-              <Button type="submit" disabled={form.formState.isSubmitting}>
+              <Button type="submit" disabled={busy}>
                 {form.formState.isSubmitting
                   ? "Working…"
                   : mode === "signup"
@@ -256,10 +284,19 @@ export function LoginForm() {
 
             <button
               type="button"
+              disabled={busy}
               className="text-sm text-fg-muted underline-offset-4 hover:text-fg hover:underline"
               onClick={() => {
-                setMode(mode === "signup" ? "signin" : "signup");
+                if (inFlight.current) return;
                 form.clearErrors();
+                void navigate({
+                  search: (previous) => ({
+                    ...previous,
+                    mode: mode === "signup" ? "signin" : "signup",
+                    error: undefined,
+                  }),
+                  replace: true,
+                });
               }}
             >
               {mode === "signup"

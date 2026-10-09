@@ -1,0 +1,6 @@
+$ node scripts/check-static.ts
+/: 17/21 preloads; 163740/225362 gzip bytes
+/docs/: 17/21 preloads; 166607/264643 gzip bytes
+/research/: 19/23 preloads; 185413/247971 gzip bytes
+/developers/: 22/25 preloads; 173189/235878 gzip bytes
+Checked 129 HTML pages; 283 external references excluded from network checks.

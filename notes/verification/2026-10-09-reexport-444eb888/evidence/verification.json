@@ -1,0 +1,1106 @@
+{
+  "date": "2026-10-09T20:46:59.124Z",
+  "listeningPerformed": false,
+  "limitations": [
+    "Complete browser playback was muted at16x; human listening and speech accuracy acceptance remain unverified.",
+    "Existing synthesis receipts name model and dtype but do not pin immutable model-weight revision."
+  ],
+  "results": [
+    {
+      "id": "film",
+      "status": "current_full_decode_and_complete_muted_browser_playback",
+      "sha256": "c5837c211e692dd7f78b656fcb327f1e09822fff798f01403e8755329c9129ac",
+      "catalogHash": "63f5ddf94573d3ea8bb3898c3e89fedab52359d1c77b9e2658dde8dc230ebf06",
+      "duration": 69,
+      "frames": 2070,
+      "bytes": 3693774,
+      "videoCodec": "h264",
+      "audioCodec": "aac",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "fps": "30/1",
+      "fullDecodeExitCode": 0,
+      "audio": {
+        "rate": 24000,
+        "decodedSamples": 1656000,
+        "peak": 0.6840032935142517,
+        "gapPeak": 1.2241084534903024e-10,
+        "toleranceSeconds": 0.06,
+        "measuredCues": [
+          {
+            "id": "film-cue-01",
+            "scheduledStart": 1,
+            "measuredSeconds": 3.025,
+            "decodedFirstAudible": 1.3375833333333333,
+            "decodedLastAudible": 3.5505,
+            "rms": 0.05574987607690435
+          },
+          {
+            "id": "film-cue-02",
+            "scheduledStart": 4.6,
+            "measuredSeconds": 3.875,
+            "decodedFirstAudible": 4.894208333333333,
+            "decodedLastAudible": 8.068,
+            "rms": 0.05803664076577122
+          },
+          {
+            "id": "film-cue-03",
+            "scheduledStart": 9.6,
+            "measuredSeconds": 3.425,
+            "decodedFirstAudible": 9.990625,
+            "decodedLastAudible": 12.518,
+            "rms": 0.042627669652010244
+          },
+          {
+            "id": "film-cue-04",
+            "scheduledStart": 13.8,
+            "measuredSeconds": 3.675,
+            "decodedFirstAudible": 14.187416666666667,
+            "decodedLastAudible": 16.919,
+            "rms": 0.04597031332894982
+          },
+          {
+            "id": "film-cue-05",
+            "scheduledStart": 18.2,
+            "measuredSeconds": 2.275,
+            "decodedFirstAudible": 18.563625,
+            "decodedLastAudible": 19.98925,
+            "rms": 0.05116791450082796
+          },
+          {
+            "id": "film-cue-06",
+            "scheduledStart": 22.8,
+            "measuredSeconds": 4.425,
+            "decodedFirstAudible": 23.108958333333334,
+            "decodedLastAudible": 26.793083333333332,
+            "rms": 0.058455438176682105
+          },
+          {
+            "id": "film-cue-07",
+            "scheduledStart": 27.4,
+            "measuredSeconds": 3.5,
+            "decodedFirstAudible": 27.731208333333335,
+            "decodedLastAudible": 30.417333333333332,
+            "rms": 0.05778743514256511
+          },
+          {
+            "id": "film-cue-08",
+            "scheduledStart": 32.2,
+            "measuredSeconds": 3.95,
+            "decodedFirstAudible": 32.474583333333335,
+            "decodedLastAudible": 35.74033333333333,
+            "rms": 0.05998372964374277
+          },
+          {
+            "id": "film-cue-09",
+            "scheduledStart": 37.8,
+            "measuredSeconds": 3.75,
+            "decodedFirstAudible": 38.10875,
+            "decodedLastAudible": 41.10475,
+            "rms": 0.05633406156253999
+          },
+          {
+            "id": "film-cue-10",
+            "scheduledStart": 42.4,
+            "measuredSeconds": 3.075,
+            "decodedFirstAudible": 42.689125,
+            "decodedLastAudible": 45.018708333333336,
+            "rms": 0.05837700406062579
+          },
+          {
+            "id": "film-cue-11",
+            "scheduledStart": 47,
+            "measuredSeconds": 3.25,
+            "decodedFirstAudible": 47.295208333333335,
+            "decodedLastAudible": 49.818125,
+            "rms": 0.056883383114519376
+          },
+          {
+            "id": "film-cue-12",
+            "scheduledStart": 51.6,
+            "measuredSeconds": 3.55,
+            "decodedFirstAudible": 51.86020833333333,
+            "decodedLastAudible": 54.51875,
+            "rms": 0.07284777910275432
+          },
+          {
+            "id": "film-cue-13",
+            "scheduledStart": 56.2,
+            "measuredSeconds": 3.125,
+            "decodedFirstAudible": 56.450916666666664,
+            "decodedLastAudible": 58.70458333333333,
+            "rms": 0.07412323394356453
+          },
+          {
+            "id": "film-cue-14",
+            "scheduledStart": 60.6,
+            "measuredSeconds": 3.65,
+            "decodedFirstAudible": 60.93179166666667,
+            "decodedLastAudible": 63.818083333333334,
+            "rms": 0.059107378946709505
+          },
+          {
+            "id": "film-cue-15",
+            "scheduledStart": 64.8,
+            "measuredSeconds": 3.4,
+            "decodedFirstAudible": 65.11908333333334,
+            "decodedLastAudible": 67.73245833333333,
+            "rms": 0.059829142808726095
+          }
+        ]
+      },
+      "playback": {
+        "ended": true,
+        "currentTime": 69,
+        "duration": 69,
+        "width": 1920,
+        "height": 1080,
+        "error": null,
+        "muted": true,
+        "rate": 16
+      }
+    },
+    {
+      "id": "trailer",
+      "status": "current_full_decode_and_complete_muted_browser_playback",
+      "sha256": "1716e607151714711201350d09881872fe6926a8a52bc334beafdd15c1706deb",
+      "catalogHash": "cd9333653849524d443136cf51f813f3341db77a345bdbac0fc5a2374ca562d1",
+      "duration": 62,
+      "frames": 1860,
+      "bytes": 3382309,
+      "videoCodec": "h264",
+      "audioCodec": "aac",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "fps": "30/1",
+      "fullDecodeExitCode": 0,
+      "audio": {
+        "rate": 24000,
+        "decodedSamples": 1488000,
+        "peak": 0.5697746276855469,
+        "gapPeak": 2.3296260753813414e-11,
+        "toleranceSeconds": 0.06,
+        "measuredCues": [
+          {
+            "id": "trailer-cue-01",
+            "scheduledStart": 0.9,
+            "measuredSeconds": 2.275,
+            "decodedFirstAudible": 1.212125,
+            "decodedLastAudible": 2.740375,
+            "rms": 0.05622964840220805
+          },
+          {
+            "id": "trailer-cue-02",
+            "scheduledStart": 4,
+            "measuredSeconds": 1.85,
+            "decodedFirstAudible": 4.308708333333334,
+            "decodedLastAudible": 5.465333333333334,
+            "rms": 0.053951992803300354
+          },
+          {
+            "id": "trailer-cue-03",
+            "scheduledStart": 7.5,
+            "measuredSeconds": 1.775,
+            "decodedFirstAudible": 7.781666666666666,
+            "decodedLastAudible": 8.865375,
+            "rms": 0.0551399052932602
+          },
+          {
+            "id": "trailer-cue-04",
+            "scheduledStart": 11.5,
+            "measuredSeconds": 2.125,
+            "decodedFirstAudible": 11.775541666666667,
+            "decodedLastAudible": 13.175541666666666,
+            "rms": 0.05459683161614286
+          },
+          {
+            "id": "trailer-cue-05",
+            "scheduledStart": 14.6,
+            "measuredSeconds": 2.25,
+            "decodedFirstAudible": 14.871958333333334,
+            "decodedLastAudible": 16.408458333333332,
+            "rms": 0.06119210408999718
+          },
+          {
+            "id": "trailer-cue-06",
+            "scheduledStart": 17.6,
+            "measuredSeconds": 3.15,
+            "decodedFirstAudible": 17.927458333333334,
+            "decodedLastAudible": 20.321875,
+            "rms": 0.05388190420366069
+          },
+          {
+            "id": "trailer-cue-07",
+            "scheduledStart": 21.8,
+            "measuredSeconds": 3.375,
+            "decodedFirstAudible": 22.119666666666667,
+            "decodedLastAudible": 24.718,
+            "rms": 0.05912391641029209
+          },
+          {
+            "id": "trailer-cue-08",
+            "scheduledStart": 26.6,
+            "measuredSeconds": 2.5,
+            "decodedFirstAudible": 26.876416666666668,
+            "decodedLastAudible": 28.651125,
+            "rms": 0.05751061865032449
+          },
+          {
+            "id": "trailer-cue-09",
+            "scheduledStart": 29.6,
+            "measuredSeconds": 2.3,
+            "decodedFirstAudible": 29.905916666666666,
+            "decodedLastAudible": 31.476,
+            "rms": 0.05338506873057968
+          },
+          {
+            "id": "trailer-cue-10",
+            "scheduledStart": 32.6,
+            "measuredSeconds": 2.4,
+            "decodedFirstAudible": 32.91220833333333,
+            "decodedLastAudible": 34.57391666666667,
+            "rms": 0.05718152595845671
+          },
+          {
+            "id": "trailer-cue-11",
+            "scheduledStart": 35.6,
+            "measuredSeconds": 2.15,
+            "decodedFirstAudible": 35.89825,
+            "decodedLastAudible": 37.313291666666665,
+            "rms": 0.0576522673264067
+          },
+          {
+            "id": "trailer-cue-12",
+            "scheduledStart": 38.6,
+            "measuredSeconds": 2.3,
+            "decodedFirstAudible": 38.916875,
+            "decodedLastAudible": 40.468125,
+            "rms": 0.058984387342691354
+          },
+          {
+            "id": "trailer-cue-13",
+            "scheduledStart": 43.6,
+            "measuredSeconds": 2.775,
+            "decodedFirstAudible": 43.902166666666666,
+            "decodedLastAudible": 45.927083333333336,
+            "rms": 0.0553322225245163
+          },
+          {
+            "id": "trailer-cue-14",
+            "scheduledStart": 47.3,
+            "measuredSeconds": 3.3,
+            "decodedFirstAudible": 47.59883333333333,
+            "decodedLastAudible": 50.1755,
+            "rms": 0.056746164179529636
+          },
+          {
+            "id": "trailer-cue-15",
+            "scheduledStart": 51.3,
+            "measuredSeconds": 2.725,
+            "decodedFirstAudible": 51.61933333333333,
+            "decodedLastAudible": 53.582375,
+            "rms": 0.057062251512172014
+          },
+          {
+            "id": "trailer-cue-16",
+            "scheduledStart": 55.6,
+            "measuredSeconds": 2,
+            "decodedFirstAudible": 55.89458333333334,
+            "decodedLastAudible": 57.213791666666665,
+            "rms": 0.06089567989551522
+          },
+          {
+            "id": "trailer-cue-17",
+            "scheduledStart": 58.4,
+            "measuredSeconds": 2.025,
+            "decodedFirstAudible": 58.709375,
+            "decodedLastAudible": 60.01541666666667,
+            "rms": 0.05591290261365539
+          }
+        ]
+      },
+      "playback": {
+        "ended": true,
+        "currentTime": 62,
+        "duration": 62,
+        "width": 1920,
+        "height": 1080,
+        "error": null,
+        "muted": true,
+        "rate": 16
+      }
+    },
+    {
+      "id": "abbey",
+      "status": "current_full_decode_and_complete_muted_browser_playback",
+      "sha256": "2fe720a5f4657f528c4a2e536e73afb8e7352f90249521ab377e9b3f59f1c8d0",
+      "catalogHash": "ef1783b8b6a56891f2ab6a9687d36882df6136098b5be5e75417ed751f011487",
+      "duration": 38,
+      "frames": 1140,
+      "bytes": 9354450,
+      "videoCodec": "h264",
+      "audioCodec": "aac",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "fps": "30/1",
+      "fullDecodeExitCode": 0,
+      "audio": {
+        "rate": 24000,
+        "decodedSamples": 912000,
+        "peak": 0.5535426139831543,
+        "gapPeak": 3.9977019090919885e-12,
+        "toleranceSeconds": 0.06,
+        "measuredCues": [
+          {
+            "id": "abbey-cue-01",
+            "scheduledStart": 0.8,
+            "measuredSeconds": 1.775,
+            "decodedFirstAudible": 1.081875,
+            "decodedLastAudible": 2.20675,
+            "rms": 0.05854396226329007
+          },
+          {
+            "id": "abbey-cue-02",
+            "scheduledStart": 3.6,
+            "measuredSeconds": 2.075,
+            "decodedFirstAudible": 3.89475,
+            "decodedLastAudible": 5.257375,
+            "rms": 0.0561936867329791
+          },
+          {
+            "id": "abbey-cue-03",
+            "scheduledStart": 6.4,
+            "measuredSeconds": 2.25,
+            "decodedFirstAudible": 6.689666666666667,
+            "decodedLastAudible": 8.207708333333333,
+            "rms": 0.05362192665838349
+          },
+          {
+            "id": "abbey-cue-04",
+            "scheduledStart": 10.6,
+            "measuredSeconds": 3.2,
+            "decodedFirstAudible": 10.98375,
+            "decodedLastAudible": 13.249166666666667,
+            "rms": 0.04961834118960944
+          },
+          {
+            "id": "abbey-cue-05",
+            "scheduledStart": 15.6,
+            "measuredSeconds": 2.875,
+            "decodedFirstAudible": 15.856166666666667,
+            "decodedLastAudible": 17.856416666666668,
+            "rms": 0.07143545464512879
+          },
+          {
+            "id": "abbey-cue-06",
+            "scheduledStart": 20.6,
+            "measuredSeconds": 3.4,
+            "decodedFirstAudible": 20.916875,
+            "decodedLastAudible": 23.532333333333334,
+            "rms": 0.055339171822371254
+          },
+          {
+            "id": "abbey-cue-07",
+            "scheduledStart": 25.8,
+            "measuredSeconds": 3.1,
+            "decodedFirstAudible": 26.112791666666666,
+            "decodedLastAudible": 28.425375,
+            "rms": 0.05798090920290698
+          },
+          {
+            "id": "abbey-cue-08",
+            "scheduledStart": 31.8,
+            "measuredSeconds": 1.925,
+            "decodedFirstAudible": 32.088625,
+            "decodedLastAudible": 33.325541666666666,
+            "rms": 0.060794614948471624
+          },
+          {
+            "id": "abbey-cue-09",
+            "scheduledStart": 34.6,
+            "measuredSeconds": 1.95,
+            "decodedFirstAudible": 34.91654166666667,
+            "decodedLastAudible": 36.150375,
+            "rms": 0.056897663347680476
+          }
+        ]
+      },
+      "playback": {
+        "ended": true,
+        "currentTime": 38,
+        "duration": 38,
+        "width": 1920,
+        "height": 1080,
+        "error": null,
+        "muted": true,
+        "rate": 16
+      }
+    },
+    {
+      "id": "explainer",
+      "status": "current_full_decode_and_complete_muted_browser_playback",
+      "sha256": "66599be9151229b1d564032632e3932a284605b2acdca65cb5c965692fff53dc",
+      "catalogHash": "50824dde0a1fe6eef27c9ef49fe6b51ff4cc411cbed20badc94087027c9345ab",
+      "duration": 132,
+      "frames": 3960,
+      "bytes": 73602812,
+      "videoCodec": "h264",
+      "audioCodec": "aac",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "fps": "30/1",
+      "fullDecodeExitCode": 0,
+      "audio": {
+        "rate": 24000,
+        "decodedSamples": 3168000,
+        "peak": 0.7503817081451416,
+        "gapPeak": 0,
+        "toleranceSeconds": 0.06,
+        "measuredCues": [
+          {
+            "id": "explainer-cue-01",
+            "scheduledStart": 1.2,
+            "measuredSeconds": 2.9,
+            "decodedFirstAudible": 1.4942083333333334,
+            "decodedLastAudible": 3.6686666666666667,
+            "rms": 0.054248425303623095
+          },
+          {
+            "id": "explainer-cue-02",
+            "scheduledStart": 5.6,
+            "measuredSeconds": 3.225,
+            "decodedFirstAudible": 5.889666666666667,
+            "decodedLastAudible": 8.356791666666666,
+            "rms": 0.05737952413136065
+          },
+          {
+            "id": "explainer-cue-03",
+            "scheduledStart": 11,
+            "measuredSeconds": 4.075,
+            "decodedFirstAudible": 11.315,
+            "decodedLastAudible": 14.58425,
+            "rms": 0.05501219279276418
+          },
+          {
+            "id": "explainer-cue-04",
+            "scheduledStart": 16.4,
+            "measuredSeconds": 4.575,
+            "decodedFirstAudible": 16.729291666666665,
+            "decodedLastAudible": 20.5005,
+            "rms": 0.05861261728848695
+          },
+          {
+            "id": "explainer-cue-05",
+            "scheduledStart": 22.6,
+            "measuredSeconds": 3.375,
+            "decodedFirstAudible": 22.903875,
+            "decodedLastAudible": 25.543083333333332,
+            "rms": 0.058626693088390226
+          },
+          {
+            "id": "explainer-cue-06",
+            "scheduledStart": 29,
+            "measuredSeconds": 6.1,
+            "decodedFirstAudible": 29.299041666666668,
+            "decodedLastAudible": 34.65741666666667,
+            "rms": 0.058661013699659384
+          },
+          {
+            "id": "explainer-cue-07",
+            "scheduledStart": 35.6,
+            "measuredSeconds": 5.3,
+            "decodedFirstAudible": 35.91525,
+            "decodedLastAudible": 40.481791666666666,
+            "rms": 0.05793785213118292
+          },
+          {
+            "id": "explainer-cue-08",
+            "scheduledStart": 44,
+            "measuredSeconds": 2.725,
+            "decodedFirstAudible": 44.3355,
+            "decodedLastAudible": 46.293166666666664,
+            "rms": 0.05509517990742849
+          },
+          {
+            "id": "explainer-cue-09",
+            "scheduledStart": 47.8,
+            "measuredSeconds": 4.425,
+            "decodedFirstAudible": 48.09945833333333,
+            "decodedLastAudible": 51.73054166666667,
+            "rms": 0.0561099557962714
+          },
+          {
+            "id": "explainer-cue-10",
+            "scheduledStart": 53.6,
+            "measuredSeconds": 5.95,
+            "decodedFirstAudible": 53.874583333333334,
+            "decodedLastAudible": 59.09308333333333,
+            "rms": 0.0596450126207193
+          },
+          {
+            "id": "explainer-cue-11",
+            "scheduledStart": 61,
+            "measuredSeconds": 5.325,
+            "decodedFirstAudible": 61.32675,
+            "decodedLastAudible": 65.879,
+            "rms": 0.05444659393567138
+          },
+          {
+            "id": "explainer-cue-12",
+            "scheduledStart": 67.6,
+            "measuredSeconds": 5.6,
+            "decodedFirstAudible": 67.903125,
+            "decodedLastAudible": 72.7255,
+            "rms": 0.057905133830690694
+          },
+          {
+            "id": "explainer-cue-13",
+            "scheduledStart": 76.2,
+            "measuredSeconds": 2,
+            "decodedFirstAudible": 76.51429166666667,
+            "decodedLastAudible": 77.77554166666667,
+            "rms": 0.05296571269838227
+          },
+          {
+            "id": "explainer-cue-14",
+            "scheduledStart": 79.2,
+            "measuredSeconds": 2.35,
+            "decodedFirstAudible": 79.51266666666666,
+            "decodedLastAudible": 81.10745833333333,
+            "rms": 0.054938984257879644
+          },
+          {
+            "id": "explainer-cue-15",
+            "scheduledStart": 82.2,
+            "measuredSeconds": 1.925,
+            "decodedFirstAudible": 82.5845,
+            "decodedLastAudible": 83.6505,
+            "rms": 0.05085387899476299
+          },
+          {
+            "id": "explainer-cue-16",
+            "scheduledStart": 86.4,
+            "measuredSeconds": 4.55,
+            "decodedFirstAudible": 86.70345833333333,
+            "decodedLastAudible": 90.5045,
+            "rms": 0.05756796463260069
+          },
+          {
+            "id": "explainer-cue-17",
+            "scheduledStart": 92,
+            "measuredSeconds": 4.2,
+            "decodedFirstAudible": 92.28808333333333,
+            "decodedLastAudible": 95.72554166666667,
+            "rms": 0.059940366565606064
+          },
+          {
+            "id": "explainer-cue-18",
+            "scheduledStart": 97,
+            "measuredSeconds": 3.475,
+            "decodedFirstAudible": 97.30133333333333,
+            "decodedLastAudible": 100.01166666666667,
+            "rms": 0.0575503912597819
+          },
+          {
+            "id": "explainer-cue-19",
+            "scheduledStart": 102.5,
+            "measuredSeconds": 4.25,
+            "decodedFirstAudible": 102.80375,
+            "decodedLastAudible": 106.26808333333334,
+            "rms": 0.05865563996848917
+          },
+          {
+            "id": "explainer-cue-20",
+            "scheduledStart": 108.6,
+            "measuredSeconds": 4.4,
+            "decodedFirstAudible": 108.91204166666667,
+            "decodedLastAudible": 112.51116666666667,
+            "rms": 0.05762210326688544
+          },
+          {
+            "id": "explainer-cue-21",
+            "scheduledStart": 114.2,
+            "measuredSeconds": 4.05,
+            "decodedFirstAudible": 114.50295833333334,
+            "decodedLastAudible": 117.78041666666667,
+            "rms": 0.058759287799891896
+          },
+          {
+            "id": "explainer-cue-22",
+            "scheduledStart": 121.4,
+            "measuredSeconds": 2.425,
+            "decodedFirstAudible": 121.73054166666667,
+            "decodedLastAudible": 123.41804166666667,
+            "rms": 0.056823246995925565
+          },
+          {
+            "id": "explainer-cue-23",
+            "scheduledStart": 124.6,
+            "measuredSeconds": 4.925,
+            "decodedFirstAudible": 124.9225,
+            "decodedLastAudible": 129.055375,
+            "rms": 0.05745743984748823
+          }
+        ]
+      },
+      "playback": {
+        "ended": true,
+        "currentTime": 132,
+        "duration": 132,
+        "width": 1920,
+        "height": 1080,
+        "error": null,
+        "muted": true,
+        "rate": 16
+      }
+    },
+    {
+      "id": "mega",
+      "status": "current_full_decode_and_complete_muted_browser_playback",
+      "sha256": "26ad9ad5aafaf7af935e484a6c6340cea796e418335685cacd48777e26252c39",
+      "catalogHash": "717d4cd28649357349be1f26a2a70145af9d5c4830c97a380bbb7fb6efddabd7",
+      "duration": 282,
+      "frames": 8460,
+      "bytes": 90295529,
+      "videoCodec": "h264",
+      "audioCodec": "aac",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "fps": "30/1",
+      "fullDecodeExitCode": 0,
+      "audio": {
+        "rate": 24000,
+        "decodedSamples": 6768000,
+        "peak": 0.8168798089027405,
+        "gapPeak": 9.550458514306914e-12,
+        "toleranceSeconds": 0.06,
+        "measuredCues": [
+          {
+            "id": "mega-cue-01",
+            "scheduledStart": 0.9,
+            "measuredSeconds": 2.3,
+            "decodedFirstAudible": 1.2267083333333333,
+            "decodedLastAudible": 2.7681666666666667,
+            "rms": 0.05324544671957659
+          },
+          {
+            "id": "mega-cue-02",
+            "scheduledStart": 4,
+            "measuredSeconds": 2.2,
+            "decodedFirstAudible": 4.326375,
+            "decodedLastAudible": 5.758375,
+            "rms": 0.054814324454241
+          },
+          {
+            "id": "mega-cue-03",
+            "scheduledStart": 7.6,
+            "measuredSeconds": 1.725,
+            "decodedFirstAudible": 7.921625,
+            "decodedLastAudible": 8.890375,
+            "rms": 0.057701793218476564
+          },
+          {
+            "id": "mega-cue-04",
+            "scheduledStart": 11.6,
+            "measuredSeconds": 2.45,
+            "decodedFirstAudible": 11.901166666666667,
+            "decodedLastAudible": 13.600375,
+            "rms": 0.05688810897207659
+          },
+          {
+            "id": "mega-cue-05",
+            "scheduledStart": 15.5,
+            "measuredSeconds": 6.675,
+            "decodedFirstAudible": 15.80075,
+            "decodedLastAudible": 21.7005,
+            "rms": 0.06155949944638486
+          },
+          {
+            "id": "mega-cue-06",
+            "scheduledStart": 24.5,
+            "measuredSeconds": 7.5,
+            "decodedFirstAudible": 24.796,
+            "decodedLastAudible": 31.511458333333334,
+            "rms": 0.05823204634889926
+          },
+          {
+            "id": "mega-cue-07",
+            "scheduledStart": 33.5,
+            "measuredSeconds": 6.45,
+            "decodedFirstAudible": 33.79904166666667,
+            "decodedLastAudible": 39.508375,
+            "rms": 0.058171539492022376
+          },
+          {
+            "id": "mega-cue-08",
+            "scheduledStart": 41.5,
+            "measuredSeconds": 5.65,
+            "decodedFirstAudible": 41.81829166666667,
+            "decodedLastAudible": 46.700208333333336,
+            "rms": 0.05785824461004879
+          },
+          {
+            "id": "mega-cue-09",
+            "scheduledStart": 49.5,
+            "measuredSeconds": 5.125,
+            "decodedFirstAudible": 49.81579166666667,
+            "decodedLastAudible": 54.131458333333335,
+            "rms": 0.05860233479399484
+          },
+          {
+            "id": "mega-cue-10",
+            "scheduledStart": 58,
+            "measuredSeconds": 6.2,
+            "decodedFirstAudible": 58.278375,
+            "decodedLastAudible": 63.732458333333334,
+            "rms": 0.058338817778379924
+          },
+          {
+            "id": "mega-cue-11",
+            "scheduledStart": 66,
+            "measuredSeconds": 2.15,
+            "decodedFirstAudible": 66.30216666666666,
+            "decodedLastAudible": 67.74879166666666,
+            "rms": 0.05417878275675055
+          },
+          {
+            "id": "mega-cue-12",
+            "scheduledStart": 69.2,
+            "measuredSeconds": 1.325,
+            "decodedFirstAudible": 69.588,
+            "decodedLastAudible": 70.07891666666667,
+            "rms": 0.0515501579927527
+          },
+          {
+            "id": "mega-cue-13",
+            "scheduledStart": 71,
+            "measuredSeconds": 1.075,
+            "decodedFirstAudible": 71.18683333333334,
+            "decodedLastAudible": 71.98604166666667,
+            "rms": 0.06898639920597577
+          },
+          {
+            "id": "mega-cue-14",
+            "scheduledStart": 72.8,
+            "measuredSeconds": 1.225,
+            "decodedFirstAudible": 73.112125,
+            "decodedLastAudible": 73.649875,
+            "rms": 0.05358110778389111
+          },
+          {
+            "id": "mega-cue-15",
+            "scheduledStart": 75.5,
+            "measuredSeconds": 5.55,
+            "decodedFirstAudible": 75.79970833333333,
+            "decodedLastAudible": 80.56883333333333,
+            "rms": 0.05963038365242764
+          },
+          {
+            "id": "mega-cue-16",
+            "scheduledStart": 84.5,
+            "measuredSeconds": 4.575,
+            "decodedFirstAudible": 84.82116666666667,
+            "decodedLastAudible": 88.62945833333333,
+            "rms": 0.05657231762159129
+          },
+          {
+            "id": "mega-cue-17",
+            "scheduledStart": 93.5,
+            "measuredSeconds": 7.45,
+            "decodedFirstAudible": 93.82508333333334,
+            "decodedLastAudible": 100.50029166666667,
+            "rms": 0.05904260958875045
+          },
+          {
+            "id": "mega-cue-18",
+            "scheduledStart": 104,
+            "measuredSeconds": 5.8,
+            "decodedFirstAudible": 104.2965,
+            "decodedLastAudible": 109.3505,
+            "rms": 0.05816216643263957
+          },
+          {
+            "id": "mega-cue-19",
+            "scheduledStart": 113.6,
+            "measuredSeconds": 2.5,
+            "decodedFirstAudible": 113.90354166666667,
+            "decodedLastAudible": 115.65733333333333,
+            "rms": 0.05864078606822683
+          },
+          {
+            "id": "mega-cue-20",
+            "scheduledStart": 117.5,
+            "measuredSeconds": 5.95,
+            "decodedFirstAudible": 117.80704166666666,
+            "decodedLastAudible": 122.96129166666667,
+            "rms": 0.05939640737098432
+          },
+          {
+            "id": "mega-cue-21",
+            "scheduledStart": 125.5,
+            "measuredSeconds": 5.65,
+            "decodedFirstAudible": 125.81991666666667,
+            "decodedLastAudible": 130.67341666666667,
+            "rms": 0.05863251135153862
+          },
+          {
+            "id": "mega-cue-22",
+            "scheduledStart": 133.6,
+            "measuredSeconds": 4.1,
+            "decodedFirstAudible": 133.87458333333333,
+            "decodedLastAudible": 137.26529166666666,
+            "rms": 0.062137365895252344
+          },
+          {
+            "id": "mega-cue-23",
+            "scheduledStart": 139.5,
+            "measuredSeconds": 5.675,
+            "decodedFirstAudible": 139.80775,
+            "decodedLastAudible": 144.71808333333334,
+            "rms": 0.058429539904922875
+          },
+          {
+            "id": "mega-cue-24",
+            "scheduledStart": 147.5,
+            "measuredSeconds": 4.025,
+            "decodedFirstAudible": 147.81695833333333,
+            "decodedLastAudible": 151.09308333333334,
+            "rms": 0.0579917787450304
+          },
+          {
+            "id": "mega-cue-25",
+            "scheduledStart": 155.5,
+            "measuredSeconds": 6.55,
+            "decodedFirstAudible": 155.79675,
+            "decodedLastAudible": 161.57891666666666,
+            "rms": 0.05819992023900553
+          },
+          {
+            "id": "mega-cue-26",
+            "scheduledStart": 163.5,
+            "measuredSeconds": 5.125,
+            "decodedFirstAudible": 163.817625,
+            "decodedLastAudible": 168.168125,
+            "rms": 0.05846775084014652
+          },
+          {
+            "id": "mega-cue-27",
+            "scheduledStart": 171.6,
+            "measuredSeconds": 3,
+            "decodedFirstAudible": 171.93375,
+            "decodedLastAudible": 174.15020833333332,
+            "rms": 0.05698040531128574
+          },
+          {
+            "id": "mega-cue-28",
+            "scheduledStart": 176.6,
+            "measuredSeconds": 2.025,
+            "decodedFirstAudible": 176.883375,
+            "decodedLastAudible": 178.20729166666666,
+            "rms": 0.057005142149033225
+          },
+          {
+            "id": "mega-cue-29",
+            "scheduledStart": 180.5,
+            "measuredSeconds": 3.625,
+            "decodedFirstAudible": 180.82525,
+            "decodedLastAudible": 183.69375,
+            "rms": 0.05820051724435742
+          },
+          {
+            "id": "mega-cue-30",
+            "scheduledStart": 188.5,
+            "measuredSeconds": 5.275,
+            "decodedFirstAudible": 188.83095833333334,
+            "decodedLastAudible": 193.29370833333334,
+            "rms": 0.05676142349277794
+          },
+          {
+            "id": "mega-cue-31",
+            "scheduledStart": 198.6,
+            "measuredSeconds": 4.6,
+            "decodedFirstAudible": 198.92008333333334,
+            "decodedLastAudible": 202.75445833333333,
+            "rms": 0.057218286939168514
+          },
+          {
+            "id": "mega-cue-32",
+            "scheduledStart": 205.5,
+            "measuredSeconds": 6.25,
+            "decodedFirstAudible": 205.79529166666666,
+            "decodedLastAudible": 211.26854166666666,
+            "rms": 0.0591884226077538
+          },
+          {
+            "id": "mega-cue-33",
+            "scheduledStart": 215,
+            "measuredSeconds": 7.7,
+            "decodedFirstAudible": 215.28975,
+            "decodedLastAudible": 222.2005,
+            "rms": 0.05975284884782906
+          },
+          {
+            "id": "mega-cue-34",
+            "scheduledStart": 228,
+            "measuredSeconds": 7.475,
+            "decodedFirstAudible": 228.26308333333333,
+            "decodedLastAudible": 235.01870833333334,
+            "rms": 0.061257599567876124
+          },
+          {
+            "id": "mega-cue-35",
+            "scheduledStart": 242.5,
+            "measuredSeconds": 7.675,
+            "decodedFirstAudible": 242.80375,
+            "decodedLastAudible": 249.70566666666667,
+            "rms": 0.06154138841875135
+          },
+          {
+            "id": "mega-cue-36",
+            "scheduledStart": 256,
+            "measuredSeconds": 8.275,
+            "decodedFirstAudible": 256.31945833333333,
+            "decodedLastAudible": 263.8020833333333,
+            "rms": 0.06097665010894559
+          },
+          {
+            "id": "mega-cue-37",
+            "scheduledStart": 273.6,
+            "measuredSeconds": 2,
+            "decodedFirstAudible": 273.89458333333334,
+            "decodedLastAudible": 275.21383333333335,
+            "rms": 0.060886451234082165
+          },
+          {
+            "id": "mega-cue-38",
+            "scheduledStart": 277.4,
+            "measuredSeconds": 2.45,
+            "decodedFirstAudible": 277.7129166666667,
+            "decodedLastAudible": 279.37975,
+            "rms": 0.05484420833498858
+          }
+        ]
+      },
+      "playback": {
+        "ended": true,
+        "currentTime": 282,
+        "duration": 282,
+        "width": 1920,
+        "height": 1080,
+        "error": null,
+        "muted": true,
+        "rate": 16
+      }
+    },
+    {
+      "id": "design",
+      "status": "current_full_decode_and_complete_muted_browser_playback",
+      "sha256": "389c8f257fcd9b04698ccdd7e7897fb2de5d005559389c69e438de66af795019",
+      "catalogHash": "95e174338646ab076f5a7aa74120698f948049afc582c2824e7c78c0aa005918",
+      "duration": 80,
+      "frames": 2400,
+      "bytes": 8658497,
+      "videoCodec": "h264",
+      "audioCodec": "aac",
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "fps": "30/1",
+      "fullDecodeExitCode": 0,
+      "audio": {
+        "rate": 24000,
+        "decodedSamples": 1920000,
+        "peak": 0.6435973048210144,
+        "gapPeak": 0,
+        "toleranceSeconds": 0.06,
+        "measuredCues": [
+          {
+            "id": "design-cue-01",
+            "scheduledStart": 0.7,
+            "measuredSeconds": 5.275,
+            "decodedFirstAudible": 1.0120833333333332,
+            "decodedLastAudible": 5.494375,
+            "rms": 0.06000559293370425
+          },
+          {
+            "id": "design-cue-02",
+            "scheduledStart": 10.7,
+            "measuredSeconds": 5.95,
+            "decodedFirstAudible": 11.00275,
+            "decodedLastAudible": 16.182583333333334,
+            "rms": 0.05787943232588757
+          },
+          {
+            "id": "design-cue-03",
+            "scheduledStart": 20.7,
+            "measuredSeconds": 5.875,
+            "decodedFirstAudible": 20.999458333333333,
+            "decodedLastAudible": 26.13254166666667,
+            "rms": 0.058892902621477686
+          },
+          {
+            "id": "design-cue-04",
+            "scheduledStart": 30.7,
+            "measuredSeconds": 5.875,
+            "decodedFirstAudible": 30.997708333333332,
+            "decodedLastAudible": 36.129,
+            "rms": 0.05885447426097301
+          },
+          {
+            "id": "design-cue-05",
+            "scheduledStart": 40.7,
+            "measuredSeconds": 5.775,
+            "decodedFirstAudible": 40.99945833333334,
+            "decodedLastAudible": 46.02554166666667,
+            "rms": 0.05864588275280389
+          },
+          {
+            "id": "design-cue-06",
+            "scheduledStart": 50.7,
+            "measuredSeconds": 5.7,
+            "decodedFirstAudible": 51.00170833333333,
+            "decodedLastAudible": 55.954625,
+            "rms": 0.059627662217345064
+          },
+          {
+            "id": "design-cue-07",
+            "scheduledStart": 60.7,
+            "measuredSeconds": 6.3,
+            "decodedFirstAudible": 60.99529166666667,
+            "decodedLastAudible": 66.55841666666667,
+            "rms": 0.05796702716088688
+          },
+          {
+            "id": "design-cue-08",
+            "scheduledStart": 70.7,
+            "measuredSeconds": 6.1,
+            "decodedFirstAudible": 70.99945833333334,
+            "decodedLastAudible": 76.365375,
+            "rms": 0.05915414910818416
+          }
+        ]
+      },
+      "playback": {
+        "ended": true,
+        "currentTime": 80,
+        "duration": 80,
+        "width": 1920,
+        "height": 1080,
+        "error": null,
+        "muted": true,
+        "rate": 16
+      }
+    }
+  ]
+}

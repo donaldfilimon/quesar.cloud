@@ -17,6 +17,7 @@
  */
 
 import { bylineNames } from "./byline";
+import { site } from "@/lib/site-identity";
 import { toIsoDate } from "./dates";
 import type { Blog, Doc, Products, Project, Research, Team } from "./schemas";
 
@@ -30,9 +31,11 @@ type Product = Products[number];
 
 const ORG_REF = {
   "@type": "Organization" as const,
-  name: "MLAI Corporation",
+  name: site.company,
   url: SITE_URL,
   logo: `${SITE_URL}/apple-touch-icon.png`,
+  email: site.contact.email,
+  telephone: site.contact.phoneInternational,
 };
 
 function bylineOrganizations(byline: string | undefined) {

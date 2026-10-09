@@ -1,0 +1,32 @@
+
+Running 7 tests using 1 worker
+
+(node:15172) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[commerce browser acceptance] installed native WDBX SHA256 cf33858e3787a3a045678c90272f0dfb56e7119d1d57a877b4f12fee3587e6de
+[migrate] applied 0001_auth.sql
+[migrate] applied 0002_field_notes.sql
+[migrate] applied 0003_inquiries.sql
+[migrate] applied 0004_telemetry.sql
+[migrate] applied 0005_console_audits.sql
+[migrate] applied 0006_workspace_connections.sql
+[migrate] applied 0007_rate_limits.sql
+[migrate] applied 0008_passkeys.sql
+[migrate] applied 0009_oauth_verification.sql
+[migrate] done — 9 migration(s) applied.
+[commerce browser acceptance] three real browser signup sessions established on disposable identity database
+  ✓  1 e2e/backend/commerce.acceptance.ts:226:1 › anonymous browser cannot create or list invoices (83ms)
+[commerce browser acceptance] real HTTP invoice create/replay and strict money-field rejection passed
+  ✓  2 e2e/backend/commerce.acceptance.ts:237:1 › HTTP replay creates one native invoice and rejects client-owned money (634ms)
+  ✓  3 e2e/backend/commerce.acceptance.ts:251:1 › bystander cannot list or cancel owner invoice and owner cancellation is replayable (1.0s)
+[commerce browser acceptance] real authorization denies password-only admin; trusted synthetic linked-identity settlement/replay passed
+  ✓  4 e2e/backend/commerce.acceptance.ts:261:1 › allowlisted password account cannot settle before verified linked identity (434ms)
+[commerce browser acceptance] owned Vite backend stopped/restarted; durable Better Auth cookie and all native WDBX states match
+  ✓  5 e2e/backend/commerce.acceptance.ts:298:1 › browser sessions and complete WDBX invoice state survive backend replacement (34.6s)
+[commerce browser acceptance] quiescent paired backup: pg_dump/pg_restore exits 0/0, 15 PostgreSQL table hashes match, complete native tree/config/key/modes preserved; restored actual app accepts owner/operator sessions and identical native invoice states with bystander refusal; original pair retained
+  ✓  6 e2e/backend/commerce.acceptance.ts:322:1 › quiescent paired PostgreSQL and complete native WDBX backup restores sessions and invoice isolation (34.4s)
+[commerce browser acceptance] actual Better Auth deletion removed buyer; fresh same-email identity sees no old invoices; bystander survives
+[commerce browser acceptance] owned app, browser contexts, identity database and native ledger scratch cleaned
+  ✓  7 e2e/backend/commerce.acceptance.ts:461:1 › real account deletion unlinks invoice history and replacement account cannot inherit it (5.7s)
+
+  7 passed (1.6m)

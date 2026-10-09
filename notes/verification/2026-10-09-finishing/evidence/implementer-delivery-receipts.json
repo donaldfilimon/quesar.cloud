@@ -1,0 +1,119 @@
+{
+  "observed_at_utc": "2026-10-09T19:02:31.312Z",
+  "baseline": "d154e480760706a39745d9b5299dd1be8a8d0f5d",
+  "source_sha256": "891ca37676728aa25fd1113fe708e7735d6b734c2b5db5fdf56735bcc14d00f3",
+  "docs_sha256": "5a871fd48e4e4259dddef1fd4bd2deec572fe545f4d5bd21f8ada00c49b667b3",
+  "persistent_sha256": "1b83249443d2aa2144402bd592cba37846a37b44b3a3d748db53610dc157dd34",
+  "native_sha256": "97271fee550a0b88e85033ec4dfad1c9157bfad9cea6beca3f3c6113ea60400b",
+  "source_and_public_unchanged_through_final_acceptance": true,
+  "installed_manifests_unchanged": true,
+  "logs": {
+    "implementer-trailer-check.log": {
+      "exit": 0,
+      "files": 97,
+      "passed": 792,
+      "sha256": "5339f3258d0c58f18463a30d7db587c7634b1fbf8b90ec5bf94bf42c39bc5aaa"
+    },
+    "implementer-sidecar.log": {
+      "exit": 0,
+      "passed": 111,
+      "expectations": 470,
+      "sha256": "335d70ec9790896fed9fee67eddebe58beee8f05833d711158e8ffb873852692"
+    },
+    "implementer-trailer-static-build.log": {
+      "exit": 0,
+      "sha256": "9725b48bfd06a845e8c4a9f8ba5c75fb3944e84c59fe61251e966a8eae9a85ab"
+    },
+    "implementer-trailer-static-check.log": {
+      "exit": 0,
+      "pages": 129,
+      "sha256": "a14768ae63c9a7a29e75f2afdf20eb449c0a1e8697947c19c7e3b6ef0393a9f7"
+    },
+    "implementer-trailer-static-browser.log": {
+      "exit": 0,
+      "passed": 226,
+      "sha256": "0d11f85f7bff1f94fd5f1d37e707f9bd53ed39d0d12784a2cddcd8aafbe18c73"
+    },
+    "implementer-trailer-persistent-build.log": {
+      "exit": 0,
+      "sha256": "059d4bde4b2adad51906a2cb265707e8a83ce01a1289000d013736aca64da239"
+    },
+    "implementer-trailer-freeze.log": {
+      "exit": 0,
+      "sha256": "1046ccd4f1241d0af18b64b1a6c13b383f2e3eaeadcb01c4af8c2d19e2eaa9f8"
+    },
+    "implementer-trailer-persistent-acceptance.log": {
+      "exit": 0,
+      "passed": 1,
+      "sha256": "c05371f81b35922097686a8780164075dc54e856dba3f8f95473be8cf7d436d5"
+    },
+    "implementer-delivery-commerce.log": {
+      "exit": 0,
+      "passed": 7,
+      "native_sha256": "97271fee550a0b88e85033ec4dfad1c9157bfad9cea6beca3f3c6113ea60400b",
+      "sha256": "6a7d103d0bcbbaba1e724f40a37cbde2755c17b0d2951553d5dc3a9710ea3661"
+    },
+    "implementer-postgres-delivery-stop.log": {
+      "exit": 0,
+      "sha256": "ca19178a35ab4153b75b494963b66ce8243e1b94c173107c87b44d09db23652d"
+    },
+    "implementer-current-static-browser.log": {
+      "exit": null,
+      "signal": "SIGTERM",
+      "superseded": "tool deadline, incomplete run; not a passing gate",
+      "sha256": "e72199952bfdcfd58af56cee0b0a90fa0cbe3e3a08ed9383dbe615d698829fe2"
+    },
+    "implementer-current-static-browser-final.log": {
+      "exit": 1,
+      "passed": 222,
+      "failed": 4,
+      "superseded": "mobile Play blocked by narrated teaser control bar; repaired and complete rerun passed",
+      "sha256": "027b9560fec9182a1da064f557c84a2412c1610e932eecfbf4ccb77bb1e5787e"
+    },
+    "implementer-current-static-build.log": {
+      "exit": 0,
+      "sha256": "786476213ab2e1f125f310640d2b07ad75bd88272e8f0e3a853e0fb35c40b22f"
+    },
+    "implementer-current-static-check.log": {
+      "exit": 1,
+      "superseded": "mark.vtt differed after concurrent public media update; unchanged rebuild/check passed",
+      "sha256": "afe66a7a24875e9d2b5f48025f5343be7357c4f7fae20c44afff4b03aff2c84f"
+    },
+    "implementer-current-persistent-acceptance.log": {
+      "exit": 0,
+      "started": "2026-10-09T18:28:14.418Z",
+      "ended": "2026-10-09T18:28:41.998Z",
+      "sha256": "f3bdb4ccc79bdd4d6becf172c72d4f11c86a0f28a0c802e0ab28b754639a3d0e"
+    },
+    "implementer-current-durable.log": {
+      "exit": 0,
+      "started": "2026-10-09T18:28:42.000Z",
+      "ended": "2026-10-09T18:29:21.757Z",
+      "sha256": "54abb0ed26cc77eb8a4c48705814c72577247d4c3ebbccf047c124138a14a9dc"
+    },
+    "implementer-current-consent.log": {
+      "exit": 0,
+      "started": "2026-10-09T18:29:21.758Z",
+      "ended": "2026-10-09T18:30:44.826Z",
+      "sha256": "1b30eefbf6fc55505fc7bf7fea887a7fa6902252cde5edf6aebe6b75696c9c2a"
+    },
+    "implementer-current-commerce.log": {
+      "exit": 0,
+      "started": "2026-10-09T18:30:44.829Z",
+      "ended": "2026-10-09T18:31:55.924Z",
+      "sha256": "3fea0bc93aa0603040df400fb60e31e4a5d53bee96675123939294bcff28797a"
+    },
+    "implementer-current-film.log": {
+      "exit": 0,
+      "started": "2026-10-09T18:31:55.925Z",
+      "ended": "2026-10-09T18:35:31.348Z",
+      "sha256": "395fc6838e572a4fe718e37760189ac07b03375951ece2e9bfbe1ec409f2d3d4"
+    },
+    "implementer-current-film-guard.log": {
+      "exit": 0,
+      "started": "2026-10-09T18:35:31.355Z",
+      "ended": "2026-10-09T18:35:48.312Z",
+      "sha256": "e9f2b115bd542b881e1b61793f065e6543e1f694cb925a85d7b04eaf7d3b7b56"
+    }
+  }
+}

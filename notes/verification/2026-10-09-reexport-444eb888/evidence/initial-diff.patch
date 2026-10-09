@@ -1,0 +1,1138 @@
+diff --git a/e2e/backend/persistent.acceptance.ts b/e2e/backend/persistent.acceptance.ts
+index 5121d835..af93f290 100644
+--- a/e2e/backend/persistent.acceptance.ts
++++ b/e2e/backend/persistent.acceptance.ts
+@@ -360,16 +360,39 @@ test("persistent Node artifact: fail closed, migrations, secure sessions, isolat
+   }
+   try {
+     const ids: string[] = [];
+-    for (const [context, suffix] of [
+-      [owner, "owner"],
+-      [other, "other"],
++    const page = await owner.newPage();
++    const bystander = await other.newPage();
++    for (const [context, active, suffix] of [
++      [owner, page, "owner"],
++      [other, bystander, "other"],
+     ] as const) {
+-      const signup = await context.request.post(`${origin}/api/auth/sign-up/email`, {
+-        headers: { origin },
+-        data: { email: `${name}-${suffix}@example.invalid`, password, name: `Synthetic ${suffix}` },
++      await active.goto(`${origin}/signup`);
++      await expect(
++        active.getByRole("heading", { name: "Create an account", exact: true }),
++      ).toBeVisible();
++      await active.waitForFunction(() => {
++        const form = document.querySelector("form");
++        return form && Object.keys(form).some((key) => key.startsWith("__reactProps$"));
+       });
++      await expect(active.getByLabel("Password", { exact: true })).toHaveAttribute(
++        "autocomplete",
++        "new-password",
++      );
++      await active.getByLabel("Name", { exact: true }).fill(`Synthetic ${suffix}`);
++      await active.getByLabel("Email", { exact: true }).fill(`${name}-${suffix}@example.invalid`);
++      await active.getByLabel("Password", { exact: true }).fill(password);
++      const submitted = active.waitForResponse(
++        (response) =>
++          response.url().endsWith("/api/auth/sign-up/email") &&
++          response.request().method() === "POST",
++      );
++      await active.getByRole("button", { name: "Create account", exact: true }).click();
++      const signup = await submitted;
+       if (signup.status() !== 200) console.log("[persistent diagnostic]", diagnostic);
+       expect(signup.status()).toBe(200);
++      await expect(active).toHaveURL(`${origin}/console`);
++      await active.goto(`${origin}/profile`);
++      await expect(active.getByLabel("Display name")).toHaveValue(`Synthetic ${suffix}`);
+       const cookies = await context.cookies();
+       expect(
+         cookies.some(
+@@ -385,8 +408,137 @@ test("persistent Node artifact: fail closed, migrations, secure sessions, isolat
+         ).rows[0].id,
+       );
+     }
+-    const page = await owner.newPage();
+-    const bystander = await other.newPage();
++    // Compiled UI only: failed header signout preserves the session and offers retry.
++    const signOutURL = `${origin}/api/auth/sign-out`;
++    const refuseSignOut = (route: import("@playwright/test").Route) =>
++      route.fulfill({
++        status: 503,
++        contentType: "application/json",
++        body: JSON.stringify({ message: "Synthetic sign-out unavailable" }),
++      });
++    await page.route(signOutURL, refuseSignOut);
++    await page
++      .getByRole("button", { name: "Account menu for Synthetic owner", exact: true })
++      .click();
++    await page.getByRole("menuitem", { name: "Sign out", exact: true }).click();
++    await expect(page.getByRole("alert").filter({ hasText: "Sign-out failed" })).toBeVisible();
++    expect(new URL(page.url()).pathname).toBe("/profile");
++    const activeOwner = (await (
++      await owner.request.get(`${origin}/api/auth/get-session`)
++    ).json()) as { user: { id: string } };
++    expect(activeOwner.user.id).toBe(ids[0]);
++    await page.unroute(signOutURL, refuseSignOut);
++    await page.getByRole("menuitem", { name: "Sign out", exact: true }).click();
++    await expect(page).toHaveURL(`${origin}/`);
++    expect(
++      (await owner.cookies()).some((cookie) => cookie.name === "__Host-quesar.session_token"),
++    ).toBe(false);
++    await page.goto(`${origin}/profile`);
++    await expect(page.getByRole("heading", { name: "Sign in", exact: true })).toBeVisible();
++    expect(new URL(page.url()).searchParams.get("next")).toBe("/profile");
++
++    // Local callback-error fixture: no provider credentials or live OAuth call.
++    await page.goto(
++      `${origin}/login?${new URLSearchParams({ next: "/profile", error: "access_denied", error_description: "must-not-display-provider-detail" })}`,
++    );
++    await expect(page.getByRole("alert")).toContainText("Provider sign-in was cancelled or denied");
++    await expect(page.locator("body")).not.toContainText("must-not-display-provider-detail");
++    await page.getByLabel("Email", { exact: true }).fill(`${name}-owner@example.invalid`);
++    await page.getByLabel("Password", { exact: true }).fill("synthetic-wrong-password");
++    await page.getByRole("button", { name: "Sign in with email", exact: true }).click();
++    await expect(page.locator("form").getByRole("alert")).toBeVisible();
++    expect(
++      (await owner.cookies()).some((cookie) => cookie.name === "__Host-quesar.session_token"),
++    ).toBe(false);
++    await page.getByLabel("Password", { exact: true }).fill(password);
++    let releaseSignIn!: () => void;
++    const signInGate = new Promise<void>((resolve) => {
++      releaseSignIn = resolve;
++    });
++    const holdSignIn = async (route: import("@playwright/test").Route) => {
++      await signInGate;
++      await route.continue();
++    };
++    await page.route(`${origin}/api/auth/sign-in/email`, holdSignIn);
++    try {
++      await page.getByRole("button", { name: "Sign in with email", exact: true }).click();
++      await expect(page.getByRole("button", { name: "Working…", exact: true })).toBeDisabled();
++      await expect(
++        page.getByRole("button", { name: "Sign in with a passkey", exact: true }),
++      ).toBeDisabled();
++      await expect(
++        page.getByRole("button", { name: "Need an account? Create one", exact: true }),
++      ).toBeDisabled();
++      releaseSignIn();
++      await expect(page).toHaveURL(`${origin}/profile`);
++    } finally {
++      releaseSignIn();
++      await page.unroute(`${origin}/api/auth/sign-in/email`, holdSignIn);
++    }
++    await page.reload();
++    await expect(page.getByLabel("Display name")).toHaveValue("Synthetic owner");
++    const ownerCookie = (await owner.cookies()).find(
++      (cookie) => cookie.name === "__Host-quesar.session_token",
++    );
++    expect(ownerCookie?.secure && ownerCookie.httpOnly).toBe(true);
++    await bystander.reload();
++    await expect(bystander.getByLabel("Display name")).toHaveValue("Synthetic other");
++    const activeOther = (await (
++      await other.request.get(`${origin}/api/auth/get-session`)
++    ).json()) as { user: { id: string } };
++    expect(activeOther.user.id).toBe(ids[1]);
++
++    // Profile signout has the same visible failure/retry contract as the header.
++    await page.route(signOutURL, refuseSignOut);
++    await page.getByRole("button", { name: "Sign out", exact: true }).click();
++    await expect(page.getByRole("alert").filter({ hasText: "Sign-out failed" })).toBeVisible();
++    await page.unroute(signOutURL, refuseSignOut);
++    await page.getByRole("button", { name: "Sign out", exact: true }).click();
++    await expect(page).toHaveURL(`${origin}/`);
++    await page.goto(`${origin}/login?next=%2Fprofile`);
++    await page.getByLabel("Email", { exact: true }).fill(`${name}-owner@example.invalid`);
++    await page.getByLabel("Password", { exact: true }).fill(password);
++    await page.getByRole("button", { name: "Sign in with email", exact: true }).click();
++    await expect(page).toHaveURL(`${origin}/profile`);
++    await expect(page.getByLabel("Display name")).toHaveValue("Synthetic owner");
++    for (const next of ["/\t/attacker.example", "/docs/../signup", "/%6cogin"]) {
++      await page.goto(`${origin}/login?${new URLSearchParams({ next })}`);
++      await expect(page).toHaveURL(`${origin}/console`);
++    }
++    receipt(
++      "compiled UI: direct signup in independent contexts, header/profile failed signout and retry, wrong-password then email signin, shared busy controls, secure session reload and sanitized return targets",
++    );
++
++    await page.goto(`${origin}/contact`);
++    await page.getByLabel("Name", { exact: true }).fill("Synthetic contact");
++    await page.getByLabel("Email", { exact: true }).fill(`${name}-receipt@example.invalid`);
++    await page
++      .getByLabel("Message", { exact: true })
++      .fill("Synthetic accepted inquiry with denied device storage.");
++    await expect(page.getByRole("button", { name: "Send inquiry", exact: true })).toBeEnabled();
++    await page.evaluate(() => {
++      Storage.prototype.setItem = () => {
++        throw new DOMException("Synthetic storage denial", "QuotaExceededError");
++      };
++    });
++    await page.getByRole("button", { name: "Send inquiry", exact: true }).click();
++    await expect(page.locator("form").getByRole("status")).toContainText(
++      "Inquiry accepted by the site",
++    );
++    await expect(page.locator("form").getByRole("status")).toContainText(
++      "local copy could not be saved",
++    );
++    await expect(page.getByRole("button", { name: "Send inquiry", exact: true })).toBeEnabled();
++    expect(
++      (
++        await db.query("select count(*)::int as n from inquiries where email=$1", [
++          `${name}-receipt@example.invalid`,
++        ])
++      ).rows[0].n,
++    ).toBe(1);
++    receipt(
++      "compiled contact: server acceptance remains honest and form settles after localStorage throws; exactly one accepted inquiry",
++    );
+     for (const [id, body] of [
+       [ids[0], "artifact owner note"],
+       [ids[1], "artifact other note"],
+diff --git a/src/components/auth/login-form.tsx b/src/components/auth/login-form.tsx
+index 7f1c20a1..512f5ca3 100644
+--- a/src/components/auth/login-form.tsx
++++ b/src/components/auth/login-form.tsx
+@@ -1,6 +1,6 @@
+ import { zodResolver } from "@hookform/resolvers/zod";
+ import { getRouteApi, Link } from "@tanstack/react-router";
+-import { useEffect, useState } from "react";
++import { useEffect, useRef, useState } from "react";
+ import { useForm } from "react-hook-form";
+ import { toast } from "sonner";
+ import { z } from "zod";
+@@ -16,6 +16,7 @@ import {
+ } from "@/lib/auth/client";
+ import type { SocialProviderId } from "@/lib/auth/providers";
+ import { useCurrentUserState } from "@/lib/auth/use-current-user";
++import { signInFailureCopy } from "@/lib/auth/callback";
+ 
+ /**
+  * The /login form. Kept out of the route file: the router's code splitter
+@@ -34,31 +35,38 @@ type FormValues = z.infer<typeof schema>;
+ 
+ export function LoginForm() {
+   const { user, isPending } = useCurrentUserState();
+-  const { next = "/dashboard" } = Route.useSearch();
++  const { next = "/dashboard", mode = "signin", error } = Route.useSearch();
++  const navigate = Route.useNavigate();
+   const methods = Route.useLoaderData();
+-  const [mode, setMode] = useState<"signin" | "signup">("signin");
+-  const [pending, setPending] = useState<SocialProviderId | "passkey" | null>(null);
++  const [pending, setPending] = useState<SocialProviderId | "passkey" | "email" | null>(null);
++  const inFlight = useRef(false);
+   const offeredProviders = SOCIAL_PROVIDERS.filter((provider) =>
+     methods.social.includes(provider.id),
+   );
+ 
+   async function continueWith(provider: SocialProviderId) {
++    if (inFlight.current) return;
++    inFlight.current = true;
+     setPending(provider);
+     try {
+       await signInWithProvider(provider, { callbackURL: next });
+     } catch (err) {
+       toast.error(err instanceof Error ? err.message : "Sign-in failed.");
++      inFlight.current = false;
+       setPending(null);
+     }
+   }
+ 
+   async function continueWithPasskey() {
++    if (inFlight.current) return;
++    inFlight.current = true;
+     setPending("passkey");
+     try {
+       await signInWithPasskey();
+       window.location.assign(next);
+     } catch (err) {
+       toast.error(err instanceof Error ? err.message : "Passkey sign-in failed.");
++      inFlight.current = false;
+       setPending(null);
+     }
+   }
+@@ -69,13 +77,17 @@ export function LoginForm() {
+   });
+ 
+   async function onSubmit(values: FormValues) {
++    if (inFlight.current) return;
++    inFlight.current = true;
++    setPending("email");
++    let succeeded = false;
+     try {
+       const result =
+         mode === "signup"
+           ? await authClient.signUp.email({
+               email: values.email,
+               password: values.password,
+-              name: values.name || values.email.split("@")[0],
++              name: values.name?.trim() || values.email.split("@")[0],
+             })
+           : await authClient.signIn.email({ email: values.email, password: values.password });
+       if (result.error) {
+@@ -86,9 +98,15 @@ export function LoginForm() {
+       }
+       toast.success(mode === "signup" ? "Account created." : "Signed in.");
+       window.location.assign(next);
++      succeeded = true;
+     } catch {
+       form.setError("root", { message: "Sign-in failed. Try again." });
+       toast.error("Sign-in failed. Try again.");
++    } finally {
++      if (!succeeded) {
++        inFlight.current = false;
++        setPending(null);
++      }
+     }
+   }
+ 
+@@ -96,6 +114,8 @@ export function LoginForm() {
+     if (!isPending && user) window.location.assign(next);
+   }, [isPending, user, next]);
+ 
++  const busy = pending !== null || form.formState.isSubmitting;
++
+   if (!isPending && user) {
+     return (
+       <p className="mx-auto max-w-md px-4 py-16 text-sm text-fg-muted">
+@@ -136,6 +156,11 @@ export function LoginForm() {
+             The desk calls Abbey, Aviva, Abi, Quesar, and WDBX through the site API. Field notes
+             stay on the same account.
+           </p>
++          {error ? (
++            <p role="alert" className="mt-3 text-sm text-destructive">
++              {signInFailureCopy[error]}
++            </p>
++          ) : null}
+         </header>
+ 
+         {!authEnabled ? (
+@@ -149,7 +174,7 @@ export function LoginForm() {
+                     <Button
+                       type="button"
+                       variant="secondary"
+-                      disabled={pending !== null}
++                      disabled={busy}
+                       onClick={() => void continueWithPasskey()}
+                     >
+                       {pending === "passkey"
+@@ -162,7 +187,7 @@ export function LoginForm() {
+                       key={provider.id}
+                       type="button"
+                       variant="secondary"
+-                      disabled={pending !== null}
++                      disabled={busy}
+                       onClick={() => void continueWith(provider.id)}
+                     >
+                       {pending === provider.id
+@@ -176,7 +201,10 @@ export function LoginForm() {
+               </>
+             ) : null}
+ 
+-            <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-3">
++            <form
++              onSubmit={(event) => void form.handleSubmit(onSubmit)(event)}
++              className="flex flex-col gap-3"
++            >
+               {mode === "signup" ? (
+                 <div>
+                   <Label htmlFor="name">Name</Label>
+@@ -245,7 +273,7 @@ export function LoginForm() {
+                   {form.formState.errors.root.message}
+                 </p>
+               ) : null}
+-              <Button type="submit" disabled={form.formState.isSubmitting}>
++              <Button type="submit" disabled={busy}>
+                 {form.formState.isSubmitting
+                   ? "Working…"
+                   : mode === "signup"
+@@ -256,10 +284,19 @@ export function LoginForm() {
+ 
+             <button
+               type="button"
++              disabled={busy}
+               className="text-sm text-fg-muted underline-offset-4 hover:text-fg hover:underline"
+               onClick={() => {
+-                setMode(mode === "signup" ? "signin" : "signup");
++                if (inFlight.current) return;
+                 form.clearErrors();
++                void navigate({
++                  search: (previous) => ({
++                    ...previous,
++                    mode: mode === "signup" ? "signin" : "signup",
++                    error: undefined,
++                  }),
++                  replace: true,
++                });
+               }}
+             >
+               {mode === "signup"
+diff --git a/src/components/profile/profile-cards.test.tsx b/src/components/profile/profile-cards.test.tsx
+index 1403fb40..80ce9061 100644
+--- a/src/components/profile/profile-cards.test.tsx
++++ b/src/components/profile/profile-cards.test.tsx
+@@ -145,7 +145,8 @@ describe("SessionsCard", () => {
+     expect(html.match(/This device/g)).toHaveLength(1);
+     expect(html.match(/>Revoke</g)).toHaveLength(1);
+     expect(html).toContain("Sign out everywhere");
+-    expect(html).toContain("up to five minutes");
++    expect(html).toContain("Revoked sessions are refused on the next server session check");
++    expect(html).not.toContain("up to five minutes");
+   });
+ 
+   it("asks for a fresh sign-in when Better Auth refuses to list sessions", () => {
+diff --git a/src/components/profile/sessions-card.tsx b/src/components/profile/sessions-card.tsx
+index ef14ea3b..cfa7907b 100644
+--- a/src/components/profile/sessions-card.tsx
++++ b/src/components/profile/sessions-card.tsx
+@@ -95,7 +95,8 @@ export function SessionsCard({
+         </ul>
+       ) : null}
+       <p className="mt-4 text-xs text-fg-subtle">
+-        A revoked device can stay signed in for up to five minutes while its cached session expires.
++        Revoked sessions are refused on the next server session check. An already-open page may need
++        a refresh.
+       </p>
+       <div className="mt-4 flex flex-wrap gap-2">
+         <Button
+diff --git a/src/components/site/footer.tsx b/src/components/site/footer.tsx
+index 76abf48a..75e8c38d 100644
+--- a/src/components/site/footer.tsx
++++ b/src/components/site/footer.tsx
+@@ -1,6 +1,7 @@
+ import { Link } from "@tanstack/react-router";
+ import { ProvLegend } from "./prov-tag";
+ import { Logo } from "./logo";
++import { site } from "@/lib/site-identity";
+ 
+ const groups = [
+   {
+@@ -54,6 +55,18 @@ export function SiteFooter() {
+             MLAI builds assistant workflows, memory systems, and developer tools with inspectable
+             sources and explicit implementation boundaries.
+           </p>
++          <ul className="mt-4 space-y-2 text-sm">
++            <li>
++              <a href={`mailto:${site.contact.email}`} className="break-words text-accent">
++                {site.contact.email}
++              </a>
++            </li>
++            <li>
++              <a href={`tel:${site.contact.phoneInternational}`} className="text-accent">
++                {site.contact.phone}
++              </a>
++            </li>
++          </ul>
+           <p className="mt-6 text-xs text-fg-subtle">
+             QSR-WEB · Browser orientation and configured server features
+           </p>
+diff --git a/src/lib/auth/client.ts b/src/lib/auth/client.ts
+index e4bcf34b..b4e54f23 100644
+--- a/src/lib/auth/client.ts
++++ b/src/lib/auth/client.ts
+@@ -1,6 +1,8 @@
+ import { passkeyClient } from "@better-auth/passkey/client";
+ import { createAuthClient } from "better-auth/react";
+ import { SOCIAL_PROVIDERS, type SocialProviderId } from "./providers";
++import { safeInternalPath } from "@/lib/internal";
++import { signInErrorURL } from "./callback";
+ 
+ /**
+  * Better Auth client (browser-side). Talks to this app's own Better Auth at
+@@ -17,14 +19,15 @@ export async function signInWithProvider(
+   provider: SocialProviderId,
+   opts: { callbackURL?: string; errorCallbackURL?: string } = {},
+ ): Promise<void> {
+-  const callbackURL = opts.callbackURL ?? "/";
++  const callbackURL = safeInternalPath(opts.callbackURL ?? "/");
+   const { data, error } = await authClient.signIn.social({
+     provider,
+     callbackURL,
+-    errorCallbackURL: opts.errorCallbackURL ?? "/login",
++    errorCallbackURL: opts.errorCallbackURL ?? signInErrorURL(callbackURL),
+   });
+   if (error) throw new Error(error.message ?? "Sign-in failed");
+-  if (data?.url) window.location.href = data.url;
++  if (!data?.url) throw new Error("Sign-in did not start. Try again.");
++  window.location.href = data.url;
+ }
+ 
+ /** Sign in with a passkey already registered on this device or synced to it. */
+diff --git a/src/lib/auth/email-password.ts b/src/lib/auth/email-password.ts
+index de78c571..f79dcc18 100644
+--- a/src/lib/auth/email-password.ts
++++ b/src/lib/auth/email-password.ts
+@@ -1,10 +1,8 @@
+ /**
+  * Local email/password sign-in (this app's Better Auth DB — not the broker).
+  *
+- * Off by default. To enable: set `emailAndPasswordEnabled` to `true` below,
+- * then build sign-up / sign-in forms with `authClient.signUp.email` /
+- * `authClient.signIn.email` from `@/lib/auth/client` (see the auth skill).
+- *
+- * Do NOT edit `server.ts` for this — that file is frozen pre-wired config.
++ * Enabled by default. The login form uses `authClient.signUp.email` and
++ * `authClient.signIn.email`; the static Pages build renders an honest notice
++ * instead, because it has no authentication server.
+  */
+ export const emailAndPasswordEnabled = true;
+diff --git a/src/lib/auth/gates.tsx b/src/lib/auth/gates.tsx
+index 70ff6125..392381c9 100644
+--- a/src/lib/auth/gates.tsx
++++ b/src/lib/auth/gates.tsx
+@@ -103,6 +103,7 @@ export function UserButton() {
+   // Sign-out can take a moment (and can fail when deployed), so the control
+   // shows it is working and cannot be fired twice.
+   const [signingOut, setSigningOut] = useState(false);
++  const [signOutFailed, setSignOutFailed] = useState(false);
+   if (!user) return null;
+   const label = user.displayName ?? user.primaryEmail ?? "Account";
+   const initial = label.charAt(0).toUpperCase();
+@@ -150,11 +151,20 @@ export function UserButton() {
+               onSelect={(event) => {
+                 event.preventDefault();
+                 setSigningOut(true);
+-                void signOut().catch(() => setSigningOut(false));
++                setSignOutFailed(false);
++                void signOut().catch(() => {
++                  setSigningOut(false);
++                  setSignOutFailed(true);
++                });
+               }}
+             >
+               {signingOut ? "Signing out…" : "Sign out"}
+             </DropdownMenuItem>
++            {signOutFailed ? (
++              <p role="alert" className="px-3 py-2 text-sm text-destructive">
++                Sign-out failed. You are still signed in. Try again.
++              </p>
++            ) : null}
+           </>
+         ) : null}
+       </DropdownMenuContent>
+diff --git a/src/lib/contact-context.test.ts b/src/lib/contact-context.test.ts
+index fd287bbb..51bbbdcf 100644
+--- a/src/lib/contact-context.test.ts
++++ b/src/lib/contact-context.test.ts
+@@ -1,5 +1,15 @@
+-import { describe, expect, it } from "vitest";
+-import { contactSearch, readReceipts, receiptLabel, submitContact } from "./contact-context";
++import { afterEach, describe, expect, it, vi } from "vitest";
++import {
++  contactSearch,
++  contactOutcomeMessage,
++  readReceipts,
++  receiptLabel,
++  saveContactReceipt,
++  submitContact,
++} from "./contact-context";
++import { writeStore } from "./local-store";
++
++afterEach(() => vi.unstubAllGlobals());
+ describe("contact context and delivery evidence", () => {
+   it("accepts exact catalog services and ignores unknown or malformed input", () => {
+     expect(contactSearch({ service: "WDBX Retrieval Architecture" })).toEqual({
+@@ -36,6 +46,57 @@ describe("contact context and delivery evidence", () => {
+   });
+ });
+ 
++it.each(["draft", "accepted"] as const)(
++  "preserves %s evidence when local receipt storage throws",
++  (delivery) => {
++    const setItem = vi.fn(() => {
++      throw new Error("Storage denied");
++    });
++    vi.stubGlobal("window", { localStorage: { setItem } });
++    const receipt = {
++      id: "synthetic-receipt",
++      name: "Fixture",
++      email: "fixture@example.invalid",
++      topic: "Quesar",
++      message: "Synthetic inquiry",
++      created: 1,
++      delivery,
++    };
++    const result = saveContactReceipt(receipt, [], (receipts) =>
++      writeStore("mlai-inquiries", receipts),
++    );
++    expect(setItem).toHaveBeenCalledOnce();
++    expect(result).toEqual({ receipts: [receipt], persisted: false, status: "done" });
++    const notice = contactOutcomeMessage(delivery, result.persisted);
++    expect(notice).toContain(
++      delivery === "draft" ? "Delivery is unconfirmed" : "Inquiry accepted by the site",
++    );
++    expect(notice).toContain("could not be saved");
++    expect(notice).not.toContain("Sending");
++  },
++);
++
++it("keeps bounded device receipts when storage succeeds", () => {
++  const receipt = {
++    id: "one",
++    name: "Fixture",
++    email: "fixture@example.invalid",
++    topic: "Quesar",
++    message: "Fixture",
++    created: 1,
++    delivery: "accepted" as const,
++  };
++  const persist = vi.fn();
++  const result = saveContactReceipt(
++    receipt,
++    Array.from({ length: 25 }, () => receipt),
++    persist,
++  );
++  expect(result.persisted).toBe(true);
++  expect(result.receipts).toHaveLength(20);
++  expect(persist).toHaveBeenCalledWith(result.receipts);
++});
++
+ describe("failed submission", () => {
+   it("returns an error and preserves all editable fields on rejection or transport failure", async () => {
+     const fields = {
+diff --git a/src/lib/contact-context.ts b/src/lib/contact-context.ts
+index e998924c..668199e9 100644
+--- a/src/lib/contact-context.ts
++++ b/src/lib/contact-context.ts
+@@ -47,6 +47,35 @@ export function readReceipts(value: unknown): InquiryReceipt[] {
+     }));
+ }
+ 
++/** Device storage is optional and must never undo a known submission outcome. */
++export function saveContactReceipt(
++  receipt: InquiryReceipt,
++  previous: InquiryReceipt[],
++  persist: (receipts: InquiryReceipt[]) => void,
++) {
++  const receipts = [receipt, ...previous].slice(0, 20);
++  let persisted = false;
++  try {
++    persist(receipts);
++    persisted = true;
++  } catch {
++    // Keep the receipt in memory even when storage is denied or full.
++  }
++  return { receipts, persisted, status: "done" as const };
++}
++
++export function contactOutcomeMessage(delivery: "draft" | "accepted", persisted: boolean) {
++  const outcome =
++    delivery === "draft"
++      ? "Email draft requested. Delivery is unconfirmed."
++      : "Inquiry accepted by the site.";
++  return `${outcome} ${
++    persisted
++      ? "A local copy is kept on this device."
++      : "The local copy could not be saved; it is available only while this page stays open."
++  }`;
++}
++
+ /** Submission produces an outcome; failed requests never mutate the caller's form. */
+ export async function submitContact<T>(
+   fields: T,
+diff --git a/src/lib/internal.test.ts b/src/lib/internal.test.ts
+index 6f626257..fdeb6103 100644
+--- a/src/lib/internal.test.ts
++++ b/src/lib/internal.test.ts
+@@ -22,7 +22,51 @@ describe("safeInternalPath", () => {
+   it("never sends the visitor back into the sign-in page (nested ?next= loop)", () => {
+     expect(safeInternalPath("/login")).toBe("/console");
+     expect(safeInternalPath("/login?next=%2Fprofile")).toBe("/console");
++    expect(safeInternalPath("/login#form")).toBe("/console");
++    expect(safeInternalPath("/signup")).toBe("/console");
++    expect(safeInternalPath("/signup?next=%2Fprofile")).toBe("/console");
++    expect(safeInternalPath("/signup/")).toBe("/console");
++    expect(safeInternalPath("/signup#form")).toBe("/console");
+     expect(safeInternalPath("/loginx")).toBe("/loginx");
++    expect(safeInternalPath("/signupx")).toBe("/signupx");
++  });
++
++  it("rejects controls, backslashes, encoded separators and normalized auth loops", () => {
++    for (const path of [
++      "/\t/attacker.example",
++      "/\n/attacker.example",
++      "/\r/attacker.example",
++      "/console\u0000",
++      "/console\u007f",
++      "/docs\\../login",
++      "/%2f/attacker.example",
++      "/%5cattacker.example",
++      "/%09/attacker.example",
++      "/docs/../login",
++      "/docs/%2e%2e/signup",
++      "/%6cogin",
++      "/%73ignup",
++      "/LOGIN",
++      "/docs/../api/auth",
++      "/docs/../auth/callback",
++      "/broken%zz",
++    ])
++      expect(safeInternalPath(path)).toBe("/console");
++    const decoded = new URLSearchParams("next=%2F%09%2Fattacker.example").get("next")!;
++    expect(new URL(decoded, "https://quesar.cloud").origin).toBe("https://attacker.example");
++    expect(safeInternalPath(decoded)).toBe("/console");
++  });
++
++  it("returns canonical safe paths while preserving ordinary query and fragment intent", () => {
++    expect(safeInternalPath("/docs/../profile?tab=sessions#devices")).toBe(
++      "/profile?tab=sessions#devices",
++    );
++    expect(safeInternalPath("/console?next=https%3A%2F%2Fexample.invalid#notes")).toBe(
++      "/console?next=https%3A%2F%2Fexample.invalid#notes",
++    );
++    expect(safeInternalPath("/contact?service=Private AI Deployment")).toBe(
++      "/contact?service=Private%20AI%20Deployment",
++    );
+   });
+ });
+ 
+diff --git a/src/lib/internal.ts b/src/lib/internal.ts
+index c512d0a3..be104bf4 100644
+--- a/src/lib/internal.ts
++++ b/src/lib/internal.ts
+@@ -52,14 +52,27 @@ export function safeInternalPath(path: string, fallback = "/console") {
+   if (
+     !path.startsWith("/") ||
+     path.startsWith("//") ||
+-    path.startsWith("/\\") ||
+-    path.includes("://")
++    path.includes("\\") ||
++    [...path].some((character) => character.charCodeAt(0) < 32 || character.charCodeAt(0) === 127)
+   ) {
+     return fallback;
+   }
+-  if (path.startsWith("/api") || path.startsWith("/auth/")) return fallback;
+-  // Never bounce back into the sign-in page itself (a nested ?next= loop).
+-  if (path === "/login" || path.startsWith("/login?") || path.startsWith("/login/"))
++  try {
++    const base = "https://quesar.cloud";
++    const url = new URL(path, base);
++    if (url.origin !== base) return fallback;
++    // Encoded separators or controls must not gain meaning in a route decoder.
++    if (/%(?:2f|5c|0[0-9a-f]|1[0-9a-f]|7f)/i.test(url.pathname)) return fallback;
++    const pathname = decodeURIComponent(url.pathname).toLowerCase();
++    // Check the normalized route, including encoded names and dot segments.
++    if (
++      ["/api", "/auth", "/login", "/signup"].some(
++        (entry) => pathname === entry || pathname.startsWith(`${entry}/`),
++      )
++    )
++      return fallback;
++    return `${url.pathname}${url.search}${url.hash}`;
++  } catch {
+     return fallback;
+-  return path;
++  }
+ }
+diff --git a/src/lib/mlai/categories/team.ts b/src/lib/mlai/categories/team.ts
+index e5028eae..65546da2 100644
+--- a/src/lib/mlai/categories/team.ts
++++ b/src/lib/mlai/categories/team.ts
+@@ -77,7 +77,7 @@ export const team: Team = [
+         heading: "Building close to the metal",
+         paragraphs: [
+           "Donald is a polyglot systems engineer who works deliberately low in the stack. His public projects span Zig, Rust, Swift, TypeScript, and Python — databases, GPU-oriented runtimes, agent frameworks, and the tooling that holds them together — because the guarantees Quesar cares about (latency, provenance, data residency) are won or lost at that level.",
+-          "That range is intentional, not scattered. Each language is chosen for where it pays off: Zig for the performance-critical core of the ABI runtime and WDBX, Rust for safe systems surfaces, Swift and MLX for on-device inference on Apple Silicon, and TypeScript for the operator-facing layers. The same instinct runs down to the compiler itself — projects like Cellstrap extend Zig toward MLIR, in line with his stated focus on AI-driven compiler optimization.",
++          "That range is intentional, not scattered. Each language is chosen for where it pays off: nightly Rust for the current ABI runtime and sibling WDBX substrate, Swift and MLX for on-device inference on Apple Silicon, and TypeScript for the operator-facing layers. Earlier Zig implementations remain historical context, not current ABI build guidance. The same instinct runs down to the compiler itself — projects like Cellstrap extend Zig toward MLIR, in line with his stated focus on AI-driven compiler optimization.",
+         ],
+       },
+       {
+diff --git a/src/lib/mlai/feed.test.ts b/src/lib/mlai/feed.test.ts
+index bb7fa749..37056307 100644
+--- a/src/lib/mlai/feed.test.ts
++++ b/src/lib/mlai/feed.test.ts
+@@ -9,6 +9,7 @@ import {
+   parseContentDate,
+ } from "./feed";
+ import { SITE_URL } from "./structured-data";
++import { site } from "@/lib/site-identity";
+ 
+ // Ported from mlai src/__tests__/feed.test.ts.
+ describe("feed", () => {
+@@ -60,5 +61,9 @@ describe("feed", () => {
+   it("keeps the Abbey/ABI tagline off the channel (brand split)", () => {
+     const channel = buildRssFeed().split("<item>")[0] ?? "";
+     expect(channel).not.toMatch(/Intelligence Without Limits/i);
++    expect(channel).toContain(
++      `<title>${site.company} — Lab Notes, Research &amp; Releases</title>`,
++    );
++    expect(channel).not.toContain("MLAI Corporation");
+   });
+ });
+diff --git a/src/lib/mlai/feed.ts b/src/lib/mlai/feed.ts
+index d6e0a9a3..5c13e1ca 100644
+--- a/src/lib/mlai/feed.ts
++++ b/src/lib/mlai/feed.ts
+@@ -95,7 +95,7 @@ export function buildRssFeed(now: Date = new Date()): string {
+   return `<?xml version="1.0" encoding="UTF-8"?>
+ <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+   <channel>
+-    <title>MLAI Corporation — Lab Notes, Research &amp; Releases</title>
++    <title>${escapeXml(site.company)} — Lab Notes, Research &amp; Releases</title>
+     <link>${SITE_URL}</link>
+     <description>${escapeXml(site.description)}</description>
+     <language>en-us</language>
+diff --git a/src/lib/mlai/pages.ts b/src/lib/mlai/pages.ts
+index 6716c3f9..2324ff95 100644
+--- a/src/lib/mlai/pages.ts
++++ b/src/lib/mlai/pages.ts
+@@ -12,7 +12,7 @@
+  * built carries `status: "development"` and is rendered with a status badge,
+  * never as shipping.
+  */
+-import type { StatusKind } from "@/lib/site-identity";
++import { site, type StatusKind } from "@/lib/site-identity";
+ 
+ import { docsMcpTools, docsModuleMap, docsWdbxCapabilities } from "./categories/abi-runtime";
+ import { wdbxGraphDefaults, wdbxGraphParams } from "./wdbx-facts";
+@@ -142,8 +142,8 @@ export const teamIntro = {
+   join: {
+     title: "Join the mission",
+     body: "We're always looking for exceptional minds in neural research and systems safety.",
+-    href: "mailto:careers@mlai-corp.com",
+-    label: "careers@mlai-corp.com",
++    href: `mailto:${site.contact.email}`,
++    label: site.contact.email,
+   },
+ } as const;
+ 
+@@ -606,7 +606,7 @@ export const securitySections = [
+   },
+   {
+     title: "Responsible disclosure",
+-    body: "If you discover a vulnerability in Quesar infrastructure, demos, or integration materials, contact security@mlai-corp.com with reproduction details and impact notes.",
++    body: `If you discover a vulnerability in Quesar infrastructure, demos, or integration materials, contact ${site.contact.email} with reproduction details and impact notes.`,
+     status: "current",
+   },
+ ] as const satisfies readonly ({ title: string; body: string } & Status)[];
+@@ -642,7 +642,7 @@ export const privacyPolicy = [
+   },
+   {
+     title: "Contact",
+-    body: "For privacy requests, security questions, or data-handling reviews, contact privacy@mlai-corp.com or security@mlai-corp.com.",
++    body: `For privacy requests, security questions, or data-handling reviews, contact ${site.contact.email} or ${site.contact.phone}.`,
+   },
+ ] as const;
+ 
+diff --git a/src/lib/mlai/structured-data.test.ts b/src/lib/mlai/structured-data.test.ts
+index d927cd9f..ce3befb6 100644
+--- a/src/lib/mlai/structured-data.test.ts
++++ b/src/lib/mlai/structured-data.test.ts
+@@ -5,6 +5,7 @@ import { products } from "./categories/products";
+ import { projects } from "./categories/projects";
+ import { research } from "./categories/research";
+ import { team } from "./categories/team";
++import { site } from "@/lib/site-identity";
+ import {
+   SITE_URL,
+   blogPostingLd,
+@@ -20,6 +21,13 @@ import {
+ // Ported from mlai src/__tests__/structured-data.test.ts, plus the serializer
+ // and the doc/project builders quesar now emits.
+ describe("structured-data", () => {
++  it("uses the public contact details for the existing publisher identity", () => {
++    expect(blogPostingLd(blog[0]!).publisher).toMatchObject({
++      name: site.company,
++      email: site.contact.email,
++      telephone: site.contact.phoneInternational,
++    });
++  });
+   it("blogPostingLd produces a valid, serializable BlogPosting", () => {
+     const post = blog[0];
+     if (!post) throw new Error("fixture: no blog post");
+@@ -66,7 +74,7 @@ describe("structured-data", () => {
+     if (!base) throw new Error("fixture: no research publication");
+     expect(researchArticleLd({ ...base, authors: "  ·  " }).author).toMatchObject({
+       "@type": "Organization",
+-      name: "MLAI Corporation",
++      name: site.company,
+     });
+   });
+ 
+diff --git a/src/lib/mlai/structured-data.ts b/src/lib/mlai/structured-data.ts
+index d7551237..13a899d2 100644
+--- a/src/lib/mlai/structured-data.ts
++++ b/src/lib/mlai/structured-data.ts
+@@ -17,6 +17,7 @@
+  */
+ 
+ import { bylineNames } from "./byline";
++import { site } from "@/lib/site-identity";
+ import { toIsoDate } from "./dates";
+ import type { Blog, Doc, Products, Project, Research, Team } from "./schemas";
+ 
+@@ -30,9 +31,11 @@ type Product = Products[number];
+ 
+ const ORG_REF = {
+   "@type": "Organization" as const,
+-  name: "MLAI Corporation",
++  name: site.company,
+   url: SITE_URL,
+   logo: `${SITE_URL}/apple-touch-icon.png`,
++  email: site.contact.email,
++  telephone: site.contact.phoneInternational,
+ };
+ 
+ function bylineOrganizations(byline: string | undefined) {
+diff --git a/src/lib/site-identity.ts b/src/lib/site-identity.ts
+index a4895838..e73edc11 100644
+--- a/src/lib/site-identity.ts
++++ b/src/lib/site-identity.ts
+@@ -11,6 +11,11 @@ export const site = {
+   name: "Quesar",
+   company: "MLAI",
+   legal: "MLAI",
++  contact: {
++    email: "cbkshadow@icloud.com",
++    phone: "813-755-0156",
++    phoneInternational: "+18137550156",
++  },
+   description:
+     "Build assistant workflows, memory systems, and developer tools with inspectable sources and explicit implementation boundaries.",
+   mission:
+diff --git a/src/routes/contact.tsx b/src/routes/contact.tsx
+index 17b8da69..774c24d9 100644
+--- a/src/routes/contact.tsx
++++ b/src/routes/contact.tsx
+@@ -18,8 +18,10 @@ import {
+ } from "@/lib/inquiries";
+ import {
+   contactSearch,
++  contactOutcomeMessage,
+   readReceipts,
+   receiptLabel,
++  saveContactReceipt,
+   submitContact,
+   type InquiryReceipt,
+ } from "@/lib/contact-context";
+@@ -27,9 +29,7 @@ import { readStore, writeStore } from "@/lib/local-store";
+ import { pageHead } from "@/lib/seo";
+ import { track } from "@/lib/telemetry";
+ import { staticSite } from "@/lib/static-site";
+-
+-/** Static preview has no server: inquiries go out as an email instead. */
+-const INQUIRY_EMAIL = "partnerships@mlai-corp.com";
++import { site } from "@/lib/site-identity";
+ 
+ export const Route = createFileRoute("/contact")({
+   head: () =>
+@@ -60,6 +60,7 @@ function ContactPage() {
+   const [saved, setSaved] = useState<InquiryReceipt[]>([]);
+   const [status, setStatus] = useState<"idle" | "saving" | "done" | "error">("idle");
+   const [error, setError] = useState("");
++  const [receiptPersisted, setReceiptPersisted] = useState(false);
+   // The static build has no server to ask: Turnstile is off from the start.
+   const [turnstile, setTurnstile] = useState<TurnstileConfig | "loading" | "unreachable">(() =>
+     staticSite ? { state: "off" } : "loading",
+@@ -110,6 +111,13 @@ function ContactPage() {
+     (typeof turnstile === "object" && turnstile.state === "misconfigured") ||
+     (needsToken && !turnstileToken);
+ 
++  function keepReceipt(receipt: InquiryReceipt) {
++    const result = saveContactReceipt(receipt, saved, (receipts) => writeStore(KEY, receipts));
++    setSaved(result.receipts);
++    setReceiptPersisted(result.persisted);
++    setStatus(result.status);
++  }
++
+   async function onSubmit(event: FormEvent) {
+     event.preventDefault();
+     const trimmed = message.trim();
+@@ -132,7 +140,7 @@ function ContactPage() {
+         `[${topic}] Inquiry from ${name.trim() || "the Quesar site"}`,
+       );
+       const body = encodeURIComponent(`${inquiryMessage}\n\n— ${name.trim()} <${email.trim()}>`);
+-      window.location.href = `mailto:${INQUIRY_EMAIL}?subject=${subject}&body=${body}`;
++      window.location.href = `mailto:${site.contact.email}?subject=${subject}&body=${body}`;
+       const draft: InquiryReceipt = {
+         delivery: "draft",
+         id: crypto.randomUUID(),
+@@ -142,11 +150,8 @@ function ContactPage() {
+         message: inquiryMessage,
+         created: Date.now(),
+       };
+-      const kept = [draft, ...saved].slice(0, 20);
+-      writeStore(KEY, kept);
+-      setSaved(kept);
+-      setStatus("done");
+-      toast.success(`Opening your email app to send this to ${INQUIRY_EMAIL}.`);
++      keepReceipt(draft);
++      toast.success(`Opening your email app to send this to ${site.contact.email}.`);
+       return;
+     }
+     const result = await submitContact(
+@@ -171,11 +176,8 @@ function ContactPage() {
+       message: inquiryMessage,
+       created: Date.now(),
+     };
+-    const next = [inquiry, ...saved].slice(0, 20);
+-    writeStore(KEY, next);
+-    setSaved(next);
++    keepReceipt(inquiry);
+     setMessage("");
+-    setStatus("done");
+     toast.success("Inquiry accepted by the site.");
+   }
+ 
+@@ -186,8 +188,8 @@ function ContactPage() {
+         title="Discuss your project."
+         lede={
+           staticSite
+-            ? `This static preview has no server, so submitting requests an email draft addressed to ${INQUIRY_EMAIL}. A copy of what you wrote stays on this device as an email draft; delivery is unconfirmed. For architecture questions, the pages themselves are the public path.`
+-            : "The server accepts and stores your inquiry with this site; if you are signed in, it is linked to your account. A local receipt records acceptance by the site. For architecture questions, the pages themselves are the public path."
++            ? `This static preview has no server, so submitting requests an email draft addressed to ${site.contact.email}. A local copy is saved when device storage is available; delivery is unconfirmed. For architecture questions, the pages themselves are the public path.`
++            : "The server accepts and stores your inquiry with this site; if you are signed in, it is linked to your account. A local receipt records acceptance when device storage is available. For architecture questions, the pages themselves are the public path."
+         }
+       />
+       <Section>
+@@ -306,9 +308,7 @@ function ContactPage() {
+               </Button>
+               {status === "done" ? (
+                 <p role="status" className="text-sm text-fg-muted">
+-                  {staticSite
+-                    ? "Email draft requested. Delivery is unconfirmed."
+-                    : "Inquiry accepted by the site. A receipt is kept on this device."}
++                  {contactOutcomeMessage(staticSite ? "draft" : "accepted", receiptPersisted)}
+                 </p>
+               ) : null}
+               {status === "error" && error ? (
+@@ -322,6 +322,16 @@ function ContactPage() {
+             <Surface>
+               <h2 className="font-display text-2xl">Direct paths</h2>
+               <ul className="mt-4 space-y-3 text-sm">
++                <li>
++                  <a href={`mailto:${site.contact.email}`} className="break-words text-accent">
++                    {site.contact.email}
++                  </a>
++                </li>
++                <li>
++                  <a href={`tel:${site.contact.phoneInternational}`} className="text-accent">
++                    {site.contact.phone}
++                  </a>
++                </li>
+                 <li>
+                   <Link to="/services" className="text-accent">
+                     Services
+diff --git a/src/routes/login.tsx b/src/routes/login.tsx
+index b75efce6..007954dd 100644
+--- a/src/routes/login.tsx
++++ b/src/routes/login.tsx
+@@ -7,14 +7,19 @@ import { getSignInMethods } from "@/lib/auth/methods";
+ import type { SignInMethods } from "@/lib/auth/providers";
+ import { safeInternalPath } from "@/lib/internal";
+ import { pageHead } from "@/lib/seo";
++import { signInFailure, type SignInFailure } from "@/lib/auth/callback";
+ 
+-type LoginSearch = { next?: string };
++type LoginSearch = { next?: string; mode?: "signin" | "signup"; error?: SignInFailure };
+ 
+ // Always return the key: the root route's raw search is merged into this
+ // route's result, so an omitted key would let a non-string `next` through
+ // unsanitized (the router JSON-parses query values).
+ function parseNext(search: Record<string, unknown>): LoginSearch {
+-  return { next: typeof search.next === "string" ? safeInternalPath(search.next) : undefined };
++  return {
++    next: typeof search.next === "string" ? safeInternalPath(search.next) : undefined,
++    mode: search.mode === "signup" ? "signup" : "signin",
++    error: signInFailure(search.error),
++  };
+ }
+ 
+ const NO_METHODS: SignInMethods = { email: false, passkey: false, social: [] };
+diff --git a/src/routes/privacy.tsx b/src/routes/privacy.tsx
+index 19984fdb..61cbad81 100644
+--- a/src/routes/privacy.tsx
++++ b/src/routes/privacy.tsx
+@@ -17,17 +17,16 @@ function PrivacyPage() {
+     <>
+       <PageHero
+         eyebrow="Privacy"
+-        title="This site does not take your data because it cannot."
+-        lede="The public Quesar website is orientation plus an optional console. It does not host Abbey sessions or accept document uploads. Signed-in persona replies reach a model provider only when one is configured. Product privacy lives in the architecture you run locally."
++        title="Privacy follows the deployment boundary."
++        lede="The static preview stores browser preferences and local copies; its contact form requests an email draft without confirming delivery. A configured server can store accounts, inquiries, field notes, and consent-gated model exchanges. It is not a hosted Abbey session or WDBX store."
+       />
+       <Section title="What this website collects">
+         <p className="max-w-2xl text-sm leading-relaxed text-fg-muted">
+-          This product site stores a theme preference in your browser when you toggle light or dark.
+-          If you sign in, it stores an account and the field notes you write in the console. Notes
+-          are scoped to your account on the server. They are not Abbey memory and not a hosted WDBX
+-          store. If you click through to GitHub, GitHub's own policies apply. Optional live
+-          repository metadata is requested from GitHub's public API in your browser; if that request
+-          fails, the page falls back to verified links with no statistics.
++          This product site stores browser preferences and local preview data. A configured server
++          stores account-scoped records and accepted inquiries according to the policy below; model
++          exchanges require current audit consent and encryption. If you click through to GitHub,
++          GitHub's own policies apply. Repository metadata is requested from GitHub's public API;
++          unavailable data may use a labelled build-time snapshot.
+         </p>
+         <p className="mt-4 max-w-2xl text-sm leading-relaxed text-fg-muted">
+           We do not invent a hosted analytics program here. If this deployment injects platform
+@@ -78,7 +77,7 @@ function PrivacyPage() {
+             },
+             {
+               title: "Permissions",
+-              body: "Local builder has no authentication and binds to the LAN. That is a documented hazard, not a privacy feature. Run it on a trusted network.",
++              body: "The separate local Quasar service binds to loopback by default and requires a pairing token for its APIs. Non-loopback exposure requires explicit opt-in and an HTTPS public origin. Generated code runs as the operator; pairing is not an operating-system sandbox.",
+             },
+             {
+               title: "Model selection",
+diff --git a/src/routes/profile.tsx b/src/routes/profile.tsx
+index 56a9a64d..a55a85f4 100644
+--- a/src/routes/profile.tsx
++++ b/src/routes/profile.tsx
+@@ -127,19 +127,31 @@ function ProfileInner({ user }: { user: AppUser }) {
+ 
+ function SignOutButton() {
+   const [signingOut, setSigningOut] = useState(false);
++  const [failed, setFailed] = useState(false);
+   return (
+-    <Button
+-      type="button"
+-      variant="secondary"
+-      className="mt-4"
+-      disabled={signingOut}
+-      onClick={() => {
+-        setSigningOut(true);
+-        void signOut("/").catch(() => setSigningOut(false));
+-      }}
+-    >
+-      {signingOut ? "Signing out…" : "Sign out"}
+-    </Button>
++    <>
++      <Button
++        type="button"
++        variant="secondary"
++        className="mt-4"
++        disabled={signingOut}
++        onClick={() => {
++          setSigningOut(true);
++          setFailed(false);
++          void signOut("/").catch(() => {
++            setSigningOut(false);
++            setFailed(true);
++          });
++        }}
++      >
++        {signingOut ? "Signing out…" : "Sign out"}
++      </Button>
++      {failed ? (
++        <p role="alert" className="mt-2 text-sm text-destructive">
++          Sign-out failed. You are still signed in. Try again.
++        </p>
++      ) : null}
++    </>
+   );
+ }
+ 
+diff --git a/src/routes/signup.tsx b/src/routes/signup.tsx
+index 78eaf002..87b16846 100644
+--- a/src/routes/signup.tsx
++++ b/src/routes/signup.tsx
+@@ -11,6 +11,6 @@ export const Route = createFileRoute("/signup")({
+   }),
+   component: function Signup() {
+     if (staticSite) return <ServerOnlyNotice feature="Sign-up" className="my-24" />;
+-    return <Navigate to="/login" search={{ next: "/console" }} />;
++    return <Navigate to="/login" search={{ next: "/console", mode: "signup" }} />;
+   },
+ });

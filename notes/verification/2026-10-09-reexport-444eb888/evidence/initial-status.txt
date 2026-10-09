@@ -1,0 +1,237 @@
+ M e2e/backend/persistent.acceptance.ts
+ M src/components/auth/login-form.tsx
+ M src/components/profile/profile-cards.test.tsx
+ M src/components/profile/sessions-card.tsx
+ M src/components/site/footer.tsx
+ M src/lib/auth/client.ts
+ M src/lib/auth/email-password.ts
+ M src/lib/auth/gates.tsx
+ M src/lib/contact-context.test.ts
+ M src/lib/contact-context.ts
+ M src/lib/internal.test.ts
+ M src/lib/internal.ts
+ M src/lib/mlai/categories/team.ts
+ M src/lib/mlai/feed.test.ts
+ M src/lib/mlai/feed.ts
+ M src/lib/mlai/pages.ts
+ M src/lib/mlai/structured-data.test.ts
+ M src/lib/mlai/structured-data.ts
+ M src/lib/site-identity.ts
+ M src/routes/contact.tsx
+ M src/routes/login.tsx
+ M src/routes/privacy.tsx
+ M src/routes/profile.tsx
+ M src/routes/signup.tsx
+?? notes/verification/2026-10-09-auth-contact-review.md
+?? notes/verification/2026-10-09-finishing/contact-auth-implementation.md
+?? notes/verification/2026-10-09-finishing/evidence/ai-consent.log
+?? notes/verification/2026-10-09-finishing/evidence/artifact-start-diagnostic.log
+?? notes/verification/2026-10-09-finishing/evidence/backend-durable-retry.log
+?? notes/verification/2026-10-09-finishing/evidence/backend-durable.log
+?? notes/verification/2026-10-09-finishing/evidence/build-persistent.log
+?? notes/verification/2026-10-09-finishing/evidence/cleanup-followup.log
+?? notes/verification/2026-10-09-finishing/evidence/closure-before-concurrent-export-receipt.json
+?? notes/verification/2026-10-09-finishing/evidence/closure-concurrent-export-mismatch.log
+?? notes/verification/2026-10-09-finishing/evidence/closure-current-check.log
+?? notes/verification/2026-10-09-finishing/evidence/closure-current-check.mjs
+?? notes/verification/2026-10-09-finishing/evidence/closure-current-hashes.log
+?? notes/verification/2026-10-09-finishing/evidence/closure-current-receipt.json
+?? notes/verification/2026-10-09-finishing/evidence/closure-final-hashes.log
+?? notes/verification/2026-10-09-finishing/evidence/closure-initial-hashes.json
+?? notes/verification/2026-10-09-finishing/evidence/closure-initial-hashes.log
+?? notes/verification/2026-10-09-finishing/evidence/commerce-native-fix-first.log
+?? notes/verification/2026-10-09-finishing/evidence/commerce-native-fix-format.log
+?? notes/verification/2026-10-09-finishing/evidence/commerce-native-fix-lint.log
+?? notes/verification/2026-10-09-finishing/evidence/commerce-native-fix-typecheck.log
+?? notes/verification/2026-10-09-finishing/evidence/commerce-native-fix.log
+?? notes/verification/2026-10-09-finishing/evidence/commerce-native-restore.log
+?? notes/verification/2026-10-09-finishing/evidence/commerce.log
+?? notes/verification/2026-10-09-finishing/evidence/completion-audit-followup.md
+?? notes/verification/2026-10-09-finishing/evidence/current-browser-install.log
+?? notes/verification/2026-10-09-finishing/evidence/current-installed-check.log
+?? notes/verification/2026-10-09-finishing/evidence/current-persistent-acceptance.log
+?? notes/verification/2026-10-09-finishing/evidence/current-persistent-build-retry.log
+?? notes/verification/2026-10-09-finishing/evidence/current-static-browser.log
+?? notes/verification/2026-10-09-finishing/evidence/current-static-build.log
+?? notes/verification/2026-10-09-finishing/evidence/current-static-check.log
+?? notes/verification/2026-10-09-finishing/evidence/durable.log
+?? notes/verification/2026-10-09-finishing/evidence/film-capture.log
+?? notes/verification/2026-10-09-finishing/evidence/film-guard.log
+?? notes/verification/2026-10-09-finishing/evidence/film-worksheet-current.json
+?? notes/verification/2026-10-09-finishing/evidence/film-worksheet-current.log
+?? notes/verification/2026-10-09-finishing/evidence/final-blocked-audit.md
+?? notes/verification/2026-10-09-finishing/evidence/final-current-check-retry.log
+?? notes/verification/2026-10-09-finishing/evidence/final-current-check.log
+?? notes/verification/2026-10-09-finishing/evidence/final-evidence-fix-review.diff
+?? notes/verification/2026-10-09-finishing/evidence/final-evidence-fix-review.md
+?? notes/verification/2026-10-09-finishing/evidence/final-frozen-persistent-acceptance-retry.log
+?? notes/verification/2026-10-09-finishing/evidence/final-frozen-persistent-acceptance.log
+?? notes/verification/2026-10-09-finishing/evidence/final-frozen-persistent-build.log
+?? notes/verification/2026-10-09-finishing/evidence/final-generated-review.diff
+?? notes/verification/2026-10-09-finishing/evidence/final-integrated-check.log
+?? notes/verification/2026-10-09-finishing/evidence/final-persistent-build.log
+?? notes/verification/2026-10-09-finishing/evidence/final-review.md
+?? notes/verification/2026-10-09-finishing/evidence/final-root-check.log
+?? notes/verification/2026-10-09-finishing/evidence/final-source-review.diff
+?? notes/verification/2026-10-09-finishing/evidence/final-static-browser.log
+?? notes/verification/2026-10-09-finishing/evidence/final-static-build.log
+?? notes/verification/2026-10-09-finishing/evidence/final-static-check.log
+?? notes/verification/2026-10-09-finishing/evidence/final-typecheck-retry.log
+?? notes/verification/2026-10-09-finishing/evidence/frozen-artifact-build.log
+?? notes/verification/2026-10-09-finishing/evidence/implementer-check.log
+?? notes/verification/2026-10-09-finishing/evidence/implementer-close-evidence.mjs
+?? notes/verification/2026-10-09-finishing/evidence/implementer-close-identity.log
+?? notes/verification/2026-10-09-finishing/evidence/implementer-closure-final-hashes.json
+?? notes/verification/2026-10-09-finishing/evidence/implementer-commerce-final.log
+?? notes/verification/2026-10-09-finishing/evidence/implementer-commerce.log
+?? notes/verification/2026-10-09-finishing/evidence/implementer-consent-retry.log
+?? notes/verification/2026-10-09-finishing/evidence/implementer-consent.log
+?? notes/verification/2026-10-09-finishing/evidence/implementer-current-check-final.log
+?? notes/verification/2026-10-09-finishing/evidence/implementer-current-check.log
+?? notes/verification/2026-10-09-finishing/evidence/implementer-current-commerce.log
+?? notes/verification/2026-10-09-finishing/evidence/implementer-current-consent.log
+?? notes/verification/2026-10-09-finishing/evidence/implementer-current-durable.log
+?? notes/verification/2026-10-09-finishing/evidence/implementer-current-film-guard.log
+?? notes/verification/2026-10-09-finishing/evidence/implementer-current-film.log
+?? notes/verification/2026-10-09-finishing/evidence/implementer-current-freeze-hashes.json
+?? notes/verification/2026-10-09-finishing/evidence/implementer-current-freeze.log
+?? notes/verification/2026-10-09-finishing/evidence/implementer-current-persistent-acceptance.log
+?? notes/verification/2026-10-09-finishing/evidence/implementer-current-persistent-build.log
+?? notes/verification/2026-10-09-finishing/evidence/implementer-current-runner-receipts.json
+?? notes/verification/2026-10-09-finishing/evidence/implementer-current-runner.mjs
+?? notes/verification/2026-10-09-finishing/evidence/implementer-current-static-browser-final.log
+?? notes/verification/2026-10-09-finishing/evidence/implementer-current-static-browser.log
+?? notes/verification/2026-10-09-finishing/evidence/implementer-current-static-build-retry.log
+?? notes/verification/2026-10-09-finishing/evidence/implementer-current-static-build.log
+?? notes/verification/2026-10-09-finishing/evidence/implementer-current-static-check-retry.log
+?? notes/verification/2026-10-09-finishing/evidence/implementer-current-static-check.log
+?? notes/verification/2026-10-09-finishing/evidence/implementer-delivery-close.mjs
+?? notes/verification/2026-10-09-finishing/evidence/implementer-delivery-commerce.log
+?? notes/verification/2026-10-09-finishing/evidence/implementer-delivery-identity-closed.log
+?? notes/verification/2026-10-09-finishing/evidence/implementer-delivery-identity-final.log
+?? notes/verification/2026-10-09-finishing/evidence/implementer-delivery-identity.log
+?? notes/verification/2026-10-09-finishing/evidence/implementer-delivery-owned-source.diff
+?? notes/verification/2026-10-09-finishing/evidence/implementer-delivery-receipts.json
+?? notes/verification/2026-10-09-finishing/evidence/implementer-durable.log
+?? notes/verification/2026-10-09-finishing/evidence/implementer-film-capture-final.log
+?? notes/verification/2026-10-09-finishing/evidence/implementer-film-capture-qualified.log
+?? notes/verification/2026-10-09-finishing/evidence/implementer-film-capture.log
+?? notes/verification/2026-10-09-finishing/evidence/implementer-film-debug.log
+?? notes/verification/2026-10-09-finishing/evidence/implementer-film-guard.log
+?? notes/verification/2026-10-09-finishing/evidence/implementer-film-isolated.log
+?? notes/verification/2026-10-09-finishing/evidence/implementer-film-trace-diagnosis.log
+?? notes/verification/2026-10-09-finishing/evidence/implementer-film-watch.log
+?? notes/verification/2026-10-09-finishing/evidence/implementer-final-hashes.json
+?? notes/verification/2026-10-09-finishing/evidence/implementer-final-identity.log
+?? notes/verification/2026-10-09-finishing/evidence/implementer-freeze-hashes.json
+?? notes/verification/2026-10-09-finishing/evidence/implementer-freeze.log
+?? notes/verification/2026-10-09-finishing/evidence/implementer-owned-source.diff
+?? notes/verification/2026-10-09-finishing/evidence/implementer-persistent-acceptance-final.log
+?? notes/verification/2026-10-09-finishing/evidence/implementer-persistent-acceptance-retry.log
+?? notes/verification/2026-10-09-finishing/evidence/implementer-persistent-acceptance.log
+?? notes/verification/2026-10-09-finishing/evidence/implementer-persistent-build.log
+?? notes/verification/2026-10-09-finishing/evidence/implementer-post-native-identity.log
+?? notes/verification/2026-10-09-finishing/evidence/implementer-postgres-delivery-stop.log
+?? notes/verification/2026-10-09-finishing/evidence/implementer-postgres-final-stop.log
+?? notes/verification/2026-10-09-finishing/evidence/implementer-postgres-init.log
+?? notes/verification/2026-10-09-finishing/evidence/implementer-postgres-stop.log
+?? notes/verification/2026-10-09-finishing/evidence/implementer-pre-native-rerun-hashes.json
+?? notes/verification/2026-10-09-finishing/evidence/implementer-receipts.json
+?? notes/verification/2026-10-09-finishing/evidence/implementer-sidecar.log
+?? notes/verification/2026-10-09-finishing/evidence/implementer-snapshot.mjs
+?? notes/verification/2026-10-09-finishing/evidence/implementer-static-browser.log
+?? notes/verification/2026-10-09-finishing/evidence/implementer-static-check.log
+?? notes/verification/2026-10-09-finishing/evidence/implementer-trailer-check.log
+?? notes/verification/2026-10-09-finishing/evidence/implementer-trailer-final-hashes.json
+?? notes/verification/2026-10-09-finishing/evidence/implementer-trailer-freeze-hashes.json
+?? notes/verification/2026-10-09-finishing/evidence/implementer-trailer-freeze.log
+?? notes/verification/2026-10-09-finishing/evidence/implementer-trailer-persistent-acceptance.log
+?? notes/verification/2026-10-09-finishing/evidence/implementer-trailer-persistent-build.log
+?? notes/verification/2026-10-09-finishing/evidence/implementer-trailer-static-browser.log
+?? notes/verification/2026-10-09-finishing/evidence/implementer-trailer-static-build.log
+?? notes/verification/2026-10-09-finishing/evidence/implementer-trailer-static-check.log
+?? notes/verification/2026-10-09-finishing/evidence/inspect-film-trace.py
+?? notes/verification/2026-10-09-finishing/evidence/integration-root-check.log
+?? notes/verification/2026-10-09-finishing/evidence/integration-sidecar-gate.log
+?? notes/verification/2026-10-09-finishing/evidence/isolated-persistent-build.log
+?? notes/verification/2026-10-09-finishing/evidence/isolated-static-build.log
+?? notes/verification/2026-10-09-finishing/evidence/latest-node-archive.log
+?? notes/verification/2026-10-09-finishing/evidence/owned-source.diff
+?? notes/verification/2026-10-09-finishing/evidence/package-qualified-node.py
+?? notes/verification/2026-10-09-finishing/evidence/persistent-ownership.log
+?? notes/verification/2026-10-09-finishing/evidence/progress.md
+?? notes/verification/2026-10-09-finishing/evidence/publication-order-closure.md
+?? notes/verification/2026-10-09-finishing/evidence/publication-order-focused.log
+?? notes/verification/2026-10-09-finishing/evidence/publication-order-sidecar-gate.log
+?? notes/verification/2026-10-09-finishing/evidence/publication-order-source.diff
+?? notes/verification/2026-10-09-finishing/evidence/publication-order-typecheck.log
+?? notes/verification/2026-10-09-finishing/evidence/qualification-hashes.json
+?? notes/verification/2026-10-09-finishing/evidence/qualified-node-artifact-hashes.json
+?? notes/verification/2026-10-09-finishing/evidence/qualified-persistent-acceptance-retry.log
+?? notes/verification/2026-10-09-finishing/evidence/qualified-persistent-acceptance.log
+?? notes/verification/2026-10-09-finishing/evidence/qualified-persistent-build.log
+?? notes/verification/2026-10-09-finishing/evidence/qualified-root-check.log
+?? notes/verification/2026-10-09-finishing/evidence/qualified-static-artifact-hashes.json
+?? notes/verification/2026-10-09-finishing/evidence/qualified-static-browser.log
+?? notes/verification/2026-10-09-finishing/evidence/qualified-static-check.log
+?? notes/verification/2026-10-09-finishing/evidence/receipt-hashes.json
+?? notes/verification/2026-10-09-finishing/evidence/report-format.log
+?? notes/verification/2026-10-09-finishing/evidence/resumed-persistent-acceptance.log
+?? notes/verification/2026-10-09-finishing/evidence/resumed-persistent-build.log
+?? notes/verification/2026-10-09-finishing/evidence/resumed-static-browser-complete.log
+?? notes/verification/2026-10-09-finishing/evidence/resumed-static-browser-final.log
+?? notes/verification/2026-10-09-finishing/evidence/resumed-static-browser.log
+?? notes/verification/2026-10-09-finishing/evidence/resumed-static-build.log
+?? notes/verification/2026-10-09-finishing/evidence/root-check.log
+?? notes/verification/2026-10-09-finishing/evidence/static-browser.log
+?? notes/verification/2026-10-09-finishing/evidence/static-check.log
+?? notes/verification/2026-10-09-finishing/evidence/task-2-brief.md
+?? notes/verification/2026-10-09-finishing/evidence/task-2-durability-brief.md
+?? notes/verification/2026-10-09-finishing/evidence/task-2-durability-fix1-review.diff
+?? notes/verification/2026-10-09-finishing/evidence/task-2-durability-fix1-review.md
+?? notes/verification/2026-10-09-finishing/evidence/task-2-durability-report.md
+?? notes/verification/2026-10-09-finishing/evidence/task-2-durability-review.diff
+?? notes/verification/2026-10-09-finishing/evidence/task-2-durability-review.md
+?? notes/verification/2026-10-09-finishing/evidence/task-2-fix1-review.diff
+?? notes/verification/2026-10-09-finishing/evidence/task-2-fix1-review.md
+?? notes/verification/2026-10-09-finishing/evidence/task-2-report.md
+?? notes/verification/2026-10-09-finishing/evidence/task-2-review.diff
+?? notes/verification/2026-10-09-finishing/evidence/task-2-review.md
+?? notes/verification/2026-10-09-finishing/evidence/task-3-media-report.md
+?? notes/verification/2026-10-09-finishing/evidence/task-3-public-audit.md
+?? notes/verification/2026-10-09-finishing/evidence/task-3-public-brief.md
+?? notes/verification/2026-10-09-finishing/evidence/task-3-public-report.md
+?? notes/verification/2026-10-09-finishing/evidence/task-3-public-review.diff
+?? notes/verification/2026-10-09-finishing/evidence/task-3-public-review.md
+?? notes/verification/2026-10-09-finishing/evidence/task-4-artifact-ownership-report.md
+?? notes/verification/2026-10-09-finishing/evidence/task-4-artifact-ownership-review.diff
+?? notes/verification/2026-10-09-finishing/evidence/task-4-artifact-ownership-review.md
+?? notes/verification/2026-10-09-finishing/evidence/task-4-brief.md
+?? notes/verification/2026-10-09-finishing/evidence/task-4-fix1-review.diff
+?? notes/verification/2026-10-09-finishing/evidence/task-4-fix1-review.md
+?? notes/verification/2026-10-09-finishing/evidence/task-4-native-restore-brief.md
+?? notes/verification/2026-10-09-finishing/evidence/task-4-native-restore-fix1-review.diff
+?? notes/verification/2026-10-09-finishing/evidence/task-4-native-restore-fix1-review.md
+?? notes/verification/2026-10-09-finishing/evidence/task-4-native-restore-report.md
+?? notes/verification/2026-10-09-finishing/evidence/task-4-native-restore-review.diff
+?? notes/verification/2026-10-09-finishing/evidence/task-4-native-restore-review.md
+?? notes/verification/2026-10-09-finishing/evidence/task-4-report.md
+?? notes/verification/2026-10-09-finishing/evidence/task-4-review.diff
+?? notes/verification/2026-10-09-finishing/evidence/task-4-review.md
+?? notes/verification/2026-10-09-finishing/evidence/task-5-brief.md
+?? notes/verification/2026-10-09-finishing/evidence/task-5-report.md
+?? notes/verification/2026-10-09-finishing/evidence/task-5-review.diff
+?? notes/verification/2026-10-09-finishing/evidence/task-5-review.md
+?? notes/verification/2026-10-09-finishing/evidence/task-6-expiry-log-report.md
+?? notes/verification/2026-10-09-finishing/evidence/task-6-expiry-log-review.diff
+?? notes/verification/2026-10-09-finishing/evidence/task-6-expiry-log-review.md
+?? notes/verification/2026-10-09-finishing/evidence/task-7-dependency-gate-report.md
+?? notes/verification/2026-10-09-finishing/evidence/task-8-evidence-closure-report.md
+?? notes/verification/2026-10-09-finishing/evidence/verify-film-worksheet.py
+?? package-lock.json
+?? src/lib/auth/callback.test.ts
+?? src/lib/auth/callback.ts
+?? src/lib/auth/client.test.ts
+?? src/lib/auth/email-password.test.ts
+?? src/routes/auth-entry.test.tsx
+?? src/routes/contact.test.tsx

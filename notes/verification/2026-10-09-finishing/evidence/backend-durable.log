@@ -1,0 +1,41 @@
+
+Running 1 test using 1 worker
+
+(node:12911) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  1 e2e/backend/durable.acceptance.ts:213:1 › disposable Postgres and real browser durable account/workflow acceptance (0ms)
+
+
+  1) e2e/backend/durable.acceptance.ts:213:1 › disposable Postgres and real browser durable account/workflow acceptance 
+
+    Error: connect ECONNREFUSED 127.0.0.1:55471
+
+      187 | test.beforeAll(async () => {
+      188 |   scratch = await mkdtemp(join(tmpdir(), "quesar-backend-"));
+    > 189 |   for (const name of names) await admin.query(`create database "${name}"`);
+          |                             ^
+      190 |   const server = createServer();
+      191 |   server.listen(0, "localhost");
+      192 |   await once(server, "listening");
+        at /Users/donaldfilimon/dev/active/quesar.cloud/node_modules/pg-pool/index.js:45:11
+        at /Users/donaldfilimon/dev/active/quesar.cloud/e2e/backend/durable.acceptance.ts:189:29
+
+    Error: Acceptance cleanup failed for 5 owned resource(s).
+
+       at process-cleanup.ts:63
+
+      61 |     }
+      62 |   }
+    > 63 |   if (failed) throw new Error(`Acceptance cleanup failed for ${failed} owned resource(s).`);
+         |                     ^
+      64 | }
+      65 |
+        at cleanupOwnedResources (/Users/donaldfilimon/dev/active/quesar.cloud/e2e/backend/process-cleanup.ts:63:21)
+        at /Users/donaldfilimon/dev/active/quesar.cloud/e2e/backend/durable.acceptance.ts:200:3
+
+    Error Context: test-results/backend-acceptance/durable.acceptance.ts-disp-464a1-account-workflow-acceptance/error-context.md
+
+    Error Context: test-results/backend-acceptance/durable.acceptance.ts-disp-464a1-account-workflow-acceptance/error-context.md
+
+  1 failed
+    e2e/backend/durable.acceptance.ts:213:1 › disposable Postgres and real browser durable account/workflow acceptance 

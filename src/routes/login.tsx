@@ -7,14 +7,19 @@ import { getSignInMethods } from "@/lib/auth/methods";
 import type { SignInMethods } from "@/lib/auth/providers";
 import { safeInternalPath } from "@/lib/internal";
 import { pageHead } from "@/lib/seo";
+import { signInFailure, type SignInFailure } from "@/lib/auth/callback";
 
-type LoginSearch = { next?: string };
+type LoginSearch = { next?: string; mode?: "signin" | "signup"; error?: SignInFailure };
 
 // Always return the key: the root route's raw search is merged into this
 // route's result, so an omitted key would let a non-string `next` through
 // unsanitized (the router JSON-parses query values).
 function parseNext(search: Record<string, unknown>): LoginSearch {
-  return { next: typeof search.next === "string" ? safeInternalPath(search.next) : undefined };
+  return {
+    next: typeof search.next === "string" ? safeInternalPath(search.next) : undefined,
+    mode: search.mode === "signup" ? "signup" : "signin",
+    error: signInFailure(search.error),
+  };
 }
 
 const NO_METHODS: SignInMethods = { email: false, passkey: false, social: [] };
