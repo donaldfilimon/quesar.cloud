@@ -148,6 +148,55 @@ export interface AudioEngineOptions {
   sampleRateFallback?: number;
 }
 
+/** An export context never connects to the live device. */
+export interface OfflineContextLike extends AudioContextLike {
+  startRendering(): Promise<AudioBufferLike>;
+}
+
+export interface PCMExportOptions {
+  createOfflineContext(length: number, sampleRate: number): OfflineContextLike;
+  signal?: AbortSignal;
+  maxSeconds: number;
+  timeoutMs?: number;
+}
+
+export interface PCMExport {
+  samples: Float32Array;
+  sampleRate: number;
+  seconds: number;
+  device: string;
+  voice: string;
+  speed: number;
+  normalizedText: string;
+  phrases: { text: string; start: number; end: number }[];
+  processing: {
+    eq: EqBand[];
+    gain: number;
+    fadeSeconds: number;
+    tailSeconds: number;
+    peak: number;
+    attenuation: number;
+  };
+}
+
+const BUS = { threshold: -18, knee: 24, ratio: 3, attack: 0.006, release: 0.18 } as const;
+function configureBus(bus: CompressorNodeLike): void {
+  for (const key of Object.keys(BUS) as (keyof typeof BUS)[]) bus[key].value = BUS[key];
+}
+
+/** Race non-cancellable model work; late results cannot be published. */
+function bounded<T>(job: Promise<T>, signal: AbortSignal): Promise<T> {
+  return new Promise((resolve, reject) => {
+    const abort = () => reject(new Error("PCM export cancelled or deadline exceeded"));
+    if (signal.aborted) {
+      abort();
+      return;
+    }
+    signal.addEventListener("abort", abort, { once: true });
+    job.then(resolve, reject).finally(() => signal.removeEventListener("abort", abort));
+  });
+}
+
 export interface VoiceSnapshot {
   status: string;
   progress: number;
@@ -388,11 +437,7 @@ export class AudioEngine {
       // level and crossfaded consonants do not spike. master → bus → out.
       const bus = ctx.createDynamicsCompressor();
       try {
-        bus.threshold.value = -18;
-        bus.knee.value = 24;
-        bus.ratio.value = 3;
-        bus.attack.value = 0.006;
-        bus.release.value = 0.18;
+        configureBus(bus);
       } catch {
         /* a fake or a locked param leaves the defaults */
       }
@@ -528,6 +573,124 @@ export class AudioEngine {
       return false;
     })();
     return this.loadPromise;
+  }
+
+  /** Explicit offline export intent. Uses the live pronunciation, persona, edge
+   * fades, EQ and bus settings. Never plays audio, stretches or truncates speech.
+   * The caller must terminate its worker/browser after a deadline: ONNX itself
+   * does not expose an abortable generate() operation. */
+  async exportPCM(who: string, text: string, opts: PCMExportOptions): Promise<PCMExport> {
+    const norm = this.normalizeText(text);
+    if (!norm.trim()) throw new Error("Empty speech");
+    if (!Number.isFinite(opts.maxSeconds) || opts.maxSeconds <= 0 || opts.maxSeconds > 600)
+      throw new Error("Invalid PCM export duration budget");
+    const timeoutMs = opts.timeoutMs ?? 300000;
+    if (!Number.isFinite(timeoutMs) || timeoutMs <= 0 || timeoutMs > 600000)
+      throw new Error("Invalid PCM export deadline");
+    const controller = new AbortController();
+    const abort = () => controller.abort();
+    opts.signal?.addEventListener("abort", abort, { once: true });
+    if (opts.signal?.aborted) abort();
+    const timer = setTimeout(abort, timeoutMs);
+    const gen = this.generation;
+    const check = () => {
+      if (controller.signal.aborted || this.disposed || gen !== this.generation)
+        throw new Error("PCM export cancelled or deadline exceeded");
+    };
+    try {
+      check();
+      if (!(await bounded(this.load(), controller.signal)) || !this.tts)
+        throw new Error("Neural model unavailable");
+      check();
+      const speaker = this.resolveSpeaker(who);
+      const parts: Float32Array[] = [];
+      const phrases: PCMExport["phrases"] = [];
+      let sr = 0;
+      let count = 0;
+      for (const chunk of chunkText(norm)) {
+        check();
+        const result = await bounded(
+          this.tts.generate(chunk, {
+            voice: speaker.voice,
+            speed: speaker.speed,
+          }),
+          controller.signal,
+        );
+        check();
+        const rate = result.sampling_rate ?? result.sr;
+        const pcm = result.audio ?? result.data;
+        if (!rate || !Number.isInteger(rate) || rate < 8000 || rate > 96000 || (sr && rate !== sr))
+          throw new Error("Invalid or changing neural sample rate");
+        sr = rate;
+        if (!(pcm instanceof Float32Array) || !pcm.length) throw new Error("Empty neural PCM");
+        let energy = 0;
+        for (const value of pcm) {
+          if (!Number.isFinite(value) || Math.abs(value) > 1)
+            throw new Error("Invalid neural PCM sample");
+          energy += value * value;
+        }
+        if (energy === 0) throw new Error("Silent neural PCM");
+        if (parts.length) count += Math.round(speaker.gap * sr);
+        phrases.push({ text: chunk, start: count / sr, end: (count + pcm.length) / sr });
+        count += pcm.length;
+        if (count > Math.floor(opts.maxSeconds * sr)) throw new Error("Neural narration overrun");
+        parts.push(pcm.slice());
+      }
+      check();
+      // Preserve the compressor lookahead and filter decay beyond the final
+      // sentence. This is added silence, never a crop of generated speech.
+      const tailSeconds = 0.04;
+      const outputCount = count + Math.ceil(tailSeconds * sr);
+      if (outputCount > Math.floor(opts.maxSeconds * sr))
+        throw new Error("Neural narration overrun");
+      const ctx = opts.createOfflineContext(outputCount, sr);
+      const source = ctx.createBufferSource();
+      source.buffer = this.buildBuffer(ctx, parts, sr, speaker.gap);
+      const chain = this.personaChain(ctx, speaker.eq);
+      const gain = ctx.createGain();
+      gain.gain.value = speaker.gain;
+      const bus = ctx.createDynamicsCompressor();
+      configureBus(bus);
+      source.connect(chain.input);
+      chain.output.connect(gain);
+      gain.connect(bus);
+      bus.connect(ctx.destination);
+      source.start(0);
+      const rendered = await bounded(ctx.startRendering(), controller.signal);
+      check();
+      const samples = rendered.getChannelData(0).slice();
+      if (samples.length !== outputCount) throw new Error("Offline PCM length mismatch");
+      let peak = 0;
+      for (const value of samples) {
+        if (!Number.isFinite(value)) throw new Error("Invalid offline PCM sample");
+        peak = Math.max(peak, Math.abs(value));
+      }
+      if (!peak) throw new Error("Silent offline PCM");
+      // Export-only safety headroom, attenuation only, recorded in the receipt.
+      const attenuation = Math.min(1, 0.85 / peak);
+      for (let i = 0; i < samples.length; i++) samples[i] *= attenuation;
+      return {
+        samples,
+        sampleRate: sr,
+        seconds: outputCount / sr,
+        device: this.device ?? "unknown",
+        voice: speaker.voice,
+        speed: speaker.speed,
+        normalizedText: norm,
+        phrases,
+        processing: {
+          eq: speaker.eq.map((band) => ({ ...band })),
+          gain: speaker.gain,
+          fadeSeconds: this.fadeSec,
+          tailSeconds,
+          peak: peak * attenuation,
+          attenuation,
+        },
+      };
+    } finally {
+      clearTimeout(timer);
+      opts.signal?.removeEventListener("abort", abort);
+    }
   }
 
   /* ── synthesis + cache ── */

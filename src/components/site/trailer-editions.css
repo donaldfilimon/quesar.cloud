@@ -1,0 +1,226 @@
+.edition-gallery {
+  --edition-paper: #f1ede3;
+  --edition-ink: #262920;
+  --edition-copper: #955c38;
+  color: var(--edition-ink);
+  background: var(--edition-paper);
+  border: 1px solid #98775455;
+  padding: clamp(1.25rem, 4vw, 3.5rem);
+}
+.edition-intro {
+  max-width: 52rem;
+}
+.edition-intro h2,
+.edition-feature h3 {
+  font-family: Georgia, serif;
+  letter-spacing: -0.035em;
+}
+.edition-intro h2 {
+  font-size: clamp(2.3rem, 5vw, 4.5rem);
+  line-height: 1.04;
+  margin: 1rem 0;
+}
+.edition-intro > p:last-child {
+  max-width: 43rem;
+  line-height: 1.65;
+  color: #57584f;
+}
+.edition-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 2rem 0;
+}
+.edition-filters button {
+  min-height: 44px;
+  padding: 0.55rem 1rem;
+  border: 1px solid #98775477;
+  border-radius: 999px;
+  font-size: 0.85rem;
+}
+.edition-filters button[aria-pressed="true"] {
+  background: var(--edition-ink);
+  color: var(--edition-paper);
+}
+.edition-filters button:hover:not([aria-pressed="true"]) {
+  border-color: var(--edition-copper);
+  color: var(--edition-copper);
+}
+.edition-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) minmax(17rem, 1fr);
+  gap: clamp(1rem, 3vw, 2.5rem);
+  align-items: start;
+}
+.edition-feature {
+  min-width: 0;
+}
+.edition-feature-topline {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.8rem 0;
+  border-top: 1px solid #98775477;
+  font: 0.7rem var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.edition-screen {
+  background: #222720;
+  color: #f1ede3;
+}
+.edition-screen video,
+.edition-play {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  display: block;
+}
+.edition-screen video {
+  background: #151915;
+}
+.edition-play {
+  position: relative;
+  overflow: hidden;
+  color: #fff;
+}
+.edition-play img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.edition-play-label {
+  position: absolute;
+  bottom: 1rem;
+  left: 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1rem;
+  background: #262920e8;
+  border: 1px solid #f1ede3aa;
+}
+.edition-resources {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  padding: 1rem;
+}
+.edition-resources a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  min-height: 44px;
+  color: #edbd92;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.edition-error {
+  padding: 0.8rem 1rem;
+  color: #fff4e9;
+}
+.edition-feature-copy {
+  padding-top: 1.5rem;
+}
+.edition-feature-copy h3 {
+  font-size: clamp(1.8rem, 3vw, 2.8rem);
+  line-height: 1.1;
+}
+.edition-feature-copy > p {
+  margin-top: 0.75rem;
+  line-height: 1.6;
+}
+.edition-access-note {
+  font-size: 0.8rem;
+  color: #65645c;
+}
+.edition-index h3 {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.8rem 0;
+  border-top: 1px solid #98775477;
+  font: 0.75rem var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.edition-index h3 span {
+  color: #69685d;
+}
+.edition-index ul {
+  max-height: 46rem;
+  overflow-y: auto;
+  border-bottom: 1px solid #98775477;
+}
+.edition-index li + li {
+  border-top: 1px solid #98775455;
+}
+.edition-index li button {
+  width: 100%;
+  min-height: 5.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem;
+  text-align: left;
+}
+.edition-index li button:hover,
+.edition-index li button[aria-pressed="true"] {
+  background: #955c3819;
+}
+.edition-index li button[aria-pressed="true"] {
+  box-shadow: inset 3px 0 var(--edition-copper);
+}
+.edition-index-number,
+.edition-index-duration,
+.edition-index-copy small {
+  font: 0.7rem var(--font-mono);
+  color: #66675e;
+}
+.edition-index img {
+  width: 5.5rem;
+  height: 3.1rem;
+  flex: none;
+  object-fit: cover;
+}
+.edition-index-copy {
+  flex: 1;
+  min-width: 0;
+}
+.edition-index-copy strong,
+.edition-index-copy small {
+  display: block;
+}
+.edition-index-copy strong {
+  font-family: Georgia, serif;
+  font-weight: normal;
+  font-size: 1rem;
+}
+.edition-index-copy small {
+  margin-top: 0.35rem;
+  text-transform: uppercase;
+}
+.edition-gallery button:focus-visible,
+.edition-gallery a:focus-visible {
+  outline: 3px solid var(--edition-copper);
+  outline-offset: 3px;
+}
+@media (max-width: 850px) {
+  .edition-layout {
+    grid-template-columns: 1fr;
+  }
+  .edition-index ul {
+    max-height: none;
+  }
+}
+@media (max-width: 450px) {
+  .edition-index-number {
+    display: none;
+  }
+  .edition-index img {
+    width: 4.5rem;
+    height: 2.6rem;
+  }
+  .edition-feature-topline {
+    font-size: 0.62rem;
+  }
+}
