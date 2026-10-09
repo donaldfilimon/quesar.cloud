@@ -1,6 +1,6 @@
 {
   "status": "encoded_and_full_decode_verified",
-  "sha256": "a9429d5d29ca481f1c2e83f44717dfe51a09bd4b6cf08fac3f8b830882382f84",
+  "sha256": "6ec25dc6e0d08dc3281039e08c527680bc1757bc8a2b4f2df59ba282dd6911a4",
   "probe": {
     "streams": [
       {
@@ -12,5 +12,16 @@
         "duration": 60
       }
     ]
+  },
+  "inputDigest": "2ae131390f387e8454e75b45796330c8789561efd95b5c685851acf58eb802c7",
+  "sourceDigest": "034796ff94a3525b62952aaeb07ecbaf081cbe5ef9d1a07d1202467a89d29e03",
+  "listeningReview": "pending",
+  "visualReview": "pending",
+  "listeningAccepted": false,
+  "visualReviewAccepted": false,
+  "sidecarHashes": {
+    "poster.jpg": "86be35d09034fe6009b55e28c0c3b1c9ebd9aa4fa639c6bb7040a0ab2326e3ff",
+    "captions.vtt": "1355ebddbce3cb420957e05321b96547b6e3cc7d03a8af3f07d83350664d5cd1",
+    "transcript.txt": "4d358cc3571a33f8f6c9414a916e0c740295d7484920acd5b483200d3c040d44"
   }
 }
