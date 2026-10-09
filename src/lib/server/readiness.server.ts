@@ -38,12 +38,17 @@ function keyState(raw: string | undefined): OptionalState {
   if (!/^[A-Za-z0-9+/_-]{43}=?$/.test(value)) return "invalid";
   return Buffer.from(value, "base64").length === 32 ? "configured" : "invalid";
 }
-export function runtimeReadiness(environment: Environment = process.env, staticMode = false) {
+export function runtimeReadiness(
+  environment: Environment = process.env,
+  staticMode = false,
+  persistentMode = false,
+) {
   const reasons: string[] = [];
   const read = (name: string) => environment[name]?.trim() || undefined;
-  const bypass = staticMode;
+  if (persistentMode && staticMode) reasons.push("static_mode_forbidden");
+  const bypass = staticMode && !persistentMode;
   if (!bypass) {
-    if (read("NODE_ENV") === "production") {
+    if (persistentMode || read("NODE_ENV") === "production") {
       if (!validDatabase(read("DATABASE_URL"))) reasons.push("database_unavailable");
       if ((read("BETTER_AUTH_SECRET")?.length ?? 0) < 32) reasons.push("session_secret_invalid");
       if (!validAuthOrigin(read("BETTER_AUTH_URL"))) reasons.push("auth_origin_invalid");
@@ -67,8 +72,12 @@ export function readinessResponse(state: ReturnType<typeof runtimeReadiness>): R
   });
 }
 /** Called before importing runtime auth/DB services. */
-export function checkRuntimeRequest(request: Request, staticMode = false): Response | undefined {
-  const state = runtimeReadiness(process.env, staticMode);
+export function checkRuntimeRequest(
+  request: Request,
+  staticMode = false,
+  persistentMode = false,
+): Response | undefined {
+  const state = runtimeReadiness(process.env, staticMode, persistentMode);
   if (new URL(request.url).pathname === "/api/readiness") {
     if (request.method !== "GET" && request.method !== "HEAD")
       return new Response(null, { status: 405, headers: { Allow: "GET, HEAD" } });

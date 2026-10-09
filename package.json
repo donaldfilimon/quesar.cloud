@@ -10,6 +10,7 @@
   "scripts": {
     "dev": "vite dev --host 0.0.0.0 --port 8080",
     "build": "vite build && node scripts/copy-pglite-assets.ts",
+    "build:persistent": "vite build --mode persistent && node scripts/copy-pglite-assets.ts --persistent",
     "build:static": "VITE_STATIC_SITE=true VITE_AUTH_ENABLED=false vite build --mode static && node scripts/publish-static.ts",
     "export:research-site": "bun scripts/export-research-site.tsx",
     "db:migrate": "node scripts/migrate.ts",
