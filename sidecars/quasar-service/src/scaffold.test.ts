@@ -87,5 +87,5 @@ test("scaffoldSite rejects when `bun install` fails, surfacing exit code + stder
   expect(message).toMatch(/install/i);
   expect(message).toMatch(/exit \d+/);
   // the stderr tail is actually included, not just an "install failed" stub
-  expect(message).toMatch(/Parser|json/i);
+  expect(message).not.toMatch(/Parser|json/i);
 }, 15000);

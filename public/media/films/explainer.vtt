@@ -1,0 +1,93 @@
+WEBVTT
+
+explainer-cue-01
+00:00:01.200 --> 00:00:05.300
+Quesar. Private AI operations.
+
+explainer-cue-02
+00:00:05.600 --> 00:00:09.600
+Follow the boundaries, one idea at a time.
+
+explainer-cue-03
+00:00:11.000 --> 00:00:16.100
+ABI separates its pure AI core from storage I/O.
+
+explainer-cue-04
+00:00:16.400 --> 00:00:22.300
+MCP owns the store-facing completion persistence tail.
+
+explainer-cue-05
+00:00:22.600 --> 00:00:27.600
+Vector primitives and accelerator contracts.
+
+explainer-cue-06
+00:00:29.000 --> 00:00:35.300
+The durable store integrates snapshots, WAL recovery and HNSW search.
+
+explainer-cue-07
+00:00:35.600 --> 00:00:42.600
+Recovery can report corruption or I/O failure. Durability has limits.
+
+explainer-cue-08
+00:00:44.000 --> 00:00:47.500
+Audit blocks carry predecessor hashes.
+
+explainer-cue-09
+00:00:47.800 --> 00:00:53.300
+The block hash covers time, sequence, profile and metadata.
+
+explainer-cue-10
+00:00:53.600 --> 00:00:59.600
+Strict verification recomputes content hashes. Link-only verification does not.
+
+explainer-cue-11
+00:01:01.000 --> 00:01:07.300
+Abbey, Aviva and ABI are persona profiles with identity contracts.
+
+explainer-cue-12
+00:01:07.600 --> 00:01:15.600
+Keyword routing is a local path. Explicit leading names can select a profile.
+
+explainer-cue-13
+00:01:16.200 --> 00:01:18.700
+Abbey: conversational.
+
+explainer-cue-14
+00:01:19.200 --> 00:01:21.700
+Aviva: direct, technical.
+
+explainer-cue-15
+00:01:22.200 --> 00:01:24.700
+Abi: routing.
+
+explainer-cue-16
+00:01:26.400 --> 00:01:31.700
+The scoped audit matches thirteen case-insensitive phrase patterns.
+
+explainer-cue-17
+00:01:32.000 --> 00:01:36.700
+Six principles contribute, including safety and privacy.
+
+explainer-cue-18
+00:01:37.000 --> 00:01:40.600
+Harm outside those phrases can escape detection.
+
+explainer-cue-19
+00:01:42.500 --> 00:01:48.300
+A distributed cognitive fabric is a longer-term vision.
+
+explainer-cue-20
+00:01:48.600 --> 00:01:53.900
+Compatibility and delivery require separate qualification.
+
+explainer-cue-21
+00:01:54.200 --> 00:01:59.600
+Treat the roadmap as a direction, with questions still open.
+
+explainer-cue-22
+00:02:01.400 --> 00:02:04.300
+Begin with a defined project.
+
+explainer-cue-23
+00:02:04.600 --> 00:02:11.600
+Discuss the scope, inspect the sources, and agree on the evidence needed.

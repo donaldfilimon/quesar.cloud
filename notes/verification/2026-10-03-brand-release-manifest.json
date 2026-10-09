@@ -1,0 +1,652 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-10-03T06:21:00.173Z",
+  "releaseStatus": "local asset inventory; publication and final human review not claimed",
+  "brand": {
+    "quesar": {
+      "name": "Quesar",
+      "attribution": "by MLAI",
+      "tagline": "Private AI operations."
+    },
+    "abbeyAbi": {
+      "tagline": "Intelligence Without Limits",
+      "restriction": "Abbey/ABI only, accompanied by claims ledger; never unlimited or AGI. Not the Quesar hero/default OG tagline."
+    }
+  },
+  "authority": [
+    "notes/mlai/brand.md",
+    "src/styles.css",
+    "src/cinematic/design/mlai-ds-tokens.css"
+  ],
+  "fonts": {
+    "heading": "Space Grotesk Variable",
+    "body": "IBM Plex Sans Variable",
+    "mono": "IBM Plex Mono"
+  },
+  "usageNotes": [
+    "Site Logo is the weighted-graph M in src/components/site/logo.tsx; public/favicon.svg is a separate nested-square icon and is not a vector master of that mark.",
+    "Scoped cinematic mappings inherit the current site dark theme. src/cinematic/design/board/tokens.ts is older board material and is not the release token authority.",
+    "Posters and OG cards are existing authored/generated files; this index does not regenerate or reapprove their claims.",
+    "Film neural narration/caption hashes and technical acceptance are recorded separately. Human listening and immutable model-weight provenance remain gaps.",
+    "Preserved MP4/WebM teasers are distinct cuts, not replacements for the six full narrated exports.",
+    "No assets copied into this release index. Paths and SHA-256 values identify canonical local originals."
+  ],
+  "assets": [
+    {
+      "group": "guidance",
+      "path": "notes/mlai/brand.md",
+      "status": "current_file",
+      "bytes": 981,
+      "sha256": "4776602856f11fe4ad1b73461bc8c96faf23e618efcd783c68a11fa1fa45357a",
+      "publicUrl": null
+    },
+    {
+      "group": "guidance",
+      "path": "src/lib/site-identity.ts",
+      "status": "current_file",
+      "bytes": 1245,
+      "sha256": "25a6021f1a0ebb403e6d6279ffeae9a7308dd80343bbb55e8abcb625d6e56475",
+      "publicUrl": null
+    },
+    {
+      "group": "tokens",
+      "path": "src/styles.css",
+      "status": "current_file",
+      "bytes": 15308,
+      "sha256": "f726c12265d16a1f5f08816594b506d24cd519f03baf248c41bb1bd188eed987",
+      "publicUrl": null
+    },
+    {
+      "group": "tokens",
+      "path": "src/cinematic/design/mlai-ds-tokens.css",
+      "status": "current_file",
+      "bytes": 7967,
+      "sha256": "09889dc06f54bba0813c396958388dac3fb2b6e7519ec7b9bc6981098fcd68ed",
+      "publicUrl": null
+    },
+    {
+      "group": "tokens",
+      "path": "src/cinematic/film/tokens.ts",
+      "status": "current_file",
+      "bytes": 2221,
+      "sha256": "bf84d6852eda7a317f6de60d8d825a36ad33efc8ab177ed86a48fa2b0d1f1ab6",
+      "publicUrl": null
+    },
+    {
+      "group": "identity",
+      "path": "src/components/site/logo.tsx",
+      "status": "current_file",
+      "bytes": 1638,
+      "sha256": "dfe6c0420d9acbc5d6c501843af98adab34775a2dc9858669d985505523c58b3",
+      "publicUrl": null
+    },
+    {
+      "group": "identity",
+      "path": "public/favicon.svg",
+      "status": "current_file",
+      "bytes": 324,
+      "sha256": "03a8fc2c31aa23d849cae27a2c9178b8248243c73ce737e261d1e7eb0f5525f5",
+      "publicUrl": "/favicon.svg"
+    },
+    {
+      "group": "identity",
+      "path": "public/apple-touch-icon.png",
+      "status": "current_file",
+      "bytes": 2100,
+      "sha256": "3cf5d17d294b51c6cca6c86070309b88554b7ad702b0412e8e2709a01990bc8a",
+      "publicUrl": "/apple-touch-icon.png"
+    },
+    {
+      "group": "identity",
+      "path": "public/manifest.webmanifest",
+      "status": "current_file",
+      "bytes": 425,
+      "sha256": "c97a54d4c3c2886f777a645394d39abe33aab2e1e957f560f26b49dafcfc6d8c",
+      "publicUrl": "/manifest.webmanifest"
+    },
+    {
+      "group": "social",
+      "path": "public/og/abbey.jpg",
+      "status": "current_file",
+      "bytes": 49522,
+      "sha256": "fd7d6df734a3046eb19e3b85ebf1783311afcdd55b51ef03622b0d586d5f9749",
+      "publicUrl": "/og/abbey.jpg"
+    },
+    {
+      "group": "social",
+      "path": "public/og/abi.jpg",
+      "status": "current_file",
+      "bytes": 47390,
+      "sha256": "0c01181c141badb8dbaa043d5d5c1a44f1aade531a5402ef4c0faafc68064d9d",
+      "publicUrl": "/og/abi.jpg"
+    },
+    {
+      "group": "social",
+      "path": "public/og/docs.jpg",
+      "status": "current_file",
+      "bytes": 47527,
+      "sha256": "061f2b03b1833b9ca0801081516632ce3ce7b6a0ba25934e1aedd1b33661a56a",
+      "publicUrl": "/og/docs.jpg"
+    },
+    {
+      "group": "social",
+      "path": "public/og/platform.jpg",
+      "status": "current_file",
+      "bytes": 51627,
+      "sha256": "1dcba3f8b8280ccd0ea9bef786e1359b83f2346bc157d7bf1d7e704b5f500ffe",
+      "publicUrl": "/og/platform.jpg"
+    },
+    {
+      "group": "social",
+      "path": "public/og/quesar.jpg",
+      "status": "current_file",
+      "bytes": 54185,
+      "sha256": "bccba0120602588380707d0c962e95c950277122a0df04f4636aecb293bf3b8c",
+      "publicUrl": "/og/quesar.jpg"
+    },
+    {
+      "group": "social",
+      "path": "public/og/research.jpg",
+      "status": "current_file",
+      "bytes": 54704,
+      "sha256": "6470688cf396b399805c967e711b4d214251c2bc8b852d78d4192f7efecabe63",
+      "publicUrl": "/og/research.jpg"
+    },
+    {
+      "group": "social",
+      "path": "public/og/showcase.jpg",
+      "status": "current_file",
+      "bytes": 57665,
+      "sha256": "a891684d78666b9071ffd8c0440595ebeba14f6601b1cd66c6aa82c611c765fb",
+      "publicUrl": "/og/showcase.jpg"
+    },
+    {
+      "group": "social",
+      "path": "public/og/wdbx.jpg",
+      "status": "current_file",
+      "bytes": 53069,
+      "sha256": "5826856f29e241c270b784e52d0adf6c6090778b7d04fca01147f1c08c2bac99",
+      "publicUrl": "/og/wdbx.jpg"
+    },
+    {
+      "group": "roomPosters",
+      "path": "public/media/rooms/film.webp",
+      "status": "current_file",
+      "bytes": 12092,
+      "sha256": "dfb12ce36b3a7fe4b9563365736c0f5733215441d0b83a34f5207587df88dc72",
+      "publicUrl": "/media/rooms/film.webp"
+    },
+    {
+      "group": "roomPosters",
+      "path": "public/media/rooms/trailer.webp",
+      "status": "current_file",
+      "bytes": 4182,
+      "sha256": "a1c59044b73eea77aa928eb7eaf58f0a107c54bd0aee662431d1201b51130187",
+      "publicUrl": "/media/rooms/trailer.webp"
+    },
+    {
+      "group": "roomPosters",
+      "path": "public/media/rooms/abbey.webp",
+      "status": "current_file",
+      "bytes": 10994,
+      "sha256": "4bc5e88e6346e5042ca8f40b30139dc378667b13f45c39158402321103185947",
+      "publicUrl": "/media/rooms/abbey.webp"
+    },
+    {
+      "group": "roomPosters",
+      "path": "public/media/rooms/explainer.webp",
+      "status": "current_file",
+      "bytes": 32304,
+      "sha256": "1f4f7d16def0ee4aa0bb44c44f3acd8e489da8e2bf64a7ab980fd66d4c7da6d6",
+      "publicUrl": "/media/rooms/explainer.webp"
+    },
+    {
+      "group": "roomPosters",
+      "path": "public/media/rooms/mega.webp",
+      "status": "current_file",
+      "bytes": 41836,
+      "sha256": "8a10830d15e2ec996ef4c8c7f402edc85e87cc5c726c04acf819ad2c0f8fa3bc",
+      "publicUrl": "/media/rooms/mega.webp"
+    },
+    {
+      "group": "roomPosters",
+      "path": "public/media/rooms/design.webp",
+      "status": "current_file",
+      "bytes": 11834,
+      "sha256": "b65d253f187c8a1c310e24f6a052c2368a2770e60e16dc1bb6ff2c7f1d90ae5d",
+      "publicUrl": "/media/rooms/design.webp"
+    },
+    {
+      "group": "teasers",
+      "path": "public/media/quesar-trailer.mp4",
+      "status": "current_file",
+      "bytes": 1100920,
+      "sha256": "b3ae3cd3d3ce3cffc88257351d31dc464315ae7082f890f49e08e657dbbe8416",
+      "publicUrl": "/media/quesar-trailer.mp4"
+    },
+    {
+      "group": "teasers",
+      "path": "public/media/quesar-trailer.webm",
+      "status": "current_file",
+      "bytes": 615269,
+      "sha256": "c6dd5f8c9f12f0b03c9a0bd0bd61d517f3a888264cd0abd04e1cb6e0e29852e0",
+      "publicUrl": "/media/quesar-trailer.webm"
+    },
+    {
+      "group": "teasers",
+      "path": "public/media/quesar-trailer.webp",
+      "status": "current_file",
+      "bytes": 39108,
+      "sha256": "080c2372506754e8cd767bca88991d308ffe7d152a4d0c961a9dd44c32174a31",
+      "publicUrl": "/media/quesar-trailer.webp"
+    },
+    {
+      "group": "teasers",
+      "path": "public/media/mark.vtt",
+      "status": "current_file",
+      "bytes": 144,
+      "sha256": "31cc9f56d5d785a2efd69b5bd7012a3750cde78c2cdd96b407fe344c1e5f2f0a",
+      "publicUrl": "/media/mark.vtt"
+    },
+    {
+      "group": "teasers",
+      "path": "public/media/atmosphere-board.mp4",
+      "status": "current_file",
+      "bytes": 636807,
+      "sha256": "69ef4449eef012c2ed2192dde4de0e24982038bf2b62e11c4082f12a5f93e73e",
+      "publicUrl": "/media/atmosphere-board.mp4"
+    },
+    {
+      "group": "teasers",
+      "path": "public/media/atmosphere-board.webm",
+      "status": "current_file",
+      "bytes": 397469,
+      "sha256": "f5dd3c0dac11922bc91adc748cd66ea26a58377e0dedffde4158aef98f3025bf",
+      "publicUrl": "/media/atmosphere-board.webm"
+    },
+    {
+      "group": "teasers",
+      "path": "public/media/atmosphere-board.webp",
+      "status": "current_file",
+      "bytes": 29786,
+      "sha256": "22658b476e754d4ed54925c89e99408ee871752e7d3625ed7832d17ef01aee7f",
+      "publicUrl": "/media/atmosphere-board.webp"
+    },
+    {
+      "group": "teasers",
+      "path": "public/media/board.vtt",
+      "status": "current_file",
+      "bytes": 147,
+      "sha256": "d81fb3c11d4bf173ad3926801336b781b463438c6fa71335c413be42d34a2a70",
+      "publicUrl": "/media/board.vtt"
+    },
+    {
+      "group": "teasers",
+      "path": "public/media/atmosphere-wafer.mp4",
+      "status": "current_file",
+      "bytes": 543863,
+      "sha256": "924731f627cf7d914905d6dfcd963b53f0f1a12b24341aa57ed67d54205407cc",
+      "publicUrl": "/media/atmosphere-wafer.mp4"
+    },
+    {
+      "group": "teasers",
+      "path": "public/media/atmosphere-wafer.webm",
+      "status": "current_file",
+      "bytes": 355240,
+      "sha256": "117b1a7ffd03b98ad1af11256634708b78ac8600a96ff20b30400045df59dc72",
+      "publicUrl": "/media/atmosphere-wafer.webm"
+    },
+    {
+      "group": "teasers",
+      "path": "public/media/atmosphere-wafer.webp",
+      "status": "current_file",
+      "bytes": 45612,
+      "sha256": "7380ed5ce7c2423cf359884ab579847097d3189ede054507085983475d7e65f6",
+      "publicUrl": "/media/atmosphere-wafer.webp"
+    },
+    {
+      "group": "teasers",
+      "path": "public/media/wafer.vtt",
+      "status": "current_file",
+      "bytes": 129,
+      "sha256": "83b23f434441033fbeb4d5c0203a482f21393b5fdc9c13d42739433639c82c79",
+      "publicUrl": "/media/wafer.vtt"
+    },
+    {
+      "group": "films",
+      "path": "public/media/films/film.mp4",
+      "status": "current_file",
+      "bytes": 3688233,
+      "sha256": "0e571bbe801f1e21a41f0d976b7a9cfccda6818f2026f1208ceac225450eed38",
+      "publicUrl": "/media/films/film.mp4"
+    },
+    {
+      "group": "films",
+      "path": "public/media/films/film.poster.png",
+      "status": "current_file",
+      "bytes": 259184,
+      "sha256": "32f96e0da9da6385a470234d588d6f88f7eb73fdb05c2b922a909c11367df44a",
+      "publicUrl": "/media/films/film.poster.png"
+    },
+    {
+      "group": "films",
+      "path": "public/media/films/film.vtt",
+      "status": "current_file",
+      "bytes": 1335,
+      "sha256": "58dfba2c9f49688ab3516f5b6070b97ce905987a750e72632e5fe9cea871a4b2",
+      "publicUrl": "/media/films/film.vtt"
+    },
+    {
+      "group": "films",
+      "path": "public/media/films/film.transcript.txt",
+      "status": "current_file",
+      "bytes": 697,
+      "sha256": "6b27b896645c806aef4cd5f0392947f093ed43e20226f031e5a33b63952d995f",
+      "publicUrl": "/media/films/film.transcript.txt"
+    },
+    {
+      "group": "films",
+      "path": "public/media/films/film.chapters.json",
+      "status": "current_file",
+      "bytes": 2453,
+      "sha256": "2d4bd176f2668907900a9455e72b757838019ce74ee1c2ed7da5e770d1970add",
+      "publicUrl": "/media/films/film.chapters.json"
+    },
+    {
+      "group": "films",
+      "path": "public/media/films/film.timing.json",
+      "status": "current_file",
+      "bytes": 9589,
+      "sha256": "dc404859ae2a7f53f2d57a268a4dcaa6d26b239bdf198e552316b7ff62498f9f",
+      "publicUrl": "/media/films/film.timing.json"
+    },
+    {
+      "group": "films",
+      "path": "public/media/films/film.encoding.json",
+      "status": "current_file",
+      "bytes": 1043,
+      "sha256": "74902f00400bdfe5ee1032b66511d7f932a39394c34838fb1b902001282cec0e",
+      "publicUrl": "/media/films/film.encoding.json"
+    },
+    {
+      "group": "films",
+      "path": "public/media/films/trailer.mp4",
+      "status": "current_file",
+      "bytes": 3374048,
+      "sha256": "4bda27069214e6d70e423aab60430af0023596a727a4c3d743902358bd674e51",
+      "publicUrl": "/media/films/trailer.mp4"
+    },
+    {
+      "group": "films",
+      "path": "public/media/films/trailer.poster.png",
+      "status": "current_file",
+      "bytes": 146490,
+      "sha256": "63e91df8725b95a497720638509f40f6084e886bf1f7dd9e1221bf69ecc283e6",
+      "publicUrl": "/media/films/trailer.poster.png"
+    },
+    {
+      "group": "films",
+      "path": "public/media/films/trailer.vtt",
+      "status": "current_file",
+      "bytes": 1302,
+      "sha256": "16359fd3783a063c8285838565a57a2429f470f82af95d08842052ff9dd80daf",
+      "publicUrl": "/media/films/trailer.vtt"
+    },
+    {
+      "group": "films",
+      "path": "public/media/films/trailer.transcript.txt",
+      "status": "current_file",
+      "bytes": 529,
+      "sha256": "6f47e643a9b3e7a6197b0ab2d100b9c48974bc7c171d5975b529cf9aed28c275",
+      "publicUrl": "/media/films/trailer.transcript.txt"
+    },
+    {
+      "group": "films",
+      "path": "public/media/films/trailer.chapters.json",
+      "status": "current_file",
+      "bytes": 3863,
+      "sha256": "b51dc9b5411e886f125ab76a2b25e7cd75f764db695e9a85d42fa4d7b1136d35",
+      "publicUrl": "/media/films/trailer.chapters.json"
+    },
+    {
+      "group": "films",
+      "path": "public/media/films/trailer.timing.json",
+      "status": "current_file",
+      "bytes": 10496,
+      "sha256": "7a37a27dd0a348ec87b67d8cb64bf217d26d4051896f0833a700cac3dc275840",
+      "publicUrl": "/media/films/trailer.timing.json"
+    },
+    {
+      "group": "films",
+      "path": "public/media/films/trailer.encoding.json",
+      "status": "current_file",
+      "bytes": 1053,
+      "sha256": "4540e8b3ecc25cb75264ffbd3a685c90effc4b87685ae3b2da00460034b3f1e5",
+      "publicUrl": "/media/films/trailer.encoding.json"
+    },
+    {
+      "group": "films",
+      "path": "public/media/films/abbey.mp4",
+      "status": "current_file",
+      "bytes": 9294970,
+      "sha256": "7abdf1a9f0674d41f7c523d7fea765165ac2033a79a963722a24b09d88c633f3",
+      "publicUrl": "/media/films/abbey.mp4"
+    },
+    {
+      "group": "films",
+      "path": "public/media/films/abbey.poster.png",
+      "status": "current_file",
+      "bytes": 313363,
+      "sha256": "14635c888622e5e51920fcb41e9028cd8b0259f49f06ab50e4d63fb839fde8ee",
+      "publicUrl": "/media/films/abbey.poster.png"
+    },
+    {
+      "group": "films",
+      "path": "public/media/films/abbey.vtt",
+      "status": "current_file",
+      "bytes": 688,
+      "sha256": "d1d3eb9830c257e5b5de150709854cfbd6c7a493828d82b7c4f9c561c92b1f0f",
+      "publicUrl": "/media/films/abbey.vtt"
+    },
+    {
+      "group": "films",
+      "path": "public/media/films/abbey.transcript.txt",
+      "status": "current_file",
+      "bytes": 293,
+      "sha256": "f4b92feed7a692eaf1b223867fb2ff7e1a6a6a9ede117b1a1860527f8590736a",
+      "publicUrl": "/media/films/abbey.transcript.txt"
+    },
+    {
+      "group": "films",
+      "path": "public/media/films/abbey.chapters.json",
+      "status": "current_file",
+      "bytes": 2919,
+      "sha256": "060998b6947c1a370a9467e987093d40bf75acfe1b4765f248c1c4556fa7e568",
+      "publicUrl": "/media/films/abbey.chapters.json"
+    },
+    {
+      "group": "films",
+      "path": "public/media/films/abbey.timing.json",
+      "status": "current_file",
+      "bytes": 5501,
+      "sha256": "57cea029f1d1cdb100b93fd9dcbfd8f0e3b5aecde2ff73003ed18ede25d18d59",
+      "publicUrl": "/media/films/abbey.timing.json"
+    },
+    {
+      "group": "films",
+      "path": "public/media/films/abbey.encoding.json",
+      "status": "current_file",
+      "bytes": 1044,
+      "sha256": "a931c1672d0dbd03ce48a52767a57015ac85ee8f30a5eed01bc571f43ff283cf",
+      "publicUrl": "/media/films/abbey.encoding.json"
+    },
+    {
+      "group": "films",
+      "path": "public/media/films/explainer.mp4",
+      "status": "current_file",
+      "bytes": 76319260,
+      "sha256": "2f5699b9c1d1c4239ebfee923287501a60e6c700df5c1723beac66ae3871f570",
+      "publicUrl": "/media/films/explainer.mp4"
+    },
+    {
+      "group": "films",
+      "path": "public/media/films/explainer.poster.png",
+      "status": "current_file",
+      "bytes": 1376672,
+      "sha256": "49515b9f5587792493717c5617c5e91f3ee03b45844821a40cfa5709bcde6c17",
+      "publicUrl": "/media/films/explainer.poster.png"
+    },
+    {
+      "group": "films",
+      "path": "public/media/films/explainer.vtt",
+      "status": "current_file",
+      "bytes": 2315,
+      "sha256": "86489474055681525c14a5a5084948f6c335c06c4de8e9226e7689460c6348bf",
+      "publicUrl": "/media/films/explainer.vtt"
+    },
+    {
+      "group": "films",
+      "path": "public/media/films/explainer.transcript.txt",
+      "status": "current_file",
+      "bytes": 1226,
+      "sha256": "9ef342eec5b628a95e505514eed42349b4f37fd2a3ea67ca8abc8626827a53dc",
+      "publicUrl": "/media/films/explainer.transcript.txt"
+    },
+    {
+      "group": "films",
+      "path": "public/media/films/explainer.chapters.json",
+      "status": "current_file",
+      "bytes": 4703,
+      "sha256": "0e03cd8764f42ccd1c19bf25aa4a9d632f7e006639084964fef2d64a1a9d4b5e",
+      "publicUrl": "/media/films/explainer.chapters.json"
+    },
+    {
+      "group": "films",
+      "path": "public/media/films/explainer.timing.json",
+      "status": "current_file",
+      "bytes": 14933,
+      "sha256": "32403250d6798d51e75c9369bd70ca392c1ae5372dc337846c5e8739bcdec58d",
+      "publicUrl": "/media/films/explainer.timing.json"
+    },
+    {
+      "group": "films",
+      "path": "public/media/films/explainer.encoding.json",
+      "status": "current_file",
+      "bytes": 1057,
+      "sha256": "ee66463e3227f473d839813220ad3385c27683d16e34512a67ab45528834935c",
+      "publicUrl": "/media/films/explainer.encoding.json"
+    },
+    {
+      "group": "films",
+      "path": "public/media/films/mega.mp4",
+      "status": "current_file",
+      "bytes": 90286650,
+      "sha256": "8a76ff8b52b78276119205e272c067c62f57d0396b8829810203ead72788d65c",
+      "publicUrl": "/media/films/mega.mp4"
+    },
+    {
+      "group": "films",
+      "path": "public/media/films/mega.poster.png",
+      "status": "current_file",
+      "bytes": 555208,
+      "sha256": "baaa633f7a738ea573c88284224d4ccade9e1fce01ca14e946a5585049cdf673",
+      "publicUrl": "/media/films/mega.poster.png"
+    },
+    {
+      "group": "films",
+      "path": "public/media/films/mega.vtt",
+      "status": "current_file",
+      "bytes": 4022,
+      "sha256": "559e187bf6688380b3cc5881bb877b75456659a68e8ffe4b34d5af294a467604",
+      "publicUrl": "/media/films/mega.vtt"
+    },
+    {
+      "group": "films",
+      "path": "public/media/films/mega.transcript.txt",
+      "status": "current_file",
+      "bytes": 2418,
+      "sha256": "b84d4f22c1b8433ff4b213edde640c733e526fa575b4d2d6c8e1b3659740a3c7",
+      "publicUrl": "/media/films/mega.transcript.txt"
+    },
+    {
+      "group": "films",
+      "path": "public/media/films/mega.chapters.json",
+      "status": "current_file",
+      "bytes": 10540,
+      "sha256": "c2496ca1c5b5aabff2ab7a611c629d62ec00d5043fd7e41e69c20e72c246fd62",
+      "publicUrl": "/media/films/mega.chapters.json"
+    },
+    {
+      "group": "films",
+      "path": "public/media/films/mega.timing.json",
+      "status": "current_file",
+      "bytes": 24559,
+      "sha256": "74114c0643381501ea9eae0f9972563d042abbbd9e514634ecac2d52c368535f",
+      "publicUrl": "/media/films/mega.timing.json"
+    },
+    {
+      "group": "films",
+      "path": "public/media/films/mega.encoding.json",
+      "status": "current_file",
+      "bytes": 1242,
+      "sha256": "1b08a2ade842113d7fa80b2814d36cbd9d11d4d90596fb0a64bfaba16b221484",
+      "publicUrl": "/media/films/mega.encoding.json"
+    },
+    {
+      "group": "films",
+      "path": "public/media/films/design.mp4",
+      "status": "current_file",
+      "bytes": 13160292,
+      "sha256": "bb863dc3f2b6a61e6ca43080615c920f383d5007ad0399aa504bd2f393090867",
+      "publicUrl": "/media/films/design.mp4"
+    },
+    {
+      "group": "films",
+      "path": "public/media/films/design.poster.png",
+      "status": "current_file",
+      "bytes": 259000,
+      "sha256": "e544ac0a38cad8faa0f0157523d58cdb3d714fa82f8594166eb22a6d3aef4b2a",
+      "publicUrl": "/media/films/design.poster.png"
+    },
+    {
+      "group": "films",
+      "path": "public/media/films/design.vtt",
+      "status": "current_file",
+      "bytes": 1043,
+      "sha256": "d995aae5e8247c5f5de923af4cbee60753047255d294b20b74e76f04e61d7bfb",
+      "publicUrl": "/media/films/design.vtt"
+    },
+    {
+      "group": "films",
+      "path": "public/media/films/design.transcript.txt",
+      "status": "current_file",
+      "bytes": 683,
+      "sha256": "60901542080f517bebb12fabc63f7aa0c18e27a1fd3879394819cebeb22f6bd2",
+      "publicUrl": "/media/films/design.transcript.txt"
+    },
+    {
+      "group": "films",
+      "path": "public/media/films/design.chapters.json",
+      "status": "current_file",
+      "bytes": 5801,
+      "sha256": "c168d91ac965db184c02eabad37690ba842cab21306b2bf01866735156cfb268",
+      "publicUrl": "/media/films/design.chapters.json"
+    },
+    {
+      "group": "films",
+      "path": "public/media/films/design.timing.json",
+      "status": "current_file",
+      "bytes": 5629,
+      "sha256": "c80b30a7e731306a7c23acf6b464ad6647c9522a3179aa19b2d17a16d0fc4745",
+      "publicUrl": "/media/films/design.timing.json"
+    },
+    {
+      "group": "films",
+      "path": "public/media/films/design.encoding.json",
+      "status": "current_file",
+      "bytes": 1048,
+      "sha256": "2768219e3e7d0bce24d403d4b8bd5f274dde777332da9898108a60a806dc6eeb",
+      "publicUrl": "/media/films/design.encoding.json"
+    }
+  ]
+}

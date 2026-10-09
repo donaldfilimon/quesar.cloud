@@ -1,0 +1,38 @@
+const spell = (value: string) => value.split("").join("‑");
+export const PRONOUNCE: ReadonlyArray<readonly [RegExp, string]> = [
+  [/\bWDBX\b/g, spell("WDBX")],
+  [/\bMLAI\b/g, spell("MLAI")],
+  [/\bHNSW\b/g, spell("HNSW")],
+  [/\bSIMD\b/g, spell("SIMD")],
+  [/\bABI\b/g, spell("ABI")],
+  [/\bAPI\b/g, spell("API")],
+  [/\bGPU\b/g, spell("GPU")],
+  [/\bCPU\b/g, spell("CPU")],
+  [/\bNPU\b/g, spell("NPU")],
+  [/\bTPU\b/g, spell("TPU")],
+  [/\bRAG\b/g, "rag"],
+  [/\bSHA-?256\b/gi, "S‑H‑A two-fifty-six"],
+  [/\bSHA\b/g, spell("SHA")],
+  [/\bAI\b/g, "A.I."],
+  [/\bMVCC\b/g, spell("MVCC")],
+  [/\bWAL\b/g, "wall"],
+  [/\bRaft\b/g, "raft"],
+  [/\bZig\b/g, "Zig"],
+  [/\bRecall@10\b/gi, "recall at ten"],
+  [/\b(\d+(?:\.\d+)?)\s*ms\b/gi, "$1 milliseconds"],
+  [/\bp50\b/gi, "p fifty"],
+  [/\bp99\b/gi, "p ninety-nine"],
+  [/\bQPS\b/g, "queries per second"],
+  [/\bTOPS\b/g, "tops"],
+  [/\bM4\b/g, "M four"],
+  [/\bGB\/s\b/g, "gigabytes per second"],
+  [/\bkWh\b/g, "kilowatt hours"],
+  [/\bAviva\b/g, "Aveeva"],
+  [/\bAbi\b/g, "Abbie"],
+  [/\bvs\.?\b/gi, "versus"],
+  [/(\d+(?:\.\d+)?)\s*×(?!\s*\d)/g, "$1 times"],
+];
+export function pronounce(text: string): string {
+  for (const [pattern, replacement] of PRONOUNCE) text = text.replace(pattern, replacement);
+  return text;
+}

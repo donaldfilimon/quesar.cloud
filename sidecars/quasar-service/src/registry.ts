@@ -6,7 +6,10 @@ import type { Site } from "../shared/index";
 export async function readRegistry(file: string): Promise<Site[]> {
   try {
     const raw = await readFile(file, "utf8");
-    return JSON.parse(raw) as Site[];
+    const rows: unknown = JSON.parse(raw);
+    if (!Array.isArray(rows) || rows.some(row => !row || typeof row.id !== "string" || typeof row.slug !== "string" || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(row.slug) || !["idle", "generating", "error"].includes(row.status) || !Array.isArray(row.promptHistory))) throw new Error("Invalid registry; operator repair required");
+    if (new Set(rows.map(row => row.id)).size !== rows.length || new Set(rows.map(row => row.slug)).size !== rows.length) throw new Error("Duplicate registry identity; operator repair required");
+    return rows as Site[];
   } catch (err) {
     if ((err as NodeJS.ErrnoException).code === "ENOENT") return [];
     throw err;

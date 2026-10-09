@@ -51,7 +51,7 @@ const pairedFetch = (url: string, init: RequestInit = {}) => fetch(url, { ...ini
 
 async function makeHarness(
   engine: EngineFn,
-  opts?: { templateDir?: string; makeClient?: ServerDeps["makeClient"]; preview?: PreviewManager }
+  opts?: { templateDir?: string; makeClient?: ServerDeps["makeClient"]; preview?: PreviewManager; jobTimeoutMs?: number }
 ): Promise<Harness> {
   const home = await realpath(await mkdtemp(path.join(tmpdir(), "quasar-home-")));
   let templateDir = opts?.templateDir;
@@ -70,6 +70,7 @@ async function makeHarness(
     scaffoldInstall: false,
     port: 0,
     pairingToken: TOKEN,
+    jobTimeoutMs: opts?.jobTimeoutMs,
     allocatePreviewPort: testPreviewPort,
   });
 
@@ -82,7 +83,7 @@ afterEach(async () => {
   while (harnesses.length > 0) {
     const h = harnesses.pop()!;
     await h.preview.stopAll();
-    h.server.stop(true);
+    await h.server.shutdown();
   }
   // give any straggling background job timers a moment to settle before the
   // temp dirs they touch get reaped by the OS at process exit.
@@ -116,23 +117,80 @@ test("POST /api/sites scaffolds the site, runs the job to idle, and replays even
   expect(site.status).toBe("generating");
 
   const markerPath = path.join(home, "sites", "my-site", "marker.txt");
+  const idleSite = await pollUntilIdle(baseUrl, site.id);
   const marker = await readFile(markerPath, "utf8");
   expect(marker).toBe("template-marker");
 
-  const idleSite = await pollUntilIdle(baseUrl, site.id);
   expect(idleSite.status).toBe("idle");
 
   const eventsRes = await pairedFetch(`${baseUrl}/api/sites/${site.id}/events?since=0`);
   expect(eventsRes.status).toBe(200);
   const eventsBody = await eventsRes.json();
-  expect(eventsBody).toEqual({
+  expect(eventsBody).toMatchObject({
     events: [{ type: "text", text: "hi" }, { type: "done" }],
     next: 2,
   });
 
-  const emptyRes = await pairedFetch(`${baseUrl}/api/sites/${site.id}/events?since=2`);
+  const emptyRes = await pairedFetch(`${baseUrl}/api/sites/${site.id}/events?since=2&epoch=${eventsBody.epoch}`);
   const emptyBody = await emptyRes.json();
-  expect(emptyBody).toEqual({ events: [], next: 2 });
+  expect(emptyBody).toMatchObject({ events: [], next: 2 });
+});
+
+test("cancel is job-bound, authenticated, origin-restricted and fences late completion", async () => {
+  let late!: () => void;
+  const { baseUrl } = await makeHarness(async ({ onEvent }) => {
+    await new Promise<void>(resolve => { late = resolve; });
+    onEvent({ type: "done" });
+    onEvent({ type: "text", text: "stale" });
+  });
+  const site = await (await pairedFetch(`${baseUrl}/api/sites`, { method: "POST", body: JSON.stringify({ name: "Cancel", prompt: "p" }) })).json();
+  while (!late) await sleep(5);
+  const url = `${baseUrl}/api/sites/${site.id}/cancel`;
+  expect((await fetch(url, { method: "POST", body: JSON.stringify({ jobId: site.job.id }) })).status).toBe(401);
+  expect((await pairedFetch(url, { method: "POST", headers: { origin: "https://evil.example" } })).status).toBe(403);
+  expect((await pairedFetch(url, { method: "GET" })).status).toBe(405);
+  expect((await pairedFetch(url, { method: "POST", body: JSON.stringify({ jobId: "stale" }) })).status).toBe(409);
+  expect((await pairedFetch(url, { method: "POST", body: JSON.stringify({ jobId: site.job.id }) })).status).toBe(202);
+  const settled = await pollUntilIdle(baseUrl, site.id);
+  expect(settled.job.outcome).toBe("cancelled");
+  late();
+  await sleep(20);
+  const feed = await (await pairedFetch(`${baseUrl}/api/sites/${site.id}/events`)).json();
+  expect(feed.events).toHaveLength(1);
+  expect(feed.events[0].type).toBe("error");
+  expect((await pairedFetch(url, { method: "POST", body: JSON.stringify({ jobId: site.job.id }) })).status).toBe(202);
+});
+
+test("whole-job deadline settles an abort-ignoring engine and ignores its late success", async () => {
+  let late!: () => void;
+  const { baseUrl } = await makeHarness(async ({ onEvent }) => {
+    await new Promise<void>(resolve => { late = resolve; });
+    onEvent({ type: "done" });
+  }, { jobTimeoutMs: 100 });
+  const site = await (await pairedFetch(`${baseUrl}/api/sites`, { method: "POST", body: JSON.stringify({ name: "Deadline", prompt: "p" }) })).json();
+  const settled = await pollUntilIdle(baseUrl, site.id);
+  expect(settled.job.outcome).toBe("error");
+  expect(settled.lastError).toContain("deadline");
+  late?.();
+  await sleep(10);
+  expect((await (await pairedFetch(`${baseUrl}/api/sites/${site.id}/events`)).json()).events).toHaveLength(1);
+});
+
+test("startup recovers a persisted generating row without rerunning provider", async () => {
+  const h = await makeHarness(stubEngine([{ type: "done" }], 1));
+  await h.server.shutdown();
+  const site = { id: "restart", name: "Restart", slug: "restart", createdAt: new Date().toISOString(), status: "generating", previewPort: 4710, promptHistory: [{ prompt: "keep", at: "then" }] };
+  await writeFile(path.join(h.home, "registry.json"), JSON.stringify([site]));
+  let called = false;
+  const server = createServer({ home: h.home, templateDir: h.templateDir, engine: async () => { called = true; }, makeClient: () => ({} as never), preview: h.preview, scaffoldInstall: false, port: 0, pairingToken: TOKEN });
+  try {
+    const recovered = await (await pairedFetch(`http://localhost:${server.port}/api/sites/restart`)).json();
+    expect(recovered.job.outcome).toBe("interrupted");
+    expect(recovered.status).toBe("error");
+    expect(recovered.previewPort).toBeNull();
+    expect(recovered.promptHistory).toEqual(site.promptHistory);
+    expect(called).toBe(false);
+  } finally { await server.shutdown(); }
 });
 
 test("an error event sets status 'error' and records lastError; a later success clears it", async () => {
@@ -188,7 +246,7 @@ test("a throwing makeClient() still drives the site to a terminal 'error' state,
 
   const settled = await pollUntilIdle(baseUrl, site.id);
   expect(settled.status).toBe("error");
-  expect(settled.lastError).toBe("no resolvable credentials");
+  expect(settled.lastError).toBe("Generation failed. Partial files may remain; inspect before retrying.");
 
   // The site must not be wedged: a subsequent edit is accepted (not a
   // permanent 409), proving status genuinely reached a terminal state.
@@ -217,7 +275,7 @@ test("an engine promise rejection (instead of an onEvent error) still reaches a 
 
   const settled = await pollUntilIdle(baseUrl, site.id);
   expect(settled.status).toBe("error");
-  expect(settled.lastError).toBe("engine crashed before emitting anything");
+  expect(settled.lastError).toBe("Generation failed. Partial files may remain; inspect before retrying.");
 
   const editRes = await pairedFetch(`${baseUrl}/api/sites/${site.id}/edit`, {
     method: "POST",
@@ -284,6 +342,32 @@ test("preview start reports running and preview stop reports stopped", async () 
   expect(stopRes.status).toBe(200);
   const stopBody = await stopRes.json();
   expect(stopBody.state).toBe("stopped");
+}, 15000);
+
+test("delete drains an admitted preview start before removing its site", async () => {
+  const preview = new PreviewManager({ command: previewCommand });
+  const startPreview = preview.start.bind(preview);
+  let admit!: () => void;
+  let resume!: () => void;
+  const admitted = new Promise<void>((resolve) => { admit = resolve; });
+  const held = new Promise<void>((resolve) => { resume = resolve; });
+  preview.start = async (...args) => { admit(); await held; return startPreview(...args); };
+  const { baseUrl } = await makeHarness(stubEngine([{ type: "done" }], 5), { preview });
+  const created = await pairedFetch(`${baseUrl}/api/sites`, {
+    method: "POST", headers: { "content-type": "application/json" },
+    body: JSON.stringify({ name: "Preview Delete", prompt: "p" }),
+  });
+  const site = await created.json();
+  await pollUntilIdle(baseUrl, site.id);
+
+  const starting = pairedFetch(`${baseUrl}/api/sites/${site.id}/preview/start`, { method: "POST" });
+  await admitted;
+  const deleting = pairedFetch(`${baseUrl}/api/sites/${site.id}`, { method: "DELETE" });
+  await sleep(30);
+  resume();
+  await starting;
+  expect((await deleting).status).toBe(204);
+  expect(preview.status(site.id).state).toBe("stopped");
 }, 15000);
 
 test("DELETE removes the site: 204, then GET is 404", async () => {
@@ -399,13 +483,14 @@ test("POST /api/sites when scaffolding fails returns 500 and leaves no orphaned 
     headers: { "content-type": "application/json" },
     body: JSON.stringify({ name: "Broken Site", prompt: "p" }),
   });
-  expect(res.status).toBe(500);
+  expect(res.status).toBe(202);
   const body = await res.json();
-  expect(typeof body.error).toBe("string");
-  expect(body.error.length).toBeGreaterThan(0);
+  const settled = await pollUntilIdle(baseUrl, body.id);
+  expect(settled.status).toBe("error");
+  expect(settled.job.outcome).toBe("error");
 
   const list = await (await pairedFetch(`${baseUrl}/api/sites`)).json();
-  expect(list).toEqual([]);
+  expect(list).toHaveLength(1);
 
   await expect(
     readFile(path.join(home, "sites", "broken-site", "marker.txt"), "utf8")

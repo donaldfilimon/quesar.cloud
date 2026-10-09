@@ -2,6 +2,7 @@ import { test, expect } from "bun:test";
 import Anthropic from "@anthropic-ai/sdk";
 import { runGeneration, createSiteTools, mapEngineError, type EngineClient, type EngineStream } from "./engine";
 import type { GenerationEvent } from "../shared/index";
+import { JobScope } from "./job";
 
 type RunnableTool = { name: string; run: (args: unknown) => Promise<unknown> };
 
@@ -10,7 +11,7 @@ type RunnableTool = { name: string; run: (args: unknown) => Promise<unknown> };
 // turn — each handle resolves its `finalMessage()` to `{content: [...]}`.
 // The fake mirrors that shape so these tests exercise the same loop shape
 // runGeneration actually drives against the SDK.
-function fakeRunner(messages: Array<{ content: unknown[] }>) {
+function fakeRunner(messages: Array<{ content: unknown[]; stop_reason?: string | null }>) {
   return {
     async *[Symbol.asyncIterator](): AsyncIterator<EngineStream> {
       for (const m of messages) yield { finalMessage: async () => m };
@@ -22,7 +23,7 @@ function fakeRunner(messages: Array<{ content: unknown[] }>) {
 test("emits text events per assistant message, then done", async () => {
   const events: GenerationEvent[] = [];
   const client = { beta: { messages: { toolRunner: (_p: Record<string, unknown>) =>
-    fakeRunner([{ content: [{ type: "text", text: "Building your site" }] }]) } } };
+    fakeRunner([{ content: [{ type: "text", text: "Building your site" }], stop_reason: "end_turn" }]) } } };
   await runGeneration({ client, siteDir: "/tmp/x", prompt: "make a site", onEvent: (e) => events.push(e) });
   expect(events).toEqual([{ type: "text", text: "Building your site" }, { type: "done" }]);
 });
@@ -31,7 +32,7 @@ test("maps a throwing runner to a single error event", async () => {
   const events: GenerationEvent[] = [];
   const client = { beta: { messages: { toolRunner: () => { throw new Error("rate limited"); } } } };
   await runGeneration({ client, siteDir: "/tmp/x", prompt: "p", onEvent: (e) => events.push(e) });
-  expect(events).toEqual([{ type: "error", message: "rate limited" }]);
+  expect(events).toEqual([{ type: "error", message: mapEngineError(new Error()) }]);
 });
 
 test("passes model, prompt, and stream:true through to the runner", async () => {
@@ -52,7 +53,7 @@ test("passes model, prompt, and stream:true through to the runner", async () => 
 
 test("a throwing onEvent on the terminal event does not escape and does not double-emit", async () => {
   const events: GenerationEvent[] = [];
-  const client = { beta: { messages: { toolRunner: (_p: Record<string, unknown>) => fakeRunner([]) } } };
+  const client = { beta: { messages: { toolRunner: (_p: Record<string, unknown>) => fakeRunner([{ content: [], stop_reason: "end_turn" }]) } } };
   let calls = 0;
   await runGeneration({
     client,
@@ -169,9 +170,10 @@ test("mapEngineError maps typed SDK errors to user-readable messages", () => {
   const other = mapEngineError(
     new Anthropic.InternalServerError(500, { message: "boom" }, undefined, headers)
   );
-  expect(other).toContain("Anthropic API error 500");
-  expect(mapEngineError(new Error("plain failure"))).toBe("plain failure");
-  expect(mapEngineError("not an error object")).toBe("not an error object");
+  expect(other).toContain("Anthropic API request failed (500)");
+  expect(other).not.toContain("boom");
+  expect(mapEngineError(new Error("plain failure"))).not.toContain("plain failure");
+  expect(mapEngineError("not an error object")).not.toContain("not an error object");
 });
 
 test("write_file tool rejects a traversal path and emits no tool event", async () => {
@@ -181,4 +183,39 @@ test("write_file tool rejects a traversal path and emits no tool event", async (
   expect(writeFile).toBeDefined();
   await expect(writeFile!.run({ path: "../escape", content: "oops" })).rejects.toThrow();
   expect(events).toEqual([]);
+});
+
+for (const stop of ["end_turn", "refusal", "max_tokens", "model_context_window_exceeded", "unexpected", null]) {
+  test(`actual SDK SSE stop ${stop} is classified without raw provider errors`, async () => {
+    let count = 0;
+    const server = Bun.serve({ port: 0, fetch() {
+      count++;
+      const message = { id: "fixture", type: "message", role: "assistant", model: "claude-opus-5", content: [], stop_reason: null, stop_sequence: null, usage: { input_tokens: 1, output_tokens: 0 } };
+      const sse = `event: message_start\ndata: ${JSON.stringify({ type: "message_start", message })}\n\nevent: message_delta\ndata: ${JSON.stringify({ type: "message_delta", delta: { stop_reason: stop, stop_sequence: null }, usage: { output_tokens: 0 } })}\n\nevent: message_stop\ndata: {"type":"message_stop"}\n\n`;
+      return new Response(sse, { headers: { "content-type": "text/event-stream" } });
+    } });
+    try {
+      const client = new Anthropic({ apiKey: "fixture", baseURL: `http://127.0.0.1:${server.port}`, maxRetries: 0 }) as unknown as EngineClient;
+      const events: GenerationEvent[] = [];
+      await runGeneration({ client, siteDir: "/tmp/unused", prompt: "fixture", onEvent: ev => { events.push(ev); } });
+      expect(count).toBe(1);
+      expect(events).toHaveLength(1);
+      expect(events[0].type).toBe(stop === "end_turn" ? "done" : "error");
+    } finally { server.stop(true); }
+  });
+}
+
+test("actual SDK stalled SSE is aborted by the shared job signal", async () => {
+  const scope = new JobScope();
+  const server = Bun.serve({ port: 0, fetch() {
+    return new Response(new ReadableStream({ start(controller) { controller.enqueue(new TextEncoder().encode(": stalled\n\n")); } }), { headers: { "content-type": "text/event-stream" } });
+  } });
+  const timer = setTimeout(() => scope.cancel("deadline"), 100);
+  try {
+    const client = new Anthropic({ apiKey: "fixture", baseURL: `http://127.0.0.1:${server.port}`, maxRetries: 0 }) as unknown as EngineClient;
+    const events: GenerationEvent[] = [];
+    await runGeneration({ client, scope, siteDir: "/tmp/unused", prompt: "fixture", onEvent: ev => { events.push(ev); } });
+    expect(events).toHaveLength(1);
+    expect(events[0].type).toBe("error");
+  } finally { clearTimeout(timer); server.stop(true); }
 });

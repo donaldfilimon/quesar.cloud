@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import {
   editSite,
+  cancelSite,
   getEvents,
   getSite,
   isUncertain,
@@ -27,11 +28,12 @@ import {
   type PreviewStatus,
   type Site,
 } from "@/lib/quasar";
+import { assertMatchingJob } from "@/lib/quasar/connection";
 import { cn } from "@/lib/utils";
 import { Notice, QuasarFrame, ServiceUnreachable, SiteStatusBadge } from "./shared";
 import { errorText, formatDate, isUnreachable, useServiceOrigin } from "./util";
 
-type Feed = { events: GenerationEvent[]; next: number };
+type Feed = { events: GenerationEvent[]; next: number; epoch?: string };
 const EMPTY_FEED: Feed = { events: [], next: 0 };
 const POLL_MS = 1000;
 
@@ -44,7 +46,7 @@ export function QuasarSiteDetail({ id }: { id: string }) {
   const [pollError, setPollError] = useState<unknown>(null);
   const [actionError, setActionError] = useState<unknown>(null);
   const [uncertain, setUncertain] = useState(false);
-  const [busy, setBusy] = useState<null | "edit" | "start" | "stop" | "retry">(null);
+  const [busy, setBusy] = useState<null | "edit" | "cancel" | "start" | "stop" | "retry">(null);
   const [editPrompt, setEditPrompt] = useState("");
   const feedRef = useRef<Feed>(EMPTY_FEED);
   const inFlight = useRef(false);
@@ -56,10 +58,13 @@ export function QuasarSiteDetail({ id }: { id: string }) {
   const readAll = useCallback(
     () =>
       getSite(id).then(async (nextSite) => {
+        const requestedFeed = feedRef.current;
+        const since = feedRef.current.next;
+        const page = await getEvents(id, since, requestedFeed.epoch);
+        if (requestedFeed !== feedRef.current) throw new Error("Feed changed during refresh.");
+        assertMatchingJob(nextSite.job?.id, page.job?.id);
         setSite(nextSite);
         setMissing(false);
-        const since = feedRef.current.next;
-        const page = await getEvents(id, since);
         feedRef.current = applyEventPage(feedRef.current, since, page);
         setFeed(feedRef.current);
         setPreview(await previewStatus(id));
@@ -97,7 +102,7 @@ export function QuasarSiteDetail({ id }: { id: string }) {
   }, [origin, poll]);
 
   function act<T>(
-    kind: "edit" | "start" | "stop",
+    kind: "edit" | "cancel" | "start" | "stop",
     run: () => Promise<T>,
     done: (value: T) => void,
   ) {
@@ -191,6 +196,35 @@ export function QuasarSiteDetail({ id }: { id: string }) {
               </div>
               {site.lastError ? (
                 <p className="mt-2 text-sm text-destructive">Last error: {site.lastError}</p>
+              ) : null}
+              {site.cleanupPending ? (
+                <p className="mt-2 text-sm text-destructive">
+                  Cleanup pending. Accepted writes are draining; edits and deletion remain fenced.
+                </p>
+              ) : null}
+              {site.job ? (
+                <p className="mt-2 text-xs text-fg-subtle">
+                  Job {site.job.id}: {site.job.outcome ?? "running or draining"}. Cancel/failure
+                  retains partial files, not a rollback. Inspect the project before an explicit edit
+                  retry.
+                </p>
+              ) : null}
+              {site.status === "generating" && site.job ? (
+                <Button
+                  className="mt-3"
+                  disabled={busy !== null || uncertain}
+                  onClick={() =>
+                    act(
+                      "cancel",
+                      () => cancelSite(id, site.job!.id),
+                      () => {
+                        void poll();
+                      },
+                    )
+                  }
+                >
+                  Cancel generation
+                </Button>
               ) : null}
               <ol className="mt-4 space-y-2 text-sm text-fg-muted">
                 {site.promptHistory.map((entry, index) => (

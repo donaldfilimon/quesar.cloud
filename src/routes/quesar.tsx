@@ -18,8 +18,8 @@ import { pageHead } from "@/lib/seo";
 export const Route = createFileRoute("/quesar")({
   head: () =>
     pageHead(
-      "Quesar — the large model",
-      "Quesar is the large model that trains and improves Abbey, Aviva, and the other assistants. This website does not host the model, run training, or host assistant sessions.",
+      "Quesar — model vision and assistant systems",
+      "Quesar is the model vision for Abbey, Aviva, and the assistant ecosystem. Explore current source, public orientation, and separately configured tools.",
       ogImage("quesar"),
     ),
   component: QuesarPage,
@@ -29,15 +29,15 @@ function QuesarPage() {
   return (
     <>
       <PageHero
-        eyebrow="Quesar"
-        title="The large model behind the assistants."
-        lede="Quesar is the large model that trains and improves Abbey, Aviva, and the other assistants. This website does not host the model, run training, or host assistant sessions."
+        eyebrow="Quesar / Model vision"
+        title="Research toward a shared model layer."
+        lede="Quesar is the model vision for Abbey, Aviva, and the assistant ecosystem. Explore the research direction alongside the source and tools available today."
       >
         <div className="mt-6 flex flex-wrap items-center gap-3">
           <StatusBadge status="partial" />
           <span className="text-sm text-fg-muted">
-            Public orientation and a signed-in console are current. Hosted assistant sessions are
-            not.
+            Public orientation and a signed-in console are current. A trained Quesar foundation
+            model, training results, and hosted assistant sessions remain unqualified here.
           </span>
         </div>
       </PageHero>
@@ -52,19 +52,19 @@ function QuesarPage() {
 
       <Section
         eyebrow="Name"
-        title="Quesar is the model. Quasar is the local builder."
+        title="Quesar names the model vision. Quasar is the local builder."
         lede="They are not interchangeable. This repository keeps the builder service at sidecars/quasar-service and its screens at /quasar/sites; the website is this app."
       >
         <CopyGrid
           items={[
             {
               title: "Quesar",
-              body: "The large model that trains and improves Abbey, Aviva, and the other assistants. This site is orientation. It does not host the model or run training.",
+              body: "A long-term model direction for Abbey, Aviva, and related assistants, with public research and source to inspect. This site provides orientation and does not run model training.",
               accent: "accent",
             },
             {
               title: "Quasar",
-              body: "A local v1 website builder: generate a Next.js project and preview it on your own machine. Bun 1.4, Anthropic credentials, a service and Expo app. Hosting, deploy adapters, and builder authentication are outside this version.",
+              body: "A local website builder with a Bun service and browser client: pair with an exact service origin, configure generation, and preview a generated Next.js project on your machine. Hosted deployment and live-provider acceptance remain separate.",
             },
           ]}
         />
@@ -99,7 +99,7 @@ function QuesarPage() {
           <CodeBlock
             label="sidecars/quasar-service"
             code={`bun run --cwd sidecars/quasar-service start
-# LAN service has no auth — trusted network only
+# pair the browser with the operator-owned service token
 # see sidecars/quasar-service/README.md`}
           />
         </div>
@@ -142,8 +142,8 @@ function QuesarPage() {
           ]}
         />
         <p className="mt-4 text-sm text-fg-subtle">
-          The builder service listens on the LAN without authentication — run it only on a network
-          you trust. In-browser studio above. Setup notes:{" "}
+          Builder data and generation requests require a pairing token bound to the service origin.
+          Remote service origins require HTTPS. In-browser studio above. Setup notes:{" "}
           <Link to="/docs/$slug" params={{ slug: "getting-started" }} className="text-accent">
             getting started
           </Link>

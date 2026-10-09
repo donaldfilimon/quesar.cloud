@@ -1,0 +1,96 @@
+[
+  {
+    "id": "film-open",
+    "start": 0,
+    "end": 9,
+    "title": "Private AI operations",
+    "status": "current",
+    "presentation": "SOURCE INSPECTION",
+    "statusNote": "Implemented source at pinned revision; runtime and security acceptance not established by this film.",
+    "visual": {
+      "text": "Private AI operations",
+      "scope": "current",
+      "sources": [
+        "brand"
+      ]
+    }
+  },
+  {
+    "id": "film-routing",
+    "start": 9,
+    "end": 22,
+    "title": "Local persona routing",
+    "status": "current",
+    "presentation": "SOURCE INSPECTION",
+    "statusNote": "Implemented source at pinned revision; runtime and security acceptance not established by this film.",
+    "visual": {
+      "text": "Local persona routing",
+      "scope": "current",
+      "sources": [
+        "routing",
+        "identity"
+      ]
+    }
+  },
+  {
+    "id": "film-memory",
+    "start": 22,
+    "end": 37,
+    "title": "Audit chain / integrity checks",
+    "status": "current",
+    "presentation": "SOURCE INSPECTION",
+    "statusNote": "Implemented source at pinned revision; runtime and security acceptance not established by this film.",
+    "visual": {
+      "text": "Audit chain / integrity checks",
+      "scope": "current",
+      "sources": [
+        "wal",
+        "integrity"
+      ]
+    }
+  },
+  {
+    "id": "film-governance",
+    "start": 37,
+    "end": 51,
+    "title": "Scoped pattern audit",
+    "status": "current",
+    "presentation": "SOURCE INSPECTION",
+    "statusNote": "Implemented source at pinned revision; runtime and security acceptance not established by this film.",
+    "visual": {
+      "text": "Scoped pattern audit",
+      "scope": "current",
+      "sources": [
+        "audit"
+      ]
+    }
+  },
+  {
+    "id": "film-northStar",
+    "start": 51,
+    "end": 60,
+    "title": "Distributed fabric / vision",
+    "status": "planned",
+    "presentation": "VISION",
+    "statusNote": "Conceptual direction; no delivery or compatibility claim.",
+    "visual": {
+      "text": "Distributed fabric / vision",
+      "scope": "vision",
+      "sources": []
+    }
+  },
+  {
+    "id": "film-close",
+    "start": 60,
+    "end": 69,
+    "title": "Review a scoped project",
+    "status": "planned",
+    "presentation": "VISION",
+    "statusNote": "Conceptual direction; no delivery or compatibility claim.",
+    "visual": {
+      "text": "Review a scoped project",
+      "scope": "vision",
+      "sources": []
+    }
+  }
+]

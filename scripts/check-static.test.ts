@@ -5,7 +5,11 @@ import { spawnSync } from "node:child_process";
 import { afterEach, describe, expect, it } from "vitest";
 
 const temporary: string[] = [];
-function check(html: string, extra: Record<string, string> = {}) {
+function check(
+  html: string,
+  extra: Record<string, string | Buffer> = {},
+  sourceMedia: Record<string, Buffer> = {},
+) {
   const dir = mkdtempSync(resolve(tmpdir(), "quesar-static-test-"));
   temporary.push(dir);
   for (const [file, content] of Object.entries({
@@ -19,6 +23,11 @@ function check(html: string, extra: Record<string, string> = {}) {
     mkdirSync(resolve(full, ".."), { recursive: true });
     writeFileSync(full, content);
   }
+  for (const [file, content] of Object.entries(sourceMedia)) {
+    const full = resolve(dir, "public", "media", file);
+    mkdirSync(resolve(full, ".."), { recursive: true });
+    writeFileSync(full, content);
+  }
   return spawnSync(process.execPath, [resolve(import.meta.dirname, "check-static.ts")], {
     cwd: dir,
     encoding: "utf8",
@@ -29,6 +38,25 @@ afterEach(() => {
 });
 
 describe("built-site gate", () => {
+  it("rejects binary media rewritten by the page crawler, including equal-size corruption", () => {
+    const original = Buffer.from([0, 0, 0, 32, 255, 128, 109, 111, 111, 118]);
+    for (const corrupt of [Buffer.from(original.toString("utf8")), Buffer.alloc(original.length)]) {
+      const result = check(
+        '<a href="/media/film.mp4" download>Film</a>',
+        { "media/film.mp4": corrupt },
+        { "film.mp4": original },
+      );
+      expect(result.status).toBe(1);
+      expect(result.stderr).toContain("built media differs from public source: /media/film.mp4");
+    }
+    expect(
+      check(
+        '<a href="/media/film.mp4">Film</a>',
+        { "media/film.mp4": original },
+        { "film.mp4": original },
+      ).status,
+    ).toBe(0);
+  });
   it("checks real DOM attributes and ignores script text and external availability", () => {
     const result = check(
       '<a href="/docs#ref-runtime">Docs</a><a href="https://example.invalid">External</a><script>const text = \'<a href="/not-a-link">\';</script>',

@@ -4,6 +4,16 @@ import { decideAdmin } from "./admin.server";
 const allowlist = new Set(["donald@example.com"]);
 
 describe("decideAdmin", () => {
+  it("refuses historical provider names and evidence for a different email", () => {
+    const candidate = { email: "donald@example.com", emailVerified: true, providers: ["google"] };
+    expect(decideAdmin(candidate, allowlist).admin).toBe(false);
+    expect(
+      decideAdmin(
+        { ...candidate, verifiedLinks: [{ provider: "google", email: "other@example.com" }] },
+        allowlist,
+      ).admin,
+    ).toBe(false);
+  });
   it("rejects an allowlisted email/password account (anyone can register that address)", () => {
     expect(
       decideAdmin(
@@ -25,13 +35,23 @@ describe("decideAdmin", () => {
   it("accepts an allowlisted account with a linked Google or Apple identity, case-insensitively", () => {
     expect(
       decideAdmin(
-        { email: "Donald@Example.com", emailVerified: true, providers: ["google"] },
+        {
+          email: "Donald@Example.com",
+          emailVerified: true,
+          providers: ["google"],
+          verifiedLinks: [{ provider: "google", email: "donald@example.com" }],
+        },
         allowlist,
       ),
     ).toEqual({ admin: true });
     expect(
       decideAdmin(
-        { email: "donald@example.com", emailVerified: false, providers: ["credential", "apple"] },
+        {
+          email: "donald@example.com",
+          emailVerified: false,
+          providers: ["credential", "apple"],
+          verifiedLinks: [{ provider: "apple", email: "donald@example.com" }],
+        },
         allowlist,
       ),
     ).toEqual({ admin: true });

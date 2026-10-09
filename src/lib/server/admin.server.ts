@@ -20,6 +20,7 @@ export interface AdminCandidate {
   emailVerified: boolean;
   /** Better Auth `account.providerId` values linked to this user. */
   providers: string[];
+  verifiedLinks?: { provider: string; email: string }[];
 }
 
 export type AdminDecision =
@@ -34,7 +35,12 @@ export function decideAdmin(user: AdminCandidate, allowlist: Set<string>): Admin
   // Require a linked verifying provider. `emailVerified` is deliberately not
   // sufficient on its own: it is a mutable column and nothing in this app
   // verifies email/password addresses, so it is not proof of control.
-  const verifiedLinked = user.providers.some((provider) => VERIFIED_PROVIDERS.has(provider));
+  const verifiedLinked = user.verifiedLinks?.some(
+    (link) =>
+      VERIFIED_PROVIDERS.has(link.provider) &&
+      user.providers.includes(link.provider) &&
+      link.email.trim().toLowerCase() === user.email.trim().toLowerCase(),
+  );
   if (!verifiedLinked) return { admin: false, reason: "unverified_identity" };
   return { admin: true };
 }
@@ -48,10 +54,14 @@ async function loadAdminCandidate(userId: string): Promise<AdminCandidate | null
   if (!user) return null;
   const accounts = await sql<{ providerId: string }>`
     select "providerId" from "account" where "userId" = ${userId}`;
+  const verifiedLinks = await sql<{ provider: string; email: string }>`
+    select a."providerId" as provider, v.email from "account" a
+    join oauth_email_verifications v on v.account_id = a.id where a."userId" = ${userId}`;
   return {
     email: user.email,
     emailVerified: Boolean(user.emailVerified),
     providers: accounts.map((row) => row.providerId),
+    verifiedLinks,
   };
 }
 

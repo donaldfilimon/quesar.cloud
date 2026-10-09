@@ -20,6 +20,13 @@ export interface Site {
   previewPort: number | null;
   promptHistory: PromptEntry[];
   lastError?: string;
+  cleanupPending?: boolean;
+  job?: {
+    id: string;
+    startedAt: string;
+    finishedAt?: string;
+    outcome?: "done" | "error" | "cancelled" | "interrupted";
+  };
 }
 
 export type GenerationEvent =

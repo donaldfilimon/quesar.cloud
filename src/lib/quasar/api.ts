@@ -176,9 +176,23 @@ export function editSite(id: string, prompt: string) {
   );
 }
 
-export function getEvents(id: string, since: number) {
-  return connection.request<{ events: GenerationEvent[]; next: number }>(
-    `/api/sites/${encodeURIComponent(id)}/events?since=${since}`,
+export function cancelSite(id: string, jobId: string) {
+  return connection.mutate(id, () =>
+    connection.request(`/api/sites/${encodeURIComponent(id)}/cancel`, {
+      method: "POST",
+      body: JSON.stringify({ jobId }),
+    }),
+  );
+}
+
+export function getEvents(id: string, since: number, epoch?: string) {
+  return connection.request<{
+    events: GenerationEvent[];
+    next: number;
+    epoch?: string;
+    job?: Site["job"];
+  }>(
+    `/api/sites/${encodeURIComponent(id)}/events?since=${since}${epoch ? `&epoch=${encodeURIComponent(epoch)}` : ""}`,
   );
 }
 

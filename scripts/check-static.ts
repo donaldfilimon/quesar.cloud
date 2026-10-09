@@ -59,6 +59,7 @@ for (const file of files(root).filter((file) => file.endsWith(".html"))) {
   pages.set(file, data);
 }
 const failures = new Set<string>();
+const checkedMedia = new Set<string>();
 let external = 0;
 const references = [...pages].map(([file, page]) => ({
   path:
@@ -88,6 +89,17 @@ for (const { path, links } of references) {
     if (!target || !existsSync(target)) {
       failures.add(`${path}: missing ${url.pathname}`);
       continue;
+    }
+    if (url.pathname.startsWith("/media/") && !checkedMedia.has(target)) {
+      checkedMedia.add(target);
+      const source = resolve("public", "." + decodeURIComponent(url.pathname));
+      if (
+        existsSync(source) &&
+        statSync(source).isFile() &&
+        (statSync(source).size !== statSync(target).size ||
+          !readFileSync(source).equals(readFileSync(target)))
+      )
+        failures.add(`built media differs from public source: ${url.pathname}`);
     }
     const hash = decodeURIComponent(url.hash.slice(1));
     if (hash && pages.has(target) && !pages.get(target)!.ids.has(hash)) {

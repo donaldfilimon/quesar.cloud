@@ -1,12 +1,13 @@
 import type { GenerationEvent } from "../shared/index";
 
 export class JobEvents {
+  readonly epoch = crypto.randomUUID();
   events: GenerationEvent[] = [];
   private subscribers: Set<(ev: GenerationEvent) => void> = new Set();
 
   emit(ev: GenerationEvent): void {
     this.events.push(ev);
-    for (const cb of this.subscribers) cb(ev);
+    for (const cb of this.subscribers) { try { cb(ev); } catch { /* subscribers do not own job state */ } }
   }
 
   since(cursor: number): { events: GenerationEvent[]; next: number } {
@@ -34,7 +35,6 @@ export class EventBus {
   }
 
   reset(siteId: string): void {
-    const job = this.jobs.get(siteId);
-    if (job) job.events.length = 0;
+    this.jobs.set(siteId, new JobEvents());
   }
 }

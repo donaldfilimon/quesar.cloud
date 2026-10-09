@@ -4,6 +4,7 @@ import { z } from "zod/v4";
 import { listSiteFiles, readSiteFile, writeSiteFile } from "./siteFs";
 import type { GenerationEvent } from "../shared/index";
 import { buildSystemPrompt } from "./systemPrompt";
+import { JobScope } from "./job";
 
 // The tool runner is invoked with `stream: true` (required at max_tokens
 // 64000 — see mapEngineError / runGeneration below), which makes it yield
@@ -11,13 +12,13 @@ import { buildSystemPrompt } from "./systemPrompt";
 // handle exposes `finalMessage()`, resolving to the same `{content}` shape
 // a non-streaming turn would have yielded directly.
 export interface EngineStream {
-  finalMessage(): Promise<{ content: unknown[] }>;
+  finalMessage(): Promise<{ content: unknown[]; stop_reason?: string | null }>;
 }
 
 export interface EngineClient {
   beta: {
     messages: {
-      toolRunner: (params: Record<string, unknown>) => AsyncIterable<EngineStream> & { done(): Promise<unknown> };
+      toolRunner: (params: Record<string, unknown>, options?: { signal: AbortSignal }) => AsyncIterable<EngineStream> & { done(): Promise<unknown> };
     };
   };
 }
@@ -38,31 +39,32 @@ export function mapEngineError(err: unknown): string {
     return "Could not reach the Anthropic API — check your connection.";
   }
   if (err instanceof Anthropic.APIError) {
-    return `Anthropic API error ${err.status}: ${err.message}`;
+    return `Anthropic API request failed (${err.status}). Check provider configuration and billing.`;
   }
-  return err instanceof Error ? err.message : String(err);
+  return "Generation failed. Partial files may remain; inspect before retrying.";
 }
 
-export function createSiteTools(siteDir: string, onEvent: (ev: GenerationEvent) => void): unknown[] {
+export function createSiteTools(siteDir: string, onEvent: (ev: GenerationEvent) => void, scope = new JobScope()): unknown[] {
   return [
     betaZodTool({
       name: "list_files",
       description: "List every file in the site as relative paths.",
       inputSchema: z.object({}),
-      run: async () => { onEvent({ type: "tool", name: "list_files" }); return (await listSiteFiles(siteDir)).join("\n"); },
+      run: async () => { scope.check(); onEvent({ type: "tool", name: "list_files" }); return (await listSiteFiles(siteDir)).join("\n"); },
     }),
     betaZodTool({
       name: "read_file",
       description: "Read one file from the site by relative path.",
       inputSchema: z.object({ path: z.string() }),
-      run: async (input) => { onEvent({ type: "tool", name: "read_file", path: input.path }); return readSiteFile(siteDir, input.path); },
+      run: async (input) => { scope.check(); onEvent({ type: "tool", name: "read_file", path: input.path }); return readSiteFile(siteDir, input.path); },
     }),
     betaZodTool({
       name: "write_file",
       description: "Create or overwrite one file in the site. Always write complete file contents.",
       inputSchema: z.object({ path: z.string(), content: z.string() }),
       run: async (input) => {
-        await writeSiteFile(siteDir, input.path, input.content);
+        await scope.accept(() => writeSiteFile(siteDir, input.path, input.content, () => scope.check()));
+        scope.check();
         onEvent({ type: "tool", name: "write_file", path: input.path });
         return `wrote ${input.path}`;
       },
@@ -70,7 +72,7 @@ export function createSiteTools(siteDir: string, onEvent: (ev: GenerationEvent) 
   ];
 }
 
-export async function runGeneration({ client, siteDir, prompt, onEvent }: { client: EngineClient; siteDir: string; prompt: string; onEvent: (ev: GenerationEvent) => void }): Promise<void> {
+export async function runGeneration({ client, siteDir, prompt, onEvent, scope = new JobScope() }: { client: EngineClient; siteDir: string; prompt: string; onEvent: (ev: GenerationEvent) => void; scope?: JobScope }): Promise<void> {
   // Exactly one terminal event ("done" or "error") is emitted, and this function never throws —
   // even if the caller's onEvent itself throws while handling that terminal event (or any event
   // along the way). `terminal` guards against a double terminal emission; wrapping the emission in
@@ -88,6 +90,8 @@ export async function runGeneration({ client, siteDir, prompt, onEvent }: { clie
 
   let finalEvent: GenerationEvent;
   try {
+    scope.check();
+    let stopReason: string | null | undefined;
     // `stream: true` is required, not optional: at max_tokens 64000 the SDK
     // throws client-side ("Streaming is required for operations that may
     // take longer than 10 minutes") before any request leaves the process
@@ -97,17 +101,24 @@ export async function runGeneration({ client, siteDir, prompt, onEvent }: { clie
       max_tokens: 64000,
       thinking: { type: "adaptive" },
       stream: true,
+      max_iterations: 24,
+      runToolsEagerly: false,
       system: buildSystemPrompt(),
-      tools: createSiteTools(siteDir, onEvent),
+      tools: createSiteTools(siteDir, onEvent, scope),
       messages: [{ role: "user", content: prompt }],
-    });
+    }, { signal: scope.controller.signal });
     for await (const stream of runner) {
       const message = await stream.finalMessage();
+      scope.check();
+      stopReason = message.stop_reason;
       for (const block of message.content as Array<{ type: string; text?: string }>) {
         if (block.type === "text" && block.text) onEvent({ type: "text", text: block.text });
       }
     }
-    finalEvent = { type: "done" };
+    scope.check();
+    finalEvent = stopReason === "end_turn" ? { type: "done" } : {
+      type: "error", message: stopReason === "refusal" ? "Provider refused generation. Partial files may remain." : "Generation incomplete (provider stop or iteration limit). Partial files may remain.",
+    };
   } catch (err) {
     finalEvent = { type: "error", message: mapEngineError(err) };
   }

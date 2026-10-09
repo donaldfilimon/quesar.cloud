@@ -56,6 +56,11 @@ async function createUser(providerId: string, email = `${randomUUID()}@example.c
   await sql`insert into "user" ("id", "name", "email", "emailVerified") values (${id}, 'Test', ${email}, true)`;
   await sql`insert into "account" ("id", "accountId", "providerId", "userId", "updatedAt")
     values (${randomUUID()}, ${id}, ${providerId}, ${id}, now())`;
+  // Synthetic authorization fixture, not a migration backfill or provider proof.
+  if (providerId === "google" || providerId === "apple") {
+    await sql`insert into oauth_email_verifications (account_id, email)
+      select id, ${email} from account where "userId" = ${id} and "providerId" = ${providerId}`;
+  }
   return { id, email };
 }
 

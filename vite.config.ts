@@ -99,8 +99,13 @@ export default defineConfig(({ command, isPreview, mode }) => {
                 crawlLinks: true,
                 autoSubfolderIndex: true,
                 failOnError: true,
-                // Server-only surfaces have nothing to prerender on a static host.
-                filter: ({ path }) => !path.startsWith("/api/") && !path.startsWith("/_serverFn"),
+                // Media is copied byte-for-byte from public/. Crawling download
+                // links as pages decodes binary responses as UTF-8 and corrupts
+                // MP4s. Server-only surfaces also have no static page.
+                filter: ({ path }) =>
+                  !path.startsWith("/media/") &&
+                  !path.startsWith("/api/") &&
+                  !path.startsWith("/_serverFn"),
               },
 
               pages: [

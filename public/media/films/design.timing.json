@@ -1,0 +1,178 @@
+{
+  "model": "onnx-community/Kokoro-82M-v1.0-ONNX",
+  "cdn": "https://cdn.jsdelivr.net/npm/kokoro-js@1.2.1/dist/kokoro.web.js",
+  "dtype": "q8",
+  "device": "wasm",
+  "rate": 24000,
+  "catalogHash": "95e174338646ab076f5a7aa74120698f948049afc582c2824e7c78c0aa005918",
+  "measurements": [
+    {
+      "id": "design-cue-01",
+      "chapterId": "design-brand",
+      "start": 0.7,
+      "end": 9.6,
+      "narrator": "abbey",
+      "text": "Begin with the brand board. This walkthrough presents design concepts for review.",
+      "status": "planned",
+      "scope": "vision",
+      "sources": [
+        "design"
+      ],
+      "voice": "af_heart",
+      "speed": 1,
+      "textHash": "72dc639b83698ed5f4b21c12172406a4e36d0688c0313b091ee0a91eea938d72",
+      "spokenHash": "72dc639b83698ed5f4b21c12172406a4e36d0688c0313b091ee0a91eea938d72",
+      "seconds": 5.275,
+      "samples": 126600,
+      "peak": 0.4465549260377884,
+      "overrun": false
+    },
+    {
+      "id": "design-cue-02",
+      "chapterId": "design-system",
+      "start": 10.7,
+      "end": 19.6,
+      "narrator": "abbey",
+      "text": "The system board explores visual foundations. Treat its proposals as design direction.",
+      "status": "planned",
+      "scope": "vision",
+      "sources": [
+        "design"
+      ],
+      "voice": "af_heart",
+      "speed": 1,
+      "textHash": "a6b7b2e1bcf68d7ab2724a382fe54262b5ac180bc2614c9aa0b59a7ca8c95077",
+      "spokenHash": "a6b7b2e1bcf68d7ab2724a382fe54262b5ac180bc2614c9aa0b59a7ca8c95077",
+      "seconds": 5.95,
+      "samples": 142800,
+      "peak": 0.458998042345047,
+      "overrun": false
+    },
+    {
+      "id": "design-cue-03",
+      "chapterId": "design-showcase",
+      "start": 20.7,
+      "end": 29.6,
+      "narrator": "abbey",
+      "text": "The showcase board explores presentation. Its imagery is not benchmark evidence.",
+      "status": "planned",
+      "scope": "vision",
+      "sources": [
+        "design"
+      ],
+      "voice": "af_heart",
+      "speed": 1,
+      "textHash": "d95a14d82c22fc13fec675464f6cc8c1ead78095e973a8c339966e147900d339",
+      "spokenHash": "d95a14d82c22fc13fec675464f6cc8c1ead78095e973a8c339966e147900d339",
+      "seconds": 5.875,
+      "samples": 141000,
+      "peak": 0.45453814566135403,
+      "overrun": false
+    },
+    {
+      "id": "design-cue-04",
+      "chapterId": "design-hero",
+      "start": 30.7,
+      "end": 39.6,
+      "narrator": "abbey",
+      "text": "The hero board explores an introduction. Read product promises against their sources.",
+      "status": "planned",
+      "scope": "vision",
+      "sources": [
+        "design"
+      ],
+      "voice": "af_heart",
+      "speed": 1,
+      "textHash": "5fd9847ae0877e7e421468d606ee7c32f77b9b3e1f0da1b3e0fd222897f66226",
+      "spokenHash": "5fd9847ae0877e7e421468d606ee7c32f77b9b3e1f0da1b3e0fd222897f66226",
+      "seconds": 5.875,
+      "samples": 141000,
+      "peak": 0.380093477666378,
+      "overrun": false
+    },
+    {
+      "id": "design-cue-05",
+      "chapterId": "design-lab",
+      "start": 40.7,
+      "end": 49.6,
+      "narrator": "abbey",
+      "text": "The lab board explores interactions. A demonstration does not qualify a deployment.",
+      "status": "planned",
+      "scope": "vision",
+      "sources": [
+        "design"
+      ],
+      "voice": "af_heart",
+      "speed": 1,
+      "textHash": "13f8971ca9d6e9ef6833ef9ea2d837c6884556151b4a4acb69071dbe24cbda21",
+      "spokenHash": "13f8971ca9d6e9ef6833ef9ea2d837c6884556151b4a4acb69071dbe24cbda21",
+      "seconds": 5.775,
+      "samples": 138600,
+      "peak": 0.39678666591644285,
+      "overrun": false
+    },
+    {
+      "id": "design-cue-06",
+      "chapterId": "design-marketing",
+      "start": 50.7,
+      "end": 59.6,
+      "narrator": "abbey",
+      "text": "The marketing board explores a story. Customer outcomes require separate evidence.",
+      "status": "planned",
+      "scope": "vision",
+      "sources": [
+        "design"
+      ],
+      "voice": "af_heart",
+      "speed": 1,
+      "textHash": "8045a8936b40a2df7cc7c5f4875ffa40b2e6d5b7b63e164666467e638b334735",
+      "spokenHash": "8045a8936b40a2df7cc7c5f4875ffa40b2e6d5b7b63e164666467e638b334735",
+      "seconds": 5.7,
+      "samples": 136800,
+      "peak": 0.6439493179321288,
+      "overrun": false
+    },
+    {
+      "id": "design-cue-07",
+      "chapterId": "design-console",
+      "start": 60.7,
+      "end": 69.6,
+      "narrator": "abbey",
+      "text": "The console board is a concept. Its displays do not establish live service operations.",
+      "status": "planned",
+      "scope": "vision",
+      "sources": [
+        "design"
+      ],
+      "voice": "af_heart",
+      "speed": 1,
+      "textHash": "e33952f68343c69dfc4e03e13b19f8ad64ac2bdd23832c51643dd8c2acd7293c",
+      "spokenHash": "e33952f68343c69dfc4e03e13b19f8ad64ac2bdd23832c51643dd8c2acd7293c",
+      "seconds": 6.3,
+      "samples": 151200,
+      "peak": 0.45122872591018676,
+      "overrun": false
+    },
+    {
+      "id": "design-cue-08",
+      "chapterId": "design-docs",
+      "start": 70.7,
+      "end": 79.6,
+      "narrator": "abbey",
+      "text": "The docs board explores navigation. Discuss a scoped project and review the evidence.",
+      "status": "planned",
+      "scope": "vision",
+      "sources": [
+        "design"
+      ],
+      "voice": "af_heart",
+      "speed": 1,
+      "textHash": "373d324115af1d7704fd96231279399ed50998a36b451f4486edc4e152cb56b7",
+      "spokenHash": "373d324115af1d7704fd96231279399ed50998a36b451f4486edc4e152cb56b7",
+      "seconds": 6.1,
+      "samples": 146400,
+      "peak": 0.6229517966508865,
+      "overrun": false
+    }
+  ]
+}

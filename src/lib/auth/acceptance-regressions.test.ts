@@ -5,6 +5,7 @@ import { betterAuth } from "better-auth";
 import { getSql } from "../db";
 import { adminDecisionFor } from "../server/admin.server";
 import { randomUUID } from "node:crypto";
+import { withOAuthProvenance } from "./oauth-provenance.server";
 
 afterEach(() => {
   vi.restoreAllMocks();
@@ -52,13 +53,15 @@ it("requires verified Google and Apple email in installed Better Auth linking fi
     });
     expect(result.linked).toBe(false);
     expect(await sql`select id from account where "userId" = ${id}`).toHaveLength(0);
-    const verified = await linkOAuthAccount(fixture, {
-      link: { userId: id, email },
-      userInfo: { id: `provider-${id}`, name: "Fixture", email, emailVerified: true },
-      account: { providerId, accountId: `provider-${id}` },
-      profile: {},
-      scopes: [],
-    });
+    const verified = await withOAuthProvenance(() =>
+      linkOAuthAccount(fixture, {
+        link: { userId: id, email },
+        userInfo: { id: `provider-${id}`, name: "Fixture", email, emailVerified: true },
+        account: { providerId, accountId: `provider-${id}` },
+        profile: { sub: `provider-${id}` },
+        scopes: [],
+      }),
+    );
     expect(verified.linked).toBe(true);
     vi.stubEnv("ADMIN_EMAILS", email);
     expect(await adminDecisionFor(id)).toEqual({ admin: true });
@@ -130,8 +133,11 @@ it("rejects unverified provider identities during actual OAuth fixture provision
     options: unknown,
   ) =>
     // Better Auth's endpoint context erases the concrete app adapter options.
-    runWithEndpointContext(fixture as unknown as Parameters<typeof runWithEndpointContext>[0], () =>
-      handle(fixture, options),
+    withOAuthProvenance(() =>
+      runWithEndpointContext(
+        fixture as unknown as Parameters<typeof runWithEndpointContext>[0],
+        () => handle(fixture, options),
+      ),
     );
   for (const providerId of ["google", "apple"]) {
     const id = randomUUID();
@@ -155,6 +161,7 @@ it("rejects unverified provider identities during actual OAuth fixture provision
       { context, getHeader: () => null },
       {
         userInfo: { id, name: "Synthetic Provider", email, emailVerified: true },
+        source: { method: "oauth", oauth: { providerId, profile: { sub: id } } },
         account: { providerId, accountId: id },
         callbackURL: "/",
         deferNonDatabaseWrites: true,
@@ -214,5 +221,5 @@ it("records the legacy provider-row remediation boundary for password sessions",
   });
   expect(session?.user.id).toBe(user.id);
   vi.stubEnv("ADMIN_EMAILS", email);
-  expect(await adminDecisionFor(user.id)).toEqual({ admin: true });
+  expect(await adminDecisionFor(user.id)).toEqual({ admin: false, reason: "unverified_identity" });
 });

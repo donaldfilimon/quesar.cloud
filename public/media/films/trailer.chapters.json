@@ -1,0 +1,152 @@
+[
+  {
+    "id": "trailer-open",
+    "start": 0,
+    "end": 3.9,
+    "title": "Ask for evidence",
+    "status": "planned",
+    "presentation": "VISION",
+    "statusNote": "Conceptual direction; no delivery or compatibility claim.",
+    "visual": {
+      "text": "Ask for evidence",
+      "scope": "vision",
+      "sources": []
+    }
+  },
+  {
+    "id": "trailer-ask",
+    "start": 3.9,
+    "end": 7.3,
+    "title": "Define the claim",
+    "status": "planned",
+    "presentation": "VISION",
+    "statusNote": "Conceptual direction; no delivery or compatibility claim.",
+    "visual": {
+      "text": "Define the claim",
+      "scope": "vision",
+      "sources": []
+    }
+  },
+  {
+    "id": "trailer-fixed",
+    "start": 7.3,
+    "end": 11.3,
+    "title": "Review the source",
+    "status": "planned",
+    "presentation": "VISION",
+    "statusNote": "Conceptual direction; no delivery or compatibility claim.",
+    "visual": {
+      "text": "Review the source",
+      "scope": "vision",
+      "sources": []
+    }
+  },
+  {
+    "id": "trailer-runtime",
+    "start": 11.3,
+    "end": 17.3,
+    "title": "Storage and compute primitives",
+    "status": "current",
+    "presentation": "SOURCE INSPECTION",
+    "statusNote": "Implemented source at pinned revision; runtime and security acceptance not established by this film.",
+    "visual": {
+      "text": "Storage and compute primitives",
+      "scope": "current",
+      "sources": [
+        "durable",
+        "compute"
+      ]
+    }
+  },
+  {
+    "id": "trailer-personas",
+    "start": 17.3,
+    "end": 26.3,
+    "title": "Profiles and local routing",
+    "status": "current",
+    "presentation": "SOURCE INSPECTION",
+    "statusNote": "Implemented source at pinned revision; runtime and security acceptance not established by this film.",
+    "visual": {
+      "text": "Profiles and local routing",
+      "scope": "current",
+      "sources": [
+        "identity",
+        "routing"
+      ]
+    }
+  },
+  {
+    "id": "trailer-memory",
+    "start": 26.3,
+    "end": 32.3,
+    "title": "Strict integrity checks",
+    "status": "current",
+    "presentation": "SOURCE INSPECTION",
+    "statusNote": "Implemented source at pinned revision; runtime and security acceptance not established by this film.",
+    "visual": {
+      "text": "Strict integrity checks",
+      "scope": "current",
+      "sources": [
+        "integrity"
+      ]
+    }
+  },
+  {
+    "id": "trailer-audit",
+    "start": 32.3,
+    "end": 38.3,
+    "title": "Scoped pattern audit",
+    "status": "current",
+    "presentation": "SOURCE INSPECTION",
+    "statusNote": "Implemented source at pinned revision; runtime and security acceptance not established by this film.",
+    "visual": {
+      "text": "Scoped pattern audit",
+      "scope": "current",
+      "sources": [
+        "audit"
+      ]
+    }
+  },
+  {
+    "id": "trailer-reason",
+    "start": 38.3,
+    "end": 43.3,
+    "title": "Review the limits",
+    "status": "planned",
+    "presentation": "VISION",
+    "statusNote": "Conceptual direction; no delivery or compatibility claim.",
+    "visual": {
+      "text": "Review the limits",
+      "scope": "vision",
+      "sources": []
+    }
+  },
+  {
+    "id": "trailer-vision",
+    "start": 43.3,
+    "end": 55.4,
+    "title": "Distributed fabric / roadmap",
+    "status": "planned",
+    "presentation": "VISION",
+    "statusNote": "Conceptual direction; no delivery or compatibility claim.",
+    "visual": {
+      "text": "Distributed fabric / roadmap",
+      "scope": "vision",
+      "sources": []
+    }
+  },
+  {
+    "id": "trailer-close",
+    "start": 55.4,
+    "end": 62,
+    "title": "Discuss your project",
+    "status": "planned",
+    "presentation": "VISION",
+    "statusNote": "Conceptual direction; no delivery or compatibility claim.",
+    "visual": {
+      "text": "Discuss your project",
+      "scope": "vision",
+      "sources": []
+    }
+  }
+]

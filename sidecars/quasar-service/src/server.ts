@@ -8,7 +8,9 @@ import { readRegistry, writeRegistry } from "./registry";
 import { allocatePort } from "./ports";
 import { EventBus } from "./events";
 import { scaffoldSite } from "./scaffold";
-import { runGeneration, type EngineClient } from "./engine";
+import { runGeneration, mapEngineError, type EngineClient } from "./engine";
+import { JobScope } from "./job";
+import { ownHome } from "./ownership";
 import { PreviewManager } from "./preview";
 
 export interface ServerDeps {
@@ -26,6 +28,7 @@ export interface ServerDeps {
   previewDomain?: string;
   allowNetwork?: boolean;
   allocatePreviewPort?: (taken: (number | null)[]) => number | Promise<number>;
+  jobTimeoutMs?: number;
 }
 
 const CORS_HEADERS: Record<string, string> = { "Cache-Control": "no-store" };
@@ -73,14 +76,36 @@ function makeMutex(): <T>(fn: () => Promise<T>) => Promise<T> {
 }
 
 export function createServer(deps: ServerDeps) {
-  const token = pairingSecret(deps.home, deps.pairingToken);
   const policy = networkPolicy({ QUASAR_HOST: deps.hostname, QUASAR_ALLOW_NETWORK: String(deps.allowNetwork), QUASAR_PUBLIC_ORIGIN: deps.publicOrigin });
+  const releaseHome = ownHome(deps.home);
+  let token: string;
+  try { token = pairingSecret(deps.home, deps.pairingToken); }
+  catch (error) { releaseHome(); throw error; }
   const allowedOrigins = new Set(deps.allowedOrigins ?? policy.allowedOrigins);
   const proxy = new PreviewProxy(deps.preview);
   const registryFile = path.join(deps.home, "registry.json");
   const sitesDir = path.join(deps.home, "sites");
   const eventBus = new EventBus();
   const withRegistryLock = makeMutex();
+  const jobs = new Map<string, { id: string; scope: JobScope; completion: Promise<void>; cancel: (reason: string, outcome?: "cancelled" | "error" | "interrupted") => void }>();
+  const deleting = new Set<string>();
+  const previewStarts = new Map<string, Set<Promise<unknown>>>();
+  let closing = false;
+  const ready = withRegistryLock(async () => {
+    const sites = await readRegistry(registryFile);
+    let changed = false;
+    for (const site of sites) {
+      if (site.previewPort !== null) { site.previewPort = null; changed = true; }
+      if (site.status !== "generating") continue;
+      changed = true;
+      site.status = "error";
+      site.lastError = "Generation interrupted by service restart. Partial files retained; inspect before retrying.";
+      site.job = { id: site.job?.id ?? crypto.randomUUID(), startedAt: site.job?.startedAt ?? site.createdAt, outcome: "interrupted", finishedAt: new Date().toISOString() };
+    }
+    if (changed) await writeRegistry(registryFile, sites);
+  });
+  // Keep rejection observed; every request still awaits the rejecting barrier.
+  void ready.catch(() => {});
 
   function siteDirFor(slug: string): string {
     return path.join(sitesDir, slug);
@@ -94,12 +119,12 @@ export function createServer(deps: ServerDeps) {
     return `${base}-${n}`;
   }
 
-  async function finalizeJob(siteId: string, ev: GenerationEvent): Promise<void> {
+  async function finalizeJob(siteId: string, jobId: string, outcome: "done" | "error" | "cancelled" | "interrupted", ev: GenerationEvent): Promise<void> {
     if (ev.type !== "done" && ev.type !== "error") return;
     await withRegistryLock(async () => {
       const sites = await readRegistry(registryFile);
       const idx = sites.findIndex((s) => s.id === siteId);
-      if (idx === -1) return;
+      if (idx === -1 || sites[idx].job?.id !== jobId || sites[idx].job?.finishedAt) return;
       if (ev.type === "done") {
         // Drop any stale lastError from a prior failed run — a fresh
         // success shouldn't leave the old failure message hanging around.
@@ -108,23 +133,35 @@ export function createServer(deps: ServerDeps) {
       } else {
         sites[idx] = { ...sites[idx], status: "error", lastError: ev.message };
       }
+      sites[idx].job = { ...sites[idx].job!, outcome, finishedAt: new Date().toISOString() };
       await writeRegistry(registryFile, sites);
     });
   }
 
-  function startJob(site: Site, prompt: string): void {
+  function startJob(site: Site, prompt: string, scaffold = false): void {
     const siteDir = siteDirFor(site.slug);
     eventBus.reset(site.id);
     const bus = eventBus.get(site.id);
-    let terminal = false;
+    const scope = new JobScope();
+    const jobId = site.job!.id;
+    let terminal: GenerationEvent | undefined;
+    let cancellation: string | undefined;
+    let cancellationOutcome: "cancelled" | "error" | "interrupted" = "cancelled";
+    let sealed = false;
+    let resolveCancelled!: () => void;
+    const cancelled = new Promise<void>(resolve => { resolveCancelled = resolve; });
+    const cancel = (reason: string, outcome: typeof cancellationOutcome = "cancelled") => {
+      if (cancellation || sealed) return;
+      cancellation = reason;
+      cancellationOutcome = outcome;
+      scope.cancel(reason);
+      resolveCancelled();
+    };
     const onEvent = (ev: GenerationEvent): void => {
-      bus.emit(ev);
+      if (terminal || cancellation || jobs.get(site.id)?.id !== jobId) return;
       if (ev.type === "done" || ev.type === "error") {
-        terminal = true;
-        void finalizeJob(site.id, ev).catch((err) => {
-          console.error("quasar: registry write failed", err);
-        });
-      }
+        terminal = ev;
+      } else bus.emit(ev);
     };
 
     // A job must always reach a terminal registry state ("idle" or "error"),
@@ -137,23 +174,33 @@ export function createServer(deps: ServerDeps) {
     // through the same onEvent("error") path used for engine-reported
     // errors, guarded by `terminal` so we never double-report if the engine
     // *did* already emit its own terminal event before rejecting.
-    void (async () => {
+    const timer = setTimeout(() => cancel("Generation deadline exceeded. Partial files retained.", "error"), deps.jobTimeoutMs ?? 15 * 60 * 1000);
+    const work = async () => {
       try {
+        if (scaffold) await scope.accept(() => scaffoldSite(deps.templateDir, siteDir, { install: deps.scaffoldInstall, signal: scope.controller.signal }));
+        scope.check();
         const client = deps.makeClient();
-        await deps.engine({ client, siteDir, prompt, onEvent });
+        await deps.engine({ client, siteDir, prompt, onEvent, scope });
       } catch (err) {
-        if (terminal) return;
-        const message = err instanceof Error ? err.message : String(err);
-        onEvent({ type: "error", message });
+        onEvent({ type: "error", message: mapEngineError(err) });
       }
-    })().catch((err) => {
-      // Belt-and-suspenders: everything inside the IIFE is already wrapped
-      // in try/catch, so this only fires if a subscriber called from
-      // `onEvent`'s own `bus.emit` throws synchronously — but an unhandled
-      // rejection here would otherwise crash the process for a job that's
-      // unrelated to whatever request happens to be in flight.
-      console.error("quasar: generation job failed unexpectedly", err);
-    });
+    };
+    // Start in a microtask after ownership has been installed.
+    const completion = (async () => {
+      await Promise.race([Promise.resolve().then(work), cancelled]);
+      scope.cancel("finished");
+      await scope.drain();
+      sealed = true;
+      clearTimeout(timer);
+      const ev: GenerationEvent = cancellation ? { type: "error", message: cancellation } : terminal ?? { type: "error", message: "Generation ended without a terminal result. Partial files retained." };
+      await finalizeJob(site.id, jobId, cancellation ? cancellationOutcome : ev.type === "done" ? "done" : "error", ev);
+      bus.emit(ev);
+      if (jobs.get(site.id)?.id === jobId) jobs.delete(site.id);
+    })();
+    jobs.set(site.id, { id: jobId, scope, completion, cancel });
+    // Persistence failure retains the mutation fence. Never publish a settled
+    // result or rerun the provider to repair a registry failure.
+    void completion.catch(() => { clearTimeout(timer); console.error("quasar: terminal persistence failed; site remains fenced until restart"); });
   }
 
   async function listSites(): Promise<Response> {
@@ -162,6 +209,7 @@ export function createServer(deps: ServerDeps) {
   }
 
   async function createSite(req: Request): Promise<Response> {
+    if (closing) return json({ error: "service stopping" }, { status: 503 });
     const parsedBody = await readJsonBody(req);
     if (!parsedBody.ok) return parsedBody.response;
 
@@ -175,7 +223,8 @@ export function createServer(deps: ServerDeps) {
     // (and distinct site dirs) instead of racing to compute the same
     // "free" slug off a stale read.
     const now = new Date().toISOString();
-    const site: Site = await withRegistryLock(async () => {
+    const site = await withRegistryLock(async () => {
+      if (closing) return null;
       const sites = await readRegistry(registryFile);
       const slug = uniqueSlug(slugify(name), sites);
       const reserved: Site = {
@@ -186,29 +235,14 @@ export function createServer(deps: ServerDeps) {
         status: "generating",
         previewPort: null,
         promptHistory: [{ prompt, at: now }],
+        job: { id: crypto.randomUUID(), startedAt: now },
       };
       sites.push(reserved);
       await writeRegistry(registryFile, sites);
+      startJob(reserved, prompt, true);
       return reserved;
     });
-
-    const siteDir = siteDirFor(site.slug);
-    try {
-      await scaffoldSite(deps.templateDir, siteDir, { install: deps.scaffoldInstall });
-    } catch (err) {
-      await rm(siteDir, { recursive: true, force: true }).catch(() => {});
-      await withRegistryLock(async () => {
-        const sites = await readRegistry(registryFile);
-        await writeRegistry(
-          registryFile,
-          sites.filter((s) => s.id !== site.id)
-        );
-      });
-      const message = err instanceof Error ? err.message : String(err);
-      return json({ error: message }, { status: 500 });
-    }
-
-    startJob(site, prompt);
+    if (!site) return json({ error: "service stopping" }, { status: 503 });
 
     return json(site, { status: 202 });
   }
@@ -217,10 +251,11 @@ export function createServer(deps: ServerDeps) {
     const sites = await readRegistry(registryFile);
     const site = sites.find((s) => s.id === id);
     if (!site) return notFound();
-    return json(site);
+    return json({ ...site, cleanupPending: Boolean(jobs.get(id)?.scope.controller.signal.aborted) });
   }
 
   async function editSite(id: string, req: Request): Promise<Response> {
+    if (closing) return json({ error: "service stopping" }, { status: 503 });
     const sites = await readRegistry(registryFile);
     const idx = sites.findIndex((s) => s.id === id);
     if (idx === -1) return notFound();
@@ -236,35 +271,39 @@ export function createServer(deps: ServerDeps) {
       { ok: true; site: Site } | { ok: false; response: Response }
     > => {
       const fresh = await readRegistry(registryFile);
+      if (closing) return { ok: false, response: json({ error: "service stopping" }, { status: 503 }) };
       const idx = fresh.findIndex((s) => s.id === id);
       if (idx === -1) return { ok: false, response: notFound() };
-      if (fresh[idx].status === "generating") {
+      if (fresh[idx].status === "generating" || jobs.has(id) || deleting.has(id)) {
         return { ok: false, response: json({ error: "job running" }, { status: 409 }) };
       }
       const now = new Date().toISOString();
       const updated: Site = {
         ...fresh[idx],
         status: "generating",
+        lastError: undefined,
+        job: { id: crypto.randomUUID(), startedAt: now },
         promptHistory: [...fresh[idx].promptHistory, { prompt, at: now }],
       };
       fresh[idx] = updated;
       await writeRegistry(registryFile, fresh);
+      startJob(updated, prompt);
       return { ok: true, site: updated };
     });
 
     if (!result.ok) return result.response;
-
-    startJob(result.site, prompt);
 
     return json(result.site, { status: 202 });
   }
 
   async function getEvents(id: string, searchParams: URLSearchParams): Promise<Response> {
     const sites = await readRegistry(registryFile);
-    if (!sites.some((s) => s.id === id)) return notFound();
+    const site = sites.find((s) => s.id === id);
+    if (!site) return notFound();
     const rawSince = Number(searchParams.get("since") ?? "0");
     const since = Number.isFinite(rawSince) && rawSince >= 0 ? rawSince : 0;
-    return json(eventBus.get(id).since(since));
+    const bus = eventBus.get(id);
+    return json({ ...bus.since(searchParams.get("epoch") === bus.epoch ? since : 0), epoch: bus.epoch, job: site.job });
   }
 
   function externalStatus(id: string, serviceOrigin: string) {
@@ -283,9 +322,11 @@ export function createServer(deps: ServerDeps) {
   }
 
   async function previewStart(id: string, serviceOrigin: string): Promise<Response> {
+    if (deleting.has(id) || closing) return json({ error: "site or service stopping" }, { status: 409 });
     const reserved = await withRegistryLock(async (): Promise<
       { ok: true; slug: string; port: number } | { ok: false; response: Response }
     > => {
+      if (deleting.has(id) || closing) return { ok: false, response: json({ error: "site or service stopping" }, { status: 409 }) };
       const sites = await readRegistry(registryFile);
       const idx = sites.findIndex((s) => s.id === id);
       if (idx === -1) return { ok: false, response: notFound() };
@@ -300,10 +341,16 @@ export function createServer(deps: ServerDeps) {
     });
 
     if (!reserved.ok) return reserved.response;
+    if (deleting.has(id) || closing) return json({ error: "site or service stopping" }, { status: 409 });
 
     deps.preview.invalidate(id);
     proxy.revoke(id);
-    await deps.preview.start(id, siteDirFor(reserved.slug), reserved.port);
+    const starting = deps.preview.start(id, siteDirFor(reserved.slug), reserved.port);
+    const starts = previewStarts.get(id) ?? new Set<Promise<unknown>>();
+    starts.add(starting);
+    previewStarts.set(id, starts);
+    try { await starting; }
+    finally { starts.delete(starting); if (!starts.size) previewStarts.delete(id); }
     return json(externalStatus(id, serviceOrigin));
   }
 
@@ -317,6 +364,19 @@ export function createServer(deps: ServerDeps) {
   }
 
   async function deleteSite(id: string): Promise<Response> {
+    if (deleting.has(id)) return json({ error: "site cleanup pending" }, { status: 409 });
+    deleting.add(id);
+    try {
+    await Promise.allSettled([...(previewStarts.get(id) ?? [])]);
+    const job = jobs.get(id);
+    if (job) {
+      job.cancel("Generation cancelled for deletion. Partial files retained until cleanup.");
+      let timer: ReturnType<typeof setTimeout> | undefined;
+      try {
+        const completed = await Promise.race([job.completion.then(() => true), new Promise<false>(resolve => { timer = setTimeout(() => resolve(false), 5000); })]);
+        if (!completed) return json({ error: "site cleanup pending; writes remain fenced, retry after refresh" }, { status: 409 });
+      } finally { clearTimeout(timer); }
+    }
     const sites = await readRegistry(registryFile);
     const idx = sites.findIndex((s) => s.id === id);
     if (idx === -1) return notFound();
@@ -324,7 +384,7 @@ export function createServer(deps: ServerDeps) {
     deps.preview.invalidate(id);
     proxy.revoke(id);
     await deps.preview.stop(id);
-    await rm(siteDirFor(sites[idx].slug), { recursive: true, force: true }).catch(() => {});
+    await rm(siteDirFor(sites[idx].slug), { recursive: true, force: true });
 
     // The final read + filter + write runs under the lock so a concurrent
     // create/edit landing during teardown can't be lost.
@@ -337,12 +397,14 @@ export function createServer(deps: ServerDeps) {
     });
 
     return noContent();
+    } finally { deleting.delete(id); }
   }
 
   async function route(req: Request, serviceOrigin: string): Promise<Response> {
     const url = new URL(req.url);
     const { pathname, searchParams } = url;
     const method = req.method;
+    await ready;
 
     if (pathname === "/health" && method === "GET") return json({ status: "ok" });
     if (!secretEqual(req.headers.get("authorization") ?? "", `Bearer ${token}`)) return json({ error: "pairing required" }, { status: 401 });
@@ -357,6 +419,21 @@ export function createServer(deps: ServerDeps) {
     }
 
     const id = decodeURIComponent(parts[2]!);
+    if (parts.length === 4 && parts[3] === "cancel") {
+      if (method !== "POST") return json({ error: "method not allowed" }, { status: 405 });
+      if (!req.headers.get("origin") || !allowedOrigins.has(req.headers.get("origin")!)) return json({ error: "trusted browser origin required" }, { status: 403 });
+      const parsed = await readJsonBody(req);
+      if (!parsed.ok) return parsed.response;
+      const body = parsed.body as { jobId?: string } | null;
+      return withRegistryLock(async () => {
+        const site = (await readRegistry(registryFile)).find(s => s.id === id);
+        if (!site) return notFound();
+        if (!body || typeof body.jobId !== "string") return json({ error: "jobId required" }, { status: 400 });
+        if (site.job?.id !== body.jobId) return json({ error: "job changed; refresh" }, { status: 409 });
+        jobs.get(id)?.cancel("Generation cancelled. Partial files retained; inspect before retrying.");
+        return json({ jobId: body.jobId, pending: jobs.has(id) }, { status: 202 });
+      });
+    }
 
     if (parts.length === 3) {
       if (method === "GET") return getSite(id);
@@ -398,7 +475,7 @@ export function createServer(deps: ServerDeps) {
     return notFound();
   }
 
-  return Bun.serve<SocketData>({
+  const server = (() => { try { return Bun.serve<SocketData>({
     port: deps.port,
     hostname: policy.hostname,
     idleTimeout: 120,
@@ -434,5 +511,20 @@ export function createServer(deps: ServerDeps) {
         return json({ error: "service request failed" }, { status: 500 });
       }
     },
-  });
+  }); } catch (error) { void ready.then(releaseHome, releaseHome); throw error; } })();
+  const stop = server.stop.bind(server);
+  let shutdownPromise: Promise<void> | undefined;
+  const shutdown = () => shutdownPromise ??= (async () => {
+    closing = true;
+    await ready;
+    await withRegistryLock(async () => {});
+    await Promise.allSettled([...previewStarts.values()].flatMap(starts => [...starts]));
+    for (const job of jobs.values()) job.cancel("Generation interrupted by service shutdown. Partial files retained.", "interrupted");
+    await Promise.all([...jobs.values()].map(job => job.completion));
+    await deps.preview.stopAll();
+    await stop(true);
+    releaseHome();
+  })();
+  server.stop = (() => { void shutdown().catch(() => console.error("quasar: shutdown cleanup failed; ownership retained")); }) as typeof server.stop;
+  return Object.assign(server, { shutdown });
 }

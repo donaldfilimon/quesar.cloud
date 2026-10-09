@@ -4,7 +4,7 @@
  * that get dropped rather than half-rendered, and the fact that provider error
  * bodies never reach a log line.
  */
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import {
   fetchDriveFiles,
   fetchGraphFiles,
@@ -152,21 +152,27 @@ describe("fetchDriveFiles", () => {
 
 describe("fetchGraphFiles", () => {
   it("applies the window itself, because /recent has no server-side date filter", async () => {
-    const fetchImpl = (async () => ({
-      ok: true,
-      status: 200,
-      json: async () => ({
-        value: [
-          GRAPH_ROW,
-          { ...GRAPH_ROW, id: "old", lastModifiedDateTime: "2020-01-01T00:00:00.000Z" },
-        ],
-      }),
-    })) as unknown as typeof fetch;
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date("2026-09-06T00:00:00.000Z"));
+    try {
+      const fetchImpl = (async () => ({
+        ok: true,
+        status: 200,
+        json: async () => ({
+          value: [
+            GRAPH_ROW,
+            { ...GRAPH_ROW, id: "old", lastModifiedDateTime: "2020-01-01T00:00:00.000Z" },
+          ],
+        }),
+      })) as unknown as typeof fetch;
 
-    const files = await fetchGraphFiles("token-2", 30, fetchImpl);
-    // Without the client-side filter the console would show items older than
-    // the window it says it is showing.
-    expect(files.map((f) => f.id)).toEqual(["sharepoint:01XYZ"]);
+      const files = await fetchGraphFiles("token-2", 30, fetchImpl);
+      // Without the client-side filter the console would show items older than
+      // the window it says it is showing.
+      expect(files.map((f) => f.id)).toEqual(["sharepoint:01XYZ"]);
+    } finally {
+      vi.useRealTimers();
+    }
   });
 
   it("returns an empty list for a tenant with no recent items", async () => {

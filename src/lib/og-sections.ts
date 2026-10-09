@@ -8,7 +8,7 @@ export const OG_SECTIONS = [
     slug: "quesar",
     path: "/quesar",
     title: "Quesar",
-    line: "The large model that trains and improves Abbey, Aviva, and the other assistants.",
+    line: "Model vision for Abbey, Aviva, and the assistant ecosystem.",
   },
   {
     slug: "platform",

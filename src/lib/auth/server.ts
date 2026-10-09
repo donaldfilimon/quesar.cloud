@@ -28,6 +28,7 @@ import { emailAndPasswordEnabled } from "./email-password";
 import { authEnabledOnServer, socialCredentials } from "./methods.server";
 import { runtimeReadiness } from "../server/readiness.server";
 import { pgliteDialect } from "./pglite-dialect";
+import { observeOAuthAssertion, recordCreatedOAuthAccount } from "./oauth-provenance.server";
 
 /**
  * Local-dev secret that outlives module reloads: PGLite (and its session rows)
@@ -128,6 +129,7 @@ function createAuth() {
     session: { cookieCache: { enabled: false } },
 
     databaseHooks: {
+      account: { create: { after: recordCreatedOAuthAccount } },
       user: {
         create: {
           before: async (user) => {
@@ -153,7 +155,8 @@ function createAuth() {
     user: {
       // Provider names alone do not prove control of an email. Apply the
       // assertion gate to provisioning, linking and returning OAuth sign-ins.
-      validateUserInfo: ({ user, source }) => {
+      validateUserInfo: async ({ user, source }) => {
+        await observeOAuthAssertion(user, source);
         if (
           source.method === "oauth" &&
           (source.oauth?.providerId === "google" || source.oauth?.providerId === "apple") &&

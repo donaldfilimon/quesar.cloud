@@ -13,8 +13,8 @@ describe("cinematic consumers", () => {
   it("uses canonical film narration unchanged in the rendered transcript", () => {
     expect(SCRIPT.map((line) => line.text)).toEqual(filmCollection[0].cues.map((cue) => cue.text));
     const html = renderToStaticMarkup(<Transcript lines={SCRIPT} />);
-    expect(html).toContain("Hello. I’m Abbey, the conversational profile in ABI.");
-    expect(html).toContain("Strict verification recomputes hashes. Links alone do not.");
+    expect(html).toContain("I’m Abbey, the conversational profile.");
+    expect(html).toContain("Strict checks recompute hashes. Links alone do not.");
     expect(html).not.toContain("Tampering can&#x27;t hide");
   });
 

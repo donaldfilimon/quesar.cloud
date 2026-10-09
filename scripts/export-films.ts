@@ -61,6 +61,7 @@ export async function openFilmRenderer(origin: string, film: string): Promise<Fi
       return { duration: api.duration, seed: api.seed, fps: api.fps };
     });
     if (metadata.fps !== 30) throw new Error("Capture rate must be 30fps");
+    const session = await context.newCDPSession(page);
     let busy = false;
     return {
       duration: metadata.duration,
@@ -74,7 +75,16 @@ export async function openFilmRenderer(origin: string, film: string): Promise<Fi
             (value) => (window.__filmCapture as FilmCaptureAPI).renderFrame(value),
             frame,
           );
-          const png = await page.screenshot({ type: "png", animations: "allow", caret: "hide" });
+          // renderFrame owns font/image/animation readiness. Chromium's faster
+          // lossless PNG compression avoids spending most capture time zipping
+          // frames that are immediately decoded again by FFmpeg.
+          const screenshot = await session.send("Page.captureScreenshot", {
+            format: "png",
+            optimizeForSpeed: true,
+            captureBeyondViewport: false,
+            fromSurface: true,
+          });
+          const png = Buffer.from(screenshot.data, "base64");
           if (errors.length || forbidden.length)
             throw new Error(
               `Capture failed: ${[...errors, ...forbidden.map((host) => `External request: ${host}`)].join("; ")}`,

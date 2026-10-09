@@ -32,11 +32,13 @@ export async function readSiteFile(siteDir: string, relPath: string): Promise<st
   return readFile(abs, "utf8");
 }
 
-export async function writeSiteFile(siteDir: string, relPath: string, content: string): Promise<void> {
+export async function writeSiteFile(siteDir: string, relPath: string, content: string, check: () => void = () => {}): Promise<void> {
   if (Buffer.byteLength(content, "utf8") > MAX_FILE_BYTES) {
     throw new PathGuardError("file too large");
   }
   const abs = await resolveSitePath(siteDir, relPath);
+  check();
   await mkdir(path.dirname(abs), { recursive: true });
+  check();
   await writeFile(abs, content, "utf8");
 }

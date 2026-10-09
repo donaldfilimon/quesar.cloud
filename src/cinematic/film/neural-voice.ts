@@ -27,6 +27,7 @@ import {
 
 import { loadKokoro, MODEL_ID } from "./kokoro-loader";
 import { PERSONAS } from "./tokens";
+import { PRONOUNCE } from "./pronunciation";
 
 export type { VoiceSnapshot };
 
@@ -101,40 +102,6 @@ const REGISTRY: PersonaVoiceRegistry = {
 // Kokoro reads plain English well but mangles ALLCAPS tokens. Rewrite the MLAI
 // vocabulary into phonetic-friendly text; the engine handles bare symbols
 // (%, ≥, →, dashes) after these rows. Order matters.
-const SPELL = (s: string): string => s.split("").join("‑"); // non-breaking hyphenated letters: W‑D‑B‑X
-const PRONOUNCE: ReadonlyArray<readonly [RegExp, string]> = [
-  [/\bWDBX\b/g, SPELL("WDBX")],
-  [/\bMLAI\b/g, SPELL("MLAI")],
-  [/\bHNSW\b/g, SPELL("HNSW")],
-  [/\bSIMD\b/g, SPELL("SIMD")],
-  [/\bABI\b/g, SPELL("ABI")], // the framework, not the persona "Abi"
-  [/\bAPI\b/g, SPELL("API")],
-  [/\bGPU\b/g, SPELL("GPU")],
-  [/\bCPU\b/g, SPELL("CPU")],
-  [/\bNPU\b/g, SPELL("NPU")],
-  [/\bTPU\b/g, SPELL("TPU")],
-  [/\bRAG\b/g, "rag"],
-  [/\bSHA-?256\b/gi, "S‑H‑A two-fifty-six"],
-  [/\bSHA\b/g, SPELL("SHA")],
-  [/\bAI\b/g, "A.I."],
-  [/\bMVCC\b/g, SPELL("MVCC")],
-  [/\bWAL\b/g, "wall"],
-  [/\bRaft\b/g, "raft"],
-  [/\bZig\b/g, "Zig"],
-  [/\bRecall@10\b/gi, "recall at ten"],
-  [/\b(\d+(?:\.\d+)?)\s*ms\b/gi, "$1 milliseconds"],
-  [/\bp50\b/gi, "p fifty"],
-  [/\bp99\b/gi, "p ninety-nine"],
-  [/\bQPS\b/g, "queries per second"],
-  [/\bTOPS\b/g, "tops"],
-  [/\bM4\b/g, "M four"],
-  [/\bGB\/s\b/g, "gigabytes per second"],
-  [/\bkWh\b/g, "kilowatt hours"],
-  [/\bAviva\b/g, "Aveeva"],
-  [/\bAbi\b/g, "Abbie"],
-  [/\bvs\.?\b/gi, "versus"],
-  [/(\d+(?:\.\d+)?)\s*×(?!\s*\d)/g, "$1 times"],
-];
 
 /* ─────────────────────────── browser plumbing ─────────────────────────── */
 

@@ -1,6 +1,12 @@
 // Ported from mlai `apps/quasar/packages/shared/src/connection.test.ts` at b6f3686 (bun:test -> vitest).
 import { expect, test } from "vitest";
-import { Connection, DEFAULT_ORIGIN, normalizeOrigin, applyEventPage } from "./connection";
+import {
+  Connection,
+  DEFAULT_ORIGIN,
+  normalizeOrigin,
+  applyEventPage,
+  assertMatchingJob,
+} from "./connection";
 const storage = (value: string | null = null) => ({
   getItem: async () => value,
   setItem: async (_: string, next: string) => {
@@ -117,6 +123,21 @@ test("synchronous double-action guard and explicit recovery after uncertain outc
     calls++;
   });
   expect(calls).toBe(2);
+});
+test("a job transition between site and event reads keeps recovery uncertain", async () => {
+  const client = new Connection(storage());
+  await expect(
+    client.mutate("site", async () => {
+      throw Error("disconnected");
+    }),
+  ).rejects.toThrow("disconnected");
+  await expect(
+    client.recover(async () => assertMatchingJob("previous", "replacement")),
+  ).rejects.toThrow("Job changed");
+  expect(client.isUncertain()).toBe(true);
+  await expect(client.mutate("site", async () => {})).rejects.toThrow("uncertain");
+  await client.recover(async () => assertMatchingJob("replacement", "replacement"));
+  expect(client.isUncertain()).toBe(false);
 });
 test("cursor catchup excludes duplicate pages and handles a restarted buffer", () => {
   const page = { events: ["a", "b"], next: 2 };

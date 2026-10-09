@@ -59,15 +59,14 @@ test("EventBus.get returns distinct JobEvents per siteId", () => {
   expect(a).not.toBe(b);
 });
 
-test("EventBus.reset clears the buffer in place, preserving the same JobEvents instance", () => {
+test("EventBus.reset replaces the epoch and isolates stale producers", () => {
   const bus = new EventBus();
   const job = bus.get("site-1");
   job.emit(textEvent("one"));
   expect(job.events.length).toBe(1);
 
   bus.reset("site-1");
-  // Same instance is returned (live subscribers on `job` keep working).
-  expect(bus.get("site-1")).toBe(job);
-  // And the buffer held by that same instance is cleared in place.
-  expect(job.events).toEqual([]);
+  expect(bus.get("site-1")).not.toBe(job);
+  expect(bus.get("site-1").events).toEqual([]);
+  expect(bus.get("site-1").epoch).not.toBe(job.epoch);
 });
