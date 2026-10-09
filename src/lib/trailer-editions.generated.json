@@ -27,7 +27,7 @@
     "transcript": "/media/editions/editorial-60/transcript.txt",
     "proof": "public/media/editions/editorial-60/verification.json",
     "master": "mlai-quesar-editorial-60.mp4",
-    "sha256": "805104de9bc259ac3c69c83fb0039a41db0adbd7ae4c0352cc055c8b963b420b"
+    "sha256": "c082482152d1cd29f3e11d943b5c78129b2a5d03ccdf62554b453295c8c86d87"
   },
   {
     "id": "technical-120",
@@ -42,7 +42,7 @@
     "transcript": "/media/editions/technical-120/transcript.txt",
     "proof": "public/media/editions/technical-120/verification.json",
     "master": "mlai-quesar-technical-120.mp4",
-    "sha256": "21e2ce9afcf704f1c9f1faa156806aec9b669821907493949e546cbef8cf788b"
+    "sha256": "f91a431a227c9992f93ca3930b0649097f628a960e9dbdb35c548b0ba117e8e9"
   },
   {
     "id": "design-120",
@@ -72,7 +72,7 @@
     "transcript": "/media/editions/technical-180/transcript.txt",
     "proof": "public/media/editions/technical-180/verification.json",
     "master": "mlai-quesar-technical-180.mp4",
-    "sha256": "d085f2fb139f9d71cb090747e56efae67a946d3fb208576c304d26b125fc2721"
+    "sha256": "1885ed48db80edd407b6565fe9b728209bd07ecabcf99e2ec3f38514da3e6877"
   },
   {
     "id": "design-180",
@@ -87,7 +87,7 @@
     "transcript": "/media/editions/design-180/transcript.txt",
     "proof": "public/media/editions/design-180/verification.json",
     "master": "mlai-quesar-design-180.mp4",
-    "sha256": "3958bdcb2415fab3a820f985594a8a7b6ac5abf31722ab4857bcb9d0a391dd2f"
+    "sha256": "9f835ea4430001eb9aabd1799830a3295aa4068f734faf3281a42b241354e383"
   },
   {
     "id": "technical-600",
@@ -102,7 +102,7 @@
     "transcript": "/media/editions/technical-600/transcript.txt",
     "proof": "public/media/editions/technical-600/verification.json",
     "master": "mlai-quesar-technical-600.mp4",
-    "sha256": "e1bf0506db9133dc565596b1dc4124293667ebb6ca560dd996061d636c2e1859"
+    "sha256": "0807c84cbdfd6f75e8ca0a515b8a2329964493ceb9178bb0053942470f5ecda7"
   },
   {
     "id": "design-600",
@@ -117,7 +117,7 @@
     "transcript": "/media/editions/design-600/transcript.txt",
     "proof": "public/media/editions/design-600/verification.json",
     "master": "mlai-quesar-design-600.mp4",
-    "sha256": "27de0c56d3f776380174132599c3ae96e67b7b058216c139c048e977be8bc89e"
+    "sha256": "c176424704d3efe2329adb8f3baf6a9a5d319f6bfb9373d79793cd17a0e18cc5"
   },
   {
     "id": "quesar-architecture-60",
@@ -162,7 +162,7 @@
     "transcript": "/media/editions/quesar-architecture-120/transcript.txt",
     "proof": "public/media/editions/quesar-architecture-120/verification.json",
     "master": "quesar-architecture-120.mp4",
-    "sha256": "309780c3e2ca3ab5c93ed1ff2bbf0cdff5bf599451a2bc09004a6d623524057c"
+    "sha256": "a05131457e43299abb5aae9610c72cbbf57cd1fd75735ea23f73d6917e7c5596"
   },
   {
     "id": "quesar-studio-120",
@@ -177,7 +177,7 @@
     "transcript": "/media/editions/quesar-studio-120/transcript.txt",
     "proof": "public/media/editions/quesar-studio-120/verification.json",
     "master": "quesar-studio-120.mp4",
-    "sha256": "05e63db799cfce9d255f20f88a456328655d5d04730b6c1466cfd711deb5a8fb"
+    "sha256": "d74172ba3a0704d59e64eec89259c15a0be571ec70e469edfdf384bdd9589188"
   },
   {
     "id": "quesar-architecture-180",
@@ -192,7 +192,7 @@
     "transcript": "/media/editions/quesar-architecture-180/transcript.txt",
     "proof": "public/media/editions/quesar-architecture-180/verification.json",
     "master": "quesar-architecture-180.mp4",
-    "sha256": "98c59e27a5e90de4afe1dfab114a54916468aace4038fb63957811cec88dcce9"
+    "sha256": "708b80c527f08a06657dd16c7828aeb37c247de42b991a0bab5533f327976abe"
   },
   {
     "id": "quesar-studio-180",
@@ -207,7 +207,7 @@
     "transcript": "/media/editions/quesar-studio-180/transcript.txt",
     "proof": "public/media/editions/quesar-studio-180/verification.json",
     "master": "quesar-studio-180.mp4",
-    "sha256": "6a4ac16529955f1066351f7c7213c5b5192a7cc25e8376cdded79c7401c59dec"
+    "sha256": "809e85aa29006ef70aa54b75a320a7d031c1318e08dba9ad787cf4d06371d4e7"
   },
   {
     "id": "quesar-architecture-600",
@@ -222,7 +222,7 @@
     "transcript": "/media/editions/quesar-architecture-600/transcript.txt",
     "proof": "public/media/editions/quesar-architecture-600/verification.json",
     "master": "quesar-architecture-600.mp4",
-    "sha256": "979381439b03ee0f29b954881228f5a17b54c57b724e0bc1050b9671272798e4"
+    "sha256": "4b6573d5104d1d79359f9f90387f5c01eb25ed62b133e1ecfa97280d8b9ad4bf"
   },
   {
     "id": "quesar-studio-600",
@@ -237,7 +237,7 @@
     "transcript": "/media/editions/quesar-studio-600/transcript.txt",
     "proof": "public/media/editions/quesar-studio-600/verification.json",
     "master": "quesar-studio-600.mp4",
-    "sha256": "06c65b802d71c0a8e120e32402f9000c535cfb02bd0ec709876ee8c517331489"
+    "sha256": "dccdaa3aa3d10af2cb5ecd556d895fd60f24fc685c0832d3a0344cbbecb6a693"
   },
   {
     "id": "quesar-architecture-60-native30",

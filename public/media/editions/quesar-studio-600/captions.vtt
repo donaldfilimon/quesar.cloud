@@ -13,437 +13,437 @@ Adaptive intelligence.
 Quesar by MLAI introduces assistant workflows, memory systems and developer tools with inspectable sources.
 
 4
-00:00:20.331 --> 00:00:22.146
+00:00:20.327 --> 00:00:22.142
 A place to begin.
 
 5
-00:00:22.446 --> 00:00:24.411
+00:00:22.442 --> 00:00:24.407
 Read the architecture.
 
 6
-00:00:24.711 --> 00:00:31.951
+00:00:24.707 --> 00:00:31.947
 The website brings products, platform, developers, research, services and contact into one navigation.
 
 7
-00:00:38.606 --> 00:00:40.196
+00:00:38.600 --> 00:00:40.190
 Three roles.
 
 8
-00:00:40.496 --> 00:00:42.411
+00:00:40.490 --> 00:00:42.405
 One conversation.
 
 9
-00:00:42.711 --> 00:00:46.201
+00:00:42.705 --> 00:00:46.195
 Abbey is a human-facing companion contract.
 
 10
-00:00:46.501 --> 00:00:49.191
+00:00:46.495 --> 00:00:49.185
 Aviva is a direct expert mode.
 
 11
-00:00:49.491 --> 00:00:54.006
+00:00:49.485 --> 00:00:54.000
 Abi coordinates intent, risk, context and response style.
 
 12
-00:01:00.662 --> 00:01:02.027
+00:01:00.652 --> 00:01:02.017
 Abbey.
 
 13
-00:01:02.327 --> 00:01:04.267
+00:01:02.317 --> 00:01:04.257
 Care in the interface.
 
 14
-00:01:04.567 --> 00:01:10.257
+00:01:04.557 --> 00:01:10.247
 Thoughtful teaching, creative work and technical collaboration are the intended role.
 
 15
-00:01:10.557 --> 00:01:14.947
+00:01:10.547 --> 00:01:14.937
 Actual assistant behavior depends on its configured backend.
 
 16
-00:01:21.603 --> 00:01:23.093
+00:01:21.589 --> 00:01:23.079
 Aviva.
 
 17
-00:01:23.393 --> 00:01:25.333
+00:01:23.379 --> 00:01:25.319
 Clarity with boundaries.
 
 18
-00:01:25.633 --> 00:01:31.648
+00:01:25.619 --> 00:01:31.634
 Concrete next actions and explicit uncertainty define the local persona profile.
 
 19
-00:01:31.948 --> 00:01:35.613
+00:01:31.934 --> 00:01:35.599
 A role alone does not establish model quality.
 
 20
-00:01:42.268 --> 00:01:43.633
+00:01:42.252 --> 00:01:43.617
 Abi.
 
 21
-00:01:43.933 --> 00:01:46.298
+00:01:43.917 --> 00:01:46.282
 Coordination, inspected.
 
 22
-00:01:46.598 --> 00:01:51.938
+00:01:46.582 --> 00:01:51.922
 Local routing and scheduler helpers select a persona or controlled blend.
 
 23
-00:01:52.238 --> 00:01:54.903
+00:01:52.222 --> 00:01:54.887
 Broader governance remains partial.
 
 24
-00:02:01.559 --> 00:02:03.024
+00:02:01.539 --> 00:02:03.004
 Memory.
 
 25
-00:02:03.324 --> 00:02:05.039
+00:02:03.304 --> 00:02:05.019
 Keep its provenance.
 
 26
-00:02:05.339 --> 00:02:13.704
+00:02:05.319 --> 00:02:13.684
 WDBX local Rust storage and retrieval components preserve durable records, vectors and causal history.
 
 27
-00:02:20.360 --> 00:02:21.975
+00:02:20.336 --> 00:02:21.951
 Integrity.
 
 28
-00:02:22.275 --> 00:02:24.265
+00:02:22.251 --> 00:02:24.241
 Truth needs evidence.
 
 29
-00:02:24.565 --> 00:02:28.005
+00:02:24.541 --> 00:02:27.981
 Storage integrity does not make a statement true.
 
 30
-00:02:28.305 --> 00:02:34.620
+00:02:28.281 --> 00:02:34.596
 Production multi-host WDBX deployment is not established by this website.
 
 31
-00:02:41.275 --> 00:02:42.940
+00:02:41.249 --> 00:02:42.914
 Developers.
 
 32
-00:02:43.240 --> 00:02:44.905
+00:02:43.214 --> 00:02:44.879
 Start with source.
 
 33
-00:02:45.205 --> 00:02:50.570
+00:02:45.179 --> 00:02:50.644
 Explore the ABI Rust framework, local CLI and MCP contracts.
 
 34
-00:02:50.870 --> 00:02:56.235
+00:02:50.944 --> 00:02:56.309
 Follow setup and verification guidance before connecting tools or memory.
 
 35
-00:03:02.891 --> 00:03:04.581
+00:03:02.961 --> 00:03:04.651
 APIs.
 
 36
-00:03:04.881 --> 00:03:06.771
+00:03:04.951 --> 00:03:06.841
 State availability.
 
 37
-00:03:07.071 --> 00:03:12.036
+00:03:07.141 --> 00:03:12.106
 Hosted Quesar APIs and platform SDKs are not published.
 
 38
-00:03:12.336 --> 00:03:15.851
+00:03:12.406 --> 00:03:15.921
 The website points to local frameworks and contracts.
 
 39
-00:03:22.507 --> 00:03:24.047
+00:03:22.573 --> 00:03:24.113
 Two names.
 
 40
-00:03:24.347 --> 00:03:26.162
+00:03:24.413 --> 00:03:26.228
 Two distinct scopes.
 
 41
-00:03:26.462 --> 00:03:30.602
+00:03:26.528 --> 00:03:30.668
 Quesar is the MLAI website and broader direction.
 
 42
-00:03:30.902 --> 00:03:35.742
+00:03:30.968 --> 00:03:35.808
 Quasar is the separately configured local website builder service.
 
 43
-00:03:42.397 --> 00:03:43.937
+00:03:42.461 --> 00:03:44.001
 Quasar.
 
 44
-00:03:44.237 --> 00:03:46.252
+00:03:44.301 --> 00:03:46.316
 Browser to your service.
 
 45
-00:03:46.552 --> 00:03:51.392
+00:03:46.616 --> 00:03:51.456
 The Quasar screens call the configured service directly from the browser.
 
 46
-00:03:51.692 --> 00:03:54.482
+00:03:51.756 --> 00:03:54.546
 This website does not spawn that service.
 
 47
-00:04:01.138 --> 00:04:02.553
+00:04:01.198 --> 00:04:02.613
 Connect.
 
 48
-00:04:02.853 --> 00:04:04.668
+00:04:02.913 --> 00:04:04.728
 Choose an origin.
 
 49
-00:04:04.968 --> 00:04:09.783
+00:04:05.028 --> 00:04:09.843
 Settings lets the browser reach a local service and check that it answers.
 
 50
-00:04:10.083 --> 00:04:13.398
+00:04:10.143 --> 00:04:13.458
 The deployment may supply a default origin.
 
 51
-00:04:20.054 --> 00:04:21.494
+00:04:20.110 --> 00:04:21.550
 Pairing.
 
 52
-00:04:21.794 --> 00:04:23.759
+00:04:21.850 --> 00:04:23.815
 A deliberate connection.
 
 53
-00:04:24.059 --> 00:04:27.149
+00:04:24.115 --> 00:04:27.205
 The settings screen includes a pairing token.
 
 54
-00:04:27.449 --> 00:04:32.814
+00:04:27.505 --> 00:04:32.870
 Saving a connection and revoking an online pairing are explicit operations.
 
 55
-00:04:39.469 --> 00:04:41.109
+00:04:39.523 --> 00:04:41.163
 A new site.
 
 56
-00:04:41.409 --> 00:04:43.199
+00:04:41.463 --> 00:04:43.253
 Begin with a prompt.
 
 57
-00:04:43.499 --> 00:04:53.714
+00:04:43.553 --> 00:04:53.768
 The local service copies a Next.js template into its sites directory and runs a Claude generation job using that machine’s Anthropic credentials.
 
 58
-00:05:00.370 --> 00:05:02.310
+00:05:00.420 --> 00:05:02.360
 A local library.
 
 59
-00:05:02.610 --> 00:05:04.400
+00:05:02.660 --> 00:05:04.450
 Read live sites.
 
 60
-00:05:04.700 --> 00:05:11.265
+00:05:04.750 --> 00:05:11.315
 The sites screen reads generated sites from the configured local service, directly through the browser.
 
 61
-00:05:17.921 --> 00:05:19.611
+00:05:17.967 --> 00:05:19.657
 Generation.
 
 62
-00:05:19.911 --> 00:05:21.626
+00:05:19.957 --> 00:05:21.672
 Follow the feed.
 
 63
-00:05:21.926 --> 00:05:26.966
+00:05:21.972 --> 00:05:27.012
 The site detail screen polls service feed and preview state every second.
 
 64
-00:05:27.266 --> 00:05:32.056
+00:05:27.312 --> 00:05:32.102
 A generation is a job to inspect, not an invisible promise.
 
 65
-00:05:38.711 --> 00:05:40.276
+00:05:38.755 --> 00:05:40.320
 Refinement.
 
 66
-00:05:40.576 --> 00:05:42.516
+00:05:40.620 --> 00:05:42.560
 Send a change request.
 
 67
-00:05:42.816 --> 00:05:46.231
+00:05:42.860 --> 00:05:46.275
 The site detail screen offers an edit prompt.
 
 68
-00:05:46.531 --> 00:05:51.721
+00:05:46.575 --> 00:05:51.765
 The route follows generation, sends edits and previews the site on your machine.
 
 69
-00:05:58.377 --> 00:05:59.867
+00:05:58.417 --> 00:05:59.907
 Preview.
 
 70
-00:06:00.167 --> 00:06:02.007
+00:06:00.207 --> 00:06:02.047
 A separate opening.
 
 71
-00:06:02.307 --> 00:06:09.222
+00:06:02.347 --> 00:06:09.262
 Preview launch obtains a ticket and checks the returned target against the configured service before opening it.
 
 72
-00:06:15.878 --> 00:06:17.443
+00:06:15.914 --> 00:06:17.479
 Recovery.
 
 73
-00:06:17.743 --> 00:06:19.933
+00:06:17.779 --> 00:06:19.969
 Uncertainty is visible.
 
 74
-00:06:20.233 --> 00:06:29.748
+00:06:20.269 --> 00:06:29.784
 The connection API exposes uncertain mutation state and recovery so screens can offer Retry rather than silently assuming success.
 
 75
-00:06:36.403 --> 00:06:37.943
+00:06:36.437 --> 00:06:37.977
 Research.
 
 76
-00:06:38.243 --> 00:06:40.533
+00:06:38.277 --> 00:06:40.567
 Ideas beside evidence.
 
 77
-00:06:40.833 --> 00:06:48.998
+00:06:40.867 --> 00:06:49.032
 Source-backed work covers memory, retrieval, orchestration and provenance, with implementation status beside the research.
 
 78
-00:06:55.654 --> 00:06:57.144
+00:06:55.684 --> 00:06:57.174
 NYON.
 
 79
-00:06:57.444 --> 00:06:59.434
+00:06:57.474 --> 00:06:59.464
 Deterministic worlds.
 
 80
-00:06:59.734 --> 00:07:06.149
+00:06:59.764 --> 00:07:06.179
 NYON is a related Rust strategy game with a separate offline Galaxy Workshop sandbox.
 
 81
-00:07:06.449 --> 00:07:10.664
+00:07:06.479 --> 00:07:10.694
 Desktop and browser qualification remain in progress.
 
 82
-00:07:17.320 --> 00:07:19.235
+00:07:17.346 --> 00:07:19.261
 The open workshop.
 
 83
-00:07:19.535 --> 00:07:21.425
+00:07:19.561 --> 00:07:21.451
 Build with the source.
 
 84
-00:07:21.725 --> 00:07:30.165
+00:07:21.751 --> 00:07:30.191
 Public repositories, documentation and plugins invite exploration through each project’s own contribution workflow.
 
 85
-00:07:36.820 --> 00:07:38.660
+00:07:36.844 --> 00:07:38.684
 The future studio.
 
 86
-00:07:38.960 --> 00:07:41.025
+00:07:38.984 --> 00:07:41.049
 Visual orchestration.
 
 87
-00:07:41.325 --> 00:07:51.240
+00:07:41.349 --> 00:07:51.264
 MLAI Studio is a proposed workspace for visual agent design, prompt experiments and inspecting context, memory and execution.
 
 88
-00:07:57.896 --> 00:07:59.811
+00:07:57.916 --> 00:07:59.831
 Many modalities.
 
 89
-00:08:00.111 --> 00:08:02.026
+00:08:00.131 --> 00:08:02.046
 Explicit boundaries.
 
 90
-00:08:02.326 --> 00:08:11.291
+00:08:02.346 --> 00:08:11.311
 Text, images, audio, code and spatial environments are a direction for future collaboration with explicit data boundaries.
 
 91
-00:08:17.947 --> 00:08:19.787
+00:08:17.963 --> 00:08:19.803
 MLAI Network.
 
 92
-00:08:20.087 --> 00:08:22.102
+00:08:20.103 --> 00:08:22.118
 A proposed community.
 
 93
-00:08:22.402 --> 00:08:28.667
+00:08:22.418 --> 00:08:28.683
 The future network would let builders share agents, plugins, research, projects and extensions.
 
 94
-00:08:28.967 --> 00:08:30.982
+00:08:28.983 --> 00:08:30.998
 It remains proposed.
 
 95
-00:08:37.637 --> 00:08:39.502
+00:08:37.651 --> 00:08:39.516
 Static and server.
 
 96
-00:08:39.802 --> 00:08:41.692
+00:08:39.816 --> 00:08:41.706
 Different capabilities.
 
 97
-00:08:41.992 --> 00:08:46.057
+00:08:42.006 --> 00:08:46.071
 The static website renders notices for server features.
 
 98
-00:08:46.357 --> 00:08:51.197
+00:08:46.371 --> 00:08:51.211
 A configured server deployment is needed for server-backed capabilities.
 
 99
-00:08:57.853 --> 00:08:59.943
+00:08:57.863 --> 00:08:59.953
 Model configuration.
 
 100
-00:09:00.243 --> 00:09:02.183
+00:09:00.253 --> 00:09:02.193
 Honest availability.
 
 101
-00:09:02.483 --> 00:09:05.398
+00:09:02.493 --> 00:09:05.408
 The site uses one model interface.
 
 102
-00:09:05.698 --> 00:09:12.613
+00:09:05.708 --> 00:09:12.623
 When no provider is configured, its model state is not configured rather than an invented response.
 
 103
-00:09:19.269 --> 00:09:20.884
+00:09:19.275 --> 00:09:20.890
 Services.
 
 104
-00:09:21.184 --> 00:09:23.099
+00:09:21.190 --> 00:09:23.105
 Define the evidence.
 
 105
-00:09:23.399 --> 00:09:28.139
+00:09:23.405 --> 00:09:28.145
 Explore the services and contact pages to discuss a project.
 
 106
-00:09:28.439 --> 00:09:33.054
+00:09:28.445 --> 00:09:33.060
 Scope, verification and operational boundaries should be explicit.
 
 107
-00:09:39.709 --> 00:09:41.499
+00:09:39.713 --> 00:09:41.503
 Build thoughtfully.
 
 108
-00:09:41.799 --> 00:09:43.739
+00:09:41.803 --> 00:09:43.743
 quesar.cloud
 
 109
-00:09:44.039 --> 00:09:46.179
+00:09:44.043 --> 00:09:46.183
 Explore the architecture.
 
 110
-00:09:46.479 --> 00:09:48.244
+00:09:46.483 --> 00:09:48.248
 Follow the source.
 
 111
-00:09:48.544 --> 00:09:51.384
+00:09:48.548 --> 00:09:51.388
 Define the evidence your project needs.
 
 112
-00:09:51.684 --> 00:09:53.874
+00:09:51.688 --> 00:09:53.878
 Quesar by MLAI.
