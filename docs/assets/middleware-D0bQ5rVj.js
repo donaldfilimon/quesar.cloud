@@ -1,0 +1,1 @@
+import{ht as e}from"./index-C76n1hQr.js";var t=e({type:`function`});export{t};

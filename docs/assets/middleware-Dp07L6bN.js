@@ -1,1 +1,0 @@
-import{ht as e}from"./index-C6K89jcq.js";var t=e({type:`function`});export{t};
