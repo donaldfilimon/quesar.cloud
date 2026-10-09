@@ -10,7 +10,7 @@ dependencies = [
     "reportlab>=5.0.1",
     "odfpy>=1.4.1",
     "pypdf>=6.19.0",
-    "docling>=2.126.0",
+    "docling>=2.132.0",
     "docling-slim[format-iwork,format-opendocument]>=2.126.0",
 ]
 
