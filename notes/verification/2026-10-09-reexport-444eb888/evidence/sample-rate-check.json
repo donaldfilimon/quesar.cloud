@@ -1,0 +1,98 @@
+[
+  {
+    "command": [
+      "ffprobe",
+      "-v",
+      "error",
+      "-select_streams",
+      "a:0",
+      "-show_entries",
+      "stream=sample_rate",
+      "-of",
+      "json",
+      "public/media/films/abbey.mp4"
+    ],
+    "exit": 0,
+    "sample_rate": "24000"
+  },
+  {
+    "command": [
+      "ffprobe",
+      "-v",
+      "error",
+      "-select_streams",
+      "a:0",
+      "-show_entries",
+      "stream=sample_rate",
+      "-of",
+      "json",
+      "public/media/films/design.mp4"
+    ],
+    "exit": 0,
+    "sample_rate": "24000"
+  },
+  {
+    "command": [
+      "ffprobe",
+      "-v",
+      "error",
+      "-select_streams",
+      "a:0",
+      "-show_entries",
+      "stream=sample_rate",
+      "-of",
+      "json",
+      "public/media/films/explainer.mp4"
+    ],
+    "exit": 0,
+    "sample_rate": "24000"
+  },
+  {
+    "command": [
+      "ffprobe",
+      "-v",
+      "error",
+      "-select_streams",
+      "a:0",
+      "-show_entries",
+      "stream=sample_rate",
+      "-of",
+      "json",
+      "public/media/films/film.mp4"
+    ],
+    "exit": 0,
+    "sample_rate": "24000"
+  },
+  {
+    "command": [
+      "ffprobe",
+      "-v",
+      "error",
+      "-select_streams",
+      "a:0",
+      "-show_entries",
+      "stream=sample_rate",
+      "-of",
+      "json",
+      "public/media/films/mega.mp4"
+    ],
+    "exit": 0,
+    "sample_rate": "24000"
+  },
+  {
+    "command": [
+      "ffprobe",
+      "-v",
+      "error",
+      "-select_streams",
+      "a:0",
+      "-show_entries",
+      "stream=sample_rate",
+      "-of",
+      "json",
+      "public/media/films/trailer.mp4"
+    ],
+    "exit": 0,
+    "sample_rate": "24000"
+  }
+]

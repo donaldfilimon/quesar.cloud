@@ -237,3 +237,6 @@ Running 226 tests using 1 worker
   ✓  223 [short-mobile] › e2e/trailer.spec.ts:70:1 › media failure disables seek and keeps chapter selection usable (2.0s)
   ✓  224 [short-mobile] › e2e/trailer.spec.ts:84:1 › old playback rejection cannot overwrite a newly selected chapter (2.0s)
   ✓  225 [short-mobile] › e2e/trailer.spec.ts:101:1 › chapter advancement plays the next film and completion returns to paused (2.2s)
+  ✓  226 [short-mobile] › e2e/trailer.spec.ts:124:1 › descriptions toggle, and mute only where a cut has sound (1.9s)
+
+  226 passed (5.3m)

@@ -3,7 +3,7 @@
 Date: 2026-10-09  
 Reviewer scope: independent source review in the canonical `quesar.cloud` checkout.  
 Baseline observed by read-only Git command: `2e76884114c5`.  
-Latest verdict: **Changes requested: R1 reopened (High), R8 newly identified (Medium). R2-R7 resolved in inspected source, not browser-qualified.** The independent follow-up at the end of this file supersedes the historical implementer dispositions below. Root/static/persistent acceptance remains parent-owned and pending evidence review.
+Latest **SOURCE verdict: Approved, no blocking findings in the inspected scoped source diff. R1-R8 resolved at source level.** The final correction re-review at the end of this file supersedes earlier findings and implementer dispositions. This is **not backend/browser qualification, a passing root-gate claim, publication approval or deployment approval**. Parent-owned acceptance evidence remains pending.
 
 ## Evidence and ownership boundary
 
@@ -118,7 +118,7 @@ The compiled persistent acceptance source now includes direct signup for indepen
 
 Fresh targeted check receipts and the complete changed-file inventory are recorded in `notes/verification/2026-10-09-finishing/contact-auth-implementation.md`. The parent owns the documented root gate, builds, static output, all Playwright/server/Postgres acceptance, final local-main commit and independent second-phase closure. No implementer commit/push/deployment or live provider call was performed.
 
-## Independent follow-up against `2e76884114c5`
+## Prior independent follow-up against `2e76884114c5` (superseded by final re-review)
 
 Reviewed all 24 tracked changed files reported by `git diff --name-only 2e768841`, including the complete changed source/test diff and full persistent acceptance source. Also read all six new source/test files absent from that tracked diff: `src/lib/auth/callback.ts`, `callback.test.ts`, `client.test.ts`, `email-password.test.ts`, `src/routes/auth-entry.test.tsx`, and `contact.test.tsx`. HEAD remained `2e76884114c5`; reviewed changes are in the live working tree, not an independently frozen artifact. Read-only retrieval/diff commands returned exit 0. No tests, builds, servers, installs, production edits, Git writes or external requests were performed by the reviewer.
 
@@ -210,4 +210,42 @@ Before final acceptance/local commit, parent must:
 4. Rebuild static output, run checker/browser acceptance and verify approved contact propagation, mail/tel schemes, intercepted draft recipient, no auth/server calls on static notice routes and storage-failure settlement. Current generated output was not independently rebuilt or qualified here.
 5. Keep public deployment, external delivery, real OAuth, physical authenticators and remote readiness unqualified without separately authorized evidence. Source approval, local gates and deployment approval are different claims.
 
-**Current independent disposition:** **Changes requested.** R2-R7 and narrow copy cleanup are accepted at source level. R1 retains a High open-redirect variant; R8 loses newer contact text on pending-submit success. Parent-owned runtime/static evidence and local-main commit remain pending; no push/deployment authorized by this review.
+**Prior follow-up disposition:** **Changes requested.** R2-R7 and narrow copy cleanup were accepted at source level; R1 and R8 were blockers in that inspected snapshot. This disposition is superseded by the final correction re-review below. The source findings remain preserved as review history, not current open defects.
+
+## Final correction re-review: SOURCE Approved
+
+Independent re-read of the current R1/R8 source and tests, persistent acceptance changes, public-renderer regression, and existing scoped auth/receipt source diff against `2e76884114c5`. Read-only Git reported HEAD **`4d2d028c0a9f`**, changed since the earlier review, with additional working-tree changes present. This approval applies to the inspected baseline-to-current **source diff**, not to a frozen compiled output or an assumed final commit. Generated `docs/` and preserved evidence also appear in the checkout diff; no generated-output acceptance or ownership inference is made here. The reviewer made no Git/source writes and did not run tests, builds, servers or installs.
+
+### R1: Independently resolved after canonical-target correction
+
+- **Severity:** High (historical finding)
+- **File:line:** `src/lib/internal.ts:51-81`; regressions: `src/lib/internal.test.ts:72-92`; compiled journey: `e2e/backend/persistent.acceptance.ts:506-516`.
+- **Description/evidence:** The parser now rejects a normalized pathname starting with `//` at line 63, before returning anything. It then constructs the exact pathname/search/hash target and reparses that exact string against the fixed origin at lines 74-78. Thus the reviewed dot-segment/double-slash case cannot change origin merely because the absolute origin was removed. Raw controls/backslashes, encoded separators/controls, malformed encodings and normalized auth/API destinations remain rejected. Ordinary query/fragment intent is preserved.
+- **Regression assessment:** Tests explicitly include raw and uppercase/lowercase encoded-dot variants, multiple leading normalized slashes and the same-base-host `//quesar.cloud` case. The latter is rejected by pathname shape even when reparsed origin alone would match. An internal path containing a non-leading doubled slash remains allowed. Compiled return-path cases now include the raw/encoded-dot variants that were missing from the prior review.
+- **Suggestion:** Preserve both canonical-prefix and exact-return-target invariants. Parent should execute these authored unit/browser checks and retain actual exit codes/artifact identity; no reviewer runtime reproduction was performed.
+- **Status:** **Resolved in independently inspected source. No remaining R1 source blocker; actual compiled/browser proof pending.**
+
+### R8: Independently resolved by freezing pending form edits
+
+- **Severity:** Medium (historical finding)
+- **File:line:** `src/routes/contact.tsx:121-127,157-181,203,217,232,244-245,260-262,303-306`; regressions: `src/routes/contact.test.tsx:42-54`; compiled journey: `e2e/backend/persistent.acceptance.ts:521-583`.
+- **Description/evidence:** Name, email, service context, topic radio group and message are now disabled while `status === "saving"`; the submit handler also refuses while saving. The radio wrapper forwards `disabled` to its primitive root (`src/components/ui/radio-group.tsx:5-9`). New user text cannot be entered through these pending controls and then silently erased by the existing success clear. Error settlement re-enables the fields without clearing their contents; success settles honestly through the existing optional receipt-persistence helper. The correction did not make local storage mandatory or turn database acceptance into mail-delivery proof.
+- **Regression assessment:** The renderer test checks enabled and disabled markup for all four text fields and every rendered radio. Compiled acceptance holds the actual inquiry request, waits until it is observed, asserts all named fields and the radio disabled/message non-editable with unchanged submitted text, then releases the request in a `finally`-protected fixture. After real server acceptance it checks editable/empty message, optional-storage failure wording, exactly one inquiry row and exact persisted submitted text. Route interception is removed; no fake success response substitutes for the server.
+- **Suggestion:** Parent should execute the delayed-request acceptance, retaining the failure case and optional-storage cases. Authoring assertions and checking their source is not evidence they passed in a browser.
+- **Status:** **Resolved in independently inspected source. No remaining R8 source blocker; actual delayed-request browser/Postgres proof pending.**
+
+### No additional blocking source findings
+
+R2-R7 remain accepted at source level with the evidence in the prior follow-up. The current auth handler/busy guard, signup mode, callback feedback, signout recovery and optional receipt code retain those fixes. Focused diff for auth server, authoritative session verification, admin admission, Start CSRF, note ownership and console server logic is still empty against baseline. No weakening of those controls, requirement for unconfigured OAuth credentials, or new production-copy blocker was identified.
+
+The public-renderer assertion now expects the actual conditional local-receipt wording and adds an explicit negative check against delivered-email/inquiry claims (`src/routes/-public-renderer.test.tsx:94-109`). It retains the configured-server acceptance and static draft distinctions, rather than deleting the claim-boundary test. The reported 85 targeted passing tests are **parent/implementer-reported**, not independently executed or adopted as full-gate/backend evidence by this review.
+
+### Remaining qualification and local-commit boundary
+
+1. **Root gate:** Parent's `bun run check` is reported running. Completion/actual exit code and final source identity have not been supplied as verified evidence in this phase. No green-gate claim here.
+2. **Backend:** Persistent artifact build, exact artifact hash and executed browser/Postgres acceptance remain pending. Source approval does not establish that signup/signin/session/navigation/recovery or the held inquiry work at runtime. Keep existing independent-user/admin/expiry/revocation checks distinct from the authored UI journey's coverage.
+3. **Static:** Verify the final regenerated pages/checker/browser results, approved mail/tel propagation, intercepted draft recipient and absence of auth/server calls on static notice surfaces. Dirty generated output alone is not successful static qualification or public publication.
+4. **External behavior:** No new real OAuth, external mail delivery, physical authenticator, public TLS/deployment or remote readiness evidence was reviewed; these remain unqualified. None is required merely to accept this narrow source correction.
+5. **Local main:** User authorizes completion and a local-main commit only, no push. The parent owns final validation, preservation/staging of intended work and commit reporting. This reviewer did not stage, commit, push or deploy. Changes after this source snapshot require scope-appropriate re-review/qualification.
+
+**Final SOURCE disposition: Approved, no blocking findings. R1-R8 are resolved in inspected source. Overall server-client/static acceptance is still pending parent-owned gate and runtime evidence.**

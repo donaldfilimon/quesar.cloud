@@ -60,7 +60,7 @@ export function safeInternalPath(path: string, fallback = "/console") {
   try {
     const base = "https://quesar.cloud";
     const url = new URL(path, base);
-    if (url.origin !== base) return fallback;
+    if (url.origin !== base || url.pathname.startsWith("//")) return fallback;
     // Encoded separators or controls must not gain meaning in a route decoder.
     if (/%(?:2f|5c|0[0-9a-f]|1[0-9a-f]|7f)/i.test(url.pathname)) return fallback;
     const pathname = decodeURIComponent(url.pathname).toLowerCase();
@@ -71,7 +71,11 @@ export function safeInternalPath(path: string, fallback = "/console") {
       )
     )
       return fallback;
-    return `${url.pathname}${url.search}${url.hash}`;
+    const target = `${url.pathname}${url.search}${url.hash}`;
+    // A path-only return value is parsed again by navigation. Its interpretation
+    // must not become off-origin after removing the absolute URL's origin.
+    if (new URL(target, base).origin !== base) return fallback;
+    return target;
   } catch {
     return fallback;
   }

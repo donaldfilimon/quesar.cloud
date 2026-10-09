@@ -124,7 +124,7 @@ function ContactPage() {
     const inquiryMessage = selectedService.trim()
       ? `Service: ${selectedService.trim()}\n\n${trimmed}`
       : trimmed;
-    if (!trimmed || blocked) return;
+    if (!trimmed || blocked || status === "saving") return;
     if (inquiryMessage.length > INQUIRY_LIMITS.messageMax) {
       setStatus("error");
       setError(
@@ -200,6 +200,7 @@ function ContactPage() {
                 <Label htmlFor="contact-name">Name</Label>
                 <Input
                   id="contact-name"
+                  disabled={status === "saving"}
                   required
                   minLength={INQUIRY_LIMITS.nameMin}
                   maxLength={INQUIRY_LIMITS.nameMax}
@@ -213,6 +214,7 @@ function ContactPage() {
                 <Label htmlFor="contact-email">Email</Label>
                 <Input
                   id="contact-email"
+                  disabled={status === "saving"}
                   type="email"
                   required
                   maxLength={INQUIRY_LIMITS.emailMax}
@@ -227,6 +229,7 @@ function ContactPage() {
               <Label htmlFor="contact-service">Service or project context (optional)</Label>
               <Input
                 id="contact-service"
+                disabled={status === "saving"}
                 value={selectedService}
                 maxLength={120}
                 onChange={(event) => setSelectedService(event.target.value)}
@@ -239,6 +242,7 @@ function ContactPage() {
             <fieldset className="mt-4">
               <legend className="text-sm">Topic</legend>
               <RadioGroup
+                disabled={status === "saving"}
                 className="mt-2 flex flex-wrap gap-2"
                 value={topic}
                 onValueChange={(value) => setTopic(value as (typeof TOPICS)[number])}
@@ -255,6 +259,7 @@ function ContactPage() {
               <Label htmlFor="contact-message">Message</Label>
               <Textarea
                 id="contact-message"
+                disabled={status === "saving"}
                 required
                 minLength={INQUIRY_LIMITS.messageMin}
                 maxLength={INQUIRY_LIMITS.messageMax}

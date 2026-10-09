@@ -1,0 +1,19 @@
+{
+  "head": "4d2d028c0a9f44914116bd34f122ea61121b4ed0",
+  "all43_media_stable": true,
+  "all114_film_sources_stable": true,
+  "final_root_exit": 0,
+  "final_root_files": 102,
+  "final_root_tests": 819,
+  "concurrent_changed_existing_files": [
+    "notes/verification/2026-10-09-auth-contact-review.md",
+    "notes/verification/2026-10-09-finishing/contact-auth-implementation.md",
+    "src/routes/contact.test.tsx",
+    "e2e/backend/persistent.acceptance.ts",
+    "src/lib/internal.test.ts",
+    "src/lib/internal.ts",
+    "src/routes/contact.tsx"
+  ],
+  "docs_diff": "",
+  "diff_check_exit": 0
+}

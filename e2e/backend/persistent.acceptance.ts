@@ -503,7 +503,14 @@ test("persistent Node artifact: fail closed, migrations, secure sessions, isolat
     await page.getByRole("button", { name: "Sign in with email", exact: true }).click();
     await expect(page).toHaveURL(`${origin}/profile`);
     await expect(page.getByLabel("Display name")).toHaveValue("Synthetic owner");
-    for (const next of ["/\t/attacker.example", "/docs/../signup", "/%6cogin"]) {
+    for (const next of [
+      "/\t/attacker.example",
+      "/docs/../signup",
+      "/%6cogin",
+      "/docs/..//attacker.example",
+      "/.//attacker.example",
+      "/docs/%2e%2e//attacker.example",
+    ]) {
       await page.goto(`${origin}/login?${new URLSearchParams({ next })}`);
       await expect(page).toHaveURL(`${origin}/console`);
     }
@@ -512,18 +519,43 @@ test("persistent Node artifact: fail closed, migrations, secure sessions, isolat
     );
 
     await page.goto(`${origin}/contact`);
+    const inquiryMessage = "Synthetic accepted inquiry with denied device storage.";
     await page.getByLabel("Name", { exact: true }).fill("Synthetic contact");
     await page.getByLabel("Email", { exact: true }).fill(`${name}-receipt@example.invalid`);
-    await page
-      .getByLabel("Message", { exact: true })
-      .fill("Synthetic accepted inquiry with denied device storage.");
+    await page.getByLabel("Message", { exact: true }).fill(inquiryMessage);
     await expect(page.getByRole("button", { name: "Send inquiry", exact: true })).toBeEnabled();
     await page.evaluate(() => {
       Storage.prototype.setItem = () => {
         throw new DOMException("Synthetic storage denial", "QuotaExceededError");
       };
     });
-    await page.getByRole("button", { name: "Send inquiry", exact: true }).click();
+    let releaseContact!: () => void;
+    const contactGate = new Promise<void>((resolve) => {
+      releaseContact = resolve;
+    });
+    const isInquiry = (request: import("@playwright/test").Request) =>
+      request.method() === "POST" && Boolean(request.postData()?.includes(inquiryMessage));
+    const holdContact = async (route: import("@playwright/test").Route) => {
+      if (!isInquiry(route.request())) return route.fallback();
+      await contactGate;
+      await route.continue();
+    };
+    await page.route("**/*", holdContact);
+    try {
+      const submitted = page.waitForRequest(isInquiry);
+      await page.getByRole("button", { name: "Send inquiry", exact: true }).click();
+      await submitted;
+      for (const label of ["Name", "Email", "Service or project context (optional)", "Message"]) {
+        await expect(page.getByLabel(label, { exact: true })).toBeDisabled();
+      }
+      await expect(page.getByRole("radio", { name: "Quesar", exact: true })).toBeDisabled();
+      await expect(page.getByLabel("Message", { exact: true })).not.toBeEditable();
+      await expect(page.getByLabel("Message", { exact: true })).toHaveValue(inquiryMessage);
+      releaseContact();
+    } finally {
+      releaseContact();
+      await page.unroute("**/*", holdContact);
+    }
     await expect(page.locator("form").getByRole("status")).toContainText(
       "Inquiry accepted by the site",
     );
@@ -531,6 +563,8 @@ test("persistent Node artifact: fail closed, migrations, secure sessions, isolat
       "local copy could not be saved",
     );
     await expect(page.getByRole("button", { name: "Send inquiry", exact: true })).toBeEnabled();
+    await expect(page.getByLabel("Message", { exact: true })).toBeEditable();
+    await expect(page.getByLabel("Message", { exact: true })).toHaveValue("");
     expect(
       (
         await db.query("select count(*)::int as n from inquiries where email=$1", [
@@ -538,8 +572,15 @@ test("persistent Node artifact: fail closed, migrations, secure sessions, isolat
         ])
       ).rows[0].n,
     ).toBe(1);
+    expect(
+      (
+        await db.query("select message from inquiries where email=$1", [
+          `${name}-receipt@example.invalid`,
+        ])
+      ).rows[0].message,
+    ).toBe(inquiryMessage);
     receipt(
-      "compiled contact: server acceptance remains honest and form settles after localStorage throws; exactly one accepted inquiry",
+      "compiled contact: editing frozen during delayed submission; server acceptance remains honest and form settles after localStorage throws; exactly one accepted inquiry with the submitted text",
     );
     for (const [id, body] of [
       [ids[0], "artifact owner note"],

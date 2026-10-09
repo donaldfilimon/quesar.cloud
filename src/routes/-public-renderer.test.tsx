@@ -99,7 +99,10 @@ describe("public renderer claim boundaries", () => {
     mode.static = false;
     const configured = render(ContactRoute);
     expect(configured).toContain("server accepts and stores your inquiry");
-    expect(configured).toContain("local receipt records acceptance by the site");
+    expect(configured).toContain(
+      "A local receipt records acceptance when device storage is available.",
+    );
+    expect(configured).not.toMatch(/email delivered|inquiry delivered/i);
     expect(configured).toContain("Send inquiry");
     expect(JSON.stringify(head(ContactRoute).meta)).toContain(
       "static preview requests an email draft",

@@ -1,8 +1,22 @@
 import { createElement, type ReactNode } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
-import { expect, it, vi } from "vitest";
+import { afterEach, expect, it, vi } from "vitest";
 import { site } from "@/lib/site-identity";
 import { privacyPolicy, securitySections, teamIntro } from "@/lib/mlai/pages";
+
+const state = vi.hoisted(() => ({ saving: false }));
+vi.mock("react", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("react")>();
+  return {
+    ...actual,
+    useState: <T,>(initial: T | (() => T)) =>
+      actual.useState<T>(state.saving && initial === "idle" ? ("saving" as T) : initial),
+  };
+});
+
+afterEach(() => {
+  state.saving = false;
+});
 
 vi.mock("@/lib/static-site", () => ({ staticSite: true }));
 vi.mock("@/lib/auth/use-current-user", () => ({
@@ -24,6 +38,21 @@ import { Route } from "./contact";
 import { SiteFooter } from "@/components/site/footer";
 import { Route as PrivacyRoute } from "./privacy";
 import { team } from "@/lib/mlai/categories/team";
+
+it("freezes all inquiry fields during submission and leaves them editable otherwise", () => {
+  for (const saving of [true, false]) {
+    state.saving = saving;
+    const html = renderToStaticMarkup(createElement(Route.options.component!));
+    for (const id of ["contact-name", "contact-email", "contact-service", "contact-message"]) {
+      const input = html.match(new RegExp(`<(?:input|textarea)[^>]*id="${id}"[^>]*>`))?.[0];
+      expect(input).toBeDefined();
+      expect(input!.includes('disabled=""')).toBe(saving);
+    }
+    const radios = html.match(/<button[^>]*role="radio"[^>]*>/g) ?? [];
+    expect(radios.length).toBeGreaterThan(0);
+    expect(radios.every((radio) => radio.includes('disabled=""') === saving)).toBe(true);
+  }
+});
 
 it("offers accessible public mail and international telephone links before hydration", () => {
   const html = renderToStaticMarkup(createElement(Route.options.component!));

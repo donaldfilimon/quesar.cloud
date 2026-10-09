@@ -68,6 +68,29 @@ describe("safeInternalPath", () => {
       "/contact?service=Private%20AI%20Deployment",
     );
   });
+
+  it("rejects canonical targets that dot normalization makes protocol-relative", () => {
+    const base = "https://quesar.cloud";
+    for (const path of [
+      "/docs/..//attacker.example",
+      "/.//attacker.example",
+      "/docs/%2e%2e//attacker.example",
+      "/docs/%2E%2E//attacker.example",
+      "/%2e//attacker.example",
+      "/docs/..//quesar.cloud",
+      "/docs/..///attacker.example/path?tab=notes#section",
+    ]) {
+      const parsed = new URL(path, base);
+      expect(parsed.origin).toBe(base);
+      expect(parsed.pathname.startsWith("//")).toBe(true);
+      const result = safeInternalPath(path);
+      expect(result).toBe("/console");
+      expect(new URL(result, base).origin).toBe(base);
+    }
+    expect(safeInternalPath("/docs//architecture?tab=source#evidence")).toBe(
+      "/docs//architecture?tab=source#evidence",
+    );
+  });
 });
 
 describe("internalHref", () => {
