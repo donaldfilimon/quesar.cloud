@@ -25,6 +25,8 @@ import {
   type VoiceSnapshot,
 } from "@/lib/trailer-engine";
 
+import type { OfflineContextLike, PCMExport, PCMExportOptions } from "@/lib/trailer-engine/audio";
+
 import { loadKokoro, MODEL_ID } from "./kokoro-loader";
 import { PERSONAS } from "./tokens";
 import { PRONOUNCE } from "./pronunciation";
@@ -217,3 +219,18 @@ export const NeuralVoice: NeuralVoiceAPI = {
   chunkText: (text) => engine.chunkText(text),
   clearCache: () => engine.clearCache(),
 };
+
+/** Explicit export entrypoint; importing this module never downloads the model. */
+export function exportPersonaPCM(
+  who: string,
+  text: string,
+  options: Omit<PCMExportOptions, "createOfflineContext">,
+): Promise<PCMExport & { model: string; immutableModelRevision: null }> {
+  return engine
+    .exportPCM(who, text, {
+      ...options,
+      createOfflineContext: (length, rate) =>
+        new OfflineAudioContext(1, length, rate) as unknown as OfflineContextLike,
+    })
+    .then((result) => ({ ...result, model: MODEL_ID, immutableModelRevision: null }));
+}

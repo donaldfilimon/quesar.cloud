@@ -1,4 +1,4 @@
-import { mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { createHash } from "node:crypto";
@@ -20,7 +20,10 @@ it.each([undefined, "", "f".repeat(63), "z".repeat(64), "0".repeat(64), "valid"]
       const sha = createHash("sha256").update(media).digest("hex");
       writeFileSync(join(folder, "mlai-quesar-kinetic-60.mp4"), media);
       for (const asset of ["middle.jpg", "captions.vtt", "transcript.txt"])
-        writeFileSync(join(folder, asset), "fixture");
+        writeFileSync(
+          join(folder, asset),
+          asset === "captions.vtt" ? "WEBVTT\n\n00:00:00.000 --> 00:00:01.000\nFixture" : "fixture",
+        );
       writeFileSync(
         join(folder, "verification.json"),
         JSON.stringify({
@@ -63,3 +66,186 @@ it.each([undefined, "", "f".repeat(63), "z".repeat(64), "0".repeat(64), "valid"]
     }
   },
 );
+
+function upgradedFixture() {
+  const root = mkdtempSync(join(tmpdir(), "trailer-upgrade-"));
+  mkdirSync(join(root, "scripts"));
+  mkdirSync(join(root, "src/lib"), { recursive: true });
+  writeFileSync(
+    join(root, "scripts/sync-trailer-editions.py"),
+    readFileSync("scripts/sync-trailer-editions.py"),
+  );
+  writeFileSync(join(root, "source.js"), "const film = true;\n");
+  const sourceHash = createHash("sha256")
+    .update(readFileSync(join(root, "source.js")))
+    .digest("hex");
+  const sources = { "source.js": sourceHash };
+  const externalImports: string[] = [];
+  const sourceDigest = createHash("sha256")
+    .update(JSON.stringify({ sources, externalImports }))
+    .digest("hex");
+  const input = join(root, "notes/launch/upgrade/artifacts/abbey-neural-v6");
+  const items: [string, number, "Quesar" | "MLAI"][] = [
+    ...[60, 120, 180, 600].flatMap((duration) =>
+      ["architecture", "studio"].map(
+        (style) =>
+          [`quesar-${style}-${duration}`, duration, "Quesar"] as [string, number, "Quesar"],
+      ),
+    ),
+    ...[
+      ["kinetic", 60],
+      ["editorial", 60],
+      ["technical", 120],
+      ["design", 120],
+      ["technical", 180],
+      ["design", 180],
+      ["technical", 600],
+      ["design", 600],
+    ].map(
+      ([style, duration]) =>
+        [`mlai-quesar-${style}-${duration}`, Number(duration), "MLAI"] as [string, number, "MLAI"],
+    ),
+  ];
+  for (const [id, duration, brand] of items) {
+    const folder = join(input, id);
+    mkdirSync(folder, { recursive: true });
+    const video = Buffer.from(`fixture video ${id}`);
+    const sha256 = createHash("sha256").update(video).digest("hex");
+    writeFileSync(join(folder, `${id}.mp4`), video);
+    const poster = brand === "Quesar" ? `sample-${duration * 15}.jpg` : "middle.jpg";
+    const sidecar = brand === "Quesar" ? "timeline.json" : "edit.json";
+    for (const [name, content] of [
+      [poster, "fixture poster"],
+      ["captions.vtt", "WEBVTT\n\nFixture"],
+      ["transcript.txt", "Fixture transcript"],
+      [sidecar, "{}"],
+    ])
+      writeFileSync(join(folder, name), content);
+    const fileHashes = Object.fromEntries(
+      ["captions.vtt", "transcript.txt", sidecar].map((name) => [
+        name,
+        createHash("sha256")
+          .update(readFileSync(join(folder, name)))
+          .digest("hex"),
+      ]),
+    );
+    const inheritedInput = brand === "MLAI" ? { "source.js": sourceHash } : null;
+    const inputDigest = createHash("sha256")
+      .update(JSON.stringify({ sourceDigest, id, version: "abbey-neural-v6", inheritedInput }))
+      .digest("hex");
+    writeFileSync(
+      join(folder, "verification.json"),
+      JSON.stringify({
+        id,
+        version: "abbey-neural-v6",
+        status: brand === "Quesar" ? "full_decode_verified" : "encoded_and_full_decode_verified",
+        sha256,
+        sources,
+        externalImports,
+        inheritedInput,
+        inputDigest,
+        fileHashes,
+        listeningReview: "pending",
+        visualReview: "pending",
+        listeningAccepted: false,
+        visualReviewAccepted: false,
+        renderSamplingFps: 30,
+        outputFps: 30,
+        browserErrors: [],
+        probe: {
+          streams: [
+            {
+              codec_type: "video",
+              width: 1920,
+              height: 1080,
+              avg_frame_rate: "30/1",
+              nb_read_frames: duration * 30,
+              duration,
+            },
+            { codec_type: "audio" },
+          ],
+        },
+      }),
+    );
+  }
+  const run = () =>
+    spawnSync(
+      "python3",
+      [
+        join(root, "scripts/sync-trailer-editions.py"),
+        "--input-dir",
+        input,
+        "--release-tag",
+        "trailer-editions-2026-10-09-abbey-neural",
+      ],
+      { encoding: "utf8" },
+    );
+  return { root, input, run };
+}
+
+it("requires all 16 upgrade receipts before writing catalog or public assets", () => {
+  const fixture = upgradedFixture();
+  try {
+    rmSync(join(fixture.input, "quesar-studio-600/verification.json"));
+    const result = fixture.run();
+    expect(result.status).not.toBe(0);
+    expect(result.stderr).toContain("all 16 required");
+    expect(existsSync(join(fixture.root, "src/lib/trailer-editions.generated.json"))).toBe(false);
+    expect(existsSync(join(fixture.root, "public/media/editions"))).toBe(false);
+  } finally {
+    rmSync(fixture.root, { recursive: true, force: true });
+  }
+});
+
+it("accepts technically verified films with pending subjective review and stages exactly four per duration", () => {
+  const fixture = upgradedFixture();
+  try {
+    const result = fixture.run();
+    expect(result.status, result.stderr).toBe(0);
+    const catalog = JSON.parse(
+      readFileSync(join(fixture.root, "src/lib/trailer-editions.generated.json"), "utf8"),
+    );
+    expect(catalog).toHaveLength(16);
+    for (const duration of [60, 120, 180, 600])
+      expect(catalog.filter((film: { seconds: number }) => film.seconds === duration)).toHaveLength(
+        4,
+      );
+    expect(
+      catalog.every((film: { video: string }) =>
+        film.video.includes("trailer-editions-2026-10-09-abbey-neural"),
+      ),
+    ).toBe(true);
+    expect(
+      existsSync(
+        join(
+          fixture.root,
+          "public/media/editions/quesar-architecture-60/quesar-architecture-60.mp4",
+        ),
+      ),
+    ).toBe(false);
+    const changed = join(fixture.input, "quesar-architecture-60/captions.vtt");
+    writeFileSync(changed, "WEBVTT\nchanged");
+    const rejected = fixture.run();
+    expect(rejected.status).not.toBe(0);
+    expect(rejected.stderr).toContain("changed sidecar");
+  } finally {
+    rmSync(fixture.root, { recursive: true, force: true });
+  }
+});
+
+it("rejects an unverified technical receipt before writing any output", () => {
+  const fixture = upgradedFixture();
+  try {
+    const proof = join(fixture.input, "quesar-architecture-60/verification.json");
+    const receipt = JSON.parse(readFileSync(proof, "utf8"));
+    receipt.status = "rendered";
+    writeFileSync(proof, JSON.stringify(receipt));
+    const result = fixture.run();
+    expect(result.status).not.toBe(0);
+    expect(result.stderr).toContain("invalid status");
+    expect(existsSync(join(fixture.root, "src/lib/trailer-editions.generated.json"))).toBe(false);
+    expect(existsSync(join(fixture.root, "public/media/editions"))).toBe(false);
+  } finally {
+    rmSync(fixture.root, { recursive: true, force: true });
+  }
+});

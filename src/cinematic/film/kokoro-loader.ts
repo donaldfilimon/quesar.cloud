@@ -29,16 +29,21 @@ async function detectDevice(): Promise<string> {
 // informational, but ORT logs it via console.error, where it reads as a
 // failure. Filter ONLY that line; everything else passes through.
 // Process-global and installed once; it is deliberately not part of the engine.
+export function isBenignOrtAssignmentNotice(value: unknown): boolean {
+  return (
+    typeof value === "string" &&
+    /Some nodes were not assigned to the preferred execution providers/i.test(value)
+  );
+}
+
 let ortFilterInstalled = false;
 function installOrtLogFilter(): void {
   if (ortFilterInstalled || typeof console === "undefined") return;
   ortFilterInstalled = true;
-  const BENIGN =
-    /onnxruntime|VerifyEachNodeIsAssignedToAnEp|nodes were not assigned to the preferred/i;
   for (const level of ["warn", "error"] as const) {
     const orig = console[level].bind(console);
     console[level] = (...args: unknown[]) => {
-      if (typeof args[0] === "string" && BENIGN.test(args[0])) return;
+      if (isBenignOrtAssignmentNotice(args[0])) return;
       orig(...args);
     };
   }

@@ -201,3 +201,133 @@ describe("AudioEngine playback intent cancellation", () => {
     expect(context.close).toHaveBeenCalledOnce();
   });
 });
+
+describe("AudioEngine offline export", () => {
+  function offlineFixture(generate: TTSHandle["generate"]) {
+    const f = fixture(generate);
+    const filters: ReturnType<typeof f.context.createBiquadFilter>[] = [];
+    const bus = f.context.createDynamicsCompressor();
+    const createOfflineContext = vi.fn((length: number, rate: number) => ({
+      ...f.context,
+      createBiquadFilter: () => {
+        const filter = f.context.createBiquadFilter();
+        filters.push(filter);
+        return filter;
+      },
+      createDynamicsCompressor: () => bus,
+      startRendering: async () => {
+        const output = f.context.createBuffer(1, length, rate);
+        const source = f.sources.at(-1)?.buffer;
+        if (source) output.getChannelData(0).set(source.getChannelData(0));
+        return output;
+      },
+    }));
+    return { ...f, createOfflineContext, filters, bus };
+  }
+  const valid = () =>
+    Promise.resolve({ audio: new Float32Array(2400).fill(0.9), sampling_rate: 24000 });
+
+  it("applies sentence edges, exact measured timing, shared bus settings and export headroom", async () => {
+    const f = offlineFixture(valid);
+    const result = await f.engine.exportPCM("abbey", "A complete sentence.", {
+      createOfflineContext: f.createOfflineContext,
+      maxSeconds: 1,
+    });
+    expect(result.seconds).toBe(0.14);
+    expect(result.samples.length).toBe(3360);
+    expect(result.samples[0]).toBe(0);
+    expect(result.samples.at(-1)).toBe(0);
+    expect(result.processing.peak).toBeCloseTo(0.85);
+    expect(result.phrases).toEqual([{ text: "A complete sentence.", start: 0, end: 0.1 }]);
+    expect(f.bus.threshold.value).toBe(-18);
+    expect(f.bus.ratio.value).toBe(3);
+    f.engine.dispose();
+  });
+
+  it.each([NaN, Infinity, 1.1])("refuses invalid neural samples (%s)", async (value) => {
+    const f = offlineFixture(async () => ({
+      audio: new Float32Array([value]),
+      sampling_rate: 24000,
+    }));
+    await expect(
+      f.engine.exportPCM("abbey", "Speech.", {
+        createOfflineContext: f.createOfflineContext,
+        maxSeconds: 1,
+      }),
+    ).rejects.toThrow("Invalid neural PCM");
+    expect(f.createOfflineContext).not.toHaveBeenCalled();
+    f.engine.dispose();
+  });
+
+  it("rejects overruns without truncating and rejects empty and silent speech", async () => {
+    const f = offlineFixture(valid);
+    await expect(
+      f.engine.exportPCM("abbey", "Speech.", {
+        createOfflineContext: f.createOfflineContext,
+        maxSeconds: 0.01,
+      }),
+    ).rejects.toThrow("overrun");
+    await expect(
+      f.engine.exportPCM("abbey", " ", {
+        createOfflineContext: f.createOfflineContext,
+        maxSeconds: 1,
+      }),
+    ).rejects.toThrow("Empty speech");
+    f.engine.dispose();
+    const silent = offlineFixture(async () => ({
+      audio: new Float32Array(100),
+      sampling_rate: 24000,
+    }));
+    await expect(
+      silent.engine.exportPCM("abbey", "Speech.", {
+        createOfflineContext: silent.createOfflineContext,
+        maxSeconds: 1,
+      }),
+    ).rejects.toThrow("Silent neural PCM");
+    silent.engine.dispose();
+  });
+
+  it("cancels a pending synthesis and ignores its eventual output", async () => {
+    const pending = deferred<TTSAudio>();
+    const f = offlineFixture(() => pending.promise);
+    const abort = new AbortController();
+    await f.engine.load();
+    const job = f.engine.exportPCM("abbey", "Speech.", {
+      createOfflineContext: f.createOfflineContext,
+      maxSeconds: 1,
+      signal: abort.signal,
+    });
+    abort.abort();
+    await expect(job).rejects.toThrow("cancelled");
+    pending.resolve(await valid());
+    await Promise.resolve();
+    expect(f.createOfflineContext).not.toHaveBeenCalled();
+    f.engine.dispose();
+  });
+
+  it("bounds a stalled model and rejects invalid offline output", async () => {
+    const stalled = offlineFixture(() => new Promise(() => {}));
+    await expect(
+      stalled.engine.exportPCM("abbey", "Speech.", {
+        createOfflineContext: stalled.createOfflineContext,
+        maxSeconds: 1,
+        timeoutMs: 5,
+      }),
+    ).rejects.toThrow("deadline");
+    stalled.engine.dispose();
+    const f = offlineFixture(valid);
+    await expect(
+      f.engine.exportPCM("abbey", "Speech.", {
+        maxSeconds: 1,
+        createOfflineContext: (n, sr) => ({
+          ...f.createOfflineContext(n, sr),
+          startRendering: async () => ({
+            duration: 0.1,
+            getChannelData: () => new Float32Array(3360).fill(NaN),
+          }),
+        }),
+      }),
+    ).rejects.toThrow("Invalid offline PCM");
+    f.engine.dispose();
+  });
+});

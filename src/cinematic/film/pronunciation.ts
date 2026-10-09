@@ -1,5 +1,8 @@
 const spell = (value: string) => value.split("").join("‑");
 export const PRONOUNCE: ReadonlyArray<readonly [RegExp, string]> = [
+  [/\bNext\.js\b/gi, "Next jay ess"],
+  [/\bquesar\.cloud\b/gi, "Quasar dot cloud"],
+  [/\bQuesar\b/g, "Quasar"],
   [/\bWDBX\b/g, spell("WDBX")],
   [/\bMLAI\b/g, spell("MLAI")],
   [/\bHNSW\b/g, spell("HNSW")],

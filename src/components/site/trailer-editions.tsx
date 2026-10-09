@@ -1,23 +1,30 @@
 import { useState } from "react";
-import { Play } from "lucide-react";
+import { Play, ArrowDownToLine } from "lucide-react";
 import { trailerEditions, type TrailerEdition } from "@/lib/trailer-editions";
+import "./trailer-editions.css";
 
-function Edition({ film }: { film: TrailerEdition }) {
-  const [started, setStarted] = useState(false);
+const defaultFilm =
+  trailerEditions.find((film) => film.id === "quesar-architecture-60") ?? trailerEditions[0];
+const durations = [60, 120, 180, 600] as const;
+const neuralRelease = trailerEditions.every((film) =>
+  film.video.includes("/trailer-editions-2026-10-09-abbey-neural/"),
+);
+
+function FilmPlayer({ film }: { film: TrailerEdition }) {
+  const [opened, setOpened] = useState(false);
   const [failed, setFailed] = useState(false);
   return (
-    <li className="overflow-hidden rounded-xl border border-border bg-card">
-      {started ? (
+    <div className="edition-screen">
+      {opened && !failed ? (
         <video
           controls
           playsInline
           preload="none"
           poster={film.poster}
-          className="aspect-video w-full bg-black"
           aria-label={film.title}
           onError={() => setFailed(true)}
         >
-          <source src={film.video} type="video/mp4" onError={() => setFailed(true)} />
+          <source src={film.video} type="video/mp4" />
           <track
             kind="captions"
             src={film.captions}
@@ -29,98 +36,133 @@ function Edition({ film }: { film: TrailerEdition }) {
       ) : (
         <button
           type="button"
-          className="group relative block aspect-video w-full bg-black text-white"
-          aria-label={`Open player for ${film.title}`}
-          onClick={() => setStarted(true)}
+          className="edition-play"
+          aria-label={`${failed ? "Retry" : "Open"} player for ${film.title}`}
+          onClick={() => {
+            setFailed(false);
+            setOpened(true);
+          }}
         >
-          <img
-            src={film.poster}
-            width={1920}
-            height={1080}
-            alt=""
-            loading="lazy"
-            decoding="async"
-            className="size-full object-cover"
-          />
-          <span className="absolute inset-0 grid place-items-center">
-            <span className="grid size-14 place-items-center rounded-full bg-black/70 group-hover:bg-black/90">
-              <Play className="size-6" aria-hidden="true" />
-            </span>
+          <img src={film.poster} width={1920} height={1080} alt="" decoding="async" />
+          <span className="edition-play-label">
+            <Play size={22} aria-hidden="true" /> {failed ? "Retry film" : "Open player"}
           </span>
         </button>
       )}
-      <div className="p-5 sm:p-6">
-        <p className="font-mono text-xs text-fg-subtle">
-          {film.brand} · {film.style.toUpperCase()} · {film.seconds / 60} MIN · 1080P · NARRATED
+      {failed && (
+        <p className="edition-error" role="alert">
+          The film could not load. Retry playback or use the transcript and download links.
         </p>
-        <h3 className="mt-3 font-display text-2xl tracking-tight">{film.title}</h3>
-        <p className="mt-3 text-sm leading-relaxed text-fg-muted">{film.description}</p>
-        {failed && (
-          <div className="mt-3">
-            <p role="alert" className="text-sm">
-              The video could not load. Open the MP4 or read the transcript below.
-            </p>
-            <button
-              type="button"
-              className="min-h-11 text-sm text-accent underline"
-              onClick={() => {
-                setFailed(false);
-                setStarted(false);
-              }}
-            >
-              Reset player
-            </button>
-          </div>
-        )}
-        <div className="mt-5 flex flex-wrap gap-x-5 gap-y-3 text-sm">
-          <a href={film.video} className="text-accent underline underline-offset-4">
-            Open MP4
+      )}
+      {opened && (
+        <div className="edition-resources">
+          <a href={film.captions} download>
+            Download captions
           </a>
-          <a href={film.captions} download className="text-accent underline underline-offset-4">
-            Captions
+          <a href={film.transcript} target="_blank" rel="noreferrer">
+            Read transcript
           </a>
-          <a href={film.transcript} className="text-accent underline underline-offset-4">
-            Transcript
+          <a href={film.video} download>
+            <ArrowDownToLine size={16} aria-hidden="true" /> Download MP4
           </a>
         </div>
-      </div>
-    </li>
+      )}
+    </div>
   );
 }
 
 export function TrailerEditions() {
-  const [minutes, setMinutes] = useState<number | null>(null);
-  const durations = [...new Set(trailerEditions.map((film) => film.seconds / 60))];
-  const films = trailerEditions.filter((film) => minutes === null || film.seconds === minutes * 60);
+  const [seconds, setSeconds] = useState<number | null>(null);
+  const [selectedId, setSelectedId] = useState(defaultFilm?.id ?? "");
+  const visible = trailerEditions.filter((film) => seconds === null || film.seconds === seconds);
+  const selected = visible.find((film) => film.id === selectedId) ?? visible[0];
+  if (!selected) return null;
   return (
-    <div id="editions" className="scroll-mt-28">
-      <p className="eyebrow">The film library</p>
-      <h2 className="mt-4 font-display text-3xl tracking-tight sm:text-5xl">
-        One ecosystem. Different perspectives.
-      </h2>
-      <p className="mt-5 max-w-2xl text-base leading-relaxed text-fg-muted">
-        React-rendered films about MLAI and Quesar, with English captions and readable transcripts.
-        These films describe vision and roadmap; current capabilities are documented on the product
-        pages.
-      </p>
-      <div role="group" aria-label="Filter films by duration" className="my-8 flex flex-wrap gap-2">
+    <div id="editions" className="edition-gallery scroll-mt-28">
+      <div className="edition-intro">
+        <p className="eyebrow">The film library</p>
+        <h2>One ecosystem. Sixteen perspectives.</h2>
+        <p>
+          Four running times.{" "}
+          {neuralRelease
+            ? "Quesar films pair a new Abbey browser neural performance with a revised scene grammar. MLAI films retain their complete original neural performances with restrained mastering. "
+            : "Explore Quesar and MLAI through their current narrated editions. "}
+          These films describe vision and roadmap; current capabilities are documented on the
+          product pages.
+        </p>
+      </div>
+      <div role="group" aria-label="Filter films by duration" className="edition-filters">
         {[null, ...durations].map((duration) => (
           <button
             key={duration ?? "all"}
             type="button"
-            aria-pressed={minutes === duration}
-            onClick={() => setMinutes(duration)}
-            className={`min-h-11 rounded-full border px-5 text-sm ${minutes === duration ? "border-accent bg-accent text-bg" : "border-border text-fg-muted hover:text-fg"}`}
+            aria-pressed={seconds === duration}
+            onClick={() => {
+              setSeconds(duration);
+              if (duration !== null && selected.seconds !== duration) {
+                setSelectedId(trailerEditions.find((film) => film.seconds === duration)?.id ?? "");
+              }
+            }}
           >
-            {duration === null ? "All editions" : `${duration} min`}
+            {duration === null
+              ? "All 16 films"
+              : `${duration / 60} min · ${trailerEditions.filter((film) => film.seconds === duration).length}`}
           </button>
         ))}
       </div>
-      <ul className="grid gap-6 lg:grid-cols-2">
-        {films.map((film) => (
-          <Edition key={film.id} film={film} />
-        ))}
-      </ul>
+      <div className="edition-layout">
+        <div className="edition-feature" aria-live="polite">
+          <div className="edition-feature-topline">
+            <span>
+              {selected.brand} / {selected.style}
+            </span>
+            <span>{selected.seconds / 60} min · 1080p</span>
+          </div>
+          <FilmPlayer key={selected.id} film={selected} />
+          <div className="edition-feature-copy">
+            <h3>{selected.title}</h3>
+            <p>{selected.description}</p>
+            <p className="edition-access-note">
+              English captions and transcript available when you open the player. Playback begins
+              only when you press play.
+            </p>
+          </div>
+        </div>
+        <div className="edition-index">
+          <h3>
+            Choose a film <span>{visible.length} shown</span>
+          </h3>
+          <ul>
+            {visible.map((film, index) => (
+              <li key={film.id}>
+                <button
+                  type="button"
+                  aria-pressed={selected.id === film.id}
+                  aria-label={`Select ${film.title}, ${film.brand}`}
+                  onClick={() => setSelectedId(film.id)}
+                >
+                  <span className="edition-index-number">{String(index + 1).padStart(2, "0")}</span>
+                  <img
+                    src={film.poster}
+                    width={160}
+                    height={90}
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <span className="edition-index-copy">
+                    <strong>{film.title}</strong>
+                    <small>
+                      {film.brand} / {film.style}
+                    </small>
+                  </span>
+                  <span className="edition-index-duration">{film.seconds / 60}m</span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
     </div>
   );
 }
