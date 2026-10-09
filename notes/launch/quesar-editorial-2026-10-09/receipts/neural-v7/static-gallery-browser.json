@@ -1,0 +1,478 @@
+{
+  "checkedAt": "2026-10-09T11:30:16.961Z",
+  "origin": "http://127.0.0.1:4318",
+  "expectedRelease": "trailer-editions-2026-10-09-abbey-neural",
+  "catalogRelease": "trailer-editions-2026-10-09-abbey-neural",
+  "viewports": [
+    {
+      "width": 375,
+      "status": 200,
+      "overflow": {
+        "scrollWidth": 375,
+        "innerWidth": 375
+      },
+      "initialCount": 16,
+      "selected": "Select Quesar architecture · 1 min, Quesar",
+      "noVideo": true,
+      "noMp4Href": true
+    },
+    {
+      "width": 768,
+      "status": 200,
+      "overflow": {
+        "scrollWidth": 768,
+        "innerWidth": 768
+      },
+      "initialCount": 16,
+      "selected": "Select Quesar architecture · 1 min, Quesar",
+      "noVideo": true,
+      "noMp4Href": true
+    },
+    {
+      "width": 1440,
+      "status": 200,
+      "overflow": {
+        "scrollWidth": 1440,
+        "innerWidth": 1440
+      },
+      "initialCount": 16,
+      "selected": "Select Quesar architecture · 1 min, Quesar",
+      "noVideo": true,
+      "noMp4Href": true
+    }
+  ],
+  "filters": [
+    {
+      "width": 375,
+      "minutes": 1,
+      "count": 4,
+      "selected": "Select Quesar architecture · 1 min, Quesar"
+    },
+    {
+      "width": 375,
+      "minutes": 2,
+      "count": 4,
+      "selected": "Select MLAI architecture · 2 min, MLAI"
+    },
+    {
+      "width": 375,
+      "minutes": 3,
+      "count": 4,
+      "selected": "Select MLAI architecture · 3 min, MLAI"
+    },
+    {
+      "width": 375,
+      "minutes": 10,
+      "count": 4,
+      "selected": "Select MLAI architecture · 10 min, MLAI"
+    },
+    {
+      "width": 768,
+      "minutes": 1,
+      "count": 4,
+      "selected": "Select Quesar architecture · 1 min, Quesar"
+    },
+    {
+      "width": 768,
+      "minutes": 2,
+      "count": 4,
+      "selected": "Select MLAI architecture · 2 min, MLAI"
+    },
+    {
+      "width": 768,
+      "minutes": 3,
+      "count": 4,
+      "selected": "Select MLAI architecture · 3 min, MLAI"
+    },
+    {
+      "width": 768,
+      "minutes": 10,
+      "count": 4,
+      "selected": "Select MLAI architecture · 10 min, MLAI"
+    },
+    {
+      "width": 1440,
+      "minutes": 1,
+      "count": 4,
+      "selected": "Select Quesar architecture · 1 min, Quesar"
+    },
+    {
+      "width": 1440,
+      "minutes": 2,
+      "count": 4,
+      "selected": "Select MLAI architecture · 2 min, MLAI"
+    },
+    {
+      "width": 1440,
+      "minutes": 3,
+      "count": 4,
+      "selected": "Select MLAI architecture · 3 min, MLAI"
+    },
+    {
+      "width": 1440,
+      "minutes": 10,
+      "count": 4,
+      "selected": "Select MLAI architecture · 10 min, MLAI"
+    }
+  ],
+  "requestsBeforeIntent": [],
+  "unrelatedMediaBeforeIntent": [],
+  "browserErrors": [],
+  "checks": {
+    "375: HTTP 200": {
+      "passed": true,
+      "detail": 200
+    },
+    "375: no horizontal overflow": {
+      "passed": true,
+      "detail": {
+        "scrollWidth": 375,
+        "innerWidth": 375
+      }
+    },
+    "375: 16 choices": {
+      "passed": true,
+      "detail": 16
+    },
+    "375: default architecture 60": {
+      "passed": true,
+      "detail": "Select Quesar architecture · 1 min, Quesar"
+    },
+    "375: unopened player": {
+      "passed": true,
+      "detail": {
+        "noVideo": true,
+        "noMp4Href": true
+      }
+    },
+    "375: 1 min has four": {
+      "passed": true,
+      "detail": 4
+    },
+    "375: 1 min deterministic selection": {
+      "passed": true,
+      "detail": {
+        "selectedFilter": "Select Quesar architecture · 1 min, Quesar",
+        "expected": "Select Quesar architecture · 1 min, Quesar"
+      }
+    },
+    "375: 2 min has four": {
+      "passed": true,
+      "detail": 4
+    },
+    "375: 2 min deterministic selection": {
+      "passed": true,
+      "detail": {
+        "selectedFilter": "Select MLAI architecture · 2 min, MLAI",
+        "expected": "Select MLAI architecture · 2 min, MLAI"
+      }
+    },
+    "375: 3 min has four": {
+      "passed": true,
+      "detail": 4
+    },
+    "375: 3 min deterministic selection": {
+      "passed": true,
+      "detail": {
+        "selectedFilter": "Select MLAI architecture · 3 min, MLAI",
+        "expected": "Select MLAI architecture · 3 min, MLAI"
+      }
+    },
+    "375: 10 min has four": {
+      "passed": true,
+      "detail": 4
+    },
+    "375: 10 min deterministic selection": {
+      "passed": true,
+      "detail": {
+        "selectedFilter": "Select MLAI architecture · 10 min, MLAI",
+        "expected": "Select MLAI architecture · 10 min, MLAI"
+      }
+    },
+    "375: keyboard Enter opens": {
+      "passed": true,
+      "detail": "Open player for Quesar architecture · 1 min"
+    },
+    "375: manual playback": {
+      "passed": true,
+      "detail": {
+        "paused": true,
+        "autoplay": false,
+        "preload": "none"
+      }
+    },
+    "375: selected media links": {
+      "passed": true,
+      "detail": {
+        "source": "https://github.com/donaldfilimon/quesar.cloud/releases/download/trailer-editions-2026-10-09-abbey-neural/quesar-architecture-60.mp4",
+        "caption": "/media/editions/quesar-architecture-60/captions.vtt",
+        "transcript": "/media/editions/quesar-architecture-60/transcript.txt",
+        "download": "https://github.com/donaldfilimon/quesar.cloud/releases/download/trailer-editions-2026-10-09-abbey-neural/quesar-architecture-60.mp4",
+        "captionLink": "/media/editions/quesar-architecture-60/captions.vtt"
+      }
+    },
+    "375: expected release": {
+      "passed": true,
+      "detail": "https://github.com/donaldfilimon/quesar.cloud/releases/download/trailer-editions-2026-10-09-abbey-neural/quesar-architecture-60.mp4"
+    },
+    "375: selection resets old player": {
+      "passed": true,
+      "detail": "Quesar studio · 1 min"
+    },
+    "375: recoverable media error": {
+      "passed": true,
+      "detail": "The film could not load. Retry playback or use the transcript and download links."
+    },
+    "375: retry restores player": {
+      "passed": true,
+      "detail": 1
+    },
+    "375: filter resets old player": {
+      "passed": true,
+      "detail": {
+        "video": 0,
+        "choices": 4
+      }
+    },
+    "768: HTTP 200": {
+      "passed": true,
+      "detail": 200
+    },
+    "768: no horizontal overflow": {
+      "passed": true,
+      "detail": {
+        "scrollWidth": 768,
+        "innerWidth": 768
+      }
+    },
+    "768: 16 choices": {
+      "passed": true,
+      "detail": 16
+    },
+    "768: default architecture 60": {
+      "passed": true,
+      "detail": "Select Quesar architecture · 1 min, Quesar"
+    },
+    "768: unopened player": {
+      "passed": true,
+      "detail": {
+        "noVideo": true,
+        "noMp4Href": true
+      }
+    },
+    "768: 1 min has four": {
+      "passed": true,
+      "detail": 4
+    },
+    "768: 1 min deterministic selection": {
+      "passed": true,
+      "detail": {
+        "selectedFilter": "Select Quesar architecture · 1 min, Quesar",
+        "expected": "Select Quesar architecture · 1 min, Quesar"
+      }
+    },
+    "768: 2 min has four": {
+      "passed": true,
+      "detail": 4
+    },
+    "768: 2 min deterministic selection": {
+      "passed": true,
+      "detail": {
+        "selectedFilter": "Select MLAI architecture · 2 min, MLAI",
+        "expected": "Select MLAI architecture · 2 min, MLAI"
+      }
+    },
+    "768: 3 min has four": {
+      "passed": true,
+      "detail": 4
+    },
+    "768: 3 min deterministic selection": {
+      "passed": true,
+      "detail": {
+        "selectedFilter": "Select MLAI architecture · 3 min, MLAI",
+        "expected": "Select MLAI architecture · 3 min, MLAI"
+      }
+    },
+    "768: 10 min has four": {
+      "passed": true,
+      "detail": 4
+    },
+    "768: 10 min deterministic selection": {
+      "passed": true,
+      "detail": {
+        "selectedFilter": "Select MLAI architecture · 10 min, MLAI",
+        "expected": "Select MLAI architecture · 10 min, MLAI"
+      }
+    },
+    "768: keyboard Enter opens": {
+      "passed": true,
+      "detail": "Open player for Quesar architecture · 1 min"
+    },
+    "768: manual playback": {
+      "passed": true,
+      "detail": {
+        "paused": true,
+        "autoplay": false,
+        "preload": "none"
+      }
+    },
+    "768: selected media links": {
+      "passed": true,
+      "detail": {
+        "source": "https://github.com/donaldfilimon/quesar.cloud/releases/download/trailer-editions-2026-10-09-abbey-neural/quesar-architecture-60.mp4",
+        "caption": "/media/editions/quesar-architecture-60/captions.vtt",
+        "transcript": "/media/editions/quesar-architecture-60/transcript.txt",
+        "download": "https://github.com/donaldfilimon/quesar.cloud/releases/download/trailer-editions-2026-10-09-abbey-neural/quesar-architecture-60.mp4",
+        "captionLink": "/media/editions/quesar-architecture-60/captions.vtt"
+      }
+    },
+    "768: expected release": {
+      "passed": true,
+      "detail": "https://github.com/donaldfilimon/quesar.cloud/releases/download/trailer-editions-2026-10-09-abbey-neural/quesar-architecture-60.mp4"
+    },
+    "768: selection resets old player": {
+      "passed": true,
+      "detail": "Quesar studio · 1 min"
+    },
+    "768: recoverable media error": {
+      "passed": true,
+      "detail": "The film could not load. Retry playback or use the transcript and download links."
+    },
+    "768: retry restores player": {
+      "passed": true,
+      "detail": 1
+    },
+    "768: filter resets old player": {
+      "passed": true,
+      "detail": {
+        "video": 0,
+        "choices": 4
+      }
+    },
+    "1440: HTTP 200": {
+      "passed": true,
+      "detail": 200
+    },
+    "1440: no horizontal overflow": {
+      "passed": true,
+      "detail": {
+        "scrollWidth": 1440,
+        "innerWidth": 1440
+      }
+    },
+    "1440: 16 choices": {
+      "passed": true,
+      "detail": 16
+    },
+    "1440: default architecture 60": {
+      "passed": true,
+      "detail": "Select Quesar architecture · 1 min, Quesar"
+    },
+    "1440: unopened player": {
+      "passed": true,
+      "detail": {
+        "noVideo": true,
+        "noMp4Href": true
+      }
+    },
+    "1440: 1 min has four": {
+      "passed": true,
+      "detail": 4
+    },
+    "1440: 1 min deterministic selection": {
+      "passed": true,
+      "detail": {
+        "selectedFilter": "Select Quesar architecture · 1 min, Quesar",
+        "expected": "Select Quesar architecture · 1 min, Quesar"
+      }
+    },
+    "1440: 2 min has four": {
+      "passed": true,
+      "detail": 4
+    },
+    "1440: 2 min deterministic selection": {
+      "passed": true,
+      "detail": {
+        "selectedFilter": "Select MLAI architecture · 2 min, MLAI",
+        "expected": "Select MLAI architecture · 2 min, MLAI"
+      }
+    },
+    "1440: 3 min has four": {
+      "passed": true,
+      "detail": 4
+    },
+    "1440: 3 min deterministic selection": {
+      "passed": true,
+      "detail": {
+        "selectedFilter": "Select MLAI architecture · 3 min, MLAI",
+        "expected": "Select MLAI architecture · 3 min, MLAI"
+      }
+    },
+    "1440: 10 min has four": {
+      "passed": true,
+      "detail": 4
+    },
+    "1440: 10 min deterministic selection": {
+      "passed": true,
+      "detail": {
+        "selectedFilter": "Select MLAI architecture · 10 min, MLAI",
+        "expected": "Select MLAI architecture · 10 min, MLAI"
+      }
+    },
+    "1440: keyboard Enter opens": {
+      "passed": true,
+      "detail": "Open player for Quesar architecture · 1 min"
+    },
+    "1440: manual playback": {
+      "passed": true,
+      "detail": {
+        "paused": true,
+        "autoplay": false,
+        "preload": "none"
+      }
+    },
+    "1440: selected media links": {
+      "passed": true,
+      "detail": {
+        "source": "https://github.com/donaldfilimon/quesar.cloud/releases/download/trailer-editions-2026-10-09-abbey-neural/quesar-architecture-60.mp4",
+        "caption": "/media/editions/quesar-architecture-60/captions.vtt",
+        "transcript": "/media/editions/quesar-architecture-60/transcript.txt",
+        "download": "https://github.com/donaldfilimon/quesar.cloud/releases/download/trailer-editions-2026-10-09-abbey-neural/quesar-architecture-60.mp4",
+        "captionLink": "/media/editions/quesar-architecture-60/captions.vtt"
+      }
+    },
+    "1440: expected release": {
+      "passed": true,
+      "detail": "https://github.com/donaldfilimon/quesar.cloud/releases/download/trailer-editions-2026-10-09-abbey-neural/quesar-architecture-60.mp4"
+    },
+    "1440: selection resets old player": {
+      "passed": true,
+      "detail": "Quesar studio · 1 min"
+    },
+    "1440: recoverable media error": {
+      "passed": true,
+      "detail": "The film could not load. Retry playback or use the transcript and download links."
+    },
+    "1440: retry restores player": {
+      "passed": true,
+      "detail": 1
+    },
+    "1440: filter resets old player": {
+      "passed": true,
+      "detail": {
+        "video": 0,
+        "choices": 4
+      }
+    },
+    "no gallery media/model request before intent": {
+      "passed": true,
+      "detail": []
+    },
+    "no browser errors": {
+      "passed": true,
+      "detail": []
+    }
+  },
+  "failures": [],
+  "status": "passed"
+}

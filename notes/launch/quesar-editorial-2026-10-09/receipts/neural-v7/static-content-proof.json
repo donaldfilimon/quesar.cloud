@@ -1,0 +1,13 @@
+{
+  "homeModulepreloadsBefore": 16,
+  "homeModulepreloadsAfter": 16,
+  "generatedAssetChanges": 263,
+  "docsChanges": 440,
+  "showcaseNeuralCopy": true,
+  "unopenedGalleryHasNoVideo": true,
+  "releaseCatalogChunks": [
+    "docs/assets/showcase-Yt1cPvDQ.js"
+  ],
+  "remoteProvenanceReadbackSha256": "450af23de1aaaeb313012c538c33144ba8e08f65703d20314a63c8a521976f09",
+  "remoteProvenanceEntries": 66
+}

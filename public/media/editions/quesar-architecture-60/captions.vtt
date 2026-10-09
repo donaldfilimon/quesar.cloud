@@ -1,17 +1,65 @@
 WEBVTT
 
 1
-00:00:00.000 --> 00:00:15.000
-Human imagination. Adaptive intelligence. Quesar by MLAI introduces assistant workflows, memory systems and developer tools with inspectable sources.
+00:00:00.530 --> 00:00:02.545
+Human imagination.
 
 2
-00:00:15.000 --> 00:00:30.000
-Two names. Two distinct scopes. Quesar is the MLAI website and broader direction. Quasar is the separately configured local website builder service.
+00:00:02.845 --> 00:00:04.885
+Adaptive intelligence.
 
 3
-00:00:30.000 --> 00:00:45.000
-A new site. Begin with a prompt. The local service copies a Next.js template into its sites directory and runs a Claude generation job using that machine’s Anthropic credentials.
+00:00:05.185 --> 00:00:13.675
+Quesar by MLAI introduces assistant workflows, memory systems and developer tools with inspectable sources.
 
 4
-00:00:45.000 --> 00:01:00.000
-Build thoughtfully. quesar.cloud Explore the architecture. Follow the source. Define the evidence your project needs. Quesar by MLAI.
+00:00:14.978 --> 00:00:16.518
+Two names.
+
+5
+00:00:16.818 --> 00:00:18.633
+Two distinct scopes.
+
+6
+00:00:18.933 --> 00:00:23.073
+Quesar is the MLAI website and broader direction.
+
+7
+00:00:23.373 --> 00:00:28.213
+Quasar is the separately configured local website builder service.
+
+8
+00:00:29.515 --> 00:00:31.155
+A new site.
+
+9
+00:00:31.455 --> 00:00:33.245
+Begin with a prompt.
+
+10
+00:00:33.545 --> 00:00:43.760
+The local service copies a Next.js template into its sites directory and runs a Claude generation job using that machine’s Anthropic credentials.
+
+11
+00:00:45.063 --> 00:00:46.853
+Build thoughtfully.
+
+12
+00:00:47.153 --> 00:00:49.093
+quesar.cloud
+
+13
+00:00:49.393 --> 00:00:51.533
+Explore the architecture.
+
+14
+00:00:51.833 --> 00:00:53.598
+Follow the source.
+
+15
+00:00:53.898 --> 00:00:56.738
+Define the evidence your project needs.
+
+16
+00:00:57.038 --> 00:00:59.228
+Quesar by MLAI.

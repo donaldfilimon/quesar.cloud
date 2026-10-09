@@ -1,0 +1,45 @@
+{
+  "checkedAtUTC": "2026-10-09",
+  "sourceMerge": "55db0dae8e98750433831d0f4283659b0a204600",
+  "batch": {
+    "command": "node notes/launch/quesar-editorial-2026-10-09/render-upgrade.mjs --all --version abbey-neural-v7",
+    "exitCode": 0
+  },
+  "repository": {
+    "command": "bun run check",
+    "exitCode": 0,
+    "testFiles": 96,
+    "tests": 779
+  },
+  "independentMediaAudit": {
+    "exitCode": 0,
+    "completed": 16
+  },
+  "localNativeBrowser": {
+    "exitCode": 0,
+    "completed": 16
+  },
+  "subjectiveListening": "pending",
+  "fullDurationViewing": "pending",
+  "persistentProductionHost": "not selected",
+  "staticBuild": {
+    "command": "bun run build:static",
+    "exitCode": 0
+  },
+  "staticCheck": {
+    "command": "bun run check:static",
+    "exitCode": 0,
+    "pages": 129,
+    "homePreloads": 16
+  },
+  "staticGalleryBrowser": {
+    "exitCode": 0,
+    "checks": 65
+  },
+  "publishedRelease": {
+    "id": 407815278,
+    "url": "https://github.com/donaldfilimon/quesar.cloud/releases/tag/trailer-editions-2026-10-09-abbey-neural",
+    "assetCount": 17,
+    "publishedAt": "2026-10-09T11:30:31Z"
+  }
+}

@@ -1,49 +1,181 @@
 WEBVTT
 
 1
-00:00:00.000 --> 00:00:15.000
-Human imagination. Adaptive intelligence. Quesar by MLAI introduces assistant workflows, memory systems and developer tools with inspectable sources.
+00:00:00.530 --> 00:00:02.545
+Human imagination.
 
 2
-00:00:15.000 --> 00:00:30.000
-A place to begin. Read the architecture. The website brings products, platform, developers, research, services and contact into one navigation.
+00:00:02.845 --> 00:00:04.885
+Adaptive intelligence.
 
 3
-00:00:30.000 --> 00:00:45.000
-Three roles. One conversation. Abbey is a human-facing companion contract. Aviva is a direct expert mode. Abi coordinates intent, risk, context and response style.
+00:00:05.185 --> 00:00:13.675
+Quesar by MLAI introduces assistant workflows, memory systems and developer tools with inspectable sources.
 
 4
-00:00:45.000 --> 00:01:00.000
-Memory. Keep its provenance. WDBX local Rust storage and retrieval components preserve durable records, vectors and causal history.
+00:00:15.294 --> 00:00:17.109
+A place to begin.
 
 5
-00:01:00.000 --> 00:01:15.000
-Developers. Start with source. Explore the ABI Rust framework, local CLI and MCP contracts. Follow setup and verification guidance before connecting tools or memory.
+00:00:17.409 --> 00:00:19.374
+Read the architecture.
 
 6
-00:01:15.000 --> 00:01:30.000
-Two names. Two distinct scopes. Quesar is the MLAI website and broader direction. Quasar is the separately configured local website builder service.
+00:00:19.674 --> 00:00:26.914
+The website brings products, platform, developers, research, services and contact into one navigation.
 
 7
-00:01:30.000 --> 00:01:45.000
-Connect. Choose an origin. Settings lets the browser reach a local service and check that it answers. The deployment may supply a default origin.
+00:00:28.533 --> 00:00:30.123
+Three roles.
 
 8
-00:01:45.000 --> 00:02:00.000
-A new site. Begin with a prompt. The local service copies a Next.js template into its sites directory and runs a Claude generation job using that machine’s Anthropic credentials.
+00:00:30.423 --> 00:00:32.338
+One conversation.
 
 9
-00:02:00.000 --> 00:02:15.000
-Generation. Follow the feed. The site detail screen polls service feed and preview state every second. A generation is a job to inspect, not an invisible promise.
+00:00:32.638 --> 00:00:36.128
+Abbey is a human-facing companion contract.
 
 10
-00:02:15.000 --> 00:02:30.000
-Preview. A separate opening. Preview launch obtains a ticket and checks the returned target against the configured service before opening it.
+00:00:36.428 --> 00:00:39.118
+Aviva is a direct expert mode.
 
 11
-00:02:30.000 --> 00:02:45.000
-The future studio. Visual orchestration. MLAI Studio is a proposed workspace for visual agent design, prompt experiments and inspecting context, memory and execution.
+00:00:39.418 --> 00:00:43.933
+Abi coordinates intent, risk, context and response style.
 
 12
-00:02:45.000 --> 00:03:00.000
-Build thoughtfully. quesar.cloud Explore the architecture. Follow the source. Define the evidence your project needs. Quesar by MLAI.
+00:00:45.551 --> 00:00:47.016
+Memory.
+
+13
+00:00:47.316 --> 00:00:49.031
+Keep its provenance.
+
+14
+00:00:49.331 --> 00:00:57.696
+WDBX local Rust storage and retrieval components preserve durable records, vectors and causal history.
+
+15
+00:00:59.315 --> 00:01:00.980
+Developers.
+
+16
+00:01:01.280 --> 00:01:02.945
+Start with source.
+
+17
+00:01:03.245 --> 00:01:08.610
+Explore the ABI Rust framework, local CLI and MCP contracts.
+
+18
+00:01:08.910 --> 00:01:14.275
+Follow setup and verification guidance before connecting tools or memory.
+
+19
+00:01:15.894 --> 00:01:17.434
+Two names.
+
+20
+00:01:17.734 --> 00:01:19.549
+Two distinct scopes.
+
+21
+00:01:19.849 --> 00:01:23.989
+Quesar is the MLAI website and broader direction.
+
+22
+00:01:24.289 --> 00:01:29.129
+Quasar is the separately configured local website builder service.
+
+23
+00:01:30.748 --> 00:01:32.163
+Connect.
+
+24
+00:01:32.463 --> 00:01:34.278
+Choose an origin.
+
+25
+00:01:34.578 --> 00:01:39.393
+Settings lets the browser reach a local service and check that it answers.
+
+26
+00:01:39.693 --> 00:01:43.008
+The deployment may supply a default origin.
+
+27
+00:01:44.626 --> 00:01:46.266
+A new site.
+
+28
+00:01:46.566 --> 00:01:48.356
+Begin with a prompt.
+
+29
+00:01:48.656 --> 00:01:58.871
+The local service copies a Next.js template into its sites directory and runs a Claude generation job using that machine’s Anthropic credentials.
+
+30
+00:02:00.490 --> 00:02:02.180
+Generation.
+
+31
+00:02:02.480 --> 00:02:04.195
+Follow the feed.
+
+32
+00:02:04.495 --> 00:02:09.535
+The site detail screen polls service feed and preview state every second.
+
+33
+00:02:09.835 --> 00:02:14.625
+A generation is a job to inspect, not an invisible promise.
+
+34
+00:02:16.244 --> 00:02:17.734
+Preview.
+
+35
+00:02:18.034 --> 00:02:19.874
+A separate opening.
+
+36
+00:02:20.174 --> 00:02:27.089
+Preview launch obtains a ticket and checks the returned target against the configured service before opening it.
+
+37
+00:02:28.708 --> 00:02:30.548
+The future studio.
+
+38
+00:02:30.848 --> 00:02:32.913
+Visual orchestration.
+
+39
+00:02:33.213 --> 00:02:43.128
+MLAI Studio is a proposed workspace for visual agent design, prompt experiments and inspecting context, memory and execution.
+
+40
+00:02:44.746 --> 00:02:46.536
+Build thoughtfully.
+
+41
+00:02:46.836 --> 00:02:48.776
+quesar.cloud
+
+42
+00:02:49.076 --> 00:02:51.216
+Explore the architecture.
+
+43
+00:02:51.516 --> 00:02:53.281
+Follow the source.
+
+44
+00:02:53.581 --> 00:02:56.421
+Define the evidence your project needs.
+
+45
+00:02:56.721 --> 00:02:58.911
+Quesar by MLAI.
