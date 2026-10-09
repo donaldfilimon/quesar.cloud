@@ -21,10 +21,10 @@
       "voice": "af_heart",
       "speed": 1,
       "textHash": "a3d2593436960ae5cc096bd971c5f001617d881b4b58972a458092ab897e8df7",
-      "spokenHash": "c60cfd86ecf7050b5bd65299769ee69252c3db39a226c01be2ccf10a1b613ffd",
+      "spokenHash": "ecf7c64f301c09fc7ee22f0e535e5026be7d76d791be92d099a8503b3043d76a",
       "seconds": 2.9,
       "samples": 69600,
-      "peak": 0.38351002633571624,
+      "peak": 0.392759008705616,
       "overrun": false
     },
     {
@@ -61,10 +61,10 @@
       "voice": "af_heart",
       "speed": 1,
       "textHash": "56ea898c36d6eb44a48b32c138cddb32076d32aa89311cdac1f8f7179ae2dc54",
-      "spokenHash": "ce867df3a6cedcaba08d818563c758a047151186c48388e9cf2bae3adf0987c7",
-      "seconds": 4.55,
-      "samples": 109200,
-      "peak": 0.5759694457054138,
+      "spokenHash": "004925ec0975fb237216a34d91b26bc12ec3eb05457385516c551b997df374a0",
+      "seconds": 4.075,
+      "samples": 97800,
+      "peak": 0.4606572359800339,
       "overrun": false
     },
     {
@@ -82,10 +82,10 @@
       "voice": "af_heart",
       "speed": 1,
       "textHash": "a7ef8b114a7b11b45768464d278d4b5756df84de168990f09fa20b9e31348dd3",
-      "spokenHash": "a7ef8b114a7b11b45768464d278d4b5756df84de168990f09fa20b9e31348dd3",
-      "seconds": 4.4,
-      "samples": 105600,
-      "peak": 0.7365830779075623,
+      "spokenHash": "8aedecf73ba7164d02f8f340d2b87cd72a894ce919b2871e780c6f8f9d2ab103",
+      "seconds": 4.575,
+      "samples": 109800,
+      "peak": 0.6125001281499862,
       "overrun": false
     },
     {
@@ -146,10 +146,10 @@
       "voice": "af_heart",
       "speed": 1,
       "textHash": "9a6dd7b3831b1591c231885fda96956bb66033682053a1ac230fb08e1532ea90",
-      "spokenHash": "9a6dd7b3831b1591c231885fda96956bb66033682053a1ac230fb08e1532ea90",
-      "seconds": 5.7,
-      "samples": 136800,
-      "peak": 0.5777334123849869,
+      "spokenHash": "f815994893b8f04f712c81e694ad1c02093165fd035aff8da623052bb91c00ec",
+      "seconds": 5.3,
+      "samples": 127200,
+      "peak": 0.6162455111742019,
       "overrun": false
     },
     {

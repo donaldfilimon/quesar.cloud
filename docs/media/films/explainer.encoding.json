@@ -17,17 +17,19 @@
     "-ac",
     "1",
     "-i",
-    "/Users/donaldfilimon/dev/active/quesar.cloud/artifacts/remaining-work/films/.explainer-352efd1c-69c4-4401-8f47-1590f72a8696/narration.f32",
+    "/Users/donaldfilimon/dev/active/quesar.cloud/artifacts/task-2-films/.explainer-dfb7194f-59de-44fb-bd27-e762fd68edd2/narration.f32",
     "-c:v",
     "libx264",
     "-preset",
     "fast",
+    "-threads",
+    "2",
     "-crf",
     "22",
     "-maxrate",
-    "6M",
+    "5464405",
     "-bufsize",
-    "12M",
+    "10928810",
     "-pix_fmt",
     "yuv420p",
     "-c:a",
@@ -36,15 +38,15 @@
     "128k",
     "-movflags",
     "+faststart",
-    "/Users/donaldfilimon/dev/active/quesar.cloud/artifacts/remaining-work/films/.explainer-352efd1c-69c4-4401-8f47-1590f72a8696/film.mp4"
+    "/Users/donaldfilimon/dev/active/quesar.cloud/artifacts/task-2-films/.explainer-dfb7194f-59de-44fb-bd27-e762fd68edd2/film.mp4"
   ],
+  "encoderVersion": "ffmpeg version 9.0.2 Copyright (c) 2000-2026 the FFmpeg developers",
+  "captureOrigin": "http://127.0.0.1:8094",
+  "catalogHash": "50824dde0a1fe6eef27c9ef49fe6b51ff4cc411cbed20badc94087027c9345ab",
+  "modelRevision": "unresolved; model ID and dtype recorded, not an immutable weight revision",
   "seed": 20261002,
   "frameCount": 3960,
-  "size": 76319260,
-  "status": "encoded; decoded and listening acceptance still required",
-  "poster": {
-    "source": "explainer.mp4",
-    "timestamp": 5,
-    "method": "Decoded first-chapter midpoint; replaces original nearly empty entry frame"
-  }
+  "posterFrame": 150,
+  "size": 73602812,
+  "status": "encoded; decoded and listening acceptance still required"
 }

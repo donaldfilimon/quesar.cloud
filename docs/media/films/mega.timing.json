@@ -160,10 +160,10 @@
       "voice": "af_heart",
       "speed": 1,
       "textHash": "1db8f4a786eebd1c5bfb8c3443da9d94154da048d3b91ec6fd5dda1206992342",
-      "spokenHash": "840db29f23fa359c7de873ffc7ebda4e60de981f46c9e5c8939d7f1918f1d8fc",
-      "seconds": 5.1,
-      "samples": 122400,
-      "peak": 0.3468567371368408,
+      "spokenHash": "991835e76563094d7bb4617452aa23983c9feca5a28cf27d15c1ef6b1910eb54",
+      "seconds": 5.65,
+      "samples": 135600,
+      "peak": 0.6327790319919586,
       "overrun": false
     },
     {
@@ -202,10 +202,10 @@
       "voice": "af_heart",
       "speed": 1,
       "textHash": "b7c6037fff27c2ea1adc03149ecde862bb21dba52cb63dd5180f5a3f4ddf9732",
-      "spokenHash": "4f214843a95f57713fc09566311b63a3fc91566a664478a5b9d6d625c76fbb87",
-      "seconds": 6.225,
-      "samples": 149400,
-      "peak": 0.4597083508968353,
+      "spokenHash": "7399f2d46af68abe5f1e97ae5fcfcb5637937f59f585abccb7ea2e0dc048a26b",
+      "seconds": 6.2,
+      "samples": 148800,
+      "peak": 0.47804768681526183,
       "overrun": false
     },
     {
@@ -768,8 +768,5 @@
       "peak": 0.4784610033035278,
       "overrun": false
     }
-  ],
-  "pcmSha256": "0d4849a9c0ba82c10b4d3217c470024f7fc647b6db0490d34bbddac5f148b0a6",
-  "cacheValidation": "Current catalog, every cue field/sample duration/peak and silent gaps/tail validated; retained neural PCM reused without time stretch",
-  "reusedFrom": "artifacts/remaining-work/films/.mega-4290caee-585e-4d59-8c3c-586e439375bf/narration.f32"
+  ]
 }

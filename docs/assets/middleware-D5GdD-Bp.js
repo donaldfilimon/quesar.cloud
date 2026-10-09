@@ -1,0 +1,1 @@
+import{dt as e}from"./index-DIsAGVVs.js";var t=e({type:`function`});export{t};

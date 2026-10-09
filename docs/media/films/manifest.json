@@ -1,18 +1,25 @@
 {
   "schemaVersion": 1,
-  "verifiedAt": "2026-10-03T06:19:49.070Z",
-  "status": "current_local_technical_verification",
+  "verifiedAt": "2026-10-09T19:18:09.417Z",
+  "status": "reexported_kokoro_local_decode",
   "humanListeningPerformed": false,
   "publicationPerformed": false,
+  "browserPlaybackPerformed": false,
   "model": {
     "id": "onnx-community/Kokoro-82M-v1.0-ONNX",
     "dtype": "q8",
     "device": "wasm",
-    "immutableWeightRevision": null
+    "immutableWeightRevision": null,
+    "voices": {
+      "abbey": "af_heart",
+      "aviva": "bf_emma",
+      "abi": "am_michael"
+    }
   },
   "limitations": [
-    "Muted accelerated browser playback and measured PCM boundaries do not establish human listening or pronunciation/creative acceptance.",
-    "The existing model-weight revision and earlier encoder versions were not recorded.",
+    "Muted accelerated browser playback was not repeated for this re-export.",
+    "Human listening and pronunciation acceptance were not performed.",
+    "The Kokoro model id, q8 dtype, wasm device, persona voice id, and pronounced text hash are recorded. The immutable weight revision is not.",
     "Source and vision labels remain part of the films; media verification does not establish product or research claims."
   ],
   "items": [
@@ -30,23 +37,24 @@
       "measuredCues": 15,
       "catalogHash": "63f5ddf94573d3ea8bb3898c3e89fedab52359d1c77b9e2658dde8dc230ebf06",
       "fullDecodeExitCode": 0,
-      "completeBrowserPlayback": {
-        "muted": true,
-        "rate": 16,
-        "ended": true
-      },
       "audioPeak": 0.6840032935142517,
       "outsideCueMarginPeak": 1.2241084534903024e-10,
+      "model": "onnx-community/Kokoro-82M-v1.0-ONNX",
+      "voices": [
+        "af_heart",
+        "am_michael",
+        "bf_emma"
+      ],
       "artifacts": [
         {
           "path": "/media/films/film.mp4",
-          "bytes": 3688233,
-          "sha256": "0e571bbe801f1e21a41f0d976b7a9cfccda6818f2026f1208ceac225450eed38"
+          "bytes": 3693774,
+          "sha256": "c5837c211e692dd7f78b656fcb327f1e09822fff798f01403e8755329c9129ac"
         },
         {
           "path": "/media/films/film.poster.png",
-          "bytes": 259184,
-          "sha256": "32f96e0da9da6385a470234d588d6f88f7eb73fdb05c2b922a909c11367df44a"
+          "bytes": 293520,
+          "sha256": "9afc2d40a55ed59c37f06293b3b1ad6ca81749f6064602f76382ac598f4f59ba"
         },
         {
           "path": "/media/films/film.vtt",
@@ -65,13 +73,13 @@
         },
         {
           "path": "/media/films/film.timing.json",
-          "bytes": 9589,
-          "sha256": "dc404859ae2a7f53f2d57a268a4dcaa6d26b239bdf198e552316b7ff62498f9f"
+          "bytes": 9590,
+          "sha256": "724d2b579dd1a1e7355058de21843ef87bda1c54ed1d246ece09c27eade01648"
         },
         {
           "path": "/media/films/film.encoding.json",
-          "bytes": 1043,
-          "sha256": "74902f00400bdfe5ee1032b66511d7f932a39394c34838fb1b902001282cec0e"
+          "bytes": 1241,
+          "sha256": "394f90419d23925ef8a95de82dbecb8ca043d32d1c0b38e3fce0e9c3604af39d"
         }
       ]
     },
@@ -89,23 +97,22 @@
       "measuredCues": 17,
       "catalogHash": "cd9333653849524d443136cf51f813f3341db77a345bdbac0fc5a2374ca562d1",
       "fullDecodeExitCode": 0,
-      "completeBrowserPlayback": {
-        "muted": true,
-        "rate": 16,
-        "ended": true
-      },
       "audioPeak": 0.5697746276855469,
       "outsideCueMarginPeak": 2.3296260753813414e-11,
+      "model": "onnx-community/Kokoro-82M-v1.0-ONNX",
+      "voices": [
+        "af_heart"
+      ],
       "artifacts": [
         {
           "path": "/media/films/trailer.mp4",
-          "bytes": 3374048,
-          "sha256": "4bda27069214e6d70e423aab60430af0023596a727a4c3d743902358bd674e51"
+          "bytes": 3382309,
+          "sha256": "1716e607151714711201350d09881872fe6926a8a52bc334beafdd15c1706deb"
         },
         {
           "path": "/media/films/trailer.poster.png",
-          "bytes": 146490,
-          "sha256": "63e91df8725b95a497720638509f40f6084e886bf1f7dd9e1221bf69ecc283e6"
+          "bytes": 211625,
+          "sha256": "325e3f557939a644419b488501f7622b7bed4a8b2e0473d7856a718825429907"
         },
         {
           "path": "/media/films/trailer.vtt",
@@ -129,8 +136,8 @@
         },
         {
           "path": "/media/films/trailer.encoding.json",
-          "bytes": 1053,
-          "sha256": "4540e8b3ecc25cb75264ffbd3a685c90effc4b87685ae3b2da00460034b3f1e5"
+          "bytes": 1246,
+          "sha256": "7b8beaf6e0c570d3cc3d02b2fd7450ac365b2caa5869edf843396f8949821c2c"
         }
       ]
     },
@@ -148,23 +155,24 @@
       "measuredCues": 9,
       "catalogHash": "ef1783b8b6a56891f2ab6a9687d36882df6136098b5be5e75417ed751f011487",
       "fullDecodeExitCode": 0,
-      "completeBrowserPlayback": {
-        "muted": true,
-        "rate": 16,
-        "ended": true
-      },
       "audioPeak": 0.5535426139831543,
       "outsideCueMarginPeak": 3.9977019090919885e-12,
+      "model": "onnx-community/Kokoro-82M-v1.0-ONNX",
+      "voices": [
+        "af_heart",
+        "am_michael",
+        "bf_emma"
+      ],
       "artifacts": [
         {
           "path": "/media/films/abbey.mp4",
-          "bytes": 9294970,
-          "sha256": "7abdf1a9f0674d41f7c523d7fea765165ac2033a79a963722a24b09d88c633f3"
+          "bytes": 9354450,
+          "sha256": "2fe720a5f4657f528c4a2e536e73afb8e7352f90249521ab377e9b3f59f1c8d0"
         },
         {
           "path": "/media/films/abbey.poster.png",
-          "bytes": 313363,
-          "sha256": "14635c888622e5e51920fcb41e9028cd8b0259f49f06ab50e4d63fb839fde8ee"
+          "bytes": 196136,
+          "sha256": "cc77d0257c778f0b5ca7d6f8edd3b1e466b66b9de1b153d4e6e55ce01c576243"
         },
         {
           "path": "/media/films/abbey.vtt",
@@ -183,13 +191,13 @@
         },
         {
           "path": "/media/films/abbey.timing.json",
-          "bytes": 5501,
-          "sha256": "57cea029f1d1cdb100b93fd9dcbfd8f0e3b5aecde2ff73003ed18ede25d18d59"
+          "bytes": 5717,
+          "sha256": "a27465125da7c355a88412e4a3052ae85bfdcc71f7204914266842621db82469"
         },
         {
           "path": "/media/films/abbey.encoding.json",
-          "bytes": 1044,
-          "sha256": "a931c1672d0dbd03ce48a52767a57015ac85ee8f30a5eed01bc571f43ff283cf"
+          "bytes": 1242,
+          "sha256": "0f5f25eeaff14fbd87708db1eb32c7744dae1178b20b6e13ba761a41f5447a84"
         }
       ]
     },
@@ -207,23 +215,22 @@
       "measuredCues": 23,
       "catalogHash": "50824dde0a1fe6eef27c9ef49fe6b51ff4cc411cbed20badc94087027c9345ab",
       "fullDecodeExitCode": 0,
-      "completeBrowserPlayback": {
-        "muted": true,
-        "rate": 16,
-        "ended": true
-      },
       "audioPeak": 0.7503817081451416,
       "outsideCueMarginPeak": 0,
+      "model": "onnx-community/Kokoro-82M-v1.0-ONNX",
+      "voices": [
+        "af_heart"
+      ],
       "artifacts": [
         {
           "path": "/media/films/explainer.mp4",
-          "bytes": 76319260,
-          "sha256": "2f5699b9c1d1c4239ebfee923287501a60e6c700df5c1723beac66ae3871f570"
+          "bytes": 73602812,
+          "sha256": "66599be9151229b1d564032632e3932a284605b2acdca65cb5c965692fff53dc"
         },
         {
           "path": "/media/films/explainer.poster.png",
-          "bytes": 1376672,
-          "sha256": "49515b9f5587792493717c5617c5e91f3ee03b45844821a40cfa5709bcde6c17"
+          "bytes": 1948078,
+          "sha256": "97b23d8dad83523a43f5b36871c2f40ef9631a3bd9a6295b8ca6069868922ee0"
         },
         {
           "path": "/media/films/explainer.vtt",
@@ -243,12 +250,12 @@
         {
           "path": "/media/films/explainer.timing.json",
           "bytes": 14933,
-          "sha256": "32403250d6798d51e75c9369bd70ca392c1ae5372dc337846c5e8739bcdec58d"
+          "sha256": "ada83014748d88db7ada62d245f2c060e1752dbabe9cae6071e32ba41970d145"
         },
         {
           "path": "/media/films/explainer.encoding.json",
-          "bytes": 1057,
-          "sha256": "ee66463e3227f473d839813220ad3385c27683d16e34512a67ab45528834935c"
+          "bytes": 1252,
+          "sha256": "6fb7c4a16da6752b93adaf53b165fbe8e15dc23fcf08fdbda0f8e3adebf215fc"
         }
       ]
     },
@@ -266,23 +273,24 @@
       "measuredCues": 38,
       "catalogHash": "717d4cd28649357349be1f26a2a70145af9d5c4830c97a380bbb7fb6efddabd7",
       "fullDecodeExitCode": 0,
-      "completeBrowserPlayback": {
-        "muted": true,
-        "rate": 16,
-        "ended": true
-      },
       "audioPeak": 0.8168798089027405,
       "outsideCueMarginPeak": 9.550458514306914e-12,
+      "model": "onnx-community/Kokoro-82M-v1.0-ONNX",
+      "voices": [
+        "af_heart",
+        "bf_emma",
+        "am_michael"
+      ],
       "artifacts": [
         {
           "path": "/media/films/mega.mp4",
-          "bytes": 90286650,
-          "sha256": "8a76ff8b52b78276119205e272c067c62f57d0396b8829810203ead72788d65c"
+          "bytes": 90295529,
+          "sha256": "26ad9ad5aafaf7af935e484a6c6340cea796e418335685cacd48777e26252c39"
         },
         {
           "path": "/media/films/mega.poster.png",
-          "bytes": 555208,
-          "sha256": "baaa633f7a738ea573c88284224d4ccade9e1fce01ca14e946a5585049cdf673"
+          "bytes": 1060277,
+          "sha256": "8de601e816f77316a7798c6269b9e060b954078562965ce272f760cbfd4a9a2a"
         },
         {
           "path": "/media/films/mega.vtt",
@@ -301,13 +309,13 @@
         },
         {
           "path": "/media/films/mega.timing.json",
-          "bytes": 24559,
-          "sha256": "74114c0643381501ea9eae0f9972563d042abbbd9e514634ecac2d52c368535f"
+          "bytes": 24211,
+          "sha256": "d63fdc159c2ed4b5cc0b88af6e43db4aeb16e41cadc9db32eef79dc9666710e7"
         },
         {
           "path": "/media/films/mega.encoding.json",
-          "bytes": 1242,
-          "sha256": "1b08a2ade842113d7fa80b2814d36cbd9d11d4d90596fb0a64bfaba16b221484"
+          "bytes": 1240,
+          "sha256": "e92e84c6c1f9a43943bd6d07b979b61561235b3ad2ecf6d5a0494c988b293581"
         }
       ]
     },
@@ -325,23 +333,22 @@
       "measuredCues": 8,
       "catalogHash": "95e174338646ab076f5a7aa74120698f948049afc582c2824e7c78c0aa005918",
       "fullDecodeExitCode": 0,
-      "completeBrowserPlayback": {
-        "muted": true,
-        "rate": 16,
-        "ended": true
-      },
       "audioPeak": 0.6435973048210144,
       "outsideCueMarginPeak": 0,
+      "model": "onnx-community/Kokoro-82M-v1.0-ONNX",
+      "voices": [
+        "af_heart"
+      ],
       "artifacts": [
         {
           "path": "/media/films/design.mp4",
-          "bytes": 13160292,
-          "sha256": "bb863dc3f2b6a61e6ca43080615c920f383d5007ad0399aa504bd2f393090867"
+          "bytes": 8658497,
+          "sha256": "389c8f257fcd9b04698ccdd7e7897fb2de5d005559389c69e438de66af795019"
         },
         {
           "path": "/media/films/design.poster.png",
-          "bytes": 259000,
-          "sha256": "e544ac0a38cad8faa0f0157523d58cdb3d714fa82f8594166eb22a6d3aef4b2a"
+          "bytes": 181029,
+          "sha256": "9a103ff8182bb436d1e8848e0b365a3704d8d659433bd0c1f45ce5b6722f0d9e"
         },
         {
           "path": "/media/films/design.vtt",
@@ -365,8 +372,8 @@
         },
         {
           "path": "/media/films/design.encoding.json",
-          "bytes": 1048,
-          "sha256": "2768219e3e7d0bce24d403d4b8bd5f274dde777332da9898108a60a806dc6eeb"
+          "bytes": 1245,
+          "sha256": "c79b156e266705359a9e76f2bff6ca78e5b76855e1fec41c3938f57c45b398b9"
         }
       ]
     }
