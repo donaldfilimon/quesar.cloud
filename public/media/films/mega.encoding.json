@@ -17,7 +17,7 @@
     "-ac",
     "1",
     "-i",
-    "artifacts/remaining-work/films/.mega-4290caee-585e-4d59-8c3c-586e439375bf/narration.f32",
+    "/Users/donaldfilimon/dev/active/quesar.cloud/artifacts/task-2-films/.mega-ef6336fa-0442-4308-bc68-418723509d9a/narration.f32",
     "-c:v",
     "libx264",
     "-preset",
@@ -38,20 +38,15 @@
     "128k",
     "-movflags",
     "+faststart",
-    "artifacts/film-completion-20261003/mega.mp4"
+    "/Users/donaldfilimon/dev/active/quesar.cloud/artifacts/task-2-films/.mega-ef6336fa-0442-4308-bc68-418723509d9a/film.mp4"
   ],
   "encoderVersion": "ffmpeg version 9.0.2 Copyright (c) 2000-2026 the FFmpeg developers",
-  "captureOrigin": "http://127.0.0.1:4199",
+  "captureOrigin": "http://127.0.0.1:8094",
   "catalogHash": "717d4cd28649357349be1f26a2a70145af9d5c4830c97a380bbb7fb6efddabd7",
   "modelRevision": "unresolved; model ID and dtype recorded, not an immutable weight revision",
   "seed": 20261002,
   "frameCount": 8460,
-  "size": 90286650,
-  "elapsedSeconds": 1395.52,
-  "status": "encoded; decode and listening acceptance pending",
-  "poster": {
-    "source": "mega.mp4",
-    "timestamp": 1.75,
-    "method": "Decoded first-chapter midpoint"
-  }
+  "posterFrame": 52,
+  "size": 90295529,
+  "status": "encoded; decoded and listening acceptance still required"
 }
