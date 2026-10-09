@@ -1,0 +1,226 @@
+[
+  {
+    "id": "design-brand",
+    "start": 0,
+    "end": 10,
+    "title": "Brand / conceptual board",
+    "status": "planned",
+    "presentation": "VISION",
+    "statusNote": "Conceptual direction; no delivery or compatibility claim.",
+    "visual": {
+      "text": "Brand / conceptual board",
+      "scope": "vision",
+      "sources": [
+        "design"
+      ]
+    },
+    "shot": {
+      "board": "brand",
+      "readiness": "Wait for the selected lazy board, its fonts and stable content before starting capture.",
+      "scroll": {
+        "from": 0,
+        "to": 0.65,
+        "startOffset": 2,
+        "endOffset": 8
+      },
+      "overlay": "CONCEPT / VISION",
+      "exploreHref": "/showcase/design"
+    }
+  },
+  {
+    "id": "design-system",
+    "start": 10,
+    "end": 20,
+    "title": "System / conceptual board",
+    "status": "planned",
+    "presentation": "VISION",
+    "statusNote": "Conceptual direction; no delivery or compatibility claim.",
+    "visual": {
+      "text": "System / conceptual board",
+      "scope": "vision",
+      "sources": [
+        "design"
+      ]
+    },
+    "shot": {
+      "board": "system",
+      "readiness": "Wait for the selected lazy board, its fonts and stable content before starting capture.",
+      "scroll": {
+        "from": 0,
+        "to": 0.65,
+        "startOffset": 2,
+        "endOffset": 8
+      },
+      "overlay": "CONCEPT / VISION",
+      "exploreHref": "/showcase/design"
+    }
+  },
+  {
+    "id": "design-showcase",
+    "start": 20,
+    "end": 30,
+    "title": "Showcase / conceptual board",
+    "status": "planned",
+    "presentation": "VISION",
+    "statusNote": "Conceptual direction; no delivery or compatibility claim.",
+    "visual": {
+      "text": "Showcase / conceptual board",
+      "scope": "vision",
+      "sources": [
+        "design"
+      ]
+    },
+    "shot": {
+      "board": "showcase",
+      "readiness": "Wait for the selected lazy board, its fonts and stable content before starting capture.",
+      "scroll": {
+        "from": 0,
+        "to": 0.65,
+        "startOffset": 2,
+        "endOffset": 8
+      },
+      "overlay": "CONCEPT / VISION",
+      "exploreHref": "/showcase/design"
+    }
+  },
+  {
+    "id": "design-hero",
+    "start": 30,
+    "end": 40,
+    "title": "Hero / conceptual board",
+    "status": "planned",
+    "presentation": "VISION",
+    "statusNote": "Conceptual direction; no delivery or compatibility claim.",
+    "visual": {
+      "text": "Hero / conceptual board",
+      "scope": "vision",
+      "sources": [
+        "design"
+      ]
+    },
+    "shot": {
+      "board": "hero",
+      "readiness": "Wait for the selected lazy board, its fonts and stable content before starting capture.",
+      "scroll": {
+        "from": 0,
+        "to": 0.65,
+        "startOffset": 2,
+        "endOffset": 8
+      },
+      "overlay": "CONCEPT / VISION",
+      "exploreHref": "/showcase/design"
+    }
+  },
+  {
+    "id": "design-lab",
+    "start": 40,
+    "end": 50,
+    "title": "Lab / conceptual board",
+    "status": "planned",
+    "presentation": "VISION",
+    "statusNote": "Conceptual direction; no delivery or compatibility claim.",
+    "visual": {
+      "text": "Lab / conceptual board",
+      "scope": "vision",
+      "sources": [
+        "design"
+      ]
+    },
+    "shot": {
+      "board": "lab",
+      "readiness": "Wait for the selected lazy board, its fonts and stable content before starting capture.",
+      "scroll": {
+        "from": 0,
+        "to": 0.65,
+        "startOffset": 2,
+        "endOffset": 8
+      },
+      "overlay": "CONCEPT / VISION",
+      "exploreHref": "/showcase/design"
+    }
+  },
+  {
+    "id": "design-marketing",
+    "start": 50,
+    "end": 60,
+    "title": "Marketing / conceptual board",
+    "status": "planned",
+    "presentation": "VISION",
+    "statusNote": "Conceptual direction; no delivery or compatibility claim.",
+    "visual": {
+      "text": "Marketing / conceptual board",
+      "scope": "vision",
+      "sources": [
+        "design"
+      ]
+    },
+    "shot": {
+      "board": "marketing",
+      "readiness": "Wait for the selected lazy board, its fonts and stable content before starting capture.",
+      "scroll": {
+        "from": 0,
+        "to": 0.65,
+        "startOffset": 2,
+        "endOffset": 8
+      },
+      "overlay": "CONCEPT / VISION",
+      "exploreHref": "/showcase/design"
+    }
+  },
+  {
+    "id": "design-console",
+    "start": 60,
+    "end": 70,
+    "title": "Console / conceptual board",
+    "status": "planned",
+    "presentation": "VISION",
+    "statusNote": "Conceptual direction; no delivery or compatibility claim.",
+    "visual": {
+      "text": "Console / conceptual board",
+      "scope": "vision",
+      "sources": [
+        "design"
+      ]
+    },
+    "shot": {
+      "board": "console",
+      "readiness": "Wait for the selected lazy board, its fonts and stable content before starting capture.",
+      "scroll": {
+        "from": 0,
+        "to": 0.65,
+        "startOffset": 2,
+        "endOffset": 8
+      },
+      "overlay": "CONCEPT / VISION",
+      "exploreHref": "/showcase/design"
+    }
+  },
+  {
+    "id": "design-docs",
+    "start": 70,
+    "end": 80,
+    "title": "Docs / conceptual board",
+    "status": "planned",
+    "presentation": "VISION",
+    "statusNote": "Conceptual direction; no delivery or compatibility claim.",
+    "visual": {
+      "text": "Docs / conceptual board",
+      "scope": "vision",
+      "sources": [
+        "design"
+      ]
+    },
+    "shot": {
+      "board": "docs",
+      "readiness": "Wait for the selected lazy board, its fonts and stable content before starting capture.",
+      "scroll": {
+        "from": 0,
+        "to": 0.65,
+        "startOffset": 2,
+        "endOffset": 8
+      },
+      "overlay": "CONCEPT / VISION",
+      "exploreHref": "/showcase/design"
+    }
+  }
+]

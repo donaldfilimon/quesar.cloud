@@ -1,0 +1,153 @@
+WEBVTT
+
+mega-cue-01
+00:00:00.900 --> 00:00:03.200
+Answers are a starting point.
+
+mega-cue-02
+00:00:04.000 --> 00:00:06.700
+Ask what supports the claim.
+
+mega-cue-03
+00:00:07.600 --> 00:00:10.700
+Follow the source.
+
+mega-cue-04
+00:00:11.600 --> 00:00:14.200
+Keep component boundaries visible.
+
+mega-cue-05
+00:00:15.500 --> 00:00:23.900
+WDBX has CPU primitives: dot products, norms, cosine and top-k.
+
+mega-cue-06
+00:00:24.500 --> 00:00:32.100
+Accelerator capability states separate availability, initialization, execution and runtime verification.
+
+mega-cue-07
+00:00:33.500 --> 00:00:40.900
+The durable store integrates snapshots, write-ahead recovery and HNSW search.
+
+mega-cue-08
+00:00:41.500 --> 00:00:48.100
+WAL frames checksum JSON bytes. Bad checksums report corruption.
+
+mega-cue-09
+00:00:49.500 --> 00:00:57.400
+Recovery treats an incomplete final frame differently from a bad checksum.
+
+mega-cue-10
+00:00:58.000 --> 00:01:05.100
+Store-facing completion persistence belongs to MCP, outside the pure AI core.
+
+mega-cue-11
+00:01:06.000 --> 00:01:08.700
+Three persona profiles.
+
+mega-cue-12
+00:01:09.200 --> 00:01:10.600
+Abbey.
+
+mega-cue-13
+00:01:11.000 --> 00:01:12.400
+Aviva.
+
+mega-cue-14
+00:01:12.800 --> 00:01:14.300
+Abi.
+
+mega-cue-15
+00:01:15.500 --> 00:01:23.900
+The local router adjusts weights using keyword prefixes, then selects a profile.
+
+mega-cue-16
+00:01:24.500 --> 00:01:31.700
+An explicit leading persona address bypasses that scoring path.
+
+mega-cue-17
+00:01:33.500 --> 00:01:43.400
+Abbey combines conversation and technical care. Aviva leads directly. ABI handles orchestration.
+
+mega-cue-18
+00:01:44.000 --> 00:01:52.700
+The training path records metadata and profile vectors; model weights remain unchanged.
+
+mega-cue-19
+00:01:53.600 --> 00:01:56.300
+Inspect the integrity boundary.
+
+mega-cue-20
+00:01:57.500 --> 00:02:04.900
+A block hash includes its predecessor, timestamp, sequence, profile and metadata.
+
+mega-cue-21
+00:02:05.500 --> 00:02:12.700
+That SHA-256 construction is a hash chain, not a digital signature.
+
+mega-cue-22
+00:02:13.600 --> 00:02:17.700
+Strict checks recompute hashes; link-only checks do not.
+
+mega-cue-23
+00:02:19.500 --> 00:02:26.900
+ABI’s audit matches thirteen case-insensitive patterns and scores six principles.
+
+mega-cue-24
+00:02:27.500 --> 00:02:33.700
+Responses avoiding those phrases can escape its checks.
+
+mega-cue-25
+00:02:35.500 --> 00:02:43.000
+Source inspection establishes what is implemented, with runtime qualification still separate.
+
+mega-cue-26
+00:02:43.500 --> 00:02:50.700
+Ask for the test, the environment, and the precise scope behind a result.
+
+mega-cue-27
+00:02:51.600 --> 00:02:55.700
+Broader reasoning is a research direction.
+
+mega-cue-28
+00:02:56.600 --> 00:02:59.300
+Keep the roadmap visible.
+
+mega-cue-29
+00:03:00.500 --> 00:03:08.000
+Our vision is a distributed cognitive fabric.
+
+mega-cue-30
+00:03:08.500 --> 00:03:17.700
+That vision does not establish support across every device or hardware tier.
+
+mega-cue-31
+00:03:18.600 --> 00:03:23.700
+Compatibility needs execution evidence on each intended path.
+
+mega-cue-32
+00:03:25.500 --> 00:03:34.400
+A proposed direction becomes an engineering task when its acceptance evidence is defined.
+
+mega-cue-33
+00:03:35.000 --> 00:03:46.700
+For a project, define the workload, data boundary, failure behavior and review process before promising delivery.
+
+mega-cue-34
+00:03:48.000 --> 00:04:00.700
+Start with a bounded question. Name the source, inspect the implementation, and agree how the result will be checked.
+
+mega-cue-35
+00:04:02.500 --> 00:04:15.400
+These equations illustrate concepts. They do not establish a benchmark, semantic truth or a deployment guarantee.
+
+mega-cue-36
+00:04:16.000 --> 00:04:32.700
+Use the illustration to frame questions: which inputs matter, which assumptions hold, and what evidence would change the decision?
+
+mega-cue-37
+00:04:33.600 --> 00:04:36.700
+Bring a scoped project.
+
+mega-cue-38
+00:04:37.400 --> 00:04:41.600
+Let’s review the evidence together.

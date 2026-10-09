@@ -1,0 +1,75 @@
+Answers are a starting point.
+
+Ask what supports the claim.
+
+Follow the source.
+
+Keep component boundaries visible.
+
+WDBX has CPU primitives: dot products, norms, cosine and top-k.
+
+Accelerator capability states separate availability, initialization, execution and runtime verification.
+
+The durable store integrates snapshots, write-ahead recovery and HNSW search.
+
+WAL frames checksum JSON bytes. Bad checksums report corruption.
+
+Recovery treats an incomplete final frame differently from a bad checksum.
+
+Store-facing completion persistence belongs to MCP, outside the pure AI core.
+
+Three persona profiles.
+
+Abbey.
+
+Aviva.
+
+Abi.
+
+The local router adjusts weights using keyword prefixes, then selects a profile.
+
+An explicit leading persona address bypasses that scoring path.
+
+Abbey combines conversation and technical care. Aviva leads directly. ABI handles orchestration.
+
+The training path records metadata and profile vectors; model weights remain unchanged.
+
+Inspect the integrity boundary.
+
+A block hash includes its predecessor, timestamp, sequence, profile and metadata.
+
+That SHA-256 construction is a hash chain, not a digital signature.
+
+Strict checks recompute hashes; link-only checks do not.
+
+ABI’s audit matches thirteen case-insensitive patterns and scores six principles.
+
+Responses avoiding those phrases can escape its checks.
+
+Source inspection establishes what is implemented, with runtime qualification still separate.
+
+Ask for the test, the environment, and the precise scope behind a result.
+
+Broader reasoning is a research direction.
+
+Keep the roadmap visible.
+
+Our vision is a distributed cognitive fabric.
+
+That vision does not establish support across every device or hardware tier.
+
+Compatibility needs execution evidence on each intended path.
+
+A proposed direction becomes an engineering task when its acceptance evidence is defined.
+
+For a project, define the workload, data boundary, failure behavior and review process before promising delivery.
+
+Start with a bounded question. Name the source, inspect the implementation, and agree how the result will be checked.
+
+These equations illustrate concepts. They do not establish a benchmark, semantic truth or a deployment guarantee.
+
+Use the illustration to frame questions: which inputs matter, which assumptions hold, and what evidence would change the decision?
+
+Bring a scoped project.
+
+Let’s review the evidence together.

@@ -1,0 +1,110 @@
+[
+  {
+    "id": "abbey-monolith",
+    "start": 0,
+    "end": 6,
+    "title": "Choose a response style",
+    "status": "planned",
+    "presentation": "VISION",
+    "statusNote": "Conceptual direction; no delivery or compatibility claim.",
+    "visual": {
+      "text": "Choose a response style",
+      "scope": "vision",
+      "sources": []
+    }
+  },
+  {
+    "id": "abbey-shatter",
+    "start": 6,
+    "end": 10,
+    "title": "Three profiles / identity contracts",
+    "status": "current",
+    "presentation": "SOURCE INSPECTION",
+    "statusNote": "Implemented source at pinned revision; runtime and security acceptance not established by this film.",
+    "visual": {
+      "text": "Three profiles / identity contracts",
+      "scope": "current",
+      "sources": [
+        "identity"
+      ]
+    }
+  },
+  {
+    "id": "abbey-abi",
+    "start": 10,
+    "end": 15,
+    "title": "ABI / orchestration",
+    "status": "current",
+    "presentation": "SOURCE INSPECTION",
+    "statusNote": "Implemented source at pinned revision; runtime and security acceptance not established by this film.",
+    "visual": {
+      "text": "ABI / orchestration",
+      "scope": "current",
+      "sources": [
+        "identity"
+      ]
+    }
+  },
+  {
+    "id": "abbey-aviva",
+    "start": 15,
+    "end": 20,
+    "title": "Aviva / direct technical",
+    "status": "current",
+    "presentation": "SOURCE INSPECTION",
+    "statusNote": "Implemented source at pinned revision; runtime and security acceptance not established by this film.",
+    "visual": {
+      "text": "Aviva / direct technical",
+      "scope": "current",
+      "sources": [
+        "identity"
+      ]
+    }
+  },
+  {
+    "id": "abbey-abbey",
+    "start": 20,
+    "end": 25,
+    "title": "Abbey / conversational and empathetic",
+    "status": "current",
+    "presentation": "SOURCE INSPECTION",
+    "statusNote": "Implemented source at pinned revision; runtime and security acceptance not established by this film.",
+    "visual": {
+      "text": "Abbey / conversational and empathetic",
+      "scope": "current",
+      "sources": [
+        "identity"
+      ]
+    }
+  },
+  {
+    "id": "abbey-convergence",
+    "start": 25,
+    "end": 31,
+    "title": "Local routing / explicit selection",
+    "status": "current",
+    "presentation": "SOURCE INSPECTION",
+    "statusNote": "Implemented source at pinned revision; runtime and security acceptance not established by this film.",
+    "visual": {
+      "text": "Local routing / explicit selection",
+      "scope": "current",
+      "sources": [
+        "routing"
+      ]
+    }
+  },
+  {
+    "id": "abbey-mark",
+    "start": 31,
+    "end": 38,
+    "title": "Review scope and evidence",
+    "status": "planned",
+    "presentation": "VISION",
+    "statusNote": "Conceptual direction; no delivery or compatibility claim.",
+    "visual": {
+      "text": "Review scope and evidence",
+      "scope": "vision",
+      "sources": []
+    }
+  }
+]

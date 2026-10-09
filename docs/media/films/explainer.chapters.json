@@ -1,0 +1,178 @@
+[
+  {
+    "id": "explainer-open",
+    "start": 0,
+    "end": 10,
+    "title": "Private AI operations",
+    "status": "current",
+    "presentation": "SOURCE INSPECTION",
+    "statusNote": "Implemented source at pinned revision; runtime and security acceptance not established by this film.",
+    "visual": {
+      "text": "Private AI operations",
+      "scope": "current",
+      "sources": [
+        "brand"
+      ]
+    }
+  },
+  {
+    "id": "explainer-runtime",
+    "start": 10,
+    "end": 28,
+    "title": "Named source boundaries",
+    "status": "current",
+    "presentation": "SOURCE INSPECTION",
+    "statusNote": "Implemented source at pinned revision; runtime and security acceptance not established by this film.",
+    "visual": {
+      "text": "Named source boundaries",
+      "scope": "current",
+      "sources": [
+        "persistence",
+        "compute"
+      ]
+    }
+  },
+  {
+    "id": "explainer-storage",
+    "start": 28,
+    "end": 43,
+    "title": "Snapshots / WAL / recovery",
+    "status": "current",
+    "presentation": "SOURCE INSPECTION",
+    "statusNote": "Implemented source at pinned revision; runtime and security acceptance not established by this film.",
+    "visual": {
+      "text": "Snapshots / WAL / recovery",
+      "scope": "current",
+      "sources": [
+        "durable",
+        "wal"
+      ]
+    }
+  },
+  {
+    "id": "explainer-memory",
+    "start": 43,
+    "end": 60,
+    "title": "Links versus strict integrity",
+    "status": "current",
+    "presentation": "SOURCE INSPECTION",
+    "statusNote": "Implemented source at pinned revision; runtime and security acceptance not established by this film.",
+    "visual": {
+      "text": "Links versus strict integrity",
+      "scope": "current",
+      "sources": [
+        "wal",
+        "integrity"
+      ]
+    }
+  },
+  {
+    "id": "explainer-minds",
+    "start": 60,
+    "end": 76,
+    "title": "Profiles / local routing",
+    "status": "current",
+    "presentation": "SOURCE INSPECTION",
+    "statusNote": "Implemented source at pinned revision; runtime and security acceptance not established by this film.",
+    "visual": {
+      "text": "Profiles / local routing",
+      "scope": "current",
+      "sources": [
+        "identity",
+        "routing"
+      ]
+    }
+  },
+  {
+    "id": "explainer-pAbbey",
+    "start": 76,
+    "end": 79,
+    "title": "Abbey / conversational",
+    "status": "current",
+    "presentation": "SOURCE INSPECTION",
+    "statusNote": "Implemented source at pinned revision; runtime and security acceptance not established by this film.",
+    "visual": {
+      "text": "Abbey / conversational",
+      "scope": "current",
+      "sources": [
+        "identity"
+      ]
+    }
+  },
+  {
+    "id": "explainer-pAviva",
+    "start": 79,
+    "end": 82,
+    "title": "Aviva / direct",
+    "status": "current",
+    "presentation": "SOURCE INSPECTION",
+    "statusNote": "Implemented source at pinned revision; runtime and security acceptance not established by this film.",
+    "visual": {
+      "text": "Aviva / direct",
+      "scope": "current",
+      "sources": [
+        "identity"
+      ]
+    }
+  },
+  {
+    "id": "explainer-pAbi",
+    "start": 82,
+    "end": 85,
+    "title": "ABI / orchestration",
+    "status": "current",
+    "presentation": "SOURCE INSPECTION",
+    "statusNote": "Implemented source at pinned revision; runtime and security acceptance not established by this film.",
+    "visual": {
+      "text": "ABI / orchestration",
+      "scope": "current",
+      "sources": [
+        "identity"
+      ]
+    }
+  },
+  {
+    "id": "explainer-govern",
+    "start": 85,
+    "end": 101,
+    "title": "Thirteen patterns / six principles",
+    "status": "current",
+    "presentation": "SOURCE INSPECTION",
+    "statusNote": "Implemented source at pinned revision; runtime and security acceptance not established by this film.",
+    "visual": {
+      "text": "Thirteen patterns / six principles",
+      "scope": "current",
+      "sources": [
+        "audit"
+      ]
+    }
+  },
+  {
+    "id": "explainer-vision",
+    "start": 101,
+    "end": 120,
+    "title": "Distributed fabric / vision",
+    "status": "planned",
+    "presentation": "VISION",
+    "statusNote": "Conceptual direction; no delivery or compatibility claim.",
+    "visual": {
+      "text": "Distributed fabric / vision",
+      "scope": "vision",
+      "sources": []
+    }
+  },
+  {
+    "id": "explainer-close",
+    "start": 120,
+    "end": 132,
+    "title": "Discuss scope and evidence",
+    "status": "planned",
+    "presentation": "VISION",
+    "statusNote": "Conceptual direction; no delivery or compatibility claim.",
+    "visual": {
+      "text": "Discuss scope and evidence",
+      "scope": "vision",
+      "sources": []
+    }
+  }
+]

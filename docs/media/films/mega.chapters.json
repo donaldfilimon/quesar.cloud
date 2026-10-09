@@ -1,0 +1,410 @@
+[
+  {
+    "id": "mega-open",
+    "start": 0,
+    "end": 3.5,
+    "title": "Ask for evidence",
+    "status": "planned",
+    "presentation": "VISION",
+    "statusNote": "Conceptual direction; no delivery or compatibility claim.",
+    "visual": {
+      "text": "Ask for evidence",
+      "scope": "vision",
+      "sources": []
+    }
+  },
+  {
+    "id": "mega-ask",
+    "start": 3.5,
+    "end": 7,
+    "title": "Define the claim",
+    "status": "planned",
+    "presentation": "VISION",
+    "statusNote": "Conceptual direction; no delivery or compatibility claim.",
+    "visual": {
+      "text": "Define the claim",
+      "scope": "vision",
+      "sources": []
+    }
+  },
+  {
+    "id": "mega-fixed",
+    "start": 7,
+    "end": 11,
+    "title": "Review the source",
+    "status": "planned",
+    "presentation": "VISION",
+    "statusNote": "Conceptual direction; no delivery or compatibility claim.",
+    "visual": {
+      "text": "Review the source",
+      "scope": "vision",
+      "sources": []
+    }
+  },
+  {
+    "id": "mega-oneRun",
+    "start": 11,
+    "end": 14.5,
+    "title": "Follow component boundaries",
+    "status": "planned",
+    "presentation": "VISION",
+    "statusNote": "Conceptual direction; no delivery or compatibility claim.",
+    "visual": {
+      "text": "Follow component boundaries",
+      "scope": "vision",
+      "sources": []
+    }
+  },
+  {
+    "id": "mega-s3",
+    "start": 14.5,
+    "end": 32.5,
+    "title": "CPU primitives / accelerator contracts",
+    "status": "current",
+    "presentation": "SOURCE INSPECTION",
+    "statusNote": "Implemented source at pinned revision; runtime and security acceptance not established by this film.",
+    "visual": {
+      "text": "CPU primitives / accelerator contracts",
+      "scope": "current",
+      "sources": [
+        "compute",
+        "backend"
+      ]
+    }
+  },
+  {
+    "id": "mega-stor",
+    "start": 32.5,
+    "end": 48.5,
+    "title": "Snapshots / WAL recovery",
+    "status": "current",
+    "presentation": "SOURCE INSPECTION",
+    "statusNote": "Implemented source at pinned revision; runtime and security acceptance not established by this film.",
+    "visual": {
+      "text": "Snapshots / WAL recovery",
+      "scope": "current",
+      "sources": [
+        "durable",
+        "wal"
+      ]
+    }
+  },
+  {
+    "id": "mega-temp",
+    "start": 48.5,
+    "end": 65.5,
+    "title": "Retrieval has explicit scope",
+    "status": "current",
+    "presentation": "SOURCE INSPECTION",
+    "statusNote": "Implemented source at pinned revision; runtime and security acceptance not established by this film.",
+    "visual": {
+      "text": "Retrieval has explicit scope",
+      "scope": "current",
+      "sources": [
+        "durable",
+        "persistence"
+      ]
+    }
+  },
+  {
+    "id": "mega-threeM",
+    "start": 65.5,
+    "end": 69,
+    "title": "Three persona profiles",
+    "status": "current",
+    "presentation": "SOURCE INSPECTION",
+    "statusNote": "Implemented source at pinned revision; runtime and security acceptance not established by this film.",
+    "visual": {
+      "text": "Three persona profiles",
+      "scope": "current",
+      "sources": [
+        "identity"
+      ]
+    }
+  },
+  {
+    "id": "mega-pAbbey",
+    "start": 69,
+    "end": 70.8,
+    "title": "Abbey",
+    "status": "current",
+    "presentation": "SOURCE INSPECTION",
+    "statusNote": "Implemented source at pinned revision; runtime and security acceptance not established by this film.",
+    "visual": {
+      "text": "Abbey",
+      "scope": "current",
+      "sources": [
+        "identity"
+      ]
+    }
+  },
+  {
+    "id": "mega-pAviva",
+    "start": 70.8,
+    "end": 72.6,
+    "title": "Aviva",
+    "status": "current",
+    "presentation": "SOURCE INSPECTION",
+    "statusNote": "Implemented source at pinned revision; runtime and security acceptance not established by this film.",
+    "visual": {
+      "text": "Aviva",
+      "scope": "current",
+      "sources": [
+        "identity"
+      ]
+    }
+  },
+  {
+    "id": "mega-pAbi",
+    "start": 72.6,
+    "end": 74.6,
+    "title": "ABI",
+    "status": "current",
+    "presentation": "SOURCE INSPECTION",
+    "statusNote": "Implemented source at pinned revision; runtime and security acceptance not established by this film.",
+    "visual": {
+      "text": "ABI",
+      "scope": "current",
+      "sources": [
+        "identity"
+      ]
+    }
+  },
+  {
+    "id": "mega-s4",
+    "start": 74.6,
+    "end": 92.1,
+    "title": "Local keyword routing",
+    "status": "current",
+    "presentation": "SOURCE INSPECTION",
+    "statusNote": "Implemented source at pinned revision; runtime and security acceptance not established by this film.",
+    "visual": {
+      "text": "Local keyword routing",
+      "scope": "current",
+      "sources": [
+        "routing"
+      ]
+    }
+  },
+  {
+    "id": "mega-pDeep",
+    "start": 92.1,
+    "end": 113.1,
+    "title": "Identity contracts / training limits",
+    "status": "current",
+    "presentation": "SOURCE INSPECTION",
+    "statusNote": "Implemented source at pinned revision; runtime and security acceptance not established by this film.",
+    "visual": {
+      "text": "Identity contracts / training limits",
+      "scope": "current",
+      "sources": [
+        "identity",
+        "training"
+      ]
+    }
+  },
+  {
+    "id": "mega-verify",
+    "start": 113.1,
+    "end": 116.6,
+    "title": "Integrity has boundaries",
+    "status": "current",
+    "presentation": "SOURCE INSPECTION",
+    "statusNote": "Implemented source at pinned revision; runtime and security acceptance not established by this film.",
+    "visual": {
+      "text": "Integrity has boundaries",
+      "scope": "current",
+      "sources": [
+        "integrity"
+      ]
+    }
+  },
+  {
+    "id": "mega-s5",
+    "start": 116.6,
+    "end": 133.1,
+    "title": "Audit block hash fields",
+    "status": "current",
+    "presentation": "SOURCE INSPECTION",
+    "statusNote": "Implemented source at pinned revision; runtime and security acceptance not established by this film.",
+    "visual": {
+      "text": "Audit block hash fields",
+      "scope": "current",
+      "sources": [
+        "wal"
+      ]
+    }
+  },
+  {
+    "id": "mega-mem",
+    "start": 133.1,
+    "end": 138.1,
+    "title": "Strict / link-only verification",
+    "status": "current",
+    "presentation": "SOURCE INSPECTION",
+    "statusNote": "Implemented source at pinned revision; runtime and security acceptance not established by this film.",
+    "visual": {
+      "text": "Strict / link-only verification",
+      "scope": "current",
+      "sources": [
+        "integrity"
+      ]
+    }
+  },
+  {
+    "id": "mega-s6",
+    "start": 138.1,
+    "end": 154.1,
+    "title": "Scoped pattern audit",
+    "status": "current",
+    "presentation": "SOURCE INSPECTION",
+    "statusNote": "Implemented source at pinned revision; runtime and security acceptance not established by this film.",
+    "visual": {
+      "text": "Scoped pattern audit",
+      "scope": "current",
+      "sources": [
+        "audit"
+      ]
+    }
+  },
+  {
+    "id": "mega-claims",
+    "start": 154.1,
+    "end": 171.1,
+    "title": "Review evidence and limits",
+    "status": "planned",
+    "presentation": "VISION",
+    "statusNote": "Conceptual direction; no delivery or compatibility claim.",
+    "visual": {
+      "text": "Review evidence and limits",
+      "scope": "vision",
+      "sources": []
+    }
+  },
+  {
+    "id": "mega-reason",
+    "start": 171.1,
+    "end": 176.1,
+    "title": "Reasoning / vision",
+    "status": "planned",
+    "presentation": "VISION",
+    "statusNote": "Conceptual direction; no delivery or compatibility claim.",
+    "visual": {
+      "text": "Reasoning / vision",
+      "scope": "vision",
+      "sources": []
+    }
+  },
+  {
+    "id": "mega-roadW",
+    "start": 176.1,
+    "end": 179.6,
+    "title": "Roadmap",
+    "status": "planned",
+    "presentation": "VISION",
+    "statusNote": "Conceptual direction; no delivery or compatibility claim.",
+    "visual": {
+      "text": "Roadmap",
+      "scope": "vision",
+      "sources": []
+    }
+  },
+  {
+    "id": "mega-s7",
+    "start": 179.6,
+    "end": 198.1,
+    "title": "Distributed fabric / vision",
+    "status": "planned",
+    "presentation": "VISION",
+    "statusNote": "Conceptual direction; no delivery or compatibility claim.",
+    "visual": {
+      "text": "Distributed fabric / vision",
+      "scope": "vision",
+      "sources": []
+    }
+  },
+  {
+    "id": "mega-vis",
+    "start": 198.1,
+    "end": 204.1,
+    "title": "Compatibility remains to qualify",
+    "status": "planned",
+    "presentation": "VISION",
+    "statusNote": "Conceptual direction; no delivery or compatibility claim.",
+    "visual": {
+      "text": "Compatibility remains to qualify",
+      "scope": "vision",
+      "sources": []
+    }
+  },
+  {
+    "id": "mega-road",
+    "start": 204.1,
+    "end": 227.1,
+    "title": "Delivery roadmap / proposed",
+    "status": "planned",
+    "presentation": "VISION",
+    "statusNote": "Conceptual direction; no delivery or compatibility claim.",
+    "visual": {
+      "text": "Delivery roadmap / proposed",
+      "scope": "vision",
+      "sources": []
+    }
+  },
+  {
+    "id": "mega-manif",
+    "start": 227.1,
+    "end": 241.1,
+    "title": "Build an evidence requirement",
+    "status": "planned",
+    "presentation": "VISION",
+    "statusNote": "Conceptual direction; no delivery or compatibility claim.",
+    "visual": {
+      "text": "Build an evidence requirement",
+      "scope": "vision",
+      "sources": []
+    }
+  },
+  {
+    "id": "mega-math",
+    "start": 241.1,
+    "end": 273.1,
+    "title": "Equations / conceptual illustration",
+    "status": "planned",
+    "presentation": "VISION",
+    "statusNote": "Conceptual direction; no delivery or compatibility claim.",
+    "visual": {
+      "text": "Equations / conceptual illustration",
+      "scope": "vision",
+      "sources": []
+    }
+  },
+  {
+    "id": "mega-word",
+    "start": 273.1,
+    "end": 277.1,
+    "title": "Bring a scoped project",
+    "status": "planned",
+    "presentation": "VISION",
+    "statusNote": "Conceptual direction; no delivery or compatibility claim.",
+    "visual": {
+      "text": "Bring a scoped project",
+      "scope": "vision",
+      "sources": []
+    }
+  },
+  {
+    "id": "mega-close",
+    "start": 277.1,
+    "end": 282,
+    "title": "Review the evidence",
+    "status": "planned",
+    "presentation": "VISION",
+    "statusNote": "Conceptual direction; no delivery or compatibility claim.",
+    "visual": {
+      "text": "Review the evidence",
+      "scope": "vision",
+      "sources": []
+    }
+  }
+]
