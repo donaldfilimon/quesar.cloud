@@ -11,3 +11,18 @@ it("keeps technical identifiers in one spoken sentence while leaving display tex
   expect(pronounce("quesar.cloud")).toBe("Quasar dot cloud");
   expect(pronounce("Quesar by MLAI")).toBe("Quasar by M‑L‑A‑I");
 });
+
+it("spells initialisms the six films speak that the table left intact", () => {
+  expect(pronounce("MCP owns the store-facing completion persistence tail.")).toBe(
+    "M‑C‑P owns the store-facing completion persistence tail.",
+  );
+  expect(pronounce("WAL frames checksum JSON bytes. Bad checksums report corruption.")).toBe(
+    "wall frames checksum J‑S‑O‑N bytes. Bad checksums report corruption.",
+  );
+  expect(pronounce("ABI separates its pure AI core from storage I/O.")).toBe(
+    "A‑B‑I separates its pure A.I. core from storage I‑O.",
+  );
+  expect(chunkText(pronounce("Recovery can report corruption or I/O failure."))).toEqual([
+    "Recovery can report corruption or I‑O failure.",
+  ]);
+});
