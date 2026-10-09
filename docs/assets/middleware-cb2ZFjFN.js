@@ -1,1 +1,0 @@
-import{ht as e}from"./index-DpAwvm5B.js";var t=e({type:`function`});export{t};

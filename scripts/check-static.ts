@@ -35,14 +35,18 @@ const pages = new Map<
   string,
   { ids: Set<string>; links: string[]; scripts: Set<string>; preloads: number }
 >();
+const failures = new Set<string>();
 for (const file of files(root).filter((file) => file.endsWith(".html"))) {
+  const html = readFileSync(file, "utf8");
+  if (!html.trim())
+    failures.add(`empty HTML document: /${relative(root, file).split(sep).join("/")}`);
   const data = {
     ids: new Set<string>(),
     links: [] as string[],
     scripts: new Set<string>(),
     preloads: 0,
   };
-  walk(parse(readFileSync(file, "utf8")), (node) => {
+  walk(parse(html), (node) => {
     const attrs = Object.fromEntries(node.attrs.map((a) => [a.name, a.value]));
     if (attrs.id) data.ids.add(attrs.id);
     if (node.tagName === "a" && attrs.name) data.ids.add(attrs.name);
@@ -58,7 +62,6 @@ for (const file of files(root).filter((file) => file.endsWith(".html"))) {
   });
   pages.set(file, data);
 }
-const failures = new Set<string>();
 const checkedMedia = new Set<string>();
 let external = 0;
 const references = [...pages].map(([file, page]) => ({

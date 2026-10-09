@@ -475,7 +475,9 @@ test("persistent Node artifact: fail closed, migrations, secure sessions, isolat
       await expect(page).toHaveURL(`${origin}/profile`);
     } finally {
       releaseSignIn();
-      await page.unroute(`${origin}/api/auth/sign-in/email`, holdSignIn);
+      // Drain released callbacks before updating interception; unroute alone
+      // does not wait for an active callback to finish. Context guards remain.
+      await page.unrouteAll({ behavior: "wait" });
     }
     await page.reload();
     await expect(page.getByLabel("Display name")).toHaveValue("Synthetic owner");
@@ -533,10 +535,15 @@ test("persistent Node artifact: fail closed, migrations, secure sessions, isolat
     const contactGate = new Promise<void>((resolve) => {
       releaseContact = resolve;
     });
+    let contactIntercepted!: () => void;
+    const contactHeld = new Promise<void>((resolve) => {
+      contactIntercepted = resolve;
+    });
     const isInquiry = (request: import("@playwright/test").Request) =>
       request.method() === "POST" && Boolean(request.postData()?.includes(inquiryMessage));
     const holdContact = async (route: import("@playwright/test").Route) => {
       if (!isInquiry(route.request())) return route.fallback();
+      contactIntercepted();
       await contactGate;
       await route.continue();
     };
@@ -545,6 +552,7 @@ test("persistent Node artifact: fail closed, migrations, secure sessions, isolat
       const submitted = page.waitForRequest(isInquiry);
       await page.getByRole("button", { name: "Send inquiry", exact: true }).click();
       await submitted;
+      await contactHeld;
       for (const label of ["Name", "Email", "Service or project context (optional)", "Message"]) {
         await expect(page.getByLabel(label, { exact: true })).toBeDisabled();
       }
@@ -554,7 +562,7 @@ test("persistent Node artifact: fail closed, migrations, secure sessions, isolat
       releaseContact();
     } finally {
       releaseContact();
-      await page.unroute("**/*", holdContact);
+      await page.unrouteAll({ behavior: "wait" });
     }
     await expect(page.locator("form").getByRole("status")).toContainText(
       "Inquiry accepted by the site",
