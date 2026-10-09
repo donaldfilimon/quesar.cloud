@@ -1,0 +1,430 @@
+{
+  "schemaVersion": 1,
+  "releaseInputVersion": "abbey-neural-v7",
+  "createdAtUTC": "2026-10-09T11:24:28.409457+00:00",
+  "scope": "Technical provenance package; subjective listening and publication not established",
+  "sourceGuide": {
+    "path": "source/NEURAL-UPGRADE.md",
+    "sha256": "cca92c591644d389313ce282fddc6b54ddc967f151951485fb6a8cd7660bf67c",
+    "bytes": 4780
+  },
+  "editionCount": 16,
+  "editions": [
+    {
+      "id": "quesar-architecture-60",
+      "master": "quesar-architecture-60.mp4",
+      "sha256": "abd4ea3691d4693bd50ec9b67d134d0c1cab6acdf59d7ec4e31d5e1ba4929533",
+      "bytes": 9405227,
+      "status": "full_decode_verified",
+      "inputDigest": "139f6357f421c01f07ac9573c5f1224a8f29d83d4e7fb1fece897bed3e5ea52a",
+      "included": {
+        "verification.json": {
+          "sha256": "5ef88f766f83e349c451c65dde58d2a6c6ba97d626830c86c1e8682fa045fe72",
+          "bytes": 11988
+        },
+        "captions.vtt": {
+          "sha256": "b9522816343bbedaaec92b8735bd58768f9b30a4b936bbc93f5856ba876d165a",
+          "bytes": 1156
+        },
+        "transcript.txt": {
+          "sha256": "2f48cd4d247d836ac5dc7d2d8a38d768ec5ffd21dc38a15cada2618bc937c426",
+          "bytes": 792
+        },
+        "timeline.json": {
+          "sha256": "121b6dae7f2182ddfee492d277d1334676ba786763e5dd89960882a88485d83c",
+          "bytes": 20539
+        }
+      }
+    },
+    {
+      "id": "quesar-studio-60",
+      "master": "quesar-studio-60.mp4",
+      "sha256": "ecd275523aebb7f8b7bc278d450247ab8f14853da1979ff8b5673ebeb49c8390",
+      "bytes": 13260562,
+      "status": "full_decode_verified",
+      "inputDigest": "6b81bcd23ddb5daba8d1d9eadb9b4eec415356acbcdf17215c47a9e74cf3d428",
+      "included": {
+        "verification.json": {
+          "sha256": "af4fa02e216575b0b5e920c5c5a6e5f520ecf8c20c8e7625c79499c79e855a38",
+          "bytes": 11953
+        },
+        "captions.vtt": {
+          "sha256": "b9522816343bbedaaec92b8735bd58768f9b30a4b936bbc93f5856ba876d165a",
+          "bytes": 1156
+        },
+        "transcript.txt": {
+          "sha256": "2f48cd4d247d836ac5dc7d2d8a38d768ec5ffd21dc38a15cada2618bc937c426",
+          "bytes": 792
+        },
+        "timeline.json": {
+          "sha256": "b670a1d5812eec8671cddbafe65c6c3c1976caaa15296e92b804fbefe367dee4",
+          "bytes": 20533
+        }
+      }
+    },
+    {
+      "id": "quesar-architecture-120",
+      "master": "quesar-architecture-120.mp4",
+      "sha256": "309780c3e2ca3ab5c93ed1ff2bbf0cdff5bf599451a2bc09004a6d623524057c",
+      "bytes": 19568287,
+      "status": "full_decode_verified",
+      "inputDigest": "fde1f9916a204bdf9ac32cf5e93382fd8424ec298c87007c9cafa84392433a06",
+      "included": {
+        "verification.json": {
+          "sha256": "ddf977fa0f57debadc1c08225da1b4f3737618b4b31a92649f94e8bae67b21b9",
+          "bytes": 12000
+        },
+        "captions.vtt": {
+          "sha256": "d06166ee2ab7a170f0b1264ac756c5944998174ebf2dda7747bb561c3f2dbb7a",
+          "bytes": 2270
+        },
+        "transcript.txt": {
+          "sha256": "0ea25a38c5bd018973d7b2c5d1bb916927cd657685f0cb6298d2a44e108d8a35",
+          "bytes": 1559
+        },
+        "timeline.json": {
+          "sha256": "363d919331a39cf20ea7a9398c464f0131144168d9b87c38e9cec692ba9bbcab",
+          "bytes": 39816
+        }
+      }
+    },
+    {
+      "id": "quesar-studio-120",
+      "master": "quesar-studio-120.mp4",
+      "sha256": "05e63db799cfce9d255f20f88a456328655d5d04730b6c1466cfd711deb5a8fb",
+      "bytes": 26671540,
+      "status": "full_decode_verified",
+      "inputDigest": "def9d2554a49d76b94b51d30b560d1d7da5bf1113f66052132b93687e234d068",
+      "included": {
+        "verification.json": {
+          "sha256": "d9c70977aa38970a92f8794e4f23f1705bf50872b4b230307a194218062b03e3",
+          "bytes": 11964
+        },
+        "captions.vtt": {
+          "sha256": "d06166ee2ab7a170f0b1264ac756c5944998174ebf2dda7747bb561c3f2dbb7a",
+          "bytes": 2270
+        },
+        "transcript.txt": {
+          "sha256": "0ea25a38c5bd018973d7b2c5d1bb916927cd657685f0cb6298d2a44e108d8a35",
+          "bytes": 1559
+        },
+        "timeline.json": {
+          "sha256": "044ae8102af39e07da90418841be0a6c84b781cd43831f2c82972982e14373bd",
+          "bytes": 39810
+        }
+      }
+    },
+    {
+      "id": "quesar-architecture-180",
+      "master": "quesar-architecture-180.mp4",
+      "sha256": "98c59e27a5e90de4afe1dfab114a54916468aace4038fb63957811cec88dcce9",
+      "bytes": 29618202,
+      "status": "full_decode_verified",
+      "inputDigest": "b50d124ed6fe06fb67eb83b0e859aee0c4fd355c4efb1e18c52441797adaf273",
+      "included": {
+        "verification.json": {
+          "sha256": "13f9818df35b3046a7064d7f4dd86ce0158c3c50972c1089b67d4b17dce50ea9",
+          "bytes": 12001
+        },
+        "captions.vtt": {
+          "sha256": "cc075cc55a3e5bc1f83cd96ed62718adbc5e4a080096b500bcdf58e796a39365",
+          "bytes": 3366
+        },
+        "transcript.txt": {
+          "sha256": "9b61bd217a30f6f0a991b77e5c19f44188a2b19c37cc2e903c85c75e9077c742",
+          "bytes": 2378
+        },
+        "timeline.json": {
+          "sha256": "32b2322e834f03d40d4a91ee3b8f80efe462486b255f7cb41c4381e65d06c2b5",
+          "bytes": 58232
+        }
+      }
+    },
+    {
+      "id": "quesar-studio-180",
+      "master": "quesar-studio-180.mp4",
+      "sha256": "6a4ac16529955f1066351f7c7213c5b5192a7cc25e8376cdded79c7401c59dec",
+      "bytes": 40472645,
+      "status": "full_decode_verified",
+      "inputDigest": "4e6f7666d75d99db3b99b9072d693586b03429619746fcb7ba94bf717594c198",
+      "included": {
+        "verification.json": {
+          "sha256": "84715fe4ea82fa6d720f5bb8613cfabb8fe593d4b996611e81dc5208154f72d0",
+          "bytes": 11965
+        },
+        "captions.vtt": {
+          "sha256": "cc075cc55a3e5bc1f83cd96ed62718adbc5e4a080096b500bcdf58e796a39365",
+          "bytes": 3366
+        },
+        "transcript.txt": {
+          "sha256": "9b61bd217a30f6f0a991b77e5c19f44188a2b19c37cc2e903c85c75e9077c742",
+          "bytes": 2378
+        },
+        "timeline.json": {
+          "sha256": "887674f6f85f1c010760587778bf606d4e7621324b11937437b26999af2d926d",
+          "bytes": 58226
+        }
+      }
+    },
+    {
+      "id": "quesar-architecture-600",
+      "master": "quesar-architecture-600.mp4",
+      "sha256": "979381439b03ee0f29b954881228f5a17b54c57b724e0bc1050b9671272798e4",
+      "bytes": 81809880,
+      "status": "full_decode_verified",
+      "inputDigest": "27496cfb9e1c5d37b37f7f24e906a838bc5bf7a7d09a2c5c4b8ed907969cd087",
+      "included": {
+        "verification.json": {
+          "sha256": "3b4561315f12036841946f86cbdaffa8b95d3c1f081fca4315f6a9ddd540c162",
+          "bytes": 12004
+        },
+        "captions.vtt": {
+          "sha256": "778eebce482984f0e70f8ccda2015c80c4315c871e7abe83799a9d5098460483",
+          "bytes": 8503
+        },
+        "transcript.txt": {
+          "sha256": "70faa2b8e342782655b5bf67fd515f8d9494e4d264a0f598120758b444d9d656",
+          "bytes": 5991
+        },
+        "timeline.json": {
+          "sha256": "1f08344f4b954ef10d85b106bd0ec41c9348beda341d7691b0a718bafcb7dfa2",
+          "bytes": 146334
+        }
+      }
+    },
+    {
+      "id": "quesar-studio-600",
+      "master": "quesar-studio-600.mp4",
+      "sha256": "06c65b802d71c0a8e120e32402f9000c535cfb02bd0ec709876ee8c517331489",
+      "bytes": 110966969,
+      "status": "full_decode_verified",
+      "inputDigest": "87fb95e01e1630953bafd3654a9309ca5becc9b7e7357e2fe63dc1a10afb5f96",
+      "included": {
+        "verification.json": {
+          "sha256": "79b6f331754090c79ffebb4ec6c55751d0a37c9d1ed1e104a3428a68e7b528d7",
+          "bytes": 11970
+        },
+        "captions.vtt": {
+          "sha256": "778eebce482984f0e70f8ccda2015c80c4315c871e7abe83799a9d5098460483",
+          "bytes": 8503
+        },
+        "transcript.txt": {
+          "sha256": "70faa2b8e342782655b5bf67fd515f8d9494e4d264a0f598120758b444d9d656",
+          "bytes": 5991
+        },
+        "timeline.json": {
+          "sha256": "40ced94f957cb3434370a939233491a9ac5da81c81306339520ab2dd8a9863fb",
+          "bytes": 146328
+        }
+      }
+    },
+    {
+      "id": "mlai-quesar-kinetic-60",
+      "master": "mlai-quesar-kinetic-60.mp4",
+      "sha256": "6ec25dc6e0d08dc3281039e08c527680bc1757bc8a2b4f2df59ba282dd6911a4",
+      "bytes": 5187081,
+      "status": "encoded_and_full_decode_verified",
+      "inputDigest": "2ae131390f387e8454e75b45796330c8789561efd95b5c685851acf58eb802c7",
+      "included": {
+        "verification.json": {
+          "sha256": "ab6c6d36af3245f5ca6435ffb4ce48e818279794b86550c0fb62f66384d46f65",
+          "bytes": 28761
+        },
+        "captions.vtt": {
+          "sha256": "1355ebddbce3cb420957e05321b96547b6e3cc7d03a8af3f07d83350664d5cd1",
+          "bytes": 1089
+        },
+        "transcript.txt": {
+          "sha256": "4d358cc3571a33f8f6c9414a916e0c740295d7484920acd5b483200d3c040d44",
+          "bytes": 513
+        },
+        "edit.json": {
+          "sha256": "d03522ee8954ece20bb90a828baffd79db96bc5c517c79cbcacd15f7f96d0e57",
+          "bytes": 12439
+        }
+      }
+    },
+    {
+      "id": "mlai-quesar-editorial-60",
+      "master": "mlai-quesar-editorial-60.mp4",
+      "sha256": "805104de9bc259ac3c69c83fb0039a41db0adbd7ae4c0352cc055c8b963b420b",
+      "bytes": 4627913,
+      "status": "encoded_and_full_decode_verified",
+      "inputDigest": "825e951f60a8168bf5835a33da1c36cfc759132626d6aade828de0f3f14dbb6b",
+      "included": {
+        "verification.json": {
+          "sha256": "36ddbff67bce485b98eea2bd60ea22e83ba433ac963fd6d7ca1b2115a1298e9a",
+          "bytes": 25142
+        },
+        "captions.vtt": {
+          "sha256": "5bebe691895d9d5b41b6c02f6e0ddf41e0b4410b269487d8b1ce7d9a175a4319",
+          "bytes": 1031
+        },
+        "transcript.txt": {
+          "sha256": "794c3e8a861698a9a04e68bac6794289abba98c03e68d8da42df10378330ebde",
+          "bytes": 591
+        },
+        "edit.json": {
+          "sha256": "cf256c60667f881310502397e2b340c4362c1e3a749c2cba114065c5798df645",
+          "bytes": 9817
+        }
+      }
+    },
+    {
+      "id": "mlai-quesar-technical-120",
+      "master": "mlai-quesar-technical-120.mp4",
+      "sha256": "21e2ce9afcf704f1c9f1faa156806aec9b669821907493949e546cbef8cf788b",
+      "bytes": 88094920,
+      "status": "encoded_and_full_decode_verified",
+      "inputDigest": "be96e44acf7650f031a7a644a6fa47ba4dd7347910d519d92ef3376483f1890b",
+      "included": {
+        "verification.json": {
+          "sha256": "4edb5669ac518ed95a8803a7e31901172e7f518b7fb6471ddddfdb257565357e",
+          "bytes": 32517
+        },
+        "captions.vtt": {
+          "sha256": "2f3119f015c4f68204ba7d4f28dc18e41da041665cc0cd4510e362b419bb5f98",
+          "bytes": 1819
+        },
+        "transcript.txt": {
+          "sha256": "f68c4d61c6832bc88a9840220e0a0448671988d475395fa0ea62b206a486d4b9",
+          "bytes": 1141
+        },
+        "edit.json": {
+          "sha256": "093d02fe5f35f7de349d7adf0cd1e4c135528f2682cb004efeb5d06014d8f9ef",
+          "bytes": 15297
+        }
+      }
+    },
+    {
+      "id": "mlai-quesar-design-120",
+      "master": "mlai-quesar-design-120.mp4",
+      "sha256": "7fd8a4cf5fe30ec12e89a8237d74c297a097b6801bc5305e757bcd9edc882fac",
+      "bytes": 27665421,
+      "status": "encoded_and_full_decode_verified",
+      "inputDigest": "f6889928f39b6181d9407f9f9a6133f24ba7ae1ec208e4d146b78143fdcc5b98",
+      "included": {
+        "verification.json": {
+          "sha256": "3e7f44450fcd683f91bcd54c97f817a89b15a700340e52435ba304d48e2682fb",
+          "bytes": 29971
+        },
+        "captions.vtt": {
+          "sha256": "5934a274577b7e61d09a88dfb52b9adce3b4f685282e28d52e8784bcdb6bb8aa",
+          "bytes": 1580
+        },
+        "transcript.txt": {
+          "sha256": "50d76ba5cd8136797e36d5af62de83bef36ad201032ba7e587b81e9d8ba28b21",
+          "bytes": 1004
+        },
+        "edit.json": {
+          "sha256": "d9eb3257326444e26dcfd71f819fdb19817540ea914eb43f9d2a4d169a976c32",
+          "bytes": 12944
+        }
+      }
+    },
+    {
+      "id": "mlai-quesar-technical-180",
+      "master": "mlai-quesar-technical-180.mp4",
+      "sha256": "d085f2fb139f9d71cb090747e56efae67a946d3fb208576c304d26b125fc2721",
+      "bytes": 92738732,
+      "status": "encoded_and_full_decode_verified",
+      "inputDigest": "94fa43661b0187d541a3113c23d5adf46b227e5b64f6f820163f5892548d129a",
+      "included": {
+        "verification.json": {
+          "sha256": "add45c0a81ca23873315e5e8f6639d7c9d9f50958ac13db078bb9bafb7243b17",
+          "bytes": 44691
+        },
+        "captions.vtt": {
+          "sha256": "c0c40170df52f3c76b2ef585e636e50f8dedaf6675721b81e75d387556752b52",
+          "bytes": 2852
+        },
+        "transcript.txt": {
+          "sha256": "2c1dc090b21ea9bf3e9c556e015750c66cb174738d947509b790d978d709d46e",
+          "bytes": 1732
+        },
+        "edit.json": {
+          "sha256": "765d3634b9c8a039321211b407f6c56ee46287de36328192c5ff7775fea70eaf",
+          "bytes": 24292
+        }
+      }
+    },
+    {
+      "id": "mlai-quesar-design-180",
+      "master": "mlai-quesar-design-180.mp4",
+      "sha256": "3958bdcb2415fab3a820f985594a8a7b6ac5abf31722ab4857bcb9d0a391dd2f",
+      "bytes": 32314326,
+      "status": "encoded_and_full_decode_verified",
+      "inputDigest": "3be7c89c116dbeba5d18e5bf58e1eebc96e24cde3f11b728e85e4fb487d5be08",
+      "included": {
+        "verification.json": {
+          "sha256": "795db7bc9cff196a86af28cdc1056fd2437fe35c19892be04e82f7fa11e6e7cf",
+          "bytes": 41274
+        },
+        "captions.vtt": {
+          "sha256": "b1792d41fdb951d131dd1187c2478a5481bf52cae109b39115bbfafdc4b9341d",
+          "bytes": 2603
+        },
+        "transcript.txt": {
+          "sha256": "82b8e183d13f1fa9d751fc318d90f947b33d93a54becc6f6cab0f63de49d61ff",
+          "bytes": 1585
+        },
+        "edit.json": {
+          "sha256": "986e96b67e5f67f16f4e11ca8f11f93857a5247ab313a420c0d6819c312e0119",
+          "bytes": 21421
+        }
+      }
+    },
+    {
+      "id": "mlai-quesar-technical-600",
+      "master": "mlai-quesar-technical-600.mp4",
+      "sha256": "e1bf0506db9133dc565596b1dc4124293667ebb6ca560dd996061d636c2e1859",
+      "bytes": 311973651,
+      "status": "encoded_and_full_decode_verified",
+      "inputDigest": "34074e53cd74939427aab20a662da04c360853c844f256fa2c9c1e6b0785021f",
+      "included": {
+        "verification.json": {
+          "sha256": "3d4247d5f5808f477725e2ae39a42c36de0a4885466b209931d935336904fdc2",
+          "bytes": 98552
+        },
+        "captions.vtt": {
+          "sha256": "4fa0aef405cdd1239bf64bf8aad82c2cba2af16b6e3e5f146b035e7ef018de4c",
+          "bytes": 8389
+        },
+        "transcript.txt": {
+          "sha256": "a0224ff4f167e51a0bd1e59be1b9c50e4396476ed5da62e0d10663bb3548cd24",
+          "bytes": 5229
+        },
+        "edit.json": {
+          "sha256": "67c1dfe2766cbeb37911f91158d8d0ac3aa17ca974503b2c7a9a9164a04a1bb8",
+          "bytes": 63838
+        }
+      }
+    },
+    {
+      "id": "mlai-quesar-design-600",
+      "master": "mlai-quesar-design-600.mp4",
+      "sha256": "27de0c56d3f776380174132599c3ae96e67b7b058216c139c048e977be8bc89e",
+      "bytes": 311721097,
+      "status": "encoded_and_full_decode_verified",
+      "inputDigest": "a50f2298f83fac7bc38cbf9c16c0e8a650c0db8902a48e642f0d4b1b472f575f",
+      "included": {
+        "verification.json": {
+          "sha256": "753f55196b3c0bf6ab190a6d1308939fded1ef35e5f78e539c8332895592b923",
+          "bytes": 98435
+        },
+        "captions.vtt": {
+          "sha256": "33679202090fcab5f3b4a4f89a2cec4720b2e436282818930a3aa1d9312f566c",
+          "bytes": 8389
+        },
+        "transcript.txt": {
+          "sha256": "a045d6e533e114cfe38d062a5577105a0f6bd43522f45358ae5141a56b475c20",
+          "bytes": 5229
+        },
+        "edit.json": {
+          "sha256": "7b969ceaf57c049be21c1f1ba4530112a6e528115cab1bdb0a66fc094f539c98",
+          "bytes": 63789
+        }
+      }
+    }
+  ]
+}

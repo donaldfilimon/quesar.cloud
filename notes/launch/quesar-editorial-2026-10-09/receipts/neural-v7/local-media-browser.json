@@ -1,0 +1,431 @@
+{
+  "checkedAt": "2026-10-09T11:24:00.783Z",
+  "input": "/Users/donaldfilimon/dev/active/quesar.cloud/notes/launch/quesar-editorial-2026-10-09/artifacts/abbey-neural-v7",
+  "requireAll": true,
+  "completed": [
+    {
+      "id": "quesar-architecture-60",
+      "mediaBytes": 9405227,
+      "receiptStatus": "full_decode_verified",
+      "duration": 60,
+      "width": 1920,
+      "height": 1080,
+      "frames": 0,
+      "muted": true,
+      "autoplay": false,
+      "advanced": 0.062892,
+      "decodedFrames": 7,
+      "cues": 16,
+      "seeks": [
+        {
+          "target": 30,
+          "actual": 30
+        },
+        {
+          "target": 58,
+          "actual": 58
+        }
+      ],
+      "paused": true,
+      "error": null
+    },
+    {
+      "id": "quesar-studio-60",
+      "mediaBytes": 13260562,
+      "receiptStatus": "full_decode_verified",
+      "duration": 60,
+      "width": 1920,
+      "height": 1080,
+      "frames": 0,
+      "muted": true,
+      "autoplay": false,
+      "advanced": 0.063403,
+      "decodedFrames": 8,
+      "cues": 16,
+      "seeks": [
+        {
+          "target": 30,
+          "actual": 30
+        },
+        {
+          "target": 58,
+          "actual": 58
+        }
+      ],
+      "paused": true,
+      "error": null
+    },
+    {
+      "id": "quesar-architecture-120",
+      "mediaBytes": 19568287,
+      "receiptStatus": "full_decode_verified",
+      "duration": 120,
+      "width": 1920,
+      "height": 1080,
+      "frames": 0,
+      "muted": true,
+      "autoplay": false,
+      "advanced": 0.069007,
+      "decodedFrames": 7,
+      "cues": 31,
+      "seeks": [
+        {
+          "target": 60,
+          "actual": 60
+        },
+        {
+          "target": 118,
+          "actual": 118
+        }
+      ],
+      "paused": true,
+      "error": null
+    },
+    {
+      "id": "quesar-studio-120",
+      "mediaBytes": 26671540,
+      "receiptStatus": "full_decode_verified",
+      "duration": 120,
+      "width": 1920,
+      "height": 1080,
+      "frames": 0,
+      "muted": true,
+      "autoplay": false,
+      "advanced": 0.066852,
+      "decodedFrames": 7,
+      "cues": 31,
+      "seeks": [
+        {
+          "target": 60,
+          "actual": 60
+        },
+        {
+          "target": 118,
+          "actual": 118
+        }
+      ],
+      "paused": true,
+      "error": null
+    },
+    {
+      "id": "quesar-architecture-180",
+      "mediaBytes": 29618202,
+      "receiptStatus": "full_decode_verified",
+      "duration": 180,
+      "width": 1920,
+      "height": 1080,
+      "frames": 0,
+      "muted": true,
+      "autoplay": false,
+      "advanced": 0.060978,
+      "decodedFrames": 7,
+      "cues": 45,
+      "seeks": [
+        {
+          "target": 90,
+          "actual": 90
+        },
+        {
+          "target": 178,
+          "actual": 178
+        }
+      ],
+      "paused": true,
+      "error": null
+    },
+    {
+      "id": "quesar-studio-180",
+      "mediaBytes": 40472645,
+      "receiptStatus": "full_decode_verified",
+      "duration": 180,
+      "width": 1920,
+      "height": 1080,
+      "frames": 0,
+      "muted": true,
+      "autoplay": false,
+      "advanced": 0.0593,
+      "decodedFrames": 7,
+      "cues": 45,
+      "seeks": [
+        {
+          "target": 90,
+          "actual": 90
+        },
+        {
+          "target": 178,
+          "actual": 178
+        }
+      ],
+      "paused": true,
+      "error": null
+    },
+    {
+      "id": "quesar-architecture-600",
+      "mediaBytes": 81809880,
+      "receiptStatus": "full_decode_verified",
+      "duration": 600,
+      "width": 1920,
+      "height": 1080,
+      "frames": 0,
+      "muted": true,
+      "autoplay": false,
+      "advanced": 0.062873,
+      "decodedFrames": 8,
+      "cues": 112,
+      "seeks": [
+        {
+          "target": 300,
+          "actual": 300
+        },
+        {
+          "target": 598,
+          "actual": 598
+        }
+      ],
+      "paused": true,
+      "error": null
+    },
+    {
+      "id": "quesar-studio-600",
+      "mediaBytes": 110966969,
+      "receiptStatus": "full_decode_verified",
+      "duration": 600,
+      "width": 1920,
+      "height": 1080,
+      "frames": 0,
+      "muted": true,
+      "autoplay": false,
+      "advanced": 0.101922,
+      "decodedFrames": 8,
+      "cues": 112,
+      "seeks": [
+        {
+          "target": 300,
+          "actual": 300
+        },
+        {
+          "target": 598,
+          "actual": 598
+        }
+      ],
+      "paused": true,
+      "error": null
+    },
+    {
+      "id": "mlai-quesar-kinetic-60",
+      "mediaBytes": 5187081,
+      "receiptStatus": "encoded_and_full_decode_verified",
+      "duration": 60,
+      "width": 1920,
+      "height": 1080,
+      "frames": 0,
+      "muted": true,
+      "autoplay": false,
+      "advanced": 0.072108,
+      "decodedFrames": 7,
+      "cues": 17,
+      "seeks": [
+        {
+          "target": 30,
+          "actual": 30
+        },
+        {
+          "target": 58,
+          "actual": 58
+        }
+      ],
+      "paused": true,
+      "error": null
+    },
+    {
+      "id": "mlai-quesar-editorial-60",
+      "mediaBytes": 4627913,
+      "receiptStatus": "encoded_and_full_decode_verified",
+      "duration": 60,
+      "width": 1920,
+      "height": 1080,
+      "frames": 0,
+      "muted": true,
+      "autoplay": false,
+      "advanced": 0.062978,
+      "decodedFrames": 8,
+      "cues": 13,
+      "seeks": [
+        {
+          "target": 30,
+          "actual": 30
+        },
+        {
+          "target": 58,
+          "actual": 58
+        }
+      ],
+      "paused": true,
+      "error": null
+    },
+    {
+      "id": "mlai-quesar-technical-120",
+      "mediaBytes": 88094920,
+      "receiptStatus": "encoded_and_full_decode_verified",
+      "duration": 120,
+      "width": 1920,
+      "height": 1080,
+      "frames": 0,
+      "muted": true,
+      "autoplay": false,
+      "advanced": 0.067777,
+      "decodedFrames": 7,
+      "cues": 20,
+      "seeks": [
+        {
+          "target": 60,
+          "actual": 60
+        },
+        {
+          "target": 118,
+          "actual": 118
+        }
+      ],
+      "paused": true,
+      "error": null
+    },
+    {
+      "id": "mlai-quesar-design-120",
+      "mediaBytes": 27665421,
+      "receiptStatus": "encoded_and_full_decode_verified",
+      "duration": 120,
+      "width": 1920,
+      "height": 1080,
+      "frames": 0,
+      "muted": true,
+      "autoplay": false,
+      "advanced": 0.07008,
+      "decodedFrames": 7,
+      "cues": 17,
+      "seeks": [
+        {
+          "target": 60,
+          "actual": 60
+        },
+        {
+          "target": 118,
+          "actual": 118
+        }
+      ],
+      "paused": true,
+      "error": null
+    },
+    {
+      "id": "mlai-quesar-technical-180",
+      "mediaBytes": 92738732,
+      "receiptStatus": "encoded_and_full_decode_verified",
+      "duration": 180,
+      "width": 1920,
+      "height": 1080,
+      "frames": 0,
+      "muted": true,
+      "autoplay": false,
+      "advanced": 0.064036,
+      "decodedFrames": 8,
+      "cues": 33,
+      "seeks": [
+        {
+          "target": 90,
+          "actual": 90
+        },
+        {
+          "target": 178,
+          "actual": 178
+        }
+      ],
+      "paused": true,
+      "error": null
+    },
+    {
+      "id": "mlai-quesar-design-180",
+      "mediaBytes": 32314326,
+      "receiptStatus": "encoded_and_full_decode_verified",
+      "duration": 180,
+      "width": 1920,
+      "height": 1080,
+      "frames": 0,
+      "muted": true,
+      "autoplay": false,
+      "advanced": 0.05823,
+      "decodedFrames": 7,
+      "cues": 30,
+      "seeks": [
+        {
+          "target": 90,
+          "actual": 90
+        },
+        {
+          "target": 178,
+          "actual": 178
+        }
+      ],
+      "paused": true,
+      "error": null
+    },
+    {
+      "id": "mlai-quesar-technical-600",
+      "mediaBytes": 311973651,
+      "receiptStatus": "encoded_and_full_decode_verified",
+      "duration": 600,
+      "width": 1920,
+      "height": 1080,
+      "frames": 0,
+      "muted": true,
+      "autoplay": false,
+      "advanced": 0.070896,
+      "decodedFrames": 7,
+      "cues": 93,
+      "seeks": [
+        {
+          "target": 300,
+          "actual": 300
+        },
+        {
+          "target": 598,
+          "actual": 598
+        }
+      ],
+      "paused": true,
+      "error": null
+    },
+    {
+      "id": "mlai-quesar-design-600",
+      "mediaBytes": 311721097,
+      "receiptStatus": "encoded_and_full_decode_verified",
+      "duration": 600,
+      "width": 1920,
+      "height": 1080,
+      "frames": 0,
+      "muted": true,
+      "autoplay": false,
+      "advanced": 0.059632,
+      "decodedFrames": 7,
+      "cues": 93,
+      "seeks": [
+        {
+          "target": 300,
+          "actual": 300
+        },
+        {
+          "target": 598,
+          "actual": 598
+        }
+      ],
+      "paused": true,
+      "error": null
+    }
+  ],
+  "missing": [],
+  "failed": [],
+  "browserErrors": [],
+  "externalRequests": [],
+  "status": "passed",
+  "fullDurationPlayback": false,
+  "listeningAccepted": false,
+  "scope": "Browser-tested 16 completed final masters; 0 final artifacts absent at snapshot. No partial/cache paths, source-code browser model, audible review, or full-duration playback were used."
+}

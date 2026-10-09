@@ -1,6 +1,6 @@
 {
   "status": "full_decode_verified",
-  "sha256": "ad3b0f225b3cc24b89046f3656498c999a715680851de58d3b46eb31dec7a81d",
+  "sha256": "06c65b802d71c0a8e120e32402f9000c535cfb02bd0ec709876ee8c517331489",
   "probe": {
     "streams": [
       {
@@ -15,5 +15,16 @@
   },
   "renderSamplingFps": 30,
   "outputFps": 30,
-  "browserErrors": []
+  "browserErrors": [],
+  "inputDigest": "87fb95e01e1630953bafd3654a9309ca5becc9b7e7357e2fe63dc1a10afb5f96",
+  "sourceDigest": "034796ff94a3525b62952aaeb07ecbaf081cbe5ef9d1a07d1202467a89d29e03",
+  "listeningReview": "pending",
+  "visualReview": "pending",
+  "listeningAccepted": false,
+  "visualReviewAccepted": false,
+  "sidecarHashes": {
+    "poster.jpg": "92a5e5514f4843416f5c7339aab20a7996d21d3a211ab7c8f3b20ee26e58df68",
+    "captions.vtt": "778eebce482984f0e70f8ccda2015c80c4315c871e7abe83799a9d5098460483",
+    "transcript.txt": "70faa2b8e342782655b5bf67fd515f8d9494e4d264a0f598120758b444d9d656"
+  }
 }

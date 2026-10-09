@@ -1,0 +1,729 @@
+{
+  "snapshotUTC": "2026-10-09T11:23:41.131243+00:00",
+  "expected": [
+    "quesar-architecture-60",
+    "quesar-architecture-120",
+    "quesar-architecture-180",
+    "quesar-architecture-600",
+    "quesar-studio-60",
+    "quesar-studio-120",
+    "quesar-studio-180",
+    "quesar-studio-600",
+    "mlai-quesar-kinetic-60",
+    "mlai-quesar-editorial-60",
+    "mlai-quesar-technical-120",
+    "mlai-quesar-design-120",
+    "mlai-quesar-technical-180",
+    "mlai-quesar-design-180",
+    "mlai-quesar-technical-600",
+    "mlai-quesar-design-600"
+  ],
+  "completed": [
+    {
+      "id": "quesar-architecture-60",
+      "sha256": "abd4ea3691d4693bd50ec9b67d134d0c1cab6acdf59d7ec4e31d5e1ba4929533",
+      "receiptSHA256": "abd4ea3691d4693bd50ec9b67d134d0c1cab6acdf59d7ec4e31d5e1ba4929533",
+      "bytes": 9405227,
+      "technical": {
+        "videoCodec": "h264",
+        "width": 1920,
+        "height": 1080,
+        "fps": "30/1",
+        "frames": "1800",
+        "videoSeconds": "60.000000",
+        "audioCodec": "aac",
+        "sampleRate": "48000",
+        "audioSeconds": "60.000000",
+        "formatSeconds": "60.000000"
+      },
+      "status": "full_decode_verified",
+      "receiptTechnical": {
+        "audioMetrics": {
+          "input_i": "-16.02",
+          "input_tp": "-1.49",
+          "input_lra": "4.20",
+          "input_thresh": "-26.52",
+          "output_i": "-16.10",
+          "output_tp": "-1.50",
+          "output_lra": "4.50",
+          "output_thresh": "-26.59",
+          "normalization_type": "dynamic",
+          "target_offset": "0.10"
+        },
+        "browserErrors": [],
+        "renderSamplingFps": 30,
+        "outputFps": 30,
+        "visualReviewAccepted": false,
+        "listeningAccepted": false
+      },
+      "verifiedAt": "2026-10-09T10:30:25.993Z",
+      "errors": [],
+      "limits": [
+        "full-motion visual acceptance pending",
+        "subjective listening acceptance pending"
+      ]
+    },
+    {
+      "id": "quesar-architecture-120",
+      "sha256": "309780c3e2ca3ab5c93ed1ff2bbf0cdff5bf599451a2bc09004a6d623524057c",
+      "receiptSHA256": "309780c3e2ca3ab5c93ed1ff2bbf0cdff5bf599451a2bc09004a6d623524057c",
+      "bytes": 19568287,
+      "technical": {
+        "videoCodec": "h264",
+        "width": 1920,
+        "height": 1080,
+        "fps": "30/1",
+        "frames": "3600",
+        "videoSeconds": "120.000000",
+        "audioCodec": "aac",
+        "sampleRate": "48000",
+        "audioSeconds": "120.000000",
+        "formatSeconds": "120.000000"
+      },
+      "status": "full_decode_verified",
+      "receiptTechnical": {
+        "audioMetrics": {
+          "input_i": "-16.04",
+          "input_tp": "-1.49",
+          "input_lra": "4.90",
+          "input_thresh": "-26.55",
+          "output_i": "-16.02",
+          "output_tp": "-1.50",
+          "output_lra": "4.80",
+          "output_thresh": "-26.52",
+          "normalization_type": "dynamic",
+          "target_offset": "0.02"
+        },
+        "browserErrors": [],
+        "renderSamplingFps": 30,
+        "outputFps": 30,
+        "visualReviewAccepted": false,
+        "listeningAccepted": false
+      },
+      "verifiedAt": "2026-10-09T10:38:13.967Z",
+      "errors": [],
+      "limits": [
+        "full-motion visual acceptance pending",
+        "subjective listening acceptance pending"
+      ]
+    },
+    {
+      "id": "quesar-architecture-180",
+      "sha256": "98c59e27a5e90de4afe1dfab114a54916468aace4038fb63957811cec88dcce9",
+      "receiptSHA256": "98c59e27a5e90de4afe1dfab114a54916468aace4038fb63957811cec88dcce9",
+      "bytes": 29618202,
+      "technical": {
+        "videoCodec": "h264",
+        "width": 1920,
+        "height": 1080,
+        "fps": "30/1",
+        "frames": "5400",
+        "videoSeconds": "180.000000",
+        "audioCodec": "aac",
+        "sampleRate": "48000",
+        "audioSeconds": "180.000000",
+        "formatSeconds": "180.000000"
+      },
+      "status": "full_decode_verified",
+      "receiptTechnical": {
+        "audioMetrics": {
+          "input_i": "-16.03",
+          "input_tp": "-1.49",
+          "input_lra": "5.00",
+          "input_thresh": "-26.52",
+          "output_i": "-15.99",
+          "output_tp": "-1.50",
+          "output_lra": "5.00",
+          "output_thresh": "-26.48",
+          "normalization_type": "dynamic",
+          "target_offset": "-0.01"
+        },
+        "browserErrors": [],
+        "renderSamplingFps": 30,
+        "outputFps": 30,
+        "visualReviewAccepted": false,
+        "listeningAccepted": false
+      },
+      "verifiedAt": "2026-10-09T10:48:25.926Z",
+      "errors": [],
+      "limits": [
+        "full-motion visual acceptance pending",
+        "subjective listening acceptance pending"
+      ]
+    },
+    {
+      "id": "quesar-architecture-600",
+      "sha256": "979381439b03ee0f29b954881228f5a17b54c57b724e0bc1050b9671272798e4",
+      "receiptSHA256": "979381439b03ee0f29b954881228f5a17b54c57b724e0bc1050b9671272798e4",
+      "bytes": 81809880,
+      "technical": {
+        "videoCodec": "h264",
+        "width": 1920,
+        "height": 1080,
+        "fps": "30/1",
+        "frames": "18000",
+        "videoSeconds": "600.000000",
+        "audioCodec": "aac",
+        "sampleRate": "48000",
+        "audioSeconds": "600.000000",
+        "formatSeconds": "600.000000"
+      },
+      "status": "full_decode_verified",
+      "receiptTechnical": {
+        "audioMetrics": {
+          "input_i": "-16.05",
+          "input_tp": "-1.40",
+          "input_lra": "6.00",
+          "input_thresh": "-26.49",
+          "output_i": "-16.02",
+          "output_tp": "-1.50",
+          "output_lra": "6.00",
+          "output_thresh": "-26.45",
+          "normalization_type": "dynamic",
+          "target_offset": "0.02"
+        },
+        "browserErrors": [],
+        "renderSamplingFps": 30,
+        "outputFps": 30,
+        "visualReviewAccepted": false,
+        "listeningAccepted": false
+      },
+      "verifiedAt": "2026-10-09T11:11:32.809Z",
+      "errors": [],
+      "limits": [
+        "full-motion visual acceptance pending",
+        "subjective listening acceptance pending"
+      ]
+    },
+    {
+      "id": "quesar-studio-60",
+      "sha256": "ecd275523aebb7f8b7bc278d450247ab8f14853da1979ff8b5673ebeb49c8390",
+      "receiptSHA256": "ecd275523aebb7f8b7bc278d450247ab8f14853da1979ff8b5673ebeb49c8390",
+      "bytes": 13260562,
+      "technical": {
+        "videoCodec": "h264",
+        "width": 1920,
+        "height": 1080,
+        "fps": "30/1",
+        "frames": "1800",
+        "videoSeconds": "60.000000",
+        "audioCodec": "aac",
+        "sampleRate": "48000",
+        "audioSeconds": "60.000000",
+        "formatSeconds": "60.000000"
+      },
+      "status": "full_decode_verified",
+      "receiptTechnical": {
+        "audioMetrics": {
+          "input_i": "-16.02",
+          "input_tp": "-1.49",
+          "input_lra": "4.20",
+          "input_thresh": "-26.52",
+          "output_i": "-16.10",
+          "output_tp": "-1.50",
+          "output_lra": "4.50",
+          "output_thresh": "-26.59",
+          "normalization_type": "dynamic",
+          "target_offset": "0.10"
+        },
+        "browserErrors": [],
+        "renderSamplingFps": 30,
+        "outputFps": 30,
+        "visualReviewAccepted": false,
+        "listeningAccepted": false
+      },
+      "verifiedAt": "2026-10-09T10:33:11.527Z",
+      "errors": [],
+      "limits": [
+        "full-motion visual acceptance pending",
+        "subjective listening acceptance pending"
+      ]
+    },
+    {
+      "id": "quesar-studio-120",
+      "sha256": "05e63db799cfce9d255f20f88a456328655d5d04730b6c1466cfd711deb5a8fb",
+      "receiptSHA256": "05e63db799cfce9d255f20f88a456328655d5d04730b6c1466cfd711deb5a8fb",
+      "bytes": 26671540,
+      "technical": {
+        "videoCodec": "h264",
+        "width": 1920,
+        "height": 1080,
+        "fps": "30/1",
+        "frames": "3600",
+        "videoSeconds": "120.000000",
+        "audioCodec": "aac",
+        "sampleRate": "48000",
+        "audioSeconds": "120.000000",
+        "formatSeconds": "120.000000"
+      },
+      "status": "full_decode_verified",
+      "receiptTechnical": {
+        "audioMetrics": {
+          "input_i": "-16.04",
+          "input_tp": "-1.49",
+          "input_lra": "4.90",
+          "input_thresh": "-26.55",
+          "output_i": "-16.02",
+          "output_tp": "-1.50",
+          "output_lra": "4.80",
+          "output_thresh": "-26.52",
+          "normalization_type": "dynamic",
+          "target_offset": "0.02"
+        },
+        "browserErrors": [],
+        "renderSamplingFps": 30,
+        "outputFps": 30,
+        "visualReviewAccepted": false,
+        "listeningAccepted": false
+      },
+      "verifiedAt": "2026-10-09T10:41:04.264Z",
+      "errors": [],
+      "limits": [
+        "full-motion visual acceptance pending",
+        "subjective listening acceptance pending"
+      ]
+    },
+    {
+      "id": "quesar-studio-180",
+      "sha256": "6a4ac16529955f1066351f7c7213c5b5192a7cc25e8376cdded79c7401c59dec",
+      "receiptSHA256": "6a4ac16529955f1066351f7c7213c5b5192a7cc25e8376cdded79c7401c59dec",
+      "bytes": 40472645,
+      "technical": {
+        "videoCodec": "h264",
+        "width": 1920,
+        "height": 1080,
+        "fps": "30/1",
+        "frames": "5400",
+        "videoSeconds": "180.000000",
+        "audioCodec": "aac",
+        "sampleRate": "48000",
+        "audioSeconds": "180.000000",
+        "formatSeconds": "180.000000"
+      },
+      "status": "full_decode_verified",
+      "receiptTechnical": {
+        "audioMetrics": {
+          "input_i": "-16.03",
+          "input_tp": "-1.49",
+          "input_lra": "5.00",
+          "input_thresh": "-26.52",
+          "output_i": "-15.99",
+          "output_tp": "-1.50",
+          "output_lra": "5.00",
+          "output_thresh": "-26.48",
+          "normalization_type": "dynamic",
+          "target_offset": "-0.01"
+        },
+        "browserErrors": [],
+        "renderSamplingFps": 30,
+        "outputFps": 30,
+        "visualReviewAccepted": false,
+        "listeningAccepted": false
+      },
+      "verifiedAt": "2026-10-09T10:53:00.639Z",
+      "errors": [],
+      "limits": [
+        "full-motion visual acceptance pending",
+        "subjective listening acceptance pending"
+      ]
+    },
+    {
+      "id": "quesar-studio-600",
+      "sha256": "06c65b802d71c0a8e120e32402f9000c535cfb02bd0ec709876ee8c517331489",
+      "receiptSHA256": "06c65b802d71c0a8e120e32402f9000c535cfb02bd0ec709876ee8c517331489",
+      "bytes": 110966969,
+      "technical": {
+        "videoCodec": "h264",
+        "width": 1920,
+        "height": 1080,
+        "fps": "30/1",
+        "frames": "18000",
+        "videoSeconds": "600.000000",
+        "audioCodec": "aac",
+        "sampleRate": "48000",
+        "audioSeconds": "600.000000",
+        "formatSeconds": "600.000000"
+      },
+      "status": "full_decode_verified",
+      "receiptTechnical": {
+        "audioMetrics": {
+          "input_i": "-16.05",
+          "input_tp": "-1.40",
+          "input_lra": "6.00",
+          "input_thresh": "-26.49",
+          "output_i": "-16.02",
+          "output_tp": "-1.50",
+          "output_lra": "6.00",
+          "output_thresh": "-26.45",
+          "normalization_type": "dynamic",
+          "target_offset": "0.02"
+        },
+        "browserErrors": [],
+        "renderSamplingFps": 30,
+        "outputFps": 30,
+        "visualReviewAccepted": false,
+        "listeningAccepted": false
+      },
+      "verifiedAt": "2026-10-09T11:22:33.393Z",
+      "errors": [],
+      "limits": [
+        "full-motion visual acceptance pending",
+        "subjective listening acceptance pending"
+      ]
+    },
+    {
+      "id": "mlai-quesar-kinetic-60",
+      "sha256": "6ec25dc6e0d08dc3281039e08c527680bc1757bc8a2b4f2df59ba282dd6911a4",
+      "receiptSHA256": "6ec25dc6e0d08dc3281039e08c527680bc1757bc8a2b4f2df59ba282dd6911a4",
+      "bytes": 5187081,
+      "technical": {
+        "videoCodec": "h264",
+        "width": 1920,
+        "height": 1080,
+        "fps": "30/1",
+        "frames": "1800",
+        "videoSeconds": "60.000000",
+        "audioCodec": "aac",
+        "sampleRate": "48000",
+        "audioSeconds": "60.000000",
+        "formatSeconds": "60.000000"
+      },
+      "status": "encoded_and_full_decode_verified",
+      "receiptTechnical": {
+        "audioMetrics": {
+          "input_i": "-16.11",
+          "input_tp": "-1.49",
+          "input_lra": "3.50",
+          "input_thresh": "-26.58",
+          "output_i": "-16.14",
+          "output_tp": "-1.50",
+          "output_lra": "3.50",
+          "output_thresh": "-26.61",
+          "normalization_type": "dynamic",
+          "target_offset": "0.14"
+        },
+        "browserErrors": null,
+        "renderSamplingFps": null,
+        "outputFps": null,
+        "visualReviewAccepted": false,
+        "listeningAccepted": false
+      },
+      "verifiedAt": "2026-10-09T10:32:59.778Z",
+      "errors": [],
+      "limits": [
+        "full-motion visual acceptance pending",
+        "subjective listening acceptance pending"
+      ]
+    },
+    {
+      "id": "mlai-quesar-editorial-60",
+      "sha256": "805104de9bc259ac3c69c83fb0039a41db0adbd7ae4c0352cc055c8b963b420b",
+      "receiptSHA256": "805104de9bc259ac3c69c83fb0039a41db0adbd7ae4c0352cc055c8b963b420b",
+      "bytes": 4627913,
+      "technical": {
+        "videoCodec": "h264",
+        "width": 1920,
+        "height": 1080,
+        "fps": "30/1",
+        "frames": "1800",
+        "videoSeconds": "60.000000",
+        "audioCodec": "aac",
+        "sampleRate": "48000",
+        "audioSeconds": "60.000000",
+        "formatSeconds": "60.000000"
+      },
+      "status": "encoded_and_full_decode_verified",
+      "receiptTechnical": {
+        "audioMetrics": {
+          "input_i": "-16.08",
+          "input_tp": "-1.49",
+          "input_lra": "4.80",
+          "input_thresh": "-26.48",
+          "output_i": "-15.92",
+          "output_tp": "-1.50",
+          "output_lra": "4.70",
+          "output_thresh": "-26.26",
+          "normalization_type": "dynamic",
+          "target_offset": "-0.08"
+        },
+        "browserErrors": null,
+        "renderSamplingFps": null,
+        "outputFps": null,
+        "visualReviewAccepted": false,
+        "listeningAccepted": false
+      },
+      "verifiedAt": "2026-10-09T10:33:23.420Z",
+      "errors": [],
+      "limits": [
+        "full-motion visual acceptance pending",
+        "subjective listening acceptance pending"
+      ]
+    },
+    {
+      "id": "mlai-quesar-technical-120",
+      "sha256": "21e2ce9afcf704f1c9f1faa156806aec9b669821907493949e546cbef8cf788b",
+      "receiptSHA256": "21e2ce9afcf704f1c9f1faa156806aec9b669821907493949e546cbef8cf788b",
+      "bytes": 88094920,
+      "technical": {
+        "videoCodec": "h264",
+        "width": 1920,
+        "height": 1080,
+        "fps": "30/1",
+        "frames": "3600",
+        "videoSeconds": "120.000000",
+        "audioCodec": "aac",
+        "sampleRate": "48000",
+        "audioSeconds": "120.000000",
+        "formatSeconds": "120.000000"
+      },
+      "status": "encoded_and_full_decode_verified",
+      "receiptTechnical": {
+        "audioMetrics": {
+          "input_i": "-16.12",
+          "input_tp": "-1.48",
+          "input_lra": "6.20",
+          "input_thresh": "-26.45",
+          "output_i": "-16.00",
+          "output_tp": "-1.50",
+          "output_lra": "6.10",
+          "output_thresh": "-26.34",
+          "normalization_type": "dynamic",
+          "target_offset": "0.00"
+        },
+        "browserErrors": null,
+        "renderSamplingFps": null,
+        "outputFps": null,
+        "visualReviewAccepted": false,
+        "listeningAccepted": false
+      },
+      "verifiedAt": "2026-10-09T10:31:02.394Z",
+      "errors": [],
+      "limits": [
+        "full-motion visual acceptance pending",
+        "subjective listening acceptance pending"
+      ]
+    },
+    {
+      "id": "mlai-quesar-design-120",
+      "sha256": "7fd8a4cf5fe30ec12e89a8237d74c297a097b6801bc5305e757bcd9edc882fac",
+      "receiptSHA256": "7fd8a4cf5fe30ec12e89a8237d74c297a097b6801bc5305e757bcd9edc882fac",
+      "bytes": 27665421,
+      "technical": {
+        "videoCodec": "h264",
+        "width": 1920,
+        "height": 1080,
+        "fps": "30/1",
+        "frames": "3600",
+        "videoSeconds": "120.000000",
+        "audioCodec": "aac",
+        "sampleRate": "48000",
+        "audioSeconds": "120.000000",
+        "formatSeconds": "120.000000"
+      },
+      "status": "encoded_and_full_decode_verified",
+      "receiptTechnical": {
+        "audioMetrics": {
+          "input_i": "-16.07",
+          "input_tp": "-1.48",
+          "input_lra": "11.70",
+          "input_thresh": "-26.56",
+          "output_i": "-16.04",
+          "output_tp": "-1.50",
+          "output_lra": "11.70",
+          "output_thresh": "-26.51",
+          "normalization_type": "dynamic",
+          "target_offset": "0.04"
+        },
+        "browserErrors": null,
+        "renderSamplingFps": null,
+        "outputFps": null,
+        "visualReviewAccepted": false,
+        "listeningAccepted": false
+      },
+      "verifiedAt": "2026-10-09T10:35:49.804Z",
+      "errors": [],
+      "limits": [
+        "full-motion visual acceptance pending",
+        "subjective listening acceptance pending"
+      ]
+    },
+    {
+      "id": "mlai-quesar-technical-180",
+      "sha256": "d085f2fb139f9d71cb090747e56efae67a946d3fb208576c304d26b125fc2721",
+      "receiptSHA256": "d085f2fb139f9d71cb090747e56efae67a946d3fb208576c304d26b125fc2721",
+      "bytes": 92738732,
+      "technical": {
+        "videoCodec": "h264",
+        "width": 1920,
+        "height": 1080,
+        "fps": "30/1",
+        "frames": "5400",
+        "videoSeconds": "180.000000",
+        "audioCodec": "aac",
+        "sampleRate": "48000",
+        "audioSeconds": "180.000000",
+        "formatSeconds": "180.000000"
+      },
+      "status": "encoded_and_full_decode_verified",
+      "receiptTechnical": {
+        "audioMetrics": {
+          "input_i": "-16.12",
+          "input_tp": "-1.48",
+          "input_lra": "5.70",
+          "input_thresh": "-26.46",
+          "output_i": "-15.95",
+          "output_tp": "-1.50",
+          "output_lra": "5.50",
+          "output_thresh": "-26.27",
+          "normalization_type": "dynamic",
+          "target_offset": "-0.05"
+        },
+        "browserErrors": null,
+        "renderSamplingFps": null,
+        "outputFps": null,
+        "visualReviewAccepted": false,
+        "listeningAccepted": false
+      },
+      "verifiedAt": "2026-10-09T10:40:49.355Z",
+      "errors": [],
+      "limits": [
+        "full-motion visual acceptance pending",
+        "subjective listening acceptance pending"
+      ]
+    },
+    {
+      "id": "mlai-quesar-design-180",
+      "sha256": "3958bdcb2415fab3a820f985594a8a7b6ac5abf31722ab4857bcb9d0a391dd2f",
+      "receiptSHA256": "3958bdcb2415fab3a820f985594a8a7b6ac5abf31722ab4857bcb9d0a391dd2f",
+      "bytes": 32314326,
+      "technical": {
+        "videoCodec": "h264",
+        "width": 1920,
+        "height": 1080,
+        "fps": "30/1",
+        "frames": "5400",
+        "videoSeconds": "180.000000",
+        "audioCodec": "aac",
+        "sampleRate": "48000",
+        "audioSeconds": "180.000000",
+        "formatSeconds": "180.000000"
+      },
+      "status": "encoded_and_full_decode_verified",
+      "receiptTechnical": {
+        "audioMetrics": {
+          "input_i": "-16.12",
+          "input_tp": "-1.48",
+          "input_lra": "6.80",
+          "input_thresh": "-26.56",
+          "output_i": "-16.01",
+          "output_tp": "-1.50",
+          "output_lra": "6.20",
+          "output_thresh": "-26.43",
+          "normalization_type": "dynamic",
+          "target_offset": "0.01"
+        },
+        "browserErrors": null,
+        "renderSamplingFps": null,
+        "outputFps": null,
+        "visualReviewAccepted": false,
+        "listeningAccepted": false
+      },
+      "verifiedAt": "2026-10-09T10:44:11.020Z",
+      "errors": [],
+      "limits": [
+        "full-motion visual acceptance pending",
+        "subjective listening acceptance pending"
+      ]
+    },
+    {
+      "id": "mlai-quesar-technical-600",
+      "sha256": "e1bf0506db9133dc565596b1dc4124293667ebb6ca560dd996061d636c2e1859",
+      "receiptSHA256": "e1bf0506db9133dc565596b1dc4124293667ebb6ca560dd996061d636c2e1859",
+      "bytes": 311973651,
+      "technical": {
+        "videoCodec": "h264",
+        "width": 1920,
+        "height": 1080,
+        "fps": "30/1",
+        "frames": "18000",
+        "videoSeconds": "600.000000",
+        "audioCodec": "aac",
+        "sampleRate": "48000",
+        "audioSeconds": "600.000000",
+        "formatSeconds": "600.000000"
+      },
+      "status": "encoded_and_full_decode_verified",
+      "receiptTechnical": {
+        "audioMetrics": {
+          "input_i": "-16.10",
+          "input_tp": "-1.48",
+          "input_lra": "8.10",
+          "input_thresh": "-26.50",
+          "output_i": "-16.00",
+          "output_tp": "-1.50",
+          "output_lra": "8.10",
+          "output_thresh": "-26.39",
+          "normalization_type": "dynamic",
+          "target_offset": "-0.00"
+        },
+        "browserErrors": null,
+        "renderSamplingFps": null,
+        "outputFps": null,
+        "visualReviewAccepted": false,
+        "listeningAccepted": false
+      },
+      "verifiedAt": "2026-10-09T11:00:26.795Z",
+      "errors": [],
+      "limits": [
+        "full-motion visual acceptance pending",
+        "subjective listening acceptance pending"
+      ]
+    },
+    {
+      "id": "mlai-quesar-design-600",
+      "sha256": "27de0c56d3f776380174132599c3ae96e67b7b058216c139c048e977be8bc89e",
+      "receiptSHA256": "27de0c56d3f776380174132599c3ae96e67b7b058216c139c048e977be8bc89e",
+      "bytes": 311721097,
+      "technical": {
+        "videoCodec": "h264",
+        "width": 1920,
+        "height": 1080,
+        "fps": "30/1",
+        "frames": "18000",
+        "videoSeconds": "600.000000",
+        "audioCodec": "aac",
+        "sampleRate": "48000",
+        "audioSeconds": "600.000000",
+        "formatSeconds": "600.000000"
+      },
+      "status": "encoded_and_full_decode_verified",
+      "receiptTechnical": {
+        "audioMetrics": {
+          "input_i": "-16.12",
+          "input_tp": "-1.46",
+          "input_lra": "7.90",
+          "input_thresh": "-26.52",
+          "output_i": "-16.05",
+          "output_tp": "-1.50",
+          "output_lra": "7.90",
+          "output_thresh": "-26.45",
+          "normalization_type": "dynamic",
+          "target_offset": "0.05"
+        },
+        "browserErrors": null,
+        "renderSamplingFps": null,
+        "outputFps": null,
+        "visualReviewAccepted": false,
+        "listeningAccepted": false
+      },
+      "verifiedAt": "2026-10-09T11:12:18.141Z",
+      "errors": [],
+      "limits": [
+        "full-motion visual acceptance pending",
+        "subjective listening acceptance pending"
+      ]
+    }
+  ],
+  "missing": [],
+  "passed": true
+}
