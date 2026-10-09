@@ -1,0 +1,4 @@
+file '/Users/donaldfilimon/dev/active/quesar.cloud/notes/launch/quesar-editorial-2026-10-09/artifacts-native30/quesar-architecture-60/voice-0.wav'
+file '/Users/donaldfilimon/dev/active/quesar.cloud/notes/launch/quesar-editorial-2026-10-09/artifacts-native30/quesar-architecture-60/voice-1.wav'
+file '/Users/donaldfilimon/dev/active/quesar.cloud/notes/launch/quesar-editorial-2026-10-09/artifacts-native30/quesar-architecture-60/voice-2.wav'
+file '/Users/donaldfilimon/dev/active/quesar.cloud/notes/launch/quesar-editorial-2026-10-09/artifacts-native30/quesar-architecture-60/voice-3.wav'

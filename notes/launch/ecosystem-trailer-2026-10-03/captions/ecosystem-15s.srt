@@ -1,0 +1,32 @@
+1
+00:00:00,000 --> 00:00:01,000
+Six projects.
+
+2
+00:00:01,000 --> 00:00:03,000
+WDBX: Durable storage.
+
+3
+00:00:03,000 --> 00:00:05,000
+ABI: Local orchestration.
+
+4
+00:00:05,000 --> 00:00:07,000
+Abbey: The local client.
+
+5
+00:00:07,000 --> 00:00:09,000
+Abbey Bot: The Discord service.
+
+6
+00:00:09,000 --> 00:00:11,000
+Quesar / MLAI: Explore the ecosystem.
+
+7
+00:00:11,000 --> 00:00:13,000
+WebPress: Visual authoring.
+
+8
+00:00:13,000 --> 00:00:15,000
+Follow the source.
+

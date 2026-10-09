@@ -1,0 +1,28 @@
+Rendering quesar-architecture-60: 600 React samples 2026-10-09T07:38:20.024Z
+quesar-architecture-60 frame 0/600
+Verified quesar-architecture-60 2026-10-09T07:38:44.128Z
+Rendering quesar-studio-60: 600 React samples 2026-10-09T07:38:49.234Z
+quesar-studio-60 frame 0/600
+Verified quesar-studio-60 2026-10-09T07:39:34.074Z
+Rendering quesar-architecture-120: 1200 React samples 2026-10-09T07:39:44.551Z
+quesar-architecture-120 frame 0/1200
+quesar-architecture-120 frame 600/1200
+node:internal/modules/run_main:111
+    triggerUncaughtException(
+    ^
+
+page.screenshot: Target page, context or browser has been closed
+Call log:
+[2m  - taking page screenshot[22m
+[2m  - waiting for fonts to load...[22m
+[2m  - fonts loaded[22m
+
+    at /Users/donaldfilimon/dev/active/quesar.cloud/notes/launch/quesar-editorial-2026-10-09/render.mjs:12:190 {
+  log: [
+    '  - taking page screenshot',
+    '  - waiting for fonts to load...',
+    '  - fonts loaded'
+  ]
+}
+
+Node.js v26.11.0

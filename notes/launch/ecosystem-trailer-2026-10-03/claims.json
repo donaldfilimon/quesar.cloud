@@ -1,0 +1,183 @@
+{
+  "as_of": "2026-10-03",
+  "scope": "Read-only source inspection, no external claims or benchmarks",
+  "products": [
+    {
+      "product": "wdbx",
+      "claim": "Durable storage and a typed episode ledger",
+      "status": "Current source description; runtime not qualified by this film",
+      "boundary": "Single-writer local ledger; no production federation, GPU, OCR or retrieval-quality claim",
+      "sources": [
+        {
+          "repo": "wdbx",
+          "path": "README.md",
+          "revision": "e45410356ceb4e96f0dc26a83b02e1c18cf94860",
+          "sha256": "a354ec8e93f1db731350294ab383cedf7c33db2a1e8c39589fd1f8b7fa443c7d",
+          "line_start": 50,
+          "line_end": 92
+        },
+        {
+          "repo": "wdbx",
+          "path": "crates/abi-wdbx/src/v3/episode/store.rs",
+          "revision": "e45410356ceb4e96f0dc26a83b02e1c18cf94860",
+          "sha256": "478c661966398964ca7cb0ba2e12df573129f115919c9618b1fe7a137c463381",
+          "line_start": 185,
+          "line_end": 245
+        }
+      ]
+    },
+    {
+      "product": "abi",
+      "claim": "Local orchestration and explicit capability reporting",
+      "status": "Current source description; runtime not qualified by this film",
+      "boundary": "Source structure, not fresh runtime, provider, acceleration or autonomous-operation proof",
+      "sources": [
+        {
+          "repo": "abi",
+          "path": "README.md",
+          "revision": "80dfe079ebe7413a6815c2d564be1f0aaa901267",
+          "sha256": "30c14916d58d22536e929209d5ef79740abce702937853356b72051f55df6ac3",
+          "line_start": 3,
+          "line_end": 11
+        },
+        {
+          "repo": "abi",
+          "path": "crates/abi-mcp/src/handlers.rs",
+          "revision": "80dfe079ebe7413a6815c2d564be1f0aaa901267",
+          "sha256": "38cc7b51c46a0cfed0ea44bfa75009ae52aecb0881fdd439cc52ba6f523f4245",
+          "line_start": 171,
+          "line_end": 238
+        }
+      ]
+    },
+    {
+      "product": "abbey",
+      "claim": "Local CLI/TUI client around ABI",
+      "status": "Current source description; runtime not qualified by this film",
+      "boundary": "No bundled weights, separately complete desktop product or live provider acceptance",
+      "sources": [
+        {
+          "repo": "abbey",
+          "path": "README.md",
+          "revision": "fe0cf5f143cc9c8824676f2f8762c3714ca32c8b",
+          "sha256": "5766166697bea1fc01e9b2d8cf90174d1a11c3d51a8ec6d910ab2f3a9cee18a6",
+          "line_start": 9,
+          "line_end": 56
+        },
+        {
+          "repo": "abbey",
+          "path": "src/claims/registry.rs",
+          "revision": "fe0cf5f143cc9c8824676f2f8762c3714ca32c8b",
+          "sha256": "207d1648ad774cab073876fab907ddf4a65bc5288d31c6cd181ddf23a4e6d38e",
+          "line_start": 50,
+          "line_end": 87
+        },
+        {
+          "repo": "abbey",
+          "path": "src/agent/backend.rs",
+          "revision": "fe0cf5f143cc9c8824676f2f8762c3714ca32c8b",
+          "sha256": "1c39aa05f6847b51f85011a575f818c3d0711563e7df2e84c7516aabd5a27294",
+          "line_start": 18,
+          "line_end": 34
+        }
+      ]
+    },
+    {
+      "product": "abbey-bot",
+      "claim": "Separate Rust Discord service with commands and permission checks",
+      "status": "Current source description; runtime not qualified by this film",
+      "boundary": "Configured generation is required; no live Discord or provider qualification from this film",
+      "sources": [
+        {
+          "repo": "abbey-bot",
+          "path": "README.md",
+          "revision": "e742375ff9b3d20b97df09c7fad10c1225ae957c",
+          "sha256": "4a5cf65f8a323bb388c65cbf0c6da6ff9d8508af6190c94ebd29699ecfe2a58a",
+          "line_start": 12,
+          "line_end": 24
+        },
+        {
+          "repo": "abbey-bot",
+          "path": "src/command_catalog/data.rs",
+          "revision": "e742375ff9b3d20b97df09c7fad10c1225ae957c",
+          "sha256": "4e5673015e0ed87d6d99fac9ed2ccec5db1fcc4b41934d382fa9fb8f6a45a187",
+          "line_start": 18,
+          "line_end": 50
+        },
+        {
+          "repo": "abbey-bot",
+          "path": "src/commands_help/workflows.rs",
+          "revision": "e742375ff9b3d20b97df09c7fad10c1225ae957c",
+          "sha256": "f9bcf70e9cb7f4a6510ac8a7433af66f5160b759316113aa5e41ab6ff1184e53",
+          "line_start": 99,
+          "line_end": 111
+        }
+      ]
+    },
+    {
+      "product": "quesar.cloud",
+      "claim": "Site presenting products, research and source boundaries",
+      "status": "Current source description; runtime not qualified by this film",
+      "boundary": "Website-oriented only; no trained Quesar model or hosted assistant claim. Quasar builder is separate.",
+      "sources": [
+        {
+          "repo": "quesar.cloud",
+          "path": "src/lib/site-identity.ts",
+          "revision": "ac8c24afe618f34a7ed46ea0baed477133064c40",
+          "sha256": "25a6021f1a0ebb403e6d6279ffeae9a7308dd80343bbb55e8abcb625d6e56475",
+          "line_start": 10,
+          "line_end": 17
+        },
+        {
+          "repo": "quesar.cloud",
+          "path": "src/lib/mlai/pages.ts",
+          "revision": "ac8c24afe618f34a7ed46ea0baed477133064c40",
+          "sha256": "f3568d0a783e142d96c54980a2c107dbecf9235da52f6607caeed4e5c8baef21",
+          "line_start": 82,
+          "line_end": 89
+        },
+        {
+          "repo": "quesar.cloud",
+          "path": "src/lib/catalog.ts",
+          "revision": "ac8c24afe618f34a7ed46ea0baed477133064c40",
+          "sha256": "7f20bcb214f906b173b1b5218977774e2197fd89bf54b8f3f809b6b5ede94542",
+          "line_start": 42,
+          "line_end": 81
+        }
+      ]
+    },
+    {
+      "product": "webpress",
+      "claim": "WP-IR is canonical for editing, code generation and export",
+      "status": "Current source description; runtime not qualified by this film",
+      "boundary": "No production hosting or full cross-platform qualification claim",
+      "sources": [
+        {
+          "repo": "webpress",
+          "path": "README.md",
+          "revision": "f3cea13e657b39a2205769c0a1e894f02df7e525",
+          "sha256": "bed7b5d466527b4d44edb3f75ab244bda08b2e94050d72d87b2db660655dc2a6",
+          "line_start": 3,
+          "line_end": 24
+        },
+        {
+          "repo": "webpress",
+          "path": "src/ir/types.ts",
+          "revision": "f3cea13e657b39a2205769c0a1e894f02df7e525",
+          "sha256": "8109cab8d56d05bceb5a9517e2552a66ea371c1cdb571e8f79f9b7a850338cc3",
+          "line_start": 1,
+          "line_end": 14
+        },
+        {
+          "repo": "webpress",
+          "path": "src/codegen/generate.ts",
+          "revision": "f3cea13e657b39a2205769c0a1e894f02df7e525",
+          "sha256": "1d2da8fe7e5f8d4fe8c71e8580f43417cfc3c15c746ed70ed0250b2acd82867a",
+          "line_start": 35,
+          "line_end": 49
+        }
+      ]
+    }
+  ],
+  "brand_scope": "Text wordmarks only, no stock assets or font binaries redistributed"
+}

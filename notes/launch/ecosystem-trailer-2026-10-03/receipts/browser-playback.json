@@ -1,0 +1,407 @@
+{
+  "status": "Passed all three MP4s",
+  "browser": "Cached Chromium 153.0.8010.12",
+  "playback_rate": 8,
+  "muted": true,
+  "network": "Local file URLs only; no server",
+  "videos": [
+    {
+      "file": "artifacts/90s/ecosystem-90s-1080p.mp4",
+      "sha256": "3726350e923b96a062553b324e3f997f6e3e542607812caab26be4426dccb380",
+      "metadata": {
+        "width": 1920,
+        "height": 1080,
+        "duration": 90,
+        "currentTime": 0,
+        "errors": []
+      },
+      "playback": {
+        "paused": false,
+        "rate": 8,
+        "muted": true
+      },
+      "first_observed_advanced_time": 0.652176,
+      "final": {
+        "ended": true,
+        "currentTime": 90,
+        "errors": [],
+        "events": [
+          {
+            "name": "loadedmetadata",
+            "time": 0
+          },
+          {
+            "name": "playing",
+            "time": 0.050944
+          },
+          {
+            "name": "timeupdate",
+            "time": 1.598606
+          },
+          {
+            "name": "timeupdate",
+            "time": 3.740388
+          },
+          {
+            "name": "timeupdate",
+            "time": 5.863581
+          },
+          {
+            "name": "timeupdate",
+            "time": 7.962376
+          },
+          {
+            "name": "timeupdate",
+            "time": 10.1141
+          },
+          {
+            "name": "timeupdate",
+            "time": 12.239234
+          },
+          {
+            "name": "timeupdate",
+            "time": 14.332089
+          },
+          {
+            "name": "timeupdate",
+            "time": 16.487348
+          },
+          {
+            "name": "timeupdate",
+            "time": 18.595269
+          },
+          {
+            "name": "timeupdate",
+            "time": 18.79179
+          },
+          {
+            "name": "playing",
+            "time": 18.947694
+          },
+          {
+            "name": "timeupdate",
+            "time": 20.865434
+          },
+          {
+            "name": "timeupdate",
+            "time": 22.995722
+          },
+          {
+            "name": "timeupdate",
+            "time": 25.093262
+          },
+          {
+            "name": "timeupdate",
+            "time": 27.239662
+          },
+          {
+            "name": "timeupdate",
+            "time": 29.351164
+          },
+          {
+            "name": "timeupdate",
+            "time": 31.475781
+          },
+          {
+            "name": "timeupdate",
+            "time": 33.605775
+          },
+          {
+            "name": "timeupdate",
+            "time": 35.750539
+          },
+          {
+            "name": "timeupdate",
+            "time": 37.838518
+          },
+          {
+            "name": "timeupdate",
+            "time": 39.962536
+          },
+          {
+            "name": "timeupdate",
+            "time": 42.109266
+          },
+          {
+            "name": "timeupdate",
+            "time": 44.234796
+          },
+          {
+            "name": "timeupdate",
+            "time": 46.365435
+          },
+          {
+            "name": "timeupdate",
+            "time": 48.484949
+          },
+          {
+            "name": "timeupdate",
+            "time": 50.61703
+          },
+          {
+            "name": "timeupdate",
+            "time": 52.735988
+          },
+          {
+            "name": "timeupdate",
+            "time": 54.845839
+          },
+          {
+            "name": "timeupdate",
+            "time": 56.977208
+          },
+          {
+            "name": "timeupdate",
+            "time": 59.131417
+          },
+          {
+            "name": "timeupdate",
+            "time": 61.244175
+          },
+          {
+            "name": "timeupdate",
+            "time": 63.362656
+          },
+          {
+            "name": "timeupdate",
+            "time": 65.483571
+          },
+          {
+            "name": "timeupdate",
+            "time": 67.603675
+          },
+          {
+            "name": "timeupdate",
+            "time": 69.72778
+          },
+          {
+            "name": "timeupdate",
+            "time": 71.86717
+          },
+          {
+            "name": "timeupdate",
+            "time": 73.986512
+          },
+          {
+            "name": "timeupdate",
+            "time": 76.092333
+          },
+          {
+            "name": "timeupdate",
+            "time": 78.223477
+          },
+          {
+            "name": "timeupdate",
+            "time": 80.36268
+          },
+          {
+            "name": "timeupdate",
+            "time": 82.476984
+          },
+          {
+            "name": "timeupdate",
+            "time": 84.613744
+          },
+          {
+            "name": "timeupdate",
+            "time": 86.714517
+          },
+          {
+            "name": "timeupdate",
+            "time": 88.843689
+          },
+          {
+            "name": "timeupdate",
+            "time": 90
+          },
+          {
+            "name": "ended",
+            "time": 90
+          }
+        ],
+        "totalVideoFrames": 2700,
+        "droppedVideoFrames": 1566
+      },
+      "wall_seconds": 11.381,
+      "page_errors": [],
+      "external_requests": []
+    },
+    {
+      "file": "artifacts/30s/ecosystem-30s-1080p.mp4",
+      "sha256": "078be322735464ff2579b88211214a7ee14a965ac4e3384e0d47d4b8a2313d0c",
+      "metadata": {
+        "width": 1920,
+        "height": 1080,
+        "duration": 30,
+        "currentTime": 0,
+        "errors": []
+      },
+      "playback": {
+        "paused": false,
+        "rate": 8,
+        "muted": true
+      },
+      "first_observed_advanced_time": 0.650637,
+      "final": {
+        "ended": true,
+        "currentTime": 30,
+        "errors": [],
+        "events": [
+          {
+            "name": "loadedmetadata",
+            "time": 0
+          },
+          {
+            "name": "playing",
+            "time": 0.013392
+          },
+          {
+            "name": "timeupdate",
+            "time": 1.664732
+          },
+          {
+            "name": "timeupdate",
+            "time": 3.784664
+          },
+          {
+            "name": "timeupdate",
+            "time": 5.925582
+          },
+          {
+            "name": "timeupdate",
+            "time": 8.04251
+          },
+          {
+            "name": "timeupdate",
+            "time": 10.172433
+          },
+          {
+            "name": "timeupdate",
+            "time": 12.298544
+          },
+          {
+            "name": "timeupdate",
+            "time": 14.410174
+          },
+          {
+            "name": "timeupdate",
+            "time": 16.548952
+          },
+          {
+            "name": "timeupdate",
+            "time": 18.674239
+          },
+          {
+            "name": "timeupdate",
+            "time": 20.805861
+          },
+          {
+            "name": "timeupdate",
+            "time": 22.919015
+          },
+          {
+            "name": "timeupdate",
+            "time": 25.019487
+          },
+          {
+            "name": "timeupdate",
+            "time": 27.148597
+          },
+          {
+            "name": "timeupdate",
+            "time": 29.293962
+          },
+          {
+            "name": "timeupdate",
+            "time": 30
+          },
+          {
+            "name": "ended",
+            "time": 30
+          }
+        ],
+        "totalVideoFrames": 900,
+        "droppedVideoFrames": 606
+      },
+      "wall_seconds": 3.818,
+      "page_errors": [],
+      "external_requests": []
+    },
+    {
+      "file": "artifacts/15s/ecosystem-15s-1080p.mp4",
+      "sha256": "2190da54ada56e94ce526131a5884ec97a2866d6c37b5bb6ca5567c544c735b1",
+      "metadata": {
+        "width": 1920,
+        "height": 1080,
+        "duration": 15,
+        "currentTime": 0,
+        "errors": []
+      },
+      "playback": {
+        "paused": false,
+        "rate": 8,
+        "muted": true
+      },
+      "first_observed_advanced_time": 0.639018,
+      "final": {
+        "ended": true,
+        "currentTime": 15,
+        "errors": [],
+        "events": [
+          {
+            "name": "loadedmetadata",
+            "time": 0
+          },
+          {
+            "name": "playing",
+            "time": 0.001344
+          },
+          {
+            "name": "timeupdate",
+            "time": 1.670123
+          },
+          {
+            "name": "timeupdate",
+            "time": 3.807349
+          },
+          {
+            "name": "timeupdate",
+            "time": 5.922239
+          },
+          {
+            "name": "timeupdate",
+            "time": 8.051624
+          },
+          {
+            "name": "timeupdate",
+            "time": 10.167353
+          },
+          {
+            "name": "timeupdate",
+            "time": 12.297577
+          },
+          {
+            "name": "timeupdate",
+            "time": 14.414781
+          },
+          {
+            "name": "timeupdate",
+            "time": 15
+          },
+          {
+            "name": "ended",
+            "time": 15
+          }
+        ],
+        "totalVideoFrames": 450,
+        "droppedVideoFrames": 329
+      },
+      "wall_seconds": 1.96,
+      "page_errors": [],
+      "external_requests": []
+    }
+  ],
+  "limits": "Automated accelerated playback; not human listening, full-pace creative review or every-frame visual inspection",
+  "script_sha256": "53147cd532508fc8cdc717e7b816680ef7e50211bfa577120b9d317d951a258c",
+  "owned_browser_closed": true
+}

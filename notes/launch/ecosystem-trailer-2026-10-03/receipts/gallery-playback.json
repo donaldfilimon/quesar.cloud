@@ -1,0 +1,179 @@
+{
+  "status": "Passed native playback, initial non-autoplay, desktop/mobile layout and no console errors; optional track tags absent",
+  "gallery": "/Users/donaldfilimon/dev/active/wdbx/docs/verification/2026-10-03-ecosystem-film-review.html",
+  "gallery_sha256": "264afe5aae04041e72614e1da33886294d3927951e8a91962b5d0f02e3e4f01d",
+  "browser": "Cached Chromium 153.0.8010.12",
+  "initial": [
+    {
+      "autoplay": false,
+      "paused": true,
+      "currentTime": 0,
+      "preload": "none",
+      "src": "file:///Users/donaldfilimon/dev/active/quesar.cloud/notes/launch/ecosystem-trailer-2026-10-03/artifacts/90s/ecosystem-90s-1080p.mp4",
+      "poster": "file:///Users/donaldfilimon/dev/active/quesar.cloud/notes/launch/ecosystem-trailer-2026-10-03/artifacts/90s/poster.png"
+    },
+    {
+      "autoplay": false,
+      "paused": true,
+      "currentTime": 0,
+      "preload": "none",
+      "src": "file:///Users/donaldfilimon/dev/active/quesar.cloud/notes/launch/ecosystem-trailer-2026-10-03/artifacts/30s/ecosystem-30s-1080p.mp4",
+      "poster": "file:///Users/donaldfilimon/dev/active/quesar.cloud/notes/launch/ecosystem-trailer-2026-10-03/artifacts/30s/poster.png"
+    },
+    {
+      "autoplay": false,
+      "paused": true,
+      "currentTime": 0,
+      "preload": "none",
+      "src": "file:///Users/donaldfilimon/dev/active/quesar.cloud/notes/launch/ecosystem-trailer-2026-10-03/artifacts/15s/ecosystem-15s-1080p.mp4",
+      "poster": "file:///Users/donaldfilimon/dev/active/quesar.cloud/notes/launch/ecosystem-trailer-2026-10-03/artifacts/15s/poster.png"
+    }
+  ],
+  "layouts": [
+    {
+      "width": 1440,
+      "clientWidth": 1440,
+      "scrollWidth": 1440
+    },
+    {
+      "width": 390,
+      "clientWidth": 390,
+      "scrollWidth": 390
+    }
+  ],
+  "links": [
+    {
+      "text": "Download 1080p MP4",
+      "href": "file:///Users/donaldfilimon/dev/active/quesar.cloud/notes/launch/ecosystem-trailer-2026-10-03/artifacts/90s/ecosystem-90s-1080p.mp4",
+      "exists": true
+    },
+    {
+      "text": "Read transcript",
+      "href": "file:///Users/donaldfilimon/dev/active/quesar.cloud/notes/launch/ecosystem-trailer-2026-10-03/captions/ecosystem-90s.transcript.txt",
+      "exists": true
+    },
+    {
+      "text": "View all nine chapters",
+      "href": "file:///Users/donaldfilimon/dev/active/quesar.cloud/notes/launch/ecosystem-trailer-2026-10-03/artifacts/90s/contact-sheet.jpg",
+      "exists": true
+    },
+    {
+      "text": "Download MP4",
+      "href": "file:///Users/donaldfilimon/dev/active/quesar.cloud/notes/launch/ecosystem-trailer-2026-10-03/artifacts/30s/ecosystem-30s-1080p.mp4",
+      "exists": true
+    },
+    {
+      "text": "Transcript",
+      "href": "file:///Users/donaldfilimon/dev/active/quesar.cloud/notes/launch/ecosystem-trailer-2026-10-03/captions/ecosystem-30s.transcript.txt",
+      "exists": true
+    },
+    {
+      "text": "Download MP4",
+      "href": "file:///Users/donaldfilimon/dev/active/quesar.cloud/notes/launch/ecosystem-trailer-2026-10-03/artifacts/15s/ecosystem-15s-1080p.mp4",
+      "exists": true
+    },
+    {
+      "text": "Transcript",
+      "href": "file:///Users/donaldfilimon/dev/active/quesar.cloud/notes/launch/ecosystem-trailer-2026-10-03/captions/ecosystem-15s.transcript.txt",
+      "exists": true
+    },
+    {
+      "text": "All deliveries and qualification limits",
+      "href": "file:///Users/donaldfilimon/dev/active/wdbx/docs/verification/2026-10-03-delivery-index.md",
+      "exists": true
+    },
+    {
+      "text": "Editable source and reproduction",
+      "href": "file:///Users/donaldfilimon/dev/active/quesar.cloud/notes/launch/ecosystem-trailer-2026-10-03/README.md",
+      "exists": true
+    },
+    {
+      "text": "Six narrated Quesar films",
+      "href": "file:///Users/donaldfilimon/dev/active/quesar.cloud/notes/verification/2026-10-03-film-review.html",
+      "exists": true
+    }
+  ],
+  "videos": [
+    {
+      "duration_seconds": 90,
+      "metadata": {
+        "width": 1920,
+        "height": 1080,
+        "duration": 90,
+        "paused": true,
+        "currentTime": 0,
+        "src": "file:///Users/donaldfilimon/dev/active/quesar.cloud/notes/launch/ecosystem-trailer-2026-10-03/artifacts/90s/ecosystem-90s-1080p.mp4",
+        "errors": []
+      },
+      "play": {
+        "muted": true,
+        "rate": 8,
+        "paused": false
+      },
+      "first_observed_advanced_time": 0.65388,
+      "final": {
+        "ended": true,
+        "currentTime": 90,
+        "errors": [],
+        "tracks": []
+      },
+      "wall_seconds": 11.32
+    },
+    {
+      "duration_seconds": 30,
+      "metadata": {
+        "width": 1920,
+        "height": 1080,
+        "duration": 30,
+        "paused": true,
+        "currentTime": 0,
+        "src": "file:///Users/donaldfilimon/dev/active/quesar.cloud/notes/launch/ecosystem-trailer-2026-10-03/artifacts/30s/ecosystem-30s-1080p.mp4",
+        "errors": []
+      },
+      "play": {
+        "muted": true,
+        "rate": 8,
+        "paused": false
+      },
+      "first_observed_advanced_time": 0.629701,
+      "final": {
+        "ended": true,
+        "currentTime": 30,
+        "errors": [],
+        "tracks": []
+      },
+      "wall_seconds": 4.037
+    },
+    {
+      "duration_seconds": 15,
+      "metadata": {
+        "width": 1920,
+        "height": 1080,
+        "duration": 15,
+        "paused": true,
+        "currentTime": 0,
+        "src": "file:///Users/donaldfilimon/dev/active/quesar.cloud/notes/launch/ecosystem-trailer-2026-10-03/artifacts/15s/ecosystem-15s-1080p.mp4",
+        "errors": []
+      },
+      "play": {
+        "muted": true,
+        "rate": 8,
+        "paused": false
+      },
+      "first_observed_advanced_time": 0.631618,
+      "final": {
+        "ended": true,
+        "currentTime": 15,
+        "errors": [],
+        "tracks": []
+      },
+      "wall_seconds": 2.032
+    }
+  ],
+  "console_errors": [],
+  "page_errors": [],
+  "external_requests": [],
+  "script_sha256": "ec31dff9118a4f2b4854fd0f475a1b7b3702e152469274885e943eae744ce66f",
+  "owned_browser_closed": true,
+  "limits": "Automated muted 8x playback; not human listening or full-pace creative review; no browser security flags changed"
+}

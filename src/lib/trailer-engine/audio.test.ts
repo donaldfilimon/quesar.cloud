@@ -289,7 +289,12 @@ describe("AudioEngine offline export", () => {
 
   it("cancels a pending synthesis and ignores its eventual output", async () => {
     const pending = deferred<TTSAudio>();
-    const f = offlineFixture(() => pending.promise);
+    const entered = deferred<void>();
+    const generate = vi.fn(() => {
+      entered.resolve(undefined);
+      return pending.promise;
+    });
+    const f = offlineFixture(generate);
     const abort = new AbortController();
     await f.engine.load();
     const job = f.engine.exportPCM("abbey", "Speech.", {
@@ -297,11 +302,14 @@ describe("AudioEngine offline export", () => {
       maxSeconds: 1,
       signal: abort.signal,
     });
+    await entered.promise;
+    expect(generate).toHaveBeenCalledTimes(1);
     abort.abort();
     await expect(job).rejects.toThrow("cancelled");
     pending.resolve(await valid());
-    await Promise.resolve();
+    await Promise.allSettled([job, pending.promise]);
     expect(f.createOfflineContext).not.toHaveBeenCalled();
+    expect(f.sources).toHaveLength(0);
     f.engine.dispose();
   });
 

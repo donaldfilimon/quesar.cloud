@@ -1,0 +1,8 @@
+file '/Users/donaldfilimon/dev/active/quesar.cloud/notes/launch/quesar-editorial-2026-10-09/artifacts-native30/quesar-studio-120/voice-0.wav'
+file '/Users/donaldfilimon/dev/active/quesar.cloud/notes/launch/quesar-editorial-2026-10-09/artifacts-native30/quesar-studio-120/voice-1.wav'
+file '/Users/donaldfilimon/dev/active/quesar.cloud/notes/launch/quesar-editorial-2026-10-09/artifacts-native30/quesar-studio-120/voice-2.wav'
+file '/Users/donaldfilimon/dev/active/quesar.cloud/notes/launch/quesar-editorial-2026-10-09/artifacts-native30/quesar-studio-120/voice-3.wav'
+file '/Users/donaldfilimon/dev/active/quesar.cloud/notes/launch/quesar-editorial-2026-10-09/artifacts-native30/quesar-studio-120/voice-4.wav'
+file '/Users/donaldfilimon/dev/active/quesar.cloud/notes/launch/quesar-editorial-2026-10-09/artifacts-native30/quesar-studio-120/voice-5.wav'
+file '/Users/donaldfilimon/dev/active/quesar.cloud/notes/launch/quesar-editorial-2026-10-09/artifacts-native30/quesar-studio-120/voice-6.wav'
+file '/Users/donaldfilimon/dev/active/quesar.cloud/notes/launch/quesar-editorial-2026-10-09/artifacts-native30/quesar-studio-120/voice-7.wav'

@@ -195,6 +195,7 @@ export function createServer(deps: ServerDeps) {
       const ev: GenerationEvent = cancellation ? { type: "error", message: cancellation } : terminal ?? { type: "error", message: "Generation ended without a terminal result. Partial files retained." };
       await finalizeJob(site.id, jobId, cancellation ? cancellationOutcome : ev.type === "done" ? "done" : "error", ev);
       bus.emit(ev);
+      eventBus.finish(site.id, bus);
       if (jobs.get(site.id)?.id === jobId) jobs.delete(site.id);
     })();
     jobs.set(site.id, { id: jobId, scope, completion, cancel });
@@ -297,13 +298,17 @@ export function createServer(deps: ServerDeps) {
   }
 
   async function getEvents(id: string, searchParams: URLSearchParams): Promise<Response> {
-    const sites = await readRegistry(registryFile);
-    const site = sites.find((s) => s.id === id);
-    if (!site) return notFound();
-    const rawSince = Number(searchParams.get("since") ?? "0");
-    const since = Number.isFinite(rawSince) && rawSince >= 0 ? rawSince : 0;
-    const bus = eventBus.get(id);
-    return json({ ...bus.since(searchParams.get("epoch") === bus.epoch ? since : 0), epoch: bus.epoch, job: site.job });
+    // Serialize with replacement/deletion so a stale registry read cannot
+    // recreate a deleted feed or pair an old job with a new stream.
+    return withRegistryLock(async () => {
+      const sites = await readRegistry(registryFile);
+      const site = sites.find((s) => s.id === id);
+      if (!site) return notFound();
+      const rawSince = Number(searchParams.get("since") ?? "0");
+      const since = Number.isSafeInteger(rawSince) && rawSince >= 0 ? rawSince : 0;
+      const bus = eventBus.get(id);
+      return json({ ...bus.since(searchParams.get("epoch") === bus.epoch ? since : 0), epoch: bus.epoch, job: site.job });
+    });
   }
 
   function externalStatus(id: string, serviceOrigin: string) {
@@ -394,6 +399,7 @@ export function createServer(deps: ServerDeps) {
         registryFile,
         fresh.filter((s) => s.id !== id)
       );
+      eventBus.delete(id);
     });
 
     return noContent();

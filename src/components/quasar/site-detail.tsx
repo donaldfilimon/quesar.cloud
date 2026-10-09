@@ -59,13 +59,13 @@ export function QuasarSiteDetail({ id }: { id: string }) {
     () =>
       getSite(id).then(async (nextSite) => {
         const requestedFeed = feedRef.current;
-        const since = feedRef.current.next;
+        const since = requestedFeed.next;
         const page = await getEvents(id, since, requestedFeed.epoch);
         if (requestedFeed !== feedRef.current) throw new Error("Feed changed during refresh.");
         assertMatchingJob(nextSite.job?.id, page.job?.id);
         setSite(nextSite);
         setMissing(false);
-        feedRef.current = applyEventPage(feedRef.current, since, page);
+        feedRef.current = applyEventPage(feedRef.current, since, page, requestedFeed.epoch);
         setFeed(feedRef.current);
         setPreview(await previewStatus(id));
         setPollError(null);

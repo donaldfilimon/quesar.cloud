@@ -1,0 +1,36 @@
+{
+  "status": "PASS",
+  "qualified_source_sha256": {
+    "render.py": "adb9b5a0640680f431ee0592846cbb9a466f2f6907e5aa2ec2a79ac0c264ba93",
+    "film.html": "44295adede6e2d27d8d19c237d182a682fca4e8308a3092cb94efe2aad9575f5",
+    "timeline.json": "b8f60570e4141264250e9a31ba6d5509be47f64b452741f6e7c6ae7cd835c313",
+    "claims.json": "17448d006c16e69d32ce3d19e4fe8a4054a90a5cebb7bad59986cdb6256d1318",
+    "STORYBOARD.md": "090c467701199fe05601513a23df570bf3c709194a5579d0d89dc2af9c63168b",
+    "README.md": "a20d39477671d352b4167bbb93820d7aa0a02622ddc2f36bc9263624359b0139",
+    "test_render.py": "5c85002ca58c5c5ba44b3aa1ba5611b235ecacca39020fcd8984c9fbdf59067e",
+    "test_color_range.py": "0da52357576c158000086faba3922be60715753bfc05200329c9e34717c3f147"
+  },
+  "delivery_receipt_sha256": "cff04f42f3fa3ee7b8118c5e4d178ac12273e2b78fdb013a76bb24c6b0262d83",
+  "qualified_mp4_sha256": {
+    "artifacts/90s/ecosystem-90s-1080p.mp4": "3726350e923b96a062553b324e3f997f6e3e542607812caab26be4426dccb380",
+    "artifacts/30s/ecosystem-30s-1080p.mp4": "078be322735464ff2579b88211214a7ee14a965ac4e3384e0d47d4b8a2313d0c",
+    "artifacts/15s/ecosystem-15s-1080p.mp4": "2190da54ada56e94ce526131a5884ec97a2866d6c37b5bb6ca5567c544c735b1"
+  },
+  "qualified_manifest_sha256": {
+    "artifacts/90s/manifest.json": "762c774dbe626f56936d1e42f018c06767f9f57a0586671c3ee88ced07cb1371",
+    "artifacts/30s/manifest.json": "ea540fbe68bd97442d51995a4219b07f3950051c6eb3c36ee27f1f87806ca1e8",
+    "artifacts/15s/manifest.json": "39507e073b7e7b9377af6cbeed76701ca5063c15f557ed4357aed87b9aa7637c"
+  },
+  "browser_playback_receipt_sha256": "5be572cb36222af98293e9a4b4da8a64c68b3797dc75caa45abddafed5594037",
+  "gallery_playback_receipt_sha256": "4854bfda4fc190b0e362cce15b3b39a1a9130c7dfc552f9b68187edb73738258",
+  "gallery_screenshot_sha256": {
+    "gallery-1440.png": "481abb2d26a85aa3273c394169560207dd86e81efa592575817fb0904f1557d0",
+    "gallery-390.png": "4c7acd5393357f5e58a7479cf4f249b1ebb808ede62d7f6e768c4fe919787642"
+  },
+  "preserved_original_file_count": 63,
+  "source_files_unchanged": true,
+  "scoped_prettier_exit_code": 0,
+  "scoped_diff_check_exit_code": 0,
+  "python_syntax": "All task Python files parsed",
+  "owned_render_or_playback_sessions_remaining": []
+}

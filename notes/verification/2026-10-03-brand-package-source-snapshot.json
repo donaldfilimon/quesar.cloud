@@ -1,0 +1,35 @@
+{
+  "head": "ac8c24afe618f34a7ed46ea0baed477133064c40",
+  "files": [
+    {
+      "path": "scripts/package-brand.ts",
+      "bytes": 10278,
+      "sha256": "cb5dc56f3212520ae44e3194edfda6b0f8fa30b1b1031f6129c85eaf9f54dff0"
+    },
+    {
+      "path": "scripts/package-brand.test.ts",
+      "bytes": 6010,
+      "sha256": "b9372e6ae15d59f19cfa912ba90d2259e0f66f8eea647ee42dc20bdb49942687"
+    },
+    {
+      "path": "notes/verification/2026-10-03-brand-distribution-README.md",
+      "bytes": 5037,
+      "sha256": "37922be64953b585cdd7b6cff21c402624418880b7338043c46bf624084108e2"
+    },
+    {
+      "path": "notes/verification/2026-10-03-brand-distribution-guidelines.md",
+      "bytes": 3762,
+      "sha256": "79ad3efca6743ba17164c95a25ca366b15c8f2f7027ea9a29850b5097f6266d8"
+    },
+    {
+      "path": "notes/verification/2026-10-03-brand-package-inputs.json",
+      "bytes": 33482,
+      "sha256": "661a0382ec36cc75e8d30a23790cc53df990050b8cd7acb6d20b4e7b54434d43"
+    },
+    {
+      "path": "notes/verification/brand-distribution-2026-10-03.tar.gz",
+      "bytes": 842867,
+      "sha256": "73b779ac79c37b2e5a0e48cd25d6b8db253af824f00890ea43456b20ca1b7f60"
+    }
+  ]
+}

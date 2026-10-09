@@ -1,0 +1,179 @@
+{
+  "status": "Current: three rendered films technically verified and sampled frames reviewed",
+  "verified_utc": "2026-10-03T09:04:08.246019+00:00",
+  "source_sha256": {
+    "render.py": "adb9b5a0640680f431ee0592846cbb9a466f2f6907e5aa2ec2a79ac0c264ba93",
+    "film.html": "44295adede6e2d27d8d19c237d182a682fca4e8308a3092cb94efe2aad9575f5",
+    "timeline.json": "b8f60570e4141264250e9a31ba6d5509be47f64b452741f6e7c6ae7cd835c313",
+    "claims.json": "17448d006c16e69d32ce3d19e4fe8a4054a90a5cebb7bad59986cdb6256d1318",
+    "STORYBOARD.md": "090c467701199fe05601513a23df570bf3c709194a5579d0d89dc2af9c63168b",
+    "README.md": "a20d39477671d352b4167bbb93820d7aa0a02622ddc2f36bc9263624359b0139",
+    "test_render.py": "5c85002ca58c5c5ba44b3aa1ba5611b235ecacca39020fcd8984c9fbdf59067e",
+    "test_color_range.py": "0da52357576c158000086faba3922be60715753bfc05200329c9e34717c3f147"
+  },
+  "qualified_deliveries": [
+    {
+      "duration_seconds": 90,
+      "video": "artifacts/90s/ecosystem-90s-1080p.mp4",
+      "video_sha256": "3726350e923b96a062553b324e3f997f6e3e542607812caab26be4426dccb380",
+      "video_bytes": 8626601,
+      "frames": 2700,
+      "dimensions": [1920, 1080],
+      "video_codec": "H.264",
+      "pixel_format": "yuv420p",
+      "color_range": "tv",
+      "fps": 30,
+      "audio_codec": "AAC",
+      "audio_sample_rate_hz": 48000,
+      "audio_channels": 2,
+      "wav": "artifacts/90s/score.wav",
+      "wav_sha256": "41e22167d64f8a67fc619bada2dcbccabfbd6b81d63f9b72519b892a0a2c6bf0",
+      "audio_lufs": -18.0,
+      "audio_true_peak_dbtp": -5.86,
+      "full_decode_exit_code": 0,
+      "faststart": true,
+      "manifest_sha256": "762c774dbe626f56936d1e42f018c06767f9f57a0586671c3ee88ced07cb1371",
+      "artifact_count": 19,
+      "caption_files_sha256": {
+        "ecosystem-90s.json": "022500f200ff9a091521dc970e14566f3961f2b0f5f6b237690020ba211b453f",
+        "ecosystem-90s.srt": "add3a4162f73ac26a74bd5914b22628b54bce8faf2f28e54b4d980801d0ed621",
+        "ecosystem-90s.transcript.txt": "b45101b1347b47fc31b3bf76181969a207cce461f84e3d106e107f9232627925",
+        "ecosystem-90s.vtt": "c2a7ae4322b32982947043ae2013d90268157bd61bb6361c1e844620135d5b0e"
+      },
+      "caption_cues": 9,
+      "visual_review": {
+        "method": "Image-tool inspection of all nine decoded chapter midpoint images via contact sheet, plus full-resolution first/middle/final frames",
+        "result": "All six products present, complete readable copy, clear concept classification, no cropped copy or browser controls observed",
+        "limits": "No human listening or real-time full-film viewing claimed"
+      },
+      "browser_playback": "Explicit muted 8x, time advanced and ended with no errors"
+    },
+    {
+      "duration_seconds": 30,
+      "video": "artifacts/30s/ecosystem-30s-1080p.mp4",
+      "video_sha256": "078be322735464ff2579b88211214a7ee14a965ac4e3384e0d47d4b8a2313d0c",
+      "video_bytes": 3603728,
+      "frames": 900,
+      "dimensions": [1920, 1080],
+      "video_codec": "H.264",
+      "pixel_format": "yuv420p",
+      "color_range": "tv",
+      "fps": 30,
+      "audio_codec": "AAC",
+      "audio_sample_rate_hz": 48000,
+      "audio_channels": 2,
+      "wav": "artifacts/30s/score.wav",
+      "wav_sha256": "2b221b143fd053b84761176eb3589149edb0a7f4ed711c4ade3ec2bd3b5e4686",
+      "audio_lufs": -18.0,
+      "audio_true_peak_dbtp": -7.93,
+      "full_decode_exit_code": 0,
+      "faststart": true,
+      "manifest_sha256": "ea540fbe68bd97442d51995a4219b07f3950051c6eb3c36ee27f1f87806ca1e8",
+      "artifact_count": 18,
+      "caption_files_sha256": {
+        "ecosystem-30s.json": "9712bc4f3529b3c6ba5794bbd135a9035af218b594a950d4389bd00f55a2213d",
+        "ecosystem-30s.srt": "efe142362af25f41d818e431422881cb701535797a06f0bcc1548d60acc9f83b",
+        "ecosystem-30s.transcript.txt": "077ebe7af52f9535c2626913fe184580c689c62841d6606ce4ad5cdb7e2c86ef",
+        "ecosystem-30s.vtt": "55d92c823d71108bc7745553e78d2dfd7d6d428e2cc525a9c8ebad66a7f34ada"
+      },
+      "caption_cues": 8,
+      "visual_review": {
+        "method": "Image-tool inspection of all eight decoded chapter midpoint images via contact sheet, plus full-resolution first/middle/final frames",
+        "result": "All six products present, complete readable cut-specific copy, clear concept classification, no cropped copy or browser controls observed",
+        "limits": "No human listening or real-time full-film viewing claimed"
+      },
+      "browser_playback": "Explicit muted 8x, time advanced and ended with no errors"
+    },
+    {
+      "duration_seconds": 15,
+      "video": "artifacts/15s/ecosystem-15s-1080p.mp4",
+      "video_sha256": "2190da54ada56e94ce526131a5884ec97a2866d6c37b5bb6ca5567c544c735b1",
+      "video_bytes": 2117481,
+      "frames": 450,
+      "dimensions": [1920, 1080],
+      "video_codec": "H.264",
+      "pixel_format": "yuv420p",
+      "color_range": "tv",
+      "fps": 30,
+      "audio_codec": "AAC",
+      "audio_sample_rate_hz": 48000,
+      "audio_channels": 2,
+      "wav": "artifacts/15s/score.wav",
+      "wav_sha256": "be7d478e1a6a6e811eb478def72d1d9b4ff39340c7079ac7001b6737d2a9df99",
+      "audio_lufs": -18.01,
+      "audio_true_peak_dbtp": -7.63,
+      "full_decode_exit_code": 0,
+      "faststart": true,
+      "manifest_sha256": "39507e073b7e7b9377af6cbeed76701ca5063c15f557ed4357aed87b9aa7637c",
+      "artifact_count": 18,
+      "caption_files_sha256": {
+        "ecosystem-15s.json": "403f69e3ceeb27abdee2a8c443119ee69376f92dbd177fc0ad2e4f8c6a9b909d",
+        "ecosystem-15s.srt": "ea3a2dd6f2887ed2f7664d684b762cafcd02760c5145924f86212c53d59c41a6",
+        "ecosystem-15s.transcript.txt": "8387244e9935f8fdc7e442f27647e80078b7d509521f8902d9fdac06e11f766f",
+        "ecosystem-15s.vtt": "c4305a3f801c8fbf314f55859019fea964bc89676f09a9380f29a8f0ff2ad890"
+      },
+      "caption_cues": 8,
+      "visual_review": {
+        "method": "Image-tool inspection of all eight decoded chapter midpoint images via contact sheet, plus full-resolution first/middle/final frames",
+        "result": "All six products present, complete readable cut-specific copy, clear concept classification, no cropped copy or browser controls observed",
+        "limits": "No human listening or real-time full-film viewing claimed"
+      },
+      "browser_playback": "Explicit muted 8x, time advanced and ended with no errors"
+    }
+  ],
+  "portable_tests": {
+    "passed": 6,
+    "exit_code": 0
+  },
+  "real_ffmpeg_regressions": {
+    "passed": 1,
+    "exit_code": 0
+  },
+  "claim_source_hashes_reverified": 16,
+  "original_file_hashes_preserved": 63,
+  "browser_playback_receipt": "receipts/browser-playback.json",
+  "gallery_acceptance": {
+    "status": "Passed actual local gallery",
+    "gallery_sha256": "264afe5aae04041e72614e1da33886294d3927951e8a91962b5d0f02e3e4f01d",
+    "playback_rate": 8,
+    "muted": true,
+    "initial_autoplay": false,
+    "durations": [90, 30, 15],
+    "optional_tracks": "Absent; burned captions and linked transcripts retained",
+    "console_errors": [],
+    "page_errors": [],
+    "external_requests": [],
+    "viewports": [
+      {
+        "width": 1440,
+        "clientWidth": 1440,
+        "scrollWidth": 1440
+      },
+      {
+        "width": 390,
+        "clientWidth": 390,
+        "scrollWidth": 390
+      }
+    ],
+    "all_link_targets_exist": true,
+    "receipt": "receipts/gallery-playback.json",
+    "desktop_screenshot": "receipts/gallery-1440.png",
+    "mobile_screenshot": "receipts/gallery-390.png"
+  },
+  "unqualified_attempt": "artifacts/90s-unqualified-range is retained historical evidence and excluded from delivery",
+  "render_process_exit_codes": {
+    "90s_initial": 1,
+    "90s_corrected": 0,
+    "30s": 0,
+    "15s": 0
+  },
+  "owned_render_sessions_remaining": [],
+  "owned_playback_sessions_remaining": [],
+  "scope_limits": [
+    "No human listening or full-pace creative viewing claimed",
+    "No product runtime, model quality, performance, deployment or production qualification inferred",
+    "No publication, commit, push, package installation or external service call"
+  ],
+  "scoped_prettier_exit_code": 0,
+  "scoped_diff_check_exit_code": 0
+}

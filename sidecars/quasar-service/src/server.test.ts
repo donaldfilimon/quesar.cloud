@@ -136,6 +136,32 @@ test("POST /api/sites scaffolds the site, runs the job to idle, and replays even
   expect(emptyBody).toMatchObject({ events: [], next: 2 });
 });
 
+for (const count of [1, 2, 3]) {
+  test(`events replay replacement with ${count} events despite old offset 2`, async () => {
+    let run = 0;
+    const { baseUrl } = await makeHarness(async ({ onEvent }) => {
+      const length = run++ === 0 ? 2 : count;
+      for (let i = 1; i < length; i++) onEvent({ type: "text", text: `run ${run}: ${i}` });
+      onEvent({ type: "done" });
+    });
+    const site = await (await pairedFetch(`${baseUrl}/api/sites`, { method: "POST", body: JSON.stringify({ name: "Epoch", prompt: "p" }) })).json();
+    await pollUntilIdle(baseUrl, site.id);
+    const url = `${baseUrl}/api/sites/${site.id}/events`;
+    const old = await (await pairedFetch(url)).json();
+    expect(old.next).toBe(2);
+    expect((await pairedFetch(`${baseUrl}/api/sites/${site.id}/edit`, { method: "POST", body: JSON.stringify({ prompt: "replace" }) })).status).toBe(202);
+    await pollUntilIdle(baseUrl, site.id);
+    const replacement = await (await pairedFetch(`${url}?since=2&epoch=${old.epoch}`)).json();
+    expect(replacement.epoch).not.toBe(old.epoch);
+    expect(replacement.events).toHaveLength(count);
+    expect(replacement.next).toBe(count);
+    expect((await (await pairedFetch(`${url}?since=${count}&epoch=${replacement.epoch}`)).json()).events).toEqual([]);
+    expect((await (await pairedFetch(`${url}?since=0.5&epoch=${replacement.epoch}`)).json()).events).toHaveLength(count);
+    expect((await pairedFetch(`${baseUrl}/api/sites/${site.id}`, { method: "DELETE" })).status).toBe(204);
+    expect((await pairedFetch(url)).status).toBe(404);
+  });
+}
+
 test("cancel is job-bound, authenticated, origin-restricted and fences late completion", async () => {
   let late!: () => void;
   const { baseUrl } = await makeHarness(async ({ onEvent }) => {

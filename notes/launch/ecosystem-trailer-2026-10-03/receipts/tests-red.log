@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/Users/donaldfilimon/dev/active/quesar.cloud/notes/launch/ecosystem-trailer-2026-10-03/test_render.py", line 12, in <module>
+    spec.loader.exec_module(renderer)
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "<frozen importlib._bootstrap_external>", line 759, in exec_module
+  File "<frozen importlib._bootstrap_external>", line 896, in get_code
+  File "<frozen importlib._bootstrap_external>", line 954, in get_data
+FileNotFoundError: [Errno 2] No such file or directory: '/Users/donaldfilimon/dev/active/quesar.cloud/notes/launch/ecosystem-trailer-2026-10-03/render.py'

@@ -1,0 +1,28 @@
+{
+  "archive": "notes/verification/brand-distribution-2026-10-03.tar.gz",
+  "archiveBytes": 842867,
+  "sha256": "73b779ac79c37b2e5a0e48cd25d6b8db253af824f00890ea43456b20ca1b7f60",
+  "archiveMembers": 72,
+  "verifiedPayloadHashes": 71,
+  "verifiedMediaReferences": 54,
+  "originalFontCssReferences": "all resolve",
+  "exactSvgElements": 6,
+  "shasumExit": 0,
+  "reproducedByteIdentical": true,
+  "runtime": {
+    "node": "v26.10.0",
+    "zlib": "1.2.12",
+    "typescript": "6.0.3"
+  },
+  "gate": {
+    "command": "bun run check",
+    "session": 62761,
+    "exitCode": 0,
+    "testFiles": 89,
+    "tests": 744,
+    "log": "notes/verification/2026-10-03-brand-package-check.log",
+    "logSha256": "46a177b83795e8e8069b73bd01947414feb7e62168123a87719c849311557bd7"
+  },
+  "diffCheckExitCode": 0,
+  "independentReview": "requested; parent coordinates"
+}

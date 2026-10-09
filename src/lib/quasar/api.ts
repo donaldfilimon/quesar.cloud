@@ -4,13 +4,7 @@
 // (`QUASAR_SERVICE_ORIGIN`) through `setFallbackOrigin`, and `recover` /
 // `isUncertain` are exposed so the screens can offer the Retry that
 // `Connection.mutate` asks for.
-import {
-  Connection,
-  ORIGIN_KEY,
-  type GenerationEvent,
-  type PreviewStatus,
-  type Site,
-} from "./index";
+import { Connection, ORIGIN_KEY, EventPage, type PreviewStatus, type Site } from "./index";
 
 const memory = new Map<string, string>();
 
@@ -186,14 +180,11 @@ export function cancelSite(id: string, jobId: string) {
 }
 
 export function getEvents(id: string, since: number, epoch?: string) {
-  return connection.request<{
-    events: GenerationEvent[];
-    next: number;
-    epoch?: string;
-    job?: Site["job"];
-  }>(
-    `/api/sites/${encodeURIComponent(id)}/events?since=${since}${epoch ? `&epoch=${encodeURIComponent(epoch)}` : ""}`,
-  );
+  return connection
+    .request<unknown>(
+      `/api/sites/${encodeURIComponent(id)}/events?since=${since}${epoch ? `&epoch=${encodeURIComponent(epoch)}` : ""}`,
+    )
+    .then((page) => EventPage.parse(page));
 }
 
 export function previewStatus(id: string) {

@@ -1,0 +1,31 @@
+Synthesizing 90s original score
+90s: 0/2700 frames
+90s: 150/2700 frames
+90s: 300/2700 frames
+90s: 450/2700 frames
+90s: 600/2700 frames
+90s: 750/2700 frames
+90s: 900/2700 frames
+90s: 1050/2700 frames
+90s: 1200/2700 frames
+90s: 1350/2700 frames
+90s: 1500/2700 frames
+90s: 1650/2700 frames
+90s: 1800/2700 frames
+90s: 1950/2700 frames
+90s: 2100/2700 frames
+90s: 2250/2700 frames
+90s: 2400/2700 frames
+90s: 2550/2700 frames
+Traceback (most recent call last):
+  File "/Users/donaldfilimon/dev/active/quesar.cloud/notes/launch/ecosystem-trailer-2026-10-03/render.py", line 412, in <module>
+    main()
+    ~~~~^^
+  File "/Users/donaldfilimon/dev/active/quesar.cloud/notes/launch/ecosystem-trailer-2026-10-03/render.py", line 393, in main
+    validation = validate(args.ffmpeg, args.ffprobe, timeline, args.cut, output)
+  File "/Users/donaldfilimon/dev/active/quesar.cloud/notes/launch/ecosystem-trailer-2026-10-03/render.py", line 307, in validate
+    check_probe(probe, duration)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/donaldfilimon/dev/active/quesar.cloud/notes/launch/ecosystem-trailer-2026-10-03/render.py", line 297, in check_probe
+    raise ValueError(f"Video contract mismatch: {actual} != {expected}")
+ValueError: Video contract mismatch: (1920, 1080, 'h264', 'yuvj420p', '30/1', 2700) != (1920, 1080, 'h264', 'yuv420p', '30/1', 2700)

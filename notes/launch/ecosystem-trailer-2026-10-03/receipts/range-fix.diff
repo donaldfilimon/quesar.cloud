@@ -1,0 +1,58 @@
+--- render-before-range-fix.py
++++ render.py
+@@ -21,7 +21,7 @@
+ FPS, RATE = 30, 48000
+ WIDTH, HEIGHT = 1920, 1080
+ CUTS = (90, 30, 15)
+-SOURCE_FILES = ("render.py", "film.html", "timeline.json", "claims.json", "STORYBOARD.md", "README.md", "test_render.py")
++SOURCE_FILES = ("render.py", "film.html", "timeline.json", "claims.json", "STORYBOARD.md", "README.md", "test_render.py", "test_color_range.py")
+ 
+ 
+ def digest(path: Path) -> str:
+@@ -223,17 +223,23 @@
+     print(f"Previewed {sum(map(len, records.values()))} shots with no text overflow", flush=True)
+ 
+ 
+-def capture(ffmpeg: str, timeline: dict, duration: int, output: Path) -> dict:
+-    from playwright.sync_api import sync_playwright
++def encoder_command(ffmpeg: str, duration: int, output: Path) -> list[str]:
+     video = output / f"ecosystem-{duration}s-1080p.mp4"
+-    command = [ffmpeg, "-y", "-hide_banner", "-loglevel", "warning", "-nostdin", "-threads", "2",
++    return [ffmpeg, "-y", "-hide_banner", "-loglevel", "warning", "-nostdin", "-threads", "2",
+                "-f", "image2pipe", "-framerate", str(FPS), "-vcodec", "mjpeg", "-i", "pipe:0",
+                "-i", str(output / "score.wav"), "-map", "0:v:0", "-map", "1:a:0", "-c:v", "libx264",
+-               "-threads", "2", "-preset", "medium", "-crf", "17", "-pix_fmt", "yuv420p", "-r", str(FPS),
++               "-threads", "2", "-preset", "medium", "-crf", "17",
++               "-vf", "scale=in_range=pc:out_range=tv,format=yuv420p", "-color_range", "tv",
++               "-pix_fmt", "yuv420p", "-r", str(FPS),
+                "-frames:v", str(duration * FPS), "-c:a", "aac", "-b:a", "192k", "-ar", str(RATE),
+                "-t", str(duration), "-movflags", "+faststart", "-map_metadata", "-1",
+                "-metadata", "title=Build with understanding — ecosystem concept film",
+                "-metadata", "comment=Abstract concept illustrations; source-grounded orientation, not runtime or deployment proof.", str(video)]
++
++
++def capture(ffmpeg: str, timeline: dict, duration: int, output: Path) -> dict:
++    from playwright.sync_api import sync_playwright
++    command = encoder_command(ffmpeg, duration, output)
+     sample_frames = {0, duration * FPS - 1} | {int((s["start"] + s["end"]) / 2 * FPS) for s in shots(timeline, duration)}
+     hashes, audit_records = {}, []
+     with sync_playwright() as playwright:
+@@ -295,6 +301,8 @@
+               visual["avg_frame_rate"], int(visual["nb_read_frames"]))
+     if actual != expected:
+         raise ValueError(f"Video contract mismatch: {actual} != {expected}")
++    if visual.get("color_range") != "tv":
++        raise ValueError("Expected limited (TV) video range")
+     if (audio["codec_name"], int(audio["sample_rate"]), audio["channels"]) != ("aac", RATE, 2):
+         raise ValueError("Expected stereo 48kHz AAC")
+     if abs(float(data["format"]["duration"]) - duration) > .05 or abs(float(audio["duration"]) - duration) > .05:
+@@ -390,6 +398,9 @@
+     score["normalization"] = normalize(args.ffmpeg, raw, output / "score.wav")
+     raw.unlink()
+     proof = capture(args.ffmpeg, timeline, args.cut, output)
++    # Retain actual capture provenance even if a later strict media check fails.
++    write_json(output / "capture-record.json", {"status": "Captured; validation pending",
++               "source_sha256": before, "capture": proof, "score": score})
+     validation = validate(args.ffmpeg, args.ffprobe, timeline, args.cut, output)
+     after = {name: digest(ROOT / name) for name in SOURCE_FILES}
+     if before != after:

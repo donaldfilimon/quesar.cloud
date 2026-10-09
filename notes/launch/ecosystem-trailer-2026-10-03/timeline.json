@@ -1,0 +1,120 @@
+{
+  "title": "Build with understanding",
+  "date": "2026-10-03",
+  "scope": "Source-grounded ecosystem orientation with abstract concept illustrations; no integrated runtime or production claim",
+  "cuts": {
+    "90": [7, 12, 12, 12, 12, 12, 12, 6, 5],
+    "30": [2, 4, 4, 4, 4, 4, 4, 0, 4],
+    "15": [1, 2, 2, 2, 2, 2, 2, 0, 2]
+  },
+  "scenes": [
+    {
+      "id": "opening",
+      "product": "THE DONALD COMPANY",
+      "role": "AN ECOSYSTEM IN MOTION",
+      "title": "Build with\nunderstanding.",
+      "body": "Six projects. Distinct responsibilities.\nA shared direction for the work ahead.",
+      "short": "Six projects. One shared direction.",
+      "micro": "Six projects.",
+      "color": "#d6efb2",
+      "caption": "An introduction to six projects and their distinct responsibilities.",
+      "motif": "constellation"
+    },
+    {
+      "id": "wdbx",
+      "product": "WDBX",
+      "role": "STORAGE SUBSTRATE",
+      "title": "Memory has\na history.",
+      "body": "Durable records. Typed episodes.\nExplicit links between events.",
+      "short": "Durable records and typed episodes.",
+      "micro": "Durable storage.",
+      "color": "#8ed4c0",
+      "caption": "WDBX includes durable storage and a typed episode ledger.",
+      "motif": "ledger"
+    },
+    {
+      "id": "abi",
+      "product": "ABI",
+      "role": "RUNTIME & ORCHESTRATION",
+      "title": "Give intent\na structure.",
+      "body": "Local orchestration. Explicit capabilities.\nInspectable runtime boundaries.",
+      "short": "Local orchestration. Explicit capabilities.",
+      "micro": "Local orchestration.",
+      "color": "#91bcf5",
+      "caption": "ABI provides orchestration and inspectable capability boundaries.",
+      "motif": "lanes"
+    },
+    {
+      "id": "abbey",
+      "product": "Abbey",
+      "role": "CLI & TUI CLIENT",
+      "title": "Keep the human\nin the work.",
+      "body": "A local client for conversation and tools.\nConnected to the ABI runtime.",
+      "short": "A local client for conversation and tools.",
+      "micro": "The local client.",
+      "color": "#eac58e",
+      "caption": "Abbey is a local CLI and TUI client built around ABI.",
+      "motif": "orbit"
+    },
+    {
+      "id": "abbey-bot",
+      "product": "Abbey Bot",
+      "role": "DISCORD SERVICE",
+      "title": "Meet the\nconversation.",
+      "body": "Discord commands and assistant workflows.\nPermissions remain part of the path.",
+      "short": "Discord workflows with explicit controls.",
+      "micro": "The Discord service.",
+      "color": "#c5b0ed",
+      "caption": "Abbey Bot is the separate Discord service, with commands and permission checks.",
+      "motif": "channels"
+    },
+    {
+      "id": "quesar",
+      "product": "Quesar / MLAI",
+      "role": "ECOSYSTEM & RESEARCH",
+      "title": "Explore\nthe work.",
+      "body": "Products. Research. Source boundaries.\nCollected in the Quesar / MLAI site.",
+      "short": "Products, research and source boundaries.",
+      "micro": "Explore the ecosystem.",
+      "color": "#b9c7f0",
+      "caption": "The Quesar / MLAI site presents products, research and implementation boundaries.",
+      "motif": "atlas"
+    },
+    {
+      "id": "webpress",
+      "product": "WebPress",
+      "role": "VISUAL AUTHORING",
+      "title": "One model.\nMany views.",
+      "body": "WP-IR connects the canvas, inspector,\ngenerated code and export.",
+      "short": "WP-IR connects editing, code and export.",
+      "micro": "Visual authoring.",
+      "color": "#f1ab95",
+      "caption": "WebPress uses WP-IR as the source for editing, code generation and export.",
+      "motif": "projections"
+    },
+    {
+      "id": "together",
+      "product": "SIX PROJECTS",
+      "role": "A SHARED DIRECTION",
+      "title": "Distinct roles.\nShared intent.",
+      "body": "A conceptual map of the ecosystem.\nIntegration remains specific to each project.",
+      "short": "Distinct roles. Shared intent.",
+      "micro": "Distinct roles.",
+      "color": "#d6efb2",
+      "caption": "This is a conceptual map; integration and readiness remain project-specific.",
+      "motif": "constellation"
+    },
+    {
+      "id": "closing",
+      "product": "THE DONALD COMPANY",
+      "role": "BUILD WITH UNDERSTANDING",
+      "title": "Follow the source.\nShape the next step.",
+      "body": "WDBX · ABI · Abbey · Abbey Bot\nQuesar / MLAI · WebPress",
+      "short": "Follow the source. Shape the next step.",
+      "micro": "Follow the source.",
+      "color": "#d6efb2",
+      "caption": "Follow the source. Shape the next step.",
+      "motif": "closing"
+    }
+  ]
+}

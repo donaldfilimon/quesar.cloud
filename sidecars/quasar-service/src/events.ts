@@ -22,19 +22,48 @@ export class JobEvents {
   }
 }
 
+// Retain at most 128 inactive site feeds, oldest completion/creation first.
+// Polling does not refresh retention; running or draining jobs are never evicted.
 export class EventBus {
-  private jobs: Map<string, JobEvents> = new Map();
+  private jobs = new Map<string, JobEvents>();
+  private inactive = new Set<string>();
+
+  constructor(private readonly maxInactive = 128) {
+    if (!Number.isSafeInteger(maxInactive) || maxInactive < 0) throw new Error("Invalid feed retention limit");
+  }
 
   get(siteId: string): JobEvents {
     let job = this.jobs.get(siteId);
     if (!job) {
       job = new JobEvents();
       this.jobs.set(siteId, job);
+      this.inactive.add(siteId);
+      this.prune();
     }
     return job;
   }
 
   reset(siteId: string): void {
+    this.inactive.delete(siteId);
     this.jobs.set(siteId, new JobEvents());
+  }
+
+  finish(siteId: string, job: JobEvents): void {
+    if (this.jobs.get(siteId) !== job) return;
+    this.inactive.add(siteId);
+    this.prune();
+  }
+
+  delete(siteId: string): void {
+    this.inactive.delete(siteId);
+    this.jobs.delete(siteId);
+  }
+
+  private prune(): void {
+    while (this.inactive.size > this.maxInactive) {
+      const oldest = this.inactive.values().next().value!;
+      this.inactive.delete(oldest);
+      this.jobs.delete(oldest);
+    }
   }
 }

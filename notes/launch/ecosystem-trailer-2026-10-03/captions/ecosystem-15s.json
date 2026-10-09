@@ -1,0 +1,58 @@
+[
+  {
+    "text": "Six projects.",
+    "startMs": 0,
+    "endMs": 1000,
+    "timestampMs": null,
+    "confidence": null
+  },
+  {
+    "text": "WDBX: Durable storage.",
+    "startMs": 1000,
+    "endMs": 3000,
+    "timestampMs": null,
+    "confidence": null
+  },
+  {
+    "text": "ABI: Local orchestration.",
+    "startMs": 3000,
+    "endMs": 5000,
+    "timestampMs": null,
+    "confidence": null
+  },
+  {
+    "text": "Abbey: The local client.",
+    "startMs": 5000,
+    "endMs": 7000,
+    "timestampMs": null,
+    "confidence": null
+  },
+  {
+    "text": "Abbey Bot: The Discord service.",
+    "startMs": 7000,
+    "endMs": 9000,
+    "timestampMs": null,
+    "confidence": null
+  },
+  {
+    "text": "Quesar / MLAI: Explore the ecosystem.",
+    "startMs": 9000,
+    "endMs": 11000,
+    "timestampMs": null,
+    "confidence": null
+  },
+  {
+    "text": "WebPress: Visual authoring.",
+    "startMs": 11000,
+    "endMs": 13000,
+    "timestampMs": null,
+    "confidence": null
+  },
+  {
+    "text": "Follow the source.",
+    "startMs": 13000,
+    "endMs": 15000,
+    "timestampMs": null,
+    "confidence": null
+  }
+]

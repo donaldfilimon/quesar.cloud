@@ -1,0 +1,64 @@
+{
+  "duration": 120,
+  "edition": "studio",
+  "cues": [
+    {
+      "start": 0,
+      "end": 15,
+      "text": "Human imagination. Adaptive intelligence. Quesar by MLAI introduces assistant workflows, memory systems and developer tools with inspectable sources.",
+      "source": "src/lib/home-vision.ts",
+      "status": "SOURCE"
+    },
+    {
+      "start": 15,
+      "end": 30,
+      "text": "Three roles. One conversation. Abbey is a human-facing companion contract. Aviva is a direct expert mode. Abi coordinates intent, risk, context and response style.",
+      "source": "src/lib/home-vision.ts",
+      "status": "SOURCE"
+    },
+    {
+      "start": 30,
+      "end": 45,
+      "text": "Memory. Keep its provenance. WDBX local Rust storage and retrieval components preserve durable records, vectors and causal history.",
+      "source": "src/lib/home-vision.ts",
+      "status": "SOURCE"
+    },
+    {
+      "start": 45,
+      "end": 60,
+      "text": "Developers. Start with source. Explore the ABI Rust framework, local CLI and MCP contracts. Follow setup and verification guidance before connecting tools or memory.",
+      "source": "src/lib/home-vision.ts",
+      "status": "SOURCE"
+    },
+    {
+      "start": 60,
+      "end": 75,
+      "text": "Two names. Two distinct scopes. Quesar is the MLAI website and broader direction. Quasar is the separately configured local website builder service.",
+      "source": "src/routes/quasar.new.tsx",
+      "status": "SOURCE"
+    },
+    {
+      "start": 75,
+      "end": 90,
+      "text": "A new site. Begin with a prompt. The local service copies a Next.js template into its sites directory and runs a Claude generation job using that machine’s Anthropic credentials.",
+      "source": "src/components/quasar/new-site.tsx",
+      "status": "SOURCE"
+    },
+    {
+      "start": 90,
+      "end": 105,
+      "text": "Preview. A separate opening. Preview launch obtains a ticket and checks the returned target against the configured service before opening it.",
+      "source": "src/lib/quasar/api.ts",
+      "status": "SOURCE"
+    },
+    {
+      "start": 105,
+      "end": 120,
+      "text": "Build thoughtfully. quesar.cloud Explore the architecture. Follow the source. Define the evidence your project needs. Quesar by MLAI.",
+      "source": "src/lib/home-vision.ts",
+      "status": "SOURCE"
+    }
+  ],
+  "samplingFps": 30,
+  "outputFps": 30
+}

@@ -1,0 +1,10 @@
+{
+  "command": "bun run check",
+  "exitCode": 0,
+  "testFiles": 89,
+  "tests": 745,
+  "focusedTests": 5,
+  "scope": "repository gate plus edition timing and cue contract tests",
+  "newProductionDependencies": [],
+  "sourceCommit": "b78295d086294ce4bac055f60a2b40aa87fba2a2"
+}

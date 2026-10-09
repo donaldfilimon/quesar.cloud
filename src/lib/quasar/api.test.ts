@@ -72,6 +72,7 @@ describe("quasar api", () => {
 
   test("list, create, feed, preview, and edit by URL, and a cold load keeps the stored origin", async () => {
     const seen: string[] = [];
+    let omitFeedEpoch = false;
     type Row = {
       id: string;
       name: string;
@@ -116,7 +117,11 @@ describe("quasar api", () => {
           return send(200, sites[0]);
         }
         if (req.method === "GET" && url.pathname === "/api/sites/site-1/events") {
-          return send(200, { events: [{ type: "text", text: "generated" }], next: 1 });
+          return send(200, {
+            events: [{ type: "text", text: "generated" }],
+            next: 1,
+            epoch: omitFeedEpoch ? undefined : "00000000-0000-4000-8000-000000000001",
+          });
         }
         if (req.method === "GET" && url.pathname === "/api/sites/site-1/preview") {
           return send(200, { state: "stopped", port: null, url: null, logTail: [] });
@@ -149,6 +154,11 @@ describe("quasar api", () => {
       expect((await listSites()).map((site) => site.name)).toEqual(["Harbor"]);
       const feed = await getEvents(created.id, 0);
       expect(feed.events).toEqual([{ type: "text", text: "generated" }]);
+      await getEvents(created.id, feed.next, feed.epoch);
+      expect(seen).toContain(`GET /api/sites/site-1/events?since=1&epoch=${feed.epoch}`);
+      omitFeedEpoch = true;
+      await expect(getEvents(created.id, 0)).rejects.toThrow();
+      omitFeedEpoch = false;
       const started = await previewStart(created.id);
       expect(started.state).toBe("running");
       const edited = await editSite(created.id, "Add a colophon");

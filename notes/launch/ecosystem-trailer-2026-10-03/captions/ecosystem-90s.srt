@@ -1,0 +1,36 @@
+1
+00:00:00,000 --> 00:00:07,000
+An introduction to six projects and their distinct responsibilities.
+
+2
+00:00:07,000 --> 00:00:19,000
+WDBX includes durable storage and a typed episode ledger.
+
+3
+00:00:19,000 --> 00:00:31,000
+ABI provides orchestration and inspectable capability boundaries.
+
+4
+00:00:31,000 --> 00:00:43,000
+Abbey is a local CLI and TUI client built around ABI.
+
+5
+00:00:43,000 --> 00:00:55,000
+Abbey Bot is the separate Discord service, with commands and permission checks.
+
+6
+00:00:55,000 --> 00:01:07,000
+The Quesar / MLAI site presents products, research and implementation boundaries.
+
+7
+00:01:07,000 --> 00:01:19,000
+WebPress uses WP-IR as the source for editing, code generation and export.
+
+8
+00:01:19,000 --> 00:01:25,000
+This is a conceptual map; integration and readiness remain project-specific.
+
+9
+00:01:25,000 --> 00:01:30,000
+Follow the source. Shape the next step.
+

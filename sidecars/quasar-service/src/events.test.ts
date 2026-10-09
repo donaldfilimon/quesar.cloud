@@ -70,3 +70,40 @@ test("EventBus.reset replaces the epoch and isolates stale producers", () => {
   expect(bus.get("site-1").events).toEqual([]);
   expect(bus.get("site-1").epoch).not.toBe(job.epoch);
 });
+
+test("inactive retention evicts oldest feeds without extending retention on polls", () => {
+  const bus = new EventBus(2);
+  const first = bus.get("first");
+  const second = bus.get("second");
+  expect(bus.get("first")).toBe(first);
+  bus.get("third");
+  expect(bus.get("second")).toBe(second);
+  expect(bus.get("first").epoch).not.toBe(first.epoch);
+});
+
+test("running feeds survive retention pressure and become eligible after finish", () => {
+  const bus = new EventBus(1);
+  bus.reset("running");
+  const running = bus.get("running");
+  bus.get("idle-1");
+  bus.get("idle-2");
+  expect(bus.get("running")).toBe(running);
+  bus.finish("running", running);
+  bus.get("idle-3");
+  expect(bus.get("running").epoch).not.toBe(running.epoch);
+});
+
+test("delete removes the retained feed and obsolete finish cannot affect replacements", () => {
+  const bus = new EventBus(0);
+  bus.reset("site");
+  const old = bus.get("site");
+  bus.reset("site");
+  const replacement = bus.get("site");
+  bus.finish("site", old);
+  bus.get("idle");
+  expect(bus.get("site")).toBe(replacement);
+  old.emit(textEvent("obsolete"));
+  expect(replacement.events).toEqual([]);
+  bus.delete("site");
+  expect(bus.get("site").epoch).not.toBe(replacement.epoch);
+});

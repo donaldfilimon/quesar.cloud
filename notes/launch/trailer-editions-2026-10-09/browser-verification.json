@@ -1,0 +1,79 @@
+{
+  "results": [
+    {
+      "src": "http://127.0.0.1:4198/artifacts/kinetic-60/mlai-quesar-kinetic-60.mp4",
+      "duration": 60,
+      "width": 1920,
+      "height": 1080,
+      "decodedFrames": 10,
+      "captionCues": 17,
+      "error": null
+    },
+    {
+      "src": "http://127.0.0.1:4198/artifacts/editorial-60/mlai-quesar-editorial-60.mp4",
+      "duration": 60,
+      "width": 1920,
+      "height": 1080,
+      "decodedFrames": 10,
+      "captionCues": 13,
+      "error": null
+    },
+    {
+      "src": "http://127.0.0.1:4198/artifacts/technical-120/mlai-quesar-technical-120.mp4",
+      "duration": 120,
+      "width": 1920,
+      "height": 1080,
+      "decodedFrames": 9,
+      "captionCues": 20,
+      "error": null
+    },
+    {
+      "src": "http://127.0.0.1:4198/artifacts/design-120/mlai-quesar-design-120.mp4",
+      "duration": 120,
+      "width": 1920,
+      "height": 1080,
+      "decodedFrames": 9,
+      "captionCues": 17,
+      "error": null
+    },
+    {
+      "src": "http://127.0.0.1:4198/artifacts/technical-180/mlai-quesar-technical-180.mp4",
+      "duration": 180,
+      "width": 1920,
+      "height": 1080,
+      "decodedFrames": 9,
+      "captionCues": 33,
+      "error": null
+    },
+    {
+      "src": "http://127.0.0.1:4198/artifacts/design-180/mlai-quesar-design-180.mp4",
+      "duration": 180,
+      "width": 1920,
+      "height": 1080,
+      "decodedFrames": 9,
+      "captionCues": 30,
+      "error": null
+    },
+    {
+      "src": "http://127.0.0.1:4198/artifacts/technical-600/mlai-quesar-technical-600.mp4",
+      "duration": 600,
+      "width": 1920,
+      "height": 1080,
+      "decodedFrames": 9,
+      "captionCues": 93,
+      "error": null
+    },
+    {
+      "src": "http://127.0.0.1:4198/artifacts/design-600/mlai-quesar-design-600.mp4",
+      "duration": 600,
+      "width": 1920,
+      "height": 1080,
+      "decodedFrames": 10,
+      "captionCues": 93,
+      "error": null
+    }
+  ],
+  "overflow": false,
+  "errors": [],
+  "listeningAccepted": false
+}

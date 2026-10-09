@@ -1,0 +1,58 @@
+[
+  {
+    "text": "Six projects. One shared direction.",
+    "startMs": 0,
+    "endMs": 2000,
+    "timestampMs": null,
+    "confidence": null
+  },
+  {
+    "text": "WDBX: Durable records and typed episodes.",
+    "startMs": 2000,
+    "endMs": 6000,
+    "timestampMs": null,
+    "confidence": null
+  },
+  {
+    "text": "ABI: Local orchestration. Explicit capabilities.",
+    "startMs": 6000,
+    "endMs": 10000,
+    "timestampMs": null,
+    "confidence": null
+  },
+  {
+    "text": "Abbey: A local client for conversation and tools.",
+    "startMs": 10000,
+    "endMs": 14000,
+    "timestampMs": null,
+    "confidence": null
+  },
+  {
+    "text": "Abbey Bot: Discord workflows with explicit controls.",
+    "startMs": 14000,
+    "endMs": 18000,
+    "timestampMs": null,
+    "confidence": null
+  },
+  {
+    "text": "Quesar / MLAI: Products, research and source boundaries.",
+    "startMs": 18000,
+    "endMs": 22000,
+    "timestampMs": null,
+    "confidence": null
+  },
+  {
+    "text": "WebPress: WP-IR connects editing, code and export.",
+    "startMs": 22000,
+    "endMs": 26000,
+    "timestampMs": null,
+    "confidence": null
+  },
+  {
+    "text": "Follow the source. Shape the next step.",
+    "startMs": 26000,
+    "endMs": 30000,
+    "timestampMs": null,
+    "confidence": null
+  }
+]

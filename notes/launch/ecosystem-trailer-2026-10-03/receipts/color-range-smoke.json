@@ -1,0 +1,11 @@
+{
+  "status": "Passed real 30-frame JPEG-to-H.264 encoding",
+  "source_renderer_sha256": "adb9b5a0640680f431ee0592846cbb9a466f2f6907e5aa2ec2a79ac0c264ba93",
+  "codec": "h264",
+  "pixel_format": "yuv420p",
+  "color_range": "tv",
+  "frames": 30,
+  "dimensions": [1920, 1080],
+  "duration_seconds": 1.0,
+  "exit_code": 0
+}

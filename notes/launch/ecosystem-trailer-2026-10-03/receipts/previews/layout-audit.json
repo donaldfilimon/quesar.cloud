@@ -1,0 +1,183 @@
+{
+  "90": [
+    {
+      "time": 3.5,
+      "image": "90s-opening.png",
+      "overflow": [],
+      "title": "Build with\nunderstanding.",
+      "caption": "An introduction to six projects and their distinct responsibilities."
+    },
+    {
+      "time": 13.0,
+      "image": "90s-wdbx.png",
+      "overflow": [],
+      "title": "Memory has\na history.",
+      "caption": "WDBX includes durable storage and a typed episode ledger."
+    },
+    {
+      "time": 25.0,
+      "image": "90s-abi.png",
+      "overflow": [],
+      "title": "Give intent\na structure.",
+      "caption": "ABI provides orchestration and inspectable capability boundaries."
+    },
+    {
+      "time": 37.0,
+      "image": "90s-abbey.png",
+      "overflow": [],
+      "title": "Keep the human\nin the work.",
+      "caption": "Abbey is a local CLI and TUI client built around ABI."
+    },
+    {
+      "time": 49.0,
+      "image": "90s-abbey-bot.png",
+      "overflow": [],
+      "title": "Meet the\nconversation.",
+      "caption": "Abbey Bot is the separate Discord service, with commands and permission checks."
+    },
+    {
+      "time": 61.0,
+      "image": "90s-quesar.png",
+      "overflow": [],
+      "title": "Explore\nthe work.",
+      "caption": "The Quesar / MLAI site presents products, research and implementation boundaries."
+    },
+    {
+      "time": 73.0,
+      "image": "90s-webpress.png",
+      "overflow": [],
+      "title": "One model.\nMany views.",
+      "caption": "WebPress uses WP-IR as the source for editing, code generation and export."
+    },
+    {
+      "time": 82.0,
+      "image": "90s-together.png",
+      "overflow": [],
+      "title": "Distinct roles.\nShared intent.",
+      "caption": "This is a conceptual map; integration and readiness remain project-specific."
+    },
+    {
+      "time": 87.5,
+      "image": "90s-closing.png",
+      "overflow": [],
+      "title": "Follow the source.\nShape the next step.",
+      "caption": "Follow the source. Shape the next step."
+    }
+  ],
+  "30": [
+    {
+      "time": 1.0,
+      "image": "30s-opening.png",
+      "overflow": [],
+      "title": "Six projects. One shared direction.",
+      "caption": "Six projects. One shared direction."
+    },
+    {
+      "time": 4.0,
+      "image": "30s-wdbx.png",
+      "overflow": [],
+      "title": "Durable records and typed episodes.",
+      "caption": "WDBX: Durable records and typed episodes."
+    },
+    {
+      "time": 8.0,
+      "image": "30s-abi.png",
+      "overflow": [],
+      "title": "Local orchestration. Explicit capabilities.",
+      "caption": "ABI: Local orchestration. Explicit capabilities."
+    },
+    {
+      "time": 12.0,
+      "image": "30s-abbey.png",
+      "overflow": [],
+      "title": "A local client for conversation and tools.",
+      "caption": "Abbey: A local client for conversation and tools."
+    },
+    {
+      "time": 16.0,
+      "image": "30s-abbey-bot.png",
+      "overflow": [],
+      "title": "Discord workflows with explicit controls.",
+      "caption": "Abbey Bot: Discord workflows with explicit controls."
+    },
+    {
+      "time": 20.0,
+      "image": "30s-quesar.png",
+      "overflow": [],
+      "title": "Products, research and source boundaries.",
+      "caption": "Quesar / MLAI: Products, research and source boundaries."
+    },
+    {
+      "time": 24.0,
+      "image": "30s-webpress.png",
+      "overflow": [],
+      "title": "WP-IR connects editing, code and export.",
+      "caption": "WebPress: WP-IR connects editing, code and export."
+    },
+    {
+      "time": 28.0,
+      "image": "30s-closing.png",
+      "overflow": [],
+      "title": "Follow the source. Shape the next step.",
+      "caption": "Follow the source. Shape the next step."
+    }
+  ],
+  "15": [
+    {
+      "time": 0.5,
+      "image": "15s-opening.png",
+      "overflow": [],
+      "title": "Six projects.",
+      "caption": "Six projects."
+    },
+    {
+      "time": 2.0,
+      "image": "15s-wdbx.png",
+      "overflow": [],
+      "title": "Durable storage.",
+      "caption": "WDBX: Durable storage."
+    },
+    {
+      "time": 4.0,
+      "image": "15s-abi.png",
+      "overflow": [],
+      "title": "Local orchestration.",
+      "caption": "ABI: Local orchestration."
+    },
+    {
+      "time": 6.0,
+      "image": "15s-abbey.png",
+      "overflow": [],
+      "title": "The local client.",
+      "caption": "Abbey: The local client."
+    },
+    {
+      "time": 8.0,
+      "image": "15s-abbey-bot.png",
+      "overflow": [],
+      "title": "The Discord service.",
+      "caption": "Abbey Bot: The Discord service."
+    },
+    {
+      "time": 10.0,
+      "image": "15s-quesar.png",
+      "overflow": [],
+      "title": "Explore the ecosystem.",
+      "caption": "Quesar / MLAI: Explore the ecosystem."
+    },
+    {
+      "time": 12.0,
+      "image": "15s-webpress.png",
+      "overflow": [],
+      "title": "Visual authoring.",
+      "caption": "WebPress: Visual authoring."
+    },
+    {
+      "time": 14.0,
+      "image": "15s-closing.png",
+      "overflow": [],
+      "title": "Follow the source.",
+      "caption": "Follow the source."
+    }
+  ]
+}

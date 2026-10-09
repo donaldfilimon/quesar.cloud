@@ -1,0 +1,16 @@
+E
+======================================================================
+ERROR: test_real_jpeg_pipeline_produces_limited_range_h264 (__main__.ColorRange.test_real_jpeg_pipeline_produces_limited_range_h264)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/donaldfilimon/dev/active/quesar.cloud/notes/launch/ecosystem-trailer-2026-10-03/test_color_range.py", line 41, in test_real_jpeg_pipeline_produces_limited_range_h264
+    renderer.check_probe(probe, 1)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/Users/donaldfilimon/dev/active/quesar.cloud/notes/launch/ecosystem-trailer-2026-10-03/render.py", line 301, in check_probe
+    raise ValueError(f"Video contract mismatch: {actual} != {expected}")
+ValueError: Video contract mismatch: (1920, 1080, 'h264', 'yuvj420p', '30/1', 30) != (1920, 1080, 'h264', 'yuv420p', '30/1', 30)
+
+----------------------------------------------------------------------
+Ran 1 test in 0.263s
+
+FAILED (errors=1)

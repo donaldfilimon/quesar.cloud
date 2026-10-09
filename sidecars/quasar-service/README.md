@@ -125,6 +125,22 @@ aligned when changing either copy. The standard service test gate includes the
 real Next smoke when template dependencies are installed; a skipped smoke is not
 proof of preview compatibility.
 
+## Event feed retention
+
+Event cursors contain an offset and a UUID stream epoch. Clients send both as
+`since` and `epoch`; missing or obsolete epochs replay the current feed from zero.
+Responses require an epoch, and the browser applies a page only when both parts
+of its captured request cursor still match. Replacement jobs and service restarts
+therefore replace the displayed feed even when event counts match.
+
+Only the latest stream per site is retained. The service keeps at most 128 inactive
+site feeds, evicting the oldest completion/creation first; polling does not extend
+retention. Running and draining jobs remain protected until terminal persistence
+and emission succeed. Successful site deletion removes its feed immediately.
+Reading an evicted feed creates an empty stream with a fresh epoch. Feed history
+is memory-only; the persisted job outcome remains available on the site record.
+This bounds obsolete feed count, not event bytes produced by an active job.
+
 ## Not verified
 
 A real end-to-end generation against the live Anthropic API has never run in

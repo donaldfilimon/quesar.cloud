@@ -1,0 +1,24 @@
+{
+  "status": "Pre-render focused checks passed; independent review pending",
+  "source_sha256": {
+    "render.py": "e6c49429e469caaab7d3e59019cc5b65d58a6b9b1496e9c4813a7a2646a60197",
+    "film.html": "44295adede6e2d27d8d19c237d182a682fca4e8308a3092cb94efe2aad9575f5",
+    "timeline.json": "b8f60570e4141264250e9a31ba6d5509be47f64b452741f6e7c6ae7cd835c313",
+    "claims.json": "17448d006c16e69d32ce3d19e4fe8a4054a90a5cebb7bad59986cdb6256d1318",
+    "STORYBOARD.md": "090c467701199fe05601513a23df570bf3c709194a5579d0d89dc2af9c63168b",
+    "README.md": "5e1a09232daad87545097bad513931e23f31d32968b3b17c21c96931de4760d1",
+    "test_render.py": "e46a8413a150969c316a30b642c1a97924c12947a6ff664adaa8a3127222c843"
+  },
+  "portable_tests": {
+    "passed": 6,
+    "exit_code": 0
+  },
+  "previewed_shots": 25,
+  "preview_text_overflow": [],
+  "burned_caption_sidecar_match": true,
+  "javascript_syntax_exit_code": 0,
+  "python_syntax": "parsed",
+  "scoped_prettier_exit_code": 0,
+  "preserved_original_file_count": 63,
+  "render_started": false
+}

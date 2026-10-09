@@ -1,0 +1,31 @@
+{
+  "status": "Range correction validated; independent review of exact correction pending",
+  "source_sha256": {
+    "render.py": "adb9b5a0640680f431ee0592846cbb9a466f2f6907e5aa2ec2a79ac0c264ba93",
+    "film.html": "44295adede6e2d27d8d19c237d182a682fca4e8308a3092cb94efe2aad9575f5",
+    "timeline.json": "b8f60570e4141264250e9a31ba6d5509be47f64b452741f6e7c6ae7cd835c313",
+    "claims.json": "17448d006c16e69d32ce3d19e4fe8a4054a90a5cebb7bad59986cdb6256d1318",
+    "STORYBOARD.md": "090c467701199fe05601513a23df570bf3c709194a5579d0d89dc2af9c63168b",
+    "README.md": "a20d39477671d352b4167bbb93820d7aa0a02622ddc2f36bc9263624359b0139",
+    "test_render.py": "5c85002ca58c5c5ba44b3aa1ba5611b235ecacca39020fcd8984c9fbdf59067e",
+    "test_color_range.py": "0da52357576c158000086faba3922be60715753bfc05200329c9e34717c3f147"
+  },
+  "portable_tests": {
+    "passed": 6,
+    "exit_code": 0
+  },
+  "previewed_shots": 25,
+  "preview_text_overflow": [],
+  "burned_caption_sidecar_match": true,
+  "javascript_syntax_exit_code": 0,
+  "python_syntax": "parsed",
+  "scoped_prettier_exit_code": 0,
+  "preserved_original_file_count": 63,
+  "render_started": false,
+  "real_ffmpeg_regressions": {
+    "passed": 1,
+    "exit_code": 0,
+    "pixel_format": "yuv420p",
+    "color_range": "tv"
+  }
+}

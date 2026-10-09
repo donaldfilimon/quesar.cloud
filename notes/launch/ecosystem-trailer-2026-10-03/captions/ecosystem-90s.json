@@ -1,0 +1,65 @@
+[
+  {
+    "text": "An introduction to six projects and their distinct responsibilities.",
+    "startMs": 0,
+    "endMs": 7000,
+    "timestampMs": null,
+    "confidence": null
+  },
+  {
+    "text": "WDBX includes durable storage and a typed episode ledger.",
+    "startMs": 7000,
+    "endMs": 19000,
+    "timestampMs": null,
+    "confidence": null
+  },
+  {
+    "text": "ABI provides orchestration and inspectable capability boundaries.",
+    "startMs": 19000,
+    "endMs": 31000,
+    "timestampMs": null,
+    "confidence": null
+  },
+  {
+    "text": "Abbey is a local CLI and TUI client built around ABI.",
+    "startMs": 31000,
+    "endMs": 43000,
+    "timestampMs": null,
+    "confidence": null
+  },
+  {
+    "text": "Abbey Bot is the separate Discord service, with commands and permission checks.",
+    "startMs": 43000,
+    "endMs": 55000,
+    "timestampMs": null,
+    "confidence": null
+  },
+  {
+    "text": "The Quesar / MLAI site presents products, research and implementation boundaries.",
+    "startMs": 55000,
+    "endMs": 67000,
+    "timestampMs": null,
+    "confidence": null
+  },
+  {
+    "text": "WebPress uses WP-IR as the source for editing, code generation and export.",
+    "startMs": 67000,
+    "endMs": 79000,
+    "timestampMs": null,
+    "confidence": null
+  },
+  {
+    "text": "This is a conceptual map; integration and readiness remain project-specific.",
+    "startMs": 79000,
+    "endMs": 85000,
+    "timestampMs": null,
+    "confidence": null
+  },
+  {
+    "text": "Follow the source. Shape the next step.",
+    "startMs": 85000,
+    "endMs": 90000,
+    "timestampMs": null,
+    "confidence": null
+  }
+]

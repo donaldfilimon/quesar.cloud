@@ -214,14 +214,15 @@ export class Connection {
   }
 }
 
-// A page is applied only at the cursor that requested it. A service restart can
-// reset the buffer; replace the old feed instead of retaining impossible cursors.
+// Bind a response to both parts of its captured request cursor. Equal offsets
+// from an obsolete epoch must not roll a replacement feed back.
 export function applyEventPage<T>(
   current: { events: T[]; next: number; epoch?: string },
   since: number,
   page: { events: T[]; next: number; epoch?: string },
+  requestedEpoch?: string,
 ) {
-  if (since !== current.next) return current;
+  if (since !== current.next || requestedEpoch !== current.epoch) return current;
   if (page.epoch && page.epoch !== current.epoch) return { events: page.events, next: page.next, epoch: page.epoch };
   if (page.next < since) return { events: page.events, next: page.next };
   return { events: [...current.events, ...page.events], next: page.next, ...(page.epoch ? { epoch: page.epoch } : {}) };

@@ -1,0 +1,1255 @@
+--- /dev/null
++++ scripts/package-brand.ts
+@@ -0,0 +1,263 @@
++/** Offline, bounded brand packaging. Inputs pin every copied byte; no downloads. */
++import { createHash } from "node:crypto";
++import { lstat, readFile, writeFile } from "node:fs/promises";
++import { resolve, join } from "node:path";
++import { fileURLToPath } from "node:url";
++import { gzipSync } from "node:zlib";
++import ts from "typescript";
++
++export interface BrandFile {
++  source: string;
++  path: string;
++  bytes: number;
++  sha256: string;
++}
++export interface BrandPackageInput {
++  schemaVersion: 1;
++  name: string;
++  usage: string;
++  files: BrandFile[];
++  references: { path: string; bytes: number; sha256: string; note: string }[];
++  markSource?: string;
++}
++const MAX_BYTES = 16 * 1024 * 1024;
++const hash = (data: Buffer) => createHash("sha256").update(data).digest("hex");
++function safePath(path: string) {
++  if (
++    typeof path !== "string" ||
++    !/^[A-Za-z0-9_@./-]+$/.test(path) ||
++    path.startsWith("/") ||
++    path.split("/").some((part) => !part || part === "." || part === "..")
++  )
++    throw new Error(`Invalid relative path: ${JSON.stringify(path)}`);
++}
++function metadata(file: { bytes: number; sha256: string }) {
++  if (!Number.isSafeInteger(file.bytes) || file.bytes < 0 || !/^[a-f0-9]{64}$/.test(file.sha256))
++    throw new Error("Invalid file metadata");
++}
++async function verifiedFile(root: string, file: BrandFile) {
++  safePath(file.source);
++  metadata(file);
++  if (file.bytes > MAX_BYTES) throw new Error(`Oversized source: ${file.source}`);
++  let current = root;
++  for (const part of file.source.split("/")) {
++    current = join(current, part);
++    if ((await lstat(current)).isSymbolicLink()) throw new Error(`Symlink source: ${file.source}`);
++  }
++  const stat = await lstat(current);
++  if (!stat.isFile() || stat.size !== file.bytes)
++    throw new Error(`Source size mismatch: ${file.source}`);
++  const data = await readFile(current);
++  if (data.length !== file.bytes || hash(data) !== file.sha256)
++    throw new Error(`Source hash mismatch: ${file.source}`);
++  return data;
++}
++
++/** Only literal SVG geometry is supported. Fail rather than evaluate changed JSX. */
++export function exportMarkSvg(source: string): string {
++  const tree = ts.createSourceFile(
++    "logo.tsx",
++    source,
++    ts.ScriptTarget.Latest,
++    true,
++    ts.ScriptKind.TSX,
++  );
++  const svgs: (ts.JsxElement | ts.JsxSelfClosingElement)[] = [];
++  const visit = (node: ts.Node) => {
++    if (
++      (ts.isJsxElement(node) && node.openingElement.tagName.getText(tree) === "svg") ||
++      (ts.isJsxSelfClosingElement(node) && node.tagName.getText(tree) === "svg")
++    )
++      svgs.push(node);
++    ts.forEachChild(node, visit);
++  };
++  visit(tree);
++  if (svgs.length !== 1) throw new Error("Expected exactly one literal SVG mark");
++  const names: Record<string, string> = {
++    viewBox: "viewBox",
++    fill: "fill",
++    d: "d",
++    stroke: "stroke",
++    strokeWidth: "stroke-width",
++    strokeLinecap: "stroke-linecap",
++    strokeLinejoin: "stroke-linejoin",
++    cx: "cx",
++    cy: "cy",
++    r: "r",
++  };
++  const escape = (value: string) =>
++    value
++      .replaceAll("&", "&amp;")
++      .replaceAll('"', "&quot;")
++      .replaceAll("<", "&lt;")
++      .replaceAll(">", "&gt;");
++  function render(node: ts.JsxElement | ts.JsxSelfClosingElement): string {
++    const opening = ts.isJsxElement(node) ? node.openingElement : node;
++    const tag = opening.tagName.getText(tree);
++    if (!["svg", "path", "circle"].includes(tag)) throw new Error(`Unexpected SVG tag: ${tag}`);
++    const attributes: string[] = [];
++    for (const attribute of opening.attributes.properties) {
++      if (
++        !ts.isJsxAttribute(attribute) ||
++        !attribute.initializer ||
++        !ts.isStringLiteral(attribute.initializer)
++      )
++        throw new Error("Dynamic SVG attributes are not supported");
++      const name = attribute.name.getText(tree);
++      if (name === "className" && tag === "svg") continue; // Site display size; geometry remains in viewBox units.
++      if (!names[name]) throw new Error(`Unexpected SVG attribute: ${name}`);
++      if (/url\s*\(/i.test(attribute.initializer.text))
++        throw new Error("External SVG paint is not supported");
++      attributes.push(`${names[name]}="${escape(attribute.initializer.text)}"`);
++    }
++    if (tag === "svg") attributes.unshift('xmlns="http://www.w3.org/2000/svg"');
++    let children = "";
++    if (ts.isJsxElement(node)) {
++      for (const child of node.children) {
++        if (ts.isJsxText(child) && !child.text.trim()) continue;
++        if (!ts.isJsxElement(child) && !ts.isJsxSelfClosingElement(child))
++          throw new Error("Dynamic SVG children are not supported");
++        children += render(child);
++      }
++    }
++    return `<${tag} ${attributes.join(" ")}>${children}</${tag}>`;
++  }
++  return `${render(svgs[0])}\n`;
++}
++
++function tar(entries: Map<string, Buffer>) {
++  const chunks: Buffer[] = [];
++  for (const [path, data] of [...entries].sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))) {
++    const name = `quesar-brand/${path}`;
++    if (Buffer.byteLength(name) > 100) throw new Error(`Archive path is too long: ${path}`);
++    const header = Buffer.alloc(512);
++    header.write(name, 0, 100, "ascii");
++    const octal = (value: number, offset: number, width: number) => {
++      const digits = value.toString(8).padStart(width - 1, "0");
++      if (digits.length >= width) throw new Error("Tar field overflow");
++      header.write(`${digits}\0`, offset, width, "ascii");
++    };
++    octal(0o644, 100, 8);
++    octal(0, 108, 8); // uid/gid and mtime deliberately stable.
++    octal(0, 116, 8);
++    octal(data.length, 124, 12);
++    octal(0, 136, 12);
++    header.fill(32, 148, 156);
++    header.write("0", 156);
++    header.write("ustar\0", 257);
++    header.write("00", 263);
++    const checksum = header.reduce((sum, byte) => sum + byte, 0);
++    header.write(`${checksum.toString(8).padStart(6, "0")}\0 `, 148, 8, "ascii");
++    chunks.push(header, data, Buffer.alloc((512 - (data.length % 512)) % 512));
++  }
++  chunks.push(Buffer.alloc(1024));
++  return gzipSync(Buffer.concat(chunks), { level: 9 });
++}
++
++export async function buildBrandArchive(root: string, input: BrandPackageInput) {
++  if (Buffer.byteLength(JSON.stringify(input)) > 256 * 1024)
++    throw new Error("Package metadata exceeds 256 KiB bound");
++  if (
++    input.schemaVersion !== 1 ||
++    typeof input.name !== "string" ||
++    typeof input.usage !== "string" ||
++    !Array.isArray(input.files) ||
++    input.files.length > 128 ||
++    !Array.isArray(input.references) ||
++    input.references.length > 128
++  )
++    throw new Error("Invalid package metadata");
++  const entries = new Map<string, Buffer>();
++  const used = new Set(["distribution.json", "sha256sums"]);
++  const sources = new Map<string, Buffer>();
++  let total = 0;
++  const add = (path: string, data: Buffer) => {
++    safePath(path);
++    if (used.has(path.toLowerCase())) throw new Error(`Duplicate archive path: ${path}`);
++    if (
++      [...used].some(
++        (prior) =>
++          path.toLowerCase().startsWith(`${prior}/`) || prior.startsWith(`${path.toLowerCase()}/`),
++      )
++    )
++      throw new Error(`Archive file/directory path conflict: ${path}`);
++    used.add(path.toLowerCase());
++    total += data.length;
++    if (total > MAX_BYTES) throw new Error("Brand package exceeds 16 MiB bound");
++    entries.set(path, data);
++  };
++  const files = [];
++  for (const file of [...input.files].sort((a, b) =>
++    a.path < b.path ? -1 : a.path > b.path ? 1 : 0,
++  )) {
++    safePath(file.path);
++    const data = await verifiedFile(resolve(root), file);
++    add(file.path, data);
++    sources.set(file.source, data);
++    files.push({ path: file.path, source: file.source, bytes: data.length, sha256: hash(data) });
++  }
++  if (input.markSource) {
++    const source = sources.get(input.markSource);
++    if (!source) throw new Error("Mark source must be a verified packaged input");
++    const data = Buffer.from(exportMarkSvg(source.toString("utf8")));
++    const path = "identity/site-mark.svg";
++    add(path, data);
++    files.push({ path, source: input.markSource, bytes: data.length, sha256: hash(data) });
++  }
++  const references = input.references
++    .map((reference) => {
++      safePath(reference.path);
++      metadata(reference);
++      if (typeof reference.note !== "string") throw new Error("Invalid reference metadata");
++      return {
++        path: reference.path,
++        bytes: reference.bytes,
++        sha256: reference.sha256,
++        note: reference.note,
++      };
++    })
++    .sort((a, b) => (a.path < b.path ? -1 : a.path > b.path ? 1 : 0));
++  const manifest = {
++    schemaVersion: 1,
++    name: input.name,
++    usage: input.usage,
++    archive: { format: "ustar+gzip", uid: 0, gid: 0, mtime: 0, fileMode: "0644" },
++    markExport: input.markSource
++      ? "Exact literal SVG geometry; currentColor; CSS badge and live wordmark remain in source."
++      : null,
++    files: files.sort((a, b) => (a.path < b.path ? -1 : a.path > b.path ? 1 : 0)),
++    references,
++  };
++  entries.set("distribution.json", Buffer.from(`${JSON.stringify(manifest, null, 2)}\n`));
++  const sums = [...entries]
++    .sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))
++    .map(([path, data]) => `${hash(data)}  ${path}\n`)
++    .join("");
++  entries.set("SHA256SUMS", Buffer.from(sums));
++  if ([...entries.values()].reduce((size, data) => size + data.length, 0) > MAX_BYTES)
++    throw new Error("Brand package exceeds 16 MiB bound");
++  const archive = tar(entries);
++  return { archive, manifest, sha256: hash(archive) };
++}
++
++if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
++  const [inputPath, outputPath, ...extra] = process.argv.slice(2);
++  if (!inputPath || !outputPath || extra.length)
++    throw new Error("Usage: node scripts/package-brand.ts <inputs.json> <new-output.tar.gz>");
++  const input = JSON.parse(await readFile(inputPath, "utf8")) as BrandPackageInput;
++  const result = await buildBrandArchive(fileURLToPath(new URL("../", import.meta.url)), input);
++  await writeFile(outputPath, result.archive, { flag: "wx" });
++  console.log(
++    JSON.stringify(
++      {
++        output: outputPath,
++        bytes: result.archive.length,
++        sha256: result.sha256,
++        files: result.manifest.files.length,
++        references: result.manifest.references.length,
++      },
++      null,
++      2,
++    ),
++  );
++}
+--- /dev/null
++++ scripts/package-brand.test.ts
+@@ -0,0 +1,138 @@
++import { mkdtemp, mkdir, readFile, rm, symlink, utimes, writeFile } from "node:fs/promises";
++import { tmpdir } from "node:os";
++import { join } from "node:path";
++import { createHash } from "node:crypto";
++import { gunzipSync } from "node:zlib";
++import { afterEach, describe, expect, it } from "vitest";
++import { buildBrandArchive, exportMarkSvg, type BrandPackageInput } from "./package-brand.ts";
++
++const roots: string[] = [];
++const hash = (value: string | Buffer) => createHash("sha256").update(value).digest("hex");
++async function fixture() {
++  const root = await mkdtemp(join(tmpdir(), "quesar-brand-test-"));
++  roots.push(root);
++  await mkdir(join(root, "src"));
++  await writeFile(join(root, "src/brand.txt"), "Quesar\n");
++  const input: BrandPackageInput = {
++    schemaVersion: 1,
++    name: "Quesar local brand distribution",
++    usage: "Local authorized review; no public reuse license inferred.",
++    files: [
++      { source: "src/brand.txt", path: "sources/brand.txt", bytes: 7, sha256: hash("Quesar\n") },
++    ],
++    references: [],
++  };
++  return { root, input };
++}
++afterEach(async () => {
++  await Promise.all(roots.splice(0).map((root) => rm(root, { recursive: true, force: true })));
++});
++
++describe("brand distribution", () => {
++  it("is deterministic across input order and source metadata; records actual hashes", async () => {
++    const { root, input } = await fixture();
++    await writeFile(join(root, "src/second.txt"), "second");
++    input.files.push({
++      source: "src/second.txt",
++      path: "sources/second.txt",
++      bytes: 6,
++      sha256: hash("second"),
++    });
++    const first = await buildBrandArchive(root, input);
++    await utimes(join(root, "src/brand.txt"), new Date(0), new Date(0));
++    const second = await buildBrandArchive(root, { ...input, files: [...input.files].reverse() });
++    expect(second.archive.equals(first.archive)).toBe(true);
++    expect(first.manifest.files.find((file) => file.path === "sources/brand.txt")?.sha256).toBe(
++      hash("Quesar\n"),
++    );
++    const tar = gunzipSync(first.archive);
++    expect(tar.toString()).toContain("quesar-brand/SHA256SUMS");
++    expect(tar.toString()).toContain("Quesar\n");
++    expect(tar.subarray(-1024).equals(Buffer.alloc(1024))).toBe(true);
++  });
++  it.each([
++    "../secret",
++    "/absolute",
++    "C:/drive",
++    "src/../brand.txt",
++    "src\\brand.txt",
++    "src//brand.txt",
++    "src/./brand.txt",
++    "src/\0bad",
++  ])("rejects source traversal or ambiguous path %s", async (source) => {
++    const { root, input } = await fixture();
++    input.files[0].source = source;
++    await expect(buildBrandArchive(root, input)).rejects.toThrow(/path/i);
++  });
++  it("rejects archive traversal and case-insensitive collisions", async () => {
++    const { root, input } = await fixture();
++    input.files[0].path = "../escape";
++    await expect(buildBrandArchive(root, input)).rejects.toThrow(/path/i);
++    input.files[0].path = "sources/Brand.txt";
++    input.files.push({ ...input.files[0], path: "sources/brand.txt" });
++    await expect(buildBrandArchive(root, input)).rejects.toThrow(/duplicate/i);
++  });
++  it("rejects missing, changed and truncated sources before generating an archive", async () => {
++    const { root, input } = await fixture();
++    await writeFile(join(root, "src/brand.txt"), "Changed");
++    await expect(buildBrandArchive(root, input)).rejects.toThrow(/hash/i);
++    await writeFile(join(root, "src/brand.txt"), "short");
++    await expect(buildBrandArchive(root, input)).rejects.toThrow(/size/i);
++    await rm(join(root, "src/brand.txt"));
++    await expect(buildBrandArchive(root, input)).rejects.toThrow(/ENOENT/);
++  });
++  it("rejects symlink files and parent directories", async () => {
++    const { root, input } = await fixture();
++    await symlink(join(root, "src/brand.txt"), join(root, "linked.txt"));
++    input.files[0].source = "linked.txt";
++    await expect(buildBrandArchive(root, input)).rejects.toThrow(/symlink/i);
++    await symlink(join(root, "src"), join(root, "linked"));
++    input.files[0].source = "linked/brand.txt";
++    await expect(buildBrandArchive(root, input)).rejects.toThrow(/symlink/i);
++  });
++  it("rejects malformed metadata and reserved output names", async () => {
++    const { root, input } = await fixture();
++    input.files[0].bytes = -1;
++    await expect(buildBrandArchive(root, input)).rejects.toThrow(/metadata/i);
++    input.files[0].bytes = 7;
++    input.files[0].path = "distribution.json";
++    await expect(buildBrandArchive(root, input)).rejects.toThrow(/duplicate/i);
++  });
++  it("rejects file/directory path conflicts and oversized reference metadata", async () => {
++    const { root, input } = await fixture();
++    input.files.push({ ...input.files[0], path: "sources/brand.txt/nested" });
++    await expect(buildBrandArchive(root, input)).rejects.toThrow(/conflict/i);
++    input.files.pop();
++    input.references.push({
++      path: "public/video.mp4",
++      bytes: 7,
++      sha256: hash("Quesar\n"),
++      note: "x".repeat(262144),
++    });
++    await expect(buildBrandArchive(root, input)).rejects.toThrow(/metadata/i);
++  });
++});
++
++describe("exact mark export", () => {
++  it("exports the current component's literal geometry without tracing", async () => {
++    const source = await readFile(
++      new URL("../src/components/site/logo.tsx", import.meta.url),
++      "utf8",
++    );
++    const svg = exportMarkSvg(source);
++    expect(svg).toContain('viewBox="0 0 32 32"');
++    expect(svg).toContain('d="M8 23 L8 10 L16 16 L24 10 L24 23"');
++    expect(svg.match(/<circle /g)).toHaveLength(5);
++    expect(svg).toContain('stroke-width="2"');
++    expect(svg).not.toContain("className");
++  });
++  it.each([
++    "const mark = <svg><path d={value}/></svg>;",
++    "const mark = <svg><script>bad</script></svg>;",
++    'const mark = <svg onLoad="bad"/>;',
++    'const mark = <svg><image href="remote"/></svg>;',
++    "const mark = <><svg/><svg/></>;",
++  ])("fails closed on dynamic or unexpected SVG source", (source) => {
++    expect(() => exportMarkSvg(source)).toThrow();
++  });
++});
+--- /dev/null
++++ notes/verification/2026-10-03-brand-distribution-README.md
+@@ -0,0 +1,38 @@
++# Quesar local brand distribution
++
++A reproducible local snapshot of the existing Quesar by MLAI identity, prepared on 2026-10-03. This package exports source-backed assets; it does not introduce a new identity or assert final creative, legal, or claims approval. No publication was performed.
++
++## Start here
++
++- `identity/site-mark.svg`: exact literal weighted-graph M geometry exported from `sources/src/components/site/logo.tsx`. It keeps the 32×32 viewBox and `currentColor`; the site's 21px display size, 32px rounded CSS badge, theme accent and border shadow remain defined by the original component and site CSS. This is an exact geometry export, not a newly approved master or a complete logo lockup.
++- `public/favicon.svg` and `public/apple-touch-icon.png`: existing application icons, copied unchanged. The nested-square favicon is distinct from the weighted-graph M.
++- `sources/src/components/site/logo.tsx`: canonical wordmark and lockup source. “Quesar” is live Space Grotesk text (bold, 1.05rem, tight tracking), with the optional “by MLAI” attribution. No outlined wordmark or separate approved master was found; none was fabricated.
++- `GUIDELINES.md`: narrative, palette, typography and motion guidance with exact source locations.
++- `public/og/` and `public/media/rooms/`: existing social cards and six room posters, copied without regeneration or claims approval.
++- `fonts/`: exactly the local Fontsource CSS and font files used by the site imports, plus each package's complete original LICENSE, metadata and package provenance. Space Grotesk Variable and IBM Plex Sans Variable use their current normal variable files; IBM Plex Mono uses weights 400 and 500, including the subsets and fallback files referenced by those CSS files.
++- `inventory/source-inventory.json`: original 77-file brand inventory. Canonical repo paths and public URLs are references, not promises that every entry is included here.
++
++The films and teaser videos are referenced with their source sizes and SHA-256 values in `distribution.json`; they remain in the canonical checkout's `public/media/` and are not duplicated in this compact identity package. The six full narrated films, transcripts and captions are accessible through `notes/verification/2026-10-03-film-review.html` in that checkout. Technical film verification does not imply human listening approval.
++
++## Rights and approval boundaries
++
++This is a local package prepared under the repository owner's task authorization. No repository-wide license or separate trademark/brand reuse grant was found. Public visibility is not a redistribution license. Do not infer permission to publish, sublicense, sell or broadly redistribute the Quesar/MLAI assets, source snapshots, social cards or posters from this archive. Confirm the applicable rights and final design/claims approval before external release. Authorship and ownership have not been independently established.
++
++The bundled Fontsource font software is identified locally as SIL Open Font License 1.1. The complete copyright and OFL text accompanies each family at `fonts/<family>/LICENSE`; keep those notices with copies and follow their terms. These font licenses do not license the surrounding brand. No font binaries were modified and no network download occurred.
++
++`public/manifest.webmanifest` is preserved as historical/current application source. Its embedded older theme colors and description do not override the current brand tagline or site CSS. `sources/src/cinematic/film/tokens.ts` records the film-specific palette and personas, not the site-wide color authority. Older design-board tokens are not included as authority.
++
++## Verify and reproduce
++
++Extract `quesar-brand/` with a standard tar reader. From inside it run `shasum -a 256 -c SHA256SUMS`. `distribution.json` lists copied and derived files, exact hashes, original paths and separate media references. SHA256SUMS includes distribution.json and every payload file, excluding itself.
++
++In the canonical checkout, with its existing dependencies installed, reproduce to a fresh output path:
++
++```sh
++node scripts/package-brand.ts notes/verification/2026-10-03-brand-package-inputs.json /tmp/quesar-brand-reproduced.tar.gz
++shasum -a 256 /tmp/quesar-brand-reproduced.tar.gz notes/verification/brand-distribution-2026-10-03.tar.gz
++```
++
++The packager refuses existing output files. It validates all copied input sizes/hashes, rejects traversal, symlinks and duplicate paths, exports only literal allowed SVG geometry, and bounds the payload to 16 MiB. Archive paths are sorted; file modes, owner IDs and timestamps are fixed. Identical pinned bytes and packager/runtime produce identical archive bytes. Cross-version gzip reproducibility is not asserted; the verification receipt records the actual Node and zlib versions used.
++
++Missing, changed or unapproved inputs fail explicitly. Update the input manifest deliberately after reviewing a source change; do not weaken hash checks. No live site, film artifact or identity source is modified by packaging.
+--- /dev/null
++++ notes/verification/2026-10-03-brand-distribution-guidelines.md
+@@ -0,0 +1,53 @@
++# Existing Quesar identity: use and source map
++
++This is a source-backed snapshot, not a redesign or additional claims approval. Paths below are the original canonical repository paths; copies included here are under `sources/` unless marked `public/`.
++
++## Narrative
++
++Quesar by MLAI uses **Private AI operations.** Abbey/ABI own **Intelligence Without Limits**, accompanied by their claims ledger; do not put that line on Quesar's hero or default OG card. Do not interpret IWL as unlimited capability or AGI. Preserve Current, Partial, Proposed and vision/roadmap boundaries. Authority: `notes/mlai/brand.md` and `src/lib/site-identity.ts`.
++
++## Mark and wordmark
++
++`src/components/site/logo.tsx` is the authority: a weighted-graph M, with the path M8 23 → 8 10 → 16 16 → 24 10 → 24 23 and five weighted nodes. The exported SVG preserves those literal elements. Color is `currentColor`, inherited from the site accent. The surrounding badge and typography are CSS, not part of the SVG geometry.
++
++The text lockup says Quesar / by MLAI. Preserve the component's spacing and typography rather than inventing outlined lettering. The favicon is a separate nested-square application icon. No minimum-size, print-safe area, trademark permission or standalone outlined master has been found in the reviewed sources; those specifications require an approved decision.
++
++## Colors
++
++Authority: `src/styles.css`, light `:root, [data-theme="light"]` block and dark `[data-theme="dark"], .mlai-ds` block. `src/cinematic/design/mlai-ds-tokens.css` maps cinematic roles to these tokens.
++
++| Role | Light | Dark |
++| --- | --- | --- |
++| Background | #f8fafc | #050508 |
++| Foreground | #111827 | #f8fafc |
++| Card | #ffffff | #0d111b |
++| Primary / chain accent | #086b89 | #00d4ff |
++| Primary foreground | #f8fafc | #02151a |
++| Muted foreground | #526174 | #a9b7cb |
++| Border | #d6dee8 | #253044 |
++| Abbey / current | #2e6b4a | #7fc49b |
++| Aviva / ABI product accent | #6d28d9 | #b69aff |
++| Warning / partial | #8a5a12 | #e0b060 |
++
++The persona ABI token uses the primary chain accent. Product ABI's separate accent uses violet. Preserve these roles instead of merging them. Scope matters: the film-specific `src/cinematic/film/tokens.ts` palette is existing cinematic source, and older design-board values do not override the site.
++
++## Typography
++
++Authority: the imports and `@theme inline` families in `src/styles.css`.
++
++- Display/headings: **Space Grotesk Variable**, then UI/system sans fallback.
++- Body: **IBM Plex Sans Variable**, then UI/system sans fallback.
++- Code/labels: **IBM Plex Mono**, then UI mono, SF Mono, Menlo, Consolas.
++
++The current cinematic mapping inherits these families. Its display leading is 1.02 and tracking −0.03em; normal leading is 1.6. Preserve source-specific sizes and weights instead of applying cinematic title settings to every page. Bundled fonts include unmodified package CSS and their original OFL notices. No substitute font or font redrawing was introduced.
++
++## Motion
++
++Authority: `src/styles.css` and `src/cinematic/design/mlai-ds-tokens.css`.
++
++- Shared ease-out: cubic-bezier(0.22, 1, 0.36, 1). Cinematic ease-in-out: cubic-bezier(0.65, 0, 0.35, 1).
++- Cinematic duration tokens: fast 180ms, base 300ms, slow 500ms.
++- Home provenance chain: 900ms with 150ms delay, disabled under prefers-reduced-motion.
++- Existing chip interaction: 180ms; flow-line dash: 1.9s linear. Reduced motion disables the flow animation and chip transforms.
++
++These are documented existing behaviors, not permission to animate every brand application. Native controls, keyboard access, readable contrast and reduced-motion behavior remain part of site acceptance. Films keep captions and transcripts. The package does not add animation to the exported mark.
+--- /dev/null
++++ notes/verification/2026-10-03-brand-package-inputs.json
+@@ -0,0 +1,748 @@
++{
++  "schemaVersion": 1,
++  "name": "Quesar local brand distribution \u2014 2026-10-03",
++  "usage": "Local authorized review/use only. No repository-wide brand/source redistribution license inferred. Bundled font licenses apply only to the font software; preserve original notices. Final design/claims and external-release approval not asserted.",
++  "files": [
++    {
++      "source": "notes/mlai/brand.md",
++      "path": "sources/notes/mlai/brand.md",
++      "bytes": 981,
++      "sha256": "4776602856f11fe4ad1b73461bc8c96faf23e618efcd783c68a11fa1fa45357a"
++    },
++    {
++      "source": "src/lib/site-identity.ts",
++      "path": "sources/src/lib/site-identity.ts",
++      "bytes": 1245,
++      "sha256": "25a6021f1a0ebb403e6d6279ffeae9a7308dd80343bbb55e8abcb625d6e56475"
++    },
++    {
++      "source": "src/styles.css",
++      "path": "sources/src/styles.css",
++      "bytes": 15308,
++      "sha256": "f726c12265d16a1f5f08816594b506d24cd519f03baf248c41bb1bd188eed987"
++    },
++    {
++      "source": "src/cinematic/design/mlai-ds-tokens.css",
++      "path": "sources/src/cinematic/design/mlai-ds-tokens.css",
++      "bytes": 7967,
++      "sha256": "09889dc06f54bba0813c396958388dac3fb2b6e7519ec7b9bc6981098fcd68ed"
++    },
++    {
++      "source": "src/cinematic/film/tokens.ts",
++      "path": "sources/src/cinematic/film/tokens.ts",
++      "bytes": 2221,
++      "sha256": "bf84d6852eda7a317f6de60d8d825a36ad33efc8ab177ed86a48fa2b0d1f1ab6"
++    },
++    {
++      "source": "src/components/site/logo.tsx",
++      "path": "sources/src/components/site/logo.tsx",
++      "bytes": 1638,
++      "sha256": "dfe6c0420d9acbc5d6c501843af98adab34775a2dc9858669d985505523c58b3"
++    },
++    {
++      "source": "public/favicon.svg",
++      "path": "public/favicon.svg",
++      "bytes": 324,
++      "sha256": "03a8fc2c31aa23d849cae27a2c9178b8248243c73ce737e261d1e7eb0f5525f5"
++    },
++    {
++      "source": "public/apple-touch-icon.png",
++      "path": "public/apple-touch-icon.png",
++      "bytes": 2100,
++      "sha256": "3cf5d17d294b51c6cca6c86070309b88554b7ad702b0412e8e2709a01990bc8a"
++    },
++    {
++      "source": "public/manifest.webmanifest",
++      "path": "public/manifest.webmanifest",
++      "bytes": 425,
++      "sha256": "c97a54d4c3c2886f777a645394d39abe33aab2e1e957f560f26b49dafcfc6d8c"
++    },
++    {
++      "source": "public/og/abbey.jpg",
++      "path": "public/og/abbey.jpg",
++      "bytes": 49522,
++      "sha256": "fd7d6df734a3046eb19e3b85ebf1783311afcdd55b51ef03622b0d586d5f9749"
++    },
++    {
++      "source": "public/og/abi.jpg",
++      "path": "public/og/abi.jpg",
++      "bytes": 47390,
++      "sha256": "0c01181c141badb8dbaa043d5d5c1a44f1aade531a5402ef4c0faafc68064d9d"
++    },
++    {
++      "source": "public/og/docs.jpg",
++      "path": "public/og/docs.jpg",
++      "bytes": 47527,
++      "sha256": "061f2b03b1833b9ca0801081516632ce3ce7b6a0ba25934e1aedd1b33661a56a"
++    },
++    {
++      "source": "public/og/platform.jpg",
++      "path": "public/og/platform.jpg",
++      "bytes": 51627,
++      "sha256": "1dcba3f8b8280ccd0ea9bef786e1359b83f2346bc157d7bf1d7e704b5f500ffe"
++    },
++    {
++      "source": "public/og/quesar.jpg",
++      "path": "public/og/quesar.jpg",
++      "bytes": 54185,
++      "sha256": "bccba0120602588380707d0c962e95c950277122a0df04f4636aecb293bf3b8c"
++    },
++    {
++      "source": "public/og/research.jpg",
++      "path": "public/og/research.jpg",
++      "bytes": 54704,
++      "sha256": "6470688cf396b399805c967e711b4d214251c2bc8b852d78d4192f7efecabe63"
++    },
++    {
++      "source": "public/og/showcase.jpg",
++      "path": "public/og/showcase.jpg",
++      "bytes": 57665,
++      "sha256": "a891684d78666b9071ffd8c0440595ebeba14f6601b1cd66c6aa82c611c765fb"
++    },
++    {
++      "source": "public/og/wdbx.jpg",
++      "path": "public/og/wdbx.jpg",
++      "bytes": 53069,
++      "sha256": "5826856f29e241c270b784e52d0adf6c6090778b7d04fca01147f1c08c2bac99"
++    },
++    {
++      "source": "public/media/rooms/film.webp",
++      "path": "public/media/rooms/film.webp",
++      "bytes": 12092,
++      "sha256": "dfb12ce36b3a7fe4b9563365736c0f5733215441d0b83a34f5207587df88dc72"
++    },
++    {
++      "source": "public/media/rooms/trailer.webp",
++      "path": "public/media/rooms/trailer.webp",
++      "bytes": 4182,
++      "sha256": "a1c59044b73eea77aa928eb7eaf58f0a107c54bd0aee662431d1201b51130187"
++    },
++    {
++      "source": "public/media/rooms/abbey.webp",
++      "path": "public/media/rooms/abbey.webp",
++      "bytes": 10994,
++      "sha256": "4bc5e88e6346e5042ca8f40b30139dc378667b13f45c39158402321103185947"
++    },
++    {
++      "source": "public/media/rooms/explainer.webp",
++      "path": "public/media/rooms/explainer.webp",
++      "bytes": 32304,
++      "sha256": "1f4f7d16def0ee4aa0bb44c44f3acd8e489da8e2bf64a7ab980fd66d4c7da6d6"
++    },
++    {
++      "source": "public/media/rooms/mega.webp",
++      "path": "public/media/rooms/mega.webp",
++      "bytes": 41836,
++      "sha256": "8a10830d15e2ec996ef4c8c7f402edc85e87cc5c726c04acf819ad2c0f8fa3bc"
++    },
++    {
++      "source": "public/media/rooms/design.webp",
++      "path": "public/media/rooms/design.webp",
++      "bytes": 11834,
++      "sha256": "b65d253f187c8a1c310e24f6a052c2368a2770e60e16dc1bb6ff2c7f1d90ae5d"
++    },
++    {
++      "source": "node_modules/@fontsource-variable/space-grotesk/LICENSE",
++      "path": "fonts/space-grotesk/LICENSE",
++      "bytes": 4401,
++      "sha256": "18a4de52385f6b988782639d5d0cc1326e5a8c2de9a7f01d7b20d9aedcc60943"
++    },
++    {
++      "source": "node_modules/@fontsource-variable/space-grotesk/files/space-grotesk-latin-ext-wght-normal.woff2",
++      "path": "fonts/space-grotesk/files/space-grotesk-latin-ext-wght-normal.woff2",
++      "bytes": 18940,
++      "sha256": "952dddb45d2f96f71cbf3b7f510b24379afc3c89ea02fcf89d377b45d62c0166"
++    },
++    {
++      "source": "node_modules/@fontsource-variable/space-grotesk/files/space-grotesk-latin-wght-normal.woff2",
++      "path": "fonts/space-grotesk/files/space-grotesk-latin-wght-normal.woff2",
++      "bytes": 22288,
++      "sha256": "0640890476fc1198ab4de571fb658de443c4d85b66466ec09534a8737ab1ce9d"
++    },
++    {
++      "source": "node_modules/@fontsource-variable/space-grotesk/files/space-grotesk-vietnamese-wght-normal.woff2",
++      "path": "fonts/space-grotesk/files/space-grotesk-vietnamese-wght-normal.woff2",
++      "bytes": 6712,
++      "sha256": "8895e3d49825128bfa5238e4c96e9b432d7a3dadbe5c17c6081267398305dc71"
++    },
++    {
++      "source": "node_modules/@fontsource-variable/space-grotesk/index.css",
++      "path": "fonts/space-grotesk/index.css",
++      "bytes": 1290,
++      "sha256": "c5596e3b99240df949843d1fa005f85642ebebd23969e6019d1252fe60231773"
++    },
++    {
++      "source": "node_modules/@fontsource-variable/space-grotesk/metadata.json",
++      "path": "fonts/space-grotesk/metadata.json",
++      "bytes": 640,
++      "sha256": "dbe18757008ad3d0b4502002e3f0907ad59cab8002305fd29f63fdefbdbd22ba"
++    },
++    {
++      "source": "node_modules/@fontsource-variable/space-grotesk/package.json",
++      "path": "fonts/space-grotesk/package.json",
++      "bytes": 1505,
++      "sha256": "e14df6ba77ac37d6c607c5b62c1e1fcf8f936de50c272190884082bb2eeef2cc"
++    },
++    {
++      "source": "node_modules/@fontsource-variable/ibm-plex-sans/LICENSE",
++      "path": "fonts/ibm-plex-sans/LICENSE",
++      "bytes": 4429,
++      "sha256": "d0283623ef57e722fd0eb688a8041589670c608ab780cd3612d06ba6f153d3fd"
++    },
++    {
++      "source": "node_modules/@fontsource-variable/ibm-plex-sans/files/ibm-plex-sans-cyrillic-ext-wght-normal.woff2",
++      "path": "fonts/ibm-plex-sans/files/ibm-plex-sans-cyrillic-ext-wght-normal.woff2",
++      "bytes": 23568,
++      "sha256": "7d0037a170882a49e65a45c38ef195237bb07b1cc791d078379f0ac0d7ae1935"
++    },
++    {
++      "source": "node_modules/@fontsource-variable/ibm-plex-sans/files/ibm-plex-sans-cyrillic-wght-normal.woff2",
++      "path": "fonts/ibm-plex-sans/files/ibm-plex-sans-cyrillic-wght-normal.woff2",
++      "bytes": 29512,
++      "sha256": "9409ee21811f0f5272b7e1d828fe8838005b0573481ef906e7e55b63f6610ab0"
++    },
++    {
++      "source": "node_modules/@fontsource-variable/ibm-plex-sans/files/ibm-plex-sans-greek-wght-normal.woff2",
++      "path": "fonts/ibm-plex-sans/files/ibm-plex-sans-greek-wght-normal.woff2",
++      "bytes": 19500,
++      "sha256": "f598dd0700f155e2facfaa8ecfacace397d4c2c153e9ce37ab7ad310e8505bc2"
++    },
++    {
++      "source": "node_modules/@fontsource-variable/ibm-plex-sans/files/ibm-plex-sans-latin-ext-wght-normal.woff2",
++      "path": "fonts/ibm-plex-sans/files/ibm-plex-sans-latin-ext-wght-normal.woff2",
++      "bytes": 30964,
++      "sha256": "d160e20920ae4d6556518d352d3af27a74e9b0de3d8fe17b1c1044fc75aa2f81"
++    },
++    {
++      "source": "node_modules/@fontsource-variable/ibm-plex-sans/files/ibm-plex-sans-latin-wght-normal.woff2",
++      "path": "fonts/ibm-plex-sans/files/ibm-plex-sans-latin-wght-normal.woff2",
++      "bytes": 45712,
++      "sha256": "e2291e842cf5af167122a22881a740c7f2dda7716f1e8cd76680264f4a859470"
++    },
++    {
++      "source": "node_modules/@fontsource-variable/ibm-plex-sans/files/ibm-plex-sans-vietnamese-wght-normal.woff2",
++      "path": "fonts/ibm-plex-sans/files/ibm-plex-sans-vietnamese-wght-normal.woff2",
++      "bytes": 13160,
++      "sha256": "73e7f7b1c980416ae0c2461268b14c7cfcce0668e683dc43fbb11a82a227b9f2"
++    },
++    {
++      "source": "node_modules/@fontsource-variable/ibm-plex-sans/index.css",
++      "path": "fonts/ibm-plex-sans/index.css",
++      "bytes": 2295,
++      "sha256": "c10c5be20da047104a63777df4fb430f065ad8ce65e26e4ff69558b41abfbe59"
++    },
++    {
++      "source": "node_modules/@fontsource-variable/ibm-plex-sans/metadata.json",
++      "path": "fonts/ibm-plex-sans/metadata.json",
++      "bytes": 894,
++      "sha256": "eb30869fb4bbb74fd140eaecf83acbddbb10c5e5db77b663b1309e2436ffbe9d"
++    },
++    {
++      "source": "node_modules/@fontsource-variable/ibm-plex-sans/package.json",
++      "path": "fonts/ibm-plex-sans/package.json",
++      "bytes": 1505,
++      "sha256": "f8f50a2f98442e88d7a7bd25389c7709fd9b6d0a622452290ca18a9cd70d6022"
++    },
++    {
++      "source": "node_modules/@fontsource/ibm-plex-mono/400.css",
++      "path": "fonts/ibm-plex-mono/400.css",
++      "bytes": 2175,
++      "sha256": "c97bb2f50c36d78f826f3092ea01221643610e718d9a6669c58cf9bd1f41b95d"
++    },
++    {
++      "source": "node_modules/@fontsource/ibm-plex-mono/500.css",
++      "path": "fonts/ibm-plex-mono/500.css",
++      "bytes": 2175,
++      "sha256": "3eefd8c56eeceff5577576d7cdb6b8e2df13abf6b23b9620557eeb836533dfff"
++    },
++    {
++      "source": "node_modules/@fontsource/ibm-plex-mono/LICENSE",
++      "path": "fonts/ibm-plex-mono/LICENSE",
++      "bytes": 5299,
++      "sha256": "23b0a9d0c6d3f140a0b77e483c5cfa6bba574325ef5cb189ed9f2fec4884533f"
++    },
++    {
++      "source": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-cyrillic-400-normal.woff",
++      "path": "fonts/ibm-plex-mono/files/ibm-plex-mono-cyrillic-400-normal.woff",
++      "bytes": 7204,
++      "sha256": "42da81a28bbcddda6768a25a4b3105ee291e69d5fa6c74747bc51bbc6718c538"
++    },
++    {
++      "source": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-cyrillic-400-normal.woff2",
++      "path": "fonts/ibm-plex-mono/files/ibm-plex-mono-cyrillic-400-normal.woff2",
++      "bytes": 8356,
++      "sha256": "7635422bd10ddbbcb0e0caa1154b928298f5c8319b8c00b30978d4395f4783ce"
++    },
++    {
++      "source": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-cyrillic-500-normal.woff",
++      "path": "fonts/ibm-plex-mono/files/ibm-plex-mono-cyrillic-500-normal.woff",
++      "bytes": 7208,
++      "sha256": "55a3af5e5ba0f565b4e66149cfe077ba88ac42cc3f68650a901d58eadbf9cd9b"
++    },
++    {
++      "source": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-cyrillic-500-normal.woff2",
++      "path": "fonts/ibm-plex-mono/files/ibm-plex-mono-cyrillic-500-normal.woff2",
++      "bytes": 8460,
++      "sha256": "1d89462e86cb8e87e7e9d6f6635605bd7c3081baca6caaecee84916bf7b60edc"
++    },
++    {
++      "source": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-cyrillic-ext-400-normal.woff",
++      "path": "fonts/ibm-plex-mono/files/ibm-plex-mono-cyrillic-ext-400-normal.woff",
++      "bytes": 5820,
++      "sha256": "0e4a2393e8ed3185ae300e4a202b6d9149d47d8a0e5bb8f1d1db33e76b86ecd1"
++    },
++    {
++      "source": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-cyrillic-ext-400-normal.woff2",
++      "path": "fonts/ibm-plex-mono/files/ibm-plex-mono-cyrillic-ext-400-normal.woff2",
++      "bytes": 6912,
++      "sha256": "f8c22ec1804bd6966b70f43ac7c327025645b4c09597117fca2a5a6c750106fe"
++    },
++    {
++      "source": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-cyrillic-ext-500-normal.woff",
++      "path": "fonts/ibm-plex-mono/files/ibm-plex-mono-cyrillic-ext-500-normal.woff",
++      "bytes": 5772,
++      "sha256": "eadb2c427859b185761380143d1f42187fd7cbd94704b543e4c76c6368fbab52"
++    },
++    {
++      "source": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-cyrillic-ext-500-normal.woff2",
++      "path": "fonts/ibm-plex-mono/files/ibm-plex-mono-cyrillic-ext-500-normal.woff2",
++      "bytes": 6972,
++      "sha256": "3febe5c7f22e4b07b4552738673c3dbe8bced2dc5f48b866edf7ccd9552d109a"
++    },
++    {
++      "source": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-400-normal.woff",
++      "path": "fonts/ibm-plex-mono/files/ibm-plex-mono-latin-400-normal.woff",
++      "bytes": 13144,
++      "sha256": "328d50b6ece9ca25c46eea3e885ba497f6237f2fb84ef7b92f88e14a1a25e381"
++    },
++    {
++      "source": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-400-normal.woff2",
++      "path": "fonts/ibm-plex-mono/files/ibm-plex-mono-latin-400-normal.woff2",
++      "bytes": 14708,
++      "sha256": "08949f728dc52d528e69b1667d15c89a5686a4ee9a296ff90983985f99c380f7"
++    },
++    {
++      "source": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-500-normal.woff",
++      "path": "fonts/ibm-plex-mono/files/ibm-plex-mono-latin-500-normal.woff",
++      "bytes": 13156,
++      "sha256": "09f018c58556e5801ecc49d5b5275dcff4c73311c2af6b88e31c51d76d076a9d"
++    },
++    {
++      "source": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-500-normal.woff2",
++      "path": "fonts/ibm-plex-mono/files/ibm-plex-mono-latin-500-normal.woff2",
++      "bytes": 14888,
++      "sha256": "01d285447409c8a588692162439a038b8cbd7871309ee20267b0d2d91c6e8e22"
++    },
++    {
++      "source": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-ext-400-normal.woff",
++      "path": "fonts/ibm-plex-mono/files/ibm-plex-mono-latin-ext-400-normal.woff",
++      "bytes": 11768,
++      "sha256": "f8ddaa0ab9d3c052c9fe035751c8214b7e0d59e6e7b69b045f8659c2fe4dced2"
++    },
++    {
++      "source": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-ext-400-normal.woff2",
++      "path": "fonts/ibm-plex-mono/files/ibm-plex-mono-latin-ext-400-normal.woff2",
++      "bytes": 13348,
++      "sha256": "6bc0f226a5b7884a8170e3f62c63d7675609d4631bdc5931b5cdab81821f00eb"
++    },
++    {
++      "source": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-ext-500-normal.woff",
++      "path": "fonts/ibm-plex-mono/files/ibm-plex-mono-latin-ext-500-normal.woff",
++      "bytes": 11768,
++      "sha256": "ff5da89c3ee20d38359943b61a7aae9200d2a0f61cf95ca10a7cccef81da2ff5"
++    },
++    {
++      "source": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-ext-500-normal.woff2",
++      "path": "fonts/ibm-plex-mono/files/ibm-plex-mono-latin-ext-500-normal.woff2",
++      "bytes": 13432,
++      "sha256": "6bb06407c97584b0867a959e05e8874693bfeb8c317de190811c51598f2d99ea"
++    },
++    {
++      "source": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-vietnamese-400-normal.woff",
++      "path": "fonts/ibm-plex-mono/files/ibm-plex-mono-vietnamese-400-normal.woff",
++      "bytes": 5620,
++      "sha256": "bced561d991e3f81c150c08e71f7fa849fcbff523560f6059245f2edce19b600"
++    },
++    {
++      "source": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-vietnamese-400-normal.woff2",
++      "path": "fonts/ibm-plex-mono/files/ibm-plex-mono-vietnamese-400-normal.woff2",
++      "bytes": 5868,
++      "sha256": "62632b6375305e70ddcafdd895218e6ae41a184fcd280a69c739460604ca00a9"
++    },
++    {
++      "source": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-vietnamese-500-normal.woff",
++      "path": "fonts/ibm-plex-mono/files/ibm-plex-mono-vietnamese-500-normal.woff",
++      "bytes": 5616,
++      "sha256": "755f62b418df17518aa0ea16b4232e546ce949a4ab7acc577071fa9be9e3dc88"
++    },
++    {
++      "source": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-vietnamese-500-normal.woff2",
++      "path": "fonts/ibm-plex-mono/files/ibm-plex-mono-vietnamese-500-normal.woff2",
++      "bytes": 6040,
++      "sha256": "781633d95de88040fb77141d1e65d928c87c0144691fbc74da5a64d137a7e910"
++    },
++    {
++      "source": "node_modules/@fontsource/ibm-plex-mono/metadata.json",
++      "path": "fonts/ibm-plex-mono/metadata.json",
++      "bytes": 1513,
++      "sha256": "ae2e02195f982cfca6ababa48282f46b1e84b1c9162037229b72c943c2c2b873"
++    },
++    {
++      "source": "node_modules/@fontsource/ibm-plex-mono/package.json",
++      "path": "fonts/ibm-plex-mono/package.json",
++      "bytes": 1494,
++      "sha256": "e51f8be2f21c7ea9925a1a1c6a6affedb45ee45c1e315db646bda66fc5fbdcef"
++    },
++    {
++      "source": "notes/verification/2026-10-03-brand-release-manifest.json",
++      "path": "inventory/source-inventory.json",
++      "bytes": 22505,
++      "sha256": "88de214732ec91afa5e6651394c4b216a8d1d520258c595678fb85e1cbdfee76"
++    },
++    {
++      "source": "notes/verification/2026-10-03-brand-distribution-README.md",
++      "path": "README.md",
++      "bytes": 5037,
++      "sha256": "37922be64953b585cdd7b6cff21c402624418880b7338043c46bf624084108e2"
++    },
++    {
++      "source": "notes/verification/2026-10-03-brand-distribution-guidelines.md",
++      "path": "GUIDELINES.md",
++      "bytes": 3762,
++      "sha256": "79ad3efca6743ba17164c95a25ca366b15c8f2f7027ea9a29850b5097f6266d8"
++    },
++    {
++      "source": "scripts/package-brand.ts",
++      "path": "sources/scripts/package-brand.ts",
++      "bytes": 10278,
++      "sha256": "cb5dc56f3212520ae44e3194edfda6b0f8fa30b1b1031f6129c85eaf9f54dff0"
++    }
++  ],
++  "references": [
++    {
++      "path": "public/media/quesar-trailer.mp4",
++      "bytes": 1100920,
++      "sha256": "b3ae3cd3d3ce3cffc88257351d31dc464315ae7082f890f49e08e657dbbe8416",
++      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
++    },
++    {
++      "path": "public/media/quesar-trailer.webm",
++      "bytes": 615269,
++      "sha256": "c6dd5f8c9f12f0b03c9a0bd0bd61d517f3a888264cd0abd04e1cb6e0e29852e0",
++      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
++    },
++    {
++      "path": "public/media/quesar-trailer.webp",
++      "bytes": 39108,
++      "sha256": "080c2372506754e8cd767bca88991d308ffe7d152a4d0c961a9dd44c32174a31",
++      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
++    },
++    {
++      "path": "public/media/mark.vtt",
++      "bytes": 144,
++      "sha256": "31cc9f56d5d785a2efd69b5bd7012a3750cde78c2cdd96b407fe344c1e5f2f0a",
++      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
++    },
++    {
++      "path": "public/media/atmosphere-board.mp4",
++      "bytes": 636807,
++      "sha256": "69ef4449eef012c2ed2192dde4de0e24982038bf2b62e11c4082f12a5f93e73e",
++      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
++    },
++    {
++      "path": "public/media/atmosphere-board.webm",
++      "bytes": 397469,
++      "sha256": "f5dd3c0dac11922bc91adc748cd66ea26a58377e0dedffde4158aef98f3025bf",
++      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
++    },
++    {
++      "path": "public/media/atmosphere-board.webp",
++      "bytes": 29786,
++      "sha256": "22658b476e754d4ed54925c89e99408ee871752e7d3625ed7832d17ef01aee7f",
++      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
++    },
++    {
++      "path": "public/media/board.vtt",
++      "bytes": 147,
++      "sha256": "d81fb3c11d4bf173ad3926801336b781b463438c6fa71335c413be42d34a2a70",
++      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
++    },
++    {
++      "path": "public/media/atmosphere-wafer.mp4",
++      "bytes": 543863,
++      "sha256": "924731f627cf7d914905d6dfcd963b53f0f1a12b24341aa57ed67d54205407cc",
++      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
++    },
++    {
++      "path": "public/media/atmosphere-wafer.webm",
++      "bytes": 355240,
++      "sha256": "117b1a7ffd03b98ad1af11256634708b78ac8600a96ff20b30400045df59dc72",
++      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
++    },
++    {
++      "path": "public/media/atmosphere-wafer.webp",
++      "bytes": 45612,
++      "sha256": "7380ed5ce7c2423cf359884ab579847097d3189ede054507085983475d7e65f6",
++      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
++    },
++    {
++      "path": "public/media/wafer.vtt",
++      "bytes": 129,
++      "sha256": "83b23f434441033fbeb4d5c0203a482f21393b5fdc9c13d42739433639c82c79",
++      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
++    },
++    {
++      "path": "public/media/films/film.mp4",
++      "bytes": 3688233,
++      "sha256": "0e571bbe801f1e21a41f0d976b7a9cfccda6818f2026f1208ceac225450eed38",
++      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
++    },
++    {
++      "path": "public/media/films/film.poster.png",
++      "bytes": 259184,
++      "sha256": "32f96e0da9da6385a470234d588d6f88f7eb73fdb05c2b922a909c11367df44a",
++      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
++    },
++    {
++      "path": "public/media/films/film.vtt",
++      "bytes": 1335,
++      "sha256": "58dfba2c9f49688ab3516f5b6070b97ce905987a750e72632e5fe9cea871a4b2",
++      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
++    },
++    {
++      "path": "public/media/films/film.transcript.txt",
++      "bytes": 697,
++      "sha256": "6b27b896645c806aef4cd5f0392947f093ed43e20226f031e5a33b63952d995f",
++      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
++    },
++    {
++      "path": "public/media/films/film.chapters.json",
++      "bytes": 2453,
++      "sha256": "2d4bd176f2668907900a9455e72b757838019ce74ee1c2ed7da5e770d1970add",
++      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
++    },
++    {
++      "path": "public/media/films/film.timing.json",
++      "bytes": 9589,
++      "sha256": "dc404859ae2a7f53f2d57a268a4dcaa6d26b239bdf198e552316b7ff62498f9f",
++      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
++    },
++    {
++      "path": "public/media/films/film.encoding.json",
++      "bytes": 1043,
++      "sha256": "74902f00400bdfe5ee1032b66511d7f932a39394c34838fb1b902001282cec0e",
++      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
++    },
++    {
++      "path": "public/media/films/trailer.mp4",
++      "bytes": 3374048,
++      "sha256": "4bda27069214e6d70e423aab60430af0023596a727a4c3d743902358bd674e51",
++      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
++    },
++    {
++      "path": "public/media/films/trailer.poster.png",
++      "bytes": 146490,
++      "sha256": "63e91df8725b95a497720638509f40f6084e886bf1f7dd9e1221bf69ecc283e6",
++      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
++    },
++    {
++      "path": "public/media/films/trailer.vtt",
++      "bytes": 1302,
++      "sha256": "16359fd3783a063c8285838565a57a2429f470f82af95d08842052ff9dd80daf",
++      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
++    },
++    {
++      "path": "public/media/films/trailer.transcript.txt",
++      "bytes": 529,
++      "sha256": "6f47e643a9b3e7a6197b0ab2d100b9c48974bc7c171d5975b529cf9aed28c275",
++      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
++    },
++    {
++      "path": "public/media/films/trailer.chapters.json",
++      "bytes": 3863,
++      "sha256": "b51dc9b5411e886f125ab76a2b25e7cd75f764db695e9a85d42fa4d7b1136d35",
++      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
++    },
++    {
++      "path": "public/media/films/trailer.timing.json",
++      "bytes": 10496,
++      "sha256": "7a37a27dd0a348ec87b67d8cb64bf217d26d4051896f0833a700cac3dc275840",
++      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
++    },
++    {
++      "path": "public/media/films/trailer.encoding.json",
++      "bytes": 1053,
++      "sha256": "4540e8b3ecc25cb75264ffbd3a685c90effc4b87685ae3b2da00460034b3f1e5",
++      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
++    },
++    {
++      "path": "public/media/films/abbey.mp4",
++      "bytes": 9294970,
++      "sha256": "7abdf1a9f0674d41f7c523d7fea765165ac2033a79a963722a24b09d88c633f3",
++      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
++    },
++    {
++      "path": "public/media/films/abbey.poster.png",
++      "bytes": 313363,
++      "sha256": "14635c888622e5e51920fcb41e9028cd8b0259f49f06ab50e4d63fb839fde8ee",
++      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
++    },
++    {
++      "path": "public/media/films/abbey.vtt",
++      "bytes": 688,
++      "sha256": "d1d3eb9830c257e5b5de150709854cfbd6c7a493828d82b7c4f9c561c92b1f0f",
++      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
++    },
++    {
++      "path": "public/media/films/abbey.transcript.txt",
++      "bytes": 293,
++      "sha256": "f4b92feed7a692eaf1b223867fb2ff7e1a6a6a9ede117b1a1860527f8590736a",
++      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
++    },
++    {
++      "path": "public/media/films/abbey.chapters.json",
++      "bytes": 2919,
++      "sha256": "060998b6947c1a370a9467e987093d40bf75acfe1b4765f248c1c4556fa7e568",
++      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
++    },
++    {
++      "path": "public/media/films/abbey.timing.json",
++      "bytes": 5501,
++      "sha256": "57cea029f1d1cdb100b93fd9dcbfd8f0e3b5aecde2ff73003ed18ede25d18d59",
++      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
++    },
++    {
++      "path": "public/media/films/abbey.encoding.json",
++      "bytes": 1044,
++      "sha256": "a931c1672d0dbd03ce48a52767a57015ac85ee8f30a5eed01bc571f43ff283cf",
++      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
++    },
++    {
++      "path": "public/media/films/explainer.mp4",
++      "bytes": 76319260,
++      "sha256": "2f5699b9c1d1c4239ebfee923287501a60e6c700df5c1723beac66ae3871f570",
++      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
++    },
++    {
++      "path": "public/media/films/explainer.poster.png",
++      "bytes": 1376672,
++      "sha256": "49515b9f5587792493717c5617c5e91f3ee03b45844821a40cfa5709bcde6c17",
++      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
++    },
++    {
++      "path": "public/media/films/explainer.vtt",
++      "bytes": 2315,
++      "sha256": "86489474055681525c14a5a5084948f6c335c06c4de8e9226e7689460c6348bf",
++      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
++    },
++    {
++      "path": "public/media/films/explainer.transcript.txt",
++      "bytes": 1226,
++      "sha256": "9ef342eec5b628a95e505514eed42349b4f37fd2a3ea67ca8abc8626827a53dc",
++      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
++    },
++    {
++      "path": "public/media/films/explainer.chapters.json",
++      "bytes": 4703,
++      "sha256": "0e03cd8764f42ccd1c19bf25aa4a9d632f7e006639084964fef2d64a1a9d4b5e",
++      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
++    },
++    {
++      "path": "public/media/films/explainer.timing.json",
++      "bytes": 14933,
++      "sha256": "32403250d6798d51e75c9369bd70ca392c1ae5372dc337846c5e8739bcdec58d",
++      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
++    },
++    {
++      "path": "public/media/films/explainer.encoding.json",
++      "bytes": 1057,
++      "sha256": "ee66463e3227f473d839813220ad3385c27683d16e34512a67ab45528834935c",
++      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
++    },
++    {
++      "path": "public/media/films/mega.mp4",
++      "bytes": 90286650,
++      "sha256": "8a76ff8b52b78276119205e272c067c62f57d0396b8829810203ead72788d65c",
++      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
++    },
++    {
++      "path": "public/media/films/mega.poster.png",
++      "bytes": 555208,
++      "sha256": "baaa633f7a738ea573c88284224d4ccade9e1fce01ca14e946a5585049cdf673",
++      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
++    },
++    {
++      "path": "public/media/films/mega.vtt",
++      "bytes": 4022,
++      "sha256": "559e187bf6688380b3cc5881bb877b75456659a68e8ffe4b34d5af294a467604",
++      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
++    },
++    {
++      "path": "public/media/films/mega.transcript.txt",
++      "bytes": 2418,
++      "sha256": "b84d4f22c1b8433ff4b213edde640c733e526fa575b4d2d6c8e1b3659740a3c7",
++      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
++    },
++    {
++      "path": "public/media/films/mega.chapters.json",
++      "bytes": 10540,
++      "sha256": "c2496ca1c5b5aabff2ab7a611c629d62ec00d5043fd7e41e69c20e72c246fd62",
++      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
++    },
++    {
++      "path": "public/media/films/mega.timing.json",
++      "bytes": 24559,
++      "sha256": "74114c0643381501ea9eae0f9972563d042abbbd9e514634ecac2d52c368535f",
++      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
++    },
++    {
++      "path": "public/media/films/mega.encoding.json",
++      "bytes": 1242,
++      "sha256": "1b08a2ade842113d7fa80b2814d36cbd9d11d4d90596fb0a64bfaba16b221484",
++      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
++    },
++    {
++      "path": "public/media/films/design.mp4",
++      "bytes": 13160292,
++      "sha256": "bb863dc3f2b6a61e6ca43080615c920f383d5007ad0399aa504bd2f393090867",
++      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
++    },
++    {
++      "path": "public/media/films/design.poster.png",
++      "bytes": 259000,
++      "sha256": "e544ac0a38cad8faa0f0157523d58cdb3d714fa82f8594166eb22a6d3aef4b2a",
++      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
++    },
++    {
++      "path": "public/media/films/design.vtt",
++      "bytes": 1043,
++      "sha256": "d995aae5e8247c5f5de923af4cbee60753047255d294b20b74e76f04e61d7bfb",
++      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
++    },
++    {
++      "path": "public/media/films/design.transcript.txt",
++      "bytes": 683,
++      "sha256": "60901542080f517bebb12fabc63f7aa0c18e27a1fd3879394819cebeb22f6bd2",
++      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
++    },
++    {
++      "path": "public/media/films/design.chapters.json",
++      "bytes": 5801,
++      "sha256": "c168d91ac965db184c02eabad37690ba842cab21306b2bf01866735156cfb268",
++      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
++    },
++    {
++      "path": "public/media/films/design.timing.json",
++      "bytes": 5629,
++      "sha256": "c80b30a7e731306a7c23acf6b464ad6647c9522a3179aa19b2d17a16d0fc4745",
++      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
++    },
++    {
++      "path": "public/media/films/design.encoding.json",
++      "bytes": 1048,
++      "sha256": "2768219e3e7d0bce24d403d4b8bd5f274dde777332da9898108a60a806dc6eeb",
++      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
++    }
++  ],
++  "markSource": "src/components/site/logo.tsx"
++}

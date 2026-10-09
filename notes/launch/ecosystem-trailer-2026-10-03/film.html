@@ -1,0 +1,629 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Build with understanding — ecosystem concept film</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: #080e16;
+        color: #f2f1e9;
+        font-family:
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          sans-serif;
+      }
+      #stage {
+        position: absolute;
+        width: 1200px;
+        height: 675px;
+        transform-origin: top left;
+        overflow: hidden;
+        background: #080e16;
+      }
+      canvas {
+        position: absolute;
+        inset: 0;
+        width: 1200px;
+        height: 675px;
+      }
+      #top {
+        position: absolute;
+        top: 43px;
+        left: 64px;
+        right: 64px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font:
+          10px/1.5 ui-monospace,
+          monospace;
+        letter-spacing: 2.4px;
+        color: #b0bac7;
+      }
+      #top strong {
+        color: #eeeadd;
+        font-weight: 600;
+        letter-spacing: 3px;
+      }
+      #classification {
+        color: #a9b8c6;
+        letter-spacing: 1.6px;
+      }
+      #copy {
+        position: absolute;
+        left: 64px;
+        top: 161px;
+        width: 590px;
+        z-index: 2;
+        transform-origin: 0 50%;
+      }
+      #role {
+        font:
+          11px/1.4 ui-monospace,
+          monospace;
+        letter-spacing: 2.3px;
+        color: var(--accent);
+        margin-bottom: 22px;
+      }
+      #product {
+        font-size: 22px;
+        font-weight: 550;
+        letter-spacing: -0.4px;
+        color: var(--accent);
+        margin-bottom: 13px;
+      }
+      h1 {
+        margin: 0;
+        font-size: 57px;
+        font-weight: 560;
+        line-height: 1.055;
+        letter-spacing: -2.4px;
+        white-space: pre-line;
+        text-wrap: balance;
+      }
+      #body {
+        font-size: 18px;
+        line-height: 1.6;
+        font-weight: 400;
+        color: #afbdcd;
+        margin-top: 23px;
+        white-space: pre-line;
+      }
+      #caption {
+        position: absolute;
+        bottom: 70px;
+        left: 64px;
+        right: 64px;
+        height: 28px;
+        font-size: 16px;
+        line-height: 28px;
+        letter-spacing: 0.1px;
+        color: #c0cad5;
+        z-index: 3;
+      }
+      #footer {
+        position: absolute;
+        left: 64px;
+        right: 64px;
+        bottom: 31px;
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        font:
+          9px/1.5 ui-monospace,
+          monospace;
+        letter-spacing: 1.8px;
+        color: #7f93a9;
+      }
+      #track {
+        height: 1px;
+        flex: 1;
+        background: #233142;
+        position: relative;
+      }
+      #progress {
+        position: absolute;
+        inset: 0 auto 0 0;
+        background: var(--accent);
+        width: 0;
+      }
+      #edition {
+        white-space: nowrap;
+      }
+      #chapter {
+        white-space: nowrap;
+        min-width: 170px;
+      }
+      .micro #copy {
+        top: 199px;
+      }
+      .micro #product {
+        font-size: 49px;
+        letter-spacing: -1.8px;
+        margin-bottom: 22px;
+      }
+      .micro h1 {
+        font-size: 38px;
+        letter-spacing: -1.2px;
+        max-width: 575px;
+      }
+      .micro #body {
+        display: none;
+      }
+      .micro #role {
+        margin-bottom: 18px;
+      }
+      .micro #caption {
+        font-size: 15px;
+      }
+      .short #copy {
+        top: 187px;
+      }
+      .short #product {
+        font-size: 37px;
+        letter-spacing: -1.1px;
+        margin-bottom: 18px;
+      }
+      .short h1 {
+        font-size: 45px;
+        letter-spacing: -1.5px;
+        max-width: 570px;
+      }
+      .short #body {
+        display: none;
+      }
+      #controls {
+        position: fixed;
+        bottom: 8px;
+        right: 10px;
+        z-index: 9;
+        font: 12px system-ui;
+        opacity: 0.85;
+        background: #fff;
+        color: #111;
+        border: 0;
+        border-radius: 4px;
+        padding: 5px 10px;
+        cursor: pointer;
+      }
+      .capture #controls {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <main id="stage" aria-label="Ecosystem concept film">
+      <canvas id="art" width="1920" height="1080"></canvas>
+      <div id="top">
+        <strong>THE DONALD COMPANY</strong
+        ><span id="classification">CONCEPT ILLUSTRATION / SOURCE-GROUNDED ORIENTATION</span>
+      </div>
+      <section id="copy">
+        <div id="role"></div>
+        <div id="product"></div>
+        <h1></h1>
+        <div id="body"></div>
+      </section>
+      <div id="caption" aria-live="off"></div>
+      <div id="footer">
+        <span id="chapter"></span>
+        <div id="track"><i id="progress"></i></div>
+        <span id="edition">ECOSYSTEM / 2026</span>
+      </div>
+    </main>
+    <button id="controls">Play / pause</button>
+    <script>
+      "use strict";
+      const stage = document.querySelector("#stage"),
+        canvas = document.querySelector("canvas"),
+        ctx = canvas.getContext("2d"),
+        copy = document.querySelector("#copy");
+      const colors = ["#8ed4c0", "#91bcf5", "#eac58e", "#c5b0ed", "#b9c7f0", "#f1ab95"];
+      const names = ["WDBX", "ABI", "Abbey", "Abbey Bot", "Quesar / MLAI", "WebPress"];
+      let data,
+        cut = 90,
+        lastScene = -1,
+        playing = false,
+        start = 0,
+        elapsed = 0;
+      const clamp = (x) => Math.min(1, Math.max(0, x)),
+        ease = (x) => 1 - Math.pow(1 - clamp(x), 3),
+        mix = (a, b, p) => a + (b - a) * p;
+      function line(x1, y1, x2, y2, color = "#334659", width = 1) {
+        ctx.strokeStyle = color;
+        ctx.lineWidth = width;
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+        ctx.stroke();
+      }
+      function circle(x, y, r, color, width = 1, fill = false) {
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, Math.PI * 2);
+        ctx.lineWidth = width;
+        ctx.strokeStyle = color;
+        if (fill) {
+          ctx.fillStyle = color;
+          ctx.fill();
+        } else ctx.stroke();
+      }
+      function rect(x, y, w, h, color, fill = false) {
+        ctx.strokeStyle = color;
+        ctx.fillStyle = color;
+        ctx.lineWidth = 1;
+        if (fill) ctx.fillRect(x, y, w, h);
+        else ctx.strokeRect(x, y, w, h);
+      }
+      function text(s, x, y, size = 11, color = "#b7c9d8", align = "left") {
+        ctx.font = `${size}px ui-monospace,monospace`;
+        ctx.fillStyle = color;
+        ctx.textAlign = align;
+        ctx.fillText(s, x, y);
+      }
+      function diamond(x, y, r, color, fill = false) {
+        ctx.beginPath();
+        ctx.moveTo(x, y - r);
+        ctx.lineTo(x + r, y);
+        ctx.lineTo(x, y + r);
+        ctx.lineTo(x - r, y);
+        ctx.closePath();
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 1.3;
+        ctx.stroke();
+        if (fill) {
+          ctx.fillStyle = color;
+          ctx.fill();
+        }
+      }
+      function glyph(i, x, y, r, color) {
+        if (i === 0) {
+          for (let j = 0; j < 3; j++) rect(x - r + j * 4, y - r + j * 7, r * 1.5, r * 0.8, color);
+        } else if (i === 1) {
+          for (let j = -1; j <= 1; j++) line(x - r, y + (j * r) / 2, x + r, y + (j * r) / 2, color);
+          circle(x, y, r * 0.22, color, 1, true);
+        } else if (i === 2) {
+          circle(x, y, r, color);
+          circle(x + r * 0.3, y - r * 0.1, r * 0.6, color);
+        } else if (i === 3) {
+          rect(x - r, y - r * 0.7, r * 2, r * 1.25, color);
+          line(x - r * 0.4, y + r * 0.55, x - r * 0.7, y + r, color);
+          circle(x - r * 0.4, y - r * 0.1, 2, color, 1, true);
+          circle(x + r * 0.4, y - r * 0.1, 2, color, 1, true);
+        } else if (i === 4) {
+          diamond(x, y, r, color);
+          circle(x, y, r * 0.5, color);
+        } else {
+          rect(x - r, y - r, r * 2, r * 2, color);
+          line(x - r, y - r * 0.25, x + r, y - r * 0.25, color);
+          line(x - r * 0.2, y - r * 0.25, x - r * 0.2, y + r, color);
+        }
+      }
+      function background(t, color) {
+        ctx.setTransform(1.6, 0, 0, 1.6, 0, 0);
+        ctx.fillStyle = "#080e16";
+        ctx.fillRect(0, 0, 1200, 675);
+        let g = ctx.createRadialGradient(940, 285, 20, 940, 285, 600);
+        g.addColorStop(0, "#162433");
+        g.addColorStop(1, "#080e16");
+        ctx.fillStyle = g;
+        ctx.fillRect(0, 0, 1200, 675);
+        ctx.globalAlpha = 0.28;
+        for (let y = 127; y < 560; y += 38) line(660, y, 1160, y, "#253749");
+        for (let x = 660; x < 1160; x += 38) line(x, 127, x, 560, "#253749");
+        ctx.globalAlpha = 1;
+        line(64, 96, 1136, 96, "#283643");
+        for (let i = 0; i < 25; i++) {
+          const x = 690 + ((i * 137) % 470),
+            y = 140 + ((i * 89) % 380);
+          ctx.globalAlpha = 0.13 + 0.11 * Math.sin(t * 0.7 + i);
+          circle(x, y, 1, color, 1, true);
+        }
+        ctx.globalAlpha = 1;
+      }
+      function constellation(t, p, color, closing = false) {
+        let cx = 925,
+          cy = 329,
+          rad = closing ? 130 : 153;
+        circle(cx, cy, rad + 30, "#29404d");
+        circle(cx, cy, rad - 35, "#20323f");
+        const points = names.map((_, i) => {
+          let a = -Math.PI / 2 + (i * Math.PI) / 3 + t * 0.019;
+          return [cx + Math.cos(a) * rad, cy + Math.sin(a) * rad];
+        });
+        for (let i = 0; i < 6; i++) {
+          let [x, y] = points[i],
+            [nx, ny] = points[(i + 1) % 6];
+          line(x, y, nx, ny, "#3c5260");
+          line(x, y, cx, cy, "#263d48");
+          circle(x, y, 24, "#11202b", 1, true);
+          glyph(i, x, y, 12, colors[i]);
+          text(names[i], x, y + 43, 10, colors[i], "center");
+        }
+        circle(cx, cy, 30, color);
+        diamond(cx, cy, 16, color);
+        text(closing ? "BUILD / UNDERSTAND" : "CONCEPT MAP", cx, 555, 10, "#91a3b5", "center");
+      }
+      function ledger(t, p, color) {
+        const reveal = ease(p * 2);
+        ctx.save();
+        ctx.translate(807, 180);
+        ctx.transform(1, 0.22, -0.36, 0.8, 0, 0);
+        for (let j = 5; j >= 0; j--) {
+          let y = j * 42,
+            x = 25 * Math.sin(j * 0.6 + t * 0.2) * (1 - reveal);
+          ctx.globalAlpha = 0.35 + j * 0.1;
+          rect(x, y, 258, 110, "#0b1822", true);
+          rect(x, y, 258, 110, color);
+          for (let k = 0; k < 5; k++)
+            line(x + 20, y + 25 + k * 13, x + 90 + ((k * 37) % 123), y + 25 + k * 13, "#335365");
+          text("EPISODE / " + String(j + 1).padStart(2, "0"), x + 20, y + 91, 11, color);
+        }
+        ctx.restore();
+        ctx.globalAlpha = 1;
+        let y = 186 + ((p * 250) % 250);
+        line(757, y, 1081, y, color, 2);
+        circle(742, y, 3, color, 1, true);
+        text("RECORD  →  LINK  →  HISTORY", 913, 535, 11, color, "center");
+      }
+      function lanes(t, p, color) {
+        const xs = [732, 867, 1002],
+          ys = [212, 316, 420];
+        for (let i = 0; i < 3; i++) {
+          line(718, ys[i], 1124, ys[i], "#385775", 1);
+          for (let j = 0; j < 3; j++) {
+            rect(xs[j], ys[i] - 23, 78, 46, "#0b1824", true);
+            rect(xs[j], ys[i] - 23, 78, 46, j === 1 ? color : "#3a546e");
+            for (let k = 0; k < 3; k++)
+              line(xs[j] + 16, ys[i] - 8 + k * 8, xs[j] + 56, ys[i] - 8 + k * 8, "#345471");
+          }
+          let x = 718 + ((t * 0.17 + i * 0.27) % 1) * 406;
+          circle(x, ys[i], 5, color, 1, true);
+        }
+        text("INTENT", 747, 161, 10, color);
+        text("CAPABILITY", 873, 161, 10, color);
+        text("STEP", 1030, 161, 10, color);
+        line(907, 174, 907, 465, color, 1);
+        text("EXPLICIT BOUNDARIES", 921, 535, 11, color, "center");
+      }
+      function orbit(t, p, color) {
+        const cx = 921,
+          cy = 320;
+        for (let i = 0; i < 7; i++) {
+          ctx.save();
+          ctx.translate(cx, cy);
+          ctx.rotate(-0.45 + i * 0.13 + Math.sin(t * 0.23) * 0.08);
+          ctx.scale(1, 0.55 + i * 0.045);
+          circle(0, 0, 70 + i * 18, i === 3 ? color : "#445060", i === 3 ? 2 : 1);
+          ctx.restore();
+        }
+        for (let i = 0; i < 3; i++) {
+          let a = t * 0.28 + i * 2.1;
+          circle(cx + Math.cos(a) * 156, cy + Math.sin(a) * 103, 4, color, 1, true);
+        }
+        circle(cx, cy, 33, "#1b2029", 1, true);
+        text("A", cx, cy + 15, 40, color, "center");
+        text("CONVERSATION  /  TOOLS", cx, 535, 11, color, "center");
+      }
+      function channels(t, p, color) {
+        for (let i = 0; i < 4; i++) {
+          let x = 738 + (i % 2) * 102,
+            y = 169 + i * 74,
+            offset = 20 * (1 - ease(p * 3 - i * 0.16));
+          rect(x + offset, y, 260 - i * 16, 51, "#121923", true);
+          rect(x + offset, y, 260 - i * 16, 51, "#4e4c67");
+          circle(x + offset + 24, y + 26, 6, color);
+          line(x + offset + 45, y + 18, x + offset + 203 - i * 15, y + 18, "#807b9e");
+          line(x + offset + 45, y + 31, x + offset + 163 - i * 12, y + 31, "#414459");
+        }
+        let cx = 1092,
+          cy = 416;
+        diamond(cx, cy, 31, color);
+        text("CONTROL", cx, cy + 59, 9, color, "center");
+        line(995, 428, 1061, 416, color);
+        text("COMMANDS  /  PERMISSIONS", 922, 535, 11, color, "center");
+      }
+      function atlas(t, p, color) {
+        const nodes = [
+          [750, 215],
+          [887, 160],
+          [1066, 216],
+          [805, 361],
+          [986, 373],
+          [1093, 457],
+        ];
+        const labels = ["PRODUCTS", "RESEARCH", "SOURCES", "DOCS", "STATUS", "CATALOG"];
+        for (let i = 0; i < nodes.length; i++) {
+          let [x, y] = nodes[i],
+            [nx, ny] = nodes[(i + 2) % 6];
+          line(x, y, nx, ny, "#35485e");
+          circle(x, y, 28 + (i % 2) * 5, "#162232", 1, true);
+          circle(x, y, 28 + (i % 2) * 5, i === Math.floor(t / 2) % 6 ? color : "#5b6f8e");
+          glyph(i, x, y, 12, color);
+          text(labels[i], x, y + 52, 10, color, "center");
+        }
+        ctx.save();
+        ctx.translate(918, 312);
+        ctx.rotate(t * 0.07);
+        ctx.setLineDash([5, 11]);
+        circle(0, 0, 183, "#40516c");
+        ctx.setLineDash([]);
+        ctx.restore();
+      }
+      function projections(t, p, color) {
+        const cx = 910,
+          cy = 273;
+        for (let i = 0; i < 6; i++) {
+          let a = (i * Math.PI) / 3 + t * 0.025,
+            x = cx + Math.cos(a) * 87,
+            y = cy + Math.sin(a) * 66;
+          line(cx, cy, x, y, "#7b635d");
+          rect(x - 12, y - 12, 24, 24, "#151c26", true);
+          rect(x - 12, y - 12, 24, 24, color);
+        }
+        diamond(cx, cy, 29, color);
+        text("WP-IR", cx, cy + 4, 11, color, "center");
+        for (let i = 0; i < 3; i++) {
+          let x = 734 + i * 128,
+            y = 404;
+          line(cx, cy + 66, x + 46, y, "#795e59");
+          rect(x, y, 95, 98, "#101b25", true);
+          rect(x, y, 95, 98, "#9b776d");
+          if (i === 0) {
+            rect(x + 11, y + 12, 73, 17, color);
+            rect(x + 11, y + 37, 30, 46, "#735b55");
+            rect(x + 48, y + 37, 36, 46, "#735b55");
+          } else if (i === 1) {
+            for (let j = 0; j < 6; j++)
+              line(
+                x + 11 + (j % 2) * 7,
+                y + 15 + j * 12,
+                x + 66 + (j % 3) * 7,
+                y + 15 + j * 12,
+                "#b89587",
+              );
+          } else {
+            rect(x + 11, y + 12, 73, 32, "#735b55");
+            for (let j = 0; j < 3; j++)
+              line(x + 11, y + 58 + j * 10, x + 82, y + 58 + j * 10, "#b89587");
+          }
+          text(["CANVAS", "CODE", "EXPORT"][i], x + 47, 535, 10, color, "center");
+        }
+      }
+      window.configure = (timeline, duration) => {
+        data = timeline;
+        cut = duration;
+        lastScene = -1;
+        stage.classList.toggle("micro", cut === 15);
+        stage.classList.toggle("short", cut === 30);
+        window.renderFrame(0);
+      };
+      window.renderFrame = (seconds) => {
+        if (!data) throw Error("Timeline not configured");
+        const total = String(cut);
+        let remaining = Math.min(Math.max(seconds, 0), cut - 1 / 30),
+          index = 0,
+          startTime = 0;
+        for (let i = 0; i < data.cuts[total].length; i++) {
+          const d = data.cuts[total][i];
+          if (d > 0 && remaining < d) {
+            index = i;
+            break;
+          }
+          remaining -= d;
+          startTime += d;
+        }
+        const scene = data.scenes[index],
+          duration = data.cuts[total][index],
+          p = clamp(remaining / duration);
+        stage.style.setProperty("--accent", scene.color);
+        if (lastScene !== index) {
+          document.querySelector("#role").textContent = scene.role;
+          document.querySelector("#product").textContent = scene.product;
+          document.querySelector("h1").textContent =
+            cut === 15 ? scene.micro : cut === 30 ? scene.short : scene.title;
+          document.querySelector("#body").textContent = scene.body;
+          let caption = cut === 90 ? scene.caption : cut === 30 ? scene.short : scene.micro;
+          if (cut !== 90 && !["opening", "closing"].includes(scene.id))
+            caption = scene.product + ": " + caption;
+          document.querySelector("#caption").textContent = caption;
+          document.querySelector("#chapter").textContent =
+            String(index + 1).padStart(2, "0") + " / " + scene.id.toUpperCase();
+          lastScene = index;
+        }
+        const entrance = index === 0 ? 1 : ease(remaining / 0.55);
+        const exit = index === 8 ? 1 : clamp((duration - remaining) / 0.32);
+        copy.style.opacity = String(Math.min(entrance, exit));
+        copy.style.transform = `translateY(${(1 - entrance) * 18}px)`;
+        document.querySelector("#caption").style.opacity = String(
+          Math.min(1, remaining / 0.3, exit),
+        );
+        document.querySelector("#progress").style.width = (seconds / cut) * 100 + "%";
+        background(seconds, scene.color);
+        ctx.globalAlpha = Math.min(entrance, exit);
+        ({
+          constellation,
+          ledger,
+          lanes,
+          orbit,
+          channels,
+          atlas,
+          projections,
+          closing: (t, p, c) => constellation(t, p, c, true),
+        })[scene.motif](remaining, p, scene.color);
+        ctx.globalAlpha = 1;
+        return { scene: scene.id, index, seconds, progress: p };
+      };
+      window.audit = () => {
+        const bounds = stage.getBoundingClientRect();
+        let overflow = [];
+        for (const selector of [
+          "#top",
+          "#role",
+          "#product",
+          "h1",
+          "#body",
+          "#caption",
+          "#footer",
+        ]) {
+          const e = document.querySelector(selector);
+          if (getComputedStyle(e).display === "none") continue;
+          const range = document.createRange();
+          range.selectNodeContents(e);
+          for (const r of range.getClientRects()) {
+            if (
+              r.left < bounds.left ||
+              r.right > bounds.right ||
+              r.top < bounds.top ||
+              r.bottom > bounds.bottom
+            )
+              overflow.push(selector);
+          }
+        }
+        return {
+          overflow,
+          title: document.querySelector("h1").textContent,
+          caption: document.querySelector("#caption").textContent,
+        };
+      };
+      function resize() {
+        stage.style.transform = `scale(${Math.min(innerWidth / 1200, innerHeight / 675)})`;
+        stage.style.left =
+          (innerWidth - 1200 * Math.min(innerWidth / 1200, innerHeight / 675)) / 2 + "px";
+        stage.style.top =
+          (innerHeight - 675 * Math.min(innerWidth / 1200, innerHeight / 675)) / 2 + "px";
+      }
+      addEventListener("resize", resize);
+      resize();
+      document.querySelector("#controls").onclick = () => {
+        playing = !playing;
+        start = performance.now() - elapsed * 1000;
+        if (playing) requestAnimationFrame(tick);
+      };
+      function tick(now) {
+        if (!playing) return;
+        elapsed = (now - start) / 1000;
+        if (elapsed >= cut) {
+          elapsed = 0;
+          start = now;
+        }
+        renderFrame(elapsed);
+        requestAnimationFrame(tick);
+      }
+      if (!new URLSearchParams(location.search).has("capture"))
+        fetch("timeline.json")
+          .then((r) => r.json())
+          .then((d) => configure(d, 90));
+      else document.body.classList.add("capture");
+    </script>
+  </body>
+</html>

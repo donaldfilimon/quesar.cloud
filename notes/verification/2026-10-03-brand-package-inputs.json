@@ -1,0 +1,748 @@
+{
+  "schemaVersion": 1,
+  "name": "Quesar local brand distribution \u2014 2026-10-03",
+  "usage": "Local authorized review/use only. No repository-wide brand/source redistribution license inferred. Bundled font licenses apply only to the font software; preserve original notices. Final design/claims and external-release approval not asserted.",
+  "files": [
+    {
+      "source": "notes/mlai/brand.md",
+      "path": "sources/notes/mlai/brand.md",
+      "bytes": 981,
+      "sha256": "4776602856f11fe4ad1b73461bc8c96faf23e618efcd783c68a11fa1fa45357a"
+    },
+    {
+      "source": "src/lib/site-identity.ts",
+      "path": "sources/src/lib/site-identity.ts",
+      "bytes": 1245,
+      "sha256": "25a6021f1a0ebb403e6d6279ffeae9a7308dd80343bbb55e8abcb625d6e56475"
+    },
+    {
+      "source": "src/styles.css",
+      "path": "sources/src/styles.css",
+      "bytes": 15308,
+      "sha256": "f726c12265d16a1f5f08816594b506d24cd519f03baf248c41bb1bd188eed987"
+    },
+    {
+      "source": "src/cinematic/design/mlai-ds-tokens.css",
+      "path": "sources/src/cinematic/design/mlai-ds-tokens.css",
+      "bytes": 7967,
+      "sha256": "09889dc06f54bba0813c396958388dac3fb2b6e7519ec7b9bc6981098fcd68ed"
+    },
+    {
+      "source": "src/cinematic/film/tokens.ts",
+      "path": "sources/src/cinematic/film/tokens.ts",
+      "bytes": 2221,
+      "sha256": "bf84d6852eda7a317f6de60d8d825a36ad33efc8ab177ed86a48fa2b0d1f1ab6"
+    },
+    {
+      "source": "src/components/site/logo.tsx",
+      "path": "sources/src/components/site/logo.tsx",
+      "bytes": 1638,
+      "sha256": "dfe6c0420d9acbc5d6c501843af98adab34775a2dc9858669d985505523c58b3"
+    },
+    {
+      "source": "public/favicon.svg",
+      "path": "public/favicon.svg",
+      "bytes": 324,
+      "sha256": "03a8fc2c31aa23d849cae27a2c9178b8248243c73ce737e261d1e7eb0f5525f5"
+    },
+    {
+      "source": "public/apple-touch-icon.png",
+      "path": "public/apple-touch-icon.png",
+      "bytes": 2100,
+      "sha256": "3cf5d17d294b51c6cca6c86070309b88554b7ad702b0412e8e2709a01990bc8a"
+    },
+    {
+      "source": "public/manifest.webmanifest",
+      "path": "public/manifest.webmanifest",
+      "bytes": 425,
+      "sha256": "c97a54d4c3c2886f777a645394d39abe33aab2e1e957f560f26b49dafcfc6d8c"
+    },
+    {
+      "source": "public/og/abbey.jpg",
+      "path": "public/og/abbey.jpg",
+      "bytes": 49522,
+      "sha256": "fd7d6df734a3046eb19e3b85ebf1783311afcdd55b51ef03622b0d586d5f9749"
+    },
+    {
+      "source": "public/og/abi.jpg",
+      "path": "public/og/abi.jpg",
+      "bytes": 47390,
+      "sha256": "0c01181c141badb8dbaa043d5d5c1a44f1aade531a5402ef4c0faafc68064d9d"
+    },
+    {
+      "source": "public/og/docs.jpg",
+      "path": "public/og/docs.jpg",
+      "bytes": 47527,
+      "sha256": "061f2b03b1833b9ca0801081516632ce3ce7b6a0ba25934e1aedd1b33661a56a"
+    },
+    {
+      "source": "public/og/platform.jpg",
+      "path": "public/og/platform.jpg",
+      "bytes": 51627,
+      "sha256": "1dcba3f8b8280ccd0ea9bef786e1359b83f2346bc157d7bf1d7e704b5f500ffe"
+    },
+    {
+      "source": "public/og/quesar.jpg",
+      "path": "public/og/quesar.jpg",
+      "bytes": 54185,
+      "sha256": "bccba0120602588380707d0c962e95c950277122a0df04f4636aecb293bf3b8c"
+    },
+    {
+      "source": "public/og/research.jpg",
+      "path": "public/og/research.jpg",
+      "bytes": 54704,
+      "sha256": "6470688cf396b399805c967e711b4d214251c2bc8b852d78d4192f7efecabe63"
+    },
+    {
+      "source": "public/og/showcase.jpg",
+      "path": "public/og/showcase.jpg",
+      "bytes": 57665,
+      "sha256": "a891684d78666b9071ffd8c0440595ebeba14f6601b1cd66c6aa82c611c765fb"
+    },
+    {
+      "source": "public/og/wdbx.jpg",
+      "path": "public/og/wdbx.jpg",
+      "bytes": 53069,
+      "sha256": "5826856f29e241c270b784e52d0adf6c6090778b7d04fca01147f1c08c2bac99"
+    },
+    {
+      "source": "public/media/rooms/film.webp",
+      "path": "public/media/rooms/film.webp",
+      "bytes": 12092,
+      "sha256": "dfb12ce36b3a7fe4b9563365736c0f5733215441d0b83a34f5207587df88dc72"
+    },
+    {
+      "source": "public/media/rooms/trailer.webp",
+      "path": "public/media/rooms/trailer.webp",
+      "bytes": 4182,
+      "sha256": "a1c59044b73eea77aa928eb7eaf58f0a107c54bd0aee662431d1201b51130187"
+    },
+    {
+      "source": "public/media/rooms/abbey.webp",
+      "path": "public/media/rooms/abbey.webp",
+      "bytes": 10994,
+      "sha256": "4bc5e88e6346e5042ca8f40b30139dc378667b13f45c39158402321103185947"
+    },
+    {
+      "source": "public/media/rooms/explainer.webp",
+      "path": "public/media/rooms/explainer.webp",
+      "bytes": 32304,
+      "sha256": "1f4f7d16def0ee4aa0bb44c44f3acd8e489da8e2bf64a7ab980fd66d4c7da6d6"
+    },
+    {
+      "source": "public/media/rooms/mega.webp",
+      "path": "public/media/rooms/mega.webp",
+      "bytes": 41836,
+      "sha256": "8a10830d15e2ec996ef4c8c7f402edc85e87cc5c726c04acf819ad2c0f8fa3bc"
+    },
+    {
+      "source": "public/media/rooms/design.webp",
+      "path": "public/media/rooms/design.webp",
+      "bytes": 11834,
+      "sha256": "b65d253f187c8a1c310e24f6a052c2368a2770e60e16dc1bb6ff2c7f1d90ae5d"
+    },
+    {
+      "source": "node_modules/@fontsource-variable/space-grotesk/LICENSE",
+      "path": "fonts/space-grotesk/LICENSE",
+      "bytes": 4401,
+      "sha256": "18a4de52385f6b988782639d5d0cc1326e5a8c2de9a7f01d7b20d9aedcc60943"
+    },
+    {
+      "source": "node_modules/@fontsource-variable/space-grotesk/files/space-grotesk-latin-ext-wght-normal.woff2",
+      "path": "fonts/space-grotesk/files/space-grotesk-latin-ext-wght-normal.woff2",
+      "bytes": 18940,
+      "sha256": "952dddb45d2f96f71cbf3b7f510b24379afc3c89ea02fcf89d377b45d62c0166"
+    },
+    {
+      "source": "node_modules/@fontsource-variable/space-grotesk/files/space-grotesk-latin-wght-normal.woff2",
+      "path": "fonts/space-grotesk/files/space-grotesk-latin-wght-normal.woff2",
+      "bytes": 22288,
+      "sha256": "0640890476fc1198ab4de571fb658de443c4d85b66466ec09534a8737ab1ce9d"
+    },
+    {
+      "source": "node_modules/@fontsource-variable/space-grotesk/files/space-grotesk-vietnamese-wght-normal.woff2",
+      "path": "fonts/space-grotesk/files/space-grotesk-vietnamese-wght-normal.woff2",
+      "bytes": 6712,
+      "sha256": "8895e3d49825128bfa5238e4c96e9b432d7a3dadbe5c17c6081267398305dc71"
+    },
+    {
+      "source": "node_modules/@fontsource-variable/space-grotesk/index.css",
+      "path": "fonts/space-grotesk/index.css",
+      "bytes": 1290,
+      "sha256": "c5596e3b99240df949843d1fa005f85642ebebd23969e6019d1252fe60231773"
+    },
+    {
+      "source": "node_modules/@fontsource-variable/space-grotesk/metadata.json",
+      "path": "fonts/space-grotesk/metadata.json",
+      "bytes": 640,
+      "sha256": "dbe18757008ad3d0b4502002e3f0907ad59cab8002305fd29f63fdefbdbd22ba"
+    },
+    {
+      "source": "node_modules/@fontsource-variable/space-grotesk/package.json",
+      "path": "fonts/space-grotesk/package.json",
+      "bytes": 1505,
+      "sha256": "e14df6ba77ac37d6c607c5b62c1e1fcf8f936de50c272190884082bb2eeef2cc"
+    },
+    {
+      "source": "node_modules/@fontsource-variable/ibm-plex-sans/LICENSE",
+      "path": "fonts/ibm-plex-sans/LICENSE",
+      "bytes": 4429,
+      "sha256": "d0283623ef57e722fd0eb688a8041589670c608ab780cd3612d06ba6f153d3fd"
+    },
+    {
+      "source": "node_modules/@fontsource-variable/ibm-plex-sans/files/ibm-plex-sans-cyrillic-ext-wght-normal.woff2",
+      "path": "fonts/ibm-plex-sans/files/ibm-plex-sans-cyrillic-ext-wght-normal.woff2",
+      "bytes": 23568,
+      "sha256": "7d0037a170882a49e65a45c38ef195237bb07b1cc791d078379f0ac0d7ae1935"
+    },
+    {
+      "source": "node_modules/@fontsource-variable/ibm-plex-sans/files/ibm-plex-sans-cyrillic-wght-normal.woff2",
+      "path": "fonts/ibm-plex-sans/files/ibm-plex-sans-cyrillic-wght-normal.woff2",
+      "bytes": 29512,
+      "sha256": "9409ee21811f0f5272b7e1d828fe8838005b0573481ef906e7e55b63f6610ab0"
+    },
+    {
+      "source": "node_modules/@fontsource-variable/ibm-plex-sans/files/ibm-plex-sans-greek-wght-normal.woff2",
+      "path": "fonts/ibm-plex-sans/files/ibm-plex-sans-greek-wght-normal.woff2",
+      "bytes": 19500,
+      "sha256": "f598dd0700f155e2facfaa8ecfacace397d4c2c153e9ce37ab7ad310e8505bc2"
+    },
+    {
+      "source": "node_modules/@fontsource-variable/ibm-plex-sans/files/ibm-plex-sans-latin-ext-wght-normal.woff2",
+      "path": "fonts/ibm-plex-sans/files/ibm-plex-sans-latin-ext-wght-normal.woff2",
+      "bytes": 30964,
+      "sha256": "d160e20920ae4d6556518d352d3af27a74e9b0de3d8fe17b1c1044fc75aa2f81"
+    },
+    {
+      "source": "node_modules/@fontsource-variable/ibm-plex-sans/files/ibm-plex-sans-latin-wght-normal.woff2",
+      "path": "fonts/ibm-plex-sans/files/ibm-plex-sans-latin-wght-normal.woff2",
+      "bytes": 45712,
+      "sha256": "e2291e842cf5af167122a22881a740c7f2dda7716f1e8cd76680264f4a859470"
+    },
+    {
+      "source": "node_modules/@fontsource-variable/ibm-plex-sans/files/ibm-plex-sans-vietnamese-wght-normal.woff2",
+      "path": "fonts/ibm-plex-sans/files/ibm-plex-sans-vietnamese-wght-normal.woff2",
+      "bytes": 13160,
+      "sha256": "73e7f7b1c980416ae0c2461268b14c7cfcce0668e683dc43fbb11a82a227b9f2"
+    },
+    {
+      "source": "node_modules/@fontsource-variable/ibm-plex-sans/index.css",
+      "path": "fonts/ibm-plex-sans/index.css",
+      "bytes": 2295,
+      "sha256": "c10c5be20da047104a63777df4fb430f065ad8ce65e26e4ff69558b41abfbe59"
+    },
+    {
+      "source": "node_modules/@fontsource-variable/ibm-plex-sans/metadata.json",
+      "path": "fonts/ibm-plex-sans/metadata.json",
+      "bytes": 894,
+      "sha256": "eb30869fb4bbb74fd140eaecf83acbddbb10c5e5db77b663b1309e2436ffbe9d"
+    },
+    {
+      "source": "node_modules/@fontsource-variable/ibm-plex-sans/package.json",
+      "path": "fonts/ibm-plex-sans/package.json",
+      "bytes": 1505,
+      "sha256": "f8f50a2f98442e88d7a7bd25389c7709fd9b6d0a622452290ca18a9cd70d6022"
+    },
+    {
+      "source": "node_modules/@fontsource/ibm-plex-mono/400.css",
+      "path": "fonts/ibm-plex-mono/400.css",
+      "bytes": 2175,
+      "sha256": "c97bb2f50c36d78f826f3092ea01221643610e718d9a6669c58cf9bd1f41b95d"
+    },
+    {
+      "source": "node_modules/@fontsource/ibm-plex-mono/500.css",
+      "path": "fonts/ibm-plex-mono/500.css",
+      "bytes": 2175,
+      "sha256": "3eefd8c56eeceff5577576d7cdb6b8e2df13abf6b23b9620557eeb836533dfff"
+    },
+    {
+      "source": "node_modules/@fontsource/ibm-plex-mono/LICENSE",
+      "path": "fonts/ibm-plex-mono/LICENSE",
+      "bytes": 5299,
+      "sha256": "23b0a9d0c6d3f140a0b77e483c5cfa6bba574325ef5cb189ed9f2fec4884533f"
+    },
+    {
+      "source": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-cyrillic-400-normal.woff",
+      "path": "fonts/ibm-plex-mono/files/ibm-plex-mono-cyrillic-400-normal.woff",
+      "bytes": 7204,
+      "sha256": "42da81a28bbcddda6768a25a4b3105ee291e69d5fa6c74747bc51bbc6718c538"
+    },
+    {
+      "source": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-cyrillic-400-normal.woff2",
+      "path": "fonts/ibm-plex-mono/files/ibm-plex-mono-cyrillic-400-normal.woff2",
+      "bytes": 8356,
+      "sha256": "7635422bd10ddbbcb0e0caa1154b928298f5c8319b8c00b30978d4395f4783ce"
+    },
+    {
+      "source": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-cyrillic-500-normal.woff",
+      "path": "fonts/ibm-plex-mono/files/ibm-plex-mono-cyrillic-500-normal.woff",
+      "bytes": 7208,
+      "sha256": "55a3af5e5ba0f565b4e66149cfe077ba88ac42cc3f68650a901d58eadbf9cd9b"
+    },
+    {
+      "source": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-cyrillic-500-normal.woff2",
+      "path": "fonts/ibm-plex-mono/files/ibm-plex-mono-cyrillic-500-normal.woff2",
+      "bytes": 8460,
+      "sha256": "1d89462e86cb8e87e7e9d6f6635605bd7c3081baca6caaecee84916bf7b60edc"
+    },
+    {
+      "source": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-cyrillic-ext-400-normal.woff",
+      "path": "fonts/ibm-plex-mono/files/ibm-plex-mono-cyrillic-ext-400-normal.woff",
+      "bytes": 5820,
+      "sha256": "0e4a2393e8ed3185ae300e4a202b6d9149d47d8a0e5bb8f1d1db33e76b86ecd1"
+    },
+    {
+      "source": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-cyrillic-ext-400-normal.woff2",
+      "path": "fonts/ibm-plex-mono/files/ibm-plex-mono-cyrillic-ext-400-normal.woff2",
+      "bytes": 6912,
+      "sha256": "f8c22ec1804bd6966b70f43ac7c327025645b4c09597117fca2a5a6c750106fe"
+    },
+    {
+      "source": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-cyrillic-ext-500-normal.woff",
+      "path": "fonts/ibm-plex-mono/files/ibm-plex-mono-cyrillic-ext-500-normal.woff",
+      "bytes": 5772,
+      "sha256": "eadb2c427859b185761380143d1f42187fd7cbd94704b543e4c76c6368fbab52"
+    },
+    {
+      "source": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-cyrillic-ext-500-normal.woff2",
+      "path": "fonts/ibm-plex-mono/files/ibm-plex-mono-cyrillic-ext-500-normal.woff2",
+      "bytes": 6972,
+      "sha256": "3febe5c7f22e4b07b4552738673c3dbe8bced2dc5f48b866edf7ccd9552d109a"
+    },
+    {
+      "source": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-400-normal.woff",
+      "path": "fonts/ibm-plex-mono/files/ibm-plex-mono-latin-400-normal.woff",
+      "bytes": 13144,
+      "sha256": "328d50b6ece9ca25c46eea3e885ba497f6237f2fb84ef7b92f88e14a1a25e381"
+    },
+    {
+      "source": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-400-normal.woff2",
+      "path": "fonts/ibm-plex-mono/files/ibm-plex-mono-latin-400-normal.woff2",
+      "bytes": 14708,
+      "sha256": "08949f728dc52d528e69b1667d15c89a5686a4ee9a296ff90983985f99c380f7"
+    },
+    {
+      "source": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-500-normal.woff",
+      "path": "fonts/ibm-plex-mono/files/ibm-plex-mono-latin-500-normal.woff",
+      "bytes": 13156,
+      "sha256": "09f018c58556e5801ecc49d5b5275dcff4c73311c2af6b88e31c51d76d076a9d"
+    },
+    {
+      "source": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-500-normal.woff2",
+      "path": "fonts/ibm-plex-mono/files/ibm-plex-mono-latin-500-normal.woff2",
+      "bytes": 14888,
+      "sha256": "01d285447409c8a588692162439a038b8cbd7871309ee20267b0d2d91c6e8e22"
+    },
+    {
+      "source": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-ext-400-normal.woff",
+      "path": "fonts/ibm-plex-mono/files/ibm-plex-mono-latin-ext-400-normal.woff",
+      "bytes": 11768,
+      "sha256": "f8ddaa0ab9d3c052c9fe035751c8214b7e0d59e6e7b69b045f8659c2fe4dced2"
+    },
+    {
+      "source": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-ext-400-normal.woff2",
+      "path": "fonts/ibm-plex-mono/files/ibm-plex-mono-latin-ext-400-normal.woff2",
+      "bytes": 13348,
+      "sha256": "6bc0f226a5b7884a8170e3f62c63d7675609d4631bdc5931b5cdab81821f00eb"
+    },
+    {
+      "source": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-ext-500-normal.woff",
+      "path": "fonts/ibm-plex-mono/files/ibm-plex-mono-latin-ext-500-normal.woff",
+      "bytes": 11768,
+      "sha256": "ff5da89c3ee20d38359943b61a7aae9200d2a0f61cf95ca10a7cccef81da2ff5"
+    },
+    {
+      "source": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-ext-500-normal.woff2",
+      "path": "fonts/ibm-plex-mono/files/ibm-plex-mono-latin-ext-500-normal.woff2",
+      "bytes": 13432,
+      "sha256": "6bb06407c97584b0867a959e05e8874693bfeb8c317de190811c51598f2d99ea"
+    },
+    {
+      "source": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-vietnamese-400-normal.woff",
+      "path": "fonts/ibm-plex-mono/files/ibm-plex-mono-vietnamese-400-normal.woff",
+      "bytes": 5620,
+      "sha256": "bced561d991e3f81c150c08e71f7fa849fcbff523560f6059245f2edce19b600"
+    },
+    {
+      "source": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-vietnamese-400-normal.woff2",
+      "path": "fonts/ibm-plex-mono/files/ibm-plex-mono-vietnamese-400-normal.woff2",
+      "bytes": 5868,
+      "sha256": "62632b6375305e70ddcafdd895218e6ae41a184fcd280a69c739460604ca00a9"
+    },
+    {
+      "source": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-vietnamese-500-normal.woff",
+      "path": "fonts/ibm-plex-mono/files/ibm-plex-mono-vietnamese-500-normal.woff",
+      "bytes": 5616,
+      "sha256": "755f62b418df17518aa0ea16b4232e546ce949a4ab7acc577071fa9be9e3dc88"
+    },
+    {
+      "source": "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-vietnamese-500-normal.woff2",
+      "path": "fonts/ibm-plex-mono/files/ibm-plex-mono-vietnamese-500-normal.woff2",
+      "bytes": 6040,
+      "sha256": "781633d95de88040fb77141d1e65d928c87c0144691fbc74da5a64d137a7e910"
+    },
+    {
+      "source": "node_modules/@fontsource/ibm-plex-mono/metadata.json",
+      "path": "fonts/ibm-plex-mono/metadata.json",
+      "bytes": 1513,
+      "sha256": "ae2e02195f982cfca6ababa48282f46b1e84b1c9162037229b72c943c2c2b873"
+    },
+    {
+      "source": "node_modules/@fontsource/ibm-plex-mono/package.json",
+      "path": "fonts/ibm-plex-mono/package.json",
+      "bytes": 1494,
+      "sha256": "e51f8be2f21c7ea9925a1a1c6a6affedb45ee45c1e315db646bda66fc5fbdcef"
+    },
+    {
+      "source": "notes/verification/2026-10-03-brand-release-manifest.json",
+      "path": "inventory/source-inventory.json",
+      "bytes": 22505,
+      "sha256": "88de214732ec91afa5e6651394c4b216a8d1d520258c595678fb85e1cbdfee76"
+    },
+    {
+      "source": "notes/verification/2026-10-03-brand-distribution-README.md",
+      "path": "README.md",
+      "bytes": 5037,
+      "sha256": "37922be64953b585cdd7b6cff21c402624418880b7338043c46bf624084108e2"
+    },
+    {
+      "source": "notes/verification/2026-10-03-brand-distribution-guidelines.md",
+      "path": "GUIDELINES.md",
+      "bytes": 3762,
+      "sha256": "79ad3efca6743ba17164c95a25ca366b15c8f2f7027ea9a29850b5097f6266d8"
+    },
+    {
+      "source": "scripts/package-brand.ts",
+      "path": "sources/scripts/package-brand.ts",
+      "bytes": 10278,
+      "sha256": "cb5dc56f3212520ae44e3194edfda6b0f8fa30b1b1031f6129c85eaf9f54dff0"
+    }
+  ],
+  "references": [
+    {
+      "path": "public/media/quesar-trailer.mp4",
+      "bytes": 1100920,
+      "sha256": "b3ae3cd3d3ce3cffc88257351d31dc464315ae7082f890f49e08e657dbbe8416",
+      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
+    },
+    {
+      "path": "public/media/quesar-trailer.webm",
+      "bytes": 615269,
+      "sha256": "c6dd5f8c9f12f0b03c9a0bd0bd61d517f3a888264cd0abd04e1cb6e0e29852e0",
+      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
+    },
+    {
+      "path": "public/media/quesar-trailer.webp",
+      "bytes": 39108,
+      "sha256": "080c2372506754e8cd767bca88991d308ffe7d152a4d0c961a9dd44c32174a31",
+      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
+    },
+    {
+      "path": "public/media/mark.vtt",
+      "bytes": 144,
+      "sha256": "31cc9f56d5d785a2efd69b5bd7012a3750cde78c2cdd96b407fe344c1e5f2f0a",
+      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
+    },
+    {
+      "path": "public/media/atmosphere-board.mp4",
+      "bytes": 636807,
+      "sha256": "69ef4449eef012c2ed2192dde4de0e24982038bf2b62e11c4082f12a5f93e73e",
+      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
+    },
+    {
+      "path": "public/media/atmosphere-board.webm",
+      "bytes": 397469,
+      "sha256": "f5dd3c0dac11922bc91adc748cd66ea26a58377e0dedffde4158aef98f3025bf",
+      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
+    },
+    {
+      "path": "public/media/atmosphere-board.webp",
+      "bytes": 29786,
+      "sha256": "22658b476e754d4ed54925c89e99408ee871752e7d3625ed7832d17ef01aee7f",
+      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
+    },
+    {
+      "path": "public/media/board.vtt",
+      "bytes": 147,
+      "sha256": "d81fb3c11d4bf173ad3926801336b781b463438c6fa71335c413be42d34a2a70",
+      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
+    },
+    {
+      "path": "public/media/atmosphere-wafer.mp4",
+      "bytes": 543863,
+      "sha256": "924731f627cf7d914905d6dfcd963b53f0f1a12b24341aa57ed67d54205407cc",
+      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
+    },
+    {
+      "path": "public/media/atmosphere-wafer.webm",
+      "bytes": 355240,
+      "sha256": "117b1a7ffd03b98ad1af11256634708b78ac8600a96ff20b30400045df59dc72",
+      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
+    },
+    {
+      "path": "public/media/atmosphere-wafer.webp",
+      "bytes": 45612,
+      "sha256": "7380ed5ce7c2423cf359884ab579847097d3189ede054507085983475d7e65f6",
+      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
+    },
+    {
+      "path": "public/media/wafer.vtt",
+      "bytes": 129,
+      "sha256": "83b23f434441033fbeb4d5c0203a482f21393b5fdc9c13d42739433639c82c79",
+      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
+    },
+    {
+      "path": "public/media/films/film.mp4",
+      "bytes": 3688233,
+      "sha256": "0e571bbe801f1e21a41f0d976b7a9cfccda6818f2026f1208ceac225450eed38",
+      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
+    },
+    {
+      "path": "public/media/films/film.poster.png",
+      "bytes": 259184,
+      "sha256": "32f96e0da9da6385a470234d588d6f88f7eb73fdb05c2b922a909c11367df44a",
+      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
+    },
+    {
+      "path": "public/media/films/film.vtt",
+      "bytes": 1335,
+      "sha256": "58dfba2c9f49688ab3516f5b6070b97ce905987a750e72632e5fe9cea871a4b2",
+      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
+    },
+    {
+      "path": "public/media/films/film.transcript.txt",
+      "bytes": 697,
+      "sha256": "6b27b896645c806aef4cd5f0392947f093ed43e20226f031e5a33b63952d995f",
+      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
+    },
+    {
+      "path": "public/media/films/film.chapters.json",
+      "bytes": 2453,
+      "sha256": "2d4bd176f2668907900a9455e72b757838019ce74ee1c2ed7da5e770d1970add",
+      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
+    },
+    {
+      "path": "public/media/films/film.timing.json",
+      "bytes": 9589,
+      "sha256": "dc404859ae2a7f53f2d57a268a4dcaa6d26b239bdf198e552316b7ff62498f9f",
+      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
+    },
+    {
+      "path": "public/media/films/film.encoding.json",
+      "bytes": 1043,
+      "sha256": "74902f00400bdfe5ee1032b66511d7f932a39394c34838fb1b902001282cec0e",
+      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
+    },
+    {
+      "path": "public/media/films/trailer.mp4",
+      "bytes": 3374048,
+      "sha256": "4bda27069214e6d70e423aab60430af0023596a727a4c3d743902358bd674e51",
+      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
+    },
+    {
+      "path": "public/media/films/trailer.poster.png",
+      "bytes": 146490,
+      "sha256": "63e91df8725b95a497720638509f40f6084e886bf1f7dd9e1221bf69ecc283e6",
+      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
+    },
+    {
+      "path": "public/media/films/trailer.vtt",
+      "bytes": 1302,
+      "sha256": "16359fd3783a063c8285838565a57a2429f470f82af95d08842052ff9dd80daf",
+      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
+    },
+    {
+      "path": "public/media/films/trailer.transcript.txt",
+      "bytes": 529,
+      "sha256": "6f47e643a9b3e7a6197b0ab2d100b9c48974bc7c171d5975b529cf9aed28c275",
+      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
+    },
+    {
+      "path": "public/media/films/trailer.chapters.json",
+      "bytes": 3863,
+      "sha256": "b51dc9b5411e886f125ab76a2b25e7cd75f764db695e9a85d42fa4d7b1136d35",
+      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
+    },
+    {
+      "path": "public/media/films/trailer.timing.json",
+      "bytes": 10496,
+      "sha256": "7a37a27dd0a348ec87b67d8cb64bf217d26d4051896f0833a700cac3dc275840",
+      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
+    },
+    {
+      "path": "public/media/films/trailer.encoding.json",
+      "bytes": 1053,
+      "sha256": "4540e8b3ecc25cb75264ffbd3a685c90effc4b87685ae3b2da00460034b3f1e5",
+      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
+    },
+    {
+      "path": "public/media/films/abbey.mp4",
+      "bytes": 9294970,
+      "sha256": "7abdf1a9f0674d41f7c523d7fea765165ac2033a79a963722a24b09d88c633f3",
+      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
+    },
+    {
+      "path": "public/media/films/abbey.poster.png",
+      "bytes": 313363,
+      "sha256": "14635c888622e5e51920fcb41e9028cd8b0259f49f06ab50e4d63fb839fde8ee",
+      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
+    },
+    {
+      "path": "public/media/films/abbey.vtt",
+      "bytes": 688,
+      "sha256": "d1d3eb9830c257e5b5de150709854cfbd6c7a493828d82b7c4f9c561c92b1f0f",
+      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
+    },
+    {
+      "path": "public/media/films/abbey.transcript.txt",
+      "bytes": 293,
+      "sha256": "f4b92feed7a692eaf1b223867fb2ff7e1a6a6a9ede117b1a1860527f8590736a",
+      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
+    },
+    {
+      "path": "public/media/films/abbey.chapters.json",
+      "bytes": 2919,
+      "sha256": "060998b6947c1a370a9467e987093d40bf75acfe1b4765f248c1c4556fa7e568",
+      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
+    },
+    {
+      "path": "public/media/films/abbey.timing.json",
+      "bytes": 5501,
+      "sha256": "57cea029f1d1cdb100b93fd9dcbfd8f0e3b5aecde2ff73003ed18ede25d18d59",
+      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
+    },
+    {
+      "path": "public/media/films/abbey.encoding.json",
+      "bytes": 1044,
+      "sha256": "a931c1672d0dbd03ce48a52767a57015ac85ee8f30a5eed01bc571f43ff283cf",
+      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
+    },
+    {
+      "path": "public/media/films/explainer.mp4",
+      "bytes": 76319260,
+      "sha256": "2f5699b9c1d1c4239ebfee923287501a60e6c700df5c1723beac66ae3871f570",
+      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
+    },
+    {
+      "path": "public/media/films/explainer.poster.png",
+      "bytes": 1376672,
+      "sha256": "49515b9f5587792493717c5617c5e91f3ee03b45844821a40cfa5709bcde6c17",
+      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
+    },
+    {
+      "path": "public/media/films/explainer.vtt",
+      "bytes": 2315,
+      "sha256": "86489474055681525c14a5a5084948f6c335c06c4de8e9226e7689460c6348bf",
+      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
+    },
+    {
+      "path": "public/media/films/explainer.transcript.txt",
+      "bytes": 1226,
+      "sha256": "9ef342eec5b628a95e505514eed42349b4f37fd2a3ea67ca8abc8626827a53dc",
+      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
+    },
+    {
+      "path": "public/media/films/explainer.chapters.json",
+      "bytes": 4703,
+      "sha256": "0e03cd8764f42ccd1c19bf25aa4a9d632f7e006639084964fef2d64a1a9d4b5e",
+      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
+    },
+    {
+      "path": "public/media/films/explainer.timing.json",
+      "bytes": 14933,
+      "sha256": "32403250d6798d51e75c9369bd70ca392c1ae5372dc337846c5e8739bcdec58d",
+      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
+    },
+    {
+      "path": "public/media/films/explainer.encoding.json",
+      "bytes": 1057,
+      "sha256": "ee66463e3227f473d839813220ad3385c27683d16e34512a67ab45528834935c",
+      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
+    },
+    {
+      "path": "public/media/films/mega.mp4",
+      "bytes": 90286650,
+      "sha256": "8a76ff8b52b78276119205e272c067c62f57d0396b8829810203ead72788d65c",
+      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
+    },
+    {
+      "path": "public/media/films/mega.poster.png",
+      "bytes": 555208,
+      "sha256": "baaa633f7a738ea573c88284224d4ccade9e1fce01ca14e946a5585049cdf673",
+      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
+    },
+    {
+      "path": "public/media/films/mega.vtt",
+      "bytes": 4022,
+      "sha256": "559e187bf6688380b3cc5881bb877b75456659a68e8ffe4b34d5af294a467604",
+      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
+    },
+    {
+      "path": "public/media/films/mega.transcript.txt",
+      "bytes": 2418,
+      "sha256": "b84d4f22c1b8433ff4b213edde640c733e526fa575b4d2d6c8e1b3659740a3c7",
+      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
+    },
+    {
+      "path": "public/media/films/mega.chapters.json",
+      "bytes": 10540,
+      "sha256": "c2496ca1c5b5aabff2ab7a611c629d62ec00d5043fd7e41e69c20e72c246fd62",
+      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
+    },
+    {
+      "path": "public/media/films/mega.timing.json",
+      "bytes": 24559,
+      "sha256": "74114c0643381501ea9eae0f9972563d042abbbd9e514634ecac2d52c368535f",
+      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
+    },
+    {
+      "path": "public/media/films/mega.encoding.json",
+      "bytes": 1242,
+      "sha256": "1b08a2ade842113d7fa80b2814d36cbd9d11d4d90596fb0a64bfaba16b221484",
+      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
+    },
+    {
+      "path": "public/media/films/design.mp4",
+      "bytes": 13160292,
+      "sha256": "bb863dc3f2b6a61e6ca43080615c920f383d5007ad0399aa504bd2f393090867",
+      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
+    },
+    {
+      "path": "public/media/films/design.poster.png",
+      "bytes": 259000,
+      "sha256": "e544ac0a38cad8faa0f0157523d58cdb3d714fa82f8594166eb22a6d3aef4b2a",
+      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
+    },
+    {
+      "path": "public/media/films/design.vtt",
+      "bytes": 1043,
+      "sha256": "d995aae5e8247c5f5de923af4cbee60753047255d294b20b74e76f04e61d7bfb",
+      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
+    },
+    {
+      "path": "public/media/films/design.transcript.txt",
+      "bytes": 683,
+      "sha256": "60901542080f517bebb12fabc63f7aa0c18e27a1fd3879394819cebeb22f6bd2",
+      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
+    },
+    {
+      "path": "public/media/films/design.chapters.json",
+      "bytes": 5801,
+      "sha256": "c168d91ac965db184c02eabad37690ba842cab21306b2bf01866735156cfb268",
+      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
+    },
+    {
+      "path": "public/media/films/design.timing.json",
+      "bytes": 5629,
+      "sha256": "c80b30a7e731306a7c23acf6b464ad6647c9522a3179aa19b2d17a16d0fc4745",
+      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
+    },
+    {
+      "path": "public/media/films/design.encoding.json",
+      "bytes": 1048,
+      "sha256": "2768219e3e7d0bce24d403d4b8bd5f274dde777332da9898108a60a806dc6eeb",
+      "note": "Reference only; canonical film/teaser bytes are not duplicated in this compact identity package."
+    }
+  ],
+  "markSource": "src/components/site/logo.tsx"
+}
