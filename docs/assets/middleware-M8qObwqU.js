@@ -1,1 +1,0 @@
-import{ht as e}from"./index-D-O-RbkC.js";var t=e({type:`function`});export{t};
