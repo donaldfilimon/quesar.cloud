@@ -38,6 +38,13 @@ afterEach(() => {
 });
 
 describe("built-site gate", () => {
+  it("rejects empty HTML even when its pathname and all referenced assets exist", () => {
+    for (const html of ["", " \n\t"]) {
+      const result = check('<a href="/contact">Contact</a>', { "contact/index.html": html });
+      expect(result.status).toBe(1);
+      expect(result.stderr).toContain("empty HTML document: /contact/index.html");
+    }
+  });
   it("rejects binary media rewritten by the page crawler, including equal-size corruption", () => {
     const original = Buffer.from([0, 0, 0, 32, 255, 128, 109, 111, 111, 118]);
     for (const corrupt of [Buffer.from(original.toString("utf8")), Buffer.alloc(original.length)]) {

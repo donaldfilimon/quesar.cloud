@@ -11,6 +11,7 @@ import { searchRetryPlugin } from "./scripts/search-retry-plugin.ts";
 import { searchCatalogPlugin } from "./scripts/search-catalog-plugin.ts";
 import { githubSnapshotPlugin } from "./scripts/github-snapshot-plugin.ts";
 import { assertPersistentBuildMode } from "./scripts/persistent-build-mode.ts";
+import { staticPrerenderPath } from "./scripts/static-prerender-path.ts";
 
 /** The files `src/lib/db.ts` globs — same directory, same non-recursive scope. */
 function hasGlobbedMigrations(root: string): boolean {
@@ -107,18 +108,17 @@ export default defineConfig(({ command, isPreview, mode }) => {
                 failOnError: true,
                 // Media is copied byte-for-byte from public/. Crawling download
                 // links as pages decodes binary responses as UTF-8 and corrupts
-                // MP4s. Server-only surfaces also have no static page.
-                filter: ({ path }) =>
-                  !path.startsWith("/media/") &&
-                  !path.startsWith("/api/") &&
-                  !path.startsWith("/_serverFn"),
+                // MP4s. Query/hash state must not overwrite canonical HTML:
+                // the prerenderer strips it when choosing the output filename.
+                filter: ({ path }) => staticPrerenderPath(path),
               },
 
               pages: [
                 { path: "/feed.xml" },
                 { path: "/unauthorized" },
                 { path: "/signup" },
-                { path: "/404" },
+                // publish-static.ts creates the standalone 404.html; /404 is
+                // not an application route and responds with a real 404.
               ],
             }
           : undefined,

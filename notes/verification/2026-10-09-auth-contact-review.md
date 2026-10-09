@@ -3,7 +3,7 @@
 Date: 2026-10-09  
 Reviewer scope: independent source review in the canonical `quesar.cloud` checkout.  
 Baseline observed by read-only Git command: `2e76884114c5`.  
-Latest **SOURCE verdict: Approved, no blocking findings in the inspected scoped source diff. R1-R8 resolved at source level.** The final correction re-review at the end of this file supersedes earlier findings and implementer dispositions. This is **not backend/browser qualification, a passing root-gate claim, publication approval or deployment approval**. Parent-owned acceptance evidence remains pending.
+Latest **SOURCE verdict: Approved, no blocking findings in the inspected scoped source diff, including the static-contact correction. R1-R8 and new static-output finding R9 resolved at source level; fixture correction accepted.** Earlier root/backend evidence remains attributed below. **Fresh full root/static/browser gates for the static-tooling changes are pending parent completion; there is no publication/deployment approval or claim that GitHub Pages hosts auth.** Earlier evidence statements describe their respective snapshots.
 
 ## Evidence and ownership boundary
 
@@ -240,7 +240,7 @@ R2-R7 remain accepted at source level with the evidence in the prior follow-up. 
 
 The public-renderer assertion now expects the actual conditional local-receipt wording and adds an explicit negative check against delivered-email/inquiry claims (`src/routes/-public-renderer.test.tsx:94-109`). It retains the configured-server acceptance and static draft distinctions, rather than deleting the claim-boundary test. The reported 85 targeted passing tests are **parent/implementer-reported**, not independently executed or adopted as full-gate/backend evidence by this review.
 
-### Remaining qualification and local-commit boundary
+### Remaining qualification at the source-approval snapshot (historical)
 
 1. **Root gate:** Parent's `bun run check` is reported running. Completion/actual exit code and final source identity have not been supplied as verified evidence in this phase. No green-gate claim here.
 2. **Backend:** Persistent artifact build, exact artifact hash and executed browser/Postgres acceptance remain pending. Source approval does not establish that signup/signin/session/navigation/recovery or the held inquiry work at runtime. Keep existing independent-user/admin/expiry/revocation checks distinct from the authored UI journey's coverage.
@@ -248,4 +248,82 @@ The public-renderer assertion now expects the actual conditional local-receipt w
 4. **External behavior:** No new real OAuth, external mail delivery, physical authenticator, public TLS/deployment or remote readiness evidence was reviewed; these remain unqualified. None is required merely to accept this narrow source correction.
 5. **Local main:** User authorizes completion and a local-main commit only, no push. The parent owns final validation, preservation/staging of intended work and commit reporting. This reviewer did not stage, commit, push or deploy. Changes after this source snapshot require scope-appropriate re-review/qualification.
 
-**Final SOURCE disposition: Approved, no blocking findings. R1-R8 are resolved in inspected source. Overall server-client/static acceptance is still pending parent-owned gate and runtime evidence.**
+**Source-approval snapshot disposition:** Approved, no blocking findings. R1-R8 resolved in inspected source. Backend/static qualification was pending at that point; subsequent parent-reported backend evidence is recorded below.
+
+## Final fixture/evidence follow-up
+
+Date: 2026-10-09. Read-only Git now reports HEAD **`0349748ef1a6`**, advanced since the previous observed `4d2d028c0a9f`. Reviewed the baseline-to-current scoped source inventory and the source delta since `4d2d028c0a9f`, plus the current team narrative and actual fixture code. No source/Git writes or validation commands were performed by this reviewer. The assigned review Markdown remains the only reviewer write. Read-only diff commands returned exit 0.
+
+### Persistent fixture correction: accepted
+
+- **Severity:** No new defect; reviewed correction to a parent-reported failing fixture.
+- **File:line:** `e2e/backend/persistent.acceptance.ts:476-480,534-565`; retained context network guard: `:354-359`.
+- **Description/evidence:** After releasing the held signin request, the fixture now drains active page routing callbacks with `page.unrouteAll({ behavior: "wait" })`, instead of merely removing the named route. The held inquiry fixture additionally signals entry from within its callback and awaits that barrier before testing disabled controls. Its `finally` releases the hold and waits for active page handlers to drain. The browser-context same-origin network guard remains installed; removing page routes does not remove that context policy. No production auth/contact code was changed to accommodate the failure.
+- **Assertion review:** Busy controls, secure-session reload, malformed return-target refusal, exact accepted inquiry count/text, optional-storage warning, foreign-audit refusal, ciphertext binding, restart and restore assertions remain. The fixture continues actual handlers for success; only deliberately injected failure responses are synthetic. No assertion deletion, fake successful response, timeout increase or auth/admin relaxation was found in this correction.
+- **Suggestion:** Retain the first failed-run receipt and final passing-run receipt separately. The correction fixes fixture lifecycle/evidence collection, not a demonstrated production session defect.
+- **Status:** **Accepted independently at source level; parent reports actual successful execution after correction.**
+
+### Current diff/narrative disposition
+
+- The baseline-to-current source inventory still consists of the reviewed auth/contact/copy/acceptance changes. The delta since `4d2d028c0a9f` contains the already-reviewed R1/R8 regressions and fixes, public-renderer wording assertion and fixture refinement, not an unexpected new production subsystem.
+- Current `src/lib/mlai/categories/team.ts:80` still distinguishes nightly-Rust current ABI/sibling WDBX from historical Zig guidance. Its baseline diff is the reviewed paragraph replacement. No additional unreviewed team narrative change was found in the inspected current file.
+- Focused baseline diff for auth server, authoritative verification, admin decision, Start CSRF, scoped notes and console server logic remains empty. **No new blocking source finding or unexpected scoped-diff concern identified.** HEAD advancement is disclosed; no ownership or final-artifact identity is inferred from HEAD alone.
+
+### Qualification evidence and provenance
+
+**Root gate: directly inspected saved parent output.** `/Users/donaldfilimon/.local/share/opencode/tool-output/tool_122794c12001PfJn61jf4hVZyU` records the ordered `format:check && typecheck && lint && test && build` command. Lines 1-17 show formatting success, typecheck/lint invocation and **102 test files / 819 tests passed**. Lines 1408-1412 show completed build and Nitro output. Parent reports the full gate green. The saved text includes bundler warnings; it is not a warning-free-build claim. This reviewer did not rerun the gate. Numeric process-exit metadata is not included in the saved text inspected; the successful command outcome is parent-reported and the retained controller metadata remains authoritative.
+
+**Sidecar: parent-reported executed result.** Typecheck and **113 tests / 486 expectations green**. No sidecar mutation appears in the scoped source inventory, and the reviewer did not independently rerun or retrieve a new sidecar receipt. This is attributed execution evidence, not an invented reviewer result.
+
+**Persistent build/artifact: parent-reported successful build.** Reported full output-tree SHA256:
+
+`5a503b65d7e6b572ae207a1cfc495d44e83bd9482164ec964699d649c2b50626`
+
+The reviewer did not recalculate this hash or inspect a new compiled tree. It identifies the parent's qualified artifact, not the static `docs/` tree.
+
+**Persistent browser/Postgres acceptance: parent-reported actual execution, accepted with explicit provenance.** Final rerun: **PASS, 1 scenario, 45.3 seconds**. Reported coverage matches the reviewed executable assertions: compiled UI signup in independent contexts; header/profile signout failure and real-handler retry; wrong password then successful signin; busy controls; secure session reload; normalized redirect refusal; held-contact edit freeze and local-storage failure with exactly one stored inquiry and exact submitted text; scoped notes/audits; foreign read/ciphertext refusal and successful owner decryption; process restart; and **15-table** seeded PostgreSQL dump/restore verification. This is local compiled runtime evidence, not merely authored tests. No final raw acceptance log or numeric exit metadata was supplied for direct reviewer inspection in this turn; scenario result, duration, artifact hash and table count are explicitly parent-reported, not independently rerun measurements.
+
+**Earlier failed run remains disclosed.** Parent reports the first actual persistent run failed on a route-handler lifecycle race after the UI/contact receipts. The reviewed fix is limited to fixture drain and entry synchronization. That run does not become a complete pass merely because some earlier receipts succeeded. The subsequent full passing rerun is the qualifying reported result; preserve both receipts in the final integration record.
+
+### Remaining boundary and exact verdict
+
+1. **Static acceptance pending:** Parent reports static build/browser work running. No current static success/exit code is asserted here. Final generated-page contact links/draft recipient, server-only notices, checker and browser outcomes must still be recorded by the parent.
+2. **GitHub Pages cannot host these auth endpoints:** This site's static build deliberately renders server-only notices for signup/signin/protected features and makes contact a draft request. The local compiled backend proof does **not** mean signup/signin is available on the public Pages deployment. Hosting live auth requires a separately configured persistent server origin/deployment; no deployment is authorized or claimed here.
+3. **Live external flows remain separate:** Synthetic callback error feedback, local TLS and a disposable Postgres scenario do not prove real provider OAuth, physical passkeys, remote TLS/operations or external mail delivery. No missing OAuth credentials are classified as bugs.
+4. **Local-main commit only:** Parent owns final static qualification, preservation/staging and the user-authorized local commit. No push. Reviewer made no commit, source change, server launch, build or test run. Preserve numerical command exit receipts and exact artifact/source identities in the parent's completion record.
+
+**Final independent verdict: SOURCE Approved, no blocking findings. Fixture correction accepted. Reported local compiled backend qualification is recorded and consistent with reviewed assertions, with the failed predecessor disclosed. Public static qualification remains pending; public hosted auth/deployment and external-provider behavior are not qualified by this review.**
+
+## Static-contact output correction: independent SOURCE Approved
+
+Date: 2026-10-09. Current read-only HEAD observation: **`4ab275be56c1`**, with the new static scripts/config changes in the working tree. Read `notes/verification/2026-10-09-static-contact-report.md`, all seven changed/new source-test files, and the installed prerenderer's relevant implementation. Also checked canonical contact/service links, route search handling, all four Quasar route declarations, router ignore-prefix configuration, Vitest inclusion, sitemap/404 generation and the scoped gate diffs. No tests/builds/servers/Git writes or production edits were performed. Only this assigned review file was updated; the implementer's report/code and preserved failure evidence were not modified.
+
+### R9: Blank contact document and duplicate prerender output writers
+
+- **Severity:** Medium (demonstrated functional delivery defect)
+- **File:line:** Configuration correction: `vite.config.ts:104-122`, `scripts/static-prerender-path.ts:1-9`; output guards: `scripts/check-static.ts:38-49,144-145`, `scripts/publish-static.ts:48-58`.
+- **Description/evidence:** Parent reports the full static browser run failed **17 cases / 209 passed**, with a zero-byte contact document and preserved direct HTTP 416 response. The implementer report records both source prerender output and published contact HTML as empty before hydration and records the failed trace location. These are attributed observed results, not reviewer reruns. The installed prerender source independently confirms that task deduplication uses the complete `page.path` (`node_modules/@tanstack/start-plugin-core/src/prerender.ts:113-128`), while output naming strips query/fragment (`:161-195`) and writes the shared file (`:208-212`). `/contact` and service-query variants therefore can be separate writers of the same HTML file. The exact filesystem interleaving that produced the empty file was not captured; it is not promoted to a directly observed syscall trace.
+- **Correction review:** The static-only filter rejects query/fragment variants before task queueing while retaining canonical paths and the existing media/API/server-function exclusions. Empty/whitespace HTML now fails the static checker even without missing links/assets. Publisher validation runs over source HTML before `rmSync(docs)`, so this refusal preserves the existing published tree. Regression fixtures check blank/whitespace output, allowed/disallowed paths and preservation on publication refusal (`scripts/static-prerender-path.test.ts:4-18`, `scripts/check-static.test.ts:41-46`, `scripts/publish-static.test.ts:12-34`). No hand-authored fake contact HTML or weakened component assertion is involved.
+- **Suggestion:** Keep the single-canonical-document crawl policy and both failure guards. Parent must complete the fresh broad gate/checker/browser run and retain failed and passing artifacts separately. The new preflight protects against empty-source-HTML refusal; it is not a claim that every later publisher/filesystem failure is transactional.
+- **Status:** **Resolved in independently inspected source. Static-fix SOURCE Approved; final broad static acceptance pending.**
+
+### Route coverage and static Quasar semantics
+
+- **Canonical contact is retained:** `staticPrerenderPath("/contact")` is allowed, auto static-path discovery is left enabled, and plain canonical links still exist in navigation/search/service pages (`src/lib/site-identity.ts:35`, `src/lib/search-pages.ts:75`, `src/routes/services.tsx:88,96`). This is not a filter that drops contact entirely.
+- **Client search state is retained:** Service links still navigate to `/contact` with service search state (`src/routes/services.tsx:58-64`). Route validation and component search reads/prefill remain intact (`src/routes/contact.tsx:34-58`; `src/lib/contact-context.ts:3-7`). Query variants use the canonical document and resolve URL search in the client; no query/link rewriting or contact UI change was made by this slice. Fragment anchor checking remains in `check-static.ts:107-109`; declining fragment-only prerender jobs does not remove anchor validation.
+- **No valid 404 route was removed:** `/404` is not an application route. Only that nonexistent prerender seed was removed; publisher's independent `404.html` creation remains (`scripts/publish-static.ts:82-111`), with its noindex behavior. Feed, signup and unauthorized seeds remain explicitly present (`vite.config.ts:116-122`).
+- **Quasar remains browser-to-local-service:** `/quasar/new`, `/quasar/sites` and `/quasar/settings` are allowed canonical paths; their `ssr: false` declarations remain (`src/routes/quasar.new.tsx:5-13`, `quasar.sites.tsx:5-13`, `quasar.settings.tsx:5-13`). Dynamic `/quasar/site/$id` continues reading its id in the browser and using the keyed local-service detail component (`src/routes/quasar.site.$id.tsx:5-19`). No new server fetch, hosted generation claim, broad `/quasar/*` exclusion or pairing/auth change was added. No present canonical-route loss or changed Quasar static semantics was identified.
+- **Test-route hygiene:** Renamed `-auth-entry.test.tsx` and `-contact.test.tsx` follow the installed router's default `'-'` ignore prefix (`node_modules/@tanstack/router-generator/src/config.ts:26`). Current generated route tree contains one `/contact` and no test imports. Vitest still includes `src/**/*.test.{ts,tsx}` and `scripts/**/*.test.ts` (`vitest.config.ts:8-17`), so the renames prevent application-route discovery without removing unit coverage.
+
+### No broad-gate weakening found
+
+`failOnError: true`, link crawling and canonical-path discovery remain enabled in the static config. Initial JS/preload budgets, media byte comparison, internal page/anchor/asset validation and search destination checks remain unchanged; the checker adds a refusal rather than excluding failures. Package/Playwright/Vitest gate configuration has no new diff in this slice. The pending persistent-fixture delta is the previously reviewed route-drain correction, not a static-browser assertion change. The report preserves the earlier external output replacement/media mismatch and does not claim that timeout changes or poster edits cured contact. No new blocking source finding was identified.
+
+### Evidence status and completion boundary
+
+- **Inspected implementer report, attributed focused results:** 10 targeted tests in 3 files, typecheck, scoped lint/format, corrected static build and checker are reported exit **0**. Checker reports **129 HTML files**; focused unchanged contact/service/browser cases report **20/20 passed, exit 0**. The report also attributes HTTP 200 / 25,548-byte responses for plain/known/unknown-query contact requests with canonical document SHA256 `21629c6d131f87069feb7da82a334295b821adbf98656c9bbfdb1e4eeb74b572`. Reviewer inspected the report and code, not a new runtime run; these counts/hash/exits are implementer-reported.
+- **Failed predecessor stays failed:** Parent's earlier **17 failed / 209 passed** suite and zero-byte/416 trace remain disclosed. Focused 20-case success does not substitute for the entire browser suite, and subsequent external output replacement does not retroactively qualify that failing artifact.
+- **Fresh broad gates pending:** Parent reports the full root gate, static checker and full browser run now running. This review asserts no final fresh-gate exit code or 226-case browser pass. Prior root/backend results above predate this static-tooling correction and are not relabelled as qualification of its final source/output.
+- **Public boundary unchanged:** GitHub Pages still has no Better Auth runtime; signup/signin/protected pages intentionally display server-only notices. Quasar browser pairing/local-service behavior is separate from website auth. Contact mailto remains a draft request, not confirmed delivery. No push, deployment, live OAuth or external message was authorized/performed by this reviewer.
+
+**Latest independent verdict: Approved SOURCE for the static-contact fix, no blocking findings. R9 is source-resolved without route loss, altered Quasar static semantics or weakened broad gates in the inspected changes. Parent owns fresh full qualification and the user-authorized local-main commit only; no push.**

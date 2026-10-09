@@ -34,10 +34,6 @@ if (!existsSync(join(src, "index.html"))) {
   process.exit(1);
 }
 
-rmSync(out, { recursive: true, force: true });
-cpSync(src, out, { recursive: true });
-writeFileSync(join(out, ".nojekyll"), "");
-
 // Prerendered HTML links `styles.css?url` as the SSR build emitted it, which is
 // a different hash (and a superset) of the client copy. Publish every asset the
 // pages reference; fail loudly if one cannot be found anywhere.
@@ -49,6 +45,18 @@ function htmlFiles(dir: string): string[] {
     return name.endsWith(".html") ? [path] : [];
   });
 }
+// Do not replace the published tree with a truncated prerender response.
+const empty = htmlFiles(src).filter((file) => !readFileSync(file, "utf8").trim());
+if (empty.length) {
+  console.error(
+    `[publish-static] empty prerendered HTML:\n  ${empty.map((file) => relative(src, file)).join("\n  ")}`,
+  );
+  process.exit(1);
+}
+rmSync(out, { recursive: true, force: true });
+cpSync(src, out, { recursive: true });
+writeFileSync(join(out, ".nojekyll"), "");
+
 const missing = new Set<string>();
 for (const file of htmlFiles(out)) {
   const html = readFileSync(file, "utf8");
