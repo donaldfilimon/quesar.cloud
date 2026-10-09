@@ -1,0 +1,58 @@
+import { afterEach, describe, expect, it, vi } from "vitest";
+
+type Handler = (context: { request: Request }) => Promise<Response>;
+const mocks = vi.hoisted(() => ({
+  expireAudits: vi.fn(),
+  authorizeCron: vi.fn(() => 200),
+  hit: vi.fn(async () => ({ allowed: true })),
+  handlers: {} as Record<"GET" | "POST", Handler>,
+}));
+
+vi.mock("@tanstack/react-router", () => ({
+  createFileRoute: () => (options: { server: { handlers: Record<"GET" | "POST", Handler> } }) => {
+    mocks.handlers = options.server.handlers;
+    return { options };
+  },
+}));
+vi.mock("@/lib/console.server", () => ({
+  authorizeCron: mocks.authorizeCron,
+  expireAudits: mocks.expireAudits,
+}));
+vi.mock("@/lib/server/rate-limit.server", () => ({
+  clientSubject: () => "test-client",
+  hit: mocks.hit,
+}));
+import "./audits-expire";
+
+afterEach(() => {
+  vi.restoreAllMocks();
+  vi.clearAllMocks();
+});
+
+describe("audit expiry failure logging", () => {
+  it.each(["GET", "POST"] as const)(
+    "keeps secret-bearing %s failures out of logs and responses",
+    async (method) => {
+      const secret = "synthetic-database-password";
+      const record = "synthetic-private-audit-record";
+      const failure = Object.assign(new Error(`postgres://user:${secret}@db.invalid/app`), {
+        detail: record,
+      });
+      mocks.expireAudits.mockRejectedValueOnce(failure);
+      const logged = vi.spyOn(console, "error").mockImplementation(() => {});
+
+      const response = await mocks.handlers[method]({
+        request: new Request("https://example.invalid/api/cron/audits-expire", { method }),
+      });
+
+      expect(response.status).toBe(500);
+      expect(response.headers.get("Cache-Control")).toBe("no-store");
+      expect(await response.json()).toEqual({ error: "Audit expiry failed" });
+      expect(logged).toHaveBeenCalledExactlyOnceWith("Audit expiry failed");
+      expect(logged.mock.calls.flat()).not.toContain(failure);
+      expect(JSON.stringify(logged.mock.calls)).not.toContain(secret);
+      expect(JSON.stringify(logged.mock.calls)).not.toContain(record);
+      expect(mocks.expireAudits).toHaveBeenCalledOnce();
+    },
+  );
+});

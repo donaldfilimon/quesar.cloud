@@ -1,5 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { createHash } from "node:crypto";
+import { mkdtemp, writeFile, rm } from "node:fs/promises";
+import { join } from "node:path";
 import { openFilmRenderer } from "../../scripts/export-films";
 
 const cases = [
@@ -290,6 +292,25 @@ const releaseCaptureProbe = (page: import("@playwright/test").Page) =>
   page.evaluate(() =>
     (window as unknown as { captureProbe: { release(): void } }).captureProbe.release(),
   );
+
+test("qualification receipts do not reload a suspended capture", async ({ page }) => {
+  const folder = await mkdtemp(join(process.cwd(), "notes/verification/film-watch-fixture-"));
+  try {
+    await page.goto("/showcase/film?capture=1");
+    await page.waitForFunction(() => !!window.__filmCapture);
+    await holdCaptureReadiness(page, "fonts");
+    await writeFile(join(folder, "receipt.json"), JSON.stringify({ status: "pending" }));
+    // Exercise both creation and update beyond Vite's watcher debounce.
+    await page.waitForTimeout(500);
+    await writeFile(join(folder, "receipt.json"), JSON.stringify({ status: "verified" }));
+    await page.waitForTimeout(500);
+    expect((await captureProbe(page)).status).toBe("pending");
+    await releaseCaptureProbe(page);
+    await expect.poll(async () => (await captureProbe(page)).status).toBe("resolved");
+  } finally {
+    await rm(folder, { recursive: true, force: true });
+  }
+});
 
 test("SPA teardown immediately rejects a suspended capture and its retired API", async ({
   page,

@@ -235,7 +235,7 @@ export function Trailer({
             {playing ? <Pause className="size-6" /> : <Play className="size-6 translate-x-0.5" />}
           </span>
         </button>
-        <div className="absolute inset-x-0 bottom-0 z-10 flex flex-wrap items-center gap-2 bg-gradient-to-t from-black/80 to-transparent px-2 py-2 text-white sm:gap-3 sm:px-3 sm:py-3">
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 flex flex-wrap items-center gap-2 bg-gradient-to-t from-black/80 to-transparent px-2 py-2 text-white sm:gap-3 sm:px-3 sm:py-3 [&>button]:pointer-events-auto [&>input]:pointer-events-auto">
           <span className="font-mono text-2xs tabular-nums">
             {clock(time)} / {clock(duration)}
           </span>

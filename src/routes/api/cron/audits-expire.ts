@@ -20,8 +20,8 @@ async function expire(request: Request): Promise<Response> {
   try {
     const deleted = await expireAudits();
     return Response.json({ ok: true, deleted }, { headers });
-  } catch (error) {
-    console.error("Audit expiry failed:", error);
+  } catch {
+    console.error("Audit expiry failed");
     return Response.json({ error: "Audit expiry failed" }, { status: 500, headers });
   }
 }

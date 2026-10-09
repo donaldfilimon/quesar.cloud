@@ -16,7 +16,7 @@ export default defineConfig({
   use: { baseURL, trace: "retain-on-failure", screenshot: "only-on-failure" },
   webServer: {
     cwd: process.cwd(),
-    command: `VITE_FILM_CAPTURE=${process.env.FILM_CAPTURE_BUILD ?? "1"} VITE_STATIC_SITE=true VITE_AUTH_ENABLED=false BETTER_AUTH_URL=${baseURL} bunx vite dev --host 127.0.0.1 --port ${process.env.FILM_TEST_PORT} --strictPort`,
+    command: `VITE_FILM_CAPTURE=${process.env.FILM_CAPTURE_BUILD ?? "1"} VITE_STATIC_SITE=true VITE_AUTH_ENABLED=false BETTER_AUTH_URL=${baseURL} bunx vite dev --config e2e/film/vite.config.ts --host 127.0.0.1 --port ${process.env.FILM_TEST_PORT} --strictPort`,
     url: baseURL,
     reuseExistingServer: false,
     timeout: 60000,

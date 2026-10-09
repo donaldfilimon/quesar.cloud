@@ -91,6 +91,7 @@ export function createServer(deps: ServerDeps) {
   const deleting = new Set<string>();
   const previewStarts = new Map<string, Set<Promise<unknown>>>();
   let closing = false;
+  const requests = new Set<Promise<void>>();
   const ready = withRegistryLock(async () => {
     const sites = await readRegistry(registryFile);
     let changed = false;
@@ -488,6 +489,10 @@ export function createServer(deps: ServerDeps) {
     maxRequestBodySize: 1024 * 1024,
     websocket: proxy.websocket,
     async fetch(req, server) {
+      if (closing) return json({ error: "service stopping" }, { status: 503 });
+      let settled!: () => void;
+      const pending = new Promise<void>(resolve => { settled = resolve; });
+      requests.add(pending);
       try {
         const url = new URL(req.url);
         const serviceOrigin = deps.publicOrigin ?? `http://${policy.hostname.includes(":") ? `[${policy.hostname}]` : policy.hostname}:${server.port}`;
@@ -515,6 +520,9 @@ export function createServer(deps: ServerDeps) {
         return response;
       } catch {
         return json({ error: "service request failed" }, { status: 500 });
+      } finally {
+        requests.delete(pending);
+        settled();
       }
     },
   }); } catch (error) { void ready.then(releaseHome, releaseHome); throw error; } })();
@@ -523,6 +531,9 @@ export function createServer(deps: ServerDeps) {
   const shutdown = () => shutdownPromise ??= (async () => {
     closing = true;
     await ready;
+    // Existing requests may be parsing bodies, deleting files, or stopping a
+    // preview outside the registry lock. They retain home ownership until done.
+    await Promise.all([...requests]);
     await withRegistryLock(async () => {});
     await Promise.allSettled([...previewStarts.values()].flatMap(starts => [...starts]));
     for (const job of jobs.values()) job.cancel("Generation interrupted by service shutdown. Partial files retained.", "interrupted");

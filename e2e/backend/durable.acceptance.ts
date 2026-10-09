@@ -3,7 +3,7 @@ import { randomBytes, randomUUID, createCipheriv, createHmac, createHash } from 
 import { spawn, spawnSync, type ChildProcess } from "node:child_process";
 import { once } from "node:events";
 import { createServer } from "node:net";
-import { mkdtemp, cp, mkdir, writeFile, rm } from "node:fs/promises";
+import { mkdtemp, cp, mkdir, writeFile, rm, readdir } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -224,12 +224,18 @@ test("disposable Postgres and real browser durable account/workflow acceptance",
   expect(
     await Promise.all(children.map(async (process) => (await once(process, "exit"))[0])),
   ).toEqual([0, 0]);
-  expect(await sql("select name from _migrations")).toHaveLength(8);
+  const expectedMigrations = (await readdir("migrations", { withFileTypes: true }))
+    .filter((entry) => entry.isFile() && entry.name.endsWith(".sql"))
+    .map((entry) => ({ name: entry.name }))
+    .sort((a, b) => a.name.localeCompare(b.name));
+  expect(await sql("select name from _migrations order by name")).toEqual(expectedMigrations);
   const concurrent = new pg.Pool({ connectionString: urlFor(names[4]) });
-  expect((await concurrent.query("select name from _migrations")).rows).toHaveLength(8);
+  expect((await concurrent.query("select name from _migrations order by name")).rows).toEqual(
+    expectedMigrations,
+  );
   await concurrent.end();
   receipt(
-    "fresh + repeat + two fresh concurrent migrators: eight unique migrations, concurrent exits 0/0",
+    `fresh + repeat + two fresh concurrent migrators: exact ${expectedMigrations.length} root filenames, concurrent exits 0/0`,
   );
   const earlier = join(scratch, "earlier");
   await mkdir(earlier);

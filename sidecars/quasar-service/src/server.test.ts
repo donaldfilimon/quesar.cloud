@@ -1,6 +1,6 @@
 import { createServer as createNetServer, type AddressInfo } from "node:net";
 import { test, expect, afterEach } from "bun:test";
-import { mkdtemp, mkdir, writeFile, readFile, realpath } from "node:fs/promises";
+import { mkdtemp, mkdir, writeFile, readFile, realpath, chmod, access } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import type { GenerationEvent } from "../shared/index";
@@ -51,7 +51,7 @@ const pairedFetch = (url: string, init: RequestInit = {}) => fetch(url, { ...ini
 
 async function makeHarness(
   engine: EngineFn,
-  opts?: { templateDir?: string; makeClient?: ServerDeps["makeClient"]; preview?: PreviewManager; jobTimeoutMs?: number }
+  opts?: { templateDir?: string; makeClient?: ServerDeps["makeClient"]; preview?: PreviewManager; jobTimeoutMs?: number; allocatePreviewPort?: ServerDeps["allocatePreviewPort"] }
 ): Promise<Harness> {
   const home = await realpath(await mkdtemp(path.join(tmpdir(), "quasar-home-")));
   let templateDir = opts?.templateDir;
@@ -71,7 +71,7 @@ async function makeHarness(
     port: 0,
     pairingToken: TOKEN,
     jobTimeoutMs: opts?.jobTimeoutMs,
-    allocatePreviewPort: testPreviewPort,
+    allocatePreviewPort: opts?.allocatePreviewPort ?? testPreviewPort,
   });
 
   const harness: Harness = { home, templateDir, baseUrl: `http://localhost:${server.port}`, server, preview };
@@ -669,3 +669,151 @@ test("a launch body delayed across child replacement cannot redeem its old gener
   expect(rejected?.status).toBe(401);
   expect(rejected?.headers.get("set-cookie")).toBeNull();
 }, 10_000);
+
+test("shutdown retains home ownership until an admitted delete finishes", async () => {
+  const h = await makeHarness(stubEngine([{ type: "done" }], 0));
+  const site = await (await pairedFetch(`${h.baseUrl}/api/sites`, { method: "POST", body: JSON.stringify({ name: "Drain delete", prompt: "test" }) })).json();
+  await pollUntilIdle(h.baseUrl, site.id);
+  let entered!: () => void;
+  const stopping = new Promise<void>(resolve => { entered = resolve; });
+  let resume!: () => void;
+  const held = new Promise<void>(resolve => { resume = resolve; });
+  const originalStop = h.preview.stop.bind(h.preview);
+  h.preview.stop = async (id: string) => { entered(); await held; await originalStop(id); };
+  const deleting = pairedFetch(`${h.baseUrl}/api/sites/${site.id}`, { method: "DELETE" });
+  void deleting.catch(() => {});
+  let shutdown: Promise<void> | undefined;
+  try {
+    await stopping;
+    let closed = false;
+    shutdown = h.server.shutdown().then(() => { closed = true; });
+    void shutdown.catch(() => {});
+    await sleep(30);
+    expect(closed).toBe(false);
+    expect(() => createServer({ home: h.home, templateDir: h.templateDir, engine: stubEngine([], 0), makeClient: () => ({} as never), preview: new PreviewManager(), scaffoldInstall: false, port: 0, pairingToken: TOKEN })).toThrow("ownership unavailable");
+    expect((await pairedFetch(`${h.baseUrl}/api/sites`)).status).toBe(503);
+    resume();
+    expect((await deleting).status).toBe(204);
+    await shutdown;
+    expect(JSON.parse(await readFile(path.join(h.home, "registry.json"), "utf8"))).toEqual([]);
+  } finally {
+    resume();
+    await Promise.allSettled([deleting, ...(shutdown ? [shutdown] : [])]);
+    h.preview.stop = originalStop;
+  }
+});
+
+test("failed pairing construction releases home for immediate same-process retry", async () => {
+  const h = await makeHarness(stubEngine([], 0));
+  await h.server.shutdown();
+  const deps = { home: h.home, templateDir: h.templateDir, engine: stubEngine([], 0), makeClient: () => ({} as never), preview: new PreviewManager(), scaffoldInstall: false, port: 0, pairingToken: "invalid" };
+  expect(() => createServer(deps)).toThrow();
+  const retry = createServer({ ...deps, pairingToken: TOKEN });
+  await retry.shutdown();
+});
+
+test("failed HTTP bind settles recovery before releasing home and preserves the occupied listener", async () => {
+  const occupied = await makeHarness(stubEngine([], 0));
+  const h = await makeHarness(stubEngine([], 0));
+  await h.server.shutdown();
+  const deps = { home: h.home, templateDir: h.templateDir, engine: stubEngine([], 0), makeClient: () => ({} as never), preview: new PreviewManager(), scaffoldInstall: false, port: occupied.server.port!, pairingToken: TOKEN };
+  expect(() => createServer(deps)).toThrow();
+  // Constructor cleanup deliberately retains ownership until async recovery settles.
+  await sleep(30);
+  const retry = createServer({ ...deps, port: 0 });
+  try { expect((await fetch(`${occupied.baseUrl}/health`)).status).toBe(200); }
+  finally { await retry.shutdown(); }
+});
+
+test("deletion drains an accepted filesystem write before removing the directory", async () => {
+  let entered!: () => void;
+  const writing = new Promise<void>(resolve => { entered = resolve; });
+  let resume!: () => void;
+  const held = new Promise<void>(resolve => { resume = resolve; });
+  const h = await makeHarness(async ({ scope, siteDir, onEvent }) => {
+    await scope!.accept(async () => { entered(); await held; await writeFile(path.join(siteDir, "accepted.txt"), "owned write"); });
+    onEvent({ type: "done" });
+  });
+  let deleting: Promise<Response> | undefined;
+  try {
+    const site = await (await pairedFetch(`${h.baseUrl}/api/sites`, { method: "POST", body: JSON.stringify({ name: "Held write", prompt: "test" }) })).json();
+    await writing;
+    let deleted = false;
+    deleting = pairedFetch(`${h.baseUrl}/api/sites/${site.id}`, { method: "DELETE" }).then(response => { deleted = true; return response; });
+    void deleting.catch(() => {});
+    await sleep(30);
+    expect(deleted).toBe(false);
+    expect((await pairedFetch(`${h.baseUrl}/api/sites/${site.id}/edit`, { method: "POST", body: JSON.stringify({ prompt: "replacement" }) })).status).toBe(409);
+    resume();
+    expect((await deleting).status).toBe(204);
+    expect(await access(path.join(h.home, "sites", site.slug)).then(() => true, () => false)).toBe(false);
+  } finally {
+    resume();
+    if (deleting) await Promise.allSettled([deleting]);
+  }
+});
+
+test("filesystem deletion failure preserves registry and slug until retry succeeds", async () => {
+  const h = await makeHarness(stubEngine([{ type: "done" }], 0));
+  const create = () => pairedFetch(`${h.baseUrl}/api/sites`, { method: "POST", body: JSON.stringify({ name: "Delete permissions", prompt: "test" }) });
+  const site = await (await create()).json();
+  await pollUntilIdle(h.baseUrl, site.id);
+  const sitesDir = path.join(h.home, "sites");
+  await chmod(sitesDir, 0o500);
+  try {
+    expect((await pairedFetch(`${h.baseUrl}/api/sites/${site.id}`, { method: "DELETE" })).status).toBe(500);
+    expect((await pairedFetch(`${h.baseUrl}/api/sites/${site.id}`)).status).toBe(200);
+  } finally { await chmod(sitesDir, 0o700); }
+  const replacement = await (await create()).json();
+  expect(replacement.slug).toBe(`${site.slug}-2`);
+  await pollUntilIdle(h.baseUrl, replacement.id);
+  expect((await pairedFetch(`${h.baseUrl}/api/sites/${site.id}`, { method: "DELETE" })).status).toBe(204);
+});
+
+test("registry mutex serializes HTTP events with settled state and immediate retry", async () => {
+  const bounded = <T>(promise: Promise<T>, label: string): Promise<T> => {
+    let timer: ReturnType<typeof setTimeout>;
+    return Promise.race([promise, new Promise<never>((_, reject) => { timer = setTimeout(() => reject(new Error(`Timeout: ${label}`)), 3000); })]).finally(() => clearTimeout(timer!));
+  };
+  let releaseEngine!: () => void;
+  const heldEngine = new Promise<void>(resolve => { releaseEngine = resolve; });
+  let admitted!: () => void;
+  const engineEntered = new Promise<void>(resolve => { admitted = resolve; });
+  let releaseLock!: () => void;
+  const heldLock = new Promise<void>(resolve => { releaseLock = resolve; });
+  let enteredLock!: () => void;
+  const lockEntered = new Promise<void>(resolve => { enteredLock = resolve; });
+  const h = await makeHarness(async ({ onEvent }) => { admitted(); await heldEngine; onEvent({ type: "done" }); }, {
+    allocatePreviewPort: async () => { enteredLock(); await heldLock; return testPreviewPort(); },
+  });
+  let preview: Promise<Response> | undefined;
+  let events: Promise<Response> | undefined;
+  try {
+    const site = await (await bounded(pairedFetch(`${h.baseUrl}/api/sites`, { method: "POST", body: JSON.stringify({ name: "Mutex finalization", prompt: "test" }) }), "create")).json();
+    await bounded(engineEntered, "engine admission");
+    preview = pairedFetch(`${h.baseUrl}/api/sites/${site.id}/preview/start`, { method: "POST" });
+    void preview.catch(() => {});
+    await bounded(lockEntered, "preview reservation lock");
+    releaseEngine();
+    await sleep(30);
+    const persisted = JSON.parse(await readFile(path.join(h.home, "registry.json"), "utf8"))[0];
+    expect(persisted.status).toBe("generating");
+    // getEvents also takes this lock: pending HTTP proves serialization,
+    // not the internal bus publication order.
+    let delivered = false;
+    events = pairedFetch(`${h.baseUrl}/api/sites/${site.id}/events`).then(response => { delivered = true; return response; });
+    void events.catch(() => {});
+    await sleep(30);
+    expect(delivered).toBe(false);
+    releaseLock();
+    const page = await (await bounded(events, "terminal events")).json();
+    expect(page.events.map((event: GenerationEvent) => event.type)).toEqual(["done"]);
+    expect(page.job.outcome).toBe("done");
+    expect(JSON.parse(await readFile(path.join(h.home, "registry.json"), "utf8"))[0].status).toBe("idle");
+    expect((await bounded(pairedFetch(`${h.baseUrl}/api/sites/${site.id}/edit`, { method: "POST", body: JSON.stringify({ prompt: "immediate retry" }) }), "retry")).status).toBe(202);
+  } finally {
+    releaseEngine();
+    releaseLock();
+    await bounded(Promise.allSettled([...(preview ? [preview] : []), ...(events ? [events] : [])]), "fixture requests cleanup");
+  }
+}, 12_000);
