@@ -1,0 +1,22 @@
+{
+  "observed_at_utc": "2026-10-09T19:07:25.753904+00:00",
+  "archive": "/Users/donaldfilimon/dev/active/quesar.cloud/artifacts/qualified-releases/persistent-node-1b83249443d2aa21-2026-10-09.tar.gz",
+  "archive_sha256": "ae4685539c3b5963b90c6875d8f8ff7bd1257948e8453821bfdbc2c96464d275",
+  "archive_bytes": 215623459,
+  "qualified_tree_sha256": "1b83249443d2aa2144402bd592cba37846a37b44b3a3d748db53610dc157dd34",
+  "baseline": "d154e480760706a39745d9b5299dd1be8a8d0f5d",
+  "qualified_source_sha256": "891ca37676728aa25fd1113fe708e7735d6b734c2b5db5fdf56735bcc14d00f3",
+  "entries": 760,
+  "regular_files": 715,
+  "directories": 44,
+  "symlinks": {
+    "server/node_modules/tslib": ".nf3/tslib@2.8.1"
+  },
+  "regular_file_bytes": 243559548,
+  "entry_names_bytes_and_link_spelling_match": true,
+  "tree_unchanged_during_packaging": true,
+  "appledouble_entries": 0,
+  "secret_file_exclusion": "No .env* or PEM/private-key containers; only the env-scrubbed qualified compiled tree was copied, never private runtime inputs or fixture dumps. Generated build metadata such as nitro.json is included. Not a claim to detect arbitrary unknown secrets in source literals.",
+  "supersedes_archive_sha256": "16a98901a8a439d843bcf56cf77353d505fa80dcdc246afe434419999ebe83f2",
+  "exit": 0
+}
