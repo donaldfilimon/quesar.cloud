@@ -1,0 +1,1 @@
+import{ht as e}from"./index-CKv3VfFn.js";var t=e({type:`function`});export{t};

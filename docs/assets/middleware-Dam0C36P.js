@@ -1,1 +1,0 @@
-import{ht as e}from"./index-DK6i92r5.js";var t=e({type:`function`});export{t};
