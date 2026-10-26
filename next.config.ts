@@ -46,6 +46,16 @@ const nextConfig: NextConfig = {
   distDir: distOverride ?? (serverMode ? ".next-server" : ".next"),
   images: { unoptimized: true },
   reactStrictMode: true,
+  // The mlai-era `/docs/intro` URL. `/docs/[slug]` has `dynamicParams = false` and
+  // "intro" is not a doc, so the route loader's redirect never runs; redirect here.
+  // (A static export has no redirects; Pages serves its 404 for it.)
+  ...(serverMode
+    ? {
+        redirects: async () => [
+          { source: "/docs/intro", destination: "/docs/getting-started", permanent: true },
+        ],
+      }
+    : {}),
   // The source commit, not a random id: rebuilding unchanged source reproduces
   // docs/ byte for byte, so a republish diff shows only real changes.
   generateBuildId: () => {

@@ -67,33 +67,28 @@ interface MiddlewareBuilder<TIn extends Context> extends FunctionMiddleware<TIn>
   client(fn: unknown): MiddlewareBuilder<TIn>;
 }
 
+/**
+ * Builders are immutable, as TanStack's are: each step returns a new builder, so two
+ * middlewares (or server functions) derived from one shared base never leak
+ * dependencies, validators or handlers into each other.
+ */
+function middlewareBuilder(state: {
+  dependencies: FunctionMiddleware[];
+  serverFn?: MiddlewareServer<unknown, unknown>;
+}): unknown {
+  return {
+    dependencies: state.dependencies,
+    serverFn: state.serverFn,
+    middleware: (list: FunctionMiddleware[]) =>
+      middlewareBuilder({ ...state, dependencies: [...state.dependencies, ...list] }),
+    server: (fn: MiddlewareServer<unknown, unknown>) =>
+      middlewareBuilder({ ...state, serverFn: fn }),
+    client: () => middlewareBuilder(state),
+  };
+}
+
 export function createMiddleware(_options?: { type?: "function" | "request" }) {
-  const state: {
-    dependencies: FunctionMiddleware[];
-    serverFn?: MiddlewareServer<unknown, unknown>;
-  } = {
-    dependencies: [],
-  };
-  const builder = {
-    get dependencies() {
-      return state.dependencies;
-    },
-    get serverFn() {
-      return state.serverFn;
-    },
-    middleware(list: FunctionMiddleware[]) {
-      state.dependencies = [...state.dependencies, ...list];
-      return builder;
-    },
-    server(fn: MiddlewareServer<unknown, unknown>) {
-      state.serverFn = fn;
-      return builder;
-    },
-    client() {
-      return builder;
-    },
-  };
-  return builder as unknown as MiddlewareBuilder<Record<never, never>>;
+  return middlewareBuilder({ dependencies: [] }) as MiddlewareBuilder<Record<never, never>>;
 }
 
 function flatten(
@@ -130,7 +125,10 @@ export function getRequest(): Request {
 
 /** Set a header on the response of the current server function or server route. */
 export function setResponseHeader(name: string, value: string) {
-  scope.getStore()?.headers.set(name, value);
+  const headers = scope.getStore()?.headers;
+  // Each `Set-Cookie` is its own header; `set` would keep only the last cookie.
+  if (name.toLowerCase() === "set-cookie") headers?.append(name, value);
+  else headers?.set(name, value);
 }
 
 /* ------------------------------------------------------------- server functions */
@@ -221,26 +219,14 @@ interface ServerFnBuilder<TContext, TInput, TData> {
   ): ServerFn<TInput, Awaited<R>>;
 }
 
-export function createServerFn(
-  options: { method?: "GET" | "POST" } = {},
-): ServerFnBuilder<Record<never, never>, undefined, undefined> {
-  const entry: Omit<ServerFnEntry, "handler"> = {
-    method: options.method ?? "POST",
-    middleware: [],
-  };
-  const builder = {
-    middleware(list: FunctionMiddleware[]) {
-      entry.middleware = [...entry.middleware, ...list];
-      return builder;
-    },
-    validator(fn: Validator<unknown, unknown>) {
-      entry.validator = toValidator(fn);
-      return builder;
-    },
-    inputValidator(fn: Validator<unknown, unknown>) {
-      entry.validator = toValidator(fn);
-      return builder;
-    },
+function serverFnBuilder(entry: Omit<ServerFnEntry, "handler">): unknown {
+  return {
+    middleware: (list: FunctionMiddleware[]) =>
+      serverFnBuilder({ ...entry, middleware: [...entry.middleware, ...list] }),
+    validator: (fn: Validator<unknown, unknown>) =>
+      serverFnBuilder({ ...entry, validator: toValidator(fn) }),
+    inputValidator: (fn: Validator<unknown, unknown>) =>
+      serverFnBuilder({ ...entry, validator: toValidator(fn) }),
     handler(fn: Handler, id?: string) {
       const complete: ServerFnEntry = { ...entry, handler: fn };
       // Without an id (vitest, which does not run the build loader) the function is
@@ -249,7 +235,16 @@ export function createServerFn(
       return (call: { data?: unknown } = {}) => executeServerFn(complete, call.data);
     },
   };
-  return builder as unknown as ServerFnBuilder<Record<never, never>, undefined, undefined>;
+}
+
+export function createServerFn(
+  options: { method?: "GET" | "POST" } = {},
+): ServerFnBuilder<Record<never, never>, undefined, undefined> {
+  return serverFnBuilder({ method: options.method ?? "POST", middleware: [] }) as ServerFnBuilder<
+    Record<never, never>,
+    undefined,
+    undefined
+  >;
 }
 
 /** Returns the function itself: server functions are plain async functions here. */

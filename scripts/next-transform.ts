@@ -17,7 +17,7 @@ import { relative, resolve } from "node:path";
 import { parse } from "@babel/parser";
 import MagicString from "magic-string";
 
-interface Node {
+export interface Node {
   type: string;
   start: number;
   end: number;
@@ -28,7 +28,7 @@ function isNode(value: unknown): value is Node {
   return Boolean(value && typeof value === "object" && typeof (value as Node).type === "string");
 }
 
-function walk(node: Node, visit: (node: Node) => void) {
+export function walk(node: Node, visit: (node: Node) => void) {
   visit(node);
   for (const [key, value] of Object.entries(node)) {
     if (key === "loc" || key === "extra" || key.endsWith("Comments")) continue;
@@ -38,7 +38,7 @@ function walk(node: Node, visit: (node: Node) => void) {
   }
 }
 
-function parseModule(code: string): Node {
+export function parseModule(code: string): Node {
   return parse(code, {
     sourceType: "module",
     plugins: ["typescript", "jsx", "importMeta"],
@@ -114,7 +114,23 @@ function literalValue(node: Node | undefined): unknown {
   throw new Error(`import.meta.glob options must be literals (found ${node.type})`);
 }
 
-export function transformGlobs(code: string, root: string): string | null {
+/** The directory a glob pattern can match under: its path before the first glob character. */
+export function globBase(root: string, pattern: string): string {
+  const literal = pattern.slice(1).split("/");
+  const index = literal.findIndex((part) => /[*?[{]/.test(part));
+  return resolve(root, ...(index < 0 ? literal.slice(0, -1) : literal.slice(0, index)));
+}
+
+/**
+ * `onDirectory` receives each pattern's base directory, so the loader can register it
+ * as a context dependency: a file added there (a new migration or route) must
+ * re-run the expansion, in watch mode and through webpack's persistent cache.
+ */
+export function transformGlobs(
+  code: string,
+  root: string,
+  onDirectory?: (dir: string) => void,
+): string | null {
   if (!code.includes("import.meta.glob")) return null;
   const calls: Node[] = [];
   walk(parseModule(code), (node) => {
@@ -143,6 +159,7 @@ export function transformGlobs(code: string, root: string): string | null {
       query?: string;
       import?: string;
     };
+    onDirectory?.(globBase(root, pattern));
     const files = globSync(pattern.slice(1), { cwd: root }).sort();
     const entries = files.map((file, fileIndex) => {
       const key = JSON.stringify(`/${file.replace(/\\/g, "/")}`);
