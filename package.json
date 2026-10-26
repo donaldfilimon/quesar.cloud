@@ -21,6 +21,7 @@
     "test": "vitest run",
     "test:e2e": "playwright test",
     "check:static": "node scripts/check-static.ts",
+    "check:seo": "node scripts/check-seo.ts",
     "check:parity": "node scripts/next-check.ts",
     "check:research-drift": "node scripts/research-drift.ts",
     "og:images": "node scripts/og-images.ts",
