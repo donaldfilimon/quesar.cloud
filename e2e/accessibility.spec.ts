@@ -78,9 +78,9 @@ test("search and cinematic modules stay off the initial home request path", asyn
   page.on("request", (request) => requested.push(request.url()));
   await page.goto("/");
   expect(
-    requested.filter((url) => /\/(search-panel|search-catalog|CinematicShell)-/.test(url)),
+    requested.filter((url) => /\/(search-panel|search-catalog|CinematicShell)[-.]/.test(url)),
   ).toEqual([]);
   await page.getByRole("button", { name: "Search the site" }).click();
   await expect(page.getByRole("combobox", { name: "Search pages" })).toBeVisible();
-  expect(requested.some((url) => /\/search-panel-/.test(url))).toBe(true);
+  expect(requested.some((url) => /\/search-panel[-.]/.test(url))).toBe(true);
 });

@@ -23,7 +23,7 @@ let panelPromise: Promise<{ default: ComponentType<SearchPanelProps> }> | undefi
 
 export const loadSearchPanel = () =>
   (panelPromise ??= Promise.all([
-    import("./search-panel"),
+    import(/* webpackChunkName: "search-panel" */ "./search-panel"),
     fetch(catalogUrl, { signal: AbortSignal.timeout(10000) }).then(async (response) => {
       if (!response.ok) throw new Error("Search catalog unavailable");
       const data: unknown = await response.json();

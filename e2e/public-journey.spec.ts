@@ -102,7 +102,7 @@ test("failed submission preserves the complete editable form", async ({ page }) 
   await page.getByLabel("Message", { exact: true }).fill(message);
   await page.getByLabel("Service or project context (optional)").fill("Private AI Deployment");
   await page.getByRole("button", { name: "Open email draft" }).click();
-  await expect(page.getByRole("alert")).toContainText(
+  await expect(page.locator("main").getByRole("alert")).toContainText(
     "Keep your service context and message under 2000 characters.",
   );
   await expect(page.getByLabel("Name", { exact: true })).toHaveValue("Donald");

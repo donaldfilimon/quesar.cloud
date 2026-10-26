@@ -13,6 +13,10 @@ export default tseslint.config(
       ".output/**",
       ".vercel/**",
       ".nitro/**",
+      // Next.js build cache and static export (next.config.ts).
+      ".next/**",
+      "out/**",
+      "next-env.d.ts",
       "node_modules/**",
       "src/routeTree.gen.ts",
       // Built static site (bun run build:static) published by GitHub Pages.
@@ -59,6 +63,13 @@ export default tseslint.config(
     // design; the router plugin splits each route component into its own
     // module for HMR, so react-refresh's one-file-one-kind rule does not apply.
     files: ["src/routes/**/*.{ts,tsx}"],
+    rules: { "react-refresh/only-export-components": "off" },
+  },
+  {
+    // Next.js segment files export route config (`generateStaticParams`,
+    // `dynamicParams`) beside the page by design, and the compat router mirrors
+    // `@tanstack/react-router`'s mixed export surface.
+    files: ["app/**/*.{ts,tsx}", "src/compat/next/router.tsx"],
     rules: { "react-refresh/only-export-components": "off" },
   },
   // Disable rules that conflict with Prettier formatting.

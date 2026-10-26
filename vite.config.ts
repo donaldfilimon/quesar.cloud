@@ -75,6 +75,9 @@ export default defineConfig(({ command, isPreview, mode }) => {
       strictPort: true,
     },
     resolve: { tsconfigPaths: true },
+    // Tailwind runs through @tailwindcss/vite. The inline (empty) PostCSS config stops
+    // Vite loading postcss.config.mjs, which exists for the Next.js build only.
+    css: { postcss: {} },
     environments: {
       client: {
         build: {

@@ -11,7 +11,8 @@ export function searchRetryPlugin(): Plugin {
     apply: "build",
     renderChunk(code) {
       const output = code.replace(
-        /import\((["'])(\.\/search-panel-[^"']+\.js)\1\)/g,
+        // The source import carries a webpack chunk-name comment for the Next.js build.
+        /import\(\s*(?:\/\*[^*]*\*\/\s*)?(["'])(\.\/search-panel-[^"']+\.js)\1\s*\)/g,
         (_match, _quote, path: string) =>
           `import(new URL(${JSON.stringify(path)},import.meta.url).href+"?attempt="+Date.now()+"-"+Math.random())`,
       );

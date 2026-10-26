@@ -1,0 +1,114 @@
+"use client";
+
+import { canonicalUrl } from "@/lib/seo";
+import { rootHead } from "./root-head";
+import {
+  RouteMatchContext,
+  useHydrated,
+  useRouterState,
+  type HeadDescriptor,
+  type RouteOptions,
+} from "./router";
+
+/**
+ * A route as its source file exports it. Generated views pass the real TanStack
+ * type (src/ typechecks against `@tanstack/react-router`); at runtime it is the
+ * compat `RouteApi`, so only `options` is read.
+ */
+interface MountedRoute {
+  options: object;
+}
+
+type Meta = Record<string, string | undefined>;
+
+/** TanStack's HeadContent rule: a later tag with the same title/name/property replaces the earlier one. */
+function metaKey(meta: Meta): string | null {
+  if ("title" in meta) return "title";
+  if (meta.charSet) return "charset";
+  if (meta.name) return `name:${meta.name}${meta.media ? `@${meta.media}` : ""}`;
+  if (meta.property) return `property:${meta.property}`;
+  return null;
+}
+
+function mergeHead(...heads: Array<HeadDescriptor | undefined>) {
+  const meta = new Map<string, Meta>();
+  const loose: Meta[] = [];
+  const links: Meta[] = [];
+  const scripts: NonNullable<HeadDescriptor["scripts"]> = [];
+  for (const head of heads) {
+    for (const entry of head?.meta ?? []) {
+      const key = metaKey(entry);
+      if (key) {
+        meta.delete(key);
+        meta.set(key, entry);
+      } else loose.push(entry);
+    }
+    links.push(...(head?.links ?? []));
+    scripts.push(...(head?.scripts ?? []));
+  }
+  return { meta: [...meta.values(), ...loose], links, scripts };
+}
+
+/** React 19 hoists these into `<head>`, during prerender and on client navigation alike. */
+export function HeadTags({ head }: { head: HeadDescriptor | undefined }) {
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const merged = mergeHead(rootHead, head);
+  const href = canonicalUrl(pathname);
+  return (
+    <>
+      {merged.meta.map((entry, index) =>
+        "title" in entry ? (
+          <title key="title">{entry.title}</title>
+        ) : (
+          <meta key={metaKey(entry) ?? `meta-${index}`} {...entry} />
+        ),
+      )}
+      {merged.links.map((link, index) => (
+        <link key={`${link.rel}-${link.href}-${index}`} {...link} />
+      ))}
+      <link rel="canonical" href={href} />
+      <meta property="og:url" content={href} />
+      {merged.scripts.map((script, index) =>
+        script.src ? (
+          <script key={script.src} src={script.src} type={script.type} async />
+        ) : (
+          <script
+            key={`inline-${index}`}
+            type={script.type}
+            dangerouslySetInnerHTML={{ __html: script.children ?? "" }}
+          />
+        ),
+      )}
+    </>
+  );
+}
+
+function RouteBody({ options }: { options: RouteOptions }) {
+  const Component = options.component;
+  return Component ? <Component /> : null;
+}
+
+/** One TanStack route as a Next page: loader, head and component, under the route's params. */
+export function RouteView({
+  route,
+  params = {},
+}: {
+  route: MountedRoute;
+  params?: Record<string, string>;
+}) {
+  const hydrated = useHydrated();
+  const options = route.options as RouteOptions;
+  const loaderData = options.loader?.({ params });
+  const head = options.head?.({ params, loaderData });
+  const clientOnly = options.ssr === false;
+  return (
+    <>
+      <HeadTags head={head} />
+      {clientOnly && !hydrated ? null : (
+        <RouteMatchContext value={{ params, loaderData }}>
+          <RouteBody options={options} />
+        </RouteMatchContext>
+      )}
+    </>
+  );
+}

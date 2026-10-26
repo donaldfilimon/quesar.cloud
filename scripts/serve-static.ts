@@ -18,6 +18,8 @@ const types: Record<string, string> = {
   ".vtt": "text/vtt",
   ".woff2": "font/woff2",
   ".xml": "application/xml",
+  // Next.js export RSC payloads; GitHub Pages serves them as text/plain too.
+  ".txt": "text/plain",
   ".pdf": "application/pdf",
 };
 createServer((req, res) => {

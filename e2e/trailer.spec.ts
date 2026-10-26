@@ -22,7 +22,7 @@ test("rejected playback stays paused and can be retried", async ({ page }) => {
   });
   await page.goto("/showcase");
   await page.getByRole("button", { name: "Play trailer" }).click();
-  await expect(page.getByRole("alert")).toContainText("Playback could not start.");
+  await expect(page.locator("main").getByRole("alert")).toContainText("Playback could not start.");
   await expect(page.getByRole("button", { name: "Play trailer" })).toBeVisible();
   await page.evaluate(() => {
     HTMLMediaElement.prototype.play = function () {
@@ -32,7 +32,7 @@ test("rejected playback stays paused and can be retried", async ({ page }) => {
   });
   await page.getByRole("button", { name: "Retry playback" }).click();
   await expect(page.getByRole("button", { name: "Pause trailer" })).toBeVisible();
-  await expect(page.getByRole("alert")).toHaveCount(0);
+  await expect(page.locator("main").getByRole("alert")).toHaveCount(0);
   expect(errors).toEqual([]);
 });
 
@@ -70,7 +70,7 @@ test("manual chapter selection cancels pending advancement and guards seeking", 
 test("media failure disables seek and keeps chapter selection usable", async ({ page }) => {
   await page.route(/\/media\/.*\.(mp4|webm)$/, (route) => route.abort());
   await page.goto("/showcase");
-  await expect(page.getByRole("alert")).toContainText("This film could not load.");
+  await expect(page.locator("main").getByRole("alert")).toContainText("This film could not load.");
   await expect(page.getByRole("slider", { name: "Seek" })).toBeDisabled();
   await expect(page.getByRole("button", { name: "Retry playback" })).toBeVisible();
   await page.getByRole("button", { name: "2. The wafer" }).click();
@@ -94,7 +94,7 @@ test("old playback rejection cannot overwrite a newly selected chapter", async (
   await page.getByRole("button", { name: "Play trailer" }).click();
   await page.getByRole("button", { name: "2. The wafer" }).click();
   await page.evaluate(() => (window as unknown as { rejectOld: () => void }).rejectOld());
-  await expect(page.getByRole("alert")).toHaveCount(0);
+  await expect(page.locator("main").getByRole("alert")).toHaveCount(0);
   await expect(page.getByRole("button", { name: "Play trailer" })).toBeVisible();
 });
 

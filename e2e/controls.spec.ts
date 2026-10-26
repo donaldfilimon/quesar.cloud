@@ -26,7 +26,10 @@ test("mobile menu releases focus and scroll when resized to desktop", async ({ p
 for (const asset of ["search-panel", "search-catalog"]) {
   test(`failed ${asset} retries locally without losing the page`, async ({ page }) => {
     let fail = true;
-    await page.route(`**/assets/${asset}-*`, (route) => (fail ? route.abort() : route.continue()));
+    // Vite emits `assets/${asset}-<hash>`; Next emits `chunks/${asset}.<hash>.js` and `/${asset}.json`.
+    await page.route(new RegExp(`/${asset}[-.]`), (route) =>
+      fail ? route.abort() : route.continue(),
+    );
     await page.goto("/");
     await page.getByRole("button", { name: "Search the site" }).click();
     await expect(page.getByText("Search could not load.")).toBeVisible();
