@@ -1,7 +1,9 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "plugins": [{ "name": "next" }]
+    "plugins": [{ "name": "next" }],
+    // Next's asset module types without the generated next-env.d.ts (fresh clones).
+    "types": ["node", "next", "next/image-types/global"]
   },
   "include": [
     "next-env.d.ts",

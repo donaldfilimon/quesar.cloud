@@ -1,4 +1,4 @@
-import { repoDocs, repoPaths } from "@/lib/catalog";
+import { repoPaths } from "@/lib/catalog";
 import { blog } from "@/lib/mlai/categories/blog";
 import { docs } from "@/lib/mlai/categories/docs";
 import { products } from "@/lib/mlai/categories/products";
@@ -23,14 +23,15 @@ export const staticParams: Record<string, () => Array<Record<string, string>>> =
   "/research/$slug": () => bySlug(research.publications),
   "/research/implementations/$slug": () => bySlug(researchContext),
   "/team/$slug": () => bySlug(team),
-  // Canonical `/source/*` targets in `repoPaths`, plus curated repos with no other route (`pathForRepo`).
+  // Every canonical `/source/*` target in `repoPaths`. The GitHub panels link to
+  // them at runtime (`pathForRepo`); the Vite crawl only reached the four that
+  // static pages link, so the other twelve were 404s on the published site.
   "/source/$name": () =>
     [
-      ...new Set([
-        ...Object.values(repoPaths)
+      ...new Set(
+        Object.values(repoPaths)
           .filter((path) => path.startsWith("/source/"))
           .map((path) => decodeURIComponent(path.slice("/source/".length))),
-        ...Object.keys(repoDocs).filter((name) => !(name in repoPaths)),
-      ]),
+      ),
     ].map((name) => ({ name })),
 };

@@ -53,7 +53,9 @@ if (!existsSync(join(src, "404.html"))) {
 const missing = new Set<string>();
 for (const file of htmlFiles(src)) {
   const html = readFileSync(file, "utf8");
-  for (const [, asset] of html.matchAll(/"\/_next\/static\/([^"?#]+)"/g)) {
+  // Attribute references only: the inline RSC payload repeats them JSON-escaped.
+  for (const [, raw] of html.matchAll(/(?:src|href)="\/_next\/static\/([^"?#]+)"/g)) {
+    const asset = decodeURIComponent(raw);
     if (!existsSync(join(src, "_next", "static", asset)))
       missing.add(`${asset} (in ${relative(src, file)})`);
   }
