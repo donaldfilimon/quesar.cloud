@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import { StatusBadge } from "@/components/site/status-badge";
 import { clientExperience } from "@/lib/mlai/categories/client-experience";
 import { Backtrace } from "@/components/site/backtrace";
-import { NeuralField } from "@/components/site/neural-field";
+import { RequestSchematic } from "@/components/site/request-schematic";
 import { Trailer } from "@/components/site/trailer";
 import { Button } from "@/components/ui/button";
 import { site } from "@/lib/site-identity";
@@ -61,14 +61,18 @@ function Home() {
       </section>
       <Row
         id="ecosystem"
+        index="01"
         label="The MLAI ecosystem"
         title="Distinct roles. One inspectable architecture."
         wide
         lede="Abbey, Aviva, and Abi are persona roles in ABI. WDBX supplies the memory substrate. Read each implementation boundary before integrating."
       >
-        <div className="grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {homeVision.ecosystem.map((product) => (
-            <article key={product.name} className={`vision-product vision-product-${product.tone}`}>
+            <article
+              key={product.name}
+              className={`vision-product vision-product-${product.tone} bp-frame`}
+            >
               <StatusBadge status={product.status} />
               <h3 className="mt-6 font-display text-3xl tracking-tight">{product.name}</h3>
               <p className="vision-product-role mt-2 text-sm font-medium">{product.role}</p>
@@ -83,7 +87,7 @@ function Home() {
             </article>
           ))}
         </div>
-        <figure className="vision-architecture mt-12 rounded-lg border border-border bg-bg-elevated p-6 sm:p-8">
+        <figure className="vision-architecture bp-frame bp-ticks mt-10 p-6 sm:p-8">
           <ol className="grid gap-6 sm:grid-cols-3" aria-label="Conceptual request flow">
             {["Your context", "ABI routing", "Selected persona"].map((step, index) => (
               <li key={step} className="font-display text-xl">
@@ -126,6 +130,7 @@ function Home() {
       </Row>
       <Row
         id="memory"
+        index="02"
         label="Memory with provenance"
         title="An answer should carry its context."
         lede="Explore the sources, retrieval weights, and causal history behind a memory system. This example illustrates an inspectable trace."
@@ -141,15 +146,17 @@ function Home() {
       </Row>
       <Row
         id="developers"
+        index="03"
         label="For builders"
         title={homeVision.developer.title}
         lede={homeVision.developer.body}
       >
-        <div className="vision-code rounded-lg border border-border bg-bg-elevated p-5 sm:p-7">
-          <p className="mb-5 font-mono text-xs text-fg-subtle">
-            Local CLI example — requires ABI source setup
+        <div className="vision-code bp-frame">
+          <p className="bp-frame-head">
+            <span>Local CLI example</span>
+            <span className="bp-note">requires ABI source setup</span>
           </p>
-          <pre className="overflow-x-auto text-sm leading-7">
+          <pre className="overflow-x-auto p-5 text-sm leading-7 sm:p-6">
             <code>{homeVision.developer.code}</code>
           </pre>
         </div>
@@ -171,11 +178,12 @@ function Home() {
       </Row>
       <Row
         id="research"
+        index="04"
         label="Research and simulation"
         title={homeVision.research.title}
         lede={homeVision.research.body}
       >
-        <div className="border-t border-border pt-6">
+        <div className="bp-frame bp-dashed p-6">
           <StatusBadge status="development" />
           <h3 className="mt-4 font-display text-2xl">{homeVision.spatial.title}</h3>
           <p className="mt-3 text-base leading-relaxed text-fg-muted">{homeVision.spatial.body}</p>
@@ -196,14 +204,15 @@ function Home() {
       </Row>
       <Row
         id="engagements"
+        index="05"
         label="For organizations · Services"
         title="Choose the next engineering decision."
         lede="Define a private AI engagement around retrieval, tool permissions, deployment topology, and evaluation. Scope and acceptance criteria are agreed for each project."
         wide
       >
-        <div className="grid gap-8 md:grid-cols-3">
+        <div className="grid gap-4 md:grid-cols-3">
           {clientExperience.engagementPaths.map((path) => (
-            <article key={path.id} className="border-t border-border pt-6">
+            <article key={path.id} className="bp-frame flex flex-col p-6">
               <StatusBadge status={path.status} />
               <h3 className="mt-4 font-display text-2xl">{path.title}</h3>
               <p className="mt-3 text-base leading-relaxed text-fg-muted">{path.body}</p>
@@ -212,14 +221,19 @@ function Home() {
                   <li key={service}>{service}</li>
                 ))}
               </ul>
-              <Link to={path.href} className="mt-6 inline-block text-accent">
+              <Link to={path.href} className="mt-auto inline-block pt-6 text-accent">
                 Explore services →
               </Link>
             </article>
           ))}
         </div>
       </Row>
-      <Row id="evidence" label="Evidence" title="Inspect the work before choosing a path.">
+      <Row
+        id="evidence"
+        index="06"
+        label="Evidence"
+        title="Inspect the work before choosing a path."
+      >
         <ul className="divide-y divide-border border-y border-border">
           {clientExperience.evidenceDoors.map((door) => (
             <li key={door.href} className="py-5">
@@ -236,6 +250,7 @@ function Home() {
       </Row>
       <Row
         id="film"
+        index="07"
         label="The film"
         title="See the direction. Inspect the evidence."
         lede={clientExperience.landingIntros.showcase.availability}
@@ -247,6 +262,7 @@ function Home() {
       </Row>
       <Row
         id="process"
+        index="08"
         label="Engagement process"
         title="Agree on the evidence before implementation."
       >
@@ -254,7 +270,7 @@ function Home() {
           {clientExperience.engagementProcess.map((step, index) => (
             <li key={step.title} className="py-5">
               <h3 className="font-display text-xl">
-                <span className="mr-3 font-mono text-sm text-fg-subtle">0{index + 1}</span>
+                <span className="bp-index mr-3 font-mono text-sm">0{index + 1}</span>
                 {step.title}
               </h3>
               <p className="mt-3 text-base leading-relaxed text-fg-muted">{step.body}</p>
@@ -264,6 +280,7 @@ function Home() {
       </Row>
       <Row
         id="community"
+        index="09"
         label="Open development"
         title={homeVision.community.title}
         lede={homeVision.community.body}
@@ -282,14 +299,15 @@ function Home() {
       </Row>
       <Row
         id="vision"
+        index="10"
         label="Future vision"
         title="The next generation of human + AI."
         lede="These are product directions. Availability and implementation evidence remain in the source catalog."
         wide
       >
-        <div className="grid gap-8 md:grid-cols-3">
+        <div className="grid gap-4 md:grid-cols-3">
           {homeVision.roadmap.map((direction) => (
-            <article key={direction.title} className="border-t border-border pt-6">
+            <article key={direction.title} className="bp-frame bp-dashed p-6">
               <StatusBadge status="planned" />
               <h3 className="mt-4 font-display text-2xl">{direction.title}</h3>
               <p className="mt-4 text-base leading-relaxed text-fg-muted">{direction.body}</p>
@@ -299,6 +317,7 @@ function Home() {
       </Row>
       <Row
         id="contact"
+        index="11"
         label="Next step"
         title="Discuss your project."
         lede={clientExperience.landingIntros.company.availability}
@@ -318,23 +337,27 @@ function Home() {
 
 function Hero() {
   return (
-    <section className="vision-hero" aria-labelledby="hero-title">
-      <div className="relative mx-auto grid max-w-6xl gap-8 px-4 pt-14 pb-12 sm:px-6 sm:pt-20 sm:pb-16 lg:grid-cols-12 lg:items-center lg:gap-4">
-        <div className="relative z-10 min-w-0 lg:col-span-7">
-          <p className="vision-eyebrow">Quesar by MLAI · {clientExperience.hero.tagline}</p>
-          <h1 id="hero-title" className="vision-title mt-7">
+    <section className="vision-hero bp-grid-fade" aria-labelledby="hero-title">
+      <div className="vision-sheet mx-auto max-w-6xl px-4 py-3 sm:px-6">
+        <p className="bp-label">Quesar by MLAI · {clientExperience.hero.tagline}</p>
+        <p className="bp-label">Sheet 01 · Home</p>
+      </div>
+      <div className="mx-auto grid max-w-6xl gap-10 px-4 pt-12 pb-14 sm:px-6 sm:pt-20 sm:pb-20 lg:grid-cols-12 lg:items-center lg:gap-8">
+        <div className="min-w-0 lg:col-span-7">
+          <p className="eyebrow">Private AI operations</p>
+          <h1 id="hero-title" className="vision-title mt-6">
             {homeVision.hero.title}
             <br />
             <span>{homeVision.hero.emphasis}</span>
           </h1>
-          <p className="vision-lede mt-7 max-w-[50ch] text-lg leading-8">{homeVision.hero.lede}</p>
-          <div className="mt-9 flex flex-wrap gap-3">
-            <Button asChild size="lg" className="vision-primary">
+          <p className="vision-lede mt-7 max-w-[52ch] text-lg leading-8">{homeVision.hero.lede}</p>
+          <div className="mt-9 flex flex-wrap items-center gap-3">
+            <Button asChild size="lg">
               <Link to={clientExperience.hero.primaryCta.href}>
                 {clientExperience.hero.primaryCta.label}
               </Link>
             </Button>
-            <Button asChild variant="secondary" size="lg" className="vision-secondary">
+            <Button asChild variant="secondary" size="lg">
               <Link to={clientExperience.hero.secondaryCta.href}>
                 {clientExperience.hero.secondaryCta.label}
               </Link>
@@ -347,11 +370,15 @@ function Hero() {
             </Link>
           </div>
         </div>
-        <div className="vision-neural min-w-0 lg:col-span-5">
-          <NeuralField />
-        </div>
+        <figure className="vision-figure bp-frame bp-ticks min-w-0 lg:col-span-5">
+          <RequestSchematic />
+          <figcaption className="bp-label mt-3 border-t border-border pt-3">
+            Conceptual architecture. Persona roles share a runtime; this drawing does not establish
+            separate models or hosted services.
+          </figcaption>
+        </figure>
       </div>
-      <div className="relative mx-auto flex max-w-6xl flex-wrap gap-x-8 gap-y-2 border-t border-white/10 px-4 py-5 text-sm sm:px-6">
+      <div className="mx-auto flex max-w-6xl flex-wrap gap-x-8 gap-y-2 border-t border-border px-4 py-4 sm:px-6">
         <a href="#ecosystem" className="vision-section-link inline-flex min-h-11 items-center">
           Explore the ecosystem ↓
         </a>
@@ -372,6 +399,7 @@ function Hero() {
  */
 function Row({
   id,
+  index,
   label,
   title,
   lede,
@@ -379,6 +407,7 @@ function Row({
   children,
 }: {
   id: string;
+  index: string;
   label: string;
   title: string;
   lede?: string;
@@ -398,7 +427,10 @@ function Row({
         )}
       >
         <header className={cn(wide ? "max-w-3xl" : "lg:col-span-5")}>
-          <p className="eyebrow">{label}</p>
+          <p className="eyebrow">
+            <span className="bp-index">{index}</span>
+            {label}
+          </p>
           <h2 id={`${id}-title`} className="section-title mt-4">
             {title}
           </h2>

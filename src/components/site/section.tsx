@@ -57,7 +57,7 @@ export function PageHero({
   compact?: boolean;
 }) {
   return (
-    <div className="border-b border-border">
+    <div className="bp-grid-fade border-b border-border">
       <div
         className={
           compact

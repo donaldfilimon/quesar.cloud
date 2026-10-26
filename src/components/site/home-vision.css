@@ -1,93 +1,183 @@
+/* Home: the blueprint hero. The page ground is drafting paper; the one
+   memorable object is the request schematic, whose trace lines draw in once. */
 .vision-hero {
   position: relative;
-  isolation: isolate;
-  overflow: hidden;
-  background: #050508;
-  color: #f8fafc;
-  border-bottom: 1px solid #253044;
+  border-bottom: 1px solid var(--border);
 }
 
-.vision-eyebrow {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  line-height: 1.75;
-  letter-spacing: 0.045em;
-  color: #a8b9cb;
+.vision-sheet {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.25rem 1.5rem;
+  border-bottom: 1px solid var(--border);
 }
 
 .vision-title {
   font-family: var(--font-display);
-  font-size: clamp(2.65rem, 4.8vw, 4.3rem);
+  font-size: clamp(2.65rem, 5.2vw, 4.6rem);
   font-weight: 500;
-  line-height: 1.08;
-  letter-spacing: -0.055em;
+  line-height: 1.02;
+  letter-spacing: -0.05em;
+  color: var(--fg);
 }
 
 .vision-title span {
-  color: #67f6f1;
+  color: var(--accent);
 }
 
 .vision-lede {
-  color: #b7c4d4;
+  color: var(--fg-muted);
 }
 
-.vision-hero .vision-primary {
-  background: #f8fafc;
-  color: #050508;
-  border: 1px solid #f8fafc;
-}
-
-.vision-hero .vision-primary:hover {
-  background: #67f6f1;
-  border-color: #67f6f1;
-}
-
-.vision-hero .vision-secondary {
-  background: transparent;
-  color: #f8fafc;
-  border: 1px solid #526075;
-}
-
-.vision-hero .vision-secondary:hover {
-  background: #151b26;
-}
-
-.vision-abbey {
-  color: #67f6f1;
+.vision-abbey,
+.vision-section-link {
+  color: var(--accent);
 }
 
 .vision-section-link {
-  color: #b7c4d4;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
 }
 
-.vision-section-link:hover {
-  color: #67f6f1;
+.vision-section-link:hover,
+.vision-abbey:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
 }
 
-.vision-hero a:focus-visible {
-  outline: 2px solid #00d4ff;
-  outline-offset: 5px;
+.vision-figure {
+  padding: 1rem;
+  background: color-mix(in oklch, var(--bg-elevated) 82%, transparent);
 }
 
+/* The schematic. Text sizes are viewBox units (520 wide), so they hold up
+   when the drawing shrinks to a phone column. */
+.bp-schematic {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.bp-node rect {
+  fill: var(--bg-elevated);
+  stroke: var(--border-strong);
+  stroke-width: 1.25;
+}
+
+.bp-node-selected rect {
+  stroke: var(--accent);
+  stroke-width: 2;
+}
+
+.bp-node-store rect {
+  fill: color-mix(in oklch, var(--accent) 7%, var(--bg-elevated));
+  stroke: var(--accent);
+  stroke-dasharray: 6 4;
+}
+
+.bp-node-index {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  fill: var(--accent);
+}
+
+.bp-node-title {
+  font-family: var(--font-display);
+  font-size: 19px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  fill: var(--fg);
+}
+
+.bp-node-sub {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  fill: var(--fg-subtle);
+}
+
+.bp-fig {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  fill: var(--annotation);
+}
+
+.bp-trace {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2;
+  animation: bp-draw 900ms var(--ease-out) both;
+}
+
+.bp-trace-quiet {
+  stroke: var(--border-strong);
+  stroke-width: 1.5;
+}
+
+.bp-link {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.25;
+  stroke-dasharray: 3 5;
+  opacity: 0.7;
+}
+
+.bp-joint {
+  fill: var(--bg-elevated);
+  stroke: var(--accent);
+  stroke-width: 2;
+}
+
+/* The dash trick runs only during the draw: the final keyframe returns to a
+   plain stroke, so a renderer that mis-scales `pathLength` dashes still ends
+   on a solid line. */
+@keyframes bp-draw {
+  0% {
+    stroke-dasharray: 1 1;
+    stroke-dashoffset: 1;
+  }
+  99.9% {
+    stroke-dasharray: 1 1;
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dasharray: none;
+    stroke-dashoffset: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bp-trace {
+    animation: none;
+  }
+}
+
+/* Spec panels: the ecosystem roles and the engagement paths. A 2px top rule in
+   the role's identity colour; planned work uses `.bp-dashed`. */
 .vision-product {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   border-top: 2px solid var(--accent);
-  padding-top: 1.5rem;
+  padding: 1.5rem;
 }
 
 .vision-product-aviva {
-  border-color: var(--abi);
+  border-top-color: var(--abi);
+}
+
+.vision-product-abbey {
+  border-top-color: var(--abbey);
 }
 
 .vision-product-abi {
-  border-color: var(--persona-abi);
+  border-top-color: var(--persona-abi);
 }
 
 .vision-product > a {
   margin-top: auto;
-  padding-top: 1.5rem;
+  padding-top: 1.25rem;
 }
 
 .vision-product-role {
@@ -98,21 +188,11 @@
   color: var(--abi);
 }
 
+.vision-product-abbey .vision-product-role {
+  color: var(--abbey);
+}
+
 .vision-code pre {
   white-space: pre-wrap;
   overflow-wrap: anywhere;
-}
-
-@media (max-width: 1023px) {
-  .vision-neural {
-    position: absolute;
-    inset: auto -8% 0 40%;
-    opacity: 0.16;
-    pointer-events: none;
-  }
-
-  .vision-title,
-  .vision-lede {
-    max-width: 38rem;
-  }
 }

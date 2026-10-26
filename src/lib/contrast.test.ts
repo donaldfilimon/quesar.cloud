@@ -8,14 +8,16 @@ const css = readFileSync(fileURLToPath(new URL("../styles.css", import.meta.url)
 
 const themes = {
   light: readThemeTokens(css, `:root, [data-theme="light"]`),
-  dark: readThemeTokens(css, `[data-theme="dark"], .mlai-ds`),
+  dark: readThemeTokens(css, `[data-theme="dark"]`),
+  // The cinematic rooms keep the film palette their exports were captured with.
+  film: readThemeTokens(css, `.mlai-ds`),
 };
 
 const textTokens = ["--fg", "--fg-muted", "--fg-subtle", "--muted-foreground"];
 const surfaces = ["--bg", "--card", "--muted"];
 const textPairs = textTokens.flatMap((fg) => surfaces.map((bg) => [fg, bg] as const));
 
-describe.each(Object.entries(themes))("%s theme contrast (WCAG AA)", (_name, tokens) => {
+describe.each(Object.entries(themes))("%s theme contrast (WCAG AA)", (name, tokens) => {
   it.each(textPairs)("%s on %s is at least 4.5:1", (fg, bg) => {
     expect(tokens[fg], fg).toBeDefined();
     expect(tokens[bg], bg).toBeDefined();
@@ -24,5 +26,11 @@ describe.each(Object.entries(themes))("%s theme contrast (WCAG AA)", (_name, tok
 
   it.each(["--bg", "--card"])("--ring on %s is at least 3:1", (bg) => {
     expect(contrastRatio(tokens["--ring"], tokens[bg])).toBeGreaterThanOrEqual(3);
+  });
+
+  // Field outlines are the only boundary a text input has (WCAG 1.4.11). The
+  // film palette has no form fields.
+  it.skipIf(name === "film").each(["--bg", "--card"])("--input on %s is at least 3:1", (bg) => {
+    expect(contrastRatio(tokens["--input"], tokens[bg])).toBeGreaterThanOrEqual(3);
   });
 });

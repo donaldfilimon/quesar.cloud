@@ -58,6 +58,8 @@
   --color-status-partial: var(--status-partial);
   --color-status-planned: var(--status-planned);
   --color-warn: var(--warn);
+  --color-annotation: var(--annotation);
+  --color-grid-line: var(--grid-line);
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -102,76 +104,146 @@
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* MLAI brand palette: titanium white by day, deep black by night.
-   Blue carries navigation and provenance; violet distinguishes expert roles.
-   Light-theme accents are darkened to retain readable contrast. */
+/* Blueprint instrument (2026-10-25): drafting paper and navy ink by day, a
+   night blueprint by dark. Cyan carries trace lines, navigation and the primary
+   action; amber is reserved for annotations and the "partial" status. Every
+   text token is at least 4.5:1 on both the page and card grounds, and the ring
+   at least 3:1. Spec: notes/superpowers/specs/2026-10-25-blueprint-redesign.md. */
 :root,
 [data-theme="light"] {
   color-scheme: light;
-  --background: #f8fafc;
-  --foreground: #111827;
-  --card: #ffffff;
-  --card-foreground: #111827;
-  --popover: #ffffff;
-  --popover-foreground: #111827;
-  --primary: #086b89;
-  --primary-foreground: #f8fafc;
-  --secondary: #edf2f7;
-  --secondary-foreground: #111827;
-  --muted: #edf2f7;
-  --muted-foreground: #526174;
-  --destructive: #b3261e;
-  --border: #d6dee8;
-  --input: #c3cfdd;
-  --ring: #086b89;
-  --chart-1: #086b89;
-  --chart-2: #2e6b4a;
-  --chart-3: #8a5a12;
-  --chart-4: #6d28d9;
-  --chart-5: #526174;
-  --radius: 0.5rem;
-  --sidebar: #ffffff;
-  --sidebar-foreground: #111827;
-  --sidebar-primary: #086b89;
-  --sidebar-primary-foreground: #f8fafc;
-  --sidebar-accent: #edf2f7;
-  --sidebar-accent-foreground: #111827;
-  --sidebar-border: #d6dee8;
-  --sidebar-ring: #086b89;
+  --background: #edf2f7;
+  --foreground: #0b1b2b;
+  --card: #fafcfe;
+  --card-foreground: #0b1b2b;
+  --popover: #fafcfe;
+  --popover-foreground: #0b1b2b;
+  --primary: #075e7e;
+  --primary-foreground: #f5fafd;
+  --secondary: #e1e9f1;
+  --secondary-foreground: #0b1b2b;
+  --muted: #e1e9f1;
+  --muted-foreground: #3b4f63;
+  --destructive: #a8261c;
+  --border: #c6d3e0;
+  --input: #687f99;
+  --ring: #075e7e;
+  --chart-1: #075e7e;
+  --chart-2: #1d6a43;
+  --chart-3: #8a4b00;
+  --chart-4: #5b3fc4;
+  --chart-5: #3b4f63;
+  --radius: 0.3rem;
+  --sidebar: #fafcfe;
+  --sidebar-foreground: #0b1b2b;
+  --sidebar-primary: #075e7e;
+  --sidebar-primary-foreground: #f5fafd;
+  --sidebar-accent: #e1e9f1;
+  --sidebar-accent-foreground: #0b1b2b;
+  --sidebar-border: #c6d3e0;
+  --sidebar-ring: #075e7e;
 
   --bg: var(--background);
   --bg-elevated: var(--card);
   --bg-subtle: var(--muted);
   --fg: var(--foreground);
   --fg-muted: var(--muted-foreground);
-  --fg-subtle: #58687e;
+  --fg-subtle: #4a5f74;
   --accent: var(--primary);
   --accent-fg: var(--primary-foreground);
-  /* Product and persona identity colors: secondary to the chain accent. */
-  --abi: #6d28d9;
+  /* Product and persona identity colors: secondary to the trace cyan. */
+  --abi: #5b3fc4;
   --wdbx: var(--primary);
-  --abbey: #2e6b4a;
-  --aviva: #6d28d9;
-  --persona-abbey: #2e6b4a;
-  --persona-aviva: #6d28d9;
+  --abbey: #1d6a43;
+  --aviva: #5b3fc4;
+  --persona-abbey: #1d6a43;
+  --persona-aviva: #5b3fc4;
   --persona-abi: var(--primary);
-  --warn: #8a5a12;
-  --border-strong: #b4c2d3;
-  --status-current: #2e6b4a;
-  --status-partial: #8a5a12;
+  --warn: #8a4b00;
+  --annotation: #8a4b00;
+  --border-strong: #93a8bd;
+  --status-current: #1d6a43;
+  --status-partial: #8a4b00;
   --status-planned: var(--fg-subtle);
   --elev-border: 0 0 0 1px var(--border);
-  --elev-border-hover: 0 0 0 1px color-mix(in oklch, var(--primary) 45%, var(--border));
-  --grid-line: color-mix(in oklch, var(--foreground) 6%, transparent);
+  --elev-border-hover: 0 0 0 1px color-mix(in oklch, var(--primary) 55%, var(--border));
+  --grid-line: color-mix(in oklch, var(--primary) 9%, transparent);
+  --grid-line-major: color-mix(in oklch, var(--primary) 16%, transparent);
+  --tick: var(--primary);
   --grad: linear-gradient(92deg, var(--primary), var(--abi));
-  --brand-seam: linear-gradient(90deg, transparent, var(--primary), transparent);
+  --brand-seam: linear-gradient(90deg, var(--primary), var(--primary) 18%, var(--border) 18%);
   --surface-sheen: none;
+  --header-bg: color-mix(in oklch, var(--background) 86%, transparent);
 }
 
-/* The dark theme. `.mlai-ds` (the cinematic rooms and design boards, dark on
-   every page theme) takes the same tokens from here, so there is no second
-   copy to keep in sync. */
-[data-theme="dark"],
+[data-theme="dark"] {
+  color-scheme: dark;
+  --background: #061220;
+  --foreground: #e4edf6;
+  --card: #0b1b2d;
+  --card-foreground: #e4edf6;
+  --popover: #0b1b2d;
+  --popover-foreground: #e4edf6;
+  --primary: #56c8ec;
+  --primary-foreground: #04131e;
+  --secondary: #10243a;
+  --secondary-foreground: #e4edf6;
+  --muted: #10243a;
+  --muted-foreground: #a3b6ca;
+  --destructive: #f08070;
+  --border: #1d3651;
+  --input: #557ea6;
+  --ring: #56c8ec;
+  --chart-1: #56c8ec;
+  --chart-2: #7fd1a2;
+  --chart-3: #f2b35c;
+  --chart-4: #b4a2ff;
+  --chart-5: #a3b6ca;
+  --radius: 0.3rem;
+  --sidebar: #0b1b2d;
+  --sidebar-foreground: #e4edf6;
+  --sidebar-primary: #56c8ec;
+  --sidebar-primary-foreground: #04131e;
+  --sidebar-accent: #10243a;
+  --sidebar-accent-foreground: #e4edf6;
+  --sidebar-border: #1d3651;
+  --sidebar-ring: #56c8ec;
+
+  --bg: var(--background);
+  --bg-elevated: var(--card);
+  --bg-subtle: var(--muted);
+  --fg: var(--foreground);
+  --fg-muted: var(--muted-foreground);
+  --fg-subtle: #8ea4bb;
+  --accent: var(--primary);
+  --accent-fg: var(--primary-foreground);
+  --abi: #b4a2ff;
+  --wdbx: var(--primary);
+  --abbey: #7fd1a2;
+  --aviva: #b4a2ff;
+  --persona-abbey: #7fd1a2;
+  --persona-aviva: #b4a2ff;
+  --persona-abi: var(--primary);
+  --warn: #f2b35c;
+  --annotation: #f2b35c;
+  --border-strong: #3a5d80;
+  --status-current: #7fd1a2;
+  --status-partial: #f2b35c;
+  --status-planned: var(--fg-subtle);
+  --elev-border: 0 0 0 1px var(--border);
+  --elev-border-hover: 0 0 0 1px color-mix(in oklch, var(--primary) 60%, var(--border));
+  --grid-line: color-mix(in oklch, var(--primary) 7%, transparent);
+  --grid-line-major: color-mix(in oklch, var(--primary) 13%, transparent);
+  --tick: var(--primary);
+  --grad: linear-gradient(92deg, var(--primary), var(--abi));
+  --brand-seam: linear-gradient(90deg, var(--primary), var(--primary) 18%, var(--border) 18%);
+  --surface-sheen: none;
+  --header-bg: color-mix(in oklch, var(--background) 82%, transparent);
+}
+
+/* The cinematic rooms and design boards (`.mlai-ds`, dark on every page
+   theme) keep the film palette the exports were captured with. It follows the
+   page themes so it wins inside a dark page as well. */
 .mlai-ds {
   color-scheme: dark;
   --background: #050508;
@@ -339,10 +411,9 @@
   content: "";
   position: absolute;
   right: 0.7rem;
-  bottom: 0.3rem;
+  bottom: 0.25rem;
   left: 0.7rem;
-  height: 1.5px;
-  border-radius: 999px;
+  height: 2px;
   background: var(--primary);
 }
 
@@ -401,24 +472,151 @@
   opacity: 0.9;
 }
 
-/* Section label: a plain sentence-case word set small beside a short chain
-   rule. It names the section; it is not decoration. */
+/* Section label: a sentence-case annotation set in mono beside a registration
+   square, the way a drawing labels its views. It names the section; an optional
+   `.bp-index` numbers it when the page is a sequence. */
 .eyebrow {
   display: inline-flex;
   align-items: center;
-  gap: 0.6rem;
-  font-family: var(--font-sans);
-  font-size: 0.875rem;
+  gap: 0.65rem;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
   font-weight: 500;
   line-height: 1.4;
+  letter-spacing: 0.01em;
   color: var(--fg-muted);
 }
 
 .eyebrow::before {
   content: "";
-  width: 1.5rem;
-  height: 2px;
-  background: var(--accent);
+  flex: none;
+  width: 0.55rem;
+  height: 0.55rem;
+  border: 1.5px solid var(--accent);
+}
+
+.bp-index {
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Blueprint primitives. `.bp-grid` is drafting paper: a 24px minor and 120px
+   major grid in the trace colour. `.bp-grid-fade` lays the same paper behind
+   its content and fades it out downward so body text never sits on lines. */
+.bp-grid {
+  background-color: var(--bg);
+  background-image:
+    linear-gradient(var(--grid-line-major) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line-major) 1px, transparent 1px),
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size:
+    120px 120px,
+    120px 120px,
+    24px 24px,
+    24px 24px;
+  background-position: -1px -1px;
+}
+
+.bp-grid-fade {
+  position: relative;
+  isolation: isolate;
+}
+
+.bp-grid-fade::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(var(--grid-line-major) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line-major) 1px, transparent 1px),
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size:
+    120px 120px,
+    120px 120px,
+    24px 24px,
+    24px 24px;
+  background-position: -1px -1px;
+  mask-image: linear-gradient(to bottom, #000 35%, transparent);
+}
+
+/* A drawn object: a hairline frame on the card ground. Add `.bp-ticks` for
+   registration corners, `.bp-dashed` for anything not built yet (planned,
+   vision, research), so the outline itself carries the status. */
+.bp-frame {
+  position: relative;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--bg-elevated);
+}
+
+.bp-dashed {
+  border-style: dashed;
+  background: transparent;
+}
+
+.bp-ticks::after {
+  --tick-len: 0.75rem;
+  --tick-w: 1.5px;
+  content: "";
+  position: absolute;
+  inset: -5px;
+  pointer-events: none;
+  background:
+    linear-gradient(var(--tick), var(--tick)) top left / var(--tick-len) var(--tick-w),
+    linear-gradient(var(--tick), var(--tick)) top left / var(--tick-w) var(--tick-len),
+    linear-gradient(var(--tick), var(--tick)) top right / var(--tick-len) var(--tick-w),
+    linear-gradient(var(--tick), var(--tick)) top right / var(--tick-w) var(--tick-len),
+    linear-gradient(var(--tick), var(--tick)) bottom left / var(--tick-len) var(--tick-w),
+    linear-gradient(var(--tick), var(--tick)) bottom left / var(--tick-w) var(--tick-len),
+    linear-gradient(var(--tick), var(--tick)) bottom right / var(--tick-len) var(--tick-w),
+    linear-gradient(var(--tick), var(--tick)) bottom right / var(--tick-w) var(--tick-len);
+  background-repeat: no-repeat;
+}
+
+/* The strip across the top of a frame: a mono label left, metadata right. */
+.bp-frame-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid var(--border);
+  padding: 0.6rem 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--fg-subtle);
+}
+
+/* Margin notes: mono, small, and in the annotation amber only when the note
+   qualifies a claim. */
+.bp-label {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+  color: var(--fg-subtle);
+}
+
+.bp-note {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--annotation);
+}
+
+.site-header {
+  background: var(--header-bg);
+  backdrop-filter: saturate(140%) blur(12px);
+  -webkit-backdrop-filter: saturate(140%) blur(12px);
+}
+
+@supports not (backdrop-filter: blur(1px)) {
+  .site-header {
+    background: var(--bg);
+  }
 }
 
 .pull-quote {

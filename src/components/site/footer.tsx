@@ -46,8 +46,7 @@ const groups = [
 
 export function SiteFooter() {
   return (
-    <footer className="mt-auto">
-      <div className="brand-seam" />
+    <footer className="mt-auto border-t border-border">
       <div className="mx-auto grid max-w-6xl gap-12 px-4 py-16 sm:px-6 md:grid-cols-[1.4fr_2fr]">
         <div>
           <Logo />
@@ -75,7 +74,7 @@ export function SiteFooter() {
         <div className="grid grid-cols-2 gap-8 sm:grid-cols-3">
           {groups.map((group) => (
             <div key={group.title}>
-              <p className="text-xs font-medium text-fg-subtle">{group.title}</p>
+              <p className="bp-label">{group.title}</p>
               <ul className="mt-3 space-y-2">
                 {group.links.map((link) => (
                   <li key={link.label}>
@@ -89,14 +88,25 @@ export function SiteFooter() {
           ))}
         </div>
       </div>
-      <div className="border-t border-border">
-        <div className="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-5 text-xs text-fg-subtle sm:flex-row sm:items-center sm:justify-between sm:px-6">
-          <p>© {new Date().getFullYear()} MLAI. ABI and WDBX include Apache-2.0 licenses.</p>
-          <p>
-            The static preview provides orientation and browser demos. A configured server
-            separately supports protected field notes and consent-gated model requests.
-          </p>
-        </div>
+      <div className="mx-auto max-w-6xl px-4 pb-8 sm:px-6">
+        {/* Title block: the corner of a drawing sheet that names who drew it. */}
+        <dl className="bp-frame grid text-xs text-fg-subtle sm:grid-cols-[auto_auto_1fr]">
+          <div className="border-b border-border px-4 py-3 sm:border-r sm:border-b-0">
+            <dt className="bp-label">Drawn by</dt>
+            <dd className="mt-1 text-fg">© {new Date().getFullYear()} MLAI</dd>
+          </div>
+          <div className="border-b border-border px-4 py-3 sm:border-r sm:border-b-0">
+            <dt className="bp-label">Licenses</dt>
+            <dd className="mt-1">ABI and WDBX include Apache-2.0 licenses.</dd>
+          </div>
+          <div className="px-4 py-3">
+            <dt className="bp-label">Build</dt>
+            <dd className="mt-1">
+              The static preview provides orientation and browser demos. A configured server
+              separately supports protected field notes and consent-gated model requests.
+            </dd>
+          </div>
+        </dl>
       </div>
     </footer>
   );

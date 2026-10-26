@@ -6,8 +6,8 @@ function Mark({ className, mono = false }: { className?: string; mono?: boolean 
   return (
     <span
       className={cn(
-        "relative inline-flex size-8 shrink-0 items-center justify-center rounded-[10px]",
-        mono ? "text-current" : "bg-bg-elevated text-accent shadow-border",
+        "relative inline-flex size-8 shrink-0 items-center justify-center rounded-[3px]",
+        mono ? "text-current" : "border border-accent bg-bg-elevated text-accent",
         className,
       )}
       aria-hidden="true"

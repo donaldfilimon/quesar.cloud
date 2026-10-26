@@ -41,7 +41,7 @@ test("home client actions and service inquiry context work by keyboard", async (
   await expect(page.getByLabel("Service or project context (optional)")).toHaveValue("");
 });
 
-test("the neural opening respects reduced motion and exposes source-based builder paths", async ({
+test("the blueprint opening respects reduced motion and exposes source-based builder paths", async ({
   page,
 }, testInfo) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
@@ -49,9 +49,9 @@ test("the neural opening respects reduced motion and exposes source-based builde
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(
     "Human imagination.Adaptive intelligence.",
   );
-  await expect(page.locator(".neural-field")).toHaveAttribute("aria-hidden", "true");
+  await expect(page.getByRole("img", { name: /Conceptual request flow/ })).toBeVisible();
   const animation = await page
-    .locator(".neural-field-edge")
+    .locator(".bp-trace")
     .first()
     .evaluate((element) => getComputedStyle(element).animationName);
   expect(animation).toBe("none");
