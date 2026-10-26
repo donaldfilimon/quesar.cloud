@@ -35,7 +35,8 @@ host as a dedicated private store. Set absolute paths for `WDBX_BINARY`,
 `WDBX_COMMERCE_DIRECTORY` (existing mode 0700),
 `WDBX_COMMERCE_CONFIG` (existing mode 0600), and
 `WDBX_COMMERCE_HOST_KEY` (existing 32-byte binary key, mode 0600).
-The executable must implement `wdbx typed inspect` and `wdbx typed commit`.
+The executable must implement `wdbx typed inspect` and `wdbx typed commit`:
+the `wdbx` binary of WDBX `crates/abi-wdbx` (Rust, since 2026-10-26).
 The host configuration must use schema `wdbx-typed-host-config-v1`, a 32-byte
 namespace, current policy and consent 32-byte values and millisecond epoch
 bounds, one stable service principal (32 bytes) and writer (16 bytes), and
