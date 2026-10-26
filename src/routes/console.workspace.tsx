@@ -6,11 +6,13 @@ import { RequireSession } from "@/lib/auth/gates";
 import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/console/workspace")({
-  head: () =>
-    pageHead(
+  head: () => {
+    const head = pageHead(
       "Console workspace — Quesar",
       "Signed-in document workspace. Documents stay in this browser; Google Drive and SharePoint connect read-only.",
-    ),
+    );
+    return { meta: [...head.meta, { name: "robots", content: "noindex" }] };
+  },
   component: ConsoleWorkspacePage,
 });
 

@@ -10,11 +10,13 @@ import { pageHead } from "@/lib/seo";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/dashboard")({
-  head: () =>
-    pageHead(
+  head: () => {
+    const head = pageHead(
       "Desk — Quesar",
       "Signed-in desk for Abbey, Aviva, Abi, Quesar, and WDBX. Retrieval is the on-site catalog unless the model endpoint answers.",
-    ),
+    );
+    return { meta: [...head.meta, { name: "robots", content: "noindex" }] };
+  },
   component: DashboardPage,
 });
 

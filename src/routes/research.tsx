@@ -14,6 +14,7 @@ import { researchContext } from "@/lib/mlai/categories/research-context";
 import { researchSources, researchTopics } from "@/lib/mlai/categories/research-topics";
 import { ogImage } from "@/lib/og-image";
 import { pageHead } from "@/lib/seo";
+import { collectionPageLd, jsonLdScript } from "@/lib/mlai/structured-data";
 
 const topicOptions = [
   { value: "all", label: "All tracks" },
@@ -27,13 +28,26 @@ const kindOptions = [
   { value: "implementation-guide", label: "Guides" },
 ] as const;
 
+const title = "Research — MLAI memory, retrieval, and orchestration";
+const description =
+  "Research notes for MLAI and Quesar: memory architecture, retrieval, provenance, local inference, and implementation case studies with sources attached.";
+
 export const Route = createFileRoute("/research")({
   head: () => ({
-    ...pageHead(
-      "Research — MLAI memory, retrieval, and orchestration",
-      "Research notes for MLAI and Quesar: memory architecture, retrieval, provenance, local inference, and implementation case studies with sources attached.",
-      ogImage("research"),
-    ),
+    ...pageHead(title, description, ogImage("research")),
+    scripts: [
+      jsonLdScript(
+        collectionPageLd(
+          "/research",
+          title,
+          description,
+          research.publications.map((paper) => ({
+            url: `/research/${paper.slug}`,
+            name: paper.title,
+          })),
+        ),
+      ),
+    ],
     links: [
       {
         rel: "alternate",

@@ -9,6 +9,7 @@ import { site } from "@/lib/site-identity";
 import {
   SITE_URL,
   blogPostingLd,
+  collectionPageLd,
   docLd,
   jsonLdScript,
   personLd,
@@ -74,6 +75,7 @@ describe("structured-data", () => {
     if (!base) throw new Error("fixture: no research publication");
     expect(researchArticleLd({ ...base, authors: "  ·  " }).author).toMatchObject({
       "@type": "Organization",
+      "@id": "https://quesar.cloud/#organization",
       name: site.company,
     });
   });
@@ -126,5 +128,36 @@ describe("structured-data", () => {
     expect(out).not.toMatch(/[\u2028\u2029]/);
     expect(JSON.parse(out)).toEqual(value);
     expect(jsonLdScript(value)).toEqual({ type: "application/ld+json", children: out });
+  });
+});
+
+describe("collectionPageLd", () => {
+  const ld = collectionPageLd("/blog", "Blog", "Desc", [
+    { url: "/blog/a", name: "A <b>" },
+    { url: "https://quesar.cloud/blog/b", name: "B" },
+  ]);
+
+  it("makes urls absolute and numbers items from 1", () => {
+    expect(ld).toMatchObject({
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "@id": `${SITE_URL}/blog`,
+      url: `${SITE_URL}/blog`,
+      name: "Blog",
+      description: "Desc",
+      isPartOf: { "@id": "https://quesar.cloud/#website" },
+    });
+    expect(ld.mainEntity).toEqual({
+      "@type": "ItemList",
+      numberOfElements: 2,
+      itemListElement: [
+        { "@type": "ListItem", position: 1, url: `${SITE_URL}/blog/a`, name: "A <b>" },
+        { "@type": "ListItem", position: 2, url: `${SITE_URL}/blog/b`, name: "B" },
+      ],
+    });
+  });
+
+  it("escapes < when serialized", () => {
+    expect(serializeJsonLd(ld)).not.toContain("<");
   });
 });

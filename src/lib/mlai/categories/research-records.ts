@@ -1640,7 +1640,8 @@ export const researchRecords: Research = {
       documentType: "implementation-guide",
       tag: "IMPLEMENTATION GUIDE",
       date: "SEPTEMBER 2026",
-      abstract: "Inspect native vector-operation support and explicit CPU fallback.",
+      abstract:
+        "Implementation guide: evaluating Metal acceleration and CPU fallback. Inspect native vector-operation support and explicit CPU fallback.",
       practicalSummary:
         "Assess whether a target Apple workstation can use the optional Metal DOT path.",
       readTime: "2 min read",
@@ -1729,7 +1730,8 @@ export const researchRecords: Research = {
       documentType: "implementation-guide",
       tag: "IMPLEMENTATION GUIDE",
       date: "SEPTEMBER 2026",
-      abstract: "Expose bounded ABI operations through a documented tool interface.",
+      abstract:
+        "Implementation guide: connecting an MCP client to ABI. Expose bounded ABI operations through a documented tool interface.",
       practicalSummary:
         "Evaluate a local integration from an MCP client into the ABI tool catalog.",
       readTime: "3 min read",
@@ -1836,7 +1838,8 @@ export const researchRecords: Research = {
       documentType: "implementation-guide",
       tag: "IMPLEMENTATION GUIDE",
       date: "SEPTEMBER 2026",
-      abstract: "Inspect local runtime state and explore session-based agent interactions.",
+      abstract:
+        "Implementation guide: using the local diagnostics dashboard and agent REPL. Inspect local runtime state and explore session-based agent interactions.",
       practicalSummary:
         "Give developers a local diagnostics and interaction surface during evaluation.",
       readTime: "2 min read",

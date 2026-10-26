@@ -1,5 +1,6 @@
 import { site } from "@/lib/site-identity";
 import { SITE_ORIGIN } from "@/lib/seo";
+import { jsonLdScript, siteGraphLd } from "@/lib/mlai/site-structured-data";
 import type { HeadDescriptor } from "./router";
 
 /**
@@ -23,4 +24,5 @@ export const rootHead: HeadDescriptor = {
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:image", content: `${SITE_ORIGIN}/og.jpg` },
   ],
+  scripts: [jsonLdScript(siteGraphLd())],
 };

@@ -64,9 +64,10 @@ Every static build also captures a fresh GitHub snapshot (`docs/github-snapshot.
 grep -ralc 'your new sentence' docs
 grep -ralc 'the old sentence' docs
 bun run check:static
+bun run check:seo
 ```
 
-The new text should appear in the route's `index.html` (and its chunk); the old text should appear nowhere. `check:static` prints each budgeted route's initial scripts and gzip bytes; a jump means something moved onto the initial path (often into what `app/layout.tsx` imports); find it before publishing. No local server or browser pass is needed for a content change; the grep is the check.
+The new text should appear in the route's `index.html` (and its chunk); the old text should appear nowhere. `check:static` prints each budgeted route's initial scripts and gzip bytes; a jump means something moved onto the initial path (often into what `app/layout.tsx` imports); find it before publishing. `check:seo` must print `0 failures` (head metadata, JSON-LD, one h1 per indexable page, sitemap matches the indexable pages). No local server or browser pass is needed for a content change; the grep is the check.
 
 **5. Commit and land.** Two commits, source first:
 

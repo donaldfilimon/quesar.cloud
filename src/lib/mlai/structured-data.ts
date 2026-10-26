@@ -21,8 +21,11 @@ import { site } from "@/lib/site-identity";
 import { toIsoDate } from "./dates";
 import type { Blog, Doc, Products, Project, Research, Team } from "./schemas";
 
-/** Canonical origin. Matches the root route's canonical link and research exports. */
-export const SITE_URL = "https://quesar.cloud";
+import { ORGANIZATION_ID, SITE_URL, jsonLdScript, serializeJsonLd } from "./site-structured-data";
+
+// Kept here so existing importers keep one entry point; the definitions live in
+// the small module the shared head also imports.
+export { SITE_URL, jsonLdScript, serializeJsonLd };
 
 type BlogPost = Blog[number];
 type ResearchPub = Research["publications"][number];
@@ -31,6 +34,7 @@ type Product = Products[number];
 
 const ORG_REF = {
   "@type": "Organization" as const,
+  "@id": ORGANIZATION_ID,
   name: site.company,
   url: SITE_URL,
   logo: `${SITE_URL}/apple-touch-icon.png`,
@@ -159,20 +163,35 @@ export function projectLd(project: Project) {
   };
 }
 
-/**
- * Serialize for an inline `<script type="application/ld+json">`.
- * `JSON.stringify` does not escape `<`, so a `</script>` inside content would
- * close the tag early; U+2028/2029 are legal JSON but not legal in older JS
- * parsers. All three become `\u` escapes, which JSON parsers read back unchanged.
- */
-export function serializeJsonLd(value: unknown): string {
-  return JSON.stringify(value)
-    .replace(/</g, "\\u003c")
-    .replace(/\u2028/g, "\\u2028")
-    .replace(/\u2029/g, "\\u2029");
+function absoluteUrl(pathOrUrl: string): string {
+  return /^https?:\/\//.test(pathOrUrl) ? pathOrUrl : `${SITE_URL}${pathOrUrl}`;
 }
 
-/** A head `scripts` entry for TanStack Router. */
-export function jsonLdScript(value: unknown) {
-  return { type: "application/ld+json", children: serializeJsonLd(value) };
+/** `CollectionPage` + `ItemList` for an index page; items are in the order the page renders them. */
+export function collectionPageLd(
+  path: string,
+  name: string,
+  description: string,
+  items: readonly { url: string; name: string }[],
+) {
+  const url = absoluteUrl(path);
+  return {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "@id": url,
+    url,
+    name,
+    description,
+    isPartOf: { "@id": `${SITE_URL}/#website` },
+    mainEntity: {
+      "@type": "ItemList",
+      numberOfElements: items.length,
+      itemListElement: items.map((item, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        url: absoluteUrl(item.url),
+        name: item.name,
+      })),
+    },
+  };
 }

@@ -4,10 +4,31 @@ import { PageClose, PageHero, RouteFrame, Section, Surface } from "@/components/
 import { ProfilePhoto } from "@/components/site/profile-photo";
 import { team } from "@/lib/mlai/categories/team";
 import { teamIntro } from "@/lib/mlai/pages";
-import { pageHead } from "@/lib/seo";
+import { extendDescription, pageHead } from "@/lib/seo";
+import { collectionPageLd, jsonLdScript } from "@/lib/mlai/structured-data";
+
+const title = "Team — MLAI";
+const description = extendDescription(
+  "MLAI team: founder and systems architect Donald Filimon.",
+  team[0]?.bio.match(/Leads [^.]*\./)?.[0],
+);
 
 export const Route = createFileRoute("/team")({
-  head: () => pageHead("Team — MLAI", "MLAI team: founder and systems architect Donald Filimon."),
+  head: () => ({
+    ...pageHead(title, description),
+    scripts: [
+      jsonLdScript(
+        collectionPageLd(
+          "/team",
+          title,
+          description,
+          team.flatMap((person) =>
+            person.slug ? [{ url: `/team/${person.slug}`, name: person.name }] : [],
+          ),
+        ),
+      ),
+    ],
+  }),
   component: TeamPage,
 });
 

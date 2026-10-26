@@ -9,7 +9,7 @@ import { research } from "@/lib/mlai/categories/research";
 import { researchContext } from "@/lib/mlai/categories/research-context";
 import { jsonLdScript, researchArticleLd } from "@/lib/mlai/structured-data";
 import { Button } from "@/components/ui/button";
-import { pageHead } from "@/lib/seo";
+import { extendDescription, pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/research/$slug")({
   // The datasets are only referenced from `loader` and `component`, which share one
@@ -18,7 +18,11 @@ export const Route = createFileRoute("/research/$slug")({
   loader: ({ params }) => {
     const paper = research.publications.find((item) => item.slug === params.slug);
     if (!paper) throw notFound();
-    return { title: paper.title, abstract: paper.abstract, ld: researchArticleLd(paper) };
+    return {
+      title: paper.title,
+      abstract: extendDescription(paper.abstract, paper.practicalSummary),
+      ld: researchArticleLd(paper),
+    };
   },
   head: ({ loaderData }) => ({
     ...pageHead(

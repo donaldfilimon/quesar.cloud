@@ -21,6 +21,7 @@ bun run lint         # eslint 10 + react-hooks 7 (React Compiler rules), --max-w
 bun run test         # vitest: src/**/*.test.{ts,tsx} and scripts/**/*.test.ts
 bun run test:e2e     # Playwright against docs/; build:static first
 bun run check:static # internal links/assets and per-route preload + gzip JS budgets in docs/
+bun run check:seo    # head metadata, JSON-LD, h1, noindex and sitemap consistency in docs/ (`out` for a fresh export)
 bun run check:research-drift  # report-only: commits since the research records' pinned abi/wdbx revisions
 bun run og:images    # re-render public/og/<slug>.jpg from src/lib/og-sections.ts (Playwright Chromium); by hand, commit the output; the build never runs it
 bun run build        # Next server build into .next-server/; never mutates Postgres

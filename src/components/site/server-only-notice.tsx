@@ -29,13 +29,15 @@ export function ServerOnlyNotice({
   }
 
   // `data-server-only-page` keeps the page out of the generated sitemap
-  // (scripts/sitemap.ts): on the static host it has nothing to index.
+  // (scripts/sitemap.ts), and the hoisted robots meta keeps it out of indexes
+  // reached through links: on the static host it has nothing to index.
   return (
     <div
       className={`mx-auto max-w-2xl rounded-lg border border-border bg-bg-elevated p-6 ${className}`}
       role="note"
       data-server-only-page=""
     >
+      <meta name="robots" content="noindex" />
       <p className="text-xs text-accent">Static preview</p>
       <h1 className="mt-2 font-display text-2xl tracking-tight">
         {feature} runs on the server deployment.

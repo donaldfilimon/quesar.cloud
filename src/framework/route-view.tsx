@@ -1,6 +1,7 @@
 "use client";
 
 import { use } from "react";
+import { breadcrumbLd, serializeJsonLd, stripBrandSuffix } from "@/lib/mlai/site-structured-data";
 import { canonicalUrl } from "@/lib/seo";
 import { rootHead } from "./root-head";
 import {
@@ -61,6 +62,8 @@ export function HeadTags({
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const merged = mergeHead(rootHead, head);
   const href = canonicalUrl(pathname);
+  const title = merged.meta.find((entry) => "title" in entry)?.title ?? "";
+  const breadcrumbs = canonical ? breadcrumbLd(pathname, title) : null;
   return (
     <>
       {merged.meta.map((entry, index) =>
@@ -90,6 +93,12 @@ export function HeadTags({
           />
         ),
       )}
+      {breadcrumbs ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: serializeJsonLd(breadcrumbs) }}
+        />
+      ) : null}
     </>
   );
 }
@@ -125,6 +134,11 @@ function RouteBody({ options }: { options: RouteOptions }) {
   return Component ? <Component /> : null;
 }
 
+/** The route's head title (falling back to the site default), for the pre-hydration heading. */
+function headTitle(head: HeadDescriptor | undefined): string {
+  return mergeHead(rootHead, head).meta.find((entry) => "title" in entry)?.title ?? "";
+}
+
 /** One route module as a Next page: loader, head and component, under the route's params. */
 export function RouteView({
   route,
@@ -142,7 +156,9 @@ export function RouteView({
   return (
     <>
       <HeadTags head={head} />
-      {clientOnly && !hydrated ? null : (
+      {clientOnly && !hydrated ? (
+        <h1 className="sr-only">{stripBrandSuffix(headTitle(head))}</h1>
+      ) : (
         <RouteMatchContext value={{ params, loaderData }}>
           <RouteBody options={options} />
         </RouteMatchContext>

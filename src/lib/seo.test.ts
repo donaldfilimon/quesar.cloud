@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { SITE_ORIGIN, canonicalUrl, pageHead } from "./seo";
+import { SITE_ORIGIN, canonicalUrl, clampDescription, pageHead, seoTitle } from "./seo";
 
 describe("canonicalUrl", () => {
   it("keeps the trailing slash on the root", () => {
@@ -61,5 +61,68 @@ describe("pageHead", () => {
     expect(keys).not.toContain("og:image");
     expect(keys).not.toContain("og:url");
     expect(keys).not.toContain("twitter:card");
+  });
+});
+
+describe("clampDescription", () => {
+  it("leaves text of at most 160 characters unchanged", () => {
+    const exact = "a".repeat(160);
+    expect(clampDescription(exact)).toBe(exact);
+    expect(clampDescription("Short text.")).toBe("Short text.");
+  });
+
+  it("cuts long text at a word boundary and ends with an ellipsis", () => {
+    const text = "word ".repeat(60).trim();
+    const out = clampDescription(text);
+    expect(out.length).toBeLessThanOrEqual(160);
+    expect(out.endsWith("…")).toBe(true);
+    expect(text.startsWith(out.slice(0, -1))).toBe(true);
+    expect(out.slice(0, -1).endsWith("word")).toBe(true);
+  });
+
+  it("never leaves trailing punctuation or space before the ellipsis", () => {
+    const text = `${"alpha beta ".repeat(14)}gamma, delta epsilon zeta eta theta iota kappa`;
+    const out = clampDescription(text, 140);
+    expect(out.length).toBeLessThanOrEqual(140);
+    expect(out).toMatch(/[^\s,;:.\-–—]…$/);
+  });
+
+  it("does not cut mid-word", () => {
+    const out = clampDescription("one two three four five", 14);
+    expect(out).toBe("one two three…");
+  });
+});
+
+describe("seoTitle", () => {
+  it("adds the brand suffix to a short brandless title", () => {
+    expect(seoTitle("Blog")).toBe("Blog · Quesar");
+  });
+
+  it("leaves titles that already carry the brand unchanged", () => {
+    expect(seoTitle("Team — Quesar")).toBe("Team — Quesar");
+    expect(seoTitle("Abbey — MLAI")).toBe("Abbey — MLAI");
+  });
+
+  it("leaves titles of 30 characters or more unchanged", () => {
+    const long = "x".repeat(30);
+    expect(seoTitle(long)).toBe(long);
+  });
+});
+
+describe("pageHead metadata rules", () => {
+  it("applies seoTitle to title, og:title and twitter:title", () => {
+    const { meta } = pageHead("Blog", "A description that is fine.");
+    expect(meta).toContainEqual({ title: "Blog · Quesar" });
+    expect(meta).toContainEqual({ property: "og:title", content: "Blog · Quesar" });
+    expect(meta).toContainEqual({ name: "twitter:title", content: "Blog · Quesar" });
+  });
+
+  it("applies clampDescription to description, og and twitter", () => {
+    const long = "word ".repeat(60).trim();
+    const clamped = clampDescription(long);
+    const { meta } = pageHead("Research — Quesar", long);
+    expect(meta).toContainEqual({ name: "description", content: clamped });
+    expect(meta).toContainEqual({ property: "og:description", content: clamped });
+    expect(meta).toContainEqual({ name: "twitter:description", content: clamped });
   });
 });

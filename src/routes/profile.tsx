@@ -19,11 +19,13 @@ import { getProfile, type ProfileRecord } from "@/lib/profile";
 import { pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/profile")({
-  head: () =>
-    pageHead(
+  head: () => {
+    const head = pageHead(
       "Profile — Quesar",
       "Your Quesar account: display name, sign-in methods, sessions, and billing.",
-    ),
+    );
+    return { meta: [...head.meta, { name: "robots", content: "noindex" }] };
+  },
   component: ProfilePage,
 });
 

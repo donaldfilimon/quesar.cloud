@@ -5,13 +5,29 @@ import { AppLink } from "@/components/site/app-link";
 import { productJourneys } from "@/lib/mlai/categories/product-journeys";
 import { products as productPages } from "@/lib/mlai/categories/products";
 import { pageHead } from "@/lib/seo";
+import { collectionPageLd, jsonLdScript } from "@/lib/mlai/structured-data";
+
+const title = "Products — Quesar, ABI, Abbey, WDBX";
+const description =
+  "Product journeys for ABI, Abbey, WDBX, and Quasar with availability and limits named.";
 
 export const Route = createFileRoute("/products")({
-  head: () =>
-    pageHead(
-      "Products — Quesar, ABI, Abbey, WDBX",
-      "Product journeys for ABI, Abbey, WDBX, and Quasar with availability and limits named.",
-    ),
+  head: () => ({
+    ...pageHead(title, description),
+    scripts: [
+      jsonLdScript(
+        collectionPageLd(
+          "/products",
+          title,
+          description,
+          productPages.map((product) => ({
+            url: `/products/${product.slug}`,
+            name: product.name,
+          })),
+        ),
+      ),
+    ],
+  }),
   component: ProductsPage,
 });
 

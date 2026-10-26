@@ -2,13 +2,29 @@ import { createFileRoute, Link } from "@/framework/router";
 import { PageClose, PageHero, RouteFrame, Section, Surface } from "@/components/site";
 import { researchContext } from "@/lib/mlai/categories/research-context";
 import { pageHead } from "@/lib/seo";
+import { collectionPageLd, jsonLdScript } from "@/lib/mlai/structured-data";
+
+const title = "Research implementations — Quesar";
+const description =
+  "Nested MLAI implementation cases: platform layers, document pipeline, mobile vault, Quasar generation, Abbey claims, WDBX specimen, and research export.";
 
 export const Route = createFileRoute("/research/implementations")({
-  head: () =>
-    pageHead(
-      "Research implementations — Quesar",
-      "Nested MLAI implementation cases: platform layers, document pipeline, mobile vault, Quasar generation, Abbey claims, WDBX specimen, and research export.",
-    ),
+  head: () => ({
+    ...pageHead(title, description),
+    scripts: [
+      jsonLdScript(
+        collectionPageLd(
+          "/research/implementations",
+          title,
+          description,
+          researchContext.map((item) => ({
+            url: `/research/implementations/${item.slug}`,
+            name: item.title,
+          })),
+        ),
+      ),
+    ],
+  }),
   component: ImplementationsPage,
 });
 

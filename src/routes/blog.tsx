@@ -4,18 +4,30 @@ import { CopyGrid, FilterChips, PageClose, PageHero, RouteFrame, Section } from 
 import { blog } from "@/lib/mlai/categories/blog";
 import { blogRubrics } from "@/lib/mlai/pages";
 import { pageHead } from "@/lib/seo";
+import { collectionPageLd, jsonLdScript } from "@/lib/mlai/structured-data";
 
 const tagOptions = [
   { value: "all", label: "All notes" },
   ...[...new Set(blog.map((post) => post.tag))].map((tag) => ({ value: tag, label: tag })),
 ];
 
+const title = "Blog — MLAI";
+const description =
+  "Engineering notes from MLAI: memory, personas, privacy, and runtime discipline.";
+
 export const Route = createFileRoute("/blog")({
   head: () => ({
-    ...pageHead(
-      "Blog — MLAI",
-      "Engineering notes from MLAI: memory, personas, privacy, and runtime discipline.",
-    ),
+    ...pageHead(title, description),
+    scripts: [
+      jsonLdScript(
+        collectionPageLd(
+          "/blog",
+          title,
+          description,
+          blog.map((post) => ({ url: `/blog/${post.slug}`, name: post.title })),
+        ),
+      ),
+    ],
     links: [
       {
         rel: "alternate",
