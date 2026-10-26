@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunk_N_E=self.webpackChunk_N_E||[]).push([[7828],{37828:(e,t,l)=>{function n(){throw Error("Server-only module: not available in the Next.js static build.")}l.r(t),l.d(t,{default:()=>s,ensureDbReady:()=>u,env:()=>a,getSql:()=>r});let r=n,u=n,a=new Proxy({},{get:n}),s=n}}]);
