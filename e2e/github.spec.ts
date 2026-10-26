@@ -46,11 +46,11 @@ test("total outage leaves curated source links and filters usable", async ({ pag
 });
 
 test("total outage falls back to the build-time snapshot, labelled as such", async ({ page }) => {
-  const { readdirSync } = await import("node:fs");
+  const { readFileSync } = await import("node:fs");
+  // `/github-snapshot.json` is `null` when GitHub did not answer at build time.
+  const root = process.env.E2E_STATIC_ROOT ?? "docs";
   test.skip(
-    !readdirSync("docs/assets").some(
-      (name) => name.startsWith("github-snapshot-") && name.endsWith(".json"),
-    ),
+    readFileSync(`${root}/github-snapshot.json`, "utf8").trim() === "null",
     "this build had no network, so it carries no snapshot",
   );
   await page.route("https://api.github.com/**", (route) => route.abort());

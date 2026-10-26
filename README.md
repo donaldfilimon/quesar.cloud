@@ -33,10 +33,10 @@ The project scripts use Node where declared; do not substitute `bun --bun`.
 
 ## Two delivery modes
 
-| Mode                          | Build                  | Boundary                                                                                                                                            |
-| ----------------------------- | ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Full server application       | `bun run build`        | Next.js server build (`.next-server/`, Vercel) with optional configured auth, database, connectors, and model providers. Building is not deploying. |
-| Static research/showcase site | `bun run build:static` | Next.js static export published under `docs/`; server-only features show explicit unavailable notices.                                              |
+| Mode                          | Build                  | Boundary                                                                                                                                    |
+| ----------------------------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| Full server application       | `bun run build`        | Next.js server build (`.next-server/`) with optional configured auth, database, connectors, and model providers. Building is not deploying. |
+| Static research/showcase site | `bun run build:static` | Next.js static export published under `docs/`; server-only features show explicit unavailable notices.                                      |
 
 The repository's publishing guidance identifies GitHub Pages from `main:/docs`
 as the static-site path. This README does not independently verify the live

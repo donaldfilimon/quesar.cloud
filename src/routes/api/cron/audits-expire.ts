@@ -2,8 +2,8 @@ import { createFileRoute } from "@/framework/router";
 
 /**
  * Retention sweep for conversation audits (mlai `internal/audits/expire`,
- * which Cloud Scheduler called with an OIDC token). Here a Vercel cron calls
- * it with `Authorization: Bearer ${CRON_SECRET}`; without CRON_SECRET the
+ * which Cloud Scheduler called with an OIDC token). Here a scheduler calls it
+ * daily with `GET` and `Authorization: Bearer ${CRON_SECRET}`; without CRON_SECRET the
  * endpoint is off (503), never open.
  */
 async function expire(request: Request): Promise<Response> {
