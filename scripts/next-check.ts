@@ -5,10 +5,10 @@
  * in `docs/` must exist in `out/` with the same title, description and canonical
  * URL, and every exported page must render the site shell around real content.
  *
- *   node scripts/next-check.ts [--vite docs] [--next out]
+ *   node scripts/next-check.ts [--vite <published dir>] [--next <export dir>]   (defaults: docs, out)
  */
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
-import { join, relative } from "node:path";
+import { join, relative, resolve } from "node:path";
 
 function arg(name: string, fallback: string): string {
   const index = process.argv.indexOf(name);
@@ -16,8 +16,8 @@ function arg(name: string, fallback: string): string {
 }
 
 const root = process.cwd();
-const viteDir = join(root, arg("--vite", "docs"));
-const nextDir = join(root, arg("--next", "out"));
+const viteDir = resolve(root, arg("--vite", "docs"));
+const nextDir = resolve(root, arg("--next", "out"));
 // Next's own not-found route; `404.html` is the page that is served.
 const IGNORED = new Set(["_not-found/index.html", "404/index.html"]);
 
