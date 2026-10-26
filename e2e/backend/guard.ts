@@ -21,13 +21,12 @@ export function acceptanceTarget() {
 }
 
 /**
- * The backend acceptance harnesses drove the retired Vite dev server and imported
- * source modules into the page (`import("/src/lib/….ts")`) to call server
- * functions, which Next.js does not serve. They stay refused until they are ported
- * to the Next server build (notes/superpowers/specs/2026-10-26-nextjs-app-router-port.md).
+ * Keeps a harness that is ported to the Next.js build but has not yet passed there
+ * from running as if it were verified. Only commerce remains: it needs an installed
+ * native WDBX binary (notes/superpowers/specs/2026-10-26-nextjs-app-router-port.md).
  */
 export function assertHarnessPorted() {
   throw new Error(
-    "Backend acceptance is not yet ported to the Next.js build; see notes/superpowers/specs/2026-10-26-nextjs-app-router-port.md.",
+    "Commerce acceptance is ported to the Next.js build but has not passed there (it needs an installed native WDBX binary); see notes/superpowers/specs/2026-10-26-nextjs-app-router-port.md.",
   );
 }

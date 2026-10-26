@@ -21,6 +21,7 @@ import { migrate } from "../../scripts/migrate.ts";
 import type { CommerceOrder } from "../../src/lib/commerce";
 import { acceptanceTarget } from "./guard";
 import { cleanupOwnedResources, stopOwnedChild } from "./process-cleanup";
+import { callServerFn } from "./server-fn";
 
 // Real browser transport, Better Auth, disposable Postgres and installed native WDBX.
 // Traces/screenshots are disabled: passwords and session cookies stay in memory.
@@ -32,7 +33,10 @@ const buyerEmail = `${run}-buyer@example.invalid`;
 const password = randomBytes(24).toString("base64url");
 const secret = randomBytes(32).toString("hex");
 const encryptionKey = randomBytes(32).toString("base64");
-const binary = "/Users/donaldfilimon/dev/active/wdbx/zig-out/bin/wdbx";
+// The installed native WDBX ledger binary; no default, because none ships with this repository.
+const binary = process.env.QUESAR_ACCEPTANCE_WDBX_BINARY ?? "";
+if (!binary)
+  throw new Error("Set QUESAR_ACCEPTANCE_WDBX_BINARY to the installed native WDBX binary.");
 const databaseUrl = new URL(adminUrl);
 databaseUrl.pathname = `/${run}`;
 const admin = new pg.Pool({ connectionString: adminUrl.href });
@@ -65,6 +69,9 @@ async function start() {
     WDBX_COMMERCE_DIRECTORY: directory,
     WDBX_COMMERCE_CONFIG: join(configurationRoot, "config.json"),
     WDBX_COMMERCE_HOST_KEY: join(configurationRoot, "host.bin"),
+    QUESAR_NEXT_MODE: "server",
+    QUESAR_NEXT_DIST: ".next-acceptance",
+    NEXT_TELEMETRY_DISABLED: "1",
   };
   // Never inherit real provider credentials or external payment configuration.
   for (const name of [
@@ -89,18 +96,10 @@ async function start() {
     "BILLING_PROVIDER",
   ])
     env[name] = "";
-  child = spawn(
-    process.execPath,
-    [
-      "node_modules/vite/bin/vite.js",
-      "--host",
-      "localhost",
-      "--port",
-      String(port),
-      "--strictPort",
-    ],
-    { env, stdio: "ignore" },
-  );
+  child = spawn(process.execPath, ["e2e/backend/next-dev-server.ts", "localhost", String(port)], {
+    env,
+    stdio: "ignore",
+  });
   for (let attempt = 0; attempt < 200; attempt++) {
     if (child.exitCode !== null || child.signalCode !== null)
       throw new Error("Owned acceptance app exited before readiness.");
@@ -114,18 +113,7 @@ async function start() {
   throw new Error("Owned acceptance app did not become ready.");
 }
 async function call(page: Page, method: string, data?: unknown): Promise<unknown> {
-  return page.evaluate(
-    async ({ method, data }) => {
-      const module = "commerce";
-      const api = await import(/* @vite-ignore */ `/src/lib/${module}.ts`);
-      try {
-        return await api[method](data === undefined ? undefined : { data });
-      } catch (error) {
-        return { thrown: error instanceof Error ? error.message : "unknown" };
-      }
-    },
-    { method, data },
-  );
+  return callServerFn(page, "lib/commerce", method, data);
 }
 async function signup(page: Page, email: string) {
   await page.goto(`${origin}/login?next=/profile`);
@@ -193,7 +181,7 @@ test.beforeAll(async ({ browser }) => {
   [buyer, bystander, anonymous, operator] = await Promise.all(contexts.map((c) => c.newPage()));
   // The cold failure destroyed the anonymous execution context after signup
   // first reached /profile; the previous warmup omitted that route and its
-  // lazy profile/billing/passkey dependencies. Visit both routes and import the read-only
+  // lazy profile/billing/passkey dependencies. Visit both routes and call the read-only
   // commerce transport before any account or invoice mutation; do not retry
   // failed journey assertions or replay writes.
   for (const route of ["/login", "/profile", "/login"]) {
@@ -315,7 +303,7 @@ test("browser sessions and complete WDBX invoice state survive backend replaceme
   await bystander.goto(`${origin}/profile`, { waitUntil: "networkidle" });
   expect(await call(bystander, "listCommerceOrders")).toEqual([]);
   receipt(
-    "owned Vite backend stopped/restarted; durable Better Auth cookie and all native WDBX states match",
+    "owned Next backend stopped/restarted; durable Better Auth cookie and all native WDBX states match",
   );
 });
 

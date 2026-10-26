@@ -11,6 +11,7 @@ import pg from "pg";
 import { migrate } from "../../scripts/migrate.ts";
 import { acceptanceTarget } from "./guard";
 import { cleanupOwnedResources, stopOwnedChild } from "./process-cleanup";
+import { callServerFn } from "./server-fn";
 
 // Credentials exist only in child environments/browser memory. Never trace auth bodies/cookies.
 const adminUrl = acceptanceTarget();
@@ -51,8 +52,11 @@ async function start() {
     VITE_AUTH_ENABLED: "true",
     VITE_STATIC_SITE: "false",
     CRON_SECRET: secret,
+    QUESAR_NEXT_MODE: "server",
+    QUESAR_NEXT_DIST: ".next-acceptance",
+    NEXT_TELEMETRY_DISABLED: "1",
   };
-  // Explicitly override Vite .env values too: this run must never use remote credentials.
+  // Explicitly override .env values too: this run must never use remote credentials.
   for (const name of [
     "XAI_API_KEY",
     "CLOUDFLARE_AI_GATEWAY_URL",
@@ -74,18 +78,10 @@ async function start() {
     "ADMIN_EMAILS",
   ])
     Object.assign(env, { [name]: "" });
-  child = spawn(
-    process.execPath,
-    [
-      "node_modules/vite/bin/vite.js",
-      "--host",
-      "localhost",
-      "--port",
-      String(port),
-      "--strictPort",
-    ],
-    { env, stdio: "ignore" },
-  );
+  child = spawn(process.execPath, ["e2e/backend/next-dev-server.ts", "localhost", String(port)], {
+    env,
+    stdio: "ignore",
+  });
   for (let i = 0; i < 200; i++) {
     if (child.exitCode !== null) throw new Error("Acceptance app exited before readiness");
     try {
@@ -111,17 +107,7 @@ async function auth(page: Page, path: string, data?: unknown) {
   );
 }
 async function call(page: Page, module: string, method: string, data?: unknown): Promise<unknown> {
-  return page.evaluate(
-    async ({ module, method, data }) => {
-      const api = await import(/* @vite-ignore */ `/src/lib/${module}.ts`);
-      try {
-        return await api[method](data === undefined ? undefined : { data });
-      } catch (error) {
-        return { thrown: error instanceof Error ? error.message : "unknown" };
-      }
-    },
-    { module, method, data },
-  );
+  return callServerFn(page, `lib/${module}`, method, data);
 }
 async function signup(page: Page, email: string) {
   page.on("pageerror", (error) =>
@@ -279,22 +265,13 @@ test("disposable Postgres and real browser durable account/workflow acceptance",
   const page = await a.newPage();
   const other = await b.newPage();
   const anonymous = await anon.newPage();
-  // Warm dev-only dependency discovery before mutating account journeys. Vite
-  // may reload the page when a previously unseen module is optimized.
-  for (let attempt = 0; attempt < 3; attempt++) {
-    try {
-      await anonymous.goto(`${origin}/contact`, { waitUntil: "networkidle" });
-      await anonymous.evaluate(async () => {
-        for (const module of ["workspace", "console", "inquiries", "profile", "auth/client"]) {
-          await import(/* @vite-ignore */ `/src/lib/${module}.ts`);
-        }
-      });
-      await anonymous.waitForLoadState("networkidle");
-      break;
-    } catch (error) {
-      if (attempt === 2) throw error;
-    }
-  }
+  // Compile the routes and the server-function dispatcher before mutating account
+  // journeys: Next dev compiles each on first request.
+  for (const route of ["/contact", "/login", "/profile", "/console"])
+    await anonymous.goto(`${origin}${route}`, { waitUntil: "networkidle" });
+  expect(await call(anonymous, "console", "getConsoleStatus")).toMatchObject({
+    thrown: "Unauthorized",
+  });
   const email = `${run}@example.invalid`;
   const otherEmail = `${run}-other@example.invalid`;
   const owner = await signup(page, email);
@@ -419,6 +396,10 @@ test("disposable Postgres and real browser durable account/workflow acceptance",
     await call(anonymous, "inquiries", "sendInquiry", { ...input, message: "short" }),
   ).toMatchObject({ ok: false, code: "invalid" });
   await sql("delete from rate_limits where bucket = 'inquiry'");
+  // The inquiry limit counts in fixed 10-minute windows (rate-limit.server.ts); a
+  // boundary inside these six calls would reset the count and pass the sixth.
+  const untilBoundary = 10 * 60_000 - (Date.now() % (10 * 60_000));
+  if (untilBoundary < 30_000) await new Promise((resolve) => setTimeout(resolve, untilBoundary));
   for (let i = 0; i < 5; i++)
     expect(await call(anonymous, "inquiries", "sendInquiry", input)).toEqual({ ok: true });
   expect(await call(anonymous, "inquiries", "sendInquiry", input)).toMatchObject({
@@ -560,7 +541,9 @@ test("disposable Postgres and real browser durable account/workflow acceptance",
   await page.getByLabel("Type your email to confirm").fill(email);
   await page.locator("#delete-password").fill("incorrect-synthetic-password");
   await page.getByRole("button", { name: "Delete my account" }).click();
-  await expect(page.getByRole("alert")).toContainText("That password is not correct");
+  await expect(
+    page.getByRole("alert").filter({ hasText: "That password is not correct" }),
+  ).toBeVisible();
   expect(await sql('select id from "user" where id=$1', [owner])).toHaveLength(1);
   // Reproduce a late database failure through the actual deletion endpoint.
   await sql(
@@ -628,7 +611,7 @@ test("disposable Postgres and real browser durable account/workflow acceptance",
   // afterAll must still remove databases/dump after exit was already delivered.
   if (!child) throw new Error("Owned app is missing before teardown qualification.");
   const appExit = once(child, "exit");
-  // Vite handles SIGTERM with a normal exit(143); SIGKILL establishes the
+  // A normal SIGTERM stop is covered above; SIGKILL establishes the
   // already signal-exited state that triggered the reviewed cleanup failure.
   child.kill("SIGKILL");
   await appExit;

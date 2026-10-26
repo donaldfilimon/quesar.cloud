@@ -13,11 +13,12 @@ import { migrate } from "../../scripts/migrate.ts";
 import { acceptanceTarget } from "./guard";
 import { cleanupOwnedResources, stopOwnedChild } from "./process-cleanup";
 
-// Run build:persistent separately, serially with every Vite acceptance harness.
+// Run `bun run build:persistent` first, serially with every other acceptance harness.
 // Only fresh owned DBs and process handles are ever destroyed. No traces include credentials.
 const target = acceptanceTarget();
-// Optional controller-frozen compiled output, never a URL or source checkout.
-// The existing guarded .output contract remains the default.
+// The compiled Next server build (`next start` serves it from this checkout, whose
+// node_modules and next.config.ts it loads). Defaults to build:persistent's
+// `.next-server`; an override names another build directory inside this checkout.
 const requestedArtifact = process.env.QUESAR_ACCEPTANCE_ARTIFACT_ROOT;
 if (
   requestedArtifact !== undefined &&
@@ -26,6 +27,7 @@ if (
   throw new Error(
     "QUESAR_ACCEPTANCE_ARTIFACT_ROOT must be an absolute local compiled-artifact directory.",
   );
+let distDir: string;
 let artifactRoot: string;
 let artifactHash: string;
 async function hashArtifact(root: string): Promise<string> {
@@ -35,6 +37,8 @@ async function hashArtifact(root: string): Promise<string> {
       a.name.localeCompare(b.name),
     )) {
       const name = join(path, entry.name);
+      // `next start` writes its caches and trace here at runtime; they are not the build.
+      if (["cache", "trace", join("server", "route-cache")].includes(name)) continue;
       if (entry.isSymbolicLink()) {
         const destination = relative(root, await realpath(join(root, name)));
         if (destination === ".." || destination.startsWith(`..${sep}`) || isAbsolute(destination))
@@ -93,16 +97,20 @@ async function start(settings: Record<string, string> = {}) {
   diagnostic = "";
   let output = "";
   let spawnFailed = false;
-  child = spawn(process.execPath, [join(artifactRoot, "server/index.mjs")], {
-    cwd: requestedArtifact === undefined ? undefined : artifactRoot,
-    env: {
-      PATH: process.env.PATH,
-      HOST: "127.0.0.1",
-      PORT: String(port),
-      ...settings,
+  child = spawn(
+    process.execPath,
+    ["node_modules/next/dist/bin/next", "start", "--hostname", "127.0.0.1", "--port", String(port)],
+    {
+      env: {
+        PATH: process.env.PATH,
+        QUESAR_NEXT_MODE: "server",
+        QUESAR_NEXT_DIST: distDir,
+        NEXT_TELEMETRY_DISABLED: "1",
+        ...settings,
+      },
+      stdio: ["ignore", "pipe", "pipe"],
     },
-    stdio: ["ignore", "pipe", "pipe"],
-  });
+  );
   child.once("error", () => {
     spawnFailed = true;
   });
@@ -119,9 +127,9 @@ async function start(settings: Record<string, string> = {}) {
       throw new Error("Owned persistent artifact exited before readiness");
     if (/EADDRINUSE|EACCES/.test(diagnostic))
       throw new Error("Owned persistent artifact could not bind its listener");
-    // Observed from this artifact: "➜ Listening on: http://127.0.0.1:<port>/".
+    // Observed from `next start`: "- Local: http://127.0.0.1:<port>", then "✓ Ready in".
     // No HTTP response can establish ownership before this owned child receipt.
-    if (!output.includes(`Listening on: http://127.0.0.1:${port}/`)) {
+    if (!output.includes(`http://127.0.0.1:${port}`) || !output.includes("Ready in")) {
       await new Promise((resolve) => setTimeout(resolve, 250));
       continue;
     }
@@ -178,14 +186,18 @@ async function seedAudit(userId: string, model: string, transplanted?: string) {
 }
 
 test.beforeAll(async () => {
-  artifactRoot = await realpath(requestedArtifact ?? resolve(".output"));
+  artifactRoot = await realpath(requestedArtifact ?? resolve(".next-server"));
+  distDir = relative(await realpath("."), artifactRoot);
+  if (!distDir || distDir === ".." || distDir.startsWith(`..${sep}`) || isAbsolute(distDir))
+    throw new Error("The compiled artifact must be a build directory inside this checkout.");
   if (
-    !(await lstat(join(artifactRoot, "server/index.mjs"))).isFile() ||
-    !(await lstat(join(artifactRoot, "public"))).isDirectory()
+    !(await lstat(join(artifactRoot, "BUILD_ID"))).isFile() ||
+    !(await lstat(join(artifactRoot, "server"))).isDirectory()
   )
-    throw new Error(
-      "Compiled artifact requires server/index.mjs and its public resource directory.",
-    );
+    throw new Error("Compiled artifact requires a Next server build (BUILD_ID and server/).");
+  // `next start` loads .env files from the checkout; none may add credentials here.
+  const dotenv = (await readdir(".")).filter((file) => file.startsWith(".env"));
+  if (dotenv.length) throw new Error(`Remove ${dotenv.join(", ")} before persistent acceptance.`);
   artifactHash = await hashArtifact(artifactRoot);
   receipt(`compiled artifact root ${artifactRoot}; full-tree SHA256 ${artifactHash}`);
   scratch = await mkdtemp(join(tmpdir(), "quesar-artifact-"));
@@ -441,7 +453,9 @@ test("persistent Node artifact: fail closed, migrations, secure sessions, isolat
     await page.goto(
       `${origin}/login?${new URLSearchParams({ next: "/profile", error: "access_denied", error_description: "must-not-display-provider-detail" })}`,
     );
-    await expect(page.getByRole("alert")).toContainText("Provider sign-in was cancelled or denied");
+    await expect(
+      page.getByRole("alert").filter({ hasText: "Provider sign-in was cancelled or denied" }),
+    ).toBeVisible();
     await expect(page.locator("body")).not.toContainText("must-not-display-provider-detail", {
       useInnerText: true,
     });
@@ -614,7 +628,9 @@ test("persistent Node artifact: fail closed, migrations, secure sessions, isolat
     await expect(
       page.getByText("Persistent artifact decrypted fixture", { exact: true }),
     ).toBeVisible();
-    await expect(bystander.getByRole("alert")).toContainText("could not be decrypted");
+    await expect(
+      bystander.getByRole("alert").filter({ hasText: "could not be decrypted" }),
+    ).toBeVisible();
     // Replay the compiled read transport with a known foreign ID. The account
     // scope must refuse it even when the caller bypasses the inventory UI.
     const outgoing = bystander.waitForRequest(
@@ -627,11 +643,7 @@ test("persistent Node artifact: fail closed, migrations, secure sessions, isolat
       async ({ url, body, contentType }) => {
         const response = await fetch(url, {
           method: "POST",
-          headers: {
-            "content-type": contentType,
-            "x-tsr-serverFn": "true",
-            accept: "application/json",
-          },
+          headers: { "content-type": contentType, accept: "application/json" },
           body,
         });
         return { status: response.status, refused: (await response.text()).includes("not_found") };

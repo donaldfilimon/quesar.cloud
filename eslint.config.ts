@@ -17,6 +17,7 @@ export default tseslint.config(
       ".next/**",
       ".next-server/**",
       ".next-film-*/**",
+      ".next-acceptance/**",
       "out/**",
       "next-env.d.ts",
       "node_modules/**",
