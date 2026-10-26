@@ -1,5 +1,6 @@
 import type { ComponentType, ReactNode } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
+import { rootHead } from "@/framework/root-head";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mode = vi.hoisted(() => ({ static: true }));
@@ -55,7 +56,12 @@ beforeEach(() => {
 
 describe("public renderer claim boundaries", () => {
   it("publishes organization brand metadata without legal registration assertions", () => {
-    const organization = JSON.parse(head(HomeRoute).scripts![0]!.children!);
+    // The Organization now ships in the site-wide graph (root head), not the home head.
+    expect(head(HomeRoute).scripts ?? []).toEqual([]);
+    const graph = JSON.parse(rootHead.scripts![0]!.children!);
+    const organization = graph["@graph"].find(
+      (node: { "@type": string }) => node["@type"] === "Organization",
+    );
     expect(organization.name).toBe(site.company);
     expect(organization).not.toHaveProperty("legalName");
     expect(organization.url).toBe("https://quesar.cloud/");
