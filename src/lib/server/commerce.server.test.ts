@@ -17,11 +17,19 @@ import { WdbxCommerceStore } from "./commerce-wdbx.server";
 vi.mock("./admin.server", () => ({
   adminDecisionFor: vi.fn(async (id: string) => ({ admin: id === "verified-admin" })),
 }));
-const binary =
-  process.env.WDBX_TEST_BINARY ?? "/Users/donaldfilimon/dev/active/wdbx/zig-out/bin/wdbx";
+// The native `wdbx` executable (WDBX crates/abi-wdbx, bin `wdbx`); no default,
+// because none ships with this repository. Missing is a failure, never a skip.
+const binary = process.env.WDBX_TEST_BINARY ?? "";
 let base: string, directory: string, store: WdbxCommerceStore, repo: CommerceRepository;
 let options: { binary: string; directory: string; config: string; hostKey: string };
+/** Every journal object an invoice's v2 ledger has written (the Rust WDBX layout). */
+async function journalBytes(root: string): Promise<Buffer> {
+  const journals = join(root, "journals");
+  const names = (await readdir(journals)).sort();
+  return Buffer.concat(await Promise.all(names.map((name) => readFile(join(journals, name)))));
+}
 beforeAll(async () => {
+  if (!binary) throw new Error("Set WDBX_TEST_BINARY to the native wdbx executable.");
   base = await realpath(await mkdtemp(join(tmpdir(), "quesar-commerce-wdbx-")));
   directory = join(base, "invoices");
   await mkdir(directory, { mode: 0o700 });
@@ -74,7 +82,8 @@ describe("first-party WDBX invoicing", () => {
     expect((await repo.create(randomUUID(), key)).id).not.toBe(orders[0].id);
     expect(await repo.list(randomUUID())).toEqual([]);
     await expect(repo.create(buyer, "bad-key")).rejects.toThrow();
-    const wal = await readFile(join(directory, orders[0].id, "zig-v4.wal"));
+    const wal = await journalBytes(join(directory, orders[0].id));
+    expect(wal.length).toBeGreaterThan(0);
     expect(wal.includes(Buffer.from(buyer))).toBe(false);
     expect(wal.includes(Buffer.from("Pilot engineering"))).toBe(false);
     // Fresh adapter is a new native process/store open: authority survives instance replacement.

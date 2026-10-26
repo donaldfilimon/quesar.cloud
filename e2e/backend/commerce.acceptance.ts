@@ -47,6 +47,12 @@ let child: ChildProcess | undefined;
 let buyer: Page, bystander: Page, anonymous: Page, operator: Page;
 const contexts: BrowserContext[] = [];
 let operatorId: string, buyerId: string;
+/** Every journal object an invoice's v2 ledger has written (the Rust WDBX layout). */
+async function journalBytes(root: string): Promise<Buffer> {
+  const journals = join(root, "journals");
+  const names = (await readdir(journals)).sort();
+  return Buffer.concat(await Promise.all(names.map((name) => readFile(join(journals, name)))));
+}
 function receipt(message: string) {
   console.log(`[commerce browser acceptance] ${message}`);
 }
@@ -231,7 +237,8 @@ test("HTTP replay creates one native invoice and rejects client-owned money", as
     await call(buyer, "createPilotOrder", { idempotencyKey: randomUUID(), amountMinor: 1 }),
   ).toHaveProperty("thrown");
   expect(await call(buyer, "listCommerceOrders")).toEqual([order]);
-  const wal = await readFile(join(directory, order.id, "zig-v4.wal"));
+  const wal = await journalBytes(join(directory, order.id));
+  expect(wal.length).toBeGreaterThan(0);
   expect(wal.includes(Buffer.from(buyerId))).toBe(false);
   expect(wal.includes(Buffer.from(order.description))).toBe(false);
   receipt("real HTTP invoice create/replay and strict money-field rejection passed");
@@ -480,7 +487,7 @@ test("real account deletion unlinks invoice history and replacement account cann
   );
   // Business receipts remain in native ledgers even after identity association is removed.
   for (const order of previousOrders)
-    expect((await readFile(join(directory, order.id, "zig-v4.wal"))).length).toBeGreaterThan(0);
+    expect((await journalBytes(join(directory, order.id))).length).toBeGreaterThan(0);
   receipt(
     "actual Better Auth deletion removed buyer; fresh same-email identity sees no old invoices; bystander survives",
   );

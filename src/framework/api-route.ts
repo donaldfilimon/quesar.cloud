@@ -18,7 +18,10 @@ interface ServerRoute {
 export function withHeaders(response: Response, extra: Headers): Response {
   if ([...extra.keys()].length === 0) return response;
   const headers = new Headers(response.headers);
-  extra.forEach((value, key) => headers.set(key, value));
+  // `Set-Cookie` values are separate headers: appending keeps the response's own cookies.
+  for (const [key, value] of extra)
+    if (key === "set-cookie") headers.append(key, value);
+    else headers.set(key, value);
   return new Response(response.body, {
     status: response.status,
     statusText: response.statusText,

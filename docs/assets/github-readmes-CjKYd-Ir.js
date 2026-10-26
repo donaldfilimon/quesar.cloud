@@ -1,1 +1,0 @@
-var e=[`quesar.cloud`,`abi`,`wdbx`,`abbey`,`skill-creator`,`abbey-bot`,`gama`];export{e as t};

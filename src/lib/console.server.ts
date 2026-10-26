@@ -699,7 +699,7 @@ export async function adminListInquiries(
 // ---------------------------------------------------------------------- cron
 
 /**
- * Vercel cron convention: `Authorization: Bearer ${CRON_SECRET}`. No secret
+ * Cron convention: the scheduler sends `Authorization: Bearer ${CRON_SECRET}`. No secret
  * configured means the endpoint is off (503), never open.
  */
 export function authorizeCron(

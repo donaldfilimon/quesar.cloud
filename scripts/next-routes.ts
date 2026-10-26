@@ -198,7 +198,8 @@ function generatedFiles(dir: string): string[] {
 
 const check = process.argv.includes("--check");
 const wanted = new Map<string, string>();
-for (const route of readRoutes()) {
+const routes = readRoutes();
+for (const route of routes) {
   const dir = segmentDir(route.id);
   if (route.methods.length) {
     // A hand-written static route handler (`app/feed.xml/route.ts`) serves both builds.
@@ -213,7 +214,7 @@ for (const route of readRoutes()) {
   wanted.set(join(dir, "view.tsx"), viewSource(route));
 }
 wanted.set(join(appDir, "api", "server-fn", "[id]", "manifest.ts"), serverFnManifest());
-wanted.set(join(root, "src", "framework", "route-registry.gen.ts"), routeRegistry(readRoutes()));
+wanted.set(join(root, "src", "framework", "route-registry.gen.ts"), routeRegistry(routes));
 
 // Generated files are committed and pass `format:check`, so they are written formatted.
 for (const [path, source] of wanted) {
