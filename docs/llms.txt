@@ -1,0 +1,117 @@
+# Quesar
+
+> Build assistant workflows, memory systems, and developer tools with inspectable sources and explicit implementation boundaries.
+
+## Site
+- [Architecture](https://quesar.cloud/architecture): Interactive stack diagram nodes current vs not claimed
+- [Blog](https://quesar.cloud/blog): Engineering notes and essays
+- [Team](https://quesar.cloud/team): Donald Filimon founder
+- [Projects](https://quesar.cloud/projects): ABI WDBX Abbey Gama directory
+- [Gama](https://quesar.cloud/gama): Swift UI framework
+- [Showcase](https://quesar.cloud/showcase): Film trailer design lab mega
+- [Changelog](https://quesar.cloud/changelog): Release history
+- [Benchmarks](https://quesar.cloud/benchmarks): Workload notes not scoreboard
+- [Get started](https://quesar.cloud/get-started): Start journeys setup
+- [Investors](https://quesar.cloud/investors): TAM SAM SOM ARR tagged targets not results
+- [Services](https://quesar.cloud/services): Audit design build harden
+- [Security](https://quesar.cloud/security): Trust posture fail closed
+- [Privacy](https://quesar.cloud/privacy): Local by default
+- [Terms](https://quesar.cloud/terms): Legal terms
+- [Contact](https://quesar.cloud/contact): Inquiry without leaving the site
+- [Developers](https://quesar.cloud/developers): Live GitHub READMEs when GitHub answers
+- [Source catalog](https://quesar.cloud/source): Public repositories in-site
+- [Links](https://quesar.cloud/links): Internal directory
+- [About](https://quesar.cloud/about): Values principles entity
+- [ABI Is Rust Now: What Changed, and What Didn't](https://quesar.cloud/blog/abi-is-rust-now): The ABI runtime moved from Zig to a nightly-Rust workspace on July 30, 2026, and WDBX became its own sibling workspace in August. Here is what that means for…
+- [WDBX V2: Observable Memory, Multimodal Inputs, and Research Alignment](https://quesar.cloud/blog/wdbx-v2-release): The second iteration of the WDBX runtime ships an observable pipeline: block-chain memory with temporal queries, multimodal input fusion, an async neural job…
+- [On Saying “I'm Not Sure”](https://quesar.cloud/blog/on-saying-im-not-sure): A note in Abbey's voice — the empathetic-polymath persona — on why an honest “I don't know” is one of the most useful things an agent can say.
+- [Inside the WDBX Hybrid Ranker: Four Factors, One Score](https://quesar.cloud/blog/inside-wdbx-hybrid-ranker): Semantic similarity is only the first of four factors. Here is the exact score WDBX uses to rank retrieval candidates — and why every factor is bounded to…
+- [How Sparse Evidence Attention Decides What the Model Sees](https://quesar.cloud/blog/what-the-model-sees-sea): Before a model reasons, something must choose which records reach the context window. SEA scores eight criteria, then packs greedily under a hard token budget.
+- [The Weights Behind Abbey, Aviva, and Abi](https://quesar.cloud/blog/weights-behind-the-personas): Persona routing is not a hidden model call. It is a normalized weight vector with hard policy overrides and an inspectable strategy decision.
+- [Designing AI Systems That Can Explain Their Last Move](https://quesar.cloud/blog/explainable-last-move): A practical guide to capturing retrieval paths, policy checks, and operator decisions so teams can debug autonomous workflows after the fact.
+- [What We Plan to Measure Before Calling an Agent Production-Ready](https://quesar.cloud/blog/production-ready-agent-metrics): Latency and accuracy are not enough. The gate we are building tracks tool-boundary violations, source coverage, rollback paths, abstention quality, and…
+- [From Vector Search to Weighted Backtrace Graphs](https://quesar.cloud/blog/vector-search-to-backtrace-graphs): Why retrieval infrastructure needs relationship-aware context and why ranking alone is not sufficient for high-stakes answer generation.
+- [The Case for Separate Planning, Review, and Execution Agents](https://quesar.cloud/blog/separate-planning-review-execution): Role separation lets teams encode checks and balances into an AI workflow instead of relying on a single agent to police itself.
+- [Making AI Control Surfaces Feel Calm Under Pressure](https://quesar.cloud/blog/calm-control-surfaces): Interface details that prevent overload: progressive disclosure, confidence bands, decision diffs, and emergency stop affordances.
+- [What Incident Reviews Need From AI Logs](https://quesar.cloud/blog/incident-reviews-from-ai-logs): How to structure traces so teams can reconstruct context, model output, policy decisions, tool calls, and human overrides after a production event.
+- [Private AI Does Not Mean Invisible AI](https://quesar.cloud/blog/private-ai-is-not-invisible-ai): Offline and VPC deployments still need measurable controls: local audit trails, release gates, repeatable evals, and operator-visible confidence signals.
+- [Neural Backtracking: What a Block Chain Buys an AI Memory](https://quesar.cloud/blog/neural-backtracking): Hallucination debugging is archaeology. WDBX chains every interaction block to its parent so you can prove nobody edited the record — and so a system can be…
+- [Surviving Writergate: Migrating ABI to Zig 0.16](https://quesar.cloud/blog/zig-016-migration): Zig 0.16 rebuilt std.io around vtable-based Reader and Writer interfaces. Ninety-five files later, here's what the migration actually looked like — and the…
+- [Why WDBX Is Written in Zig](https://quesar.cloud/blog/why-zig): Garbage collection pauses are invisible in the mean and fatal in the tail. WDBX is Zig because a real-time vector database is a p99 product, not a p50 product.
+- [Donald Filimon](https://quesar.cloud/team/donald-filimon): Building privacy-first AI infrastructure — durable memory, traceable retrieval, and bounded autonomy — close to the metal across Zig, Rust, and Swift.
+
+## Docs
+- [Docs](https://quesar.cloud/docs): Getting started runtime MCP WDBX
+- [Start with the source.](https://quesar.cloud/docs/getting-started): Prepare an ABI checkout and follow its own validation workflow.
+- [Different tools. Clear roles.](https://quesar.cloud/docs/architecture): Separate runtime, storage, interface, and application framework responsibilities.
+- [ABI runtime, as the tree actually ships.](https://quesar.cloud/docs/runtime): Nightly Rust orchestration, wrappers, crates, and what a successful gate actually proves.
+- [Fail closed. Tag the figure.](https://quesar.cloud/docs/trust): Sessions, evaluation gates, and the difference between measured, reported, and target.
+- [Evidence before promises.](https://quesar.cloud/docs/evidence): Keep documented behavior, reported testing, measured results and targets separate.
+- [A companion, not a capability claim.](https://quesar.cloud/docs/identity): Understand Abbey, Aviva and ABI without confusing identity with implementation.
+- [One tree. Many surfaces.](https://quesar.cloud/docs/gama): A source-based introduction to Gama’s Swift scene and rendering model.
+- [Abbey, Aviva, Abi — profiles, not products.](https://quesar.cloud/docs/personas): Routing is a design mechanism. Per-persona quality is evaluated, not assumed.
+- [Memory is a substrate, not a chat log.](https://quesar.cloud/docs/wdbx): Layered HNSW, MVCC, content addressing. Integrity of storage is not truth of the record.
+- [The V2 snapshot, kept for reference.](https://quesar.cloud/docs/wdbx-v2): A frozen June 2026 documentation set from the earlier Abbey WDBX project. Not the current implementation guide.
+- [Twelve contract-covered tools.](https://quesar.cloud/docs/mcp): JSON-RPC 2.0 over stdio, optional loopback HTTP. Unknown tools fail closed.
+- [Each surface has its own gate.](https://quesar.cloud/docs/deployment): Packaging orchestration, retrieval, and controls. A web check is not mobile evidence.
+- [Protected surfaces fail closed.](https://quesar.cloud/docs/api): The console requires a session. There is no public hosted assistant API.
+
+## Research
+- [Research](https://quesar.cloud/research): Papers notes implementation limits
+- [AI & agent behavior](https://quesar.cloud/research/ai-overview): Understand how Abbey and ABI route requests, produce local responses, and expose bounded checks.
+- [WDBX memory & retrieval](https://quesar.cloud/research/wdbx-overview): Durable records, searchable vectors and inspectable retrieval for applications that need continuity.
+- [SEA evidence selection](https://quesar.cloud/research/sea-overview): Select a bounded set of relevant records before assembling an assistant context.
+- [GPU & compute](https://quesar.cloud/research/gpu-overview): Inspect native vector-operation support and explicit CPU fallback.
+- [MCP integrations](https://quesar.cloud/research/mcp-overview): Expose bounded ABI operations through a documented tool interface.
+- [TUI & operator tools](https://quesar.cloud/research/tui-overview): Inspect local runtime state and explore session-based agent interactions.
+- [WDBX: A Weighted-Backtrace Memory Store for Traceable Retrieval](https://quesar.cloud/research/wdbx-weighted-backtrace-memory-store): A technical note on durable storage, approximate vector search and inspectable ranking, with legacy and canonical episode paths distinguished.
+- [Sparse Evidence Attention for Bounded Context Assembly](https://quesar.cloud/research/sparse-evidence-attention-context-assembly): A source-backed account of eight-signal selection and bounded prompt assembly.
+- [WDBX Graph Weights for Traceable Neural Retrieval](https://quesar.cloud/research/wdbx-graph-weights-traceable-retrieval): Inspect how a candidate ranking can expose the factors that influenced it.
+- [Policy-Locked Tool Use in Multi-Agent Systems](https://quesar.cloud/research/policy-locked-tool-use-multi-agent): A proposed evaluation method for explicit authorization boundaries in agent workflows.
+- [Latency Budgets for Real-Time AI Orchestration](https://quesar.cloud/research/latency-budgets-real-time-orchestration): A proposed method for measuring the stages that determine interactive response time.
+- [Backtrace Confidence Signals for Hallucination Reduction](https://quesar.cloud/research/backtrace-confidence-signals-hallucination): A proposed study of whether visible evidence helps reviewers detect unsupported answers.
+- [Vector Index Maintenance Under Continuous Ingestion](https://quesar.cloud/research/vector-index-maintenance-continuous-ingestion): A source-based guide to persistence and index maintenance boundaries.
+- [Human Approval Gates That Operators Actually Use](https://quesar.cloud/research/human-approval-gates-operators-use): A proposed usability study for understandable approval and refusal flows.
+- [Chunk Provenance in Long-Context Retrieval Systems](https://quesar.cloud/research/chunk-provenance-long-context-retrieval): A proposed application pattern for preserving source references through document retrieval.
+- [Offline-First AI Workflows for Sensitive Data](https://quesar.cloud/research/offline-first-ai-sensitive-data): A bounded description of local deterministic processing and its evaluation uses.
+- [Prompt Injection Drills for Agentic Systems](https://quesar.cloud/research/prompt-injection-drills-agentic-systems): A proposed adversarial test set for agent boundaries and failure handling.
+- [Multi-Persona Routing Under Uncertainty: Policy Weights and Request Classification](https://quesar.cloud/research/multi-persona-routing-policy-weights): A corrected account of deterministic local profile routing and adaptive state in the SEA path.
+- [Evaluating Metal acceleration and CPU fallback](https://quesar.cloud/research/gpu-implementation-guide): Implementation guide: evaluating Metal acceleration and CPU fallback. Inspect native vector-operation support and explicit CPU fallback.
+- [Connecting an MCP client to ABI](https://quesar.cloud/research/mcp-implementation-guide): Implementation guide: connecting an MCP client to ABI. Expose bounded ABI operations through a documented tool interface.
+- [Using the local diagnostics dashboard and agent REPL](https://quesar.cloud/research/tui-implementation-guide): Implementation guide: using the local diagnostics dashboard and agent REPL. Inspect local runtime state and explore session-based agent interactions.
+- [A six-layer architecture for evidence-aware AI systems](https://quesar.cloud/research/implementations/six-layer-evidence-aware-platform): Quesar organizes interface, orchestration, retrieval, acceleration, storage, and audit as distinct layers so that evidence and runtime claims can be traced to…
+- [A private document pipeline with explicit fallback behavior](https://quesar.cloud/research/implementations/private-document-intelligence-pipeline): The private Quesar application implements bounded ingestion, workspace-scoped extraction and search, and consent-gated model access while making degraded…
+- [Mobile Vault persistence across CloudKit and local fallback](https://quesar.cloud/research/implementations/mobile-vault-cloudkit-local-fallback): The Quesar mobile Vault keeps one CRUD contract while selecting either the user's private CloudKit database or an encrypted local SecureStore fallback and…
+- [Quasar as a bounded repository-generation loop](https://quesar.cloud/research/implementations/quasar-bounded-repository-generation): Quasar couples an Anthropic tool loop to a narrowly constrained project filesystem, producing a local application through inspectable read, list, and write…
+- [Abbey capability claims as an executable ledger](https://quesar.cloud/research/implementations/abbey-executable-capability-ledger): Abbey centralizes capability statements in a typed registry whose status, evidence, dependencies, feature flags, and refusal behavior can be projected into…
+- [WDBX Specimen separates architecture, runtime profiles, and proof](https://quesar.cloud/research/implementations/wdbx-specimen-architecture-and-conformance): WDBX Specimen combines a provenance-aware architecture specification with explicit browser and native runtime profiles, then uses conformance tests to make a…
+- [Deterministic research exports with citation gates](https://quesar.cloud/research/implementations/deterministic-research-provenance-exports): The Quesar research export pipeline converts validated publication records into stable JSON and static HTML, verifies and copies declared attachments, and…
+
+## Projects
+- [Quesar](https://quesar.cloud/quesar): Large model that trains and improves Abbey, Aviva, and the other assistants
+- [Platform](https://quesar.cloud/platform): Three layers one chip WDBX ABI Abbey
+- [Abbey](https://quesar.cloud/abbey): Companion claims ledger personas
+- [ABI](https://quesar.cloud/abi): Rust orchestration MCP CLI
+- [WDBX](https://quesar.cloud/wdbx): Episodic memory HNSW provenance
+- [Products](https://quesar.cloud/products): Product deep dives journeys
+- [Apps](https://quesar.cloud/apps): Workspace mobile vault builder bot
+- [Workspace](https://quesar.cloud/workspace): Abbey document workspace
+- [Mobile vault](https://quesar.cloud/mobile): Expo companion web vault
+- [Abbey bot](https://quesar.cloud/abbey-bot): Persona router companion chat
+- [Companion](https://quesar.cloud/companion): macOS SwiftUI companion
+- [Skill creator](https://quesar.cloud/skill-creator): Integrity skill builder
+- [Plugins](https://quesar.cloud/plugins): abi-mega skills scripts
+- [Demo](https://quesar.cloud/demo): Persona router live demo
+- [Cell machine](https://quesar.cloud/source/cell-machine): Cellular automaton
+- [ABI](https://quesar.cloud/products/abi): Explore deterministic persona routing, template completion, and source-defined tools.
+- [Abbey](https://quesar.cloud/products/abbey): Explore a browser document workspace and its optional configured server model-request path.
+- [WDBX](https://quesar.cloud/products/wdbx): Store durable records and retrieve vectors with inspectable provenance.
+- [Quasar](https://quesar.cloud/products/quasar): Generate a Next.js website and preview it on your own machine.
+- [ABI](https://quesar.cloud/projects/abi): A runtime you can inspect.
+- [WDBX](https://quesar.cloud/projects/wdbx): Give retrieval a foundation.
+- [Abbey](https://quesar.cloud/projects/abbey): A more thoughtful interface.
+- [Gama](https://quesar.cloud/projects/gama): One tree. Many surfaces.
+
+## More
+- [cell-lang](https://quesar.cloud/source/cell-lang): Systems language: Rust ownership, Swift ergonomics, Zig control, C ABI.
+- [NYON](https://quesar.cloud/source/nyon): Deterministic Rust strategy game and offline Galaxy Workshop sandbox. Related source work.
