@@ -7,38 +7,17 @@ import { RequestSchematic } from "@/components/site/request-schematic";
 import { Trailer } from "@/components/site/trailer";
 import { Button } from "@/components/ui/button";
 import { site } from "@/lib/site-identity";
-import { jsonLdScript } from "@/lib/mlai/structured-data";
 import { pageHead } from "@/lib/seo";
 import { cn } from "@/lib/utils";
 import { homeVision } from "@/lib/home-vision";
 import "@/components/site/home-vision.css";
-
-const organizationLd = {
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  name: site.company,
-
-  url: "https://quesar.cloud/",
-  description: site.mission,
-  sameAs: [
-    "https://github.com/donaldfilimon/quesar.cloud",
-    "https://github.com/donaldfilimon/abi",
-    "https://github.com/donaldfilimon/wdbx",
-    "https://github.com/donaldfilimon/abbey",
-    "https://github.com/donaldfilimon/skill-creator",
-    "https://github.com/donaldfilimon/gama",
-  ],
-};
 
 const HOME_TITLE = `Quesar by ${site.company}: Private AI operations`;
 const HOME_DESCRIPTION =
   "AI engineering engagements for traceable retrieval, bounded agent workflows, and private deployment.";
 
 export const Route = createFileRoute("/")({
-  head: () => ({
-    ...pageHead(HOME_TITLE, HOME_DESCRIPTION),
-    scripts: [jsonLdScript(organizationLd)],
-  }),
+  head: () => pageHead(HOME_TITLE, HOME_DESCRIPTION),
   component: Home,
 });
 

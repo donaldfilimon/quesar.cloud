@@ -1,6 +1,7 @@
 "use client";
 
 import { use } from "react";
+import { breadcrumbLd, serializeJsonLd } from "@/lib/mlai/site-structured-data";
 import { canonicalUrl } from "@/lib/seo";
 import { rootHead } from "./root-head";
 import {
@@ -61,6 +62,8 @@ export function HeadTags({
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const merged = mergeHead(rootHead, head);
   const href = canonicalUrl(pathname);
+  const title = merged.meta.find((entry) => "title" in entry)?.title ?? "";
+  const breadcrumbs = canonical ? breadcrumbLd(pathname, title) : null;
   return (
     <>
       {merged.meta.map((entry, index) =>
@@ -90,6 +93,12 @@ export function HeadTags({
           />
         ),
       )}
+      {breadcrumbs ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: serializeJsonLd(breadcrumbs) }}
+        />
+      ) : null}
     </>
   );
 }

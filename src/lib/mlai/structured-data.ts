@@ -21,8 +21,11 @@ import { site } from "@/lib/site-identity";
 import { toIsoDate } from "./dates";
 import type { Blog, Doc, Products, Project, Research, Team } from "./schemas";
 
-/** Canonical origin. Matches the root route's canonical link and research exports. */
-export const SITE_URL = "https://quesar.cloud";
+import { SITE_URL, jsonLdScript, serializeJsonLd } from "./site-structured-data";
+
+// Kept here so existing importers keep one entry point; the definitions live in
+// the small module the shared head also imports.
+export { SITE_URL, jsonLdScript, serializeJsonLd };
 
 type BlogPost = Blog[number];
 type ResearchPub = Research["publications"][number];
@@ -157,22 +160,4 @@ export function projectLd(project: Project) {
     codeRepository: project.source.url,
     publisher: ORG_REF,
   };
-}
-
-/**
- * Serialize for an inline `<script type="application/ld+json">`.
- * `JSON.stringify` does not escape `<`, so a `</script>` inside content would
- * close the tag early; U+2028/2029 are legal JSON but not legal in older JS
- * parsers. All three become `\u` escapes, which JSON parsers read back unchanged.
- */
-export function serializeJsonLd(value: unknown): string {
-  return JSON.stringify(value)
-    .replace(/</g, "\\u003c")
-    .replace(/\u2028/g, "\\u2028")
-    .replace(/\u2029/g, "\\u2029");
-}
-
-/** A head `scripts` entry for TanStack Router. */
-export function jsonLdScript(value: unknown) {
-  return { type: "application/ld+json", children: serializeJsonLd(value) };
 }
