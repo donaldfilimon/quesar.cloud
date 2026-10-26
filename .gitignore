@@ -4,7 +4,7 @@ node_modules/
 dist/
 # Retired Vite/Nitro build output, still present in older checkouts.
 .output/
-# Vercel CLI build output; Vercel regenerates it from source.
+# Retired Vercel CLI output, still present in older checkouts.
 .vercel/
 # Local QA scratch.
 screenshots/

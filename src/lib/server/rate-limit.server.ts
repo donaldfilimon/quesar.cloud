@@ -52,9 +52,9 @@ export async function hit(
 
 /**
  * A stable, non-reversible subject for anonymous requests. Reads only headers
- * the deployment's proxy sets: `x-real-ip` (Vercel overwrites it), then the
- * rightmost `x-forwarded-for` hop. `cf-connecting-ip` is passed through
- * unchanged by Vercel, so it is trusted only when `TRUSTED_PROXY=cloudflare`
+ * the deployment's proxy sets: `x-real-ip` (the proxy must overwrite it), then the
+ * rightmost `x-forwarded-for` hop. `cf-connecting-ip` can pass through a proxy
+ * unchanged, so it is trusted only when `TRUSTED_PROXY=cloudflare`
  * says Cloudflare is in front. The IP is hashed with a server-side key and
  * never stored raw.
  */
