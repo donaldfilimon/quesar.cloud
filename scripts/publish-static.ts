@@ -5,8 +5,9 @@
  * Copies the Next.js static export from `out/` (after `scripts/next-export.ts`
  * has moved each page to `<path>/index.html`) into `docs/` (the Pages source:
  * branch `main`, folder `/docs`), then adds what Pages needs: `.nojekyll` (serve
- * the `_next/` directory and `.md` paths verbatim), `CNAME`, and `sitemap.xml`
- * generated from the pages (`./sitemap.ts`). The export's own `404.html` is the
+ * the `_next/` directory and `.md` paths verbatim), `CNAME`, and `sitemap.xml` and
+ * `llms.txt` generated from the pages (`./sitemap.ts`, `./llms-txt.ts`). The
+ * export's own `404.html` is the
  * Pages 404. `docs/` holds ONLY the built site; internal records live in `notes/`.
  */
 import {
@@ -19,6 +20,8 @@ import {
   writeFileSync,
 } from "node:fs";
 import { join, relative } from "node:path";
+import { site } from "../src/lib/site-identity.ts";
+import { buildLlmsTxt, llmsPage } from "./llms-txt.ts";
 import { buildSitemap, sitemapEntry } from "./sitemap.ts";
 
 const root = process.cwd();
@@ -69,14 +72,21 @@ rmSync(out, { recursive: true, force: true });
 cpSync(src, out, { recursive: true });
 writeFileSync(join(out, ".nojekyll"), "");
 writeFileSync(join(out, "CNAME"), `${DOMAIN}\n`);
-const sitemap = htmlFiles(out).flatMap((file) => {
-  const entry = sitemapEntry(readFileSync(file, "utf8"));
+const builtPages = htmlFiles(out).map((file) => readFileSync(file, "utf8"));
+const sitemap = builtPages.flatMap((html) => {
+  const entry = sitemapEntry(html);
   return entry ? [entry] : [];
 });
 writeFileSync(join(out, "sitemap.xml"), buildSitemap(sitemap));
+const llms = builtPages.flatMap((html) => {
+  const page = llmsPage(html);
+  return page ? [page] : [];
+});
+writeFileSync(join(out, "llms.txt"), buildLlmsTxt(llms, site.name));
 writeFileSync(
   join(out, "robots.txt"),
   `${readFileSync(join(out, "robots.txt"), "utf8").trimEnd()}\n\nSitemap: https://${DOMAIN}/sitemap.xml\n`,
 );
 console.log(`[publish-static] sitemap.xml lists ${sitemap.length} pages`);
+console.log(`[publish-static] llms.txt lists ${llms.length} pages`);
 console.log(`[publish-static] docs/ ready for ${DOMAIN}`);

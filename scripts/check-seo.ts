@@ -212,6 +212,16 @@ export function sitemapLocations(xml: string): string[] {
   return [...xml.matchAll(/<loc>([^<]*)<\/loc>/g)].map((m) => decodeXml(m[1].trim()));
 }
 
+/** `/llms.txt` may only advertise pages the sitemap lists (indexable, canonical). */
+export function checkLlms(text: string, sitemapLocs: readonly string[]): string[] {
+  const listed = new Set(sitemapLocs);
+  const links = [...text.matchAll(/\]\((https?:\/\/[^)\s]+)\)/g)].map((m) => m[1]);
+  if (!links.length) return ["llms.txt lists no pages"];
+  return links
+    .filter((url) => !listed.has(url))
+    .map((url) => `llms.txt link not in sitemap: ${url}`);
+}
+
 function main() {
   const root = resolve(process.argv[2] ?? "docs");
   const pages = htmlFiles(root).map((file) => {
@@ -220,9 +230,15 @@ function main() {
     return pageFacts(readFileSync(file, "utf8"), route);
   });
   const sitemapFile = resolve(root, "sitemap.xml");
-  const failures = existsSync(sitemapFile)
-    ? checkSite(pages, sitemapLocations(readFileSync(sitemapFile, "utf8")))
-    : [`sitemap.xml not found in ${root}`, ...checkSite(pages, [])];
+  const locs = existsSync(sitemapFile) ? sitemapLocations(readFileSync(sitemapFile, "utf8")) : [];
+  const llmsFile = resolve(root, "llms.txt");
+  const failures = [
+    ...(existsSync(sitemapFile) ? [] : [`sitemap.xml not found in ${root}`]),
+    ...checkSite(pages, locs),
+    ...(existsSync(llmsFile)
+      ? checkLlms(readFileSync(llmsFile, "utf8"), locs)
+      : [`llms.txt not found in ${root}`]),
+  ];
   console.log(
     `check:seo: ${pages.length} pages, ${pages.filter(isIndexable).length} indexable, ${failures.length} failures`,
   );
