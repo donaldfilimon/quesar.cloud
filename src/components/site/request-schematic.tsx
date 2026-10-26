@@ -92,7 +92,8 @@ export function RequestSchematic({ className }: { className?: string }) {
       ))}
       {[context.x + 150, routing.x + 150, 402].map((x, i) => (
         <path
-          key={x}
+          // Context and routing share an x, so the position cannot be the key.
+          key={i}
           d={`M${x} ${i === 0 ? context.y + context.h : i === 1 ? routing.y + routing.h : 352} V${store.y}`}
           className="bp-link"
         />

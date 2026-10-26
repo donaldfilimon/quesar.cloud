@@ -286,8 +286,19 @@ type LinkProps = Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "href"> & {
   replace?: boolean;
   preload?: unknown;
   resetScroll?: boolean;
+  /** Merged in when the link matches the current path; `className` is appended. */
+  activeProps?: AnchorHTMLAttributes<HTMLAnchorElement> & Record<string, unknown>;
+  /** `exact: false` (the default) also matches child paths. */
+  activeOptions?: { exact?: boolean; includeHash?: boolean; includeSearch?: boolean };
   children?: ReactNode;
 };
+
+function isActive(pathname: string, target: string, exact: boolean) {
+  const path = target.split(/[?#]/)[0].replace(/\/+$/, "") || "/";
+  const current = pathname.replace(/\/+$/, "") || "/";
+  if (exact || path === "/") return current === path;
+  return current === path || current.startsWith(`${path}/`);
+}
 
 /**
  * TanStack's `defaultPreload: "intent"`: no viewport prefetching (a page carries
@@ -305,6 +316,9 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(function Link(
     onClick,
     onPointerEnter,
     onFocus,
+    activeProps,
+    activeOptions,
+    className,
     children,
     ...rest
   },
@@ -314,6 +328,11 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(function Link(
   const location = useLocationState();
   const href = buildHref({ to, params, search, hash }, location);
   const internal = href.startsWith("/");
+  const active =
+    internal && isActive(location.pathname, href, activeOptions?.exact ?? false)
+      ? activeProps
+      : undefined;
+  const { className: activeClassName, ...activeRest } = active ?? {};
   return (
     <NextLink
       ref={ref}
@@ -334,6 +353,8 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(function Link(
         if (internal) router.prefetch(href);
       }}
       {...rest}
+      {...activeRest}
+      className={[className, activeClassName].filter(Boolean).join(" ") || undefined}
     >
       {children}
     </NextLink>

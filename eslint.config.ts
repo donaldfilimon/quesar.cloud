@@ -15,6 +15,7 @@ export default tseslint.config(
       ".nitro/**",
       // Next.js build cache and static export (next.config.ts).
       ".next/**",
+      ".next-server/**",
       "out/**",
       "next-env.d.ts",
       "node_modules/**",

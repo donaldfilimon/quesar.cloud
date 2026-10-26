@@ -14,6 +14,7 @@ playwright-report/
 .agents/
 # Next.js build (next.config.ts): webpack cache and the static export.
 .next/
+.next-server/
 out/
 next-env.d.ts
 # Python bytecode from scripts.

@@ -1,5 +1,6 @@
 "use client";
 
+import { use } from "react";
 import { canonicalUrl } from "@/lib/seo";
 import { rootHead } from "./root-head";
 import {
@@ -83,6 +84,32 @@ export function HeadTags({ head }: { head: HeadDescriptor | undefined }) {
   );
 }
 
+const isPromise = (value: unknown): value is Promise<unknown> =>
+  Boolean(value && typeof (value as Promise<unknown>).then === "function");
+
+/**
+ * Loader results by route and params. Async loaders (`/login` asks the server for
+ * its sign-in methods) return a promise that `use()` suspends on; it must be the
+ * same promise on every render, or the page would suspend forever. A rejected
+ * load is dropped so the next visit retries.
+ */
+const loads = new WeakMap<RouteOptions, Map<string, unknown>>();
+function loadOnce(options: RouteOptions, params: Record<string, string>): unknown {
+  if (!options.loader) return undefined;
+  let byParams = loads.get(options);
+  if (!byParams) loads.set(options, (byParams = new Map()));
+  const key = JSON.stringify(params);
+  if (!byParams.has(key)) {
+    const value = options.loader({ params });
+    byParams.set(key, value);
+    if (isPromise(value)) value.catch(() => byParams.delete(key));
+    // Sync loaders read static data; they re-run cheaply, so only promises are kept.
+    else byParams.delete(key);
+    return value;
+  }
+  return byParams.get(key);
+}
+
 function RouteBody({ options }: { options: RouteOptions }) {
   const Component = options.component;
   return Component ? <Component /> : null;
@@ -98,7 +125,8 @@ export function RouteView({
 }) {
   const hydrated = useHydrated();
   const options = route.options as RouteOptions;
-  const loaderData = options.loader?.({ params });
+  const loaded = loadOnce(options, params);
+  const loaderData = isPromise(loaded) ? use(loaded) : loaded;
   const head = options.head?.({ params, loaderData });
   const clientOnly = options.ssr === false;
   return (
