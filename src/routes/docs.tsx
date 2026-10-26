@@ -5,14 +5,26 @@ import { DocsHub } from "@/components/site/docs-hub";
 import { docs } from "@/lib/mlai/categories/docs";
 import { ogImage } from "@/lib/og-image";
 import { pageHead } from "@/lib/seo";
+import { collectionPageLd, jsonLdScript } from "@/lib/mlai/structured-data";
+
+const title = "Docs — Quesar, ABI, WDBX";
+const description =
+  "Documentation for Quesar and ABI: getting started, runtime, personas, WDBX, MCP, and evidence.";
 
 export const Route = createFileRoute("/docs")({
-  head: () =>
-    pageHead(
-      "Docs — Quesar, ABI, WDBX",
-      "Documentation for Quesar and ABI: getting started, runtime, personas, WDBX, MCP, and evidence.",
-      ogImage("docs"),
-    ),
+  head: () => ({
+    ...pageHead(title, description, ogImage("docs")),
+    scripts: [
+      jsonLdScript(
+        collectionPageLd(
+          "/docs",
+          title,
+          description,
+          docs.map((doc) => ({ url: `/docs/${doc.slug}`, name: doc.title })),
+        ),
+      ),
+    ],
+  }),
   component: DocsPage,
 });
 

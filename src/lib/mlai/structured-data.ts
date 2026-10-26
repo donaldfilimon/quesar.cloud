@@ -161,3 +161,36 @@ export function projectLd(project: Project) {
     publisher: ORG_REF,
   };
 }
+
+function absoluteUrl(pathOrUrl: string): string {
+  return /^https?:\/\//.test(pathOrUrl) ? pathOrUrl : `${SITE_URL}${pathOrUrl}`;
+}
+
+/** `CollectionPage` + `ItemList` for an index page; items are in the order the page renders them. */
+export function collectionPageLd(
+  path: string,
+  name: string,
+  description: string,
+  items: readonly { url: string; name: string }[],
+) {
+  const url = absoluteUrl(path);
+  return {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "@id": url,
+    url,
+    name,
+    description,
+    isPartOf: { "@id": `${SITE_URL}/#website` },
+    mainEntity: {
+      "@type": "ItemList",
+      numberOfElements: items.length,
+      itemListElement: items.map((item, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        url: absoluteUrl(item.url),
+        name: item.name,
+      })),
+    },
+  };
+}

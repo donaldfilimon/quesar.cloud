@@ -2,13 +2,25 @@ import { createFileRoute } from "@/framework/router";
 import { CopyGrid, PageClose, PageHero, RouteFrame, Section } from "@/components/site";
 import { projects } from "@/lib/mlai/categories/projects";
 import { pageHead } from "@/lib/seo";
+import { collectionPageLd, jsonLdScript } from "@/lib/mlai/structured-data";
+
+const title = "Projects — MLAI";
+const description = "Public project directory: ABI, WDBX, Abbey, and Gama with limits named.";
 
 export const Route = createFileRoute("/projects")({
-  head: () =>
-    pageHead(
-      "Projects — MLAI",
-      "Public project directory: ABI, WDBX, Abbey, and Gama with limits named.",
-    ),
+  head: () => ({
+    ...pageHead(title, description),
+    scripts: [
+      jsonLdScript(
+        collectionPageLd(
+          "/projects",
+          title,
+          description,
+          projects.map((project) => ({ url: `/projects/${project.slug}`, name: project.name })),
+        ),
+      ),
+    ],
+  }),
   component: ProjectsPage,
 });
 
