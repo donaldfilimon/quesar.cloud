@@ -1,0 +1,35 @@
+1:"$Sreact.fragment"
+2:"static/chunks/9756-2d48c2b995ad91ca.js"
+3:"static/chunks/4514-528d9552f8c1e643.js"
+4:"static/chunks/1546-99b37aecf8873e20.js"
+5:"static/chunks/1856-78311fb8a2f30563.js"
+6:"static/chunks/app/layout-5b8d5a70955bfa90.js"
+7:I[71856,["9756","$2","4514","$3","1546","$4","1856","$5","7177","$6"],"RootShell"]
+8:I[57121,[],""]
+9:I[74581,[],""]
+a:I[71856,["9756","$2","4514","$3","1546","$4","1856","$5","7177","$6"],"RootNotFound"]
+e:"static/chunks/1198-c1e944e214dbc838.js"
+f:"static/chunks/6792-8e4f2770d364d6e6.js"
+10:"static/chunks/666-a9e1970276137947.js"
+11:"static/chunks/3537-1498eaf1ce4308c4.js"
+12:"static/chunks/1504-4a55a61e1f7cb7a1.js"
+13:"static/chunks/4027-b0ada882da9b319f.js"
+14:"static/chunks/6261-7095146ab05fe95d.js"
+15:"static/chunks/app/source/page-84a79ceab8ed6bbf.js"
+16:I[78584,["9756","$2","4514","$3","1198","$e","1546","$4","6792","$f","666","$10","3537","$11","1504","$12","4027","$13","6261","$14","4646","$15"],"default"]
+17:I[90484,[],"OutletBoundary"]
+18:"$Sreact.suspense"
+1a:"ViewportBoundary"
+1b:I[90484,[],"$1a"]
+1d:"MetadataBoundary"
+1e:I[90484,[],"$1d"]
+20:I[27123,[],"default",1]
+:HL["/_next/static/css/99ca6817d53765a8.css","style"]
+c:X
+d:[["children",{"s":"__PAGE__","h":512,"d":{"r":["$","$1","c",{"children":[["$","$L16",null,{}],null,["$","$L17",null,{"children":["$","$18",null,{"name":"Next.MetadataOutlet","children":"$@19"}]}]]}],"p":false,"v":null}}]]
+b:[["children",{"s":"source","h":512,"d":{"r":["$","$1","c",{"children":[null,["$","$L8",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L9",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$c"},"c":"$Qd"}]]
+0:{"P":null,"c":["","source"],"q":"","i":false,"t":{"t":{"s":"","h":528,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/99ca6817d53765a8.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]],["$","html",null,{"lang":"en","data-theme":"dark","className":"dark","suppressHydrationWarning":true,"children":[["$","head",null,{"children":[["$","script",null,{"dangerouslySetInnerHTML":{"__html":"(function(){try{var t=localStorage.getItem(\"mlai-theme\");var theme=t===\"light\"||t===\"dark\"?t:(window.matchMedia(\"(prefers-color-scheme: light)\").matches?\"light\":\"dark\");document.documentElement.dataset.theme=theme;document.documentElement.classList.toggle(\"dark\",theme===\"dark\");}catch(e){document.documentElement.dataset.theme=\"dark\";document.documentElement.classList.add(\"dark\");}})();"}}],["$","link",null,{"rel":"icon","type":"image/svg+xml","href":"/favicon.svg"}],["$","link",null,{"rel":"manifest","href":"/manifest.webmanifest"}],["$","link",null,{"rel":"apple-touch-icon","href":"/apple-touch-icon.png"}],["$","link",null,{"rel":"alternate","type":"application/rss+xml","title":"Quesar lab notes, research and releases","href":"/feed.xml"}]]}],["$","body",null,{"className":"antialiased","children":["$","$L7",null,{"children":["$","$L8",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L9",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","$La",null,{}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}]}]}]]}]]}],"p":false,"v":null},"c":"$Qb"},"h":{"r":["$","$1","h",{"children":[null,["$","$L1b",null,{"children":"$L1c"}],["$","$L1e",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$18",null,{"name":"Next.Metadata","children":"$L1f"}]}],null]}],null]}],"p":false,"v":null}},"m":"$undefined","G":["$20",[]],"S":true,"r":"$undefined","s":"$undefined","a":"$undefined","l":"$undefined","p":"$undefined","d":"$undefined","b":"93e1bd9e53be"}
+c:C
+1c:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]
+19:null
+1f:[]
