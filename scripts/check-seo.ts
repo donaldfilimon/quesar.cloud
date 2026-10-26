@@ -59,23 +59,31 @@ export function pageFacts(html: string, route: string): PageFacts {
     jsonLd: [],
     serverOnly: false,
   };
-  walk(parse(html), (node) => {
+  const document = parse(html);
+  const head = new Set<Element>();
+  walk(document, (node) => {
+    if (node.tagName === "head") walk(node, (inner) => head.add(inner));
+  });
+  walk(document, (node) => {
     const attrs = Object.fromEntries(node.attrs.map((a) => [a.name, a.value]));
     if ("data-server-only-page" in attrs) facts.serverOnly = true;
+    // Metadata counts only from <head>: a stray body <meta> must not satisfy a rule.
+    const inHead = head.has(node);
     switch (node.tagName) {
       case "html":
         facts.lang = attrs.lang ?? null;
         break;
       case "title":
-        facts.title ??= text(node).trim();
+        if (inHead) facts.title ??= text(node).trim();
         break;
       case "h1":
         facts.h1Count++;
         break;
       case "link":
-        if (attrs.rel === "canonical") facts.canonical ??= attrs.href ?? null;
+        if (inHead && attrs.rel === "canonical") facts.canonical ??= attrs.href ?? null;
         break;
       case "meta":
+        if (!inHead) break;
         if (attrs.name === "description") facts.description ??= attrs.content ?? null;
         else if (attrs.name === "robots") facts.robots ??= attrs.content ?? null;
         else if (attrs.property === "og:image") facts.ogImage ??= attrs.content ?? null;
@@ -92,6 +100,37 @@ export function pageFacts(html: string, route: string): PageFacts {
     }
   });
   return facts;
+}
+
+const ORIGIN = "https://quesar.cloud";
+
+/** Built-page route for an on-origin URL (`/x/y` and `/x/y/` both become `/x/y/`), else null. */
+function builtRoute(url: unknown): string | null {
+  if (typeof url !== "string" || !url.startsWith(ORIGIN)) return null;
+  const path = url.slice(ORIGIN.length).split(/[?#]/)[0] ?? "";
+  if (path !== "" && !path.startsWith("/")) return null;
+  return path.endsWith("/") ? path || "/" : `${path}/`;
+}
+
+/** Every BreadcrumbList `item` and ItemList `url` found in a JSON-LD value (including @graph). */
+function structuredLinks(value: unknown): string[] {
+  if (Array.isArray(value)) return value.flatMap(structuredLinks);
+  if (!value || typeof value !== "object") return [];
+  const node = value as Record<string, unknown>;
+  const type = node["@type"];
+  const is = (name: string) => type === name || (Array.isArray(type) && type.includes(name));
+  const links: string[] = [];
+  if (Array.isArray(node.itemListElement)) {
+    const key = is("BreadcrumbList") ? "item" : is("ItemList") ? "url" : null;
+    if (key)
+      for (const el of node.itemListElement) {
+        const link = (el as Record<string, unknown> | null)?.[key];
+        if (typeof link === "string") links.push(link);
+      }
+  }
+  for (const child of Object.values(node))
+    if (child && typeof child === "object") links.push(...structuredLinks(child));
+  return links;
 }
 
 export function isIndexable(page: PageFacts): boolean {
@@ -120,6 +159,16 @@ export function checkSite(pages: readonly PageFacts[], sitemapLocs: readonly str
       if (page.h1Count !== 1) fail(page, `expected exactly one <h1>, found ${page.h1Count}`);
     }
   }
+  const built = new Set(
+    pages.filter((p) => !p.is404).map((p) => builtRoute(`${ORIGIN}${p.route}`)),
+  );
+  for (const page of pages)
+    for (const block of page.jsonLd)
+      for (const link of structuredLinks(block.value)) {
+        const route = builtRoute(link);
+        if (route && !built.has(route))
+          failures.push(`structured-data link to missing page ${link} on ${page.route}`);
+      }
   const indexable = pages.filter(isIndexable);
   for (const field of ["title", "description"] as const) {
     const seen = new Map<string, PageFacts[]>();

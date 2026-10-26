@@ -21,7 +21,7 @@ import { site } from "@/lib/site-identity";
 import { toIsoDate } from "./dates";
 import type { Blog, Doc, Products, Project, Research, Team } from "./schemas";
 
-import { SITE_URL, jsonLdScript, serializeJsonLd } from "./site-structured-data";
+import { ORGANIZATION_ID, SITE_URL, jsonLdScript, serializeJsonLd } from "./site-structured-data";
 
 // Kept here so existing importers keep one entry point; the definitions live in
 // the small module the shared head also imports.
@@ -34,6 +34,7 @@ type Product = Products[number];
 
 const ORG_REF = {
   "@type": "Organization" as const,
+  "@id": ORGANIZATION_ID,
   name: site.company,
   url: SITE_URL,
   logo: `${SITE_URL}/apple-touch-icon.png`,

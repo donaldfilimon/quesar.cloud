@@ -9,6 +9,23 @@ const SECTIONS = [
   ["projects", "Projects"],
 ] as const;
 
+/** Private, app or noindex routes: never advertised in llms.txt. */
+export const LLMS_EXCLUDED = [
+  "/console",
+  "/dashboard",
+  "/profile",
+  "/admin",
+  "/login",
+  "/signup",
+  "/unauthorized",
+  "/financial-model",
+  "/tf-pose-demo",
+  "/quasar",
+] as const;
+
+const excluded = (href: string) =>
+  LLMS_EXCLUDED.some((prefix) => href === prefix || href.startsWith(`${prefix}/`));
+
 const collapse = (s: string) => s.replace(/\s+/g, " ").trim();
 
 /**
@@ -21,7 +38,7 @@ export function buildLlmsTxt(): string {
   const groups = new Map<string, string[]>();
   const seen = new Set<string>();
   for (const hit of searchCatalog) {
-    if (hit.external || !hit.href || seen.has(hit.href)) continue;
+    if (hit.external || !hit.href || seen.has(hit.href) || excluded(hit.href)) continue;
     seen.add(hit.href);
     const heading = SECTIONS.find(([category]) => category === hit.category)?.[1] ?? "More";
     const body = clampDescription(collapse(hit.body));
@@ -32,5 +49,8 @@ export function buildLlmsTxt(): string {
   const sections = order
     .filter((h) => groups.has(h))
     .map((h) => `## ${h}\n${groups.get(h)!.join("\n")}`);
-  return `# ${site.name}\n\n> ${collapse(site.description)}\n\n${collapse(site.mission)}\n\n${sections.join("\n\n")}\n`;
+  const description = collapse(site.description);
+  const mission = collapse(site.mission);
+  const intro = mission === description ? "" : `${mission}\n\n`;
+  return `# ${site.name}\n\n> ${description}\n\n${intro}${sections.join("\n\n")}\n`;
 }

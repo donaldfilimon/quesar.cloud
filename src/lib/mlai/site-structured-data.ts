@@ -30,7 +30,8 @@ export function jsonLdScript(value: unknown) {
 }
 
 const WEBSITE_ID = `${SITE_URL}/#website`;
-const ORGANIZATION_ID = `${SITE_URL}/#organization`;
+/** The one Organization entity; detail-page JSON-LD references it by this id. */
+export const ORGANIZATION_ID = `${SITE_URL}/#organization`;
 
 /** WebSite plus Organization, linked by `@id`. No SearchAction: the site has no search URL. */
 export function siteGraphLd() {
@@ -68,14 +69,38 @@ export function siteGraphLd() {
   };
 }
 
+const SUFFIX =
+  /(?:\s+[·—|]\s+(?:Quesar by MLAI|MLAI research|Quesar|MLAI|Quasar|Docs|Blog|Showcase|Source)|:\s+Quesar\b.*)$/;
+
 /**
- * Drop a trailing brand suffix (` · Quesar`, ` — Quesar`, ` | Quesar`, ` — MLAI`,
- * `: Quesar…`) from a page title; any other title is returned whole.
+ * Drop trailing brand and section suffixes (` · Quesar`, ` — Quesar`, ` | Quesar`,
+ * ` — MLAI`, ` — Docs`, ` — Showcase`, `: Quesar…`, chained as in
+ * `Sites — Quasar · Quesar`) from a page title; any other title is returned whole,
+ * and never as an empty string.
  */
 export function stripBrandSuffix(title: string): string {
-  const stripped = title.replace(/(?:\s+[·—|]\s+(?:Quesar|MLAI)|:\s+Quesar\b.*)$/, "").trim();
+  let stripped = title;
+  for (let i = 0; i < 4 && SUFFIX.test(stripped); i++) stripped = stripped.replace(SUFFIX, "");
+  stripped = stripped.trim();
   return stripped || title;
 }
+
+/**
+ * Section index routes that exist as pages, so a breadcrumb may link to them.
+ * `site-structured-data.test.ts` fails when an entry has no `src/routes` file.
+ * A prefix not listed (e.g. `/quasar`) is not a page and gets no crumb.
+ */
+export const BREADCRUMB_SECTIONS: ReadonlySet<string> = new Set([
+  "/blog",
+  "/docs",
+  "/products",
+  "/projects",
+  "/research",
+  "/research/implementations",
+  "/showcase",
+  "/source",
+  "/team",
+]);
 
 const titleCase = (segment: string) =>
   segment
@@ -92,6 +117,7 @@ export function breadcrumbLd(pathname: string, pageTitle: string) {
   segments.forEach((segment, index) => {
     const path = `/${segments.slice(0, index + 1).join("/")}`;
     const last = index === segments.length - 1;
+    if (!last && !BREADCRUMB_SECTIONS.has(path)) return;
     const label = last
       ? stripBrandSuffix(pageTitle)
       : (nav.find((item) => item.to === path)?.label ?? titleCase(segment));

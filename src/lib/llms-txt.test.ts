@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildLlmsTxt } from "./llms-txt";
+import { LLMS_EXCLUDED, buildLlmsTxt } from "./llms-txt";
 import { site } from "./site-identity";
 
 const text = buildLlmsTxt();
@@ -34,5 +34,19 @@ describe("buildLlmsTxt", () => {
       expect(body.length).toBeGreaterThan(0);
       expect(body.length).toBeLessThanOrEqual(160);
     }
+  });
+
+  it("never lists private or noindex routes", () => {
+    const paths = links.map(
+      (l) => (/\]\(https:\/\/quesar\.cloud(.*?)\)/.exec(l)?.[1] ?? "").split("#")[0],
+    );
+    for (const path of paths)
+      for (const prefix of LLMS_EXCLUDED)
+        expect(path === prefix || path.startsWith(`${prefix}/`), path).toBe(false);
+  });
+
+  it("does not repeat the description as the mission paragraph", () => {
+    const same = lines.filter((l) => l.replace(/^> /, "") === site.description);
+    expect(same).toHaveLength(1);
   });
 });

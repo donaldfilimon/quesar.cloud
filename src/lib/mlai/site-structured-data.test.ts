@@ -1,6 +1,15 @@
+import { existsSync } from "node:fs";
+import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 import { site } from "@/lib/site-identity";
-import { SITE_URL, breadcrumbLd, siteGraphLd, stripBrandSuffix } from "./site-structured-data";
+import {
+  BREADCRUMB_SECTIONS,
+  ORGANIZATION_ID,
+  SITE_URL,
+  breadcrumbLd,
+  siteGraphLd,
+  stripBrandSuffix,
+} from "./site-structured-data";
 
 const SAME_AS = [
   "https://github.com/donaldfilimon/quesar.cloud",
@@ -60,6 +69,15 @@ describe("stripBrandSuffix", () => {
     ["Some Post: Quesar by MLAI", "Some Post"],
     ["Quesar roadmap notes", "Quesar roadmap notes"],
     ["Plain Title", "Plain Title"],
+    ["Film — Showcase", "Film"],
+    ["Sites — Quasar · Quesar", "Sites"],
+    ["Start with the source. — Docs", "Start with the source."],
+    ["Some Note — Blog · Quesar", "Some Note"],
+    ["Paper — MLAI research", "Paper"],
+    ["Readme — Source", "Readme"],
+    ["Pose detection demo — Quesar by MLAI", "Pose detection demo"],
+    ["Docs", "Docs"],
+    [" — Docs", " — Docs"],
   ])("%s -> %s", (input, expected) => {
     expect(stripBrandSuffix(input)).toBe(expected);
   });
@@ -92,9 +110,9 @@ describe("breadcrumbLd", () => {
     expect(list.itemListElement[1]!.name).toBe("Research");
   });
 
-  it("title-cases segments missing from nav", () => {
-    const list = breadcrumbLd("/some-section/page", "Page")!;
-    expect(list.itemListElement.map((i) => i.name)).toEqual(["Home", "Some Section", "Page"]);
+  it("title-cases listed section prefixes missing from nav", () => {
+    const list = breadcrumbLd("/research/implementations/page", "Page")!;
+    expect(list.itemListElement.map((i) => i.name)).toContain("Implementations");
   });
 
   it("ignores trailing slashes", () => {
@@ -109,5 +127,39 @@ describe("breadcrumbLd", () => {
   it("keeps a title without a brand suffix whole", () => {
     const list = breadcrumbLd("/x", "Quesar and friends")!;
     expect(list.itemListElement[1]!.name).toBe("Quesar and friends");
+  });
+});
+
+describe("breadcrumb section prefixes", () => {
+  it("lists only prefixes that have an index route file", () => {
+    for (const prefix of BREADCRUMB_SECTIONS) {
+      const file = `${prefix.slice(1).replace(/\//g, ".")}.tsx`;
+      expect(existsSync(resolve(__dirname, "../../routes", file)), prefix).toBe(true);
+    }
+  });
+
+  it("skips intermediate prefixes that are not pages", () => {
+    const list = breadcrumbLd("/quasar/sites", "Sites — Quasar · Quesar")!;
+    expect(list.itemListElement.map((i) => [i.name, i.item])).toEqual([
+      ["Home", "https://quesar.cloud/"],
+      ["Sites", "https://quesar.cloud/quasar/sites"],
+    ]);
+    expect(list.itemListElement.map((i) => i.position)).toEqual([1, 2]);
+  });
+
+  it("keeps real section crumbs and strips section suffixes from the last", () => {
+    const list = breadcrumbLd("/showcase/film", "Film — Showcase")!;
+    expect(list.itemListElement.map((i) => i.name)).toEqual(["Home", "Showcase", "Film"]);
+    const deep = breadcrumbLd("/research/implementations/x", "X — MLAI research")!;
+    expect(deep.itemListElement.map((i) => i.item)).toEqual([
+      "https://quesar.cloud/",
+      "https://quesar.cloud/research",
+      "https://quesar.cloud/research/implementations",
+      "https://quesar.cloud/research/implementations/x",
+    ]);
+  });
+
+  it("exports the organization id used by the site graph", () => {
+    expect(ORGANIZATION_ID).toBe("https://quesar.cloud/#organization");
   });
 });

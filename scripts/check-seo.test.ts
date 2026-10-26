@@ -116,4 +116,83 @@ describe("check-seo", () => {
       "https://x/?a=1&b=2",
     ]);
   });
+
+  it("reads robots and other metadata from <head> only", () => {
+    const p = page({
+      title: null,
+      robots: undefined,
+      body: '<meta name="robots" content="noindex"><title>Body</title><meta name="description" content="x">',
+      description: null,
+    });
+    expect(p.robots).toBeNull();
+    expect(p.title).toBeNull();
+    expect(p.description).toBeNull();
+    const hidden = page({ route: "/s/", body: "<p data-server-only-page></p>" });
+    const sneaky = pageFacts(
+      `<!doctype html><html lang="en"><head><title>T</title></head><body><meta name="robots" content="noindex"><p data-server-only-page></p></body></html>`,
+      "/s/",
+    );
+    expect(sneaky.robots).toBeNull();
+    expect(checkSite([hidden], []).join("\n")).toContain("server-only page is not noindex");
+    expect(checkSite([sneaky], []).join("\n")).toContain("server-only page is not noindex");
+  });
+
+  describe("structured-data links", () => {
+    const crumbs = (...urls: string[]) =>
+      JSON.stringify({
+        "@type": "BreadcrumbList",
+        itemListElement: urls.map((item, i) => ({ "@type": "ListItem", position: i + 1, item })),
+      });
+    const list = (...urls: string[]) =>
+      JSON.stringify({
+        "@type": "ItemList",
+        itemListElement: urls.map((url, i) => ({ "@type": "ListItem", position: i + 1, url })),
+      });
+
+    it("accepts links that resolve to built pages", () => {
+      const home = page({ route: "/" });
+      const blog = page({ route: "/blog/" });
+      const post = page({
+        route: "/blog/x/",
+        jsonLd: crumbs(
+          "https://quesar.cloud/",
+          "https://quesar.cloud/blog",
+          "https://quesar.cloud/blog/x",
+        ),
+      });
+      const index = page({ route: "/docs/", jsonLd: list("https://quesar.cloud/blog/x") });
+      expect(checkSite([home, blog, post, index], sitemap(home, blog, post, index))).toEqual([]);
+    });
+
+    it("flags a breadcrumb or item-list link to a missing page", () => {
+      const home = page({ route: "/" });
+      const a = page({
+        route: "/quasar/sites/",
+        jsonLd: crumbs("https://quesar.cloud/", "https://quesar.cloud/quasar"),
+      });
+      const b = page({ route: "/b/", jsonLd: list("https://quesar.cloud/ghost/") });
+      const failures = checkSite([home, a, b], sitemap(home, a, b));
+      expect(failures).toContain(
+        "structured-data link to missing page https://quesar.cloud/quasar on /quasar/sites/",
+      );
+      expect(failures).toContain(
+        "structured-data link to missing page https://quesar.cloud/ghost/ on /b/",
+      );
+    });
+
+    it("ignores off-origin links and finds links inside @graph", () => {
+      const home = page({
+        route: "/",
+        jsonLd: JSON.stringify({
+          "@graph": [
+            JSON.parse(list("https://example.com/x")),
+            JSON.parse(crumbs("https://quesar.cloud/nope")),
+          ],
+        }),
+      });
+      expect(checkSite([home], sitemap(home))).toEqual([
+        "structured-data link to missing page https://quesar.cloud/nope on /",
+      ]);
+    });
+  });
 });

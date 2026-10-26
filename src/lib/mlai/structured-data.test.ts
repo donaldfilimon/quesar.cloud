@@ -75,6 +75,7 @@ describe("structured-data", () => {
     if (!base) throw new Error("fixture: no research publication");
     expect(researchArticleLd({ ...base, authors: "  ·  " }).author).toMatchObject({
       "@type": "Organization",
+      "@id": "https://quesar.cloud/#organization",
       name: site.company,
     });
   });
