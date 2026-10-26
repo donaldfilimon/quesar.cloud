@@ -1,4 +1,4 @@
-import markUrl from "../mlai-mark.svg";
+import { markUrl } from "../mark";
 /* Nav + Command palette (⌘K) for the MLAI marketing site. */
 import { useEffect, useState } from "react";
 import { IChevron, ISearch } from "./Icons.tsx";

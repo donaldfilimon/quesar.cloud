@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { getRouteApi, Link } from "@tanstack/react-router";
+import { getRouteApi, Link } from "@/framework/router";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";

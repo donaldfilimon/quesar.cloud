@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@/framework/router";
 import { PageClose, PageHero, Section, Surface } from "@/components/site";
 import { investor } from "@/lib/mlai/categories/investor";
 import { ProvTag } from "@/components/site/prov-tag";

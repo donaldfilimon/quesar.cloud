@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link } from "@/framework/router";
 import { Mic, Play } from "lucide-react";
 import { showcaseProgram, showcaseReels, showcaseVoice } from "@/lib/mlai/pages";
 

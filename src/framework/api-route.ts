@@ -1,14 +1,14 @@
 /**
- * Adapts a TanStack server route (`createFileRoute(…)({ server: { handlers } })`)
+ * Adapts a server route (`createFileRoute(…)({ server: { handlers } })` in `src/routes`)
  * to Next.js route-handler exports. Handlers get `{ request, params }` as on
- * TanStack Start, run inside the request scope that `getRequest()` reads, and
+ * TanStack Start did, run inside the request scope that `getRequest()` reads, and
  * keep any headers set with `setResponseHeader`. A splat (`$`) arrives as
  * `_splat`, joined, as TanStack names it.
  */
-import { runWithRequest } from "./start-server";
+import { runWithRequest } from "./server-fn";
 
 type Params = Record<string, string | string[]>;
-type TanStackHandler = (ctx: { request: Request; params: Record<string, string> }) => unknown;
+type ServerRouteHandler = (ctx: { request: Request; params: Record<string, string> }) => unknown;
 
 interface ServerRoute {
   options: object;
@@ -35,8 +35,9 @@ export function routeHandler(route: ServerRoute, method: string) {
         Array.isArray(value) ? value.join("/") : value,
       ]),
     );
-    const handlers = (route.options as { server?: { handlers?: Record<string, TanStackHandler> } })
-      .server?.handlers;
+    const handlers = (
+      route.options as { server?: { handlers?: Record<string, ServerRouteHandler> } }
+    ).server?.handlers;
     const handler = handlers?.[method];
     if (!handler) return new Response(null, { status: 405 });
     const { value, headers } = await runWithRequest(request, async () =>

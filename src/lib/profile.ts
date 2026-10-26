@@ -9,7 +9,7 @@
  * `authClient.updateUser` in the browser, and `validateDisplayName` is shared by the client and Better Auth database
  * hooks, including direct signup and update requests.
  */
-import { createServerFn } from "@tanstack/react-start";
+import { createServerFn } from "@/framework/server-fn";
 import { authMiddleware } from "@/lib/auth/middleware";
 
 export { DISPLAY_NAME_MAX, validateDisplayName, type NameCheck } from "./profile-name";

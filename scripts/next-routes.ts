@@ -1,11 +1,10 @@
 #!/usr/bin/env node
 /**
  * Generate the Next.js App Router pages (`app/**\/page.tsx` + `view.tsx`) from the
- * TanStack file routes in `src/routes`, so both builds render one set of routes
- * while the port runs (notes/superpowers/specs/2026-10-26-nextjs-app-router-port.md).
+ * route modules in `src/routes` (notes/superpowers/specs/2026-10-26-nextjs-app-router-port.md).
  *
  * Each route id comes from its `createFileRoute("…")` call, not the file name. The
- * server `page.tsx` supplies params (dynamic routes read `src/compat/next/static-params.ts`)
+ * server `page.tsx` supplies params (dynamic routes read `src/framework/static-params.ts`)
  * and renders the client `view.tsx`, which mounts the route through `RouteView`.
  *
  *   node scripts/next-routes.ts          write app/ (removes stale generated pages)
@@ -90,7 +89,7 @@ export default function Page() {
 `;
   }
   const params = route.dynamic.map((name) => `${name}: string`).join("; ");
-  return `${header}import { staticParams } from "@/compat/next/static-params";
+  return `${header}import { staticParams } from "@/framework/static-params";
 import RouteView from "./view";
 
 export const dynamicParams = false;
@@ -125,7 +124,7 @@ function serverRouteSource(route: RouteFile): string {
     .join("\n");
   return `${MARKER} from src/${route.file}.ts. Do not edit.
 // Server build only: the \`.server.ts\` extension keeps it out of the static export.
-import { routeHandler } from "@/compat/next/api-route";
+import { routeHandler } from "@/framework/api-route";
 import { Route } from "@/${route.file}";
 
 export const dynamic = "force-dynamic";
@@ -160,10 +159,26 @@ export const serverFnModules = [${sorted.map((_, index) => `module${index}`).joi
 `;
 }
 
+/** Page routes by id for `getRouteApi` (src/framework/router.tsx `RouteRegistry`). */
+function routeRegistry(routes: RouteFile[]): string {
+  const pages = routes.filter((route) => !route.methods.length);
+  return `${MARKER}. Do not edit.
+${pages.map((route, index) => `import type { Route as Route${index} } from "@/${route.file}";`).join("\n")}
+
+declare module "./router" {
+  interface RouteRegistry {
+${pages.map((route, index) => `    ${JSON.stringify(route.id)}: typeof Route${index};`).join("\n")}
+  }
+}
+
+export {};
+`;
+}
+
 function viewSource(route: RouteFile): string {
   return `"use client";
 ${MARKER} from src/${route.file}.tsx. Do not edit.
-import { RouteView as Mount } from "@/compat/next/route-view";
+import { RouteView as Mount } from "@/framework/route-view";
 import { Route } from "@/${route.file}";
 
 export default function RouteView({ params }: { params?: Record<string, string> }) {
@@ -198,6 +213,7 @@ for (const route of readRoutes()) {
   wanted.set(join(dir, "view.tsx"), viewSource(route));
 }
 wanted.set(join(appDir, "api", "server-fn", "[id]", "manifest.ts"), serverFnManifest());
+wanted.set(join(root, "src", "framework", "route-registry.gen.ts"), routeRegistry(readRoutes()));
 
 // Generated files are committed and pass `format:check`, so they are written formatted.
 for (const [path, source] of wanted) {

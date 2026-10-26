@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link } from "@/framework/router";
 import { ProvLegend } from "./prov-tag";
 import { Logo } from "./logo";
 import { site } from "@/lib/site-identity";

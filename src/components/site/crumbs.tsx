@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link } from "@/framework/router";
 
 export function Crumbs({ items }: { items: readonly { to?: string; label: string }[] }) {
   return (

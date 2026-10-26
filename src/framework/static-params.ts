@@ -8,10 +8,9 @@ import { researchContext } from "@/lib/mlai/categories/research-context";
 import { team } from "@/lib/mlai/categories/team";
 
 /**
- * `generateStaticParams` for each dynamic TanStack route, read from the same
- * datasets the route loaders look items up in. The Vite static build discovers
- * these pages by crawling links; listing the data is the App Router equivalent,
- * and `bun run next:check` compares the two page sets.
+ * `generateStaticParams` for each dynamic route, read from the same datasets the
+ * route loaders look items up in. (The Vite build this replaced found these pages
+ * by crawling links; `bun run check:parity` compares a new export with `docs/`.)
  */
 const bySlug = (items: ReadonlyArray<{ slug?: string }>) =>
   items.flatMap(({ slug }) => (slug ? [{ slug }] : []));

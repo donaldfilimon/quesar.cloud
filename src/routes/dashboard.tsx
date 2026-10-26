@@ -1,6 +1,6 @@
 import { AiConsentPanel } from "@/components/console/ai-consent-panel";
 import { useAiConsent } from "@/components/console/use-ai-consent";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@/framework/router";
 import { type FormEvent, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";

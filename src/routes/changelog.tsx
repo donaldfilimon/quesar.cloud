@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@/framework/router";
 import { PageClose, PageHero, Section, Surface } from "@/components/site";
 import { changelog } from "@/lib/mlai/categories/changelog";
 import type { Changelog } from "@/lib/mlai/schemas";

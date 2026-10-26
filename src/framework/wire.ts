@@ -3,7 +3,7 @@ import { fromJSON, toJSON } from "seroval";
 /**
  * Server-function wire format for the Next.js build: seroval's JSON form, the
  * serializer TanStack Start uses, so Dates, Maps, undefined and the like survive
- * the round trip as they do on the Vite build. `fromJSON` does not evaluate code.
+ * the round trip as they did before the port. `fromJSON` does not evaluate code.
  */
 export const SERVER_FN_PATH = "/api/server-fn/";
 

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@/framework/router";
 import { PageClose, PageHero, Section, Surface } from "@/components/site";
 import { AccountCard, NameForm, type SaveName } from "@/components/profile/account-card";
 import { DeleteAccountCard } from "@/components/profile/delete-account-card";

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Link } from "@tanstack/react-router";
+import { Link } from "@/framework/router";
 import { useCurrentUserState, type CurrentUserState } from "@/lib/auth/use-current-user";
 import { staticSite } from "@/lib/static-site";
 import type { CommerceOrder } from "@/lib/commerce";

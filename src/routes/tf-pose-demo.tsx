@@ -1,5 +1,5 @@
 import { lazy, Suspense } from "react";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@/framework/router";
 import { PageClose, PageHero, Section } from "@/components/site";
 
 // TensorFlow.js and PoseNet load inside this chunk only, and only in the browser.

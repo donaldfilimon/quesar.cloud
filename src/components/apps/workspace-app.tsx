@@ -1,6 +1,6 @@
 import { AiConsentPanel } from "@/components/console/ai-consent-panel";
 import { useAiConsent } from "@/components/console/use-ai-consent";
-import { useHydrated } from "@tanstack/react-router";
+import { useHydrated } from "@/framework/router";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { askPersonaFromClient } from "@/lib/ai";

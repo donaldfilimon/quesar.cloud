@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Link } from "@tanstack/react-router";
+import { Link } from "@/framework/router";
 import { Captions, CaptionsOff, Maximize, Pause, Play, Volume2, VolumeX } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { filmCuts, type FilmCut } from "./film-cuts";

@@ -13,7 +13,7 @@
  * configured) resolve as `{ ok: false, error, nextStep? }` with mlai's copy.
  * Genuine faults (database down, signed out) still throw.
  */
-import { createServerFn } from "@tanstack/react-start";
+import { createServerFn } from "@/framework/server-fn";
 import { z } from "zod";
 import { authMiddleware } from "@/lib/auth/middleware";
 

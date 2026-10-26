@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@/framework/router";
 import { PageClose, PageHero, RouteFrame, Section, Surface } from "@/components/site";
 import { researchContext } from "@/lib/mlai/categories/research-context";
 import { pageHead } from "@/lib/seo";

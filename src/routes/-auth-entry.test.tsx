@@ -72,8 +72,8 @@ vi.mock("react-hook-form", async (importOriginal) => {
     },
   };
 });
-vi.mock("@tanstack/react-router", async (importOriginal) => ({
-  ...(await importOriginal<typeof import("@tanstack/react-router")>()),
+vi.mock("@/framework/router", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@/framework/router")>()),
   getRouteApi: () => ({
     useSearch: () => ({ mode: state.mode, error: state.error }),
     useLoaderData: () => state.methods,

@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@/framework/router";
 import { safeInternalPath } from "@/lib/internal";
 import { Button } from "@/components/ui/button";
 

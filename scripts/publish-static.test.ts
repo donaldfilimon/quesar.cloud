@@ -14,10 +14,10 @@ it.each(["", " \n\t"])(
   (html) => {
     const dir = mkdtempSync(resolve(tmpdir(), "quesar-publish-test-"));
     temporary.push(dir);
-    mkdirSync(resolve(dir, ".output/public/contact"), { recursive: true });
+    mkdirSync(resolve(dir, "out/contact"), { recursive: true });
     mkdirSync(resolve(dir, "docs"));
-    writeFileSync(resolve(dir, ".output/public/index.html"), "<main>Site</main>");
-    writeFileSync(resolve(dir, ".output/public/contact/index.html"), html);
+    writeFileSync(resolve(dir, "out/index.html"), "<main>Site</main>");
+    writeFileSync(resolve(dir, "out/contact/index.html"), html);
     writeFileSync(resolve(dir, "docs/index.html"), "Existing published site");
     const result = spawnSync(
       process.execPath,

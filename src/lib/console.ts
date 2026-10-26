@@ -8,7 +8,7 @@
  * Expected refusals come back as `{ ok: false, reason, message }`, never as a
  * thrown error, so the UI can show them honestly.
  */
-import { createServerFn } from "@tanstack/react-start";
+import { createServerFn } from "@/framework/server-fn";
 import { z } from "zod";
 import { authMiddleware } from "@/lib/auth/middleware";
 

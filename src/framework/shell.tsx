@@ -22,6 +22,7 @@ export function RootNotFound() {
   return (
     <>
       <HeadTags
+        canonical={false}
         head={{
           meta: [{ title: "Page not found — Quesar" }, { name: "robots", content: "noindex" }],
         }}

@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@/framework/router";
 
 /** Recent SharePoint / OneDrive files for the signed-in user (`?days=`, clamped to 365). */
 export const Route = createFileRoute("/api/workspace/sharepoint")({

@@ -1,9 +1,10 @@
 node_modules/
 .env
 .env.*
-.output/
 dist/
-# Build output (Nitro Vercel preset); Vercel regenerates it from source.
+# Retired Vite/Nitro build output, still present in older checkouts.
+.output/
+# Vercel CLI build output; Vercel regenerates it from source.
 .vercel/
 # Local QA scratch.
 screenshots/
@@ -15,6 +16,7 @@ playwright-report/
 # Next.js build (next.config.ts): webpack cache and the static export.
 .next/
 .next-server/
+.next-film-*/
 out/
 next-env.d.ts
 # Python bytecode from scripts.

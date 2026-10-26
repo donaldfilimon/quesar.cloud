@@ -23,7 +23,7 @@ bun install --frozen-lockfile
 bun run dev
 ```
 
-Development uses port **8080** with strict port selection. The script binds
+Development runs the Next.js dev server (server mode) on port **8080**. It binds
 `0.0.0.0`, so use a trusted development network and do not expose it as a
 production service. If changing the port or origin, also configure
 `BETTER_AUTH_URL` as described in [AGENTS.md](AGENTS.md).
@@ -33,10 +33,10 @@ The project scripts use Node where declared; do not substitute `bun --bun`.
 
 ## Two delivery modes
 
-| Mode | Build | Boundary |
-| --- | --- | --- |
-| Full server application | `bun run build` | TanStack Start/Nitro server output with optional configured auth, database, connectors, and model providers. Building is not deploying. |
-| Static research/showcase site | `bun run build:static` | Prerendered output under `docs/`; server-only features show explicit unavailable notices. |
+| Mode                          | Build                  | Boundary                                                                                                                                            |
+| ----------------------------- | ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Full server application       | `bun run build`        | Next.js server build (`.next-server/`, Vercel) with optional configured auth, database, connectors, and model providers. Building is not deploying. |
+| Static research/showcase site | `bun run build:static` | Next.js static export published under `docs/`; server-only features show explicit unavailable notices.                                              |
 
 The repository's publishing guidance identifies GitHub Pages from `main:/docs`
 as the static-site path. This README does not independently verify the live
@@ -47,18 +47,19 @@ to rebuild or publish the website.
 
 ## Architecture
 
-| Area | Source |
-| --- | --- |
-| React/TanStack application routes | `src/routes/` |
-| Site UI and explicit server-only notices | `src/components/site/` |
-| Typed project/research content | `src/lib/site-identity.ts`, `src/lib/home-content.ts`, `src/lib/mlai/` |
-| Cinematic showcase | `src/cinematic/`, with playback support in `src/lib/trailer-engine/` |
-| First-party authentication | `src/lib/auth/` |
-| Server services and model-provider interface | `src/lib/server/`, including `llm/` |
-| Database and release migrations | `src/lib/db.ts`, `migrations/`, `scripts/migrate.ts` |
-| Native shell | `native/`, with its own package and dependency boundary |
+| Area                                                | Source                                                                 |
+| --------------------------------------------------- | ---------------------------------------------------------------------- |
+| Route modules (`createFileRoute`) and server routes | `src/routes/`, generated into `app/` by `scripts/next-routes.ts`       |
+| Router, server functions and their Next.js wiring   | `src/framework/`, `next.config.ts`, `proxy.server.ts`                  |
+| Site UI and explicit server-only notices            | `src/components/site/`                                                 |
+| Typed project/research content                      | `src/lib/site-identity.ts`, `src/lib/home-content.ts`, `src/lib/mlai/` |
+| Cinematic showcase                                  | `src/cinematic/`, with playback support in `src/lib/trailer-engine/`   |
+| First-party authentication                          | `src/lib/auth/`                                                        |
+| Server services and model-provider interface        | `src/lib/server/`, including `llm/`                                    |
+| Database and release migrations                     | `src/lib/db.ts`, `migrations/`, `scripts/migrate.ts`                   |
+| Native shell                                        | `native/`, with its own package and dependency boundary                |
 
-The site uses React, TypeScript, Vite, Tailwind, and TanStack Start. Read
+The site uses React, TypeScript, Next.js (App Router, webpack) and Tailwind. Read
 [`package.json`](package.json) for exact versions and scripts rather than
 inferring the stack from older project descriptions.
 
@@ -81,7 +82,8 @@ These commands describe required checks; they are not a claim that this commit
 has passed them. Browser acceptance, generated-asset verification, live auth,
 model-provider availability, and a deployment are separate evidence.
 
-Useful additional commands are `bun run preview`,
+Useful additional commands are `bun run start` (serves the last server build),
+`bun run check:parity`,
 `bun run check:research-drift`, and `bun run export:research-site`.
 Research drift is report-only. Review [CLAUDE.md](CLAUDE.md) for the complete
 command map and output locations.

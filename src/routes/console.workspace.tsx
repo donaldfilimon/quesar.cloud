@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@/framework/router";
 import { WorkspaceApp } from "@/components/apps/workspace-app";
 import { WorkspaceSources } from "@/components/workspace/workspace-sources";
 import { PageClose, PageHero, Section } from "@/components/site";

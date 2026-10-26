@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@/framework/router";
 import type { ReactNode } from "react";
 import { StatusBadge } from "@/components/site/status-badge";
 import { clientExperience } from "@/lib/mlai/categories/client-experience";

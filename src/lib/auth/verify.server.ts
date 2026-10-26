@@ -1,4 +1,4 @@
-import { getRequest } from "@tanstack/react-start/server";
+import { getRequest } from "@/framework/server-fn";
 import { getAuth, authConfigured } from "./server";
 
 /**

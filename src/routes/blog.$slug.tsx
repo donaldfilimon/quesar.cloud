@@ -1,4 +1,4 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound } from "@/framework/router";
 import { MathArticleBody } from "@/components/site/math-article";
 import { Callout } from "@/components/site/lab";
 import { PageClose, PageHero, Section } from "@/components/site";

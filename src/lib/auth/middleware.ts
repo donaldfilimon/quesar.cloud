@@ -1,10 +1,10 @@
-import { createMiddleware } from "@tanstack/react-start";
+import { createMiddleware } from "@/framework/server-fn";
 
 /**
  * Auth middleware for server functions: the standard way to get the caller's
  * verified user id. The session cookie is same-origin and rides along.
  *
- *   import { createServerFn } from "@tanstack/react-start";
+ *   import { createServerFn } from "@/framework/server-fn";
  *   import { getSql } from "@/lib/db";
  *   import { authMiddleware } from "@/lib/auth/middleware";
  *

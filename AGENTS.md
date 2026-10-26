@@ -7,6 +7,14 @@ Donald's standing rules for this repository. `CLAUDE.md` carries the command set
   was merged in at `8077dd1`; the local `mlai` checkout was retired 2026-09-28
   (history: `~/at-risk-bundles/2026-09-28-consolidation/mlai.bundle`). Port any
   remaining feature from that history; never revive it for new site work.
+- **Next.js App Router (2026-10-26, Donald's decision).** Asked whether the
+  rule above ruled out Next.js, Donald chose to port this repository from
+  TanStack Start + Vite to Next.js 16 anyway. That is a port of this source, not
+  a revival of `MLAI-CORPORATION-WWW`, which stays retired. Route modules keep
+  their `createFileRoute` shape on `@/framework/router`; `app/` is generated
+  from them; server functions keep their source on `@/framework/server-fn`.
+  Spec and verification record:
+  `notes/superpowers/specs/2026-10-26-nextjs-app-router-port.md`.
 - **No longer a Grok App Builder project (2026-09-23).** The repo began as a
   Grok export; its sandbox contract, platform chrome (PWA middleware, preview
   bridge, "Created with Grok" pill) and sandbox tooling were removed. Do not
@@ -53,8 +61,9 @@ Spec: `notes/superpowers/specs/2026-09-22-mlai-merge-design.md`. Checklist: `not
   `user.deleteUser` with a `beforeDelete` hook that calls `purgeUserData`
   (`src/lib/server/account-deletion.server.ts`), which revokes workspace grants
   and deletes per-user rows. Inquiries are unlinked, not deleted.
-- **Static preview build** (`bun run build:static`, published from `docs/` by
-  GitHub Pages): `VITE_STATIC_SITE=true` makes every server feature render
+- **Static preview build** (`bun run build:static`, the Next static export,
+  published from `docs/` by GitHub Pages): `VITE_STATIC_SITE=true` (defined by
+  `next.config.ts` for that build) makes every server feature render
   `ServerOnlyNotice` instead of calling the server. The GitHub panels fetch
   GitHub's public API from the browser, and contact opens an email. `docs/`
   contains only the built site; internal records are in `notes/`.
@@ -66,7 +75,7 @@ Spec: `notes/superpowers/specs/2026-09-22-mlai-merge-design.md`. Checklist: `not
 | `XAI_API_KEY` / `CLOUDFLARE_AI_GATEWAY_URL`+`_TOKEN`+`_ID` / `LLM_PROVIDER`         | model calls                                                                                                                                                                                       | "model not configured"; desk answers from the catalog                        |
 | `APP_ENCRYPTION_KEY` (32 bytes, `openssl rand -base64 32`)                          | audits, workspace tokens                                                                                                                                                                          | chat audits and workspace connect disabled                                   |
 | `APP_ENCRYPTION_KEY_PREVIOUS`                                                       | key rotation                                                                                                                                                                                      | values sealed under the old key stop opening; connectors show "reconnect"    |
-| `CRON_SECRET`                                                                       | daily audit expiry (`/api/cron/audits-expire`, scheduled in `vite.config.ts` → Vercel `crons`)                                                                                                    | the job answers 503; expired audits are not deleted                          |
+| `CRON_SECRET`                                                                       | daily audit expiry (`/api/cron/audits-expire`, scheduled in `vercel.json` `crons`)                                                                                                                | the job answers 503; expired audits are not deleted                          |
 | `ADMIN_EMAILS`                                                                      | `/admin`                                                                                                                                                                                          | nobody is admin                                                              |
 | `BETTER_AUTH_SECRET`                                                                | session signing                                                                                                                                                                                   | a per-process random secret: sessions break across restarts and instances    |
 | `BETTER_AUTH_URL`                                                                   | auth origin, passkey relying party                                                                                                                                                                | only the local `:8080` origins are trusted; passkeys use `localhost`         |

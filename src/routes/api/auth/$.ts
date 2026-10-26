@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@/framework/router";
 import { getAuth } from "@/lib/auth/server";
 import { withOAuthProvenance } from "@/lib/auth/oauth-provenance.server";
 

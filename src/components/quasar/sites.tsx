@@ -1,5 +1,5 @@
 // Ported from mlai `apps/mlai/lib/quasar-screens.tsx` (`QuasarSites`) at b6f3686.
-import { Link } from "@tanstack/react-router";
+import { Link } from "@/framework/router";
 import { useCallback, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { listSites } from "@/lib/quasar/api";

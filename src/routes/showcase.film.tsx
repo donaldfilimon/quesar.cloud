@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@/framework/router";
 import { lazy, Suspense } from "react";
 import { CinematicFallback } from "@/cinematic/components/CinematicFallback";
 import { pageHead } from "@/lib/seo";

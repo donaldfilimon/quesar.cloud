@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link } from "@/framework/router";
 import { cn } from "@/lib/utils";
 
 /** Weighted-graph “M” — the Lab mark. Mirrors WDBX’s directed backtrace. */

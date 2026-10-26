@@ -16,6 +16,7 @@ export default tseslint.config(
       // Next.js build cache and static export (next.config.ts).
       ".next/**",
       ".next-server/**",
+      ".next-film-*/**",
       "out/**",
       "next-env.d.ts",
       "node_modules/**",
@@ -70,7 +71,7 @@ export default tseslint.config(
     // Next.js segment files export route config (`generateStaticParams`,
     // `dynamicParams`) beside the page by design, and the compat router mirrors
     // `@tanstack/react-router`'s mixed export surface.
-    files: ["app/**/*.{ts,tsx}", "src/compat/next/router.tsx"],
+    files: ["app/**/*.{ts,tsx}", "src/framework/router.tsx"],
     rules: { "react-refresh/only-export-components": "off" },
   },
   // Disable rules that conflict with Prettier formatting.

@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@/framework/router";
 import { AppLink } from "@/components/site/app-link";
 import { PageClose, PageHero, Section } from "@/components/site";
 import { searchIndex } from "@/lib/search-pages";

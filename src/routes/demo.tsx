@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@/framework/router";
 import { PersonaRouter } from "@/components/apps/persona-router";
 import { WdbxLiveDemo } from "@/components/demos/wdbx-live-demo";
 import { NamedGrid, PageClose, PageHero, Section } from "@/components/site";

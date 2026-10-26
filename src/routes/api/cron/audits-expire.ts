@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@/framework/router";
 
 /**
  * Retention sweep for conversation audits (mlai `internal/audits/expire`,

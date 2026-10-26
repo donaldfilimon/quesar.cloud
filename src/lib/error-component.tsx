@@ -1,4 +1,4 @@
-import { Link, useRouter, type ErrorComponentProps } from "@tanstack/react-router";
+import { Link, useRouter, type ErrorComponentProps } from "@/framework/router";
 import { RotateCcw, TriangleAlert } from "lucide-react";
 import { useEffect } from "react";
 

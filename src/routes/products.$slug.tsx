@@ -1,4 +1,5 @@
-import { createFileRoute, notFound } from "@tanstack/react-router";
+import type { ReactNode } from "react";
+import { createFileRoute, notFound } from "@/framework/router";
 import { PersonaRouter } from "@/components/apps/persona-router";
 import { CosineSimDemo } from "@/components/demos/cosine-sim-demo";
 import { ShardingLatencyDemo } from "@/components/demos/sharding-latency-demo";
@@ -38,7 +39,8 @@ export const Route = createFileRoute("/products/$slug")({
   component: ProductPage,
 });
 
-function ProductPage() {
+// Annotated: the component reads `Route`, whose type is inferred from this options object.
+function ProductPage(): ReactNode {
   const { slug } = Route.useParams();
   const product = productPages.find((item) => item.slug === slug);
   if (!product) throw notFound();

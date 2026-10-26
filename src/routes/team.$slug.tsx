@@ -1,4 +1,4 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound } from "@/framework/router";
 import { Globe, MapPin } from "lucide-react";
 import { MathArticleBody } from "@/components/site/math-article";
 import { CopyGrid, PageClose, PageHero, Section } from "@/components/site";

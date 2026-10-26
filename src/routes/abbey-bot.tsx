@@ -1,7 +1,7 @@
 import { AiConsentPanel } from "@/components/console/ai-consent-panel";
 import { useAiConsent } from "@/components/console/use-ai-consent";
 import { type FormEvent, useRef, useState } from "react";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@/framework/router";
 import { PersonaRouter } from "@/components/apps/persona-router";
 import { scoreMessage } from "@/components/apps/persona-score";
 import { PageClose, PageHero, Section } from "@/components/site";

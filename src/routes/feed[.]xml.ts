@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@/framework/router";
 
 /**
  * GET /feed.xml: RSS 2.0 for lab notes, research publications and releases. Ported from

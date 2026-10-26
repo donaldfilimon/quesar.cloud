@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { Link } from "@tanstack/react-router";
+import { Link } from "@/framework/router";
 import { AppLink } from "./app-link";
 import { NextUp } from "./lab";
 import { Surface } from "./section";

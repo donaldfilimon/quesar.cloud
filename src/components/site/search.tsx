@@ -1,4 +1,4 @@
-import { useNavigate } from "@tanstack/react-router";
+import { useNavigate } from "@/framework/router";
 import { Search as SearchIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import type { SearchHit } from "@/lib/site-search";

@@ -1,4 +1,4 @@
-import { Link, useNavigate, useRouter } from "@tanstack/react-router";
+import { Link, useNavigate, useRouter } from "@/framework/router";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import {
   DropdownMenu,

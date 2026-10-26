@@ -1,5 +1,5 @@
 import { useState, type ReactNode } from "react";
-import { Link } from "@tanstack/react-router";
+import { Link } from "@/framework/router";
 import { Check, Copy } from "lucide-react";
 import {
   Accordion,

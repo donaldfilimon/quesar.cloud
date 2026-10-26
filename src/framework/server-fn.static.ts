@@ -1,5 +1,5 @@
 /**
- * `@tanstack/react-start` for the Next.js static build. Server functions keep their
+ * `@/framework/server-fn` for the static export (`next.config.ts`). Server functions keep their
  * call signatures, but there is no server behind them yet: the static build renders
  * `ServerOnlyNotice` before any of them is called (src/lib/static-site.ts), and a
  * call that slips through rejects instead of touching the network. Stage 2 of the

@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@/framework/router";
 import { RepoList } from "@/components/github/repo-list";
 import { PageClose, PageHero, RouteFrame, Section } from "@/components/site";
 import { pageHead } from "@/lib/seo";

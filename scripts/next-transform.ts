@@ -1,6 +1,6 @@
 /**
  * Build-time transforms for the Next.js build (scripts/next-transform-loader.ts),
- * doing what the TanStack Start compiler and Vite do for the Vite build
+ * doing what the TanStack Start compiler and Vite did before the port
  * (notes/superpowers/specs/2026-10-26-nextjs-app-router-port.md, stage 2):
  *
  * - `createServerFn(…).handler(fn)`: in browser bundles the handler is replaced by
@@ -8,7 +8,7 @@
  *   server the id is passed alongside it so the dispatcher can find it. Ids are
  *   `<module path relative to src/>#<n>`, n counting handlers in source order.
  * - `import.meta.glob(pattern, options)`: expanded at build time into an object
- *   literal, as Vite does. Eager `?raw` globs import the files as source text;
+ *   literal, as Vite did. Eager `?raw` globs import the files as source text;
  *   lazy globs keep their keys, with loaders that refuse (no caller uses them,
  *   and importing route components into the server graph would not compile).
  */

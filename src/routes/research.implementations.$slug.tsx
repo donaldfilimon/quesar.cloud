@@ -1,4 +1,4 @@
-import { createFileRoute, notFound } from "@tanstack/react-router";
+import { createFileRoute, notFound } from "@/framework/router";
 import { ArticleBody, SourceChips } from "@/components/site/article";
 import { Crumbs } from "@/components/site/crumbs";
 import { ResearchSidebar } from "@/components/site/research-nav";

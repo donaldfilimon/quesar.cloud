@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@/framework/router";
 import { DataTable, NamedGrid, PageClose, PageHero, Section, SpecList } from "@/components/site";
 import { StatusBadge } from "@/components/site/status-badge";
 import { ProvTag } from "@/components/site/prov-tag";

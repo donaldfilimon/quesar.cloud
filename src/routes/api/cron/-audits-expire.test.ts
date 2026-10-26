@@ -8,7 +8,7 @@ const mocks = vi.hoisted(() => ({
   handlers: {} as Record<"GET" | "POST", Handler>,
 }));
 
-vi.mock("@tanstack/react-router", () => ({
+vi.mock("@/framework/router", () => ({
   createFileRoute: () => (options: { server: { handlers: Record<"GET" | "POST", Handler> } }) => {
     mocks.handlers = options.server.handlers;
     return { options };

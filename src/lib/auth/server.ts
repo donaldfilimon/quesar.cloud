@@ -19,7 +19,7 @@
 import { passkey } from "@better-auth/passkey";
 import { betterAuth, APIError } from "better-auth";
 import { validateDisplayName } from "../profile-name";
-import { tanstackStartCookies } from "better-auth/tanstack-start";
+import { nextCookies } from "better-auth/next-js";
 import { randomBytes } from "node:crypto";
 import { Pool } from "pg";
 import { getPglite } from "../db";
@@ -198,9 +198,10 @@ function createAuth() {
 
     plugins: [
       passkey({ rpID: passkeyRpID, rpName: "Quesar", origin: passkeyOrigin }),
-      // Bridges Better Auth's Set-Cookie into TanStack Start responses. MUST be
-      // last so it runs after every other plugin's hooks.
-      tanstackStartCookies(),
+      // Bridges Better Auth's Set-Cookie into Next.js responses when auth runs
+      // outside its own route handler. MUST be last so it runs after every other
+      // plugin's hooks.
+      nextCookies(),
     ],
   });
 }

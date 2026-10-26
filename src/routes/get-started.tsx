@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@/framework/router";
 import { PageClose, PageHero, Section } from "@/components/site";
 import { AppLink } from "@/components/site/app-link";
 import { Button } from "@/components/ui/button";

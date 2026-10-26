@@ -1,14 +1,13 @@
 "use client";
 
 /**
- * `@tanstack/react-router` for the Next.js App Router build. `next.config.ts`
- * aliases the package here, so route files and components under `src/` render
- * unchanged on both stacks while the migration runs
- * (notes/superpowers/specs/2026-10-26-nextjs-app-router-port.md).
- *
- * Only the surface this repo uses is implemented. Each Next page renders one
- * TanStack route through `RouteView` (./route-view.tsx), which supplies the
- * params and loader data that `Route.useParams()` / `useLoaderData()` read.
+ * The site's route API on the Next.js App Router. Route modules in `src/routes`
+ * declare `createFileRoute(path)({ loader, head, validateSearch, component })`
+ * (the shape they had on TanStack Router, which this replaced; see
+ * notes/superpowers/specs/2026-10-26-nextjs-app-router-port.md), and
+ * `scripts/next-routes.ts` generates the `app/` pages that mount them through
+ * `RouteView` (./route-view.tsx), which supplies the params and loader data that
+ * `Route.useParams()` / `useLoaderData()` read. Navigation is Next's.
  */
 import NextLink from "next/link";
 import {
@@ -34,6 +33,13 @@ type Params = Record<string, string>;
 type Search = Record<string, unknown>;
 type SearchInput = Search | true | ((prev: Search) => Search) | undefined;
 
+/** Params named in a route path: `/research/$slug` → `{ slug: string }`; a bare `$` is `_splat`. */
+export type PathParams<P extends string> = P extends `${string}/$${infer Rest}`
+  ? Rest extends `${infer Name}/${infer Tail}`
+    ? Record<Name extends "" ? "_splat" : Name, string> & PathParams<`/${Tail}`>
+    : Record<Rest extends "" ? "_splat" : Rest, string>
+  : Record<never, string>;
+
 export interface ErrorComponentProps {
   error: unknown;
   reset: () => void;
@@ -45,14 +51,31 @@ export interface HeadDescriptor {
   scripts?: Array<{ type?: string; children?: string; src?: string }>;
 }
 
-export interface RouteOptions {
+type Method = "GET" | "POST" | "PUT" | "PATCH" | "DELETE" | "HEAD" | "OPTIONS";
+type ServerHandler<P extends string> = (ctx: {
+  request: Request;
+  params: PathParams<P>;
+}) => Response | Promise<Response>;
+
+export interface RouteOptions<
+  P extends string = string,
+  TLoader = unknown,
+  TSearch extends Search = Search,
+> {
   component?: ComponentType;
-  loader?: (ctx: { params: Params }) => unknown;
-  head?: (ctx: { params: Params; loaderData: unknown }) => HeadDescriptor;
-  validateSearch?: (search: Search) => Search;
+  loader?: (ctx: { params: PathParams<P> }) => TLoader;
+  head?: (ctx: {
+    params: PathParams<P>;
+    loaderData: Awaited<TLoader> | undefined;
+  }) => HeadDescriptor;
+  validateSearch?: (search: Search) => TSearch;
+  /** `false` renders the route only after hydration. */
   ssr?: boolean;
   notFoundComponent?: ComponentType;
-  [key: string]: unknown;
+  /** Server routes: route handlers by method (generated as `app/**\/route.server.ts`). */
+  server?: { handlers?: Partial<Record<Method, ServerHandler<P>>> };
+  /** Accepted for source compatibility; Next splits each page into its own chunk. */
+  codeSplitGroupings?: unknown;
 }
 
 /* ---------------------------------------------------------------- search */
@@ -148,17 +171,28 @@ interface RouteMatch {
 }
 export const RouteMatchContext = createContext<RouteMatch>({ params: {}, loaderData: undefined });
 
-const registry = new Map<string, RouteApi>();
-
-export interface RouteApi {
-  readonly id: string;
-  readonly fullPath: string;
-  options: RouteOptions;
-  useParams: () => Params;
-  useLoaderData: () => unknown;
-  useSearch: () => Search;
+export interface RouteApi<
+  P extends string = string,
+  TLoader = unknown,
+  TSearch extends Search = Search,
+> {
+  readonly id: P;
+  readonly fullPath: P;
+  options: RouteOptions<P, TLoader, TSearch>;
+  useParams: () => PathParams<P>;
+  useLoaderData: () => Awaited<TLoader>;
+  useSearch: () => TSearch;
   useNavigate: () => ReturnType<typeof useNavigate>;
 }
+
+/**
+ * Every page route by id, for `getRouteApi`; augmented by the generated
+ * `./route-registry.gen.ts`, as TanStack's `routeTree.gen.ts` registered routes.
+ */
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface RouteRegistry {}
+
+const registry = new Map<string, { options: RouteOptions }>();
 
 function useRouteSearch(id: string, fallback: RouteOptions): Search {
   const raw = useSearchStr();
@@ -182,16 +216,18 @@ function routeApi(id: string, options: RouteOptions = {}): RouteApi {
   };
 }
 
-export function createFileRoute(id: string) {
-  return (options: RouteOptions) => {
-    const route = routeApi(id, options);
+export function createFileRoute<P extends string>(id: P) {
+  return <TLoader = undefined, TSearch extends Search = Search>(
+    options: RouteOptions<P, TLoader, TSearch>,
+  ): RouteApi<P, TLoader, TSearch> => {
+    const route = routeApi(id, options as RouteOptions);
     registry.set(id, route);
-    return route;
+    return route as unknown as RouteApi<P, TLoader, TSearch>;
   };
 }
 
-export function getRouteApi(id: string) {
-  return routeApi(id);
+export function getRouteApi<K extends keyof RouteRegistry & string>(id: K): RouteRegistry[K] {
+  return routeApi(id) as RouteRegistry[K];
 }
 
 /**
@@ -248,7 +284,8 @@ export function useRouterState<T = { location: LocationState }>(
   return options.select ? options.select(state) : (state as T);
 }
 
-export function useNavigate() {
+/** `from` is accepted for source compatibility: navigation without `to` stays on the current path. */
+export function useNavigate(_options?: { from?: string }) {
   const router = useNextRouter();
   const location = useLocationState();
   return useCallback(

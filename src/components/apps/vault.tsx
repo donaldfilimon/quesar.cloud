@@ -1,4 +1,4 @@
-import { useHydrated } from "@tanstack/react-router";
+import { useHydrated } from "@/framework/router";
 import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { readStore, writeStore } from "@/lib/local-store";

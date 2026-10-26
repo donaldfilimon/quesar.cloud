@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@/framework/router";
 import { PageClose, PageHero, Section, Surface } from "@/components/site";
 import { LEGAL_UPDATED, privacyPolicy } from "@/lib/mlai/pages";
 import { pageHead } from "@/lib/seo";

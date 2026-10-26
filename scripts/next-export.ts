@@ -3,7 +3,7 @@
  * Finish the Next.js static export (`out/`) for a plain static host. With
  * `trailingSlash: false` Next writes `/docs` as `docs.html`; GitHub Pages and
  * `scripts/serve-static.ts` serve directories through `index.html`, so each page
- * moves to `docs/index.html`, the layout the Vite build publishes in `docs/`.
+ * moves to `docs/index.html`, the layout `docs/` has always had.
  * The RSC payloads (`docs.txt`, `docs/__next.*.txt`) stay where the client router
  * requests them.
  */

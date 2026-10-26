@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@/framework/router";
 import { ArchitectureDiagram } from "@/components/diagram/architecture-diagram";
 import { JourneyRail, PageClose, PageHero, Section, StepList } from "@/components/site";
 import { architectureSteps } from "@/lib/mlai/categories/architecture";

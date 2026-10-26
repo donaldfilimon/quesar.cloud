@@ -3,7 +3,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it, vi } from "vitest";
 
 // Link needs a router; these cards are rendered in isolation.
-vi.mock("@tanstack/react-router", () => ({
+vi.mock("@/framework/router", () => ({
   Link: ({ to, children }: { to: string; children: ReactNode }) => <a href={to}>{children}</a>,
 }));
 

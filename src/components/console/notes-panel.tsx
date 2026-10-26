@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link } from "@/framework/router";
 import { formatDistanceToNow } from "date-fns";
 import { type FormEvent, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";

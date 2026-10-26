@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@/framework/router";
 
 /**
  * Start the Drive / SharePoint OAuth flow (a top-level navigation from the

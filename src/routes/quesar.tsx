@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@/framework/router";
 import { QuasarStudio } from "@/components/apps/quasar-studio";
 import {
   CodeBlock,

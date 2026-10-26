@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link } from "@/framework/router";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { research } from "@/lib/mlai/categories/research";

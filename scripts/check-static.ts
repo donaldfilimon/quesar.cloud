@@ -5,7 +5,8 @@ import { parse, type DefaultTreeAdapterMap } from "parse5";
 import { transform } from "lightningcss";
 
 type Node = DefaultTreeAdapterMap["node"];
-const root = resolve("docs");
+// The published site by default; `node scripts/check-static.ts out` checks a fresh export.
+const root = resolve(process.argv[2] ?? "docs");
 const origin = "https://quesar.cloud";
 // Preload ceilings sit about four above the measured counts after the content
 // barrel was split (2026-09-29: 17, 17, 19, 21); gzip ceilings are unchanged.
@@ -54,8 +55,16 @@ for (const file of files(root).filter((file) => file.endsWith(".html"))) {
     if (attrs.href && ["a", "link"].includes(node.tagName)) data.links.push(attrs.href);
     if (attrs.srcset)
       data.links.push(...attrs.srcset.split(",").map((s) => s.trim().split(/\s+/)[0]));
-    if (node.tagName === "script" && attrs.src) data.scripts.add(attrs.src);
-    if (node.tagName === "link" && attrs.rel === "modulepreload") {
+    // `nomodule` scripts (Next's legacy polyfills) never load in a module-capable browser.
+    if (node.tagName === "script" && attrs.src && !("nomodule" in attrs)) {
+      data.preloads++;
+      data.scripts.add(attrs.src);
+    }
+    // Next emits `preload` with `as="script"`; `modulepreload` is the module-script form.
+    if (
+      node.tagName === "link" &&
+      (attrs.rel === "modulepreload" || (attrs.rel === "preload" && attrs.as === "script"))
+    ) {
       data.preloads++;
       data.scripts.add(attrs.href);
     }
@@ -73,7 +82,7 @@ const references = [...pages].map(([file, page]) => ({
       .replace(/index\.html$/, ""),
   links: page.links,
 }));
-for (const file of files(root).filter((file) => /search-catalog-[^/]+\.json$/.test(file))) {
+for (const file of files(root).filter((file) => /search-catalog(-[^/]+)?\.json$/.test(file))) {
   const entries = JSON.parse(readFileSync(file, "utf8")) as { href: string; hash?: string }[];
   references.push({
     path: "/" + relative(root, file).split(sep).join("/"),
@@ -133,7 +142,7 @@ for (const budget of budgets) {
     return asset && asset.endsWith(".js") ? sum + gzipSync(readFileSync(asset)).length : sum;
   }, 0);
   console.log(
-    `${budget.route}: ${page.preloads}/${budget.preloads} preloads; ${gzip}/${budget.gzip} gzip bytes`,
+    `${budget.route}: ${page.preloads}/${budget.preloads} initial scripts; ${gzip}/${budget.gzip} gzip bytes`,
   );
   if (page.preloads > budget.preloads || gzip > budget.gzip)
     failures.add(`${budget.route}: initial JavaScript budget exceeded`);

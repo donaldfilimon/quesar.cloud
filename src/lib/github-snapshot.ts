@@ -1,4 +1,4 @@
-import snapshotUrl from "virtual:github-snapshot-url";
+import snapshotUrl from "@/framework/github-snapshot-url";
 import { parseSnapshot, type GithubPayload } from "./github-data";
 
 let pending: Promise<GithubPayload | null> | undefined;

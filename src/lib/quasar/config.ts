@@ -1,4 +1,4 @@
-import { createServerFn } from "@tanstack/react-start";
+import { createServerFn } from "@/framework/server-fn";
 import { staticSite } from "@/lib/static-site";
 
 /**

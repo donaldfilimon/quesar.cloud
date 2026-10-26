@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
- * Parity check for the Next.js static export (`bun run next:build` → `out/`)
- * against the Vite static build (`docs/`, what quesar.cloud serves). Every page
+ * Parity check for a fresh static export (`out/`) against the published site
+ * (`docs/`, what quesar.cloud serves; until the cut-over, the Vite build). Every page
  * in `docs/` must exist in `out/` with the same title, description and canonical
  * URL, and every exported page must render the site shell around real content.
  *
@@ -90,7 +90,7 @@ for (const page of nextPages) {
 
 const extra = [...nextPages].filter((page) => !vitePages.includes(page));
 console.log(
-  `[next-check] ${vitePages.length} Vite pages, ${nextPages.size} Next pages (${extra.length} only in Next: ${extra.join(", ") || "none"})`,
+  `[next-check] ${vitePages.length} published pages, ${nextPages.size} exported pages (${extra.length} only in the export: ${extra.join(", ") || "none"})`,
 );
 if (problems.length) {
   console.error(`[next-check] ${problems.length} problems:\n  ${problems.join("\n  ")}`);

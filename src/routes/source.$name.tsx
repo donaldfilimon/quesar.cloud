@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@/framework/router";
 import { CellMachine } from "@/components/apps/cell-machine";
 import { PageClose, PageHero, Section, Surface } from "@/components/site";
 import { StatusBadge } from "@/components/site/status-badge";

@@ -1,4 +1,4 @@
-import { Outlet, useChildMatches } from "@tanstack/react-router";
+import { Outlet, useChildMatches } from "@/framework/router";
 import type { ReactNode } from "react";
 
 /** Parent file routes also match their children. Render the child, not the index, when one is active. */

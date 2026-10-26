@@ -1,4 +1,4 @@
-import markUrl from "../mlai-mark.svg";
+import { markUrl } from "../mark";
 /* Marketing — the full MLAI marketing page entry point.
    Composes Nav + Hero + Features + Personas + Footer over the GalaxyCanvas
    background, plus a Request-access modal. Self-contained: all kit-specific

@@ -1,6 +1,6 @@
 import { ServerOnlyNotice } from "@/components/site/server-only-notice";
 import { staticSite } from "@/lib/static-site";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@/framework/router";
 import { LoginForm } from "@/components/auth/login-form";
 import { authEnabled } from "@/lib/auth/enabled";
 import { getSignInMethods } from "@/lib/auth/methods";

@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@/framework/router";
 import { CosineSimDemo } from "@/components/demos/cosine-sim-demo";
 import { ShardingLatencyDemo } from "@/components/demos/sharding-latency-demo";
 import { CopyGrid, DataTable, MetricCard, PageClose, PageHero, Section } from "@/components/site";

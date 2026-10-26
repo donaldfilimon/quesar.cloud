@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@/framework/router";
 import { ArrowRight, Users } from "lucide-react";
 import { PageClose, PageHero, RouteFrame, Section, Surface } from "@/components/site";
 import { ProfilePhoto } from "@/components/site/profile-photo";

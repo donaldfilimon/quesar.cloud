@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@/framework/router";
 import { BulletSurface, CopyGrid, PageClose, PageHero, Section } from "@/components/site";
 import { SpecList } from "@/components/site/lab";
 import { about } from "@/lib/mlai/categories/about";

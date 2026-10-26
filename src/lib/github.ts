@@ -1,4 +1,4 @@
-import { createServerFn } from "@tanstack/react-start";
+import { createServerFn } from "@/framework/server-fn";
 import { staticSite } from "./static-site";
 import type { GithubPayload } from "./github-data";
 export type { GithubPayload, LiveRepo, ReadmeCard, EventItem, Freshness } from "./github-data";

@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link } from "@/framework/router";
 import { docs } from "@/lib/mlai/categories/docs";
 import { cn, headingId } from "@/lib/utils";
 

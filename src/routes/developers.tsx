@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@/framework/router";
 import { RepoList } from "@/components/github/repo-list";
 import { GithubStatusLine, SourcePanel } from "@/components/github/source-panel";
 import {

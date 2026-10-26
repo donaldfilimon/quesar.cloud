@@ -2,15 +2,14 @@
 /**
  * Publish the static GitHub Pages build (`bun run build:static`).
  *
- * Copies the prerendered site from `.output/public` into `docs/` (the Pages
- * source: branch `main`, folder `/docs`), then adds what Pages needs:
- * `.nojekyll` (serve `_`-prefixed and `.md` paths verbatim), `CNAME`, a
- * self-contained `404.html`, and `sitemap.xml` generated from the pages
- * (`./sitemap.ts`). `docs/` holds ONLY the built site; internal
- * records live in `notes/`.
+ * Copies the Next.js static export from `out/` (after `scripts/next-export.ts`
+ * has moved each page to `<path>/index.html`) into `docs/` (the Pages source:
+ * branch `main`, folder `/docs`), then adds what Pages needs: `.nojekyll` (serve
+ * the `_next/` directory and `.md` paths verbatim), `CNAME`, and `sitemap.xml`
+ * generated from the pages (`./sitemap.ts`). The export's own `404.html` is the
+ * Pages 404. `docs/` holds ONLY the built site; internal records live in `notes/`.
  */
 import {
-  copyFileSync,
   cpSync,
   existsSync,
   readdirSync,
@@ -23,21 +22,15 @@ import { join, relative } from "node:path";
 import { buildSitemap, sitemapEntry } from "./sitemap.ts";
 
 const root = process.cwd();
-const src = join(root, ".output", "public");
+const src = join(root, "out");
 const out = join(root, "docs");
 const DOMAIN = "quesar.cloud";
 
 if (!existsSync(join(src, "index.html"))) {
-  console.error(
-    "[publish-static] .output/public/index.html is missing; run the static build first.",
-  );
+  console.error("[publish-static] out/index.html is missing; run the static build first.");
   process.exit(1);
 }
 
-// Prerendered HTML links `styles.css?url` as the SSR build emitted it, which is
-// a different hash (and a superset) of the client copy. Publish every asset the
-// pages reference; fail loudly if one cannot be found anywhere.
-const SSR_ASSETS = join(root, "node_modules", ".nitro", "vite", "services", "ssr", "assets");
 function htmlFiles(dir: string): string[] {
   return readdirSync(dir).flatMap((name) => {
     const path = join(dir, name);
@@ -45,7 +38,6 @@ function htmlFiles(dir: string): string[] {
     return name.endsWith(".html") ? [path] : [];
   });
 }
-// Do not replace the published tree with a truncated prerender response.
 const empty = htmlFiles(src).filter((file) => !readFileSync(file, "utf8").trim());
 if (empty.length) {
   console.error(
@@ -53,68 +45,33 @@ if (empty.length) {
   );
   process.exit(1);
 }
-rmSync(out, { recursive: true, force: true });
-cpSync(src, out, { recursive: true });
-writeFileSync(join(out, ".nojekyll"), "");
+if (!existsSync(join(src, "404.html"))) {
+  console.error("[publish-static] out/404.html is missing; the export must include the 404 page.");
+  process.exit(1);
+}
 
 const missing = new Set<string>();
-for (const file of htmlFiles(out)) {
+for (const file of htmlFiles(src)) {
   const html = readFileSync(file, "utf8");
-  for (const [, asset] of html.matchAll(/"\/assets\/([^"?#]+)"/g)) {
-    if (existsSync(join(out, "assets", asset))) continue;
-    if (existsSync(join(SSR_ASSETS, asset)))
-      copyFileSync(join(SSR_ASSETS, asset), join(out, "assets", asset));
-    else missing.add(`${asset} (in ${relative(out, file)})`);
+  for (const [, asset] of html.matchAll(/"\/_next\/static\/([^"?#]+)"/g)) {
+    if (!existsSync(join(src, "_next", "static", asset)))
+      missing.add(`${asset} (in ${relative(src, file)})`);
   }
 }
 if (missing.size) {
   console.error(`[publish-static] referenced assets not found:\n  ${[...missing].join("\n  ")}`);
   process.exit(1);
 }
-writeFileSync(join(out, "CNAME"), `${DOMAIN}\n`);
 
-// Reuse the site's stylesheet so the 404 page looks like the site without
-// needing the app bundle (a prerendered route would hydrate as the wrong page).
-const index = readFileSync(join(out, "index.html"), "utf8");
-const css = [...index.matchAll(/<link[^>]+rel="stylesheet"[^>]*>/g)]
-  .map((m) => m[0])
-  .join("\n    ");
-writeFileSync(
-  join(out, "404.html"),
-  `<!doctype html>
-<html lang="en" data-theme="dark" class="dark">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="robots" content="noindex" />
-    <title>Page not found — Quesar</title>
-    <link rel="icon" href="/favicon.svg" />
-    ${css}
-  </head>
-  <body class="antialiased">
-    <main class="mx-auto flex min-h-[70vh] max-w-xl flex-col justify-center px-6 py-24">
-      <p class="font-mono text-[0.68rem] tracking-[0.16em] text-accent uppercase">404</p>
-      <h1 class="mt-3 font-display text-4xl tracking-tight">This page is not in the catalog.</h1>
-      <p class="mt-4 text-sm leading-relaxed text-fg-muted">
-        Every public surface lives on this site. If a name moved, start from home, docs, or the source catalog.
-      </p>
-      <p class="mt-8 flex flex-wrap gap-4 text-sm">
-        <a href="/" class="text-accent">Home</a>
-        <a href="/docs" class="text-accent">Docs</a>
-        <a href="/developers" class="text-accent">Source</a>
-        <a href="/contact" class="text-accent">Contact</a>
-      </p>
-    </main>
-  </body>
-</html>
-`,
-);
+rmSync(out, { recursive: true, force: true });
+cpSync(src, out, { recursive: true });
+writeFileSync(join(out, ".nojekyll"), "");
+writeFileSync(join(out, "CNAME"), `${DOMAIN}\n`);
 const sitemap = htmlFiles(out).flatMap((file) => {
   const entry = sitemapEntry(readFileSync(file, "utf8"));
   return entry ? [entry] : [];
 });
 writeFileSync(join(out, "sitemap.xml"), buildSitemap(sitemap));
-// Only this build has a sitemap, so only this build's robots.txt names it.
 writeFileSync(
   join(out, "robots.txt"),
   `${readFileSync(join(out, "robots.txt"), "utf8").trimEnd()}\n\nSitemap: https://${DOMAIN}/sitemap.xml\n`,

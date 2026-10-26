@@ -1,4 +1,4 @@
-import { Link, useRouterState } from "@tanstack/react-router";
+import { Link, useRouterState } from "@/framework/router";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { recoveryForPathname, SUGGESTED_DESTINATIONS } from "@/lib/mlai/not-found";
 

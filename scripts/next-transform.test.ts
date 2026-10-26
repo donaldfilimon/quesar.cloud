@@ -4,7 +4,7 @@ import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { moduleIdFor, transformGlobs, transformServerFns } from "./next-transform.ts";
 
-const source = `import { createServerFn } from "@tanstack/react-start";
+const source = `import { createServerFn } from "@/framework/server-fn";
 import { authMiddleware } from "@/lib/auth/middleware";
 export const one = createServerFn({ method: "GET" })
   .middleware([authMiddleware])

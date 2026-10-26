@@ -27,8 +27,8 @@ vi.mock("@/lib/inquiries", async (importOriginal) => ({
   getTurnstileConfig: vi.fn(),
   sendInquiry: vi.fn(),
 }));
-vi.mock("@tanstack/react-router", async (importOriginal) => ({
-  ...(await importOriginal<typeof import("@tanstack/react-router")>()),
+vi.mock("@/framework/router", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@/framework/router")>()),
   createFileRoute: () => (options: unknown) => ({ options, useSearch: () => ({}) }),
   useHydrated: () => false,
   Link: ({ to, children }: { to: string; children: ReactNode }) => <a href={to}>{children}</a>,

@@ -2,8 +2,10 @@
 docs/
 .output/
 .vercel/
-.tanstack/
-src/routeTree.gen.ts
+.next/
+.next-server/
+.next-film-*/
+out/
 bun.lock
 # Standalone projects with their own toolchains (see their READMEs).
 sidecars/

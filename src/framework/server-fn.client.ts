@@ -1,5 +1,5 @@
 /**
- * `@tanstack/react-start` in browser bundles of the Next.js server build. The
+ * `@/framework/server-fn` in browser bundles of the server build (`next.config.ts`). The
  * loader (scripts/next-transform.ts) has already replaced every server-function
  * handler with its id, so `.handler(id)` returns a function that POSTs to the
  * dispatcher (`app/api/server-fn/[id]/route.server.ts`) and returns its result.

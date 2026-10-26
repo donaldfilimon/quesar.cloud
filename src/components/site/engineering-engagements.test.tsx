@@ -39,10 +39,12 @@ beforeAll(async () => {
     },
     resolve: {
       alias: [
-        ...["lib/auth/use-current-user", "lib/static-site", "lib/commerce"].map((suffix) => ({
-          find: `@/${suffix}`,
-          replacement: `\0fixture:@/${suffix}`,
-        })),
+        ...["framework/router", "lib/auth/use-current-user", "lib/static-site", "lib/commerce"].map(
+          (suffix) => ({
+            find: `@/${suffix}`,
+            replacement: `\0fixture:@/${suffix}`,
+          }),
+        ),
         { find: "@", replacement: fileURLToPath(new URL("../../", import.meta.url)) },
       ],
     },
@@ -53,12 +55,17 @@ beforeAll(async () => {
         resolveId(id) {
           if (id.startsWith("\0fixture:")) return id;
           if (id === "/fixture.js") return "\0fixture:harness";
-          for (const suffix of ["lib/auth/use-current-user", "lib/static-site", "lib/commerce"]) {
+          for (const suffix of [
+            "framework/router",
+            "lib/auth/use-current-user",
+            "lib/static-site",
+            "lib/commerce",
+          ]) {
             if (id.includes(`/src/${suffix}`)) return `\0fixture:@/${suffix}`;
           }
           if (
             [
-              "@tanstack/react-router",
+              "@/framework/router",
               "@/lib/auth/use-current-user",
               "@/lib/static-site",
               "@/lib/commerce",
@@ -68,7 +75,7 @@ beforeAll(async () => {
         },
         load(id) {
           if (id === "\0fixture:harness") return harness;
-          if (id === "\0fixture:@tanstack/react-router")
+          if (id === "\0fixture:@/framework/router")
             return `import React from 'react';export function Link({children,...props}){return React.createElement('a',null,children)}`;
           if (id === "\0fixture:@/lib/auth/use-current-user")
             return `export function useCurrentUserState(){return {user:window.user,isPending:false}}`;

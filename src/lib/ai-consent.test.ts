@@ -6,7 +6,7 @@ vi.mock("@/lib/auth/middleware", () => ({ authMiddleware: "required-auth" }));
 vi.mock("@/lib/static-site", () => ({ staticSite: false }));
 // Execute the actual validators/handler closures, with a synthetic authenticated context.
 // Real HTTP session admission is separately exercised in the disposable PG browser suite.
-vi.mock("@tanstack/react-start", () => ({
+vi.mock("@/framework/server-fn", () => ({
   createServerFn: () => {
     let validate: (data: unknown) => unknown;
     const builder = {

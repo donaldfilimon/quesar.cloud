@@ -8,7 +8,7 @@
    only; this view never holds one. A source the user has not linked comes back
    as `unconfigured` and renders a Connect link rather than an error. Files open
    at the provider in a new tab, exactly as in mlai. */
-import { useHydrated } from "@tanstack/react-router";
+import { useHydrated } from "@/framework/router";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Cloud,

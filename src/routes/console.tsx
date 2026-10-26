@@ -1,4 +1,4 @@
-import { createFileRoute, Outlet, useChildMatches, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Outlet, useChildMatches, useNavigate } from "@/framework/router";
 import { JourneyRail, PageClose, PageHero, RouteFrame, Section } from "@/components/site";
 import { AdminLink } from "@/components/console/admin-link";
 import { AuditsPanel } from "@/components/console/audits-panel";

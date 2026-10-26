@@ -13,7 +13,7 @@
  */
 import { staticSite } from "@/lib/static-site";
 import { useEffect } from "react";
-import { useRouterState } from "@tanstack/react-router";
+import { useRouterState } from "@/framework/router";
 
 export type TelemetryEvent =
   "page_view" | "inquiry_open" | "inquiry_submit" | "inquiry_success" | "inquiry_close";

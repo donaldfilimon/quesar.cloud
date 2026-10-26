@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@/framework/router";
 import { ChipRow, HeroStatus, NamedGrid, PageClose, PageHero, Section } from "@/components/site";
 import { frozenCli } from "@/lib/catalog";
 import { pageHead } from "@/lib/seo";

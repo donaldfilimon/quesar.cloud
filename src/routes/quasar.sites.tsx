@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@/framework/router";
 import { QuasarSites } from "@/components/quasar/sites";
 import { pageHead } from "@/lib/seo";
 

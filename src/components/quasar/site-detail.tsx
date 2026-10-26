@@ -3,7 +3,7 @@
 // `applyEventPage` (so a poll that returns after an edit reset is discarded),
 // polls never overlap, and an uncertain action offers the Retry the
 // connection asks for.
-import { Link } from "@tanstack/react-router";
+import { Link } from "@/framework/router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";

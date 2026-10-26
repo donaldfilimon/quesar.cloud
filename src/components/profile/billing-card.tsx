@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link } from "@/framework/router";
 import { Surface } from "@/components/site";
 import { Button } from "@/components/ui/button";
 import type { BillingPlansResult } from "@/lib/billing";

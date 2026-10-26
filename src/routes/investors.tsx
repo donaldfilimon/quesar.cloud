@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@/framework/router";
 import { ArrChart } from "@/components/charts/arr-chart";
 import { TamChart } from "@/components/charts/tam-chart";
 import {

@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link } from "@/framework/router";
 
 /**
  * Shown in the static GitHub Pages build wherever a feature needs the server

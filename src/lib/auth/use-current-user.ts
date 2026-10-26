@@ -1,4 +1,4 @@
-import { useHydrated } from "@tanstack/react-router";
+import { useHydrated } from "@/framework/router";
 import { authClient, authEnabled } from "./client";
 import { staticSite } from "@/lib/static-site";
 

@@ -1,4 +1,4 @@
-import markUrl from "../mlai-mark.svg";
+import { markUrl } from "../mark";
 /* Console shell — sidebar nav, top bar, and ⌘K command palette. */
 import { useEffect, useState } from "react";
 import { IChevron, ISearch } from "./Icons.tsx";

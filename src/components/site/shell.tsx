@@ -1,5 +1,5 @@
 import { lazy, Suspense, type ReactNode } from "react";
-import { useHydrated } from "@tanstack/react-router";
+import { useHydrated } from "@/framework/router";
 import { SiteFooter } from "./footer";
 import { SiteHeader } from "./header";
 

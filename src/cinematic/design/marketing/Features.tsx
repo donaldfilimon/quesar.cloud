@@ -1,4 +1,4 @@
-import markUrl from "../mlai-mark.svg";
+import { markUrl } from "../mark";
 /* Features — product cards, a stat band, and the footer. */
 import { IDb, ILayers, ISpark, type IconComponent } from "./Icons.tsx";
 

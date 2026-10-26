@@ -3,7 +3,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mode = vi.hoisted(() => ({ static: true }));
-vi.mock("@tanstack/react-router", () => ({
+vi.mock("@/framework/router", () => ({
   createFileRoute: () => (options: { component: ComponentType; head: () => unknown }) => ({
     options,
     useSearch: () => ({}),

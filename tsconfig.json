@@ -9,7 +9,7 @@
     "isolatedModules": true,
     "skipLibCheck": true,
     "noEmit": true,
-    "types": ["vite/client", "node"],
+    "types": ["node"],
     "paths": {
       "@/*": ["./src/*"]
     },
@@ -20,7 +20,6 @@
     "scripts",
     "e2e",
     "playwright.config.ts",
-    "vite.config.ts",
     "vitest.config.ts",
     "eslint.config.ts"
   ]

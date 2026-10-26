@@ -6,7 +6,7 @@
  * attributed: `optionalSession` reads the session the same way
  * `authMiddleware` does, but resolves to `null` instead of throwing.
  */
-import { createMiddleware, createServerFn } from "@tanstack/react-start";
+import { createMiddleware, createServerFn } from "@/framework/server-fn";
 import { coerceInquiryInput, type InquiryResult } from "@/lib/inquiry-rules";
 
 export { INQUIRY_LIMITS, TOPICS, type InquiryResult, type InquiryTopic } from "@/lib/inquiry-rules";
@@ -33,7 +33,7 @@ export const sendInquiry = createServerFn({ method: "POST" })
   .middleware([optionalSession])
   .validator((input: unknown) => coerceInquiryInput(input))
   .handler(async ({ data, context }): Promise<InquiryResult> => {
-    const { getRequest } = await import("@tanstack/react-start/server");
+    const { getRequest } = await import("@/framework/server-fn");
     const { submitInquiry } = await import("@/lib/server/inquiries.server");
     return submitInquiry(data, { request: getRequest(), userId: context.userId });
   });

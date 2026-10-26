@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link } from "@/framework/router";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useGithubData } from "@/lib/use-github-data";
 import { README_NAMES } from "@/lib/github-readmes";

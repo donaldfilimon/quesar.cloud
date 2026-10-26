@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link } from "@/framework/router";
 import { useEffect, useState } from "react";
 import { getAdminStatus } from "@/lib/console";
 

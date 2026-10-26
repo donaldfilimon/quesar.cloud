@@ -1,7 +1,7 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it, vi } from "vitest";
 import type { ReactNode } from "react";
-vi.mock("@tanstack/react-router", () => ({
+vi.mock("@/framework/router", () => ({
   createFileRoute: () => (options: { component: () => ReactNode }) => ({ options }),
   Link: ({
     to,

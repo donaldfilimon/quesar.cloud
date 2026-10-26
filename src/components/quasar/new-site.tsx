@@ -1,5 +1,5 @@
 // Ported from mlai `apps/mlai/lib/quasar-screens.tsx` (`QuasarNewSite`) at b6f3686.
-import { useNavigate } from "@tanstack/react-router";
+import { useNavigate } from "@/framework/router";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";

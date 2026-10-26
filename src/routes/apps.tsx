@@ -1,5 +1,5 @@
 import { clientExperience } from "@/lib/mlai/categories/client-experience";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@/framework/router";
 import { CopyGrid, PageClose, PageHero, Section } from "@/components/site";
 import { appSurfaces } from "@/lib/catalog";
 import { pageHead } from "@/lib/seo";

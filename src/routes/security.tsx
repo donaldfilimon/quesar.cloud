@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@/framework/router";
 import { PageClose, PageHero, Section, Surface } from "@/components/site";
 import { StatusBadge } from "@/components/site/status-badge";
 import { LEGAL_UPDATED, securitySections } from "@/lib/mlai/pages";

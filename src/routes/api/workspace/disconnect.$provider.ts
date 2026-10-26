@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@/framework/router";
 
 /**
  * Drop a stored connection, revoking the grant at the provider first where

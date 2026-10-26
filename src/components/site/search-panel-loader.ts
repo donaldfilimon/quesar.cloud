@@ -1,17 +1,16 @@
 import { createElement, type ComponentType } from "react";
-import catalogUrl from "virtual:search-catalog-url";
+import catalogUrl from "@/framework/search-catalog-url";
 import type { SearchHit } from "@/lib/site-search";
 
 /**
  * The search panel pulls in cmdk and reads the generated search catalog (a
- * JSON asset, `virtual:search-catalog-url`), so both load on first intent
+ * JSON file, `@/framework/search-catalog-url`), so both load on first intent
  * (hover, focus, click or the shortcut) instead of riding in the root chunk.
  * Shared by the header trigger (`./search`), which only preloads, and the
  * dialog (`./search-dialog`), which renders the result.
  *
  * A failed load clears the cached promise so the next attempt starts fresh;
- * the build gives each panel import a fresh URL (scripts/search-retry-plugin.ts)
- * because browsers cache rejected dynamic imports by URL.
+ * webpack forgets a failed chunk, so a retry loads it again.
  */
 export type SearchPanelProps = {
   query: string;

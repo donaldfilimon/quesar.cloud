@@ -25,7 +25,7 @@ import {
 } from "./timeline-context";
 import { REDUCED_MOTION_QUERY, prefersReducedMotion, resolveSeek } from "./engine-utils";
 import type { VoiceGate } from "./speech";
-import { Link } from "@tanstack/react-router";
+import { Link } from "@/framework/router";
 
 /** Live `prefers-reduced-motion`, so an OS change applies without a remount. */
 function useReducedMotion(): boolean {

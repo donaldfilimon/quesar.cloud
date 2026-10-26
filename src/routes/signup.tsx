@@ -1,4 +1,4 @@
-import { createFileRoute, Navigate } from "@tanstack/react-router";
+import { createFileRoute, Navigate } from "@/framework/router";
 import { ServerOnlyNotice } from "@/components/site/server-only-notice";
 import { staticSite } from "@/lib/static-site";
 

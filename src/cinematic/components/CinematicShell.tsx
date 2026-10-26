@@ -1,7 +1,7 @@
 import { useEffect, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { isCapture } from "../film/capture";
-import { Link } from "@tanstack/react-router";
+import { Link } from "@/framework/router";
 import { ArrowLeft } from "lucide-react";
 import "../design/mlai-ds-tokens.css";
 

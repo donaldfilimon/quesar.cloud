@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link } from "@/framework/router";
 import type { ReactNode } from "react";
 import { internalHref, isExternal } from "@/lib/internal";
 

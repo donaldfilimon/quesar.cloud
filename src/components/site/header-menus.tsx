@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link } from "@/framework/router";
 import { X } from "lucide-react";
 import type { ReactNode } from "react";
 import * as Sheet from "@radix-ui/react-dialog";

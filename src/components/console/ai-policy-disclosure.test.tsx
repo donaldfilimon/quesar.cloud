@@ -3,7 +3,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const fixture = vi.hoisted(() => ({ accepted: false, loading: false, retentionDays: 365 }));
-vi.mock("@tanstack/react-router", () => ({
+vi.mock("@/framework/router", () => ({
   useHydrated: () => false,
   Link: ({ to, children }: { to: string; children: ReactNode }) => <a href={to}>{children}</a>,
 }));

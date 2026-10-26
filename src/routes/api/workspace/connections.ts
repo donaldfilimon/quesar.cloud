@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@/framework/router";
 
 /** Which workspace providers this user has connected, and which are available. */
 export const Route = createFileRoute("/api/workspace/connections")({

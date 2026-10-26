@@ -1,4 +1,4 @@
-import { createFileRoute, notFound } from "@tanstack/react-router";
+import { createFileRoute, notFound } from "@/framework/router";
 import { AppLink } from "@/components/site/app-link";
 import { BulletSurface, PageClose, PageHero, Section, Surface } from "@/components/site";
 import { projects } from "@/lib/mlai/categories/projects";

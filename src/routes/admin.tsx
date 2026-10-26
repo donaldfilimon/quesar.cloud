@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@/framework/router";
 import { AdminPanels } from "@/components/console/admin/admin-panels";
 import { PageClose, PageHero, RouteFrame, Section } from "@/components/site";
 import { RequireSession } from "@/lib/auth/gates";

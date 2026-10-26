@@ -12,9 +12,8 @@ import {
 } from "./router";
 
 /**
- * A route as its source file exports it. Generated views pass the real TanStack
- * type (src/ typechecks against `@tanstack/react-router`); at runtime it is the
- * compat `RouteApi`, so only `options` is read.
+ * A route as its source file exports it (`RouteApi<path, loader, search>`); only
+ * `options` is read here, so every route's generic type is accepted.
  */
 interface MountedRoute {
   options: object;
@@ -51,7 +50,14 @@ function mergeHead(...heads: Array<HeadDescriptor | undefined>) {
 }
 
 /** React 19 hoists these into `<head>`, during prerender and on client navigation alike. */
-export function HeadTags({ head }: { head: HeadDescriptor | undefined }) {
+export function HeadTags({
+  head,
+  canonical = true,
+}: {
+  head: HeadDescriptor | undefined;
+  /** Off for the 404 page, which has no canonical address. */
+  canonical?: boolean;
+}) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const merged = mergeHead(rootHead, head);
   const href = canonicalUrl(pathname);
@@ -67,8 +73,12 @@ export function HeadTags({ head }: { head: HeadDescriptor | undefined }) {
       {merged.links.map((link, index) => (
         <link key={`${link.rel}-${link.href}-${index}`} {...link} />
       ))}
-      <link rel="canonical" href={href} />
-      <meta property="og:url" content={href} />
+      {canonical ? (
+        <>
+          <link rel="canonical" href={href} />
+          <meta property="og:url" content={href} />
+        </>
+      ) : null}
       {merged.scripts.map((script, index) =>
         script.src ? (
           <script key={script.src} src={script.src} type={script.type} async />
@@ -115,7 +125,7 @@ function RouteBody({ options }: { options: RouteOptions }) {
   return Component ? <Component /> : null;
 }
 
-/** One TanStack route as a Next page: loader, head and component, under the route's params. */
+/** One route module as a Next page: loader, head and component, under the route's params. */
 export function RouteView({
   route,
   params = {},

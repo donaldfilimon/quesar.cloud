@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@/framework/router";
 
 /** Anonymous page telemetry sink. See `src/lib/server/telemetry.server.ts`. */
 export const Route = createFileRoute("/api/telemetry")({
