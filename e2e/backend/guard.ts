@@ -19,14 +19,3 @@ export function acceptanceTarget() {
   }
   return url;
 }
-
-/**
- * Keeps a harness that is ported to the Next.js build but has not yet passed there
- * from running as if it were verified. Only commerce remains: it needs an installed
- * native WDBX binary (notes/superpowers/specs/2026-10-26-nextjs-app-router-port.md).
- */
-export function assertHarnessPorted() {
-  throw new Error(
-    "Commerce acceptance is ported to the Next.js build but has not passed there (it needs an installed native WDBX binary); see notes/superpowers/specs/2026-10-26-nextjs-app-router-port.md.",
-  );
-}
