@@ -19,3 +19,15 @@ export function acceptanceTarget() {
   }
   return url;
 }
+
+/**
+ * The backend acceptance harnesses drove the retired Vite dev server and imported
+ * source modules into the page (`import("/src/lib/….ts")`) to call server
+ * functions, which Next.js does not serve. They stay refused until they are ported
+ * to the Next server build (notes/superpowers/specs/2026-10-26-nextjs-app-router-port.md).
+ */
+export function assertHarnessPorted() {
+  throw new Error(
+    "Backend acceptance is not yet ported to the Next.js build; see notes/superpowers/specs/2026-10-26-nextjs-app-router-port.md.",
+  );
+}

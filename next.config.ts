@@ -5,10 +5,12 @@ import type { NextConfig } from "next";
  * quesar.cloud on the Next.js App Router
  * (notes/superpowers/specs/2026-10-26-nextjs-app-router-port.md). Two modes:
  *
- * - static (`bun run build:static`): the export GitHub Pages serves from `docs/`.
+ * - static (`QUESAR_NEXT_MODE=static`, `bun run build:static`): the export GitHub
+ *   Pages serves from `docs/`.
  *   Server-only modules are stubbed and server functions refuse; pages show
  *   `ServerOnlyNotice` instead (src/lib/static-site.ts).
- * - server (`QUESAR_NEXT_MODE=server`: `bun run dev`, `build`, `start`): the full
+ * - server (the default: `bun run dev`, `build`, `start`, and Vercel, whose builder
+ *   reloads this file without the build script's environment): the full
  *   site. Server functions compile to an RPC client in the browser and a registry
  *   on the server (scripts/next-transform.ts); `src/routes` server routes become
  *   route handlers; `proxy.server.ts` runs readiness and CSP.
@@ -23,7 +25,7 @@ import type { NextConfig } from "next";
 import { execFileSync } from "node:child_process";
 import { assertPersistentBuildMode } from "./scripts/persistent-build-mode.ts";
 
-const serverMode = process.env.QUESAR_NEXT_MODE === "server";
+const serverMode = process.env.QUESAR_NEXT_MODE !== "static";
 // The narrated-film capture (e2e/film) runs its own dev server beside any other build.
 const distOverride = process.env.QUESAR_NEXT_DIST;
 const persistent = process.env.QUESAR_NEXT_PERSISTENT === "true";

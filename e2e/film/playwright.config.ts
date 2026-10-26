@@ -17,7 +17,7 @@ export default defineConfig({
   webServer: {
     cwd: process.cwd(),
     // The static build's dev server (next.config.ts), with capture compiled in or out.
-    command: `node scripts/next-routes.ts && VITE_FILM_CAPTURE=${process.env.FILM_CAPTURE_BUILD ?? "1"} QUESAR_NEXT_DIST=.next-film-${process.env.FILM_TEST_PORT} bunx next dev --webpack --hostname 127.0.0.1 --port ${process.env.FILM_TEST_PORT}`,
+    command: `node scripts/next-routes.ts && VITE_FILM_CAPTURE=${process.env.FILM_CAPTURE_BUILD ?? "1"} QUESAR_NEXT_MODE=static QUESAR_NEXT_DIST=.next-film-${process.env.FILM_TEST_PORT} bunx next dev --webpack --hostname 127.0.0.1 --port ${process.env.FILM_TEST_PORT}`,
     url: baseURL,
     reuseExistingServer: false,
     timeout: 180000,

@@ -1,5 +1,6 @@
 import { defineConfig } from "@playwright/test";
-import { acceptanceTarget } from "./guard";
+import { acceptanceTarget, assertHarnessPorted } from "./guard";
+assertHarnessPorted();
 acceptanceTarget();
 export default defineConfig({
   testDir: ".",
