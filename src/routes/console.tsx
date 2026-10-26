@@ -39,6 +39,7 @@ export const Route = createFileRoute("/console")({
         content:
           "Private field notes, audited model chat and your encrypted conversation audits, scoped to your account.",
       },
+      { name: "robots", content: "noindex" },
     ],
   }),
   component: ConsolePage,
