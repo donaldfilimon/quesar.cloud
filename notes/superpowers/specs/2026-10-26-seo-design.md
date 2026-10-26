@@ -47,9 +47,14 @@ Gaps:
 - **Headings.** Client-only routes render a visually hidden `<h1>` (the route title) in
   the static HTML when the page itself has none; pages that already render an `<h1>`
   after hydration do not get a second one.
-- **llms.txt.** A force-static `/llms.txt` (like `feed.xml`) lists the site's name,
-  description and sections with links, derived from the search catalog, the single
-  inventory, so it never needs a hand-kept list.
+- **llms.txt.** `scripts/publish-static.ts` writes `/llms.txt` from the built pages
+  (`scripts/llms-txt.ts`): exactly the sitemap's pages, each with its own title and
+  meta description, its publication date and a `historical` note for superseded
+  posts. The first version (a force-static route over the search catalog) shipped
+  in #45 and failed a later claims audit: the catalog's short hints drop the status
+  wording and dates the pages carry (e.g. "Large model that trains and improves
+  Abbey" for a page marked partial). It was replaced the same day; `check:seo`
+  fails when `llms.txt` is missing, empty, or links a page the sitemap does not list.
 - **Gate.** `scripts/check-seo.ts` (`bun run check:seo [dir]`) checks a built site:
   title/description/canonical/og:image/lang present; descriptions ≤160; valid JSON-LD
   on every indexable page; exactly one `<h1>` on indexable pages; server-only pages are

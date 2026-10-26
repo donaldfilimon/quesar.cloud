@@ -1,5 +1,25 @@
 import { describe, expect, it } from "vitest";
-import { checkSite, pageFacts, sitemapLocations } from "./check-seo.ts";
+import { checkLlms, checkSite, pageFacts, sitemapLocations } from "./check-seo.ts";
+
+describe("checkLlms", () => {
+  const locs = ["https://quesar.cloud/", "https://quesar.cloud/about"];
+  it("passes when every link is a sitemap page", () => {
+    expect(
+      checkLlms(
+        "- [Home](https://quesar.cloud/): x\n- [About](https://quesar.cloud/about): y",
+        locs,
+      ),
+    ).toEqual([]);
+  });
+  it("flags a link the sitemap does not list", () => {
+    expect(checkLlms("- [Console](https://quesar.cloud/console): x", locs)).toEqual([
+      "llms.txt link not in sitemap: https://quesar.cloud/console",
+    ]);
+  });
+  it("flags an empty index", () => {
+    expect(checkLlms("# Quesar\n", locs)).toEqual(["llms.txt lists no pages"]);
+  });
+});
 
 type Options = {
   route?: string;

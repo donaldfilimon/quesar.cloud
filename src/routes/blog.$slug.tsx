@@ -45,9 +45,12 @@ function BlogPost() {
       </PageHero>
       <Section>
         {post.historical ? (
-          <Callout label="Historical" className="mb-10 max-w-3xl">
-            {post.historical}
-          </Callout>
+          // `data-historical-page` keeps the status on this post's llms.txt line (scripts/llms-txt.ts).
+          <div data-historical-page="">
+            <Callout label="Historical" className="mb-10 max-w-3xl">
+              {post.historical}
+            </Callout>
+          </div>
         ) : null}
         <MathArticleBody sections={post.body} />
         <div className="mt-14 flex max-w-3xl flex-wrap items-center justify-between gap-6 border-t border-border pt-8">
