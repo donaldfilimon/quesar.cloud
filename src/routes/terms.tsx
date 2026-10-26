@@ -1,10 +1,17 @@
 import { createFileRoute } from "@/framework/router";
 import { PageClose, PageHero, Section, Surface } from "@/components/site";
 import { termsSections } from "@/lib/mlai/pages";
-import { pageHead } from "@/lib/seo";
+import { extendDescription, pageHead } from "@/lib/seo";
+
+const lede =
+  "Last updated 22 September 2026. These terms cover the public website and in-browser app orientations.";
+const description = extendDescription(
+  "Terms of use for the public Quesar orientation site.",
+  lede.replace(/^Last updated[^.]*\.\s*/, ""),
+);
 
 export const Route = createFileRoute("/terms")({
-  head: () => pageHead("Terms — MLAI", "Terms of use for the public Quesar orientation site."),
+  head: () => pageHead("Terms — MLAI", description),
   component: TermsPage,
 });
 
@@ -14,7 +21,7 @@ function TermsPage() {
       <PageHero
         eyebrow="Terms"
         title="This site orients. It does not host your sessions."
-        lede="Last updated 22 September 2026. These terms cover the public website and in-browser app orientations."
+        lede={lede}
       />
       <Section>
         <div className="max-w-3xl space-y-6 text-sm leading-relaxed text-fg-muted">

@@ -8,7 +8,7 @@ import { Crumbs } from "@/components/site/crumbs";
 import { PageClose, PageHero, Pager, Section } from "@/components/site";
 import { docs } from "@/lib/mlai/categories/docs";
 import { docLd, jsonLdScript } from "@/lib/mlai/structured-data";
-import { pageHead } from "@/lib/seo";
+import { extendDescription, pageHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/docs/$slug")({
   // `docs` is only referenced from `loader` and `component`, which share one lazy
@@ -20,7 +20,12 @@ export const Route = createFileRoute("/docs/$slug")({
       throw redirect({ to: "/docs/$slug", params: { slug: "getting-started" }, statusCode: 301 });
     const doc = docs.find((item) => item.slug === params.slug);
     if (!doc) throw notFound();
-    return { title: doc.title, description: doc.description, ld: docLd(doc) };
+    const lead = doc.body[0]?.paragraphs?.[0]?.match(/^.*?[.!?](?=\s|$)/)?.[0];
+    return {
+      title: doc.title,
+      description: extendDescription(doc.description, lead),
+      ld: docLd(doc),
+    };
   },
   head: ({ loaderData }) => ({
     ...pageHead(
