@@ -1,12 +1,11 @@
 import { defineConfig } from "@playwright/test";
-import { acceptanceTarget, assertHarnessPorted } from "./guard";
-assertHarnessPorted();
+import { acceptanceTarget } from "./guard";
 acceptanceTarget();
 export default defineConfig({
   testDir: ".",
   testMatch: "ai-consent.acceptance.ts",
   workers: 1,
-  timeout: 300_000,
+  timeout: 600_000,
   expect: { timeout: 20_000 },
   outputDir: "../../test-results/ai-consent-acceptance",
   reporter: "list",

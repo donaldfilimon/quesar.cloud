@@ -10,6 +10,7 @@ import pg from "pg";
 import { migrate } from "../../scripts/migrate.ts";
 import { acceptanceTarget } from "./guard";
 import { cleanupOwnedResources, stopOwnedChild } from "./process-cleanup";
+import { callServerFn, serverFnPath } from "./server-fn";
 // Credentials exist only in child environments/browser memory. Never trace auth bodies/cookies.
 const adminUrl = acceptanceTarget();
 const run = `quesar_ai_${randomBytes(6).toString("hex")}`;
@@ -49,8 +50,11 @@ async function start(provider = true, encryption = true) {
     VITE_AUTH_ENABLED: "true",
     VITE_STATIC_SITE: "false",
     CRON_SECRET: secret,
+    QUESAR_NEXT_MODE: "server",
+    QUESAR_NEXT_DIST: ".next-acceptance",
+    NEXT_TELEMETRY_DISABLED: "1",
   };
-  // Explicitly override Vite .env values too: this run must never use remote credentials.
+  // Explicitly override .env values too: this run must never use remote credentials.
   for (const name of [
     "XAI_API_KEY",
     "CLOUDFLARE_AI_GATEWAY_URL",
@@ -82,12 +86,9 @@ async function start(provider = true, encryption = true) {
     [
       "--import",
       "./e2e/backend/ai-provider-fixture.ts",
-      "node_modules/vite/bin/vite.js",
-      "--host",
+      "e2e/backend/next-dev-server.ts",
       "localhost",
-      "--port",
       String(port),
-      "--strictPort",
     ],
     { env, stdio: "ignore" },
   );
@@ -103,17 +104,7 @@ async function start(provider = true, encryption = true) {
   throw new Error("Acceptance app did not become ready");
 }
 async function call(page: Page, module: string, method: string, data?: unknown): Promise<unknown> {
-  return page.evaluate(
-    async ({ module, method, data }) => {
-      const api = await import(/* @vite-ignore */ `/src/lib/${module}.ts`);
-      try {
-        return await api[method](data === undefined ? undefined : { data });
-      } catch (error) {
-        return { thrown: error instanceof Error ? error.message : "unknown" };
-      }
-    },
-    { module, method, data },
-  );
+  return callServerFn(page, `lib/${module}`, method, data);
 }
 async function signup(page: Page, email: string) {
   page.on("pageerror", (error) =>
@@ -179,40 +170,29 @@ test("all four AI surfaces enforce consent and sealed audits over real HTTP and 
   const page = await context.newPage();
   const otherContext = await browser.newContext();
   const other = await otherContext.newPage();
-  // Discover every consumer before account mutation; Vite may reload on first discovery.
-  for (let attempt = 0; attempt < 3; attempt++) {
-    try {
-      await page.goto(`${origin}/login`, { waitUntil: "networkidle" });
-      await page.evaluate(async () => {
-        for (const module of [
-          "lib/ai",
-          "lib/systems",
-          "lib/console",
-          "lib/profile",
-          "lib/auth/client",
-          "routes/abbey-bot",
-          "routes/dashboard",
-          "routes/console",
-          "components/apps/workspace-app",
-        ]) {
-          await import(
-            /* @vite-ignore */ `/src/${module}.tsx`.replace(/lib\/(.+)\.tsx$/, "lib/$1.ts")
-          );
-        }
-      });
-      await page.waitForLoadState("networkidle");
-      break;
-    } catch (error) {
-      if (attempt === 2) throw error;
-    }
-  }
+  // Compile every consumer route and the server-function dispatcher before account
+  // mutation: Next dev compiles each on first request.
+  for (const route of [
+    "/login",
+    "/profile",
+    "/abbey-bot",
+    "/dashboard",
+    "/console",
+    "/workspace",
+    "/console/workspace",
+  ])
+    await page.goto(`${origin}${route}`, { waitUntil: "networkidle" });
+  expect(await call(page, "console", "getConsoleStatus")).toMatchObject({
+    thrown: "Unauthorized",
+  });
   const owner = await signup(page, `${run}@example.invalid`);
   const bystander = await signup(other, `${run}-other@example.invalid`);
   await page.waitForLoadState("networkidle");
   receipt("authenticated synthetic owners ready");
-  expect(
-    await call(page, "ai", "askPersonaFromClient", { prompt: "refuse before consent" }),
-  ).toMatchObject({ ok: false, reason: "consent_required" });
+  expect(await call(page, "ai", "askPersona", { prompt: "refuse before consent" })).toMatchObject({
+    ok: false,
+    reason: "consent_required",
+  });
   expect(
     await call(page, "systems", "askDesk", { desk: "abbey", prompt: "refuse before consent" }),
   ).toMatchObject({ ok: false, reason: "consent_required" });
@@ -221,26 +201,27 @@ test("all four AI surfaces enforce consent and sealed audits over real HTTP and 
   await expect(page.getByRole("button", { name: "Send", exact: true })).toBeDisabled();
   await page.getByRole("button", { name: "Accept AI audit policy" }).click();
   await expect(page.getByRole("button", { name: "Withdraw consent" })).toBeVisible();
-  expect(
-    await call(other, "ai", "askPersonaFromClient", { prompt: "bystander refused" }),
-  ).toMatchObject({ ok: false, reason: "consent_required" });
+  expect(await call(other, "ai", "askPersona", { prompt: "bystander refused" })).toMatchObject({
+    ok: false,
+    reason: "consent_required",
+  });
   expect(
     await sql("select id from conversation_audits where user_id=$1", [bystander]),
   ).toHaveLength(0);
 
   // Shared policy load failure is visible, leaves input editable, and recovers explicitly.
-  await page.route("**/_serverFn/**", async (route) => {
-    if (route.request().method() === "GET")
-      await route.fulfill({ status: 503, body: "Synthetic policy unavailable" });
-    else await route.continue();
-  });
+  // The policy loads through getConsoleStatus; every other server function passes.
+  const policyLoad = `${origin}${serverFnPath("lib/console", "getConsoleStatus")}`;
+  await page.route(policyLoad, (route) =>
+    route.fulfill({ status: 503, body: "Synthetic policy unavailable" }),
+  );
   await page.goto(`${origin}/abbey-bot`);
   await expect(
     page.getByRole("alert").filter({ hasText: "AI policy could not be loaded" }),
   ).toBeVisible();
   await page.getByLabel("Ask Abbey, Aviva, or Abi").fill("policy retry draft");
   await expect(page.getByRole("button", { name: "Send", exact: true })).toBeDisabled();
-  await page.unroute("**/_serverFn/**");
+  await page.unroute(policyLoad);
   await page.getByRole("button", { name: "Retry policy" }).click();
   await expect(page.getByRole("button", { name: "Withdraw consent" })).toBeVisible();
   await expect(page.getByLabel("Ask Abbey, Aviva, or Abi")).toHaveValue("policy retry draft");
@@ -329,7 +310,7 @@ test("all four AI surfaces enforce consent and sealed audits over real HTTP and 
   await expect(page.getByRole("button", { name: "Withdraw consent" })).toBeVisible();
   await page.getByRole("button", { name: "Withdraw consent" }).click();
   await expect(page.getByRole("button", { name: "Accept AI audit policy" })).toBeVisible();
-  expect(await call(page, "ai", "askPersonaFromClient", { prompt: "withdrawn" })).toMatchObject({
+  expect(await call(page, "ai", "askPersona", { prompt: "withdrawn" })).toMatchObject({
     ok: false,
     reason: "consent_required",
   });
@@ -354,9 +335,10 @@ test("all four AI surfaces enforce consent and sealed audits over real HTTP and 
     await sql("drop trigger ai_insert_fault on conversation_audits");
     await sql("drop function ai_insert_fault()");
   }
-  expect(
-    await call(page, "ai", "askPersonaFromClient", { prompt: "FIXTURE_TIMEOUT" }),
-  ).toMatchObject({ ok: false, reason: "provider_error" });
+  expect(await call(page, "ai", "askPersona", { prompt: "FIXTURE_TIMEOUT" })).toMatchObject({
+    ok: false,
+    reason: "provider_error",
+  });
   const existing = await sql("select id from conversation_audits where user_id=$1", [owner]);
   expect(existing).toHaveLength(5);
   for (const row of existing)
@@ -377,7 +359,7 @@ test("all four AI surfaces enforce consent and sealed audits over real HTTP and 
     page.getByText("Live AI is off because audit encryption is not configured."),
   ).toBeVisible();
   const beforeMissingKey = (await providerCalls()).length;
-  expect(await call(page, "ai", "askPersonaFromClient", { prompt: "missing key" })).toMatchObject({
+  expect(await call(page, "ai", "askPersona", { prompt: "missing key" })).toMatchObject({
     ok: false,
     reason: "encryption_not_configured",
   });

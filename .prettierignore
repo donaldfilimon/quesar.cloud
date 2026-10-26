@@ -5,6 +5,7 @@ docs/
 .next/
 .next-server/
 .next-film-*/
+.next-acceptance/
 out/
 bun.lock
 # Standalone projects with their own toolchains (see their READMEs).

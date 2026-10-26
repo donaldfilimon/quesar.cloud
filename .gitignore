@@ -17,6 +17,7 @@ playwright-report/
 .next/
 .next-server/
 .next-film-*/
+.next-acceptance/
 out/
 next-env.d.ts
 # Python bytecode from scripts.
