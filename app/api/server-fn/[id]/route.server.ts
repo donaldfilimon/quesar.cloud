@@ -27,7 +27,13 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
   if (!registered) throw new Error("No server-function modules were bundled.");
   if (!isSameOriginRequest(request)) return new Response("Forbidden", { status: 403 });
   const { id } = await context.params;
-  const entry = lookupServerFn(decodeURIComponent(id));
+  let entry: ReturnType<typeof lookupServerFn>;
+  try {
+    entry = lookupServerFn(decodeURIComponent(id));
+  } catch {
+    // A malformed escape (`%E0%A4%A`) names no function.
+    entry = undefined;
+  }
   if (!entry)
     return reply(
       { ok: false, error: { name: "NotFound", message: "Unknown server function." } },
@@ -46,7 +52,14 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
   } catch (error) {
     const name = error instanceof Error ? error.name : "Error";
     const message = error instanceof Error ? error.message : "Server function failed.";
-    const status = name === "UnauthorizedError" ? 401 : 500;
+    // Errors that carry a client status (`CrossSiteRequestError` is 403) keep it.
+    const carried = (error as { status?: unknown } | null)?.status;
+    const status =
+      name === "UnauthorizedError"
+        ? 401
+        : typeof carried === "number" && carried >= 400 && carried < 500
+          ? carried
+          : 500;
     if (status === 500) console.error(`[server-fn] ${id}`, error);
     return reply({ ok: false, error: { name, message } }, status);
   }
