@@ -32,6 +32,9 @@ const SESSION_COLUMNS: &str =
 
 /// Stores a new session and returns it with the token to give the client.
 /// `ip` is the raw client IP; Better Auth stores and shows it.
+///
+/// The caller must emit the cookie only after the transaction commits: a
+/// rolled-back session leaves the client holding a token that matches nothing.
 pub async fn create(
     tx: &mut PgConnection,
     user_id: &str,
@@ -111,25 +114,47 @@ pub async fn resolve(
 }
 
 /// Extends `row` to a full lifetime when `UPDATE_AGE` has passed since its
-/// last extension. `None` when the row is gone (a concurrent revoke).
+/// last extension. `None` when the row is gone or expired (a concurrent revoke,
+/// or a caller holding a dead row).
+///
+/// The update is a compare-and-swap on the `expires_at` the caller read and
+/// requires the row to be unexpired at `now`, so it never revives a dead
+/// session, never shortens a newer refresh, and of two concurrent refreshes
+/// exactly one reports `refreshed = true`; the loser gets the winner's row.
 pub async fn refresh_if_due(
     pool: &PgPool,
     row: SessionRow,
     now: OffsetDateTime,
 ) -> Result<Option<(SessionRow, bool)>, AuthError> {
+    if row.expires_at <= now {
+        return Ok(None);
+    }
     if row.expires_at - SESSION_TTL + UPDATE_AGE > now {
         return Ok(Some((row, false)));
     }
     let refreshed: Option<SessionRow> = sqlx::query_as(&format!(
         "update auth_sessions set expires_at = $2, updated_at = $3
-         where id = $1 returning {SESSION_COLUMNS}"
+         where id = $1 and expires_at = $4 and expires_at > $3
+         returning {SESSION_COLUMNS}"
     ))
     .bind(&row.id)
     .bind(now + SESSION_TTL)
     .bind(now)
+    .bind(row.expires_at)
     .fetch_optional(pool)
     .await?;
-    Ok(refreshed.map(|row| (row, true)))
+    if let Some(updated) = refreshed {
+        return Ok(Some((updated, true)));
+    }
+    // Lost a race: the row is revoked, expired, or already refreshed.
+    let current: Option<SessionRow> = sqlx::query_as(&format!(
+        "select {SESSION_COLUMNS} from auth_sessions where id = $1 and expires_at > $2"
+    ))
+    .bind(&row.id)
+    .bind(now)
+    .fetch_optional(pool)
+    .await?;
+    Ok(current.map(|row| (row, false)))
 }
 
 /// Revokes one of the user's own sessions. False when the id is not theirs.
@@ -216,6 +241,14 @@ pub fn set_cookie(token: &SecretToken) -> String {
     cookie_attributes(token.expose(), SESSION_TTL.whole_seconds())
 }
 
+/// The `Set-Cookie` value that re-issues a presented token after `resolve`
+/// reported `refreshed`, so the browser cookie lives as long as the session.
+/// `None` unless the text passes the same 43-character base64url gate as
+/// [`read_cookie`]; this is the only way to turn presented text into a cookie.
+pub fn set_cookie_for_presented(token: &str) -> Option<String> {
+    well_formed(token).then(|| cookie_attributes(token, SESSION_TTL.whole_seconds()))
+}
+
 /// The `Set-Cookie` value that removes the session cookie.
 pub fn clear_cookie() -> String {
     cookie_attributes("", 0)
@@ -235,9 +268,12 @@ pub fn read_cookie(headers: &HeaderMap) -> Option<String> {
             let (name, value) = pair.trim().split_once('=')?;
             (name == COOKIE_NAME).then_some(value)
         })?;
-    let well_formed = value.len() == TOKEN_LEN
+    well_formed(value).then(|| value.to_owned())
+}
+
+fn well_formed(value: &str) -> bool {
+    value.len() == TOKEN_LEN
         && value
             .bytes()
-            .all(|b| b.is_ascii_alphanumeric() || b == b'-' || b == b'_');
-    well_formed.then(|| value.to_owned())
+            .all(|b| b.is_ascii_alphanumeric() || b == b'-' || b == b'_')
 }

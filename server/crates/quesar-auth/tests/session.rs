@@ -406,3 +406,103 @@ fn read_cookie_cases() {
         Some(url)
     );
 }
+
+#[tokio::test]
+async fn refresh_never_revives_an_expired_row() {
+    let db = migrated().await;
+    insert_user(&db.pool, "u1").await;
+    let (row, token) = make(&db.pool, "u1", T0).await;
+    let dead = T0 + SESSION_TTL + hours(1);
+    assert!(
+        session::refresh_if_due(&db.pool, row.clone(), dead)
+            .await
+            .unwrap()
+            .is_none()
+    );
+    let stored: OffsetDateTime = sqlx::query_scalar("select expires_at from auth_sessions")
+        .fetch_one(&db.pool)
+        .await
+        .unwrap();
+    assert_eq!(stored, row.expires_at);
+    assert!(
+        session::resolve(&db.pool, token.expose(), dead)
+            .await
+            .unwrap()
+            .is_none()
+    );
+    db.cleanup().await;
+}
+
+#[tokio::test]
+async fn two_refreshes_from_the_same_row_report_one_refresh() {
+    let db = migrated().await;
+    insert_user(&db.pool, "u1").await;
+    let (row, _) = make(&db.pool, "u1", T0).await;
+    let first_at = T0 + hours(30);
+    let second_at = T0 + hours(29); // an older request finishing later
+    let (a, a_refreshed) = session::refresh_if_due(&db.pool, row.clone(), first_at)
+        .await
+        .unwrap()
+        .unwrap();
+    let (b, b_refreshed) = session::refresh_if_due(&db.pool, row, second_at)
+        .await
+        .unwrap()
+        .unwrap();
+    assert!(a_refreshed);
+    assert!(!b_refreshed);
+    // The loser sees the winner's row and does not shorten it.
+    assert_eq!(b.expires_at, a.expires_at);
+    let stored: OffsetDateTime = sqlx::query_scalar("select expires_at from auth_sessions")
+        .fetch_one(&db.pool)
+        .await
+        .unwrap();
+    assert_eq!(stored, first_at + SESSION_TTL);
+    db.cleanup().await;
+}
+
+#[tokio::test]
+async fn refreshed_session_reissues_the_cookie() {
+    let db = migrated().await;
+    insert_user(&db.pool, "u1").await;
+    let (_, token) = make(&db.pool, "u1", T0).await;
+    let mut request = HeaderMap::new();
+    request.insert(
+        header::COOKIE,
+        HeaderValue::from_str(&format!("{COOKIE_NAME}={}", token.expose())).unwrap(),
+    );
+    let presented = session::read_cookie(&request).unwrap();
+    let later = T0 + hours(30);
+    let (_, _, refreshed) = session::resolve(&db.pool, &presented, later)
+        .await
+        .unwrap()
+        .unwrap();
+    assert!(refreshed);
+    assert_eq!(
+        session::set_cookie_for_presented(&presented).unwrap(),
+        format!(
+            "{COOKIE_NAME}={}; Path=/; Max-Age=604800; HttpOnly; Secure; SameSite=Lax",
+            token.expose()
+        )
+    );
+    assert!(session::set_cookie_for_presented("short").is_none());
+    assert!(session::set_cookie_for_presented(&format!("{}; Domain=x", "A".repeat(31))).is_none());
+    db.cleanup().await;
+}
+
+#[tokio::test]
+async fn a_rolled_back_creation_does_not_resolve() {
+    let db = migrated().await;
+    insert_user(&db.pool, "u1").await;
+    let mut tx = db.pool.begin().await.unwrap();
+    let (_, token) = session::create(&mut tx, "u1", None, None, T0)
+        .await
+        .unwrap();
+    tx.rollback().await.unwrap();
+    assert!(
+        session::resolve(&db.pool, token.expose(), T0)
+            .await
+            .unwrap()
+            .is_none()
+    );
+    db.cleanup().await;
+}
