@@ -10,7 +10,7 @@ publish.workspace = true
 workspace = true
 
 [dependencies]
-argon2 = "0.5"
+argon2 = { version = "0.5", features = ["zeroize"] }
 base64 = "0.22"
 http = "1"
 rand = "0.8"

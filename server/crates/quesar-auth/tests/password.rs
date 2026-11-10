@@ -2,8 +2,7 @@ use std::sync::Mutex;
 
 use argon2::password_hash::PasswordHash;
 use quesar_auth::password::{
-    Argon2Hasher, Password, PasswordHasher, PhcString, dummy_hash, hash, verify,
-    verify_unknown_user,
+    Argon2Hasher, DummyHash, Password, PasswordHasher, PhcString, hash, verify, verify_unknown_user,
 };
 use quesar_auth::validate::{self, ValidationError};
 
@@ -23,13 +22,30 @@ fn hash_has_owasp_parameters() {
         "{}",
         phc.as_str()
     );
-    let parsed = PasswordHash::new(dummy_hash().as_str()).unwrap();
-    assert_eq!(parsed.algorithm.as_str(), "argon2id");
+    let dummy = DummyHash::new(&Argon2Hasher).unwrap();
     assert!(
-        dummy_hash()
+        dummy
+            .phc()
             .as_str()
             .starts_with("$argon2id$v=19$m=19456,t=2,p=1$")
     );
+}
+
+#[test]
+fn dummy_hash_does_the_same_work_as_a_real_hash() {
+    let dummy = DummyHash::new(&Argon2Hasher).unwrap();
+    let real = hash(&Password::new("a real password")).unwrap();
+    let d = PasswordHash::new(dummy.phc().as_str()).unwrap();
+    let r = PasswordHash::new(real.as_str()).unwrap();
+    assert_eq!(d.algorithm, r.algorithm);
+    assert_eq!(d.version, r.version);
+    for name in ["m", "t", "p"] {
+        let get = |h: &PasswordHash| h.params.get(name).map(|v| v.to_string());
+        assert!(get(&d).is_some());
+        assert_eq!(get(&d), get(&r), "param {name}");
+    }
+    assert_eq!(d.hash.unwrap().len(), r.hash.unwrap().len());
+    assert_eq!(d.salt.unwrap().len(), r.salt.unwrap().len());
 }
 
 struct Counting(Mutex<Vec<String>>);
@@ -47,11 +63,16 @@ impl PasswordHasher for Counting {
 #[test]
 fn unknown_user_verifies_once_against_dummy_hash() {
     let counter = Counting(Mutex::new(Vec::new()));
-    assert!(!verify_unknown_user(&counter, &Password::new("whatever1")));
+    let dummy = DummyHash::new(&Argon2Hasher).unwrap();
+    assert!(!verify_unknown_user(
+        &counter,
+        &dummy,
+        &Password::new("whatever1")
+    ));
     let calls = counter.0.lock().unwrap();
-    assert_eq!(calls.as_slice(), [dummy_hash().as_str().to_owned()]);
+    assert_eq!(calls.as_slice(), [dummy.phc().as_str().to_owned()]);
     // The real hasher also rejects it.
-    assert!(!Argon2Hasher.verify(&Password::new("whatever1"), dummy_hash()));
+    assert!(!Argon2Hasher.verify(&Password::new("whatever1"), dummy.phc()));
 }
 
 #[test]
@@ -59,7 +80,8 @@ fn debug_is_redacted() {
     let shown = format!("{:?}", Password::new("hunter2-secret"));
     assert!(!shown.contains("hunter2"), "{shown}");
     assert!(shown.contains("redacted"));
-    assert!(!format!("{:?}", dummy_hash()).contains("argon2"));
+    let dummy = DummyHash::new(&Argon2Hasher).unwrap();
+    assert!(!format!("{dummy:?}").contains("argon2"));
 }
 
 #[test]
@@ -95,7 +117,41 @@ fn emails() {
         validate::email("  Ada@Example.COM ").unwrap(),
         "ada@example.com"
     );
-    for bad in ["a@b", "@b.c", "a b@c.d", "", "a@@b.c", "a@b..c", "a@.c.d"] {
+    for ok in [
+        "a+tag@example.com",
+        "o'brien@example.com",
+        "a.b-c_d@sub.example.co.uk",
+        "a@my-host.example.com",
+        "x'.y@example.com",
+        "a@1b.example.com",
+    ] {
+        assert!(validate::email(ok).is_ok(), "{ok:?}");
+    }
+    for bad in [
+        "a@b",
+        "@b.c",
+        "a b@c.d",
+        "",
+        "a@@b.c",
+        "a@b..c",
+        "a@.c.d",
+        "a@b.c",
+        "a..b@x.com",
+        ".a@x.com",
+        "a.@x.com",
+        "a'@x.com",
+        "a<b>@x.com",
+        "a\"b@x.com",
+        "a@-b.com",
+        "a@b.123",
+        "a@b.c1",
+        "a@b_c.com",
+        "é@x.com",
+        "a@exämple.com",
+        "a\u{200b}b@x.com",
+        "\u{feff}a@x.com",
+        "a@x.com\u{200b}",
+    ] {
         assert_eq!(
             validate::email(bad),
             Err(ValidationError::InvalidEmail),

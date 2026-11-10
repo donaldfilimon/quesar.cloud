@@ -56,25 +56,46 @@ pub fn display_name(input: &str) -> Result<String, ValidationError> {
     Ok(name.to_owned())
 }
 
-/// Trim, lowercase and syntax-check. Deliberately small: exactly one `@`, a
-/// non-empty local part, a domain with a dot whose labels are non-empty, and no
-/// whitespace or control characters. Not looser than zod's `email()` for these
-/// cases; it may be stricter on exotic quoted local parts, which is acceptable.
+/// Trim, lowercase and syntax-check, matching zod's `email()` regex exactly
+/// (the rule Better Auth's sign-in applies):
+/// `^(?:[A-Za-z0-9_'+\-]+\.)*[A-Za-z0-9_'+\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\-]*\.)+[A-Za-z]{2,}$`.
+///
+/// Local part: ASCII runs of `[A-Za-z0-9_'+-]` separated by single dots, the
+/// last character not an apostrophe. Domain: one or more labels that start
+/// alphanumeric (then alphanumerics or hyphens), then an alphabetic TLD of 2+
+/// letters. Anything else, including all non-ASCII, is refused.
 pub fn email(input: &str) -> Result<String, ValidationError> {
     let email = input.trim().to_lowercase();
-    let bad = email.is_empty()
-        || email.len() > 254
-        || email.chars().any(|c| c.is_whitespace() || c.is_control());
-    let mut parts = email.split('@');
-    let (local, domain) = match (parts.next(), parts.next(), parts.next()) {
-        (Some(local), Some(domain), None) => (local, domain),
-        _ => return Err(ValidationError::InvalidEmail),
-    };
-    let domain_ok = domain.contains('.') && domain.split('.').all(|label| !label.is_empty());
-    if bad || local.is_empty() || !domain_ok {
-        return Err(ValidationError::InvalidEmail);
+    if zod_email(&email) {
+        Ok(email)
+    } else {
+        Err(ValidationError::InvalidEmail)
     }
-    Ok(email)
+}
+
+fn zod_email(email: &str) -> bool {
+    let Some((local, domain)) = email.split_once('@') else {
+        return false;
+    };
+    let local_char = |c: char| c.is_ascii_alphanumeric() || matches!(c, '_' | '\'' | '+' | '-');
+    let local_ok = !local.is_empty()
+        && local
+            .split('.')
+            .all(|run| !run.is_empty() && run.chars().all(local_char))
+        && !local.ends_with('\'');
+    let labels: Vec<&str> = domain.split('.').collect();
+    let Some((tld, labels)) = labels.split_last() else {
+        return false;
+    };
+    let domain_ok = !labels.is_empty()
+        && labels.iter().all(|label| {
+            let mut chars = label.chars();
+            chars.next().is_some_and(|c| c.is_ascii_alphanumeric())
+                && chars.all(|c| c.is_ascii_alphanumeric() || c == '-')
+        })
+        && tld.len() >= 2
+        && tld.chars().all(|c| c.is_ascii_alphabetic());
+    local_ok && domain_ok
 }
 
 /// Require 8..=128 characters.

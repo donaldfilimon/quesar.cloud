@@ -5,7 +5,6 @@
 //! verified against [`dummy_hash`] so the work done matches a real account.
 
 use std::fmt;
-use std::sync::OnceLock;
 
 use argon2::password_hash::rand_core::OsRng;
 use argon2::password_hash::{PasswordHash, PasswordHasher as _, PasswordVerifier, SaltString};
@@ -106,22 +105,39 @@ pub fn verify(password: &Password, hash: &PhcString) -> bool {
     Argon2Hasher.verify(password, hash)
 }
 
-/// A hash with the production parameters, made once from a random password
-/// nobody knows. Verifying against it costs the same as a real account.
-pub static DUMMY_HASH: OnceLock<PhcString> = OnceLock::new();
+/// A hash with the production parameters, made from a random password nobody
+/// knows. Verifying against it costs the same as a real account.
+///
+/// Build it once at startup with [`DummyHash::new`] (it takes a 19 MiB hash, so
+/// never lazily inside a request) and hold it where sign-in runs.
+pub struct DummyHash(PhcString);
 
-pub fn dummy_hash() -> &'static PhcString {
-    DUMMY_HASH.get_or_init(|| {
+impl DummyHash {
+    /// Hash a random password. Fails if hashing fails; there is no fallback,
+    /// because a placeholder would make unknown users cheaper to reject.
+    pub fn new(hasher: &dyn PasswordHasher) -> Result<Self, HashError> {
         let random = crate::token::SecretToken::generate();
-        // Hashing with fixed parameters cannot fail; if it somehow does, an
-        // unparseable placeholder still makes `verify` fail closed.
-        hash(&Password::new(random.expose())).unwrap_or_else(|_| PhcString::new("$invalid"))
-    })
+        hasher.hash(&Password::new(random.expose())).map(Self)
+    }
+
+    pub fn phc(&self) -> &PhcString {
+        &self.0
+    }
+}
+
+impl fmt::Debug for DummyHash {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str("DummyHash([redacted])")
+    }
 }
 
 /// Verify a password for an email with no usable credential: exactly one hasher
-/// call, against [`dummy_hash`]. Always returns false for the caller to ignore.
-pub fn verify_unknown_user(hasher: &dyn PasswordHasher, password: &Password) -> bool {
-    hasher.verify(password, dummy_hash());
+/// call, against the prepared dummy hash. Always returns false.
+pub fn verify_unknown_user(
+    hasher: &dyn PasswordHasher,
+    dummy: &DummyHash,
+    password: &Password,
+) -> bool {
+    hasher.verify(password, dummy.phc());
     false
 }
