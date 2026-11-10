@@ -10,6 +10,7 @@
 pub mod body;
 pub mod error;
 pub mod fn_router;
+pub mod functions;
 
 use std::sync::Arc;
 
@@ -20,6 +21,8 @@ use axum::http::header::CACHE_CONTROL;
 use axum::middleware::{self, Next};
 use axum::response::Response;
 use quesar_auth::AuthConfig;
+use quesar_contract::commerce::CommerceReadiness;
+use quesar_services::turnstile::TurnstileConfig;
 
 pub use error::ApiError;
 pub use fn_router::FnRouter;
@@ -39,6 +42,12 @@ pub struct PublicServices {
     /// The origins [`SameOrigin`] accepts: the configured public origin, plus
     /// the local development origins outside production.
     pub trusted_origins: Vec<String>,
+    /// Turnstile settings, read once at startup.
+    pub turnstile: TurnstileConfig,
+    /// `QUASAR_SERVICE_ORIGIN` normalised, or `None` when unset or malformed.
+    pub quasar_default_origin: Option<String>,
+    /// What `commerce.getCommerceReadiness` answers.
+    pub commerce: CommerceReadiness,
 }
 
 impl PublicServices {
@@ -57,13 +66,16 @@ impl PublicServices {
         );
         Self {
             trusted_origins: auth.trusted_origins,
+            turnstile: functions::config::turnstile(environment),
+            quasar_default_origin: functions::config::quasar_default_origin(environment),
+            commerce: functions::config::commerce(environment),
         }
     }
 }
 
-/// The functions the server offers. Tasks 3, 5 and 6 register theirs here.
+/// The functions the server offers. Tasks 5 and 6 register theirs here.
 pub fn functions() -> FnRouter {
-    FnRouter::new()
+    functions::register(FnRouter::new())
 }
 
 /// An unknown path below the mount: JSON, never the static site's HTML 404.

@@ -6,6 +6,15 @@
 //!
 //! `rate_limit` is the database-backed fixed-window limiter of
 //! `src/lib/server/rate-limit.server.ts`, over the same `rate_limits` table.
+//!
+//! `text` holds the string helpers that measure and trim as ECMAScript does.
+//! `turnstile`, `quasar` and `commerce` are the configuration reads behind the
+//! public functions: they take the environment as plain values and return their
+//! own types, not wire types.
 
+pub mod commerce;
 pub mod crypto;
+pub mod quasar;
 pub mod rate_limit;
+pub mod text;
+pub mod turnstile;

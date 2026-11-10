@@ -25,6 +25,7 @@ http = "1"
 sha2 = "0.10"
 zeroize = "1"
 sqlx = { version = "0.8", default-features = false, features = ["postgres", "runtime-tokio", "tls-rustls-ring-webpki"] }
+url = "2"
 
 [dev-dependencies]
 serde = { version = "1", features = ["derive"] }
