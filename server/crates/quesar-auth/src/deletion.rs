@@ -9,8 +9,9 @@
 //!    them.
 //! 2. Workspace grants are revoked at the provider ([`WorkspaceRevoker`]),
 //!    best effort once a real revoker is wired. Until then (the default hook)
-//!    a user with any workspace connection is refused, with nothing changed. These are external calls, so they run before and outside
-//!    the transaction and cannot be rolled back.
+//!    a user with any workspace connection is refused, with nothing changed.
+//!    These are external calls, so they run before and outside the
+//!    transaction and cannot be rolled back.
 //! 3. One transaction deletes the per-user rows, unlinks inquiries and, last,
 //!    deletes the `"user"` row, whose cascades remove the credentials, linked
 //!    accounts, sessions, passkeys and sign-in flows. Any failure rolls back
