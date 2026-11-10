@@ -1,6 +1,7 @@
 {
   "extends": "./tsconfig.json",
   "include": [
+    "src/framework/env.d.ts",
     "notes/launch/**/*.ts",
     "notes/launch/**/*.tsx",
     "notes/verification/2026-10-09-finishing/evidence/**/*.ts",

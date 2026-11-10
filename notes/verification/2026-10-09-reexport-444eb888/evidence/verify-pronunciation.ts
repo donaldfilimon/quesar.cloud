@@ -1,9 +1,9 @@
 import type { TimingReceipt } from "./evidence-types.ts";
 import { readFile, writeFile } from "node:fs/promises";
 import { createHash } from "node:crypto";
-import { filmCollection } from "/Users/donaldfilimon/dev/active/quesar.cloud/src/lib/mlai/categories/film-collection.ts";
-import { PERSONAS } from "/Users/donaldfilimon/dev/active/quesar.cloud/src/cinematic/film/tokens.ts";
-import { pronounce } from "/Users/donaldfilimon/dev/active/quesar.cloud/src/cinematic/film/pronunciation.ts";
+import { filmCollection } from "../../../../src/lib/mlai/categories/film-collection.ts";
+import { PERSONAS } from "../../../../src/cinematic/film/tokens.ts";
+import { pronounce } from "../../../../src/cinematic/film/pronunciation.ts";
 const hash = (s: string | Uint8Array) => createHash("sha256").update(s).digest("hex");
 const results = [];
 for (const film of filmCollection) {
