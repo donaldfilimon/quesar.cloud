@@ -132,6 +132,11 @@ impl AdminEmails {
         self.0.contains(&email.trim().to_lowercase())
     }
 
+    /// The lowercased addresses, for [`crate::admin::decide_admin`].
+    pub fn as_set(&self) -> &HashSet<String> {
+        &self.0
+    }
+
     pub fn len(&self) -> usize {
         self.0.len()
     }

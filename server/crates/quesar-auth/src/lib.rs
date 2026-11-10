@@ -5,6 +5,7 @@
 //! injectable clock, the row types over migration `0010_rust_auth.sql` and the
 //! configuration read from the environment.
 
+pub mod admin;
 pub mod clock;
 pub mod config;
 pub mod email_password;
