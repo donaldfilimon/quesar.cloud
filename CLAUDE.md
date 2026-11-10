@@ -10,7 +10,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Commands
 
-bun is the package manager (`bun.lock` is the only lockfile that counts; a stray `package-lock.json` came in with `4d2d028c` and is not used, so never run `npm install` or update it). It must be Bun >= 1.4.2 (`packageManager`/`engines.bun`): `bun.lock` is lockfileVersion 2, which older Bun rejects with "Unknown lockfile version". In Claude Code on the web, `.claude/hooks/session-start.sh` upgrades an older Bun and runs `bun install --frozen-lockfile` at session start. The tools themselves run on Node (>= 24): use `bun run <script>`, never `bun --bun`, and never bare `bun test` (that is Bun's own runner, not vitest).
+bun is the package manager (`bun.lock`; there is no `package-lock.json`). It must be Bun >= 1.4.2 (`packageManager`/`engines.bun`): `bun.lock` is lockfileVersion 2, which older Bun rejects with "Unknown lockfile version". In Claude Code on the web, `.claude/hooks/session-start.sh` upgrades an older Bun and runs `bun install --frozen-lockfile` at session start. The tools themselves run on Node (>= 24): use `bun run <script>`, never `bun --bun`, and never bare `bun test` (that is Bun's own runner, not vitest).
 
 ```bash
 bun install          # --frozen-lockfile in the session-start hook
