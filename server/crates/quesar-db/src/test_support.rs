@@ -11,8 +11,13 @@ use sqlx::{Connection, PgConnection, PgPool};
 
 static COUNTER: AtomicU32 = AtomicU32::new(0);
 
+/// An empty or whitespace-only value (`TEST_DATABASE_URL= cargo test`) is unset.
+fn configured_url(raw: Option<String>) -> Option<String> {
+    raw.filter(|url| !url.trim().is_empty())
+}
+
 fn admin_options() -> PgConnectOptions {
-    let Ok(url) = std::env::var("TEST_DATABASE_URL") else {
+    let Some(url) = configured_url(std::env::var("TEST_DATABASE_URL").ok()) else {
         panic!(
             "TEST_DATABASE_URL is not set. Run `scripts/dev-postgres.sh start` and export the URL it prints."
         );
@@ -95,5 +100,21 @@ async fn drop_database(admin: &PgConnectOptions, name: &str) {
         let _ = sqlx::query(&format!("DROP DATABASE IF EXISTS \"{name}\" WITH (FORCE)"))
             .execute(&mut connection)
             .await;
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::configured_url;
+
+    #[test]
+    fn a_blank_url_counts_as_unset() {
+        assert_eq!(configured_url(None), None);
+        assert_eq!(configured_url(Some(String::new())), None);
+        assert_eq!(configured_url(Some(" \t\n".into())), None);
+        assert_eq!(
+            configured_url(Some("postgres://h/db".into())),
+            Some("postgres://h/db".into())
+        );
     }
 }

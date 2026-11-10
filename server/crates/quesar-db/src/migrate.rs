@@ -9,7 +9,7 @@
 use std::path::{Path, PathBuf};
 
 use sqlx::postgres::PgConnection;
-use sqlx::{PgPool, Row};
+use sqlx::{Connection, PgPool, Row};
 
 /// The two-integer advisory lock key `scripts/migrate.ts` takes.
 const LOCK_KEY: (i32, i32) = (716_483, 1);
@@ -41,10 +41,24 @@ impl std::fmt::Display for MigrateError {
                 )
             }
             Self::ReadFile { name, source } => write!(f, "cannot read migration {name}: {source}"),
-            Self::Database(source) => write!(f, "migration bookkeeping failed: {source}"),
-            Self::Apply { name, source } => write!(f, "error applying {name}: {source}"),
+            // The driver's message can quote SQL, so only the SQLSTATE is shown;
+            // the full error stays reachable through `source()`.
+            Self::Database(source) => {
+                write!(f, "migration bookkeeping failed{}", sqlstate(source))
+            }
+            Self::Apply { name, source } => {
+                write!(f, "error applying {name}{}", sqlstate(source))
+            }
         }
     }
+}
+
+/// ` (SQLSTATE 42P01)` when the database reported a code, else nothing.
+fn sqlstate(error: &sqlx::Error) -> String {
+    error
+        .as_database_error()
+        .and_then(|database| database.code())
+        .map_or_else(String::new, |code| format!(" (SQLSTATE {code})"))
 }
 
 impl std::error::Error for MigrateError {
@@ -65,23 +79,26 @@ impl From<sqlx::Error> for MigrateError {
 /// Applies the pending `*.sql` files directly in `dir` (subdirectories such as
 /// `migrations/auth/` are ignored) and returns their names in apply order.
 pub async fn migrate(pool: &PgPool, dir: &Path) -> Result<Vec<String>, MigrateError> {
-    let mut connection = pool.acquire().await?;
+    // Detached, so this connection is never pooled: if the future is dropped
+    // while the session lock is held (a timeout, shutdown), dropping the
+    // connection closes it and Postgres releases the lock with the session.
+    // Any other advisory-lock holder should do the same.
+    let mut connection = pool.acquire().await?.detach();
     // Session lock: lives on this exact connection through discovery and recording.
     sqlx::query("SELECT pg_advisory_lock($1, $2)")
         .bind(LOCK_KEY.0)
         .bind(LOCK_KEY.1)
-        .execute(&mut *connection)
+        .execute(&mut connection)
         .await?;
     let outcome = apply_pending(&mut connection, dir).await;
     let unlocked = sqlx::query("SELECT pg_advisory_unlock($1, $2)")
         .bind(LOCK_KEY.0)
         .bind(LOCK_KEY.1)
-        .execute(&mut *connection)
+        .execute(&mut connection)
         .await;
-    if unlocked.is_err() {
-        // A lock that may still be held must not go back into the pool.
-        connection.close_on_drop();
-    }
+    // Closing ends the session, which releases the lock even if unlocking failed.
+    // A failure to close adds nothing: the connection is gone either way.
+    let _ = connection.close().await;
     let applied = outcome?;
     unlocked?;
     Ok(applied)
@@ -150,10 +167,11 @@ async fn list_migrations(dir: &Path) -> Result<Vec<String>, MigrateError> {
     let mut entries = tokio::fs::read_dir(dir).await.map_err(read_dir_error)?;
     let mut names = Vec::new();
     while let Some(entry) = entries.next_entry().await.map_err(read_dir_error)? {
-        let is_file = entry
-            .file_type()
+        // `metadata` follows symlinks (unlike `DirEntry::file_type`), so a
+        // symlinked .sql file counts; a dangling link or a link to a directory does not.
+        let is_file = tokio::fs::metadata(entry.path())
             .await
-            .map(|kind| kind.is_file())
+            .map(|metadata| metadata.is_file())
             .unwrap_or(false);
         if let Ok(name) = entry.file_name().into_string()
             && is_file

@@ -154,3 +154,92 @@ async fn a_missing_directory_is_an_error_and_releases_the_lock() {
     assert!(migrate(&db.pool, dir.path()).await.unwrap().is_empty());
     db.cleanup().await;
 }
+
+/// Whether the migration advisory lock is free right now, asked from a fresh
+/// connection (the lock is per session, so the asking session must be another).
+async fn lock_is_free(pool: &PgPool) -> bool {
+    let mut connection = pool.acquire().await.unwrap();
+    let got: bool = sqlx::query_scalar("SELECT pg_try_advisory_lock(716483, 1)")
+        .fetch_one(&mut *connection)
+        .await
+        .unwrap();
+    if got {
+        sqlx::query("SELECT pg_advisory_unlock(716483, 1)")
+            .execute(&mut *connection)
+            .await
+            .unwrap();
+    }
+    got
+}
+
+#[tokio::test]
+async fn a_cancelled_run_does_not_leave_the_lock_on_a_pooled_connection() {
+    let db = TestDatabase::create().await;
+    let dir = tempfile::tempdir().unwrap();
+    // Holds the lock for a moment, so the timeout below fires between lock and unlock.
+    std::fs::write(dir.path().join("0001_slow.sql"), "SELECT pg_sleep(1.5);").unwrap();
+    let cancelled = tokio::time::timeout(
+        std::time::Duration::from_millis(300),
+        migrate(&db.pool, dir.path()),
+    )
+    .await;
+    assert!(cancelled.is_err(), "the run should have been cancelled");
+
+    // The abandoned session ends once its statement finishes, which frees the
+    // lock. A connection still pooled with the lock would hold it for good.
+    let mut free = false;
+    for _ in 0..50 {
+        if lock_is_free(&db.pool).await {
+            free = true;
+            break;
+        }
+        tokio::time::sleep(std::time::Duration::from_millis(200)).await;
+    }
+    assert!(free, "the advisory lock was never released");
+    let applied = migrate(&db.pool, dir.path()).await.unwrap();
+    assert_eq!(applied, ["0001_slow.sql"]);
+    db.cleanup().await;
+}
+
+#[cfg(unix)]
+#[tokio::test]
+async fn a_symlinked_sql_file_is_applied() {
+    let db = TestDatabase::create().await;
+    let outside = tempfile::tempdir().unwrap();
+    let target = outside.path().join("shared.sql");
+    std::fs::write(&target, "CREATE TABLE linked_table (id INT);").unwrap();
+    let dir = tempfile::tempdir().unwrap();
+    std::os::unix::fs::symlink(&target, dir.path().join("0001_linked.sql")).unwrap();
+    // A symlink to a directory and a dangling one are not files.
+    std::os::unix::fs::symlink(outside.path(), dir.path().join("0002_dir.sql")).unwrap();
+    std::os::unix::fs::symlink("/nonexistent/x.sql", dir.path().join("0003_dangling.sql")).unwrap();
+
+    let applied = migrate(&db.pool, dir.path()).await.unwrap();
+    assert_eq!(applied, ["0001_linked.sql"]);
+    let found: bool = sqlx::query_scalar("SELECT to_regclass('linked_table') IS NOT NULL")
+        .fetch_one(&db.pool)
+        .await
+        .unwrap();
+    assert!(found);
+    db.cleanup().await;
+}
+
+#[tokio::test]
+async fn error_messages_name_the_file_and_sqlstate_but_not_the_driver_text() {
+    let db = TestDatabase::create().await;
+    let dir = tempfile::tempdir().unwrap();
+    std::fs::write(
+        dir.path().join("0001_bad.sql"),
+        "SELECT * FROM table_with_a_distinctive_name;",
+    )
+    .unwrap();
+    let error = migrate(&db.pool, dir.path()).await.unwrap_err();
+    let message = error.to_string();
+    assert!(message.contains("0001_bad.sql"), "{message}");
+    assert!(message.contains("42P01"), "{message}");
+    assert!(!message.contains("distinctive"), "{message}");
+    // The driver error stays reachable through source().
+    let source = std::error::Error::source(&error).unwrap().to_string();
+    assert!(source.contains("distinctive"), "{source}");
+    db.cleanup().await;
+}

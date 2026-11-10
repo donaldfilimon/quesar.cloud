@@ -81,9 +81,6 @@ async fn run_migrate() -> Result<(), Box<dyn std::error::Error>> {
         .unwrap_or(DEFAULT_MIGRATIONS_DIR);
     let pool = quesar_db::connect(url).await?;
     let applied = quesar_db::migrate(&pool, std::path::Path::new(dir)).await?;
-    for name in &applied {
-        tracing::info!(migration = %name, "applied");
-    }
     tracing::info!(applied = applied.len(), "migrations up to date");
     Ok(())
 }
