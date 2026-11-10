@@ -73,6 +73,8 @@ struct State_ {
     token: TokenBehavior,
     jwks: String,
     userinfo: String,
+    /// (`user.fields` value, status, body) answers that win over `userinfo`.
+    userinfo_for: Vec<(String, u16, String)>,
     requests: Vec<Recorded>,
 }
 
@@ -159,6 +161,7 @@ async fn handle(State(shared): State<Arc<Shared>>, request: Request) -> Response
             .collect(),
     };
     let path = recorded.path.clone();
+    let query = recorded.query.clone();
     let mut state = shared.lock();
     state.requests.push(recorded);
     let json_response = |status: u16, body: String| {
@@ -185,7 +188,19 @@ async fn handle(State(shared): State<Arc<Shared>>, request: Request) -> Response
             }
         },
         "/jwks" => json_response(200, state.jwks.clone()),
-        "/userinfo" => json_response(200, state.userinfo.clone()),
+        "/userinfo" => {
+            let fields = url::form_urlencoded::parse(query.as_bytes())
+                .find(|(key, _)| key == "user.fields")
+                .map(|(_, value)| value.into_owned());
+            let specific = state
+                .userinfo_for
+                .iter()
+                .find(|(wanted, ..)| Some(wanted) == fields.as_ref());
+            match specific {
+                Some((_, status, body)) => json_response(*status, body.clone()),
+                None => json_response(200, state.userinfo.clone()),
+            }
+        }
         _ => StatusCode::NOT_FOUND.into_response(),
     }
 }
@@ -202,6 +217,7 @@ impl MockIdp {
                 },
                 jwks: PRIMARY_JWKS.to_owned(),
                 userinfo: "{}".to_owned(),
+                userinfo_for: Vec::new(),
                 requests: Vec::new(),
             }),
         });
@@ -265,6 +281,16 @@ impl MockIdp {
     /// `/userinfo` answers with this JSON.
     pub fn set_userinfo(&self, body: &Value) {
         self.shared.lock().userinfo = body.to_string();
+    }
+
+    /// `/userinfo?user.fields=<fields>` answers with this status and JSON
+    /// (X asks for its profile and its email separately).
+    pub fn set_userinfo_for(&self, fields: &str, status: u16, body: &Value) {
+        let mut state = self.shared.lock();
+        state.userinfo_for.retain(|(wanted, ..)| wanted != fields);
+        state
+            .userinfo_for
+            .push((fields.to_owned(), status, body.to_string()));
     }
 
     /// Every request so far, oldest first.

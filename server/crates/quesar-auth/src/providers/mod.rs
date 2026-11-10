@@ -3,6 +3,7 @@
 
 pub mod apple;
 pub mod google;
+pub mod twitter;
 
 use crate::oauth::jwks::JwksCache;
 

@@ -29,6 +29,8 @@ pub const BINDING_COOKIE: &str = "__Host-quesar.oauth_binding";
 pub const CODE: &str = "synthetic-authorization-code";
 pub const SUB: &str = "google-sub-0001";
 pub const EMAIL: &str = "ada@example.com";
+pub const TWITTER_ID: &str = "x-client-id";
+pub const TWITTER_SECRET: &str = "synthetic-x-client-secret";
 
 pub struct OAuth {
     pub app: Router,
@@ -69,26 +71,40 @@ pub fn client() -> reqwest::Client {
 
 impl OAuth {
     pub async fn new() -> Self {
-        Self::build(true, true).await
+        Self::build(true, true, false).await
     }
 
     /// `production`: plain-http provider endpoints must be refused.
     pub async fn production() -> Self {
-        Self::build(true, false).await
+        Self::build(true, false, false).await
     }
 
     /// No Google credentials in the environment.
     pub async fn without_google() -> Self {
-        Self::build(false, true).await
+        Self::build(false, true, false).await
     }
 
-    async fn build(google: bool, allow_http: bool) -> Self {
+    /// Google and X both configured.
+    pub async fn with_twitter() -> Self {
+        Self::build(true, true, true).await
+    }
+
+    /// X configured, in production mode (plain-http endpoints refused).
+    pub async fn twitter_production() -> Self {
+        Self::build(true, false, true).await
+    }
+
+    async fn build(google: bool, allow_http: bool, twitter: bool) -> Self {
         let db = migrated().await;
         let idp = MockIdp::start().await;
         let mut pairs = vec![("PUBLIC_ORIGIN", ORIGIN), ("TRUSTED_PROXY", "x-real-ip")];
         if google {
             pairs.push(("GOOGLE_SIGNIN_CLIENT_ID", CLIENT_ID));
             pairs.push(("GOOGLE_SIGNIN_CLIENT_SECRET", CLIENT_SECRET));
+        }
+        if twitter {
+            pairs.push(("TWITTER_CLIENT_ID", TWITTER_ID));
+            pairs.push(("TWITTER_CLIENT_SECRET", TWITTER_SECRET));
         }
         let config = Config::from_env(Environment::from_pairs(pairs)).unwrap();
         let clock = Arc::new(FixedClock::new(T0));
@@ -98,6 +114,10 @@ impl OAuth {
         if let Some(google) = services.config.providers.google.as_mut() {
             google.endpoints.token = idp.token_url();
             google.endpoints.jwks = Some(idp.jwks_url());
+        }
+        if let Some(twitter) = services.config.providers.twitter.as_mut() {
+            twitter.endpoints.token = idp.token_url();
+            twitter.endpoints.userinfo = Some(idp.userinfo_url());
         }
         Self {
             app: router_with(&config, Some(services)),
@@ -144,7 +164,14 @@ impl OAuth {
 
     /// `POST /oauth/google/start`.
     pub async fn start(&self, body: &Value) -> Started {
-        let reply = self.post("/oauth/google/start", body, &[]).await;
+        self.start_on("google", body).await
+    }
+
+    /// `POST /oauth/<provider>/start`.
+    pub async fn start_on(&self, provider: &str, body: &Value) -> Started {
+        let reply = self
+            .post(&format!("/oauth/{provider}/start"), body, &[])
+            .await;
         assert_eq!(reply.status, StatusCode::OK, "{}", reply.text());
         let url = url::Url::parse(reply.result()["url"].as_str().unwrap()).unwrap();
         let pair = |name: &str| {

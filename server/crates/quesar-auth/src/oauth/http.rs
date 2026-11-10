@@ -89,13 +89,32 @@ pub async fn get_json<T: DeserializeOwned>(
     url: &str,
     allow_http: bool,
 ) -> Result<T, HttpError> {
+    get_json_authorized(http, url, None, allow_http).await
+}
+
+/// A secret `Authorization` header value: marked sensitive so the HTTP stack
+/// never prints it.
+fn sensitive(value: &str) -> Result<reqwest::header::HeaderValue, HttpError> {
+    let mut value =
+        reqwest::header::HeaderValue::from_str(value).map_err(|_| HttpError::InvalidUrl)?;
+    value.set_sensitive(true);
+    Ok(value)
+}
+
+/// `GET url` with an `Authorization` header value (a bearer token) and parse
+/// the JSON body.
+pub async fn get_json_authorized<T: DeserializeOwned>(
+    http: &reqwest::Client,
+    url: &str,
+    authorization: Option<&str>,
+    allow_http: bool,
+) -> Result<T, HttpError> {
     let url = check_url(url, allow_http)?;
-    let response = http
-        .get(url)
-        .header("accept", "application/json")
-        .send()
-        .await
-        .map_err(|_| HttpError::Network)?;
+    let mut request = http.get(url).header("accept", "application/json");
+    if let Some(authorization) = authorization {
+        request = request.header(reqwest::header::AUTHORIZATION, sensitive(authorization)?);
+    }
+    let response = request.send().await.map_err(|_| HttpError::Network)?;
     parse(response).await
 }
 
@@ -108,19 +127,32 @@ pub async fn post_form<T: DeserializeOwned>(
     fields: &[(&str, &str)],
     allow_http: bool,
 ) -> Result<T, HttpError> {
+    post_form_authorized(http, url, fields, None, allow_http).await
+}
+
+/// As [`post_form`] with an `Authorization` header value (HTTP Basic client
+/// authentication).
+pub async fn post_form_authorized<T: DeserializeOwned>(
+    http: &reqwest::Client,
+    url: &str,
+    fields: &[(&str, &str)],
+    authorization: Option<&str>,
+    allow_http: bool,
+) -> Result<T, HttpError> {
     let url = check_url(url, allow_http)?;
     let body = Zeroizing::new(
         url::form_urlencoded::Serializer::new(String::new())
             .extend_pairs(fields)
             .finish(),
     );
-    let response = http
+    let mut request = http
         .post(url)
         .header("accept", "application/json")
         .header("content-type", "application/x-www-form-urlencoded")
-        .body(body.as_str().to_owned())
-        .send()
-        .await
-        .map_err(|_| HttpError::Network)?;
+        .body(body.as_str().to_owned());
+    if let Some(authorization) = authorization {
+        request = request.header(reqwest::header::AUTHORIZATION, sensitive(authorization)?);
+    }
+    let response = request.send().await.map_err(|_| HttpError::Network)?;
     parse(response).await
 }

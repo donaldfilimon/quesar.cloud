@@ -78,9 +78,8 @@ impl ProviderEndpoints {
             authorize: "https://x.com/i/oauth2/authorize".into(),
             token: "https://api.x.com/2/oauth2/token".into(),
             jwks: None,
-            userinfo: Some(
-                "https://api.x.com/2/users/me?user.fields=confirmed_email,profile_image_url".into(),
-            ),
+            // Two calls on this URL, one per `user.fields` set (`twitter.mjs`).
+            userinfo: Some("https://api.x.com/2/users/me".into()),
         }
     }
 }

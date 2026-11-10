@@ -1,8 +1,7 @@
 //! OAuth sign-in: `POST /oauth/{provider}/start` and `GET /callback/{provider}`.
 //!
 //! Ports `server.ts:107-124,155-170` and Better Auth's `callback.mjs` with the
-//! binding cookie of Contradiction 7. Google and Apple are wired so far; X
-//! answers as not configured until its task lands. Apple's browser comes back
+//! binding cookie of Contradiction 7. Google, Apple and X are wired. Apple's browser comes back
 //! by a cross-site form POST (`routes/apple.rs`), which parks its code on the
 //! flow; the GET here then completes the flow like any other provider's.
 //!
@@ -24,7 +23,7 @@ use quesar_auth::oauth::link::{self, Outcome};
 use quesar_auth::oauth::paths;
 use quesar_auth::oauth::provider::{self, Identity, ProviderError, ProviderId};
 use quesar_auth::providers::apple::AppleSecrets;
-use quesar_auth::providers::{Deps, apple, google};
+use quesar_auth::providers::{Deps, apple, google, twitter};
 use quesar_auth::{AppleConfig, AuthError, OAuthClient};
 use quesar_services::rate_limit::Bucket;
 use serde::Deserialize;
@@ -63,6 +62,7 @@ pub(super) fn not_configured() -> ApiError {
 pub(super) enum Configured<'a> {
     Google(&'a OAuthClient),
     Apple(&'a AppleConfig, &'a AppleSecrets),
+    Twitter(&'a OAuthClient),
 }
 
 impl Configured<'_> {
@@ -70,6 +70,7 @@ impl Configured<'_> {
         match self {
             Self::Google(_) => ProviderId::Google,
             Self::Apple(..) => ProviderId::Apple,
+            Self::Twitter(_) => ProviderId::Twitter,
         }
     }
 }
@@ -87,8 +88,12 @@ pub(super) fn configured<'a>(services: &'a AuthServices, name: &str) -> Option<C
         ProviderId::Apple => services
             .apple()
             .map(|(config, secrets)| Configured::Apple(config, secrets)),
-        // X arrives with its own task.
-        ProviderId::Twitter => None,
+        ProviderId::Twitter => services
+            .config
+            .providers
+            .twitter
+            .as_ref()
+            .map(Configured::Twitter),
     }
 }
 
@@ -131,6 +136,9 @@ pub async fn start(
         }
         Configured::Apple(config, _) => {
             apple::authorize_url(config, &redirect_uri, state, challenge, nonce)
+        }
+        Configured::Twitter(client) => {
+            twitter::authorize_url(client, &redirect_uri, state, challenge)
         }
     }
     .map_err(|error| {
@@ -337,7 +345,10 @@ async fn exchange(
         jwks: &services.jwks,
         allow_http: !services.production,
     };
-    let nonce = flow.nonce.as_ref().ok_or(ExchangeError::Provider)?;
+    // Only the OIDC providers (Google, Apple) sign a nonce; X has none. Each
+    // of those refuses a flow that somehow holds no nonce.
+    let nonce = flow.nonce.as_ref().map(|nonce| nonce.expose());
+    let required = || nonce.ok_or(ExchangeError::Provider);
     let redirect_uri = provider::redirect_uri(&services.config, provider);
     match configured {
         Configured::Google(client) => Ok(google::exchange(
@@ -346,7 +357,7 @@ async fn exchange(
             code,
             flow.verifier.expose(),
             &redirect_uri,
-            nonce.expose(),
+            required()?,
             now,
         )
         .await?),
@@ -357,11 +368,17 @@ async fn exchange(
             code,
             flow.verifier.expose(),
             &redirect_uri,
-            nonce.expose(),
+            required()?,
             posted_name,
             now,
         )
         .await?),
+        Configured::Twitter(client) => {
+            Ok(
+                twitter::exchange(&deps, client, code, flow.verifier.expose(), &redirect_uri)
+                    .await?,
+            )
+        }
     }
 }
 
