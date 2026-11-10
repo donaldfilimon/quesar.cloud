@@ -2,6 +2,8 @@
 
 mod common;
 
+use std::sync::LazyLock;
+
 use axum::body::Body;
 use axum::http::header::CACHE_CONTROL;
 use axum::http::{Method, Request, StatusCode};
@@ -16,12 +18,25 @@ const GOOGLE: [(&str, &str); 2] = [
     ("GOOGLE_SIGNIN_CLIENT_ID", "g-id"),
     ("GOOGLE_SIGNIN_CLIENT_SECRET", "g-secret"),
 ];
-const APPLE: [(&str, &str); 4] = [
-    ("APPLE_CLIENT_ID", "svc"),
-    ("APPLE_TEAM_ID", "team"),
-    ("APPLE_KEY_ID", "key"),
-    ("APPLE_PRIVATE_KEY", "pem"),
-];
+/// Apple is offered only when its private key mints a client secret, so the
+/// fake test key of the contract vectors stands in for the `.p8` file.
+static APPLE_PEM: LazyLock<String> = LazyLock::new(|| {
+    let path = concat!(
+        env!("CARGO_MANIFEST_DIR"),
+        "/../../contract/apple-secret-vectors.json"
+    );
+    let file: Value = serde_json::from_str(&std::fs::read_to_string(path).unwrap()).unwrap();
+    file["key"]["private_key_pem"].as_str().unwrap().to_owned()
+});
+
+fn apple() -> [(&'static str, &'static str); 4] {
+    [
+        ("APPLE_CLIENT_ID", "svc"),
+        ("APPLE_TEAM_ID", "team"),
+        ("APPLE_KEY_ID", "key"),
+        ("APPLE_PRIVATE_KEY", APPLE_PEM.as_str()),
+    ]
+}
 const TWITTER: [(&str, &str); 2] = [
     ("TWITTER_CLIENT_ID", "t-id"),
     ("TWITTER_CLIENT_SECRET", "t-secret"),
@@ -45,7 +60,7 @@ async fn email_and_passkeys_are_on_and_providers_appear_only_when_configured() {
     );
     let all: Vec<_> = TWITTER
         .iter()
-        .chain(&APPLE)
+        .chain(&apple())
         .chain(&GOOGLE)
         .copied()
         .collect();
@@ -56,7 +71,11 @@ async fn email_and_passkeys_are_on_and_providers_appear_only_when_configured() {
     );
     let two: Vec<_> = TWITTER.iter().chain(&GOOGLE).copied().collect();
     assert_eq!(methods(&two).await["social"], json!(["google", "twitter"]));
-    assert_eq!(methods(&APPLE).await["social"], json!(["apple"]));
+    assert_eq!(methods(&apple()).await["social"], json!(["apple"]));
+    // A key that cannot be parsed leaves Apple out.
+    let mut garbage = apple();
+    garbage[3] = ("APPLE_PRIVATE_KEY", "not a pem");
+    assert_eq!(methods(&garbage).await["social"], json!([]));
     // An id without its secret is not configured.
     assert_eq!(
         methods(&[("GOOGLE_SIGNIN_CLIENT_ID", "g-id")]).await["social"],

@@ -88,6 +88,8 @@ pub async fn exchange(
             issuers: &ISSUERS,
             audience: &client.client_id,
             nonce: Some(nonce),
+            nonce_sha256: false,
+            email_verified_text: false,
         },
         &KeySource {
             cache: deps.jwks,

@@ -39,8 +39,8 @@ impl Methods {
         if providers.google.is_some() {
             social.push("google");
         }
-        // Task 7: Apple also needs its client-secret mint to have succeeded.
-        if providers.apple.is_some() {
+        // Apple is offered only when its private key mints a client secret.
+        if services.apple().is_some() {
             social.push("apple");
         }
         if providers.twitter.is_some() {

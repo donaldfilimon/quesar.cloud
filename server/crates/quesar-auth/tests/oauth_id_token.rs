@@ -67,6 +67,8 @@ impl Rig {
                 issuers: &["https://accounts.google.com", "accounts.google.com"],
                 audience: AUD,
                 nonce: Some(NONCE),
+                nonce_sha256: false,
+                email_verified_text: false,
             },
             &KeySource {
                 cache: &self.cache,
@@ -375,6 +377,8 @@ async fn an_unreachable_or_insecure_key_endpoint_is_refused() {
         issuers: &["https://accounts.google.com"],
         audience: AUD,
         nonce: Some(NONCE),
+        nonce_sha256: false,
+        email_verified_text: false,
     };
     // Plain http is refused when not allowed (production).
     let url = rig.idp.jwks_url();

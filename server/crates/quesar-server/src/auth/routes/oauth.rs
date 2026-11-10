@@ -1,8 +1,10 @@
 //! OAuth sign-in: `POST /oauth/{provider}/start` and `GET /callback/{provider}`.
 //!
 //! Ports `server.ts:107-124,155-170` and Better Auth's `callback.mjs` with the
-//! binding cookie of Contradiction 7. Only Google is wired so far; the others
-//! answer as not configured until their tasks land.
+//! binding cookie of Contradiction 7. Google and Apple are wired so far; X
+//! answers as not configured until its task lands. Apple's browser comes back
+//! by a cross-site form POST (`routes/apple.rs`), which parks its code on the
+//! flow; the GET here then completes the flow like any other provider's.
 //!
 //! The callback is a browser navigation, so every outcome is a redirect: to
 //! the return path on success, or to the flow's error path with
@@ -21,8 +23,9 @@ use quesar_auth::oauth::flow::{self, Flow};
 use quesar_auth::oauth::link::{self, Outcome};
 use quesar_auth::oauth::paths;
 use quesar_auth::oauth::provider::{self, Identity, ProviderError, ProviderId};
-use quesar_auth::providers::{Deps, google};
-use quesar_auth::{AuthError, OAuthClient};
+use quesar_auth::providers::apple::AppleSecrets;
+use quesar_auth::providers::{Deps, apple, google};
+use quesar_auth::{AppleConfig, AuthError, OAuthClient};
 use quesar_services::rate_limit::Bucket;
 use serde::Deserialize;
 use serde_json::json;
@@ -48,7 +51,7 @@ struct StartBody {
     error_callback_url: Option<String>,
 }
 
-fn not_configured() -> ApiError {
+pub(super) fn not_configured() -> ApiError {
     ApiError::auth(
         StatusCode::NOT_FOUND,
         "PROVIDER_NOT_CONFIGURED",
@@ -56,18 +59,36 @@ fn not_configured() -> ApiError {
     )
 }
 
+/// A provider this server has credentials for.
+pub(super) enum Configured<'a> {
+    Google(&'a OAuthClient),
+    Apple(&'a AppleConfig, &'a AppleSecrets),
+}
+
+impl Configured<'_> {
+    pub(super) fn id(&self) -> ProviderId {
+        match self {
+            Self::Google(_) => ProviderId::Google,
+            Self::Apple(..) => ProviderId::Apple,
+        }
+    }
+}
+
 /// The provider named in the path, if it is one this server can sign in with
-/// and has credentials for.
-fn configured<'a>(services: &'a AuthServices, name: &str) -> Option<(ProviderId, &'a OAuthClient)> {
+/// and has usable credentials for (Apple's key must mint a client secret).
+pub(super) fn configured<'a>(services: &'a AuthServices, name: &str) -> Option<Configured<'a>> {
     match ProviderId::parse(name)? {
         ProviderId::Google => services
             .config
             .providers
             .google
             .as_ref()
-            .map(|client| (ProviderId::Google, client)),
-        // Apple and X arrive with their own tasks.
-        ProviderId::Apple | ProviderId::Twitter => None,
+            .map(Configured::Google),
+        ProviderId::Apple => services
+            .apple()
+            .map(|(config, secrets)| Configured::Apple(config, secrets)),
+        // X arrives with its own task.
+        ProviderId::Twitter => None,
     }
 }
 
@@ -83,7 +104,8 @@ pub async fn start(
     services
         .limit(Bucket::AuthCredential, &ip.subject(services))
         .await?;
-    let (provider, client) = configured(services, &name).ok_or_else(not_configured)?;
+    let configured = configured(services, &name).ok_or_else(not_configured)?;
+    let provider = configured.id();
     let input: StartBody = json::read(&headers, body).await?;
     let callback = paths::safe_callback(input.callback_url.as_deref());
     let error_callback = paths::safe_error_callback(input.error_callback_url.as_deref());
@@ -97,15 +119,19 @@ pub async fn start(
     )
     .await?;
     let nonce = started.nonce.as_ref().map(|nonce| nonce.expose());
-    let url = match provider {
-        ProviderId::Google => google::authorize_url(
-            client,
-            &provider::redirect_uri(&services.config, provider),
-            started.state.expose(),
-            &started.challenge,
-            nonce.unwrap_or_default(),
-        ),
-        ProviderId::Apple | ProviderId::Twitter => return Err(not_configured()),
+    let redirect_uri = provider::redirect_uri(&services.config, provider);
+    let (state, challenge, nonce) = (
+        started.state.expose(),
+        started.challenge.as_str(),
+        nonce.unwrap_or_default(),
+    );
+    let url = match configured {
+        Configured::Google(client) => {
+            google::authorize_url(client, &redirect_uri, state, challenge, nonce)
+        }
+        Configured::Apple(config, _) => {
+            apple::authorize_url(config, &redirect_uri, state, challenge, nonce)
+        }
     }
     .map_err(|error| {
         tracing::error!(%error, "cannot build the authorization URL");
@@ -246,7 +272,22 @@ async fn run(
     if !bound {
         return refuse("state_mismatch");
     }
-    if let Some(error) = query.error.as_deref() {
+    // Apple's answer came by form POST and is parked on the flow; for the
+    // others it is in this request's query. An Apple GET carrying its own
+    // `code` or `error` is not an answer.
+    let (error, code, name) = if flow.provider == ProviderId::Apple.as_str() {
+        match flow.posted.as_ref() {
+            Some(posted) => (
+                posted.error.as_deref(),
+                posted.code.as_deref(),
+                posted.name.as_deref(),
+            ),
+            None => (None, None, None),
+        }
+    } else {
+        (query.error.as_deref(), query.code.as_deref(), None)
+    };
+    if let Some(error) = error {
         // The provider's own text is never forwarded.
         return refuse(if error == "access_denied" {
             "access_denied"
@@ -254,14 +295,14 @@ async fn run(
             "failed"
         });
     }
-    let Some(code) = query.code.as_deref().filter(|code| !code.is_empty()) else {
+    let Some(code) = code.filter(|code| !code.is_empty()) else {
         return refuse("no_code");
     };
     if code.len() > CODE_MAX_LEN {
         return refuse("failed");
     }
 
-    let identity = match exchange(services, &flow, code, now).await {
+    let identity = match exchange(services, &flow, code, name, now).await {
         Ok(identity) => identity,
         Err(error) => {
             tracing::warn!(%error, "oauth code exchange failed");
@@ -286,28 +327,41 @@ async fn exchange(
     services: &AuthServices,
     flow: &Flow,
     code: &str,
+    posted_name: Option<&str>,
     now: time::OffsetDateTime,
 ) -> Result<Identity, ExchangeError> {
     let provider = ProviderId::parse(&flow.provider).ok_or(ExchangeError::Provider)?;
-    let (_, client) = configured(services, provider.as_str()).ok_or(ExchangeError::Provider)?;
+    let configured = configured(services, provider.as_str()).ok_or(ExchangeError::Provider)?;
     let deps = Deps {
         http: &services.http,
         jwks: &services.jwks,
         allow_http: !services.production,
     };
     let nonce = flow.nonce.as_ref().ok_or(ExchangeError::Provider)?;
-    match provider {
-        ProviderId::Google => Ok(google::exchange(
+    let redirect_uri = provider::redirect_uri(&services.config, provider);
+    match configured {
+        Configured::Google(client) => Ok(google::exchange(
             &deps,
             client,
             code,
             flow.verifier.expose(),
-            &provider::redirect_uri(&services.config, provider),
+            &redirect_uri,
             nonce.expose(),
             now,
         )
         .await?),
-        ProviderId::Apple | ProviderId::Twitter => Err(ExchangeError::Provider),
+        Configured::Apple(config, secrets) => Ok(apple::exchange(
+            &deps,
+            config,
+            &secrets.current(config, now),
+            code,
+            flow.verifier.expose(),
+            &redirect_uri,
+            nonce.expose(),
+            posted_name,
+            now,
+        )
+        .await?),
     }
 }
 

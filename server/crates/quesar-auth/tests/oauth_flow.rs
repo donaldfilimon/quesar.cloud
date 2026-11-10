@@ -4,7 +4,7 @@ use std::path::{Path, PathBuf};
 use std::time::Duration;
 
 use http::{HeaderMap, HeaderValue, header};
-use quesar_auth::oauth::flow::{self, BINDING_COOKIE, FLOW_TTL};
+use quesar_auth::oauth::flow::{self, Attach, BINDING_COOKIE, FLOW_TTL, Posted};
 use quesar_auth::oauth::pkce;
 use quesar_auth::oauth::provider::ProviderId;
 use quesar_db::migrate;
@@ -228,4 +228,96 @@ fn the_binding_cookie_is_read_only_when_well_formed() {
         assert_eq!(flow::read_binding_cookie(&headers), None, "{bad:?}");
     }
     assert_eq!(flow::read_binding_cookie(&HeaderMap::new()), None);
+}
+
+fn posted(code: &str) -> Posted {
+    Posted {
+        code: Some(code.to_owned()),
+        error: None,
+        name: Some("Ada Lovelace".to_owned()),
+    }
+}
+
+#[tokio::test]
+async fn an_apple_post_is_parked_once_and_consume_hands_it_back() {
+    let db = migrated().await;
+    let started = flow::start(&db.pool, ProviderId::Apple, "/console", "/login?x=1", T0)
+        .await
+        .unwrap();
+    let state = started.state.expose();
+
+    let stored = flow::attach_post(&db.pool, state, &posted("first"), T0)
+        .await
+        .unwrap();
+    assert_eq!(stored, Attach::Stored);
+    // The second post, whatever it says, does not replace the first.
+    let again = flow::attach_post(&db.pool, state, &posted("second"), T0)
+        .await
+        .unwrap();
+    assert_eq!(
+        again,
+        Attach::AlreadyPosted {
+            error_callback: "/login?x=1".to_owned()
+        }
+    );
+    // Parking consumed nothing.
+    let count: i64 = sqlx::query_scalar("select count(*) from auth_flows")
+        .fetch_one(&db.pool)
+        .await
+        .unwrap();
+    assert_eq!(count, 1);
+
+    let taken = flow::consume(&db.pool, state, T0).await.unwrap().unwrap();
+    let delivered = taken.posted.expect("the parked answer");
+    assert_eq!(delivered.code.as_deref(), Some("first"));
+    assert_eq!(delivered.name.as_deref(), Some("Ada Lovelace"));
+    assert_eq!(delivered.error, None);
+    assert!(
+        !format!("{delivered:?}").contains("first"),
+        "Debug is redacted"
+    );
+    db.cleanup().await;
+}
+
+#[tokio::test]
+async fn an_apple_post_needs_a_live_apple_flow() {
+    let db = migrated().await;
+    // Unknown state.
+    assert_eq!(
+        flow::attach_post(&db.pool, "no-such-state", &posted("c"), T0)
+            .await
+            .unwrap(),
+        Attach::Unknown
+    );
+    // A Google flow is not Apple's to fill.
+    let google = flow::start(&db.pool, ProviderId::Google, "/c", "/login", T0)
+        .await
+        .unwrap();
+    assert_eq!(
+        flow::attach_post(&db.pool, google.state.expose(), &posted("c"), T0)
+            .await
+            .unwrap(),
+        Attach::Unknown
+    );
+    // Expired on the injected clock: refused at the boundary, with its error path.
+    let apple = flow::start(&db.pool, ProviderId::Apple, "/c", "/login?y=2", T0)
+        .await
+        .unwrap();
+    let before = T0 + FLOW_TTL - time::Duration::seconds(1);
+    let at = T0 + FLOW_TTL;
+    assert_eq!(
+        flow::attach_post(&db.pool, apple.state.expose(), &posted("c"), at)
+            .await
+            .unwrap(),
+        Attach::Expired {
+            error_callback: "/login?y=2".to_owned()
+        }
+    );
+    assert_eq!(
+        flow::attach_post(&db.pool, apple.state.expose(), &posted("c"), before)
+            .await
+            .unwrap(),
+        Attach::Stored
+    );
+    db.cleanup().await;
 }

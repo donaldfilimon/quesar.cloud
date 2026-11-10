@@ -8,6 +8,7 @@ use axum::routing::{get, post};
 
 use crate::router::AppState;
 
+pub mod apple;
 pub mod delete;
 pub mod email;
 pub mod methods;
@@ -28,5 +29,8 @@ pub fn router() -> Router<Arc<AppState>> {
         .route("/profile", post(profile::update))
         .route("/delete-account", post(delete::delete_account))
         .route("/oauth/{provider}/start", post(oauth::start))
-        .route("/callback/{provider}", get(oauth::callback))
+        .route(
+            "/callback/{provider}",
+            get(oauth::callback).post(apple::form_post),
+        )
 }

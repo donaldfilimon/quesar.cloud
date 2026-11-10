@@ -39,6 +39,27 @@ struct Payload {
     callback: String,
     #[serde(rename = "errorCallback")]
     error_callback: String,
+    /// What a `form_post` callback delivered (Apple); absent until it did.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    posted: Option<Posted>,
+}
+
+/// What a cross-site `form_post` callback (Sign in with Apple) delivered,
+/// parked on the flow until the same-site GET that completes it. Already
+/// validated and size-capped by the route; `error` is one of our fixed codes,
+/// never provider text.
+#[derive(Clone, Serialize, Deserialize)]
+pub struct Posted {
+    pub code: Option<String>,
+    pub error: Option<String>,
+    /// The display name from Apple's first-sign-in `user` field.
+    pub name: Option<String>,
+}
+
+impl fmt::Debug for Posted {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("Posted").finish_non_exhaustive()
+    }
 }
 
 /// An OIDC nonce: `Debug` is redacted and the text is wiped on drop.
@@ -93,6 +114,7 @@ pub async fn start(
         nonce: nonce.as_ref().map(|nonce| nonce.expose().to_owned()),
         callback: callback.to_owned(),
         error_callback: error_callback.to_owned(),
+        posted: None,
     };
     // A struct of strings always serializes.
     let payload = serde_json::to_value(&payload).unwrap_or_default();
@@ -130,6 +152,8 @@ pub struct Flow {
     pub nonce: Option<Nonce>,
     pub callback: String,
     pub error_callback: String,
+    /// Set when the provider answered by `form_post` ([`attach_post`]).
+    pub posted: Option<Posted>,
     /// The injected clock had passed `expires_at` when the flow was taken.
     pub expired: bool,
     binding_hash: Vec<u8>,
@@ -194,9 +218,73 @@ pub async fn consume(
         nonce: payload.nonce.map(|nonce| Nonce(Zeroizing::new(nonce))),
         callback: payload.callback,
         error_callback: payload.error_callback,
+        posted: payload.posted,
         expired,
         binding_hash,
     }))
+}
+
+/// What [`attach_post`] did.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum Attach {
+    /// Stored; the GET callback can now complete the flow.
+    Stored,
+    /// No such Apple flow.
+    Unknown,
+    /// The flow had expired; go to its error path.
+    Expired { error_callback: String },
+    /// This state was already posted once; go to its error path.
+    AlreadyPosted { error_callback: String },
+}
+
+/// Parks what an Apple `form_post` delivered on the flow, once. The flow is
+/// not consumed and nothing is exchanged: the same-site GET that follows does
+/// that, with the binding cookie the cross-site POST cannot carry.
+///
+/// One `update` with the predicates in its `where`, so two racing posts cannot
+/// both store, and expiry is judged on the injected clock. Lookup by the
+/// SHA-256 of 256 random bits (see [`consume`]).
+pub async fn attach_post(
+    pool: &PgPool,
+    state: &str,
+    posted: &Posted,
+    now: OffsetDateTime,
+) -> Result<Attach, AuthError> {
+    let hash = token_hash(state);
+    // A struct of optional strings always serializes.
+    let posted = serde_json::to_value(posted).unwrap_or_default();
+    let stored = sqlx::query(
+        "update auth_flows set payload = jsonb_set(payload, '{posted}', $3)
+         where state_hash = $1 and kind = 'oauth' and provider = 'apple'
+           and expires_at > $2 and not jsonb_exists(payload, 'posted')",
+    )
+    .bind(hash.as_slice())
+    .bind(now)
+    .bind(posted)
+    .execute(pool)
+    .await?;
+    if stored.rows_affected() == 1 {
+        return Ok(Attach::Stored);
+    }
+    let row = sqlx::query(
+        "select (expires_at <= $2) as expired, payload ->> 'errorCallback' as error_callback
+         from auth_flows where state_hash = $1 and kind = 'oauth' and provider = 'apple'",
+    )
+    .bind(hash.as_slice())
+    .bind(now)
+    .fetch_optional(pool)
+    .await?;
+    let Some(row) = row else {
+        return Ok(Attach::Unknown);
+    };
+    let expired: bool = row.try_get("expired")?;
+    let error_callback: Option<String> = row.try_get("error_callback")?;
+    let error_callback = error_callback.unwrap_or_default();
+    Ok(if expired {
+        Attach::Expired { error_callback }
+    } else {
+        Attach::AlreadyPosted { error_callback }
+    })
 }
 
 fn cookie_attributes(value: &str, max_age: i64) -> String {

@@ -1,6 +1,7 @@
 //! One module per identity provider: its authorization URL and the exchange of
 //! an authorization code for a verified [`Identity`](crate::oauth::provider::Identity).
 
+pub mod apple;
 pub mod google;
 
 use crate::oauth::jwks::JwksCache;

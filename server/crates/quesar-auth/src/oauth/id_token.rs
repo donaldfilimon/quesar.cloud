@@ -11,6 +11,7 @@ use std::fmt;
 use jsonwebtoken::{Algorithm, DecodingKey, Validation};
 use serde::Deserialize;
 use serde_json::Value;
+use sha2::{Digest, Sha256};
 use subtle::ConstantTimeEq;
 use time::OffsetDateTime;
 
@@ -109,7 +110,8 @@ struct RawClaims {
 pub struct Claims {
     pub subject: String,
     pub email: Option<String>,
-    /// Only a JSON `true` is verified; the string `"true"` is not.
+    /// Only a JSON `true` is verified; the string `"true"` counts only when
+    /// [`Expect::email_verified_text`] is set.
     pub email_verified: bool,
     pub name: Option<String>,
     pub picture: Option<String>,
@@ -127,6 +129,11 @@ pub struct Expect<'a> {
     pub audience: &'a str,
     /// The nonce sent on the authorization URL.
     pub nonce: Option<&'a str>,
+    /// Also accept the lowercase hex SHA-256 of the nonce in the token
+    /// (`nonceComparison: "exact-or-sha256"`, Apple).
+    pub nonce_sha256: bool,
+    /// Also accept the string `"true"` for `email_verified` (Apple).
+    pub email_verified_text: bool,
 }
 
 /// Where the keys are and how to fetch them.
@@ -135,6 +142,16 @@ pub struct KeySource<'a> {
     pub http: &'a reqwest::Client,
     pub url: &'a str,
     pub allow_http: bool,
+}
+
+fn sha256_hex(value: &str) -> String {
+    use std::fmt::Write;
+    Sha256::digest(value.as_bytes())
+        .iter()
+        .fold(String::with_capacity(64), |mut hex, byte| {
+            let _ = write!(hex, "{byte:02x}");
+            hex
+        })
 }
 
 fn unix_seconds(at: OffsetDateTime) -> f64 {
@@ -208,10 +225,14 @@ pub async fn verify(
         return Err(IdTokenError::NotYetValid);
     }
     if let Some(expected) = expect.nonce {
-        let matches = claims
-            .nonce
-            .as_deref()
-            .is_some_and(|nonce| bool::from(nonce.as_bytes().ct_eq(expected.as_bytes())));
+        let equals =
+            |claim: &str, wanted: &str| bool::from(claim.as_bytes().ct_eq(wanted.as_bytes()));
+        let matches = claims.nonce.as_deref().is_some_and(|claim| {
+            // Both comparisons always run, so which one matched is not a timing signal.
+            let exact = equals(claim, expected);
+            let hashed = expect.nonce_sha256 && equals(claim, &sha256_hex(expected));
+            exact || hashed
+        });
         if !matches {
             return Err(IdTokenError::Nonce);
         }
@@ -219,7 +240,11 @@ pub async fn verify(
     Ok(Claims {
         subject: sub,
         email: claims.email,
-        email_verified: claims.email_verified == Some(Value::Bool(true)),
+        email_verified: match &claims.email_verified {
+            Some(Value::Bool(verified)) => *verified,
+            Some(Value::String(text)) => expect.email_verified_text && text == "true",
+            _ => false,
+        },
         name: claims.name,
         picture: claims.picture,
     })

@@ -24,7 +24,8 @@ use axum::response::Response;
 use quesar_auth::deletion::DeletionHooks;
 use quesar_auth::oauth::jwks::JwksCache;
 use quesar_auth::password::{Argon2Hasher, HashError};
-use quesar_auth::{AuthConfig, Clock};
+use quesar_auth::providers::apple::AppleSecrets;
+use quesar_auth::{AppleConfig, AuthConfig, Clock};
 use quesar_db::PgPool;
 use quesar_services::rate_limit::{self, Bucket, RateLimiter, SecretMissing};
 
@@ -94,6 +95,9 @@ pub struct AuthServices {
     pub production: bool,
     /// Identity providers' signing keys.
     pub jwks: JwksCache,
+    /// Apple's parsed key and current client secret. `None` when Apple is not
+    /// configured or its key cannot be used, and Apple sign-in is then off.
+    apple: Option<AppleSecrets>,
     /// The external cleanups an account deletion calls. M2 defaults: the
     /// WDBX configuration guard and no workspace revocation; M5 and M6 replace
     /// them.
@@ -122,6 +126,14 @@ impl AuthServices {
             |name| environment.read(name).map(str::to_owned),
             server.production,
         );
+        let apple = config.providers.apple.as_ref().and_then(|apple| {
+            AppleSecrets::new(apple, clock.now())
+                .inspect_err(|_| {
+                    // The error names no key material.
+                    tracing::warn!("APPLE_PRIVATE_KEY cannot be used; Apple sign-in is off");
+                })
+                .ok()
+        });
         let http = reqwest::Client::builder()
             .redirect(reqwest::redirect::Policy::none())
             .timeout(PROVIDER_TIMEOUT)
@@ -139,12 +151,19 @@ impl AuthServices {
             auth_enabled: environment.read("VITE_AUTH_ENABLED") != Some("false"),
             production: server.production,
             jwks: JwksCache::new(),
+            apple,
             deletion: DeletionHooks::defaults(
                 environment
                     .raw_pairs()
                     .map(|(name, value)| (name.to_owned(), value.to_owned())),
             ),
         })
+    }
+
+    /// Apple's configuration with its secrets, only when Apple sign-in is
+    /// usable: configured, and its private key mints a client secret.
+    pub fn apple(&self) -> Option<(&AppleConfig, &AppleSecrets)> {
+        Some((self.config.providers.apple.as_ref()?, self.apple.as_ref()?))
     }
 
     /// Counts one hit for `subject` (a user id, or [`extract::ClientIp::subject`])
