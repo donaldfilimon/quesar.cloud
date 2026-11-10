@@ -60,10 +60,43 @@ async fn run() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
+/// Where the SQL files live unless `QUESAR_MIGRATIONS_DIR` says otherwise,
+/// relative to the repo root like the other defaults.
+const DEFAULT_MIGRATIONS_DIR: &str = "migrations";
+
+/// `quesar-server migrate`: the explicit release step, like `bun run db:migrate`.
+async fn run_migrate() -> Result<(), Box<dyn std::error::Error>> {
+    let environment = Environment::from_process();
+    let url = environment
+        .read("DATABASE_URL")
+        .ok_or("DATABASE_URL is required to migrate")?;
+    let dir = environment
+        .read("QUESAR_MIGRATIONS_DIR")
+        .unwrap_or(DEFAULT_MIGRATIONS_DIR);
+    let pool = quesar_db::connect(url).await?;
+    let applied = quesar_db::migrate(&pool, std::path::Path::new(dir)).await?;
+    for name in &applied {
+        tracing::info!(migration = %name, "applied");
+    }
+    tracing::info!(applied = applied.len(), "migrations up to date");
+    Ok(())
+}
+
 #[tokio::main]
 async fn main() -> ExitCode {
+    let mut args = std::env::args().skip(1);
+    let command = args.next();
+    if command.as_deref().is_some_and(|c| c != "migrate") || args.next().is_some() {
+        eprintln!("usage: quesar-server [migrate]");
+        return ExitCode::from(2);
+    }
     init_tracing();
-    match run().await {
+    let result = if command.is_some() {
+        run_migrate().await
+    } else {
+        run().await
+    };
+    match result {
         Ok(()) => ExitCode::SUCCESS,
         Err(error) => {
             tracing::error!(%error, "quesar-server failed");

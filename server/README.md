@@ -25,10 +25,33 @@ bun run server         # http://127.0.0.1:8787
 | `QUESAR_ENV`      | unset            | `production` enforces readiness: every request but the probe gets 503 until config is sound.   |
 | `PUBLIC_ORIGIN`   | unset            | The public HTTPS origin. Required in production. `BETTER_AUTH_URL` is read as a fallback.      |
 | `DATABASE_URL`    | unset            | Postgres. Required in production; there is no in-memory fallback.                              |
+| `QUESAR_MIGRATIONS_DIR` | `migrations` | Used by `quesar-server migrate`: the SQL files to apply. |
 | `RUST_LOG`        | `info`           | Log filter. Logs are JSON on stdout.                                                           |
 
 `/api/readiness` reports the shape of the configuration only. It does not claim
 the database answers.
+
+## Migrate
+
+```bash
+DATABASE_URL=postgres://... quesar-server migrate
+```
+
+Applies the pending `migrations/*.sql` (top level only; `migrations/auth/` is
+ignored) and logs each name. It exits 1 on failure or when `DATABASE_URL` is
+unset. It is interchangeable with `bun run db:migrate`: same `_migrations`
+table, same advisory lock, one transaction per file. Any other argument exits 2;
+no argument serves.
+
+## Database tests
+
+Tests in `quesar-db` need a Postgres, read from `TEST_DATABASE_URL`, and fail
+(never skip) without it. `scripts/dev-postgres.sh start` runs a throwaway one on
+`127.0.0.1:54329` (`QUESAR_TEST_PG_PORT` changes the port; trust auth, superuser
+`quesar`) and prints its URL; `stop` removes it. `bun run check:server` starts it
+for you unless `TEST_DATABASE_URL` is already exported. Each test gets its own
+database via `quesar_db::test_support::TestDatabase` (cargo feature
+`test-support`).
 
 ## Check
 
