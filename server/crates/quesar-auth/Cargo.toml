@@ -1,0 +1,26 @@
+[package]
+name = "quesar-auth"
+version = "0.1.0"
+description = "Authentication core for the quesar.cloud server: identifiers, tokens, clock, row types and configuration. Framework-free."
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+base64 = "0.22"
+rand = "0.8"
+serde_json = "1"
+sha2 = "0.10"
+time = "0.3"
+url = "2"
+uuid = "1"
+zeroize = "1"
+sqlx = { version = "0.8", default-features = false, features = ["postgres", "runtime-tokio", "tls-rustls-ring-webpki", "derive", "time", "json", "uuid"] }
+
+[dev-dependencies]
+quesar-db = { path = "../quesar-db", features = ["test-support"] }
+tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
+time = { version = "0.3", features = ["macros"] }

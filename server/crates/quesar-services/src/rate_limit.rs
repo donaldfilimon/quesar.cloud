@@ -48,6 +48,10 @@ pub enum Bucket {
     Workspace,
     CommerceCreate,
     AuditExpiry,
+    /// Sign-in and sign-up: Better Auth's `/sign-in*` and `/sign-up*` rule.
+    AuthCredential,
+    /// Every other auth endpoint.
+    AuthGeneral,
 }
 
 impl Bucket {
@@ -61,6 +65,8 @@ impl Bucket {
             Self::Workspace => "workspace",
             Self::CommerceCreate => "commerce-create",
             Self::AuditExpiry => "audit-expiry",
+            Self::AuthCredential => "auth",
+            Self::AuthGeneral => "auth-general",
         }
     }
 
@@ -73,6 +79,8 @@ impl Bucket {
             Self::Workspace => (60_000, 60),
             Self::CommerceCreate => (3_600_000, 20),
             Self::AuditExpiry => (60_000, 5),
+            Self::AuthCredential => (10_000, 3),
+            Self::AuthGeneral => (10_000, 100),
         };
         Limit { window_ms, max }
     }

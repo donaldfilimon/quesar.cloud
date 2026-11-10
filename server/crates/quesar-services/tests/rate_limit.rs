@@ -259,6 +259,8 @@ fn buckets_carry_the_typescript_limits() {
         (Bucket::Workspace, "workspace", 60_000, 60),
         (Bucket::CommerceCreate, "commerce-create", 3_600_000, 20),
         (Bucket::AuditExpiry, "audit-expiry", 60_000, 5),
+        (Bucket::AuthCredential, "auth", 10_000, 3),
+        (Bucket::AuthGeneral, "auth-general", 10_000, 100),
     ];
     for (bucket, name, window_ms, max) in table {
         assert_eq!(bucket.name(), name);
