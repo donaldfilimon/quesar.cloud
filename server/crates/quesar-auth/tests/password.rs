@@ -161,6 +161,26 @@ fn emails() {
 }
 
 #[test]
+fn email_is_checked_before_lowercasing() {
+    for bad in [
+        "\u{212A}@x.com",
+        "a\u{130}b@x.com",
+        "a@\u{212A}.com",
+        "a@x.\u{212A}\u{212A}",
+    ] {
+        assert_eq!(
+            validate::email(bad),
+            Err(ValidationError::InvalidEmail),
+            "{bad:?}"
+        );
+    }
+    assert_eq!(
+        validate::email("ADA.Lovelace@EXAMPLE.Com").unwrap(),
+        "ada.lovelace@example.com"
+    );
+}
+
+#[test]
 fn password_lengths() {
     assert_eq!(
         validate::password_len("1234567"),

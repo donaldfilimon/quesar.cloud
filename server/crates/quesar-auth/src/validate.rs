@@ -65,9 +65,11 @@ pub fn display_name(input: &str) -> Result<String, ValidationError> {
 /// alphanumeric (then alphanumerics or hyphens), then an alphabetic TLD of 2+
 /// letters. Anything else, including all non-ASCII, is refused.
 pub fn email(input: &str) -> Result<String, ValidationError> {
-    let email = input.trim().to_lowercase();
-    if zod_email(&email) {
-        Ok(email)
+    // Check the raw trimmed string, as zod does, so a non-ASCII character that
+    // lowercases to ASCII (U+212A KELVIN SIGN, U+0130) cannot slip through.
+    let email = input.trim();
+    if zod_email(email) {
+        Ok(email.to_ascii_lowercase())
     } else {
         Err(ValidationError::InvalidEmail)
     }
