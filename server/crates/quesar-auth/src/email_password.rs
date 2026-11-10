@@ -132,6 +132,21 @@ pub async fn find_credentials(
     }))
 }
 
+/// The password hash of the user's credential account, if they have one
+/// (Better Auth's `findCredentialAccount`: the first credential account, and
+/// one without a password counts as none).
+pub async fn credential_hash(pool: &PgPool, user_id: &str) -> Result<Option<PhcString>, AuthError> {
+    let hash: Option<Option<String>> = sqlx::query_scalar(
+        r#"select password from "account"
+           where "userId" = $1 and "providerId" = 'credential'
+           order by "createdAt" limit 1"#,
+    )
+    .bind(user_id)
+    .fetch_optional(pool)
+    .await?;
+    Ok(hash.flatten().map(PhcString::new))
+}
+
 /// Sets the (already validated) display name; `None` when the user is gone.
 pub async fn rename(
     pool: &PgPool,

@@ -8,6 +8,7 @@
 pub mod admin;
 pub mod clock;
 pub mod config;
+pub mod deletion;
 pub mod email_password;
 pub mod error;
 pub mod ids;

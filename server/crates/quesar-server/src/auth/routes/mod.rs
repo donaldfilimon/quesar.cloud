@@ -8,6 +8,7 @@ use axum::routing::{get, post};
 
 use crate::router::AppState;
 
+pub mod delete;
 pub mod email;
 pub mod methods;
 pub mod oauth;
@@ -25,6 +26,7 @@ pub fn router() -> Router<Arc<AppState>> {
         .route("/sessions/revoke", post(session::revoke))
         .route("/sessions/revoke-others", post(session::revoke_others))
         .route("/profile", post(profile::update))
+        .route("/delete-account", post(delete::delete_account))
         .route("/oauth/{provider}/start", post(oauth::start))
         .route("/callback/{provider}", get(oauth::callback))
 }

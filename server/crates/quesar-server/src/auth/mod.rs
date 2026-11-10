@@ -21,6 +21,7 @@ use axum::Router;
 use axum::extract::{OriginalUri, Request, State};
 use axum::middleware::{self, Next};
 use axum::response::Response;
+use quesar_auth::deletion::DeletionHooks;
 use quesar_auth::oauth::jwks::JwksCache;
 use quesar_auth::password::{Argon2Hasher, HashError};
 use quesar_auth::{AuthConfig, Clock};
@@ -51,6 +52,8 @@ const AVAILABLE_WHEN_DISABLED: &[&str] = &[
     "/api/auth/sessions/revoke",
     "/api/auth/sessions/revoke-others",
     "/api/auth/profile",
+    // Needs a session, so it answers 401 while sign-in is off.
+    "/api/auth/delete-account",
 ];
 /// Identity-provider calls give up after this long.
 const PROVIDER_TIMEOUT: Duration = Duration::from_secs(10);
@@ -91,6 +94,10 @@ pub struct AuthServices {
     pub production: bool,
     /// Identity providers' signing keys.
     pub jwks: JwksCache,
+    /// The external cleanups an account deletion calls. M2 defaults: the
+    /// WDBX configuration guard and no workspace revocation; M5 and M6 replace
+    /// them.
+    pub deletion: DeletionHooks,
 }
 
 impl std::fmt::Debug for AuthServices {
@@ -132,6 +139,11 @@ impl AuthServices {
             auth_enabled: environment.read("VITE_AUTH_ENABLED") != Some("false"),
             production: server.production,
             jwks: JwksCache::new(),
+            deletion: DeletionHooks::defaults(
+                environment
+                    .raw_pairs()
+                    .map(|(name, value)| (name.to_owned(), value.to_owned())),
+            ),
         })
     }
 

@@ -52,6 +52,12 @@ impl Environment {
         )
     }
 
+    /// Every variable exactly as set (not trimmed, blanks included), for the
+    /// checks that must treat "set to anything" as set.
+    pub fn raw_pairs(&self) -> impl Iterator<Item = (&str, &str)> {
+        self.0.iter().map(|(k, v)| (k.as_str(), v.as_str()))
+    }
+
     pub fn read(&self, name: &str) -> Option<&str> {
         self.0
             .get(name)
