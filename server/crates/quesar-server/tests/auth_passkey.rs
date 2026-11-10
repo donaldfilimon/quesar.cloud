@@ -830,6 +830,42 @@ async fn sign_in_routes_are_rate_limited_before_any_work() {
 }
 
 #[tokio::test]
+async fn a_registration_made_under_a_stale_user_handle_is_refused_not_stored() {
+    let h = Harness::new().await;
+    let session = h
+        .sign_up("tabs@example.com")
+        .await
+        .session_cookie()
+        .unwrap();
+    // Two tabs begin before the user has any key: two random handles.
+    let first = start_registration(&h, &session).await;
+    let second = start_registration(&h, &session).await;
+    assert_ne!(first.options["user"]["id"], second.options["user"]["id"]);
+    let mut browser = SoftBrowser::new();
+    let one = browser.create(ORIGIN, &first.options);
+    let two = browser.create(ORIGIN, &second.options);
+
+    let reply = register_verify(&h, &session, &first, &one, None).await;
+    assert_eq!(reply.status, StatusCode::OK, "{}", reply.text());
+    let reply = register_verify(&h, &session, &second, &two, None).await;
+    assert_eq!(reply.status, StatusCode::BAD_REQUEST);
+    assert_eq!(reply.error_code(), "PASSKEY_REGISTRATION_FAILED");
+    assert_eq!(count(&h, "select count(*) from auth_passkeys").await, 1);
+
+    // Retrying begins with the committed handle and succeeds.
+    let retry = start_registration(&h, &session).await;
+    assert_eq!(retry.options["user"]["id"], first.options["user"]["id"]);
+    let three = browser.create(ORIGIN, &retry.options);
+    let reply = register_verify(&h, &session, &retry, &three, None).await;
+    assert_eq!(reply.status, StatusCode::OK, "{}", reply.text());
+    assert_eq!(
+        count(&h, "select count(distinct user_handle) from auth_passkeys").await,
+        1
+    );
+    h.finish().await;
+}
+
+#[tokio::test]
 async fn a_replayed_registration_cannot_attach_a_credential_twice() {
     let h = Harness::new().await;
     let session = h.sign_up("dup@example.com").await.session_cookie().unwrap();

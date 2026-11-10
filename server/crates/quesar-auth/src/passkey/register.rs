@@ -130,8 +130,15 @@ pub async fn finish(
     )
     .await?;
     tx.commit().await?;
-    if inserted.is_none() {
-        tracing::info!("passkey registration refused: credential id already registered");
+    match inserted {
+        store::Inserted::Stored(row) => Ok(Some(*row)),
+        store::Inserted::Duplicate => {
+            tracing::info!("passkey registration refused: credential id already registered");
+            Ok(None)
+        }
+        store::Inserted::HandleMismatch => {
+            tracing::info!("passkey registration refused: user handle changed since it began");
+            Ok(None)
+        }
     }
-    Ok(inserted)
 }
