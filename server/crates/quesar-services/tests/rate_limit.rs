@@ -209,6 +209,30 @@ fn headers_that_are_not_utf8_are_ignored() {
     );
 }
 
+#[test]
+fn an_empty_trusted_header_falls_back_to_the_peer_address() {
+    for (trust, name) in [
+        (ProxyTrust::XRealIp, "x-real-ip"),
+        (ProxyTrust::Cloudflare, "cf-connecting-ip"),
+        (ProxyTrust::XForwardedFor, "x-forwarded-for"),
+    ] {
+        for value in ["", "   "] {
+            let headers = headers_of(&[(name, value)]);
+            assert_eq!(
+                client_ip_from_headers(&headers, trust, peer("10.0.0.1:1")),
+                "10.0.0.1",
+                "{name}={value:?}"
+            );
+        }
+    }
+    // A trailing comma leaves an empty rightmost hop.
+    let headers = headers_of(&[("x-forwarded-for", "203.0.113.9,")]);
+    assert_eq!(
+        client_ip_from_headers(&headers, ProxyTrust::XForwardedFor, peer("10.0.0.1:1")),
+        "10.0.0.1"
+    );
+}
+
 fn configured(secret: &str) -> RateLimitSecret {
     RateLimitSecret::Configured(secret.to_owned())
 }

@@ -267,8 +267,10 @@ fn joined_header(headers: &http::HeaderMap, name: &str) -> Option<String> {
 
 /// The client address for rate limiting: the header `trust` names, else the
 /// peer address, else `"unknown"`. A trusted header that is present but empty
-/// is used as is, as in the TypeScript; repeated header lines are joined like
-/// Fetch does before the rightmost `x-forwarded-for` hop is taken.
+/// (or whitespace) names no client, so it falls back to the peer address: an
+/// empty subject would put every such client in one shared bucket. Repeated
+/// header lines are joined like Fetch does before the rightmost
+/// `x-forwarded-for` hop is taken.
 pub fn client_ip_from_headers(
     headers: &http::HeaderMap,
     trust: ProxyTrust,
@@ -281,8 +283,15 @@ pub fn client_ip_from_headers(
             .and_then(|v| v.split(',').next_back().map(|hop| hop.trim().to_owned())),
         ProxyTrust::Cloudflare => joined_header(headers, "cf-connecting-ip"),
     };
+    let peer_ip = peer.map(|addr| addr.ip().to_canonical().to_string());
+    // With no peer address (only in tests; the server always has one) an empty
+    // header stays as given, which the shared contract vectors pin.
+    let from_header = match (from_header, &peer_ip) {
+        (Some(ip), Some(_)) if ip.trim().is_empty() => None,
+        (header, _) => header,
+    };
     from_header
-        .or_else(|| peer.map(|addr| addr.ip().to_canonical().to_string()))
+        .or(peer_ip)
         .unwrap_or_else(|| "unknown".to_owned())
 }
 

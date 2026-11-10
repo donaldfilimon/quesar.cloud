@@ -1,9 +1,12 @@
 use std::net::SocketAddr;
 use std::process::ExitCode;
+use std::sync::Arc;
 
+use quesar_server::auth::AuthServices;
 use quesar_server::config::Environment;
 use quesar_server::readiness::runtime_readiness;
-use quesar_server::{Config, router};
+use quesar_server::trace::request_span;
+use quesar_server::{Config, router_with};
 use tokio::net::TcpListener;
 use tower_http::trace::TraceLayer;
 
@@ -47,7 +50,23 @@ async fn run() -> Result<(), Box<dyn std::error::Error>> {
     if !config.site_dir.join("index.html").is_file() {
         tracing::warn!(site_dir = %config.site_dir.display(), "site directory has no index.html");
     }
-    let app = router(&config).layer(TraceLayer::new_for_http());
+    let auth = match config.environment.read("DATABASE_URL") {
+        Some(url) => {
+            let pool = quesar_db::connect(url).await?;
+            Some(AuthServices::build(
+                pool,
+                &config,
+                Arc::new(quesar_auth::SystemClock),
+            )?)
+        }
+        None => {
+            tracing::warn!("DATABASE_URL is not set; /api/auth/* answers 503");
+            None
+        }
+    };
+    // The span records the method and path only, never the query string.
+    let app =
+        router_with(&config, auth).layer(TraceLayer::new_for_http().make_span_with(request_span));
     let listener = TcpListener::bind(config.listen).await?;
     tracing::info!(
         listen = %listener.local_addr()?,

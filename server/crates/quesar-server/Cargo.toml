@@ -10,15 +10,18 @@ publish.workspace = true
 workspace = true
 
 [dependencies]
-axum = { version = "0.8", default-features = false, features = ["http1", "http2", "json", "tokio"] }
+axum = { version = "0.8", default-features = false, features = ["form", "http1", "http2", "json", "original-uri", "query", "tokio"] }
 base64 = "0.22"
 http-body-util = "0.1"
 percent-encoding = "2"
+quesar-auth = { path = "../quesar-auth" }
 quesar-db = { path = "../quesar-db" }
 quesar-services = { path = "../quesar-services" }
 serde = { version = "1", features = ["derive"] }
+reqwest = { version = "0.12", default-features = false, features = ["rustls-tls", "json"] }
 serde_json = "1"
-tokio = { version = "1", features = ["macros", "net", "rt-multi-thread", "signal"] }
+time = "0.3"
+tokio = { version = "1", features = ["macros", "net", "rt-multi-thread", "signal", "sync"] }
 tower = { version = "0.5", features = ["util"] }
 tower-http = { version = "0.6", features = ["fs", "trace"] }
 tracing = "0.1"
@@ -26,5 +29,7 @@ tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
 url = "2"
 
 [dev-dependencies]
+quesar-db = { path = "../quesar-db", features = ["test-support"] }
 http-body-util = { version = "0.1", features = ["channel"] }
+sqlx = { version = "0.8", default-features = false, features = ["postgres", "runtime-tokio"] }
 tempfile = "3"
