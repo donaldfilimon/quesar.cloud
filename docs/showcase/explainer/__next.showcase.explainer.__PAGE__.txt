@@ -3,13 +3,13 @@
 3:"static/chunks/4514-528d9552f8c1e643.js"
 4:"static/chunks/1546-99b37aecf8873e20.js"
 5:"static/chunks/203-7b0223e2fefe979c.js"
-6:"static/chunks/1856-fdf06ce030d8bf0b.js"
-7:"static/chunks/app/layout-783b23c39fd9dd8b.js"
+6:"static/chunks/1856-8d22ee3124cf31ed.js"
+7:"static/chunks/app/layout-7c7991423c323bd2.js"
 8:I[71856,["9756","$2","4514","$3","1546","$4","203","$5","1856","$6","7177","$7"],"RootShell"]
 9:I[57121,[],""]
 a:I[74581,[],""]
 b:I[71856,["9756","$2","4514","$3","1546","$4","203","$5","1856","$6","7177","$7"],"RootNotFound"]
-14:"static/chunks/app/showcase/explainer/page-14482465ceafc4ff.js"
+14:"static/chunks/app/showcase/explainer/page-448f708edf46e882.js"
 15:I[62574,["9756","$2","203","$5","2681","$14"],"default"]
 16:I[90484,[],"OutletBoundary"]
 17:"$Sreact.suspense"
@@ -17,14 +17,14 @@ b:I[71856,["9756","$2","4514","$3","1546","$4","203","$5","1856","$6","7177","$7
 1b:I[90484,[],"$1a"]
 1c:"MetadataBoundary"
 1d:I[90484,[],"$1c"]
-:HL["/_next/static/css/aaf0fc9679014c9d.css","style"]
+:HL["/_next/static/css/b2faa010fac09568.css","style"]
 d:X
 10:X
 10:C
 13:[["children",{"s":"__PAGE__","h":160,"d":{"r":["$","$1","c",{"children":[["$","$L15",null,{}],null,["$","$L16",null,{"children":["$","$17",null,{"name":"Next.MetadataOutlet","children":"$@18"}]}]]}],"p":"$@19","v":null,"s":"$d"}}]]
 11:[["children",{"s":"explainer","h":96,"d":{"r":["$","$1","c",{"children":[null,["$","$L9",null,{"parallelRouterKey":"children","template":["$","$La",null,{}]}]]}],"p":"$@12","v":"$10","s":"$d"},"c":"$Q13"}]]
 e:[["children",{"s":"showcase","h":96,"d":{"r":["$","$1","c",{"children":[null,["$","$L9",null,{"parallelRouterKey":"children","template":["$","$La",null,{}]}]]}],"p":"$@f","v":"$10","s":"$d"},"c":"$Q11"}]]
-0:{"t":{"t":{"s":"","h":80,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/aaf0fc9679014c9d.css","precedence":"next"}]],["$","html",null,{"lang":"en","data-theme":"dark","className":"dark","suppressHydrationWarning":true,"children":[["$","head",null,{"children":[["$","script",null,{"dangerouslySetInnerHTML":{"__html":"(function(){try{var t=localStorage.getItem(\"mlai-theme\");var theme=t===\"light\"||t===\"dark\"?t:(window.matchMedia(\"(prefers-color-scheme: light)\").matches?\"light\":\"dark\");document.documentElement.dataset.theme=theme;document.documentElement.classList.toggle(\"dark\",theme===\"dark\");}catch(e){document.documentElement.dataset.theme=\"dark\";document.documentElement.classList.add(\"dark\");}})();"}}],["$","link",null,{"rel":"icon","type":"image/svg+xml","href":"/favicon.svg"}],["$","link",null,{"rel":"manifest","href":"/manifest.webmanifest"}],["$","link",null,{"rel":"apple-touch-icon","href":"/apple-touch-icon.png"}],["$","link",null,{"rel":"alternate","type":"application/rss+xml","title":"Quesar lab notes, research and releases","href":"/feed.xml"}]]}],["$","body",null,{"className":"antialiased","children":["$","$L8",null,{"children":["$","$L9",null,{"parallelRouterKey":"children","template":["$","$La",null,{}],"notFound":[["$","$Lb",null,{}],[]]}]}]}]]}]]}],"p":"$@c","v":null,"s":"$d"},"c":"$Qe"},"h":{"r":["$","$1","h",{"children":[null,["$","$L1b",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]}],["$","$L1d",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$17",null,{"name":"Next.Metadata","children":[]}]}],null]}],null]}],"p":"$@1e","v":null,"s":"$d"}},"a":"$@1f","u":"$@20","b":"7ac1e7b4d60e"}
+0:{"t":{"t":{"s":"","h":80,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/b2faa010fac09568.css","precedence":"next"}]],["$","html",null,{"lang":"en","data-theme":"dark","className":"dark","suppressHydrationWarning":true,"children":[["$","head",null,{"children":[["$","script",null,{"dangerouslySetInnerHTML":{"__html":"(function(){try{var t=localStorage.getItem(\"mlai-theme\");var theme=t===\"light\"||t===\"dark\"?t:(window.matchMedia(\"(prefers-color-scheme: light)\").matches?\"light\":\"dark\");document.documentElement.dataset.theme=theme;document.documentElement.classList.toggle(\"dark\",theme===\"dark\");}catch(e){document.documentElement.dataset.theme=\"dark\";document.documentElement.classList.add(\"dark\");}})();"}}],["$","link",null,{"rel":"icon","type":"image/svg+xml","href":"/favicon.svg"}],["$","link",null,{"rel":"manifest","href":"/manifest.webmanifest"}],["$","link",null,{"rel":"apple-touch-icon","href":"/apple-touch-icon.png"}],["$","link",null,{"rel":"alternate","type":"application/rss+xml","title":"Quesar lab notes, research and releases","href":"/feed.xml"}]]}],["$","body",null,{"className":"antialiased","children":["$","$L8",null,{"children":["$","$L9",null,{"parallelRouterKey":"children","template":["$","$La",null,{}],"notFound":[["$","$Lb",null,{}],[]]}]}]}]]}]]}],"p":"$@c","v":null,"s":"$d"},"c":"$Qe"},"h":{"r":["$","$1","h",{"children":[null,["$","$L1b",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]}],["$","$L1d",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$17",null,{"name":"Next.Metadata","children":[]}]}],null]}],null]}],"p":"$@1e","v":null,"s":"$d"}},"a":"$@1f","u":"$@20","b":"538ce9dacd37"}
 18:null
 d:300
 20:true
