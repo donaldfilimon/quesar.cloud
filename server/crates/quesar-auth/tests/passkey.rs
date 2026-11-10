@@ -8,7 +8,7 @@ use std::time::Duration;
 
 use http::{HeaderMap, HeaderValue, header};
 use quesar_auth::passkey::flow::{self, Ceremony};
-use quesar_auth::passkey::store::{self, NewPasskey};
+use quesar_auth::passkey::store::{self, Inserted, NewPasskey};
 use quesar_auth::passkey::{CEREMONY_TTL, NAME_MAX_CHARS, Passkeys};
 use quesar_auth::{AuthConfig, new_id};
 use quesar_db::migrate;
@@ -258,6 +258,13 @@ fn the_binding_cookie_is_host_prefixed_http_only_and_read_by_name() {
     }
 }
 
+fn stored(inserted: Inserted) -> quesar_auth::rows::PasskeyRow {
+    match inserted {
+        Inserted::Stored(row) => *row,
+        other => panic!("expected a stored key, got {other:?}"),
+    }
+}
+
 fn new_key<'a>(user_id: &'a str, handle: Uuid, credential_id: &'a [u8]) -> NewPasskey<'a> {
     NewPasskey {
         user_id,
@@ -278,30 +285,32 @@ async fn keys_are_stored_listed_and_deleted_per_user() {
     let handle = Uuid::new_v4();
 
     let mut tx = db.pool.begin().await.unwrap();
-    let first = store::insert(&mut tx, new_key(&alice, handle, b"cred-1"), T0)
-        .await
-        .unwrap()
-        .expect("inserted");
+    let first = stored(
+        store::insert(&mut tx, new_key(&alice, handle, b"cred-1"), T0)
+            .await
+            .unwrap(),
+    );
     tx.commit().await.unwrap();
     assert_eq!(first.user_handle, handle);
     assert_eq!(first.device_type, "singleDevice");
     assert!(!first.backed_up);
 
-    // A second key of the same user keeps the first handle, whatever is offered.
+    // A second key of the same user is stored under the same handle.
     let mut tx = db.pool.begin().await.unwrap();
-    let second = store::insert(
-        &mut tx,
-        NewPasskey {
-            backup_eligible: true,
-            backed_up: true,
-            name: Some("Phone".to_owned()),
-            ..new_key(&alice, Uuid::new_v4(), b"cred-2")
-        },
-        T0 + Duration::from_secs(5),
-    )
-    .await
-    .unwrap()
-    .expect("inserted");
+    let second = stored(
+        store::insert(
+            &mut tx,
+            NewPasskey {
+                backup_eligible: true,
+                backed_up: true,
+                name: Some("Phone".to_owned()),
+                ..new_key(&alice, handle, b"cred-2")
+            },
+            T0 + Duration::from_secs(5),
+        )
+        .await
+        .unwrap(),
+    );
     tx.commit().await.unwrap();
     assert_eq!(second.user_handle, handle);
     assert_eq!(second.device_type, "multiDevice");
@@ -312,14 +321,31 @@ async fn keys_are_stored_listed_and_deleted_per_user() {
     );
     assert_eq!(store::user_handle(&db.pool, &bob).await.unwrap(), None);
 
+    // A key made under another handle is refused, not stored under this one.
+    let mut tx = db.pool.begin().await.unwrap();
+    let other = store::insert(&mut tx, new_key(&alice, Uuid::new_v4(), b"cred-3"), T0)
+        .await
+        .unwrap();
+    tx.commit().await.unwrap();
+    assert!(matches!(other, Inserted::HandleMismatch));
+    assert_eq!(
+        store::credential_ids(&db.pool, &alice).await.unwrap().len(),
+        2
+    );
+
     // A credential id registered once cannot be registered again, by anyone.
     for owner in [&alice, &bob] {
         let mut tx = db.pool.begin().await.unwrap();
-        let again = store::insert(&mut tx, new_key(owner, Uuid::new_v4(), b"cred-1"), T0)
+        let handle = if owner == &alice {
+            handle
+        } else {
+            Uuid::new_v4()
+        };
+        let again = store::insert(&mut tx, new_key(owner, handle, b"cred-1"), T0)
             .await
             .unwrap();
         tx.commit().await.unwrap();
-        assert!(again.is_none());
+        assert!(matches!(again, Inserted::Duplicate));
     }
 
     // Per-user views.
@@ -350,10 +376,11 @@ async fn using_a_key_stores_the_credential_and_last_use_under_a_row_lock() {
     let db = migrated().await;
     let alice = user(&db.pool, "lock@example.com").await;
     let mut tx = db.pool.begin().await.unwrap();
-    let key = store::insert(&mut tx, new_key(&alice, Uuid::new_v4(), b"cred-x"), T0)
-        .await
-        .unwrap()
-        .unwrap();
+    let key = stored(
+        store::insert(&mut tx, new_key(&alice, Uuid::new_v4(), b"cred-x"), T0)
+            .await
+            .unwrap(),
+    );
     tx.commit().await.unwrap();
 
     assert!(

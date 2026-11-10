@@ -590,7 +590,11 @@ Shorthand in the Checks column:
 - **FM**: `FetchMetadata` (403).
 - **AU**: `AuthUser` (401 `UnauthorizedError`).
 - **RL-a / RL-g**: the `auth` / `auth-general` bucket (429 `RateLimitedError`).
-- Every route except `/methods` can answer 503 `AuthUnavailableError`.
+- Every route except `/methods` can answer 503 `AuthUnavailableError` (`AUTH_UNAVAILABLE`): always without a database, and, when `VITE_AUTH_ENABLED=false`, for every route that could issue a session (sign-up, sign-in, OAuth start and callback, passkey sign-in). Routes that only need a session (`/sign-out`, `/session`, `/sessions*`, `/profile`, `/delete-account`, `/passkeys`, `/passkey/register/*`, `/passkey/delete`) stay reachable when sign-in is off and answer 401, because no session can exist; `/methods` then reports `{email:false, passkey:false, social:[]}`.
+- Any JSON body that is malformed, has a wrong field type or is `null` answers 400 `INVALID_BODY`; a missing field takes its empty default (so `{}` to `/sign-in` is `INVALID_EMAIL`). A body over 16 KiB answers 413 `PAYLOAD_TOO_LARGE`.
+- An unknown path under `/api/auth` is 404 `NOT_FOUND`; a known path with another method is 405 `METHOD_NOT_ALLOWED` with an `Allow` header. Both are JSON envelopes.
+- Passkey routes answer 404 `PASSKEYS_NOT_AVAILABLE` when the configured origin cannot be a WebAuthn relying party (for example an IP address); the server still starts.
+- Rate-limited requests answer 429 `RateLimitedError` (`RATE_LIMITED`) with `Retry-After`, except the OAuth callbacks (the GET callbacks and the Apple form POST), which answer a 303 to the error path (`?error=failed`).
 
 | Method, path | Checks | Request | Result | Errors (status, code) |
 | --- | --- | --- | --- | --- |
@@ -605,14 +609,19 @@ Shorthand in the Checks column:
 | POST `/sessions/revoke-others` | SO, AU, RL-g | `{}` | `{revoked: number}` | — |
 | POST `/oauth/{google\|apple\|twitter}/start` | SO, RL-a | `{callbackURL?, errorCallbackURL?}` | `{url}` + binding cookie | 404 `PROVIDER_NOT_CONFIGURED` |
 | GET `/callback/{google\|twitter\|apple}` | FM (navigation passes), RL-g | query `code`, `state`, `error` | 303 to the callback path + session cookie, or 303 to the error path `?error=` one of `access_denied`, `provider_email_unverified`, `state_not_found`, `state_mismatch`, `expired`, `no_code`, `email_not_found`, `account_not_linked`, `failed` | — |
-| POST `/callback/apple` | **none** (sole exemption), RL-g | form `code`, `state`, `user`, `error` (≤ 16 KiB) | 303 to `GET /callback/apple?state=…` | 413; 303 to the error path |
-| POST `/passkey/register/options` | SO, AU, RL-g | `{}` | `{flowId, options}` (simplewebauthn `optionsJSON`) | 403 `SESSION_NOT_FRESH` |
-| POST `/passkey/register/verify` | SO, AU, RL-g | `{flowId, credential, name?}` | `{passkey: {id, name, deviceType, backedUp, createdAt}}` | 400 `CHALLENGE_NOT_FOUND`, `PASSKEY_REGISTRATION_FAILED` |
-| POST `/passkey/authenticate/options` | SO, RL-a | `{}` | `{flowId, options}` | — |
-| POST `/passkey/authenticate/verify` | SO, RL-a | `{flowId, credential}` | `{user, session}` + cookie | 400 `CHALLENGE_NOT_FOUND`; 401 `PASSKEY_AUTHENTICATION_FAILED` |
+| POST `/callback/apple` | **none** (sole exemption; it applies only when Apple is configured, on this exact path, with Apple's origin or `Sec-Fetch-Site: cross-site`; otherwise 403), RL-g | form `code`, `state`, `user`, `error` (≤ 16 KiB, `application/x-www-form-urlencoded`) | 303 to `GET /callback/apple?state=…` (nobody is signed in, the flow is not consumed) | 413 `PAYLOAD_TOO_LARGE`; 404 `PROVIDER_NOT_CONFIGURED`; every other outcome (rate limit, wrong content type, unknown, expired or already-posted state) is a 303 to the error path with a fixed `?error=` code, never a 429 JSON |
+| POST `/passkey/register/options` | SO, AU, RL-g | `{}` | `{flowId, options}` (simplewebauthn `optionsJSON`) | 403 `SESSION_NOT_FRESH`; 404 `PASSKEYS_NOT_AVAILABLE` |
+| POST `/passkey/register/verify` | SO, AU, RL-g | `{flowId, credential, name?}` | `{passkey: {id, name, deviceType, backedUp, createdAt}}` | 400 `CHALLENGE_NOT_FOUND`, `PASSKEY_REGISTRATION_FAILED` (also a duplicate credential or a registration begun under a stale user handle); 404 `PASSKEYS_NOT_AVAILABLE` |
+| POST `/passkey/authenticate/options` | SO, RL-a | `{}` | `{flowId, options}` | 404 `PASSKEYS_NOT_AVAILABLE` |
+| POST `/passkey/authenticate/verify` | SO, RL-a | `{flowId, credential}` | `{user, session}` + cookie | 400 `CHALLENGE_NOT_FOUND`; 401 `PASSKEY_AUTHENTICATION_FAILED`; 404 `PASSKEYS_NOT_AVAILABLE` |
 | GET `/passkeys` | AU, RL-g | — | `{passkeys: [...]}` | — |
 | POST `/passkey/delete` | SO, AU, RL-g | `{id}` | `{}` | 404 `NOT_FOUND` |
-| POST `/delete-account` | SO, AU, RL-a | `{password?}` | `{}` + cookie cleared | 400 `INVALID_PASSWORD`, `CREDENTIAL_ACCOUNT_NOT_FOUND`, `SESSION_EXPIRED`; 500 `DELETION_FAILED`; 503 `DELETION_UNAVAILABLE` |
+| POST `/delete-account` | SO, AU, RL-a | `{password?}` | `{}` + cookie cleared | 400 `INVALID_PASSWORD`, `CREDENTIAL_ACCOUNT_NOT_FOUND`, `SESSION_EXPIRED`; 500 `DELETION_FAILED`; 503 `DELETION_UNAVAILABLE` (nothing deleted: the commerce cleanup configuration is partial, or the user has a workspace connection and no revoker is installed yet) |
+
+Account linking, as built:
+- X never links to an existing user by email, and a user created by X is never `emailVerified`, even when X returns a confirmed address (Better Auth marks such users verified; that would let an X account pre-hijack a local one). A colliding address gives `account_not_linked`.
+- Google and Apple link only when the provider email is verified and the local user is email-verified too; an email/password user is never joined by a later provider sign-in.
+- Sessions are revoked by `id`; the API never returns a session token.
 
 M7 notes:
 - `SESSION_NOT_FRESH`, `SESSION_EXPIRED` and `INVALID_PASSWORD` keep the codes `delete-account.ts` and `profile.tsx` already match on.

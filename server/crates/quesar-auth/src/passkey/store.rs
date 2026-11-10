@@ -53,7 +53,7 @@ pub fn clean_name(name: Option<&str>) -> Option<String> {
 /// What a new key is stored with.
 pub struct NewPasskey<'a> {
     pub user_id: &'a str,
-    /// Used only when the user has no key yet.
+    /// The handle the authenticator was created with.
     pub user_handle: Uuid,
     pub credential_id: &'a [u8],
     pub credential: serde_json::Value,
@@ -71,15 +71,28 @@ pub fn device_type(backup_eligible: bool) -> &'static str {
     }
 }
 
-/// Inserts a key. `None` when the credential id is already registered (to this
-/// or another account). The user's existing handle wins over `user_handle`,
-/// and an advisory lock on the user keeps two simultaneous first registrations
-/// from picking two handles.
+/// What [`insert`] did.
+#[derive(Debug)]
+pub enum Inserted {
+    Stored(Box<PasskeyRow>),
+    /// The credential id is already registered (to this or another account).
+    Duplicate,
+    /// The user already has keys under a different handle than the one the
+    /// authenticator was given. Storing this key would make it unusable at
+    /// sign-in (the handle check would never match), so nothing is stored.
+    HandleMismatch,
+}
+
+/// Inserts a key under `new.user_handle`, which must be the handle the
+/// authenticator was created with. If the user already has keys under another
+/// handle (a second registration begun before any key existed, finishing
+/// after the first), nothing is stored. An advisory lock on the user makes the
+/// check and the insert atomic against a concurrent registration.
 pub async fn insert(
     tx: &mut PgConnection,
     new: NewPasskey<'_>,
     now: OffsetDateTime,
-) -> Result<Option<PasskeyRow>, AuthError> {
+) -> Result<Inserted, AuthError> {
     sqlx::query("select pg_advisory_xact_lock(hashtextextended('auth_passkeys:' || $1::text, 0))")
         .bind(new.user_id)
         .execute(&mut *tx)
@@ -90,7 +103,10 @@ pub async fn insert(
     .bind(new.user_id)
     .fetch_optional(&mut *tx)
     .await?;
-    Ok(sqlx::query_as(&format!(
+    if existing.is_some_and(|handle| handle != new.user_handle) {
+        return Ok(Inserted::HandleMismatch);
+    }
+    let row: Option<PasskeyRow> = sqlx::query_as(&format!(
         "insert into auth_passkeys
            (id, user_id, user_handle, credential_id, credential, name, device_type, backed_up, created_at)
          values ($1, $2, $3, $4, $5, $6, $7, $8, $9)
@@ -99,7 +115,7 @@ pub async fn insert(
     ))
     .bind(new_id())
     .bind(new.user_id)
-    .bind(existing.unwrap_or(new.user_handle))
+    .bind(new.user_handle)
     .bind(new.credential_id)
     .bind(new.credential)
     .bind(new.name)
@@ -107,7 +123,8 @@ pub async fn insert(
     .bind(new.backed_up)
     .bind(now)
     .fetch_optional(&mut *tx)
-    .await?)
+    .await?;
+    Ok(row.map_or(Inserted::Duplicate, |row| Inserted::Stored(Box::new(row))))
 }
 
 /// Deletes one of the user's own keys. `false` when there is no such key for
