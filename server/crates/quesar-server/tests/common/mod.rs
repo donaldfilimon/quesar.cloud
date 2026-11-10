@@ -15,13 +15,17 @@ use quesar_auth::FixedClock;
 use quesar_auth::password::{HashError, Password, PasswordHasher, PhcString};
 use quesar_db::migrate;
 use quesar_db::test_support::TestDatabase;
+use quesar_server::api::{FnRouter, PublicServices};
 use quesar_server::auth::{AuthServices, Hashing};
 use quesar_server::config::Environment;
-use quesar_server::{Config, router_with};
+use quesar_server::{Config, router_with_functions};
 use serde_json::Value;
 use time::OffsetDateTime;
 use time::macros::datetime;
 use tower::ServiceExt;
+
+/// A change to the public services before the router is built.
+type PublicEdit = Box<dyn FnOnce(&mut PublicServices)>;
 
 pub const T0: OffsetDateTime = datetime!(2026-11-10 12:00 UTC);
 pub const ORIGIN: &str = "https://quesar.cloud";
@@ -121,6 +125,95 @@ impl Reply {
     }
 }
 
+/// The test environment: the public origin, and each request names its own
+/// client address (see `fresh_ip`).
+pub fn test_config(extra: &[(&str, &str)]) -> Config {
+    let mut pairs = vec![("PUBLIC_ORIGIN", ORIGIN), ("TRUSTED_PROXY", "x-real-ip")];
+    pairs.extend_from_slice(extra);
+    Config::from_env(Environment::from_pairs(pairs)).unwrap()
+}
+
+/// A same-origin request to `path` (the full path) from a client address
+/// `ip`. `headers` override or add to the defaults (`origin`, `x-real-ip`,
+/// `content-type`); a request that names `sec-fetch-site` gets no default
+/// `origin`.
+pub fn full_request(
+    method: Method,
+    path: &str,
+    body: String,
+    ip: String,
+    headers: &[(&str, &str)],
+) -> Request<Body> {
+    let mut builder = Request::builder().method(method).uri(path);
+    let has = |name: &str| headers.iter().any(|(n, _)| n.eq_ignore_ascii_case(name));
+    if !has("origin") && !has("sec-fetch-site") {
+        builder = builder.header("origin", ORIGIN);
+    }
+    if !has("x-real-ip") {
+        builder = builder.header("x-real-ip", ip);
+    }
+    builder = builder.header(CONTENT_TYPE, "application/json");
+    for (name, value) in headers {
+        builder = builder.header(*name, *value);
+    }
+    builder.body(Body::from(body)).unwrap()
+}
+
+async fn reply_from(app: &Router, request: Request<Body>) -> Reply {
+    let response = app.clone().oneshot(request).await.unwrap();
+    let (parts, body) = response.into_parts();
+    Reply {
+        status: parts.status,
+        headers: parts.headers,
+        body: body.collect().await.unwrap().to_bytes().to_vec(),
+    }
+}
+
+/// A server with no database: only what needs none answers.
+pub struct NoDatabase {
+    pub app: Router,
+    ips: AtomicU64,
+}
+
+impl NoDatabase {
+    /// With `functions` mounted at `/api/fn` and `edit` applied to the
+    /// [`PublicServices`] before the router is built.
+    pub fn new(
+        extra: &[(&str, &str)],
+        functions: FnRouter,
+        edit: impl FnOnce(&mut PublicServices),
+    ) -> Self {
+        let config = test_config(extra);
+        let mut public = PublicServices::build(&config).unwrap();
+        edit(&mut public);
+        Self {
+            app: router_with_functions(&config, None, public, functions),
+            ips: AtomicU64::new(1),
+        }
+    }
+
+    /// The request exactly as given.
+    pub async fn send(&self, request: Request<Body>) -> Reply {
+        reply_from(&self.app, request).await
+    }
+
+    pub async fn request(
+        &self,
+        method: Method,
+        path: &str,
+        body: &str,
+        headers: &[(&str, &str)],
+    ) -> Reply {
+        let n = self.ips.fetch_add(1, Ordering::SeqCst);
+        let ip = format!("203.0.{}.{}", (n / 250) % 250, n % 250 + 1);
+        reply_from(
+            &self.app,
+            full_request(method, path, body.to_owned(), ip, headers),
+        )
+        .await
+    }
+}
+
 pub struct Harness {
     pub app: Router,
     pub db: TestDatabase,
@@ -152,15 +245,31 @@ impl Harness {
         Self::build(&[], false).await
     }
 
+    /// With `functions` mounted at `/api/fn` instead of the production set.
+    pub async fn with_functions(extra: &[(&str, &str)], functions: FnRouter) -> Self {
+        Self::build_full(extra, true, Some(functions), None).await
+    }
+
+    /// With `edit` applied to the [`PublicServices`] before the router is built.
+    pub async fn with_public(
+        extra: &[(&str, &str)],
+        edit: impl FnOnce(&mut PublicServices) + 'static,
+    ) -> Self {
+        Self::build_full(extra, true, None, Some(Box::new(edit))).await
+    }
+
     async fn build(extra: &[(&str, &str)], fake_hasher: bool) -> Self {
+        Self::build_full(extra, fake_hasher, None, None).await
+    }
+
+    async fn build_full(
+        extra: &[(&str, &str)],
+        fake_hasher: bool,
+        functions: Option<FnRouter>,
+        edit: Option<PublicEdit>,
+    ) -> Self {
         let db = migrated().await;
-        let mut pairs = vec![
-            ("PUBLIC_ORIGIN", ORIGIN),
-            // Each request names its own client address (see `fresh_ip`).
-            ("TRUSTED_PROXY", "x-real-ip"),
-        ];
-        pairs.extend_from_slice(extra);
-        let config = Config::from_env(Environment::from_pairs(pairs)).unwrap();
+        let config = test_config(extra);
         let clock = Arc::new(FixedClock::new(T0));
         let mut services = AuthServices::build(db.pool.clone(), &config, clock.clone()).unwrap();
         let hasher = Arc::new(Counting::default());
@@ -168,8 +277,13 @@ impl Harness {
             services.hashing = Hashing::new(hasher.clone(), 4).unwrap();
         }
         hasher.reset();
+        let mut public = PublicServices::build(&config).unwrap();
+        if let Some(edit) = edit {
+            edit(&mut public);
+        }
+        let functions = functions.unwrap_or_else(quesar_server::api::functions);
         Self {
-            app: router_with(&config, Some(services)),
+            app: router_with_functions(&config, Some(services), public, functions),
             db,
             clock,
             hasher,
@@ -184,13 +298,20 @@ impl Harness {
     }
 
     pub async fn send(&self, request: Request<Body>) -> Reply {
-        let response = self.app.clone().oneshot(request).await.unwrap();
-        let (parts, body) = response.into_parts();
-        Reply {
-            status: parts.status,
-            headers: parts.headers,
-            body: body.collect().await.unwrap().to_bytes().to_vec(),
-        }
+        reply_from(&self.app, request).await
+    }
+
+    /// A request to any path (the full path, unlike [`Self::post`]), from a
+    /// fresh client address, with the same defaults as `post`.
+    pub async fn request(
+        &self,
+        method: Method,
+        path: &str,
+        body: &str,
+        headers: &[(&str, &str)],
+    ) -> Reply {
+        let request = full_request(method, path, body.to_owned(), self.fresh_ip(), headers);
+        self.send(request).await
     }
 
     /// A same-origin JSON POST from a fresh client address. `headers` override

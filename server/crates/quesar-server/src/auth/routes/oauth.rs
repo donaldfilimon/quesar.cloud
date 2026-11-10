@@ -14,6 +14,7 @@
 use std::sync::Arc;
 
 use axum::body::Body;
+use axum::extract::rejection::PathRejection;
 use axum::extract::{Path, State};
 use axum::http::header::{CACHE_CONTROL, LOCATION, SET_COOKIE};
 use axum::http::{HeaderMap, HeaderValue, StatusCode, Uri};
@@ -101,10 +102,12 @@ pub async fn start(
     _: SameOrigin,
     State(state): State<Arc<AppState>>,
     ip: ClientIp,
-    Path(name): Path<String>,
+    name: Result<Path<String>, PathRejection>,
     headers: HeaderMap,
     body: Body,
 ) -> Result<Response, ApiError> {
+    // A name that is not valid UTF-8 once unescaped names no provider.
+    let Path(name) = name.map_err(|_| ApiError::NotFound)?;
     let services = state.auth_services()?;
     services
         .limit_route(Bucket::AuthCredential, "oauth-start", &ip.subject(services))
@@ -220,10 +223,13 @@ pub async fn callback(
     _: FetchMetadata,
     State(state): State<Arc<AppState>>,
     ip: ClientIp,
-    Path(name): Path<String>,
+    name: Result<Path<String>, PathRejection>,
     headers: HeaderMap,
     uri: Uri,
 ) -> Response {
+    // A browser navigation: a name that is not valid UTF-8 once unescaped is
+    // an unknown provider, which `run` already sends back to the login page.
+    let name = name.map_or_else(|_| String::new(), |Path(name)| name);
     let Ok(services) = state.auth_services() else {
         return ApiError::Unavailable.into_response();
     };

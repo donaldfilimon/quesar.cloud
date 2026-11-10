@@ -121,7 +121,9 @@ pub fn is_apple_callback(
         )
 }
 
-/// The request came from a trusted origin (see [`is_same_origin`]).
+/// The request came from a trusted origin (see [`is_same_origin`]). It reads
+/// [`PublicServices`](crate::api::PublicServices), so it answers without a
+/// database.
 #[derive(Debug, Clone, Copy)]
 pub struct SameOrigin;
 
@@ -132,8 +134,7 @@ impl FromRequestParts<Arc<AppState>> for SameOrigin {
         parts: &mut Parts,
         state: &Arc<AppState>,
     ) -> Result<Self, ApiError> {
-        let services = state.auth_services()?;
-        if is_same_origin(&parts.headers, &services.config.trusted_origins) {
+        if is_same_origin(&parts.headers, &state.public.trusted_origins) {
             Ok(Self)
         } else {
             Err(ApiError::CrossSite)
@@ -190,6 +191,9 @@ impl<S: Send + Sync> FromRequestParts<S> for FetchMetadata {
 }
 
 /// A signed-in user: their row and the session it came from.
+///
+/// Under `/api/fn` the mount-level [`SameOrigin`] layer has already run, so
+/// the extractor adds only the [`FetchMetadata`] check and the session lookup.
 #[derive(Debug)]
 pub struct AuthUser {
     pub user: UserRow,
@@ -199,6 +203,18 @@ pub struct AuthUser {
     /// `auth` router's response layer already sends it (see `reissue`); this
     /// is for inspection.
     pub reissue_cookie: Option<String>,
+}
+
+/// The session behind the request's cookie, if any: the lookup [`AuthUser`]
+/// and [`MaybeUser`] share, without their [`FetchMetadata`] check. A handler
+/// that must rate limit first calls this after the limit. When the session was
+/// extended, the cookie to re-send is left for the response layer (see
+/// `reissue`).
+pub async fn maybe_user(
+    parts: &Parts,
+    services: &AuthServices,
+) -> Result<Option<AuthUser>, ApiError> {
+    lookup(parts, services).await
 }
 
 /// Cookie lookup shared by [`AuthUser`] and [`MaybeUser`].
@@ -245,7 +261,7 @@ impl FromRequestParts<Arc<AppState>> for AuthUser {
 }
 
 /// The same lookup as [`AuthUser`] without the 401. [`FetchMetadata`] still
-/// runs.
+/// runs. Under `/api/fn` the mount-level [`SameOrigin`] layer has already run.
 #[derive(Debug)]
 pub struct MaybeUser(pub Option<AuthUser>);
 

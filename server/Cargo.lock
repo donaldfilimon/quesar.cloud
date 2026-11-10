@@ -1718,6 +1718,7 @@ dependencies = [
  "http-body-util",
  "percent-encoding",
  "quesar-auth",
+ "quesar-contract",
  "quesar-db",
  "quesar-services",
  "reqwest",

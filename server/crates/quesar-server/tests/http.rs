@@ -258,6 +258,9 @@ async fn unknown_api_paths_answer_in_json_for_every_method() {
         let request = Request::builder()
             .method(method.clone())
             .uri("/api/fn/console.sendChat")
+            // Same-origin first: a request that is not gets 403 before the
+            // name is looked up (tests/api_fn.rs).
+            .header("sec-fetch-site", "same-origin")
             .body(Body::empty())
             .unwrap();
         let response = send(&config, request).await;

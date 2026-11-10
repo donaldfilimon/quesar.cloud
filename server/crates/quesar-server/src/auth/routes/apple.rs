@@ -17,6 +17,7 @@
 use std::sync::Arc;
 
 use axum::body::Body;
+use axum::extract::rejection::PathRejection;
 use axum::extract::{Path, State};
 use axum::http::header::{CACHE_CONTROL, CONTENT_TYPE, LOCATION};
 use axum::http::{HeaderMap, HeaderValue, StatusCode};
@@ -125,10 +126,11 @@ pub async fn form_post(
     _: SameOriginOrApple,
     State(state): State<Arc<AppState>>,
     ip: ClientIp,
-    Path(name): Path<String>,
+    name: Result<Path<String>, PathRejection>,
     headers: HeaderMap,
     body: Body,
 ) -> Result<Response, ApiError> {
+    let Path(name) = name.map_err(|_| ApiError::NotFound)?;
     let services = state.auth_services()?;
     // Only Apple answers by POST; for any other name, a same-origin POST has
     // nothing to do here.
@@ -152,11 +154,7 @@ pub async fn form_post(
     let bytes = match read_body_limited(&headers, body, FORM_MAX).await {
         Ok(bytes) => bytes,
         Err(BodyLimitError::TooLarge | BodyLimitError::Aborted) => {
-            return Err(ApiError::auth(
-                StatusCode::PAYLOAD_TOO_LARGE,
-                "PAYLOAD_TOO_LARGE",
-                "Request body is too large",
-            ));
+            return Err(ApiError::PayloadTooLarge);
         }
         // Not produced by the plain byte read; fail closed all the same.
         Err(BodyLimitError::InvalidJson) => {
