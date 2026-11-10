@@ -8,7 +8,7 @@ use std::sync::Arc;
 use quesar_db::migrate;
 use quesar_db::test_support::TestDatabase;
 use quesar_services::rate_limit::{
-    Bucket, Limit, RateLimiter, client_ip, resolve_secret, window_start,
+    Bucket, Limit, PruneSampling, RateLimiter, client_ip, resolve_secret, window_start,
 };
 use serde::Deserialize;
 
@@ -22,8 +22,12 @@ async fn database() -> TestDatabase {
     db
 }
 
+fn limiter_never(db: &TestDatabase) -> RateLimiter {
+    limiter(db)
+}
+
 fn limiter(db: &TestDatabase) -> RateLimiter {
-    RateLimiter::new(db.pool.clone(), SECRET)
+    RateLimiter::new(db.pool.clone(), SECRET).with_prune_sampling(PruneSampling::Never)
 }
 
 #[derive(Deserialize)]
@@ -235,6 +239,29 @@ async fn prune_removes_only_windows_older_than_a_day() {
         .await
         .unwrap();
     assert_eq!(left, ["edge", "new"]);
+    db.cleanup().await;
+}
+
+#[tokio::test]
+async fn a_hit_prunes_expired_rows_when_sampled_in() {
+    let db = database().await;
+    let limiter = limiter(&db).with_prune_sampling(PruneSampling::Always);
+    let limit = Limit {
+        window_ms: 60_000,
+        max: 5,
+    };
+    let day = 24 * 60 * 60_000;
+    let never = limiter_never(&db);
+    never
+        .hit_with("p", "old", limit, T - day - 120_000)
+        .await
+        .unwrap();
+    limiter.hit_with("p", "new", limit, T).await.unwrap();
+    let left: Vec<String> = sqlx::query_scalar("select subject from rate_limits")
+        .fetch_all(&db.pool)
+        .await
+        .unwrap();
+    assert_eq!(left, ["new"]);
     db.cleanup().await;
 }
 

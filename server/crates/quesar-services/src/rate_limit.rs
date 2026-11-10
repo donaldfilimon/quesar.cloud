@@ -171,9 +171,20 @@ pub fn client_ip(
         .to_owned()
 }
 
+/// When a hit also prunes expired rows. Production uses `Sampled`, the
+/// TypeScript's roughly 1-in-50; the other two make tests deterministic.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub enum PruneSampling {
+    #[default]
+    Sampled,
+    Never,
+    Always,
+}
+
 pub struct RateLimiter {
     pool: PgPool,
     secret: Zeroizing<Vec<u8>>,
+    prune_sampling: PruneSampling,
 }
 
 impl fmt::Debug for RateLimiter {
@@ -188,7 +199,15 @@ impl RateLimiter {
         Self {
             pool,
             secret: Zeroizing::new(secret.into()),
+            prune_sampling: PruneSampling::default(),
         }
+    }
+
+    /// Replaces the default 1-in-50 prune sampling (for tests).
+    #[must_use]
+    pub fn with_prune_sampling(mut self, prune_sampling: PruneSampling) -> Self {
+        self.prune_sampling = prune_sampling;
+        self
     }
 
     /// A stable, non-reversible subject for an anonymous client address:
@@ -241,10 +260,14 @@ impl RateLimiter {
         .bind(start as f64)
         .fetch_one(&self.pool)
         .await?;
-        if RandomState::new()
-            .hash_one(now_ms)
-            .is_multiple_of(PRUNE_ONE_IN)
-        {
+        let prune = match self.prune_sampling {
+            PruneSampling::Sampled => RandomState::new()
+                .hash_one(now_ms)
+                .is_multiple_of(PRUNE_ONE_IN),
+            PruneSampling::Never => false,
+            PruneSampling::Always => true,
+        };
+        if prune {
             self.prune(now_ms).await?;
         }
         let count = i64::from(count);
