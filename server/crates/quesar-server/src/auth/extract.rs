@@ -202,6 +202,10 @@ pub struct AuthUser {
 
 /// Cookie lookup shared by [`AuthUser`] and [`MaybeUser`].
 async fn lookup(parts: &Parts, services: &AuthServices) -> Result<Option<AuthUser>, ApiError> {
+    // With sign-in switched off no session counts, whatever the cookie holds.
+    if !services.auth_enabled {
+        return Ok(None);
+    }
     let Some(token) = session::read_cookie(&parts.headers) else {
         return Ok(None);
     };

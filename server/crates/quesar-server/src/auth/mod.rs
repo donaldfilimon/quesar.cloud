@@ -37,6 +37,21 @@ pub use hashing::{Hashing, MAX_CONCURRENT_HASHES};
 pub const MOUNT: &str = "/api/auth";
 /// Paths (below [`MOUNT`]) that answer without a database.
 const PUBLIC_WITHOUT_DATABASE: &[&str] = &["/api/auth/methods"];
+/// Paths that still answer when sign-in is switched off with
+/// `VITE_AUTH_ENABLED=false`. Everything else on `/api/auth` is 503, so a
+/// route that can issue a session (sign-up, sign-in, OAuth, passkeys) is
+/// closed by default; a new route opts in only by being added here, and only
+/// if it needs a session (the extractors find none while auth is off, so it
+/// answers 401) or cannot issue one.
+const AVAILABLE_WHEN_DISABLED: &[&str] = &[
+    "/api/auth/methods",
+    "/api/auth/sign-out",
+    "/api/auth/session",
+    "/api/auth/sessions",
+    "/api/auth/sessions/revoke",
+    "/api/auth/sessions/revoke-others",
+    "/api/auth/profile",
+];
 /// Identity-provider calls give up after this long.
 const PROVIDER_TIMEOUT: Duration = Duration::from_secs(10);
 
@@ -145,20 +160,23 @@ impl AppState {
 }
 
 /// Answers 503 for everything but [`PUBLIC_WITHOUT_DATABASE`] when there is no
-/// database.
+/// database, and for everything but [`AVAILABLE_WHEN_DISABLED`] when sign-in
+/// is switched off.
 async fn require_database(
     State(state): State<Arc<AppState>>,
     request: Request,
     next: Next,
 ) -> Response {
-    if state.auth.is_none() {
-        let path = request
-            .extensions()
-            .get::<OriginalUri>()
-            .map_or_else(|| request.uri().path(), |original| original.0.path());
-        if !PUBLIC_WITHOUT_DATABASE.contains(&path) {
-            return axum::response::IntoResponse::into_response(ApiError::Unavailable);
-        }
+    let path = request
+        .extensions()
+        .get::<OriginalUri>()
+        .map_or_else(|| request.uri().path(), |original| original.0.path());
+    let refused = match &state.auth {
+        None => !PUBLIC_WITHOUT_DATABASE.contains(&path),
+        Some(services) => !services.auth_enabled && !AVAILABLE_WHEN_DISABLED.contains(&path),
+    };
+    if refused {
+        return axum::response::IntoResponse::into_response(ApiError::Unavailable);
     }
     next.run(request).await
 }

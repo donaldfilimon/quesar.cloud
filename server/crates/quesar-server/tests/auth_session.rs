@@ -466,3 +466,31 @@ async fn authenticated_routes_are_rate_limited_per_user() {
     assert_eq!(refused.error_code(), "RATE_LIMITED");
     h.finish().await;
 }
+
+#[tokio::test]
+async fn revoking_the_current_session_clears_the_cookie_and_never_re_issues_it() {
+    let h = Harness::new().await;
+    let clear = format!("{COOKIE_NAME}=; Path=/; Max-Age=0; HttpOnly; Secure; SameSite=Lax");
+    for age in [0, 27] {
+        let email = format!("user{age}@example.com");
+        let up = h.sign_up(&email).await;
+        let cookie = up.session_cookie().unwrap();
+        let id = up.result()["session"]["id"].as_str().unwrap().to_owned();
+        h.clock.advance(hours(age));
+        let reply = h
+            .post(
+                "/sessions/revoke",
+                &json!({ "id": id }),
+                &[("cookie", &cookie)],
+            )
+            .await;
+        assert_eq!(reply.status, StatusCode::OK);
+        assert_eq!(
+            reply.set_cookies(),
+            std::slice::from_ref(&clear),
+            "age {age} h"
+        );
+        assert_eq!(h.get("/session", Some(&cookie)).await.result(), Value::Null);
+    }
+    h.finish().await;
+}

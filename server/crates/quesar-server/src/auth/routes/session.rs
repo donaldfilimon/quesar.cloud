@@ -17,6 +17,7 @@ use serde_json::{Value, json};
 use crate::auth::ApiError;
 use crate::auth::error::ok;
 use crate::auth::extract::{AuthUser, ClientIp, MaybeUser, SameOrigin};
+use crate::auth::issue::with_cookie;
 use crate::auth::json;
 use crate::auth::view::{SessionListItem, UserAndSession};
 use crate::router::AppState;
@@ -78,7 +79,13 @@ pub async fn revoke(
     services.limit(Bucket::AuthGeneral, &auth.user.id).await?;
     let input: RevokeBody = json::read(&headers, body).await?;
     if session::revoke(&services.pool, &auth.user.id, &input.id).await? {
-        Ok(ok(json!({})))
+        let response = ok(json!({}));
+        // Revoking the session in use signs this browser out. The cookie
+        // response also stops the re-issue layer re-sending the dead token.
+        if input.id == auth.session.id {
+            return with_cookie(response, &session::clear_cookie());
+        }
+        Ok(response)
     } else {
         Err(ApiError::NotFound)
     }

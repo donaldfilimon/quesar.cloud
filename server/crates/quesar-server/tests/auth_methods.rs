@@ -135,3 +135,118 @@ async fn methods_is_rate_limited_and_refuses_cross_site_reads() {
     assert_eq!(evil.status, StatusCode::FORBIDDEN);
     h.finish().await;
 }
+
+#[tokio::test]
+async fn with_sign_in_switched_off_nothing_issues_a_session_and_no_session_counts() {
+    // A session made while auth was on.
+    let on = Harness::new().await;
+    let cookie = on
+        .sign_up("ada@example.com")
+        .await
+        .session_cookie()
+        .unwrap();
+    // Same database, auth off: rebuild the app over it.
+    let pool = on.db.pool.clone();
+    let config = Config::from_env(Environment::from_pairs([
+        ("PUBLIC_ORIGIN", "https://quesar.cloud"),
+        ("TRUSTED_PROXY", "x-real-ip"),
+        ("VITE_AUTH_ENABLED", "false"),
+        ("GOOGLE_SIGNIN_CLIENT_ID", "g-id"),
+        ("GOOGLE_SIGNIN_CLIENT_SECRET", "g-secret"),
+    ]))
+    .unwrap();
+    let services = quesar_server::auth::AuthServices::build(
+        pool.clone(),
+        &config,
+        std::sync::Arc::new(quesar_auth::FixedClock::new(common::T0)),
+    )
+    .unwrap();
+    let app = quesar_server::router_with(&config, Some(services));
+    let send = |method: Method, path: &'static str, with_cookie: bool| {
+        let app = app.clone();
+        let cookie = cookie.clone();
+        async move {
+            let mut b = Request::builder()
+                .method(method)
+                .uri(path)
+                .header("origin", "https://quesar.cloud")
+                .header("content-type", "application/json");
+            if with_cookie {
+                b = b.header("cookie", cookie);
+            }
+            let r = app
+                .oneshot(b.body(Body::from(
+                    r#"{"name":"N","email":"new@example.com","password":"synthetic-password-2026"}"#,
+                )).unwrap())
+                .await
+                .unwrap();
+            let status = r.status();
+            let has_cookie = r.headers().contains_key("set-cookie");
+            let body: Value =
+                serde_json::from_slice(&r.into_body().collect().await.unwrap().to_bytes())
+                    .unwrap_or(Value::Null);
+            (status, has_cookie, body)
+        }
+    };
+    let users_before: i64 = sqlx::query_scalar(r#"select count(*) from "user""#)
+        .fetch_one(&pool)
+        .await
+        .unwrap();
+    let sessions_before: i64 = sqlx::query_scalar("select count(*) from auth_sessions")
+        .fetch_one(&pool)
+        .await
+        .unwrap();
+
+    // Everything that can issue a session is 503, including the OAuth routes.
+    for (method, path) in [
+        (Method::POST, "/api/auth/sign-up"),
+        (Method::POST, "/api/auth/sign-in"),
+        (Method::POST, "/api/auth/oauth/google/start"),
+        (Method::GET, "/api/auth/callback/google"),
+    ] {
+        let (status, has_cookie, body) = send(method, path, false).await;
+        assert_eq!(status, StatusCode::SERVICE_UNAVAILABLE, "{path}");
+        assert_eq!(body["error"]["code"], "AUTH_UNAVAILABLE", "{path}");
+        assert!(!has_cookie, "{path}");
+    }
+    // Anything unlisted is closed too.
+    assert_eq!(
+        send(Method::POST, "/api/auth/passkey/authenticate/verify", false)
+            .await
+            .0,
+        StatusCode::SERVICE_UNAVAILABLE
+    );
+    let users_after: i64 = sqlx::query_scalar(r#"select count(*) from "user""#)
+        .fetch_one(&pool)
+        .await
+        .unwrap();
+    let sessions_after: i64 = sqlx::query_scalar("select count(*) from auth_sessions")
+        .fetch_one(&pool)
+        .await
+        .unwrap();
+    assert_eq!(
+        (users_after, sessions_after),
+        (users_before, sessions_before)
+    );
+
+    // A valid cookie no longer counts.
+    let (status, _, body) = send(Method::GET, "/api/auth/session", true).await;
+    assert_eq!(status, StatusCode::OK);
+    assert_eq!(body["result"], Value::Null);
+    assert_eq!(
+        send(Method::POST, "/api/auth/profile", true).await.0,
+        StatusCode::UNAUTHORIZED
+    );
+    assert_eq!(
+        send(Method::GET, "/api/auth/sessions", true).await.0,
+        StatusCode::UNAUTHORIZED
+    );
+    // /methods still answers, all false.
+    let (status, _, body) = send(Method::GET, "/api/auth/methods", false).await;
+    assert_eq!(status, StatusCode::OK);
+    assert_eq!(
+        body["result"],
+        json!({ "email": false, "passkey": false, "social": [] })
+    );
+    on.finish().await;
+}
