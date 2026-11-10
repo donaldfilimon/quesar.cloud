@@ -20,7 +20,9 @@ use std::fmt;
 use aes_gcm::aead::{Aead, OsRng, Payload};
 use aes_gcm::{AeadCore, Aes256Gcm, KeyInit, Nonce};
 use base64::Engine;
-use base64::engine::general_purpose::{STANDARD_NO_PAD, URL_SAFE_NO_PAD};
+use base64::alphabet::STANDARD;
+use base64::engine::DecodePaddingMode;
+use base64::engine::general_purpose::{GeneralPurpose, GeneralPurposeConfig, URL_SAFE_NO_PAD};
 use hmac::{Hmac, Mac};
 use sha2::Sha256;
 use zeroize::Zeroizing;
@@ -84,6 +86,15 @@ impl fmt::Debug for Opened {
     }
 }
 
+/// Standard alphabet, no padding (the caller strips it), and trailing bits
+/// that are not canonical are accepted, as Node's `Buffer.from(x, "base64")`.
+const LENIENT_STANDARD: GeneralPurpose = GeneralPurpose::new(
+    &STANDARD,
+    GeneralPurposeConfig::new()
+        .with_decode_allow_trailing_bits(true)
+        .with_decode_padding_mode(DecodePaddingMode::RequireNone),
+);
+
 type SealKey = Zeroizing<[u8; KEY_BYTES]>;
 
 /// The configured sealing keys. Key bytes are zeroized on drop and never
@@ -109,10 +120,10 @@ impl SealingKeys {
     /// ignored.
     pub fn new(current: Option<&str>, previous: Option<&str>) -> Self {
         Self {
-            current: parse_key(current).and_then(|key| derive_seal_key(&key)),
+            current: parse_key(current).and_then(|key| derive_seal_key(key.as_slice())),
             previous: previous
                 .and_then(|raw| parse_key(Some(raw)).ok())
-                .and_then(|key| derive_seal_key(&key).ok()),
+                .and_then(|key| derive_seal_key(key.as_slice()).ok()),
         }
     }
 
@@ -158,45 +169,65 @@ impl SealingKeys {
     }
 }
 
-fn parse_key(raw: Option<&str>) -> Result<Zeroizing<Vec<u8>>, CryptoError> {
+/// Parse a raw key into 32 bytes, wiping every intermediate copy.
+///
+/// Accepted, as in `parseKey`: 64 hex characters, or base64/base64url with
+/// padding present or absent. Like Node's lenient decoder, non-canonical
+/// trailing bits in the last character are accepted (so every 43/44-character
+/// key Node accepts works here). Deliberate difference: Node silently skips
+/// interior whitespace and stray characters; this refuses a key containing
+/// any (only surrounding whitespace is trimmed), since a key with junk in it
+/// is almost certainly a misconfiguration and failing closed is safer.
+fn parse_key(raw: Option<&str>) -> Result<Zeroizing<[u8; KEY_BYTES]>, CryptoError> {
     let value = raw.map(str::trim).filter(|v| !v.is_empty());
     let Some(value) = value else {
         return Err(CryptoError::NotConfigured);
     };
-    let bytes = if value.len() == 64 && value.bytes().all(|b| b.is_ascii_hexdigit()) {
-        decode_hex(value)
-    } else {
-        let standard: String = value
+    let mut key = Zeroizing::new([0u8; KEY_BYTES]);
+    if value.len() == 64 && value.bytes().all(|b| b.is_ascii_hexdigit()) {
+        decode_hex(value, &mut key)?;
+        return Ok(key);
+    }
+    // 43 or 44 characters (4 padding at most) is all a 32-byte key can be.
+    if value.len() > 44 {
+        return Err(CryptoError::InvalidKey);
+    }
+    let normalised: Zeroizing<Vec<u8>> = Zeroizing::new(
+        value
             .trim_end_matches('=')
-            .chars()
+            .bytes()
             .map(|c| match c {
-                '-' => '+',
-                '_' => '/',
+                b'-' => b'+',
+                b'_' => b'/',
                 other => other,
             })
-            .collect();
-        STANDARD_NO_PAD.decode(standard).ok()
-    };
-    match bytes {
-        Some(bytes) if bytes.len() == KEY_BYTES => Ok(Zeroizing::new(bytes)),
-        _ => Err(CryptoError::InvalidKey),
+            .collect(),
+    );
+    // Room for the decoded length plus the engine's slack.
+    let mut decoded = Zeroizing::new(vec![0u8; normalised.len() / 4 * 3 + 3]);
+    let written = LENIENT_STANDARD
+        .decode_slice(normalised.as_slice(), decoded.as_mut_slice())
+        .map_err(|_| CryptoError::InvalidKey)?;
+    if written != KEY_BYTES {
+        return Err(CryptoError::InvalidKey);
     }
+    key.copy_from_slice(&decoded[..KEY_BYTES]);
+    Ok(key)
 }
 
-fn decode_hex(value: &str) -> Option<Vec<u8>> {
-    value
-        .as_bytes()
-        .chunks(2)
-        .map(|pair| {
-            let text = std::str::from_utf8(pair).ok()?;
-            u8::from_str_radix(text, 16).ok()
-        })
-        .collect()
+fn decode_hex(value: &str, out: &mut [u8; KEY_BYTES]) -> Result<(), CryptoError> {
+    for (slot, pair) in out.iter_mut().zip(value.as_bytes().chunks(2)) {
+        let text = std::str::from_utf8(pair).map_err(|_| CryptoError::InvalidKey)?;
+        *slot = u8::from_str_radix(text, 16).map_err(|_| CryptoError::InvalidKey)?;
+    }
+    Ok(())
 }
 
 /// `HMAC-SHA256(key, "quesar:seal")`, as `subkey(key, "seal")` in the TS.
 fn derive_seal_key(key: &[u8]) -> Result<SealKey, CryptoError> {
     // HMAC accepts keys of any length, so this does not fail in practice.
+    // `hmac` 0.12 and `sha2` 0.10 offer no `zeroize` feature, so the ipad/opad
+    // state inside `mac` is not wiped when it drops; only our own copies are.
     let mut mac =
         <Hmac<Sha256> as Mac>::new_from_slice(key).map_err(|_| CryptoError::InvalidKey)?;
     mac.update(SUBKEY_PURPOSE);

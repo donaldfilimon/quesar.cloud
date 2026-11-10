@@ -27,6 +27,7 @@ struct Keys {
 struct Vector {
     name: String,
     sealed_with: String,
+    key_text: Option<String>,
     associated_data: String,
     plaintext_base64: String,
     envelope: String,
@@ -41,14 +42,49 @@ fn load(file: &str) -> VectorFile {
 fn open_all(file: &str) {
     let f = load(file);
     assert!(!f.vectors.is_empty());
-    let keys = SealingKeys::new(Some(&f.keys.current_base64), Some(&f.keys.previous_base64));
+    let shared = SealingKeys::new(Some(&f.keys.current_base64), Some(&f.keys.previous_base64));
     for v in &f.vectors {
+        let custom = v
+            .key_text
+            .as_deref()
+            .map(|text| SealingKeys::new(Some(text), None));
+        let keys = custom.as_ref().unwrap_or(&shared);
         let expected = String::from_utf8(STANDARD.decode(&v.plaintext_base64).unwrap()).unwrap();
         let opened = keys
             .open_with_rotation(&v.envelope, &v.associated_data)
             .unwrap_or_else(|e| panic!("{}: {e}", v.name));
         assert_eq!(opened.plaintext, expected, "{}", v.name);
         assert_eq!(opened.rotated, v.sealed_with == "previous", "{}", v.name);
+    }
+}
+
+#[test]
+fn non_canonical_trailing_bits_key_decodes_like_node() {
+    // Last character 'N' leaves non-zero trailing bits; Node reads 32 x 0x03.
+    let text = format!("{}AwN", "AwMD".repeat(10));
+    let lenient = SealingKeys::new(Some(&text), None);
+    let canonical = SealingKeys::new(Some(&STANDARD.encode([3u8; 32])), None);
+    assert!(lenient.configured());
+    let sealed = canonical.seal("x", "a").unwrap();
+    assert_eq!(lenient.open(&sealed, "a").unwrap(), "x");
+    assert!(
+        load("crypto-vectors.json")
+            .vectors
+            .iter()
+            .any(|v| v.key_text.as_deref() == Some(text.as_str()))
+    );
+}
+
+#[test]
+fn keys_with_interior_junk_are_refused() {
+    // Deliberate difference from Node, which skips such characters.
+    let canonical = STANDARD.encode([3u8; 32]);
+    for bad in [
+        format!("{} {}", &canonical[..20], &canonical[20..]),
+        format!("{}!{}", &canonical[..20], &canonical[20..]),
+        format!("{}=={}", &canonical[..40], &canonical[40..]),
+    ] {
+        assert!(!SealingKeys::new(Some(&bad), None).configured(), "{bad:?}");
     }
 }
 

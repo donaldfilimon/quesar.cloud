@@ -23,6 +23,8 @@ struct Keys {
 struct Vector {
     name: String,
     sealed_with: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    key_text: Option<String>,
     associated_data: String,
     plaintext_base64: String,
     envelope: String,
@@ -49,10 +51,14 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut vectors = Vec::new();
     for v in source.vectors {
         let plaintext = String::from_utf8(STANDARD.decode(&v.plaintext_base64)?)?;
-        let keys = if v.sealed_with == "previous" {
-            &previous
-        } else {
-            &current
+        let custom = v
+            .key_text
+            .as_deref()
+            .map(|text| SealingKeys::new(Some(text), None));
+        let keys = match v.sealed_with.as_str() {
+            "previous" => &previous,
+            "custom" => custom.as_ref().ok_or("custom vector without key_text")?,
+            _ => &current,
         };
         vectors.push(Vector {
             envelope: keys.seal(&plaintext, &v.associated_data)?,
