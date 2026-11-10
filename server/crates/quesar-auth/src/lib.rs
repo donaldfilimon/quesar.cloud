@@ -11,6 +11,7 @@ pub mod error;
 pub mod ids;
 pub mod password;
 pub mod rows;
+pub mod session;
 pub mod token;
 pub mod validate;
 

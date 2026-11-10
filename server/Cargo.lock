@@ -1192,6 +1192,7 @@ version = "0.1.0"
 dependencies = [
  "argon2",
  "base64",
+ "http",
  "quesar-db",
  "rand",
  "serde_json",
