@@ -28,7 +28,7 @@
     "lint": "eslint . --max-warnings 0",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "check:server": "cargo fmt --manifest-path server/Cargo.toml --all --check && cargo clippy --manifest-path server/Cargo.toml --all-targets --locked -- -D warnings && TEST_DATABASE_URL=\"$(scripts/dev-postgres.sh start)\" cargo test --manifest-path server/Cargo.toml --locked",
+    "check:server": "cargo fmt --manifest-path server/Cargo.toml --all --check && cargo clippy --manifest-path server/Cargo.toml --all-targets --locked -- -D warnings && scripts/dev-postgres.sh exec cargo test --manifest-path server/Cargo.toml --locked",
     "server": "cargo run --manifest-path server/Cargo.toml --locked",
     "check": "bun run format:check && bun run typecheck && bun run lint && bun run test && bun run check:server && bun run build"
   },
