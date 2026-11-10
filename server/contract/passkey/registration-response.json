@@ -1,0 +1,26 @@
+{
+  "_comment": "FAKE: produced by server/contract/passkey/generate.mjs; the key is generated there and trusted by nothing.",
+  "challenge": "QtAfMPUrLIatlg2141BMoK4P2wHaPHRfAVtpkGSPs_U",
+  "response": {
+    "id": "MIBpWUJ1WXrjaHPYK6x-406m5TzbF16vjZMvk2zOa4g",
+    "rawId": "MIBpWUJ1WXrjaHPYK6x-406m5TzbF16vjZMvk2zOa4g",
+    "response": {
+      "attestationObject": "o2NmbXRkbm9uZWdhdHRTdG10oGhhdXRoRGF0YVik-mCQ4a6jcuCLypxy-dAQ5oZ69iOjP-PJYWnR8miWzTldAAAAAAAAAAAAAAAAAAAAAAAAAAAAIDCAaVlCdVl642hz2CusfuNOpuU82xder42TL5NszmuIpQECAyYgASFYIL4w5tONLUoL4K_0SbYnQWYS_FSrxA53PdZyPMdO4ddBIlggCfQKW4MdHwXo1FkqcMU_eAA4_ZOzkWjs229yfEVd36s",
+      "clientDataJSON": "eyJ0eXBlIjoid2ViYXV0aG4uY3JlYXRlIiwiY2hhbGxlbmdlIjoiUXRBZk1QVXJMSWF0bGcyMTQxQk1vSzRQMndIYVBIUmZBVnRwa0dTUHNfVSIsIm9yaWdpbiI6Imh0dHBzOi8vcXVlc2FyLmNsb3VkIiwiY3Jvc3NPcmlnaW4iOmZhbHNlfQ",
+      "transports": [
+        "internal",
+        "hybrid"
+      ],
+      "publicKeyAlgorithm": -7,
+      "publicKey": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEvjDm040tSgvgr_RJtidBZhL8VKvEDnc91nI8x07h10EJ9Apbgx0fBejUWSpwxT94ADj9k7ORaOzbb3J8RV3fqw",
+      "authenticatorData": "-mCQ4a6jcuCLypxy-dAQ5oZ69iOjP-PJYWnR8miWzTldAAAAAAAAAAAAAAAAAAAAAAAAAAAAIDCAaVlCdVl642hz2CusfuNOpuU82xder42TL5NszmuIpQECAyYgASFYIL4w5tONLUoL4K_0SbYnQWYS_FSrxA53PdZyPMdO4ddBIlggCfQKW4MdHwXo1FkqcMU_eAA4_ZOzkWjs229yfEVd36s"
+    },
+    "type": "public-key",
+    "clientExtensionResults": {
+      "credProps": {
+        "rk": true
+      }
+    },
+    "authenticatorAttachment": "platform"
+  }
+}

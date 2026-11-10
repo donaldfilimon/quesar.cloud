@@ -2,7 +2,7 @@
 //! ISO 8601 with milliseconds and a `Z`, as `Date#toISOString` writes them.
 //! Nothing here can carry a session token.
 
-use quesar_auth::{SessionRow, UserRow};
+use quesar_auth::{PasskeyRow, SessionRow, UserRow};
 use serde::Serialize;
 use time::format_description::FormatItem;
 use time::macros::format_description;
@@ -94,6 +94,30 @@ impl UserAndSession {
         Self {
             user: user.into(),
             session: session.into(),
+        }
+    }
+}
+
+/// One passkey of `GET /passkeys` and the result of registering one. Nothing
+/// of the credential itself is shown.
+#[derive(Debug, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct PasskeyView {
+    pub id: String,
+    pub name: Option<String>,
+    pub device_type: String,
+    pub backed_up: bool,
+    pub created_at: String,
+}
+
+impl From<&PasskeyRow> for PasskeyView {
+    fn from(passkey: &PasskeyRow) -> Self {
+        Self {
+            id: passkey.id.clone(),
+            name: passkey.name.clone(),
+            device_type: passkey.device_type.clone(),
+            backed_up: passkey.backed_up,
+            created_at: iso(passkey.created_at),
         }
     }
 }

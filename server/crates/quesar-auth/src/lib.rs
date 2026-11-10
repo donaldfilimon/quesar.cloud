@@ -13,6 +13,7 @@ pub mod email_password;
 pub mod error;
 pub mod ids;
 pub mod oauth;
+pub mod passkey;
 pub mod password;
 pub mod providers;
 pub mod rows;

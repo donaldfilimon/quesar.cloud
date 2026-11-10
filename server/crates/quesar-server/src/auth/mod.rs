@@ -23,6 +23,7 @@ use axum::middleware::{self, Next};
 use axum::response::Response;
 use quesar_auth::deletion::DeletionHooks;
 use quesar_auth::oauth::jwks::JwksCache;
+use quesar_auth::passkey::Passkeys;
 use quesar_auth::password::{Argon2Hasher, HashError};
 use quesar_auth::providers::apple::AppleSecrets;
 use quesar_auth::{AppleConfig, AuthConfig, Clock};
@@ -98,6 +99,9 @@ pub struct AuthServices {
     /// Apple's parsed key and current client secret. `None` when Apple is not
     /// configured or its key cannot be used, and Apple sign-in is then off.
     apple: Option<AppleSecrets>,
+    /// The WebAuthn relying party. `None` when the configured origin cannot
+    /// host passkeys (for example an IP address); passkeys are then off.
+    passkeys: Option<Passkeys>,
     /// The external cleanups an account deletion calls. M2 defaults: the
     /// WDBX configuration guard and no workspace revocation; M5 and M6 replace
     /// them.
@@ -134,6 +138,9 @@ impl AuthServices {
                 })
                 .ok()
         });
+        let passkeys = Passkeys::new(&config)
+            .inspect_err(|error| tracing::warn!(%error, "passkeys are off"))
+            .ok();
         let http = reqwest::Client::builder()
             .redirect(reqwest::redirect::Policy::none())
             .timeout(PROVIDER_TIMEOUT)
@@ -152,6 +159,7 @@ impl AuthServices {
             production: server.production,
             jwks: JwksCache::new(),
             apple,
+            passkeys,
             deletion: DeletionHooks::defaults(
                 environment
                     .raw_pairs()
@@ -164,6 +172,11 @@ impl AuthServices {
     /// usable: configured, and its private key mints a client secret.
     pub fn apple(&self) -> Option<(&AppleConfig, &AppleSecrets)> {
         Some((self.config.providers.apple.as_ref()?, self.apple.as_ref()?))
+    }
+
+    /// The WebAuthn relying party, when passkeys are usable.
+    pub fn passkeys(&self) -> Option<&Passkeys> {
+        self.passkeys.as_ref()
     }
 
     /// Counts one hit for `subject` (a user id, or [`extract::ClientIp::subject`])

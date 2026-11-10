@@ -48,7 +48,7 @@ impl Methods {
         }
         Self {
             email: true,
-            passkey: true,
+            passkey: services.passkeys().is_some(),
             social,
         }
     }

@@ -29,7 +29,15 @@ subtle = "2"
 time = "0.3"
 tracing = "0.1"
 url = "2"
-uuid = "1"
+uuid = { version = "1", features = ["v4"] }
+# `danger-allow-state-serialisation`: the ceremony state (the challenge, the
+#   allowed credentials) is serialized into `auth_flows` and never reaches the
+#   client, so a ceremony is single-use and server-owned.
+# `conditional-ui`: discoverable (usernameless) sign-in,
+#   `start_discoverable_authentication`.
+# `danger-credential-internals`: `Credential::backup_eligible` and
+#   `backup_state`, the `device_type` and `backed_up` columns.
+webauthn-rs = { version = "0.5", features = ["danger-allow-state-serialisation", "conditional-ui", "danger-credential-internals"] }
 zeroize = "1"
 axum = { version = "0.8", default-features = false, features = ["http1", "tokio"], optional = true }
 tokio = { version = "1", features = ["net", "rt", "sync"], optional = true }
