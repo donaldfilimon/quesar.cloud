@@ -454,3 +454,46 @@ async fn a_purge_failure_is_a_500_and_leaves_the_account_whole() {
     );
     h.finish().await;
 }
+
+#[tokio::test]
+async fn a_workspace_connection_refuses_deletion_until_revocation_exists() {
+    let h = Harness::new().await;
+    let (id, cookie) = account(&h, "ada@example.com").await;
+    sqlx::query("insert into workspace_connections (user_id, provider, sealed) values ($1, 'google', 'v1.x.y.z')")
+        .bind(&id)
+        .execute(&h.db.pool)
+        .await
+        .unwrap();
+
+    let reply = delete(&h, &cookie, json!({ "password": PASSWORD })).await;
+
+    assert_error(
+        &reply,
+        StatusCode::SERVICE_UNAVAILABLE,
+        "AuthError",
+        "DELETION_UNAVAILABLE",
+    );
+    assert_eq!(users(&h, &id).await, 1);
+    for sql in [
+        "select count(*) from workspace_connections where user_id = $1",
+        "select count(*) from field_notes where user_id = $1",
+        "select count(*) from auth_sessions where user_id = $1",
+    ] {
+        assert_eq!(count(&h, sql, &id).await, 1, "{sql}");
+    }
+    assert_eq!(
+        h.get("/session", Some(&cookie)).await.result()["user"]["id"],
+        id
+    );
+
+    // Without the connection the same request deletes.
+    sqlx::query("delete from workspace_connections where user_id = $1")
+        .bind(&id)
+        .execute(&h.db.pool)
+        .await
+        .unwrap();
+    let reply = delete(&h, &cookie, json!({ "password": PASSWORD })).await;
+    assert_eq!(reply.status, StatusCode::OK, "{}", reply.text());
+    assert_eq!(users(&h, &id).await, 0);
+    h.finish().await;
+}

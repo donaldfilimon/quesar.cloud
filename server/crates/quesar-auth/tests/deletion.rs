@@ -8,7 +8,7 @@ use std::sync::atomic::{AtomicUsize, Ordering};
 
 use quesar_auth::deletion::{
     BoxFuture, CommerceUnlinkError, CommerceUnlinker, DeletedCounts, DeletionError, DeletionHooks,
-    WdbxConfigGuard, WorkspaceOutcome, WorkspaceRevoker, purge_and_delete,
+    NoWorkspaceRevoker, WdbxConfigGuard, WorkspaceOutcome, WorkspaceRevoker, purge_and_delete,
 };
 use quesar_auth::session;
 use quesar_db::test_support::TestDatabase;
@@ -484,5 +484,127 @@ async fn a_commerce_hook_that_refuses_aborts_before_anything_else() {
     };
     purge_and_delete(&db.pool, "victim", &ok).await.unwrap();
     assert_eq!(counts(&rows(&db.pool, "victim").await, "user"), 0);
+    db.cleanup().await;
+}
+
+const SEALED: &str = "v1.x.y.z";
+
+#[tokio::test]
+async fn the_default_workspace_hook_refuses_a_user_with_a_connection() {
+    let db = migrated().await;
+    seed(&db.pool, "victim").await;
+    seed(&db.pool, "bystander").await;
+    let defaults = DeletionHooks {
+        commerce: Arc::new(WdbxConfigGuard::default()),
+        workspace: Arc::new(NoWorkspaceRevoker),
+    };
+
+    let error = purge_and_delete(&db.pool, "victim", &defaults)
+        .await
+        .unwrap_err();
+
+    assert!(
+        matches!(error, DeletionError::WorkspaceRevocationUnavailable),
+        "{error}"
+    );
+    assert_eq!(rows(&db.pool, "victim").await, intact(2));
+    assert_eq!(rows(&db.pool, "bystander").await, intact(2));
+    db.cleanup().await;
+}
+
+#[tokio::test]
+async fn the_default_workspace_hook_deletes_a_user_without_a_connection() {
+    let db = migrated().await;
+    seed(&db.pool, "victim").await;
+    sqlx::query("delete from workspace_connections where user_id = 'victim'")
+        .execute(&db.pool)
+        .await
+        .unwrap();
+    let defaults = DeletionHooks {
+        commerce: Arc::new(WdbxConfigGuard::default()),
+        workspace: Arc::new(NoWorkspaceRevoker),
+    };
+
+    let report = purge_and_delete(&db.pool, "victim", &defaults)
+        .await
+        .unwrap();
+
+    assert!(report.workspace.is_empty());
+    assert_eq!(counts(&rows(&db.pool, "victim").await, "user"), 0);
+    db.cleanup().await;
+}
+
+#[tokio::test]
+async fn a_real_revoker_is_called_once_per_connection() {
+    let db = migrated().await;
+    seed(&db.pool, "victim").await;
+    sqlx::query("insert into workspace_connections (user_id, provider, sealed) values ('victim', 'microsoft', $1)")
+        .bind(SEALED)
+        .execute(&db.pool)
+        .await
+        .unwrap();
+    let revoker = Revoker::new(true);
+
+    let report = purge_and_delete(&db.pool, "victim", &hooks(revoker.clone()))
+        .await
+        .unwrap();
+
+    assert_eq!(
+        revoker.calls(),
+        vec![
+            ("victim".to_owned(), "google".to_owned()),
+            ("victim".to_owned(), "microsoft".to_owned())
+        ]
+    );
+    assert_eq!(report.deleted.workspace_connections, 2);
+    assert_eq!(counts(&rows(&db.pool, "victim").await, "user"), 0);
+    db.cleanup().await;
+}
+
+#[derive(Clone, Default)]
+struct Captured(Arc<Mutex<Vec<u8>>>);
+
+impl std::io::Write for Captured {
+    fn write(&mut self, buf: &[u8]) -> std::io::Result<usize> {
+        self.0.lock().unwrap().extend_from_slice(buf);
+        Ok(buf.len())
+    }
+
+    fn flush(&mut self) -> std::io::Result<()> {
+        Ok(())
+    }
+}
+
+impl<'a> tracing_subscriber::fmt::MakeWriter<'a> for Captured {
+    type Writer = Captured;
+
+    fn make_writer(&'a self) -> Self::Writer {
+        self.clone()
+    }
+}
+
+#[tokio::test]
+async fn a_failed_revocation_is_logged_by_provider_without_any_token() {
+    let db = migrated().await;
+    seed(&db.pool, "victim").await;
+    let captured = Captured::default();
+    // The test runs on one thread, so a scoped default sees every event.
+    let _guard = tracing::subscriber::set_default(
+        tracing_subscriber::fmt()
+            .with_max_level(tracing::Level::TRACE)
+            .with_writer(captured.clone())
+            .finish(),
+    );
+
+    let report = purge_and_delete(&db.pool, "victim", &hooks(Revoker::new(false)))
+        .await
+        .unwrap();
+
+    assert!(!report.workspace[0].revoked);
+    assert_eq!(counts(&rows(&db.pool, "victim").await, "user"), 0);
+    let log = String::from_utf8(captured.0.lock().unwrap().clone()).unwrap();
+    assert!(log.contains("WARN"), "{log}");
+    assert!(log.contains("google"), "{log}");
+    assert!(!log.contains(SEALED), "{log}");
     db.cleanup().await;
 }

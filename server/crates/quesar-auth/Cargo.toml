@@ -39,3 +39,4 @@ quesar-auth = { path = ".", features = ["test-support"] }
 quesar-db = { path = "../quesar-db", features = ["test-support"] }
 tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
 time = { version = "0.3", features = ["macros"] }
+tracing-subscriber = "0.3"

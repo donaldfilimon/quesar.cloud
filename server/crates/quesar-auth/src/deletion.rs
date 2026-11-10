@@ -8,7 +8,8 @@
 //!    changed: the user is never deleted while commerce data still points at
 //!    them.
 //! 2. Workspace grants are revoked at the provider ([`WorkspaceRevoker`]),
-//!    best effort. These are external calls, so they run before and outside
+//!    best effort once a real revoker is wired. Until then (the default hook)
+//!    a user with any workspace connection is refused, with nothing changed. These are external calls, so they run before and outside
 //!    the transaction and cannot be rolled back.
 //! 3. One transaction deletes the per-user rows, unlinks inquiries and, last,
 //!    deletes the `"user"` row, whose cascades remove the credentials, linked
@@ -68,17 +69,35 @@ pub trait CommerceUnlinker: Send + Sync {
 
 /// Revokes a user's workspace grant at the provider
 /// (`revokeAndDeleteWorkspaceConnection`, the revoke half). M5 implements it.
+///
+/// Deleting a connection's sealed refresh token without revoking the grant
+/// would leave the grant live at Google or Microsoft with no way to revoke it
+/// later. So a hook that cannot revoke says so through [`available`], and
+/// deletion then refuses any user who has a connection.
+///
+/// [`available`]: WorkspaceRevoker::available
 pub trait WorkspaceRevoker: Send + Sync {
+    /// Whether this hook really revokes at the provider. A real revoker keeps
+    /// the default; only the placeholder returns false.
+    fn available(&self) -> bool {
+        true
+    }
+
     /// Whether the provider confirmed the revocation. Best effort: it never
     /// fails the deletion, and the stored connection is deleted either way.
     fn revoke<'a>(&'a self, user_id: &'a str, provider: &'a str) -> BoxFuture<'a, bool>;
 }
 
-/// The M2 workspace hook: nothing is revoked at a provider.
+/// The M2 workspace hook: nothing can be revoked at a provider, so deletion
+/// refuses users who have a workspace connection (see [`WorkspaceRevoker`]).
 #[derive(Debug, Default, Clone, Copy)]
 pub struct NoWorkspaceRevoker;
 
 impl WorkspaceRevoker for NoWorkspaceRevoker {
+    fn available(&self) -> bool {
+        false
+    }
+
     fn revoke<'a>(&'a self, _user_id: &'a str, _provider: &'a str) -> BoxFuture<'a, bool> {
         Box::pin(async { false })
     }
@@ -185,6 +204,9 @@ impl fmt::Debug for DeletionHooks {
 pub enum DeletionError {
     /// The commerce hook refused; nothing was changed.
     Commerce(CommerceUnlinkError),
+    /// The user has workspace connections and no real revoker is wired, so
+    /// deleting them would strand live provider grants; nothing was changed.
+    WorkspaceRevocationUnavailable,
     /// The database failed; if it failed inside the transaction, nothing in it
     /// was changed.
     Database(AuthError),
@@ -194,6 +216,9 @@ impl fmt::Display for DeletionError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             Self::Commerce(error) => write!(f, "{error}"),
+            Self::WorkspaceRevocationUnavailable => {
+                f.write_str("workspace grants cannot be revoked yet")
+            }
             Self::Database(error) => write!(f, "account deletion failed: {error}"),
         }
     }
@@ -203,6 +228,7 @@ impl std::error::Error for DeletionError {
     fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
         match self {
             Self::Commerce(error) => Some(error),
+            Self::WorkspaceRevocationUnavailable => None,
             Self::Database(error) => Some(error),
         }
     }
@@ -259,10 +285,24 @@ pub async fn purge_and_delete(
     .bind(user_id)
     .fetch_all(pool)
     .await?;
+    if !providers.is_empty() && !hooks.workspace.available() {
+        return Err(DeletionError::WorkspaceRevocationUnavailable);
+    }
     let mut workspace = Vec::with_capacity(providers.len());
     for provider in providers {
         let revoked = hooks.workspace.revoke(user_id, &provider).await;
         workspace.push(WorkspaceOutcome { provider, revoked });
+    }
+
+    let failed: Vec<&str> = workspace
+        .iter()
+        .filter(|outcome| !outcome.revoked)
+        .map(|outcome| outcome.provider.as_str())
+        .collect();
+    if !failed.is_empty() {
+        // Best effort, as in the TypeScript: the connection is deleted anyway.
+        // Provider names only, never a token.
+        tracing::warn!(providers = ?failed, "workspace grant revocation failed; deleting the connection anyway");
     }
 
     let mut tx = pool.begin().await?;

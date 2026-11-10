@@ -97,8 +97,10 @@ pub async fn delete_account(
                 "account deleted"
             );
         }
-        Err(DeletionError::Commerce(error)) => {
-            tracing::warn!(%error, "account deletion refused by the commerce cleanup");
+        Err(
+            error @ (DeletionError::Commerce(_) | DeletionError::WorkspaceRevocationUnavailable),
+        ) => {
+            tracing::warn!(%error, "account deletion refused by an external cleanup");
             return Err(ApiError::auth(
                 StatusCode::SERVICE_UNAVAILABLE,
                 "DELETION_UNAVAILABLE",
