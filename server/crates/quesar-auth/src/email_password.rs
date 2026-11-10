@@ -13,6 +13,7 @@ use time::OffsetDateTime;
 use crate::error::AuthError;
 use crate::ids::new_id;
 use crate::password::PhcString;
+use crate::providers::twitter::PLACEHOLDER_DOMAIN;
 use crate::rows::UserRow;
 use crate::validate::{self, ValidationError};
 
@@ -26,9 +27,21 @@ pub fn validate_sign_up(
     password: &str,
 ) -> Result<(String, String), ValidationError> {
     let email = validate::email(email)?;
+    if is_reserved_domain(&email) {
+        return Err(ValidationError::InvalidEmail);
+    }
     validate::password_len(password)?;
     let name = validate::display_name(name)?;
     Ok((name, email))
+}
+
+/// Whether the (lowercased) address is in the `.invalid` TLD (RFC 6761), which
+/// includes the placeholder domain X users get. Nobody can own such a mailbox,
+/// and a password sign-up must not claim a placeholder address, which would
+/// block that X user's sign-in for good.
+fn is_reserved_domain(email: &str) -> bool {
+    let domain = email.rsplit_once('@').map_or("", |(_, domain)| domain);
+    domain == PLACEHOLDER_DOMAIN || domain == "invalid" || domain.ends_with(".invalid")
 }
 
 /// Whether a user with this (already lowercased) email exists.

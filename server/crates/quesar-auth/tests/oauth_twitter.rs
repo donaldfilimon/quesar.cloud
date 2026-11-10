@@ -151,6 +151,43 @@ async fn a_confirmed_email_is_verified() {
 }
 
 #[tokio::test]
+async fn an_invalid_confirmed_email_falls_back_to_the_unverified_placeholder() {
+    for bad in ["not an email", "a@b", "x@y@z.example", "é@example.com"] {
+        let idp = MockIdp::start().await;
+        serve(&idp);
+        idp.set_userinfo_for(
+            "confirmed_email",
+            200,
+            &json!({ "data": { "confirmed_email": bad } }),
+        );
+        let identity = exchange(&client_for(&idp, "i", "s"), true).await.unwrap();
+        assert_eq!(
+            identity.email.as_deref(),
+            Some("77@twitter.placeholder.invalid"),
+            "{bad}"
+        );
+        assert!(!identity.email_verified, "{bad}");
+    }
+}
+
+#[tokio::test]
+async fn an_id_with_letters_or_over_twenty_digits_is_refused() {
+    for bad in ["AbC", "12a", "123456789012345678901"] {
+        let idp = MockIdp::start().await;
+        idp.respond_with_token_body(200, json!({ "access_token": "tok" }).to_string());
+        idp.set_userinfo_for(
+            "profile_image_url",
+            200,
+            &json!({ "data": { "id": bad, "name": "N" } }),
+        );
+        let error = exchange(&client_for(&idp, "i", "s"), true)
+            .await
+            .unwrap_err();
+        assert_eq!(error, ProviderError::Http(HttpError::Malformed), "{bad}");
+    }
+}
+
+#[tokio::test]
 async fn https_is_required_unless_allowed() {
     let idp = MockIdp::start().await;
     serve(&idp);
