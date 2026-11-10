@@ -1,0 +1,412 @@
+{
+  "description": "files is the sorted routeFiles() of src/lib/server/telemetry-routes.server.ts; the Rust server derives its path allowlist from it. Each vector's path is normalizeTelemetryPath(input, appRoutePatterns()). Regenerate when a route file is added or renamed: GEN_CONTRACT_VECTORS=1 bunx vitest run src/lib/server/public-contract.test.ts",
+  "files": [
+    "/src/routes/-auth-entry.test.tsx",
+    "/src/routes/-contact.test.tsx",
+    "/src/routes/-public-journey.test.tsx",
+    "/src/routes/-public-renderer.test.tsx",
+    "/src/routes/abbey-bot.tsx",
+    "/src/routes/abbey.tsx",
+    "/src/routes/abi.tsx",
+    "/src/routes/about.tsx",
+    "/src/routes/admin.tsx",
+    "/src/routes/apps.tsx",
+    "/src/routes/architecture.tsx",
+    "/src/routes/benchmarks.tsx",
+    "/src/routes/blog.$slug.tsx",
+    "/src/routes/blog.tsx",
+    "/src/routes/cell-machine.tsx",
+    "/src/routes/changelog.tsx",
+    "/src/routes/companion.tsx",
+    "/src/routes/company.tsx",
+    "/src/routes/console.tsx",
+    "/src/routes/console.workspace.tsx",
+    "/src/routes/contact.tsx",
+    "/src/routes/dashboard.tsx",
+    "/src/routes/demo.tsx",
+    "/src/routes/developers.tsx",
+    "/src/routes/docs.$slug.tsx",
+    "/src/routes/docs.tsx",
+    "/src/routes/financial-model.tsx",
+    "/src/routes/gama.tsx",
+    "/src/routes/get-started.tsx",
+    "/src/routes/index.tsx",
+    "/src/routes/investors.tsx",
+    "/src/routes/links.tsx",
+    "/src/routes/login.tsx",
+    "/src/routes/mobile.tsx",
+    "/src/routes/platform.tsx",
+    "/src/routes/plugins.tsx",
+    "/src/routes/privacy.tsx",
+    "/src/routes/products.$slug.tsx",
+    "/src/routes/products.tsx",
+    "/src/routes/profile.tsx",
+    "/src/routes/projects.$slug.tsx",
+    "/src/routes/projects.tsx",
+    "/src/routes/quasar.new.tsx",
+    "/src/routes/quasar.settings.tsx",
+    "/src/routes/quasar.site.$id.tsx",
+    "/src/routes/quasar.sites.tsx",
+    "/src/routes/quesar.tsx",
+    "/src/routes/research.$slug.tsx",
+    "/src/routes/research.implementations.$slug.tsx",
+    "/src/routes/research.implementations.tsx",
+    "/src/routes/research.tsx",
+    "/src/routes/security.tsx",
+    "/src/routes/services.tsx",
+    "/src/routes/showcase.abbey.tsx",
+    "/src/routes/showcase.design.tsx",
+    "/src/routes/showcase.explainer.tsx",
+    "/src/routes/showcase.film.tsx",
+    "/src/routes/showcase.mega.tsx",
+    "/src/routes/showcase.trailer.tsx",
+    "/src/routes/showcase.tsx",
+    "/src/routes/signup.tsx",
+    "/src/routes/skill-creator.tsx",
+    "/src/routes/source.$name.tsx",
+    "/src/routes/source.tsx",
+    "/src/routes/team.$slug.tsx",
+    "/src/routes/team.tsx",
+    "/src/routes/terms.tsx",
+    "/src/routes/tf-pose-demo.tsx",
+    "/src/routes/unauthorized.tsx",
+    "/src/routes/wdbx.tsx",
+    "/src/routes/workspace.tsx"
+  ],
+  "vectors": [
+    {
+      "name": "root",
+      "input": "/",
+      "path": "/"
+    },
+    {
+      "name": "static route",
+      "input": "/about",
+      "path": "/about"
+    },
+    {
+      "name": "nested static route",
+      "input": "/console/workspace",
+      "path": "/console/workspace"
+    },
+    {
+      "name": "flat-named nested route",
+      "input": "/showcase/film",
+      "path": "/showcase/film"
+    },
+    {
+      "name": "dynamic blog slug",
+      "input": "/blog/wdbx-v2-release",
+      "path": "/blog/wdbx-v2-release"
+    },
+    {
+      "name": "dynamic research slug",
+      "input": "/research/neural-backtracking",
+      "path": "/research/neural-backtracking"
+    },
+    {
+      "name": "dynamic team slug",
+      "input": "/team/donald-filimon",
+      "path": "/team/donald-filimon"
+    },
+    {
+      "name": "dynamic product slug",
+      "input": "/products/abi",
+      "path": "/products/abi"
+    },
+    {
+      "name": "dynamic slug with digits",
+      "input": "/blog/zig-016-migration",
+      "path": "/blog/zig-016-migration"
+    },
+    {
+      "name": "dynamic slug of one character",
+      "input": "/blog/a",
+      "path": "/blog/a"
+    },
+    {
+      "name": "two-level dynamic route",
+      "input": "/research/implementations/abi-core",
+      "path": "/research/implementations/abi-core"
+    },
+    {
+      "name": "dynamic route named id",
+      "input": "/quasar/site/site-42",
+      "path": "/quasar/site/site-42"
+    },
+    {
+      "name": "dynamic route named name",
+      "input": "/source/abi",
+      "path": "/source/abi"
+    },
+    {
+      "name": "slug with uppercase",
+      "input": "/blog/Wdbx",
+      "path": ""
+    },
+    {
+      "name": "slug with leading hyphen",
+      "input": "/blog/-x",
+      "path": ""
+    },
+    {
+      "name": "slug with trailing hyphen",
+      "input": "/blog/x-",
+      "path": ""
+    },
+    {
+      "name": "slug with double hyphen",
+      "input": "/blog/a--b",
+      "path": ""
+    },
+    {
+      "name": "slug with underscore",
+      "input": "/blog/a_b",
+      "path": ""
+    },
+    {
+      "name": "slug with dot",
+      "input": "/blog/a.b",
+      "path": ""
+    },
+    {
+      "name": "slug with a non-ascii letter",
+      "input": "/blog/café",
+      "path": ""
+    },
+    {
+      "name": "slug with arabic-indic digits",
+      "input": "/blog/١٢٣",
+      "path": ""
+    },
+    {
+      "name": "slug with a fullwidth letter",
+      "input": "/blog/ａ",
+      "path": ""
+    },
+    {
+      "name": "empty slug",
+      "input": "/blog/",
+      "path": "/blog"
+    },
+    {
+      "name": "email smuggled as a dynamic segment",
+      "input": "/blog/victim@example.com",
+      "path": ""
+    },
+    {
+      "name": "email smuggled as a path",
+      "input": "/u/victim@example.com",
+      "path": ""
+    },
+    {
+      "name": "sentence smuggled as a segment",
+      "input": "/team/user 12345 said something",
+      "path": ""
+    },
+    {
+      "name": "query dropped",
+      "input": "/about?utm_source=x&email=a@b.co",
+      "path": "/about"
+    },
+    {
+      "name": "fragment dropped",
+      "input": "/about#section",
+      "path": "/about"
+    },
+    {
+      "name": "empty query",
+      "input": "/about?",
+      "path": "/about"
+    },
+    {
+      "name": "fragment before query",
+      "input": "/about#a?b",
+      "path": "/about"
+    },
+    {
+      "name": "query on an unknown path",
+      "input": "/u/victim?token=abc",
+      "path": ""
+    },
+    {
+      "name": "only a query",
+      "input": "?x=1",
+      "path": ""
+    },
+    {
+      "name": "only a fragment",
+      "input": "#x",
+      "path": ""
+    },
+    {
+      "name": "trailing slash",
+      "input": "/about/",
+      "path": "/about"
+    },
+    {
+      "name": "trailing slash on a dynamic route",
+      "input": "/blog/wdbx-v2-release/",
+      "path": "/blog/wdbx-v2-release"
+    },
+    {
+      "name": "two trailing slashes",
+      "input": "/about//",
+      "path": ""
+    },
+    {
+      "name": "double slash is the root",
+      "input": "//",
+      "path": "/"
+    },
+    {
+      "name": "triple slash",
+      "input": "///",
+      "path": ""
+    },
+    {
+      "name": "leading double slash",
+      "input": "//about",
+      "path": ""
+    },
+    {
+      "name": "deeper path under a dynamic family",
+      "input": "/blog/wdbx-v2-release/extra",
+      "path": ""
+    },
+    {
+      "name": "deeper path under a static route",
+      "input": "/about/extra",
+      "path": ""
+    },
+    {
+      "name": "dynamic path 128 units",
+      "input": "/blog/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "path": "/blog/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "name": "dynamic path 129 units",
+      "input": "/blog/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "path": ""
+    },
+    {
+      "name": "dynamic path 200 units",
+      "input": "/blog/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "path": ""
+    },
+    {
+      "name": "static route in another case",
+      "input": "/ABOUT",
+      "path": ""
+    },
+    {
+      "name": "static route with a leading space",
+      "input": " /about",
+      "path": ""
+    },
+    {
+      "name": "static route with a trailing space",
+      "input": "/about ",
+      "path": ""
+    },
+    {
+      "name": "static route with a trailing newline",
+      "input": "/about\n",
+      "path": ""
+    },
+    {
+      "name": "static route with a nul",
+      "input": "/about\u0000",
+      "path": ""
+    },
+    {
+      "name": "absolute url",
+      "input": "https://evil.test/about",
+      "path": ""
+    },
+    {
+      "name": "relative path",
+      "input": "about",
+      "path": ""
+    },
+    {
+      "name": "unknown route",
+      "input": "/nope",
+      "path": ""
+    },
+    {
+      "name": "api route",
+      "input": "/api/telemetry",
+      "path": ""
+    },
+    {
+      "name": "api auth route",
+      "input": "/api/auth/anything",
+      "path": ""
+    },
+    {
+      "name": "ignored test file route",
+      "input": "/auth-entry/test",
+      "path": ""
+    },
+    {
+      "name": "route root file",
+      "input": "/__root",
+      "path": ""
+    },
+    {
+      "name": "empty string",
+      "input": "",
+      "path": ""
+    },
+    {
+      "name": "constructor",
+      "input": "constructor",
+      "path": ""
+    },
+    {
+      "name": "__proto__",
+      "input": "__proto__",
+      "path": ""
+    },
+    {
+      "name": "toString",
+      "input": "toString",
+      "path": ""
+    },
+    {
+      "name": "null",
+      "input": null,
+      "path": ""
+    },
+    {
+      "name": "number",
+      "input": 42,
+      "path": ""
+    },
+    {
+      "name": "boolean",
+      "input": true,
+      "path": ""
+    },
+    {
+      "name": "object",
+      "input": {
+        "toString": "/about"
+      },
+      "path": ""
+    },
+    {
+      "name": "array",
+      "input": [
+        "/about"
+      ],
+      "path": ""
+    },
+    {
+      "name": "array of nothing",
+      "input": [],
+      "path": ""
+    }
+  ]
+}

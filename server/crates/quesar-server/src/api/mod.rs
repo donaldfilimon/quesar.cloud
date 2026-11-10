@@ -11,6 +11,7 @@ pub mod body;
 pub mod error;
 pub mod fn_router;
 pub mod functions;
+pub mod telemetry;
 
 use std::net::IpAddr;
 use std::sync::Arc;

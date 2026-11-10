@@ -170,6 +170,7 @@ pub fn router_with_functions(
         // A service, not a nested router: a nested router does not answer
         // `/api/fn/` itself, and its fallback must see every path below.
         .nest_service(api::MOUNT, functions)
+        .nest(api::telemetry::MOUNT, api::telemetry::routes())
         .route("/docs/intro", get(docs_intro))
         .fallback(static_site)
         .layer(middleware::from_fn_with_state(

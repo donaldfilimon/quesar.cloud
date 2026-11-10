@@ -16,6 +16,8 @@ import {
   type InquiryInput,
   type InquiryValidation,
 } from "@/lib/inquiry-rules";
+import { normalizeTelemetryPath } from "./telemetry-path";
+import { appRoutePatterns, routeFiles } from "./telemetry-routes.server";
 
 const ORIGIN_FILE = new URL("../../../server/contract/quasar-origin-vectors.json", import.meta.url);
 
@@ -203,6 +205,99 @@ function inquiryVector(c: { name: string; input: unknown }): InquiryVector {
   };
 }
 
+const TELEMETRY_FILE = new URL("../../../server/contract/telemetry-routes.json", import.meta.url);
+
+type TelemetryVector = { name: string; input: unknown; path: string };
+type TelemetryFile = { description: string; files: string[]; vectors: TelemetryVector[] };
+
+// The sorted output of routeFiles(): the Rust server builds its route allowlist
+// from this list, so a route added without regenerating the file fails here.
+const currentRouteFiles = () => [...routeFiles()].sort();
+
+// Inputs are JSON values (they cross the wire as JSON); `path` may be anything.
+const TELEMETRY_CASES: { name: string; input: unknown }[] = [
+  { name: "root", input: "/" },
+  { name: "static route", input: "/about" },
+  { name: "nested static route", input: "/console/workspace" },
+  { name: "flat-named nested route", input: "/showcase/film" },
+  { name: "dynamic blog slug", input: "/blog/wdbx-v2-release" },
+  { name: "dynamic research slug", input: "/research/neural-backtracking" },
+  { name: "dynamic team slug", input: "/team/donald-filimon" },
+  { name: "dynamic product slug", input: "/products/abi" },
+  { name: "dynamic slug with digits", input: "/blog/zig-016-migration" },
+  { name: "dynamic slug of one character", input: "/blog/a" },
+  { name: "two-level dynamic route", input: "/research/implementations/abi-core" },
+  { name: "dynamic route named id", input: "/quasar/site/site-42" },
+  { name: "dynamic route named name", input: "/source/abi" },
+  { name: "slug with uppercase", input: "/blog/Wdbx" },
+  { name: "slug with leading hyphen", input: "/blog/-x" },
+  { name: "slug with trailing hyphen", input: "/blog/x-" },
+  { name: "slug with double hyphen", input: "/blog/a--b" },
+  { name: "slug with underscore", input: "/blog/a_b" },
+  { name: "slug with dot", input: "/blog/a.b" },
+  { name: "slug with a non-ascii letter", input: "/blog/caf\u00e9" },
+  { name: "slug with arabic-indic digits", input: "/blog/\u0661\u0662\u0663" },
+  { name: "slug with a fullwidth letter", input: "/blog/\uff41" },
+  { name: "empty slug", input: "/blog/" },
+  { name: "email smuggled as a dynamic segment", input: "/blog/victim@example.com" },
+  { name: "email smuggled as a path", input: "/u/victim@example.com" },
+  { name: "sentence smuggled as a segment", input: "/team/user 12345 said something" },
+  { name: "query dropped", input: "/about?utm_source=x&email=a@b.co" },
+  { name: "fragment dropped", input: "/about#section" },
+  { name: "empty query", input: "/about?" },
+  { name: "fragment before query", input: "/about#a?b" },
+  { name: "query on an unknown path", input: "/u/victim?token=abc" },
+  { name: "only a query", input: "?x=1" },
+  { name: "only a fragment", input: "#x" },
+  { name: "trailing slash", input: "/about/" },
+  { name: "trailing slash on a dynamic route", input: "/blog/wdbx-v2-release/" },
+  { name: "two trailing slashes", input: "/about//" },
+  { name: "double slash is the root", input: "//" },
+  { name: "triple slash", input: "///" },
+  { name: "leading double slash", input: "//about" },
+  { name: "deeper path under a dynamic family", input: "/blog/wdbx-v2-release/extra" },
+  { name: "deeper path under a static route", input: "/about/extra" },
+  { name: "dynamic path 128 units", input: `/blog/${"a".repeat(122)}` },
+  { name: "dynamic path 129 units", input: `/blog/${"a".repeat(123)}` },
+  { name: "dynamic path 200 units", input: `/blog/${"a".repeat(194)}` },
+  { name: "static route in another case", input: "/ABOUT" },
+  { name: "static route with a leading space", input: " /about" },
+  { name: "static route with a trailing space", input: "/about " },
+  { name: "static route with a trailing newline", input: "/about\n" },
+  { name: "static route with a nul", input: "/about\u0000" },
+  { name: "absolute url", input: "https://evil.test/about" },
+  { name: "relative path", input: "about" },
+  { name: "unknown route", input: "/nope" },
+  { name: "api route", input: "/api/telemetry" },
+  { name: "api auth route", input: "/api/auth/anything" },
+  { name: "ignored test file route", input: "/auth-entry/test" },
+  { name: "route root file", input: "/__root" },
+  { name: "empty string", input: "" },
+  { name: "constructor", input: "constructor" },
+  { name: "__proto__", input: "__proto__" },
+  { name: "toString", input: "toString" },
+  { name: "null", input: null },
+  { name: "number", input: 42 },
+  { name: "boolean", input: true },
+  { name: "object", input: { toString: "/about" } },
+  { name: "array", input: ["/about"] },
+  { name: "array of nothing", input: [] },
+];
+
+function telemetryVector(c: { name: string; input: unknown }): TelemetryVector {
+  return { name: c.name, input: c.input, path: normalizeTelemetryPath(c.input, appRoutePatterns()) };
+}
+
+if (process.env.GEN_CONTRACT_VECTORS === "1") {
+  const telemetry: TelemetryFile = {
+    description:
+      "files is the sorted routeFiles() of src/lib/server/telemetry-routes.server.ts; the Rust server derives its path allowlist from it. Each vector's path is normalizeTelemetryPath(input, appRoutePatterns()). Regenerate when a route file is added or renamed: GEN_CONTRACT_VECTORS=1 bunx vitest run src/lib/server/public-contract.test.ts",
+    files: currentRouteFiles(),
+    vectors: TELEMETRY_CASES.map(telemetryVector),
+  };
+  writeFileSync(TELEMETRY_FILE, `${JSON.stringify(telemetry, null, 2)}\n`);
+}
+
 if (process.env.GEN_CONTRACT_VECTORS === "1") {
   const inquiries: InquiryFile = {
     description:
@@ -249,6 +344,28 @@ describe("public contract: contact inquiry rules", () => {
   for (const vector of file.vectors) {
     it(`coerces and validates: ${vector.name}`, () => {
       expect(inquiryVector({ name: vector.name, input: vector.input })).toEqual(vector);
+    });
+  }
+});
+
+describe("public contract: telemetry route allowlist", () => {
+  const file = JSON.parse(readFileSync(TELEMETRY_FILE, "utf8")) as TelemetryFile;
+
+  it("lists the current route files (regenerate the file when a route is added)", () => {
+    expect(file.files).toEqual(currentRouteFiles());
+  });
+
+  it("covers every case", () => {
+    expect(file.vectors.map((v) => v.name)).toEqual(TELEMETRY_CASES.map((c) => c.name));
+  });
+
+  it("has distinct names", () => {
+    expect(new Set(file.vectors.map((v) => v.name)).size).toBe(file.vectors.length);
+  });
+
+  for (const vector of file.vectors) {
+    it(`normalises: ${vector.name}`, () => {
+      expect(telemetryVector({ name: vector.name, input: vector.input })).toEqual(vector);
     });
   }
 });
