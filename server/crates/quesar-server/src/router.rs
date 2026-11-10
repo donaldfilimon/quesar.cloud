@@ -171,6 +171,7 @@ pub fn router_with_functions(
         // `/api/fn/` itself, and its fallback must see every path below.
         .nest_service(api::MOUNT, functions)
         .nest(api::telemetry::MOUNT, api::telemetry::routes())
+        .nest(api::csp_report::MOUNT, api::csp_report::routes())
         .route("/docs/intro", get(docs_intro))
         .fallback(static_site)
         .layer(middleware::from_fn_with_state(

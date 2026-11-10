@@ -8,6 +8,7 @@
 //! exist (the TypeScript dispatcher does the same).
 
 pub mod body;
+pub mod csp_report;
 pub mod error;
 pub mod fn_router;
 pub mod functions;
