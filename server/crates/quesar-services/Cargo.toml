@@ -1,0 +1,33 @@
+[package]
+name = "quesar-services"
+version = "0.1.0"
+description = "Server-side services for quesar.cloud: AES-256-GCM sealing of data at rest (byte-compatible with src/lib/server/crypto.server.ts) and database-backed rate limiting."
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+# The `zeroize` features wipe the expanded AES key schedule and the GHASH key
+# when a cipher is dropped. `aes`, `ghash`, `polyval` and `ctr` are named only
+# to switch those features on; `hmac` 0.12 and `sha2` 0.10 have none (see the
+# note in `derive_seal_key`).
+aes-gcm = { version = "0.10", features = ["zeroize"] }
+aes = { version = "0.8", features = ["zeroize"] }
+ctr = { version = "0.9", features = ["zeroize"] }
+ghash = { version = "0.5", features = ["zeroize"] }
+polyval = { version = "0.6", features = ["zeroize"] }
+base64 = "0.22"
+hmac = "0.12"
+http = "1"
+sha2 = "0.10"
+zeroize = "1"
+sqlx = { version = "0.8", default-features = false, features = ["postgres", "runtime-tokio", "tls-rustls-ring-webpki"] }
+
+[dev-dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+quesar-db = { path = "../quesar-db", features = ["test-support"] }
+tokio = { version = "1", features = ["macros", "rt-multi-thread"] }

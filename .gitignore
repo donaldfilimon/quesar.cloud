@@ -22,3 +22,6 @@ out/
 next-env.d.ts
 # Python bytecode from scripts.
 scripts/__pycache__/
+# Rust server (server/): cargo build output and the export it serves.
+server/target/
+server/site/

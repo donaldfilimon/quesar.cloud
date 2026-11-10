@@ -1,0 +1,17 @@
+{
+  "_comment": "FAKE: produced by server/contract/passkey/generate.mjs; the key is generated there and trusted by nothing.",
+  "challenge": "4wdmYBC0RX9GFsHxfMmmBlmGhtRlfkx2hipHByb5ySY",
+  "response": {
+    "id": "MIBpWUJ1WXrjaHPYK6x-406m5TzbF16vjZMvk2zOa4g",
+    "rawId": "MIBpWUJ1WXrjaHPYK6x-406m5TzbF16vjZMvk2zOa4g",
+    "response": {
+      "authenticatorData": "-mCQ4a6jcuCLypxy-dAQ5oZ69iOjP-PJYWnR8miWzTkdAAAABQ",
+      "clientDataJSON": "eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoiNHdkbVlCQzBSWDlHRnNIeGZNbW1CbG1HaHRSbGZreDJoaXBIQnliNXlTWSIsIm9yaWdpbiI6Imh0dHBzOi8vcXVlc2FyLmNsb3VkIiwiY3Jvc3NPcmlnaW4iOmZhbHNlfQ",
+      "signature": "MEYCIQDQ0fNpXoBFnk35mRSaE9jkvPmgAMgaqIsG8VlFEaPYJAIhANRIZrh0jxBQtuFHCvubdKG29zFc450bDcQ-Q81mEl2p",
+      "userHandle": "Ko0sCEWFRdewBplRnTJivg"
+    },
+    "type": "public-key",
+    "clientExtensionResults": {},
+    "authenticatorAttachment": "platform"
+  }
+}

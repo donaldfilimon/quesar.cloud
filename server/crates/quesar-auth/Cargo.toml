@@ -1,0 +1,51 @@
+[package]
+name = "quesar-auth"
+version = "0.1.0"
+description = "Authentication core for the quesar.cloud server: identifiers, tokens, clock, row types and configuration. Framework-free."
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[lints]
+workspace = true
+
+[features]
+# The in-process mock identity provider (`tests/support/mock_idp.rs`), for
+# this crate's tests and quesar-server's.
+test-support = ["dep:axum", "dep:tokio"]
+
+[dependencies]
+argon2 = { version = "0.5", features = ["zeroize"] }
+base64 = "0.22"
+http = "1"
+jsonwebtoken = "9"
+p256 = { version = "0.13", default-features = false, features = ["ecdsa", "pem", "std"] }
+rand = "0.8"
+reqwest = { version = "0.12", default-features = false, features = ["rustls-tls"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+sha2 = "0.10"
+subtle = "2"
+time = "0.3"
+tracing = "0.1"
+url = "2"
+uuid = { version = "1", features = ["v4"] }
+# `danger-allow-state-serialisation`: the ceremony state (the challenge, the
+#   allowed credentials) is serialized into `auth_flows` and never reaches the
+#   client, so a ceremony is single-use and server-owned.
+# `conditional-ui`: discoverable (usernameless) sign-in,
+#   `start_discoverable_authentication`.
+# `danger-credential-internals`: `Credential::backup_eligible` and
+#   `backup_state`, the `device_type` and `backed_up` columns.
+webauthn-rs = { version = "0.5", features = ["danger-allow-state-serialisation", "conditional-ui", "danger-credential-internals"] }
+zeroize = "1"
+axum = { version = "0.8", default-features = false, features = ["http1", "tokio"], optional = true }
+tokio = { version = "1", features = ["net", "rt", "sync"], optional = true }
+sqlx = { version = "0.8", default-features = false, features = ["postgres", "runtime-tokio", "tls-rustls-ring-webpki", "derive", "time", "json", "uuid"] }
+
+[dev-dependencies]
+quesar-auth = { path = ".", features = ["test-support"] }
+quesar-db = { path = "../quesar-db", features = ["test-support"] }
+tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
+time = { version = "0.3", features = ["macros"] }
+tracing-subscriber = "0.3"

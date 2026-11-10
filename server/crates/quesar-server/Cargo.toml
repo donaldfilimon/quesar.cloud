@@ -1,0 +1,40 @@
+[package]
+name = "quesar-server"
+version = "0.1.0"
+description = "The quesar.cloud server: serves the static export and /api/* from one origin."
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+axum = { version = "0.8", default-features = false, features = ["form", "http1", "http2", "json", "original-uri", "query", "tokio"] }
+base64 = "0.22"
+http-body-util = "0.1"
+percent-encoding = "2"
+quesar-auth = { path = "../quesar-auth" }
+quesar-db = { path = "../quesar-db" }
+quesar-services = { path = "../quesar-services" }
+serde = { version = "1", features = ["derive"] }
+reqwest = { version = "0.12", default-features = false, features = ["rustls-tls", "json"] }
+serde_json = "1"
+sqlx = { version = "0.8", default-features = false, features = ["postgres", "runtime-tokio"] }
+time = { version = "0.3", features = ["formatting", "macros"] }
+tokio = { version = "1", features = ["macros", "net", "rt-multi-thread", "signal", "sync"] }
+tower = { version = "0.5", features = ["util"] }
+tower-http = { version = "0.6", features = ["fs", "trace"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
+url = "2"
+zeroize = "1"
+
+[dev-dependencies]
+quesar-auth = { path = "../quesar-auth", features = ["test-support"] }
+quesar-db = { path = "../quesar-db", features = ["test-support"] }
+http-body-util = { version = "0.1", features = ["channel"] }
+tempfile = "3"
+# A software authenticator that signs real attestations and assertions, so the
+# passkey ceremonies are tested end to end.
+webauthn-authenticator-rs = { version = "0.5", default-features = false, features = ["softpasskey"] }

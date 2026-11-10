@@ -29,6 +29,8 @@ export default tseslint.config(
       // Standalone projects with their own toolchains (Bun, Gradle, Swift),
       // outside the npm build. See their READMEs.
       "sidecars/**",
+      // The Rust server: cargo fmt and clippy cover it (bun run check:server).
+      "server/**",
       "native/**",
       // Session-plugin state (git-ignored by its own .gitignore). Flat config
       // does not read .gitignore, and it writes a timestamp file named `*.ts`.
