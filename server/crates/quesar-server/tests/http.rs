@@ -263,3 +263,68 @@ async fn unknown_api_paths_answer_in_json_for_every_method() {
         assert_eq!(body["error"]["name"], "NotFoundError");
     }
 }
+
+const CSP: &str = "content-security-policy-report-only";
+const REPORTING: &str = "reporting-endpoints";
+
+#[tokio::test]
+async fn pages_and_the_404_page_carry_the_csp_and_reporting_headers() {
+    let site = site();
+    let config = config(&site, &[]);
+    for path in ["/", "/docs", "/docs/", "/nope"] {
+        let response = get(&config, path).await;
+        assert!(
+            response.headers().contains_key(CSP) && response.headers().contains_key(REPORTING),
+            "{path}"
+        );
+        assert_eq!(
+            header_named(&response, REPORTING),
+            r#"csp-endpoint="/api/csp-report""#
+        );
+    }
+    assert_eq!(get(&config, "/nope").await.status(), StatusCode::NOT_FOUND);
+}
+
+fn header_named<'a>(response: &'a Response, name: &str) -> &'a str {
+    response.headers().get(name).unwrap().to_str().unwrap()
+}
+
+#[tokio::test]
+async fn development_and_production_pages_get_their_own_policy() {
+    let site = site();
+    let development = get(&config(&site, &[]), "/").await;
+    let production = get(
+        &config(
+            &site,
+            &[
+                ("QUESAR_ENV", "production"),
+                ("DATABASE_URL", "postgres://quesar@127.0.0.1/quesar"),
+                ("PUBLIC_ORIGIN", "https://quesar.cloud"),
+            ],
+        ),
+        "/",
+    )
+    .await;
+    let development = header_named(&development, CSP);
+    let production = header_named(&production, CSP);
+    assert!(development.contains("'unsafe-eval'") && development.contains("ws: wss:"));
+    assert!(!production.contains("'unsafe-eval'") && !production.contains("ws:"));
+}
+
+#[tokio::test]
+async fn assets_media_the_feed_and_api_responses_carry_neither_header() {
+    let site = site();
+    let config = config(&site, &[]);
+    for path in [
+        "/_next/static/chunks/app.js",
+        "/feed.xml",
+        "/media/clip.bin",
+        "/api/readiness",
+        "/api/no-such-endpoint",
+        "/api",
+    ] {
+        let response = get(&config, path).await;
+        assert!(!response.headers().contains_key(CSP), "{path}");
+        assert!(!response.headers().contains_key(REPORTING), "{path}");
+    }
+}

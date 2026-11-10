@@ -5,7 +5,7 @@ use std::sync::Arc;
 
 use axum::body::Body;
 use axum::extract::{Request, State};
-use axum::http::header::{CACHE_CONTROL, LOCATION};
+use axum::http::header::{CACHE_CONTROL, CONTENT_TYPE, LOCATION};
 use axum::http::{HeaderValue, StatusCode};
 use axum::middleware::{self, Next};
 use axum::response::{IntoResponse, Response};
@@ -14,6 +14,7 @@ use axum::{Json, Router};
 use serde_json::json;
 
 use crate::config::Config;
+use crate::csp::PageHeaders;
 use crate::readiness::{Readiness, runtime_readiness};
 use crate::static_site;
 
@@ -23,6 +24,8 @@ struct AppState {
     site_dir: PathBuf,
     /// Computed once: the environment does not change while the process runs.
     readiness: Readiness,
+    /// Report-only CSP for HTML pages: production or development policy.
+    page_headers: PageHeaders,
 }
 
 type Shared = State<Arc<AppState>>;
@@ -71,13 +74,24 @@ async fn docs_intro() -> Response {
 }
 
 async fn static_site(State(state): Shared, request: Request<Body>) -> Response {
-    static_site::serve(&state.site_dir, request).await
+    let mut response = static_site::serve(&state.site_dir, request).await;
+    // Pages only (including the 404 page): not assets, media or the feed.
+    let is_html = response
+        .headers()
+        .get(CONTENT_TYPE)
+        .and_then(|value| value.to_str().ok())
+        .is_some_and(|value| value.starts_with("text/html"));
+    if is_html {
+        state.page_headers.apply(response.headers_mut());
+    }
+    response
 }
 
 pub fn router(config: &Config) -> Router {
     let state = Arc::new(AppState {
         site_dir: config.site_dir.clone(),
         readiness: runtime_readiness(&config.environment, config.production),
+        page_headers: PageHeaders::new(config.production),
     });
     Router::new()
         .route(READINESS_PATH, get(readiness))

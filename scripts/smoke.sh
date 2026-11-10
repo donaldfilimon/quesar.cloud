@@ -53,6 +53,9 @@ check "old docs intro redirects" 308 "$(status "${BASE}/docs/intro")"
 check "traversal is refused" 404 "$(status --path-as-is "${BASE}/../package.json")"
 check "encoded traversal is refused" 404 "$(status "${BASE}/%2e%2e/package.json")"
 check "dotfiles are not served" 404 "$(status "${BASE}/.nojekyll")"
+check "home page carries the report-only CSP" "yes" \
+  "$([ -n "$(header content-security-policy-report-only "${BASE}/")" ] && echo yes || echo no)"
+check "readiness carries no CSP" "" "$(header content-security-policy-report-only "${BASE}/api/readiness")"
 check "POST to a page is refused" 405 "$(status -X POST "${BASE}/docs")"
 
 asset="$(find "${SITE_DIR}/_next/static" -type f -name '*.js' -print -quit)"

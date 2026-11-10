@@ -12,6 +12,7 @@ workspace = true
 [dependencies]
 axum = { version = "0.8", default-features = false, features = ["http1", "http2", "json", "tokio"] }
 base64 = "0.22"
+http-body-util = { version = "0.1", features = ["channel"] }
 quesar-db = { path = "../quesar-db" }
 percent-encoding = "2"
 serde = { version = "1", features = ["derive"] }
@@ -24,5 +25,4 @@ tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
 url = "2"
 
 [dev-dependencies]
-http-body-util = "0.1"
 tempfile = "3"
