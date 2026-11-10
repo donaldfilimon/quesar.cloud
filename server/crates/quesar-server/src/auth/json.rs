@@ -1,7 +1,8 @@
 //! Reading a credential-bearing JSON body.
 //!
 //! The body is read under a cap, parsed straight into the request type and
-//! then overwritten, so a password does not sit in a freed buffer. Request
+//! then overwritten. That is best effort: the final buffer is zeroed;
+//! earlier reallocations and hyper's frames are not. Request
 //! types must not derive `Debug` over a plain `String` password: use
 //! [`password`] with `#[serde(deserialize_with)]`, which builds the redacted,
 //! zeroizing [`Password`] directly from the parser.
