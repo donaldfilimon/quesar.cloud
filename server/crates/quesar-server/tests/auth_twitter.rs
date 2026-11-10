@@ -169,13 +169,13 @@ async fn a_confirmed_email_signs_in_a_new_user_with_basic_auth_and_no_verificati
     }
     assert_eq!(h.idp.requests_to("/jwks").len(), 0);
 
-    // Stored: a verified user, a twitter account, no verification row.
+    // Stored: an unverified user (see `link.rs`), a twitter account, no verification row.
     assert_eq!(
         user_rows(&h).await,
         [(
             "Ada on X".to_owned(),
             "ada@example.com".to_owned(),
-            true,
+            false, // X never makes a local user verified
             Some("https://pbs.example.com/ada.png".to_owned())
         )]
     );
@@ -487,5 +487,82 @@ async fn google_and_apple_still_require_their_nonce_and_x_works_without_one() {
         .unwrap();
     let reply = finish(&h, &started).await;
     assert_eq!(location(&reply), "/console");
+    h.cleanup().await;
+}
+
+async fn assert_unverified_x_user_blocks_linking(h: &OAuth) {
+    let users = user_rows(h).await;
+    assert_eq!(users.len(), 1);
+    assert!(!users[0].2, "the X-created user is not verified");
+}
+
+#[tokio::test]
+async fn an_x_created_user_is_unverified_and_google_cannot_link_into_it() {
+    let h = OAuth::with_twitter().await;
+    let (_, reply) = sign_in(&h, Some((200, confirmed(EMAIL)))).await;
+    assert_eq!(location(&reply), "/console");
+    assert_unverified_x_user_blocks_linking(&h).await;
+
+    // The owner of the address signs in with Google afterwards.
+    let started = h.start(&json!({})).await;
+    h.issue(&started.nonce);
+    let reply = h.finish(&started).await;
+    assert_error(&reply, "account_not_linked");
+    assert_eq!(h.count(r#""user""#).await, 1);
+    let providers: Vec<String> = sqlx::query_scalar(r#"select "providerId" from "account""#)
+        .fetch_all(&h.db.pool)
+        .await
+        .unwrap();
+    assert_eq!(providers, ["twitter"], "no Google account on that user");
+    assert_eq!(h.count("oauth_email_verifications").await, 0);
+    h.cleanup().await;
+}
+
+#[tokio::test]
+async fn the_x_created_user_is_never_admin_even_on_the_allowlist() {
+    use quesar_auth::admin::admin_decision_for;
+    use quesar_auth::config::AdminEmails;
+    let h = OAuth::with_twitter().await;
+    let (_, reply) = sign_in(&h, Some((200, confirmed(EMAIL)))).await;
+    assert_eq!(location(&reply), "/console");
+    let started = h.start(&json!({})).await;
+    h.issue(&started.nonce);
+    assert_error(&h.finish(&started).await, "account_not_linked");
+
+    let allow = AdminEmails::parse(EMAIL);
+    let ids: Vec<String> = sqlx::query_scalar(r#"select id from "user""#)
+        .fetch_all(&h.db.pool)
+        .await
+        .unwrap();
+    assert_eq!(ids.len(), 1);
+    for id in ids {
+        let decision = admin_decision_for(&h.db.pool, &id, &allow).await.unwrap();
+        assert!(!decision.is_admin(), "{decision:?}");
+    }
+    h.cleanup().await;
+}
+
+#[tokio::test]
+async fn a_returning_x_user_whose_confirmed_email_appears_later_stays_unverified() {
+    let h = OAuth::with_twitter().await;
+    sqlx::query(
+        r#"insert into "user" (id, name, email, "emailVerified") values ('x-user', 'Ada', $1, false)"#,
+    )
+    .bind(EMAIL)
+    .execute(&h.db.pool)
+    .await
+    .unwrap();
+    sqlx::query(
+        r#"insert into "account" (id, "accountId", "providerId", "userId", "updatedAt")
+           values ('x-account', $1, 'twitter', 'x-user', now())"#,
+    )
+    .bind(X_ID)
+    .execute(&h.db.pool)
+    .await
+    .unwrap();
+    let (_, reply) = sign_in(&h, Some((200, confirmed(EMAIL)))).await;
+    assert_eq!(location(&reply), "/console");
+    assert!(reply.session_cookie().is_some());
+    assert_unverified_x_user_blocks_linking(&h).await;
     h.cleanup().await;
 }

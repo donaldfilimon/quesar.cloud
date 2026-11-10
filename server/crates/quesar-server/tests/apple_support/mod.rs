@@ -127,6 +127,10 @@ impl Apple {
             apple.endpoints.token = idp.token_url();
             apple.endpoints.jwks = Some(idp.jwks_url());
         }
+        if let Some(twitter) = services.config.providers.twitter.as_mut() {
+            twitter.endpoints.token = idp.token_url();
+            twitter.endpoints.userinfo = Some(idp.userinfo_url());
+        }
         Self {
             app: router_with(&config, Some(services)),
             db,
@@ -241,9 +245,18 @@ impl Apple {
 
     /// The same-site GET the POST redirected to; `cookie` is the binding.
     pub async fn get_callback(&self, query: &str, cookie: Option<&str>) -> Reply {
+        self.get_callback_on("apple", query, cookie).await
+    }
+
+    pub async fn get_callback_on(
+        &self,
+        provider: &str,
+        query: &str,
+        cookie: Option<&str>,
+    ) -> Reply {
         let mut builder = Request::builder()
             .method(Method::GET)
-            .uri(format!("/api/auth/callback/apple?{query}"))
+            .uri(format!("/api/auth/callback/{provider}?{query}"))
             .header("x-real-ip", self.fresh_ip())
             .header("sec-fetch-site", "cross-site")
             .header("sec-fetch-mode", "navigate")

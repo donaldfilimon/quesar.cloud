@@ -130,6 +130,13 @@ pub async fn resolve(
         .map(|email| email.trim().to_lowercase())
         .filter(|email| !email.is_empty());
 
+    // A local user's `emailVerified` comes only from a provider that asserts
+    // email. Better Auth also sets it from X's `confirmed_email`; here that
+    // would let an attacker whose X account confirms a victim's address
+    // create the user first (verified), hold it through X, and have the
+    // owner's later Google or Apple sign-in linked into it by step 4.
+    let local_verified = identity.email_verified && provider.asserts_email();
+
     // Two sign-ins for one provider account, or one address, take turns. The
     // `account` table has no unique key on (provider, id) to fall back on.
     lock(
@@ -180,7 +187,7 @@ pub async fn resolve(
             // Cannot happen (the foreign key cascades); never sign in as no one.
             return Ok(Outcome::Refused(Refusal::AccountNotLinked));
         };
-        if identity.email_verified && !user.email_verified && user.email == email {
+        if local_verified && !user.email_verified && user.email == email {
             user = sqlx::query_as(&format!(
                 r#"update "user" set "emailVerified" = true, "updatedAt" = $2
                    where id = $1 returning {USER_COLUMNS}"#
@@ -225,7 +232,7 @@ pub async fn resolve(
     .bind(new_id())
     .bind(new_user_name(identity, &email))
     .bind(&email)
-    .bind(identity.email_verified)
+    .bind(local_verified)
     .bind(identity.image.as_deref())
     .bind(now)
     .fetch_optional(&mut *tx)
