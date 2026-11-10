@@ -1750,11 +1750,13 @@ dependencies = [
  "http",
  "polyval",
  "quesar-db",
+ "reqwest",
  "serde",
  "serde_json",
  "sha2",
  "sqlx",
  "tokio",
+ "tracing",
  "url",
  "zeroize",
 ]

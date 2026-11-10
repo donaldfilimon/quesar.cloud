@@ -7,6 +7,8 @@ use std::fmt;
 
 use zeroize::Zeroizing;
 
+pub use crate::turnstile_verify::Verifier;
+
 /// Cloudflare's siteverify endpoint. A field of [`TurnstileConfig`] with this
 /// default and no environment override, so a test can point it at a mock.
 pub const SITEVERIFY_URL: &str = "https://challenges.cloudflare.com/turnstile/v0/siteverify";

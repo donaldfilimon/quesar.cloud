@@ -18,3 +18,4 @@ pub mod quasar;
 pub mod rate_limit;
 pub mod text;
 pub mod turnstile;
+pub mod turnstile_verify;

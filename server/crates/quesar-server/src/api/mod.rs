@@ -12,7 +12,9 @@ pub mod error;
 pub mod fn_router;
 pub mod functions;
 
+use std::net::IpAddr;
 use std::sync::Arc;
+use std::time::Duration;
 
 use axum::Router;
 use axum::extract::Request;
@@ -27,13 +29,15 @@ use quesar_services::turnstile::TurnstileConfig;
 pub use error::ApiError;
 pub use fn_router::FnRouter;
 
-use crate::auth::extract::SameOrigin;
+use crate::auth::extract::{ClientIp, SameOrigin};
 use crate::auth::{BuildError, reissue};
 use crate::config::Config;
 use crate::router::AppState;
 
 /// Where the functions are mounted.
 pub const MOUNT: &str = "/api/fn";
+
+const HTTP_TIMEOUT: Duration = Duration::from_secs(10);
 
 /// What public endpoints need and no database provides. Fields are public so a
 /// test can replace one before the router is built.
@@ -48,17 +52,29 @@ pub struct PublicServices {
     pub quasar_default_origin: Option<String>,
     /// What `commerce.getCommerceReadiness` answers.
     pub commerce: CommerceReadiness,
+    /// For outbound calls (Turnstile siteverify): follows no redirects, times
+    /// out after 10 s.
+    pub http: reqwest::Client,
 }
 
 impl PublicServices {
-    /// The production constructor. Later tasks add services that can fail to
-    /// build (an HTTP client), which is why it returns a `Result`.
+    /// The production constructor; the HTTP client is the one that can fail.
     pub fn build(config: &Config) -> Result<Self, BuildError> {
-        Ok(Self::from_config(config))
+        Ok(Self::with_http(
+            config,
+            http_client().map_err(BuildError::HttpClient)?,
+        ))
     }
 
     /// What [`crate::router_with`] uses when the caller built none.
     pub(crate) fn from_config(config: &Config) -> Self {
+        // Building the client only fails when no TLS backend initialises;
+        // `build` (what `main` calls first) reports that and exits, so this
+        // convenience path for tests never reaches the default client.
+        Self::with_http(config, http_client().unwrap_or_default())
+    }
+
+    fn with_http(config: &Config, http: reqwest::Client) -> Self {
         let environment = &config.environment;
         let auth = AuthConfig::from_lookup(
             |name| environment.read(name).map(str::to_owned),
@@ -69,8 +85,26 @@ impl PublicServices {
             turnstile: functions::config::turnstile(environment),
             quasar_default_origin: functions::config::quasar_default_origin(environment),
             commerce: functions::config::commerce(environment),
+            http,
         }
     }
+}
+
+fn http_client() -> Result<reqwest::Client, reqwest::Error> {
+    reqwest::Client::builder()
+        .redirect(reqwest::redirect::Policy::none())
+        .timeout(HTTP_TIMEOUT)
+        .build()
+}
+
+/// The address to give Cloudflare as `remoteip`: only a real client address.
+/// Loopback and unspecified addresses (the proxy's own, when no header is
+/// trusted) and any text that is not an address (`unknown`, a header list) are
+/// never forwarded (plan decision 10).
+pub fn remote_ip(ip: &ClientIp) -> Option<String> {
+    let address: IpAddr = ip.0.parse().ok()?;
+    let address = address.to_canonical();
+    (!address.is_loopback() && !address.is_unspecified()).then(|| ip.0.clone())
 }
 
 /// The functions the server offers. Tasks 5 and 6 register theirs here.
