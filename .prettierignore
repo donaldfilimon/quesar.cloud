@@ -11,6 +11,7 @@ bun.lock
 # Standalone projects with their own toolchains (see their READMEs).
 sidecars/
 native/
+server/
 # Vendored assets.
 public/
 # Dated records (some imported from mlai): kept byte-for-byte.

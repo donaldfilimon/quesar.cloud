@@ -28,7 +28,9 @@
     "lint": "eslint . --max-warnings 0",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "check": "bun run format:check && bun run typecheck && bun run lint && bun run test && bun run build"
+    "check:server": "cargo fmt --manifest-path server/Cargo.toml --all --check && cargo clippy --manifest-path server/Cargo.toml --all-targets --locked -- -D warnings && cargo test --manifest-path server/Cargo.toml --locked",
+    "server": "cargo run --manifest-path server/Cargo.toml --locked",
+    "check": "bun run format:check && bun run typecheck && bun run lint && bun run test && bun run check:server && bun run build"
   },
   "dependencies": {
     "@better-auth/core": "1.7.19",
