@@ -181,7 +181,7 @@ pub async fn authenticate_options(
 ) -> Result<Response, ApiError> {
     let services = state.auth_services()?;
     services
-        .limit(Bucket::AuthCredential, &ip.subject(services))
+        .limit(Bucket::AuthGeneral, &ip.subject(services))
         .await?;
     let relying_party = passkeys(services)?;
     let begun_flow = authenticate::begin(relying_party, &services.pool, services.clock.now())
@@ -218,7 +218,11 @@ pub async fn authenticate_verify(
 ) -> Result<Response, ApiError> {
     let services = state.auth_services()?;
     services
-        .limit(Bucket::AuthCredential, &ip.subject(services))
+        .limit_route(
+            Bucket::AuthCredential,
+            "passkey-verify",
+            &ip.subject(services),
+        )
         .await?;
     let relying_party = passkeys(services)?;
     let input: AuthenticateBody = json::read(&headers, body).await?;

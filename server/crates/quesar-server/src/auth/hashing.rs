@@ -2,10 +2,12 @@
 //!
 //! Argon2id is CPU-bound and takes 19 MiB per hash, so it runs in
 //! `spawn_blocking` behind a semaphore: a flood of sign-in attempts queues
-//! instead of exhausting memory or starving the runtime's blocking pool.
+//! (for at most [`PERMIT_WAIT`]) instead of exhausting memory or starving the
+//! runtime's blocking pool.
 
 use std::fmt;
 use std::sync::Arc;
+use std::time::Duration;
 
 use quesar_auth::password::{
     DummyHash, HashError, Password, PasswordHasher, PhcString, verify_unknown_user,
@@ -17,8 +19,15 @@ use tokio::sync::Semaphore;
 /// requests wait for a permit rather than fail.
 pub const MAX_CONCURRENT_HASHES: usize = 4;
 
+/// How long a request waits for a permit before it is turned away. Without a
+/// bound, a flood from many addresses (each under its own rate limit) would
+/// queue behind the permits without limit, in latency and in memory.
+pub const PERMIT_WAIT: Duration = Duration::from_secs(10);
+
 #[derive(Debug)]
 pub enum HashingError {
+    /// No permit came free within [`PERMIT_WAIT`]: the server is busy hashing.
+    Busy,
     /// The hasher itself failed.
     Hash(HashError),
     /// The blocking task panicked or was cancelled.
@@ -27,7 +36,10 @@ pub enum HashingError {
 
 impl fmt::Display for HashingError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.write_str("password hashing failed")
+        f.write_str(match self {
+            Self::Busy => "password hashing is busy",
+            _ => "password hashing failed",
+        })
     }
 }
 
@@ -64,9 +76,9 @@ impl Hashing {
         &self,
         work: impl FnOnce() -> T + Send + 'static,
     ) -> Result<T, HashingError> {
-        let permit = Arc::clone(&self.permits)
-            .acquire_owned()
+        let permit = tokio::time::timeout(PERMIT_WAIT, Arc::clone(&self.permits).acquire_owned())
             .await
+            .map_err(|_| HashingError::Busy)?
             .map_err(|_| HashingError::Task)?;
         tokio::task::spawn_blocking(move || {
             let result = work();

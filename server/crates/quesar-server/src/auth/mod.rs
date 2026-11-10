@@ -71,6 +71,8 @@ pub enum BuildError {
     RateLimitSecret(SecretMissing),
     HttpClient(reqwest::Error),
     Hashing(HashError),
+    /// The auth tables are not there: `quesar-server migrate` has not run.
+    SchemaMissing,
 }
 
 impl std::fmt::Display for BuildError {
@@ -79,11 +81,30 @@ impl std::fmt::Display for BuildError {
             Self::RateLimitSecret(error) => write!(f, "{error}"),
             Self::HttpClient(error) => write!(f, "cannot build the provider HTTP client: {error}"),
             Self::Hashing(error) => write!(f, "cannot prepare password hashing: {error}"),
+            Self::SchemaMissing => f.write_str(
+                "the authentication tables are missing or unreadable; \
+                 run `quesar-server migrate` before starting the server",
+            ),
         }
     }
 }
 
 impl std::error::Error for BuildError {}
+
+/// Fails startup, with a message that says what to run, when the auth tables
+/// (migration 0010) cannot be read. Without it the server would come up and
+/// answer 503 to every `/api/auth` request. The database error is not part of
+/// the message.
+pub async fn check_schema(pool: &PgPool) -> Result<(), BuildError> {
+    sqlx::query("select 1 from auth_sessions, auth_flows, auth_passkeys limit 0")
+        .execute(pool)
+        .await
+        .map(|_| ())
+        .map_err(|error| {
+            tracing::debug!(%error, "auth schema check failed");
+            BuildError::SchemaMissing
+        })
+}
 
 /// Everything an auth endpoint needs, built once at startup.
 pub struct AuthServices {
@@ -198,6 +219,19 @@ impl AuthServices {
                 retry_after_ms: hit.retry_after_ms,
             })
         }
+    }
+
+    /// As [`Self::limit`] with its own window per `route`: Better Auth keys its
+    /// rule by client IP plus path, so sign-up, sign-in, OAuth start and
+    /// passkey verification each get their own allowance. The counted subject
+    /// is `"{route}:{subject}"`.
+    pub async fn limit_route(
+        &self,
+        bucket: Bucket,
+        route: &'static str,
+        subject: &str,
+    ) -> Result<(), ApiError> {
+        self.limit(bucket, &format!("{route}:{subject}")).await
     }
 }
 

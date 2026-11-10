@@ -26,7 +26,7 @@ impl std::fmt::Debug for Issued {
     }
 }
 
-/// Creates the session in `tx`, commits, and only then builds the cookie, so a
+/// Deletes the session the request presented, creates the new one in `tx`, commits, and only then builds the cookie, so a
 /// rolled-back sign-up never hands out a token. Prunes expired rows now and
 /// then; a prune failure is logged and never fails the request.
 pub async fn issue_session(
@@ -40,6 +40,13 @@ pub async fn issue_session(
     let user_agent = headers
         .get(USER_AGENT)
         .and_then(|value| value.to_str().ok());
+    // Never reuse a presented token, and drop the session the browser held, in
+    // the same transaction, so every way of signing in (password, sign-up,
+    // OAuth, passkey) ends a planted or earlier session, and a failed attempt
+    // leaves it alone.
+    if let Some(presented) = session::read_cookie(headers) {
+        session::delete_by_token_in(&mut tx, &presented).await?;
+    }
     let (session, token) = session::create(&mut tx, user_id, Some(ip), user_agent, now).await?;
     tx.commit().await.map_err(AuthError::from)?;
     let cookie = session::set_cookie(&token);

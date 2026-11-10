@@ -12,7 +12,7 @@
 //! it reads from the form is validated and capped before it is stored.
 //!
 //! Every outcome is a redirect, to the return path or to an error path with a
-//! fixed code, except a body over 16 KiB (413).
+//! fixed code, except a body over 16 KiB: 413 in the auth error envelope.
 
 use std::sync::Arc;
 
@@ -30,7 +30,7 @@ use quesar_services::rate_limit::Bucket;
 use crate::auth::extract::{ClientIp, SameOriginOrApple};
 use crate::auth::routes::oauth::{configured, not_configured};
 use crate::auth::{ApiError, AuthServices};
-use crate::body_limit::read_body_limited;
+use crate::body_limit::{BodyLimitError, read_body_limited};
 use crate::router::AppState;
 
 /// Apple's form is a few hundred bytes plus an ID token it also sends.
@@ -151,7 +151,17 @@ pub async fn form_post(
     }
     let bytes = match read_body_limited(&headers, body, FORM_MAX).await {
         Ok(bytes) => bytes,
-        Err(error) => return Ok(error.into_response()),
+        Err(BodyLimitError::TooLarge | BodyLimitError::Aborted) => {
+            return Err(ApiError::auth(
+                StatusCode::PAYLOAD_TOO_LARGE,
+                "PAYLOAD_TOO_LARGE",
+                "Request body is too large",
+            ));
+        }
+        // Not produced by the plain byte read; fail closed all the same.
+        Err(BodyLimitError::InvalidJson) => {
+            return Ok(redirect(&paths::with_error(LOGIN, "failed")));
+        }
     };
     let mut form = parse_form(&bytes);
     let Some(state_value) = form.state.take().filter(|state| is_state(state)) else {

@@ -784,23 +784,29 @@ async fn cross_site_posts_are_refused_before_any_work() {
 async fn sign_in_routes_are_rate_limited_before_any_work() {
     let h = Harness::new().await;
     let ip = ("x-real-ip", "203.0.113.77");
-    for _ in 0..3 {
+    // The options route only makes a challenge: it is in the general bucket
+    // (100 per 10 s), not the 3 per 10 s credential rule.
+    for _ in 0..5 {
         let reply = h
             .post("/passkey/authenticate/options", &json!({}), &[ip])
             .await;
         assert_eq!(reply.status, StatusCode::OK);
     }
-    let blocked = h
-        .post("/passkey/authenticate/options", &json!({}), &[ip])
-        .await;
-    assert_eq!(blocked.status, StatusCode::TOO_MANY_REQUESTS);
-    assert!(blocked.headers.contains_key("retry-after"));
-    assert_eq!(
-        count(&h, "select count(*) from auth_flows").await,
-        3,
-        "the blocked request stored nothing"
-    );
-    // The verify route shares the bucket and is refused too, whatever it holds.
+    assert_eq!(count(&h, "select count(*) from auth_flows").await, 5);
+    // The verify route has its own window of 3 per client: whatever it holds,
+    // the fourth is refused before any work, and the options calls above did
+    // not spend any of it.
+    for _ in 0..3 {
+        let reply = h
+            .post(
+                "/passkey/authenticate/verify",
+                &json!({ "flowId": "x", "credential": {} }),
+                &[ip],
+            )
+            .await;
+        assert_ne!(reply.status, StatusCode::TOO_MANY_REQUESTS);
+        assert!(reply.session_cookie().is_none());
+    }
     let blocked = h
         .post(
             "/passkey/authenticate/verify",
@@ -809,6 +815,7 @@ async fn sign_in_routes_are_rate_limited_before_any_work() {
         )
         .await;
     assert_eq!(blocked.status, StatusCode::TOO_MANY_REQUESTS);
+    assert!(blocked.headers.contains_key("retry-after"));
 
     // The signed-in routes use the general bucket, per user.
     let session = h
@@ -948,5 +955,77 @@ async fn with_sign_in_switched_off_only_the_session_needing_passkey_routes_answe
         StatusCode::UNAUTHORIZED
     );
     assert_eq!(count(&h, "select count(*) from auth_flows").await, 0);
+    h.finish().await;
+}
+
+#[tokio::test]
+async fn options_then_verify_twice_from_one_client_still_succeeds() {
+    let h = Harness::new().await;
+    let (_, mut browser, credential_id) = user_with_passkey(&h, "twice@example.com").await;
+    let ip = ("x-real-ip", "203.0.113.88");
+    for round in 0..2 {
+        let options = h
+            .post("/passkey/authenticate/options", &json!({}), &[ip])
+            .await;
+        let ceremony = Ceremony::of(&options, SIGN_IN_BINDING);
+        let credential = browser.get(ORIGIN, &ceremony.options, &credential_id);
+        let reply = h
+            .post(
+                "/passkey/authenticate/verify",
+                &json!({ "flowId": ceremony.flow_id, "credential": credential }),
+                &[("cookie", &ceremony.binding), ip],
+            )
+            .await;
+        assert_eq!(
+            reply.status,
+            StatusCode::OK,
+            "round {round}: {}",
+            reply.text()
+        );
+    }
+    h.finish().await;
+}
+
+/// A session row for `cookie` (`name=token`) exists.
+async fn session_alive(h: &Harness, cookie: &str) -> bool {
+    h.get("/session", Some(cookie)).await.result() != Value::Null
+}
+
+#[tokio::test]
+async fn passkey_sign_in_ends_the_presented_session_only_on_success() {
+    let h = Harness::new().await;
+    let (prior, mut browser, credential_id) = user_with_passkey(&h, "fix@example.com").await;
+
+    // A failed attempt (bad signature) keeps the presented session.
+    let ceremony = start_sign_in(&h).await;
+    let mut assertion = browser.get(ORIGIN, &ceremony.options, &credential_id);
+    assertion["response"]["signature"] = json!(b64(&[1u8; 64]));
+    let failed = h
+        .post(
+            "/passkey/authenticate/verify",
+            &json!({ "flowId": ceremony.flow_id, "credential": assertion }),
+            &[("cookie", &format!("{prior}; {}", ceremony.binding))],
+        )
+        .await;
+    assert_failed_sign_in(&failed);
+    assert!(session_alive(&h, &prior).await);
+
+    // A good one replaces it.
+    let ceremony = start_sign_in(&h).await;
+    let credential = browser.get(ORIGIN, &ceremony.options, &credential_id);
+    let reply = h
+        .post(
+            "/passkey/authenticate/verify",
+            &json!({ "flowId": ceremony.flow_id, "credential": credential }),
+            &[("cookie", &format!("{prior}; {}", ceremony.binding))],
+        )
+        .await;
+    assert_eq!(reply.status, StatusCode::OK, "{}", reply.text());
+    assert!(
+        !session_alive(&h, &prior).await,
+        "the prior session is gone"
+    );
+    assert!(session_alive(&h, &reply.session_cookie().unwrap()).await);
+    assert_eq!(h.session_count().await, 1);
     h.finish().await;
 }

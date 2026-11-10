@@ -33,12 +33,30 @@ use time::macros::datetime;
 use tower::ServiceExt;
 
 const T0: OffsetDateTime = datetime!(2026-11-10 12:00 UTC);
-const APPLE: [(&str, &str); 4] = [
-    ("APPLE_CLIENT_ID", "svc"),
-    ("APPLE_TEAM_ID", "team"),
-    ("APPLE_KEY_ID", "key"),
-    ("APPLE_PRIVATE_KEY", "pem"),
-];
+/// Apple settings with the FAKE key of the contract vectors, which mints a
+/// client secret (the cross-site exemption needs Apple to be usable).
+fn apple() -> [(&'static str, &'static str); 4] {
+    let path = concat!(
+        env!("CARGO_MANIFEST_DIR"),
+        "/../../contract/apple-secret-vectors.json"
+    );
+    let file: Value = serde_json::from_str(&std::fs::read_to_string(path).unwrap()).unwrap();
+    let text = |name: &str| -> &'static str {
+        Box::leak(
+            file["key"][name]
+                .as_str()
+                .unwrap()
+                .to_owned()
+                .into_boxed_str(),
+        )
+    };
+    [
+        ("APPLE_CLIENT_ID", text("client_id")),
+        ("APPLE_TEAM_ID", text("team_id")),
+        ("APPLE_KEY_ID", text("key_id")),
+        ("APPLE_PRIVATE_KEY", text("private_key_pem")),
+    ]
+}
 
 fn config(extra: &[(&str, &str)]) -> Config {
     let mut pairs = vec![("PUBLIC_ORIGIN", "https://quesar.cloud")];
@@ -292,7 +310,7 @@ async fn the_apple_origin_is_accepted_on_the_apple_callback_only_and_only_with_a
             ],
         )
     };
-    let with_apple = config(&APPLE);
+    let with_apple = config(&apple());
     let app = probe(&with_apple, services(lazy_pool(), &with_apple, clock(T0)));
     assert_eq!(
         send(&app, apple_post("/api/auth/callback/apple"))
@@ -570,7 +588,7 @@ async fn the_apple_exemption_holds_behind_the_real_nested_mount() {
         ("origin", "https://appleid.apple.com"),
         ("sec-fetch-site", "cross-site"),
     ];
-    let with_apple = config(&APPLE);
+    let with_apple = config(&apple());
     let app = nested_apple(&with_apple, "/api/auth");
     let status = |app: Router, method: Method, path: &str, headers: &[(&str, &str)]| {
         let request = request(method, path, headers);

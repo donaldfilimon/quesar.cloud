@@ -398,6 +398,17 @@ async fn without_a_usable_user_field_the_token_name_or_the_email_is_used() {
     h.cleanup().await;
 }
 
+/// The auth envelope, not `body_limit`'s `{"error": "..."}`, and never cached.
+fn assert_too_large(reply: &Reply) {
+    assert_eq!(reply.status, StatusCode::PAYLOAD_TOO_LARGE);
+    assert_eq!(reply.error_code(), "PAYLOAD_TOO_LARGE");
+    assert_eq!(
+        reply.json()["error"]["message"],
+        "Request body is too large"
+    );
+    assert_eq!(reply.headers["cache-control"], "no-store");
+}
+
 #[tokio::test]
 async fn a_body_over_16_kib_is_413_and_stores_nothing() {
     let h = Apple::new().await;
@@ -409,7 +420,7 @@ async fn a_body_over_16_kib_is_413_and_stores_nothing() {
     ]);
     assert!(big.len() > 16 * 1024);
     let reply = h.post_callback(big.clone()).await;
-    assert_eq!(reply.status, StatusCode::PAYLOAD_TOO_LARGE);
+    assert_too_large(&reply);
     // By Content-Length too, before the body is read.
     let declared = h
         .post_callback_with(
@@ -417,7 +428,7 @@ async fn a_body_over_16_kib_is_413_and_stores_nothing() {
             &[("content-length", &(17 * 1024).to_string())],
         )
         .await;
-    assert_eq!(declared.status, StatusCode::PAYLOAD_TOO_LARGE);
+    assert_too_large(&declared);
     // Nothing was parked on the flow: a GET still has no code.
     let get = h
         .get_callback(&format!("state={}", started.state), Some(&started.binding))
@@ -572,8 +583,9 @@ async fn a_garbage_key_turns_apple_off_everywhere() {
         let post = h
             .post_callback(form(&[("code", CODE), ("state", "whatever")]))
             .await;
-        assert_eq!(post.status, StatusCode::NOT_FOUND);
-        assert_eq!(post.error_code(), "PROVIDER_NOT_CONFIGURED");
+        // The cross-site exemption applies only while Apple is usable.
+        assert_eq!(post.status, StatusCode::FORBIDDEN, "{garbage}");
+        assert_eq!(post.json()["error"]["name"], "CrossSiteRequestError");
         h.cleanup().await;
     }
 }

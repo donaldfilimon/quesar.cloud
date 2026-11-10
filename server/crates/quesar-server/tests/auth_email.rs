@@ -340,7 +340,7 @@ async fn unknown_email_no_password_and_wrong_password_are_indistinguishable() {
 }
 
 #[tokio::test]
-async fn the_fourth_credential_request_in_ten_seconds_is_429() {
+async fn the_fourth_request_to_one_credential_route_in_ten_seconds_is_429() {
     let h = Harness::new().await;
     h.sign_up("ada@example.com").await;
     h.hasher.reset();
@@ -359,7 +359,8 @@ async fn the_fourth_credential_request_in_ten_seconds_is_429() {
     // The clock stands at the start of a 10 s window.
     assert_eq!(refused.headers[RETRY_AFTER], "10");
     assert_eq!(h.hasher.verifies(), 3, "no hash was spent on the refusal");
-    // Sign-up shares the bucket.
+    // Each route has its own window per client (Better Auth keys by path):
+    // three sign-ins did not use up this client's sign-up.
     let up = h
         .post(
             "/sign-up",
@@ -367,7 +368,7 @@ async fn the_fourth_credential_request_in_ten_seconds_is_429() {
             &ip,
         )
         .await;
-    assert_eq!(up.status, StatusCode::TOO_MANY_REQUESTS);
+    assert_eq!(up.status, StatusCode::OK, "{}", up.text());
     // Another client is unaffected, and the window passes with the clock.
     assert_eq!(
         h.post("/sign-in", &body, &[]).await.status,
@@ -484,5 +485,87 @@ async fn sign_out_deletes_the_session_and_always_clears_the_cookie() {
         )
         .await;
     assert_eq!(referer.status, StatusCode::OK);
+    h.finish().await;
+}
+
+#[tokio::test]
+async fn each_credential_route_counts_its_own_three_requests() {
+    let h = Harness::new().await;
+    let ip = [("x-real-ip", "203.0.113.51")];
+    let sign_up = |n: usize| {
+        let body =
+            json!({ "name": "N", "email": format!("n{n}@example.com"), "password": PASSWORD });
+        let h = &h;
+        async move { h.post("/sign-up", &body, &ip).await.status.as_u16() }
+    };
+    assert_eq!(
+        [sign_up(1).await, sign_up(2).await, sign_up(3).await],
+        [200, 200, 200]
+    );
+    assert_eq!(sign_up(4).await, 429);
+    // Sign-in from the same client is a different route and still has its three.
+    let body = json!({ "email": "n1@example.com", "password": PASSWORD });
+    for _ in 0..3 {
+        assert_eq!(h.post("/sign-in", &body, &ip).await.status, StatusCode::OK);
+    }
+    assert_eq!(
+        h.post("/sign-in", &body, &ip).await.status,
+        StatusCode::TOO_MANY_REQUESTS
+    );
+    h.finish().await;
+}
+
+#[tokio::test]
+async fn a_placeholder_address_cannot_be_claimed_by_a_password_sign_up() {
+    let h = Harness::new().await;
+    for email in [
+        "123@twitter.placeholder.invalid",
+        "123@Twitter.Placeholder.Invalid",
+        "someone@example.invalid",
+    ] {
+        let reply = h
+            .post(
+                "/sign-up",
+                &json!({ "name": "Squatter", "email": email, "password": PASSWORD }),
+                &[],
+            )
+            .await;
+        assert_eq!(
+            (reply.status.as_u16(), reply.error_code().as_str()),
+            (400, "INVALID_EMAIL"),
+            "{email}"
+        );
+    }
+    assert_eq!(user_count(&h).await, 0);
+    assert_eq!(h.hasher.hashes(), 0);
+    h.finish().await;
+}
+
+#[tokio::test]
+async fn sign_up_ends_the_presented_session() {
+    let h = Harness::new().await;
+    let first = h.sign_up("first@example.com").await;
+    let prior = first.session_cookie().unwrap();
+    // A failed sign-up (taken email) keeps the presented session.
+    let taken = h
+        .post(
+            "/sign-up",
+            &json!({ "name": "N", "email": "first@example.com", "password": PASSWORD }),
+            &[("cookie", &prior)],
+        )
+        .await;
+    assert_eq!(taken.status, StatusCode::UNPROCESSABLE_ENTITY);
+    assert_ne!(h.get("/session", Some(&prior)).await.result(), Value::Null);
+    // A good one replaces it.
+    let reply = h
+        .post(
+            "/sign-up",
+            &json!({ "name": "N", "email": "second@example.com", "password": PASSWORD }),
+            &[("cookie", &prior)],
+        )
+        .await;
+    assert_eq!(reply.status, StatusCode::OK, "{}", reply.text());
+    assert_eq!(h.get("/session", Some(&prior)).await.result(), Value::Null);
+    assert_eq!(h.session_count().await, 1);
     h.finish().await;
 }
