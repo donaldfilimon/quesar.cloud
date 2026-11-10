@@ -616,7 +616,7 @@ Shorthand in the Checks column:
 | POST `/passkey/authenticate/verify` | SO, RL-a | `{flowId, credential}` | `{user, session}` + cookie | 400 `CHALLENGE_NOT_FOUND`; 401 `PASSKEY_AUTHENTICATION_FAILED`; 404 `PASSKEYS_NOT_AVAILABLE` |
 | GET `/passkeys` | AU, RL-g | — | `{passkeys: [...]}` | — |
 | POST `/passkey/delete` | SO, AU, RL-g | `{id}` | `{}` | 404 `NOT_FOUND` |
-| POST `/delete-account` | SO, AU, RL-a | `{password?}` | `{}` + cookie cleared | 400 `INVALID_PASSWORD`, `CREDENTIAL_ACCOUNT_NOT_FOUND`, `SESSION_EXPIRED`; 500 `DELETION_FAILED`; 503 `DELETION_UNAVAILABLE` (nothing deleted: the commerce cleanup configuration is partial, or the user has a workspace connection and no revoker is installed yet) |
+| POST `/delete-account` | SO, AU, RL-a | `{password?}` | `{}` + cookie cleared | 400 `INVALID_PASSWORD`, `CREDENTIAL_ACCOUNT_NOT_FOUND`, `SESSION_EXPIRED`; 500 `DELETION_FAILED`; 503 `DELETION_UNAVAILABLE` (nothing deleted: the commerce cleanup configuration is partial, or complete (`WDBX_BINARY` plus the three `WDBX_COMMERCE_*` as absolute paths) because the store cannot be reached before M6, or the user has a workspace connection and no revoker is installed yet; deletion works only with no `WDBX_COMMERCE_*` set) |
 
 Account linking, as built:
 - X never links to an existing user by email, and a user created by X is never `emailVerified`, even when X returns a confirmed address (Better Auth marks such users verified; that would let an X account pre-hijack a local one). A colliding address gives `account_not_linked`.

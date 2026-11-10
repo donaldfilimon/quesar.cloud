@@ -90,7 +90,10 @@ check "auth paths are JSON without a database" "application/json" \
   "$(header content-type "${BASE}/api/auth/nope")"
 
 # --- /api/auth over a database ----------------------------------------------
-if pg_url="$(scripts/dev-postgres.sh start 2>/dev/null | tail -n 1)" && [ -n "${pg_url}" ]; then
+# psql and openssl may be missing even when dev-postgres.sh finds a keg-only
+# install, so check them before starting anything.
+if command -v psql >/dev/null 2>&1 && command -v openssl >/dev/null 2>&1 \
+  && pg_url="$(scripts/dev-postgres.sh start 2>/dev/null | tail -n 1)" && [ -n "${pg_url}" ]; then
   PG_STARTED=1
   smoke_url="${pg_url%/*}/quesar_smoke"
   psql "${pg_url}" -qc 'drop database if exists quesar_smoke' -c 'create database quesar_smoke' >/dev/null
@@ -148,7 +151,7 @@ if pg_url="$(scripts/dev-postgres.sh start 2>/dev/null | tail -n 1)" && [ -n "${
   DB_SERVER_PID=""
   psql "${pg_url}" -qc 'drop database if exists quesar_smoke' >/dev/null
 else
-  echo "skip  database-backed auth checks (PostgreSQL is not available)"
+  echo "skip  database-backed auth checks (PostgreSQL, psql or openssl is not available)"
 fi
 
 if [ "${failures}" -gt 0 ]; then
