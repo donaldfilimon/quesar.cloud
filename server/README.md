@@ -62,3 +62,17 @@ scripts/smoke.sh       # starts the server against docs/ and checks it with curl
 
 `bun run check` runs `check:server` as one of its steps. The root lint,
 prettier, tsconfig and vitest do not cover this directory.
+
+## Sealing contract with the Node server
+
+`quesar-services` seals data at rest exactly as `src/lib/server/crypto.server.ts`
+does (`v1.<iv>.<ct>.<tag>`, AES-256-GCM under `HMAC-SHA256(key, "quesar:seal")`,
+associated data always supplied). The vectors in `server/contract/` pin that in
+both directions; `src/lib/server/crypto-contract.test.ts` opens both files with
+the TypeScript, and the Rust tests open both with Rust. The keys in them are
+fake test keys. To regenerate (only when the format changes):
+
+```bash
+GEN_CONTRACT_VECTORS=1 bunx vitest run src/lib/server/crypto-contract.test.ts
+cargo run --manifest-path server/Cargo.toml -p quesar-services --example gen_vectors
+```
