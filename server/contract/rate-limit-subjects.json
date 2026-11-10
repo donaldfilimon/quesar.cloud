@@ -4,7 +4,7 @@
   "vectors": [
     {
       "name": "ipv4 via x-real-ip",
-      "trusted_proxy": "",
+      "trusted_proxy": "x-real-ip",
       "headers": {
         "x-real-ip": "203.0.113.9"
       },
@@ -12,7 +12,7 @@
     },
     {
       "name": "ipv6 via x-real-ip",
-      "trusted_proxy": "",
+      "trusted_proxy": "x-real-ip",
       "headers": {
         "x-real-ip": "2001:db8:85a3::8a2e:370:7334"
       },
@@ -20,7 +20,7 @@
     },
     {
       "name": "rightmost x-forwarded-for hop",
-      "trusted_proxy": "",
+      "trusted_proxy": "x-forwarded-for",
       "headers": {
         "x-forwarded-for": "1.1.1.1, 198.51.100.7 , 203.0.113.9"
       },
@@ -28,7 +28,7 @@
     },
     {
       "name": "x-real-ip wins over x-forwarded-for",
-      "trusted_proxy": "",
+      "trusted_proxy": "x-real-ip",
       "headers": {
         "x-real-ip": "198.51.100.4",
         "x-forwarded-for": "203.0.113.9"
@@ -37,7 +37,7 @@
     },
     {
       "name": "cf-connecting-ip ignored without a trusted cloudflare",
-      "trusted_proxy": "",
+      "trusted_proxy": "x-real-ip",
       "headers": {
         "x-real-ip": "198.51.100.4",
         "cf-connecting-ip": "192.0.2.1"
@@ -55,7 +55,7 @@
     },
     {
       "name": "empty x-real-ip is used as given",
-      "trusted_proxy": "",
+      "trusted_proxy": "x-real-ip",
       "headers": {
         "x-real-ip": "",
         "x-forwarded-for": "203.0.113.9"
@@ -67,6 +67,23 @@
       "trusted_proxy": "",
       "headers": {},
       "subject": "8i4s-qBP8HZFRbOhDb96qrVrutO4kAbl"
+    },
+    {
+      "name": "cloudflare trusted, cf-connecting-ip absent",
+      "trusted_proxy": "cloudflare",
+      "headers": {},
+      "subject": "8i4s-qBP8HZFRbOhDb96qrVrutO4kAbl"
+    },
+    {
+      "name": "x-forwarded-for sent as two header lines",
+      "trusted_proxy": "x-forwarded-for",
+      "headers": {
+        "x-forwarded-for": [
+          "198.51.100.7",
+          "203.0.113.9"
+        ]
+      },
+      "subject": "yD8kjSRkOOCYAxcMB4Dt8VzoKl94dmg-"
     }
   ]
 }

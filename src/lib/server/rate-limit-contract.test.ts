@@ -17,35 +17,45 @@ const TEST_SECRET = "contract-test-secret-not-real";
 
 const FILE = new URL("../../../server/contract/rate-limit-subjects.json", import.meta.url);
 
-type Headers = {
-  "cf-connecting-ip"?: string;
-  "x-real-ip"?: string;
-  "x-forwarded-for"?: string;
+// A string is one header line; an array is the same header sent as several lines.
+type HeaderValue = string | string[];
+type HeaderSet = {
+  "cf-connecting-ip"?: HeaderValue;
+  "x-real-ip"?: HeaderValue;
+  "x-forwarded-for"?: HeaderValue;
 };
-type Case = { name: string; trusted_proxy: string; headers: Headers };
+// `trusted_proxy` is the Rust server's TRUSTED_PROXY mode ("" = none). The
+// TypeScript trusts x-real-ip then x-forwarded-for unconditionally and only
+// reads TRUSTED_PROXY for "cloudflare", so each case below is chosen so that
+// both implementations pick the same address under that mode.
+type Case = { name: string; trusted_proxy: string; headers: HeaderSet };
 type Vector = Case & { subject: string };
 type VectorFile = { description: string; secret: string; vectors: Vector[] };
 
 const CASES: Case[] = [
-  { name: "ipv4 via x-real-ip", trusted_proxy: "", headers: { "x-real-ip": "203.0.113.9" } },
+  {
+    name: "ipv4 via x-real-ip",
+    trusted_proxy: "x-real-ip",
+    headers: { "x-real-ip": "203.0.113.9" },
+  },
   {
     name: "ipv6 via x-real-ip",
-    trusted_proxy: "",
+    trusted_proxy: "x-real-ip",
     headers: { "x-real-ip": "2001:db8:85a3::8a2e:370:7334" },
   },
   {
     name: "rightmost x-forwarded-for hop",
-    trusted_proxy: "",
+    trusted_proxy: "x-forwarded-for",
     headers: { "x-forwarded-for": "1.1.1.1, 198.51.100.7 , 203.0.113.9" },
   },
   {
     name: "x-real-ip wins over x-forwarded-for",
-    trusted_proxy: "",
+    trusted_proxy: "x-real-ip",
     headers: { "x-real-ip": "198.51.100.4", "x-forwarded-for": "203.0.113.9" },
   },
   {
     name: "cf-connecting-ip ignored without a trusted cloudflare",
-    trusted_proxy: "",
+    trusted_proxy: "x-real-ip",
     headers: { "x-real-ip": "198.51.100.4", "cf-connecting-ip": "192.0.2.1" },
   },
   {
@@ -55,17 +65,31 @@ const CASES: Case[] = [
   },
   {
     name: "empty x-real-ip is used as given",
-    trusted_proxy: "",
+    trusted_proxy: "x-real-ip",
     headers: { "x-real-ip": "", "x-forwarded-for": "203.0.113.9" },
   },
   { name: "no headers", trusted_proxy: "", headers: {} },
+  { name: "cloudflare trusted, cf-connecting-ip absent", trusted_proxy: "cloudflare", headers: {} },
+  {
+    name: "x-forwarded-for sent as two header lines",
+    trusted_proxy: "x-forwarded-for",
+    headers: { "x-forwarded-for": ["198.51.100.7", "203.0.113.9"] },
+  },
 ];
+
+function requestHeaders(set: HeaderSet): Headers {
+  const headers = new Headers();
+  for (const [name, value] of Object.entries(set)) {
+    for (const line of Array.isArray(value) ? value : [value]) headers.append(name, line);
+  }
+  return headers;
+}
 
 function subjectFor(c: Case): string {
   const previous = process.env.TRUSTED_PROXY;
   process.env.TRUSTED_PROXY = c.trusted_proxy;
   try {
-    return clientSubject(new Request("https://quesar.cloud/", { headers: c.headers }));
+    return clientSubject(new Request("https://quesar.cloud/", { headers: requestHeaders(c.headers) }));
   } finally {
     if (previous === undefined) delete process.env.TRUSTED_PROXY;
     else process.env.TRUSTED_PROXY = previous;

@@ -1,3 +1,4 @@
+use std::net::SocketAddr;
 use std::process::ExitCode;
 
 use quesar_server::config::Environment;
@@ -54,9 +55,14 @@ async fn run() -> Result<(), Box<dyn std::error::Error>> {
         production = config.production,
         "quesar-server listening"
     );
-    axum::serve(listener, app)
-        .with_graceful_shutdown(shutdown_signal())
-        .await?;
+    // Connect info makes the peer address available to handlers, which key
+    // rate limits on it unless `TRUSTED_PROXY` names a header to trust.
+    axum::serve(
+        listener,
+        app.into_make_service_with_connect_info::<SocketAddr>(),
+    )
+    .with_graceful_shutdown(shutdown_signal())
+    .await?;
     Ok(())
 }
 

@@ -7,6 +7,8 @@ use std::collections::HashMap;
 use std::net::SocketAddr;
 use std::path::PathBuf;
 
+use quesar_services::rate_limit::ProxyTrust;
+
 /// Where the server listens unless `QUESAR_LISTEN` says otherwise: loopback,
 /// because a reverse proxy terminates TLS in front of it.
 const DEFAULT_LISTEN: &str = "127.0.0.1:8787";
@@ -66,6 +68,9 @@ pub struct Config {
     /// `QUESAR_ENV=production`: readiness is enforced and traffic is refused
     /// until the configuration is sound.
     pub production: bool,
+    /// `TRUSTED_PROXY`: which proxy header names the client address. Unset
+    /// trusts none, so handlers key rate limits on the peer socket address.
+    pub proxy_trust: ProxyTrust,
     pub environment: Environment,
 }
 
@@ -81,10 +86,12 @@ impl Config {
                 .unwrap_or(DEFAULT_SITE_DIR),
         );
         let production = environment.read("QUESAR_ENV") == Some("production");
+        let proxy_trust = ProxyTrust::from_setting(environment.read("TRUSTED_PROXY"));
         Ok(Self {
             listen,
             site_dir,
             production,
+            proxy_trust,
             environment,
         })
     }
@@ -108,6 +115,21 @@ mod tests {
         assert_eq!(config.listen, "127.0.0.1:8787".parse().unwrap());
         assert_eq!(config.site_dir, PathBuf::from("docs"));
         assert!(!config.production);
+        assert_eq!(config.proxy_trust, ProxyTrust::None);
+    }
+
+    #[test]
+    fn reads_the_trusted_proxy_and_ignores_unknown_values() {
+        let read = |value: &str| {
+            Config::from_env(Environment::from_pairs([("TRUSTED_PROXY", value)]))
+                .unwrap()
+                .proxy_trust
+        };
+        assert_eq!(read("x-real-ip"), ProxyTrust::XRealIp);
+        assert_eq!(read("x-forwarded-for"), ProxyTrust::XForwardedFor);
+        assert_eq!(read(" cloudflare "), ProxyTrust::Cloudflare);
+        assert_eq!(read("Cloudflare"), ProxyTrust::None);
+        assert_eq!(read("true"), ProxyTrust::None);
     }
 
     #[test]

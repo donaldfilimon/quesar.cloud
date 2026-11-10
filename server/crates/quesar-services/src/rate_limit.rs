@@ -11,6 +11,7 @@
 
 use std::fmt;
 use std::hash::{BuildHasher, RandomState};
+use std::net::SocketAddr;
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use base64::Engine;
@@ -147,28 +148,73 @@ pub fn resolve_secret(
         .to_owned()
 }
 
-/// The client address from the proxy headers, as `clientSubject` picks it:
-/// `cf-connecting-ip` only when Cloudflare is the trusted proxy, then
-/// `x-real-ip`, then the rightmost `x-forwarded-for` hop, else `"unknown"`.
-/// A header that is present but empty is used as is, as in the TypeScript.
-pub fn client_ip(
-    trust_cloudflare: bool,
-    cf_connecting_ip: Option<&str>,
-    x_real_ip: Option<&str>,
-    x_forwarded_for: Option<&str>,
+/// Which proxy header, if any, names the real client address. Read from
+/// `TRUSTED_PROXY` by [`ProxyTrust::from_setting`].
+///
+/// Deliberate deviation from `clientSubject` in `rate-limit.server.ts`: the
+/// TypeScript always trusted `x-real-ip` (and then `x-forwarded-for`) because it
+/// ran behind Vercel, which overwrites them. This server sits behind a proxy
+/// that may pass a client-supplied `X-Real-IP` through, so by default no header
+/// is trusted and the peer socket address is used. A header is read only in the
+/// mode that names it, and a missing header never falls back to another
+/// client-controllable one.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub enum ProxyTrust {
+    /// No proxy header is trusted: the peer address is the client.
+    #[default]
+    None,
+    /// `x-real-ip`, set by the proxy (Caddy needs `header_up X-Real-IP {remote_host}`).
+    XRealIp,
+    /// The rightmost `x-forwarded-for` hop (the one the trusted proxy appended).
+    XForwardedFor,
+    /// `cf-connecting-ip`, set by Cloudflare.
+    Cloudflare,
+}
+
+impl ProxyTrust {
+    /// Parses the `TRUSTED_PROXY` value: `x-real-ip`, `x-forwarded-for` or
+    /// `cloudflare`, matched case-sensitively after trimming. Unset or anything
+    /// else trusts no header.
+    pub fn from_setting(raw: Option<&str>) -> Self {
+        match raw.map(str::trim) {
+            Some("x-real-ip") => Self::XRealIp,
+            Some("x-forwarded-for") => Self::XForwardedFor,
+            Some("cloudflare") => Self::Cloudflare,
+            _ => Self::None,
+        }
+    }
+}
+
+/// The values of a header joined with ", " the way Fetch's `Headers.get` does,
+/// skipping values that are not UTF-8. `None` when no usable value exists.
+fn joined_header(headers: &http::HeaderMap, name: &str) -> Option<String> {
+    let values: Vec<&str> = headers
+        .get_all(name)
+        .iter()
+        .filter_map(|value| value.to_str().ok())
+        .collect();
+    (!values.is_empty()).then(|| values.join(", "))
+}
+
+/// The client address for rate limiting: the header `trust` names, else the
+/// peer address, else `"unknown"`. A trusted header that is present but empty
+/// is used as is, as in the TypeScript; repeated header lines are joined like
+/// Fetch does before the rightmost `x-forwarded-for` hop is taken.
+pub fn client_ip_from_headers(
+    headers: &http::HeaderMap,
+    trust: ProxyTrust,
+    peer: Option<SocketAddr>,
 ) -> String {
-    let forwarded = || {
-        x_forwarded_for
-            .and_then(|v| v.split(',').next_back())
-            .map(str::trim)
+    let from_header = match trust {
+        ProxyTrust::None => None,
+        ProxyTrust::XRealIp => joined_header(headers, "x-real-ip"),
+        ProxyTrust::XForwardedFor => joined_header(headers, "x-forwarded-for")
+            .and_then(|v| v.split(',').next_back().map(|hop| hop.trim().to_owned())),
+        ProxyTrust::Cloudflare => joined_header(headers, "cf-connecting-ip"),
     };
-    trust_cloudflare
-        .then_some(cf_connecting_ip)
-        .flatten()
-        .or(x_real_ip)
-        .or_else(forwarded)
-        .unwrap_or("unknown")
-        .to_owned()
+    from_header
+        .or_else(|| peer.map(|addr| addr.ip().to_canonical().to_string()))
+        .unwrap_or_else(|| "unknown".to_owned())
 }
 
 /// When a hit also prunes expired rows. Production uses `Sampled`, the
