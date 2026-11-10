@@ -9,8 +9,10 @@ pub mod clock;
 pub mod config;
 pub mod error;
 pub mod ids;
+pub mod password;
 pub mod rows;
 pub mod token;
+pub mod validate;
 
 pub use clock::{Clock, FixedClock, SystemClock};
 pub use config::{
