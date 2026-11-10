@@ -551,3 +551,98 @@ async fn production_refuses_to_build_without_a_rate_limit_secret() {
     let development = config(&[]);
     assert!(AuthServices::build(lazy_pool(), &development, clock(T0)).is_ok());
 }
+
+/// The Apple handler behind the real `/api/auth` mount (and elsewhere), where
+/// the handler sees the path with its prefix stripped. A fallback handler lets
+/// odd paths reach the extractor instead of a router 404.
+fn nested_apple(config: &Config, mount: &str) -> Router {
+    let state = Arc::new(AppState::new(
+        config,
+        Some(services(lazy_pool(), config, clock(T0))),
+    ));
+    let inner = Router::new().fallback(|_: SameOriginOrApple| async { "ok" });
+    Router::new().nest(mount, inner).with_state(state)
+}
+
+#[tokio::test]
+async fn the_apple_exemption_holds_behind_the_real_nested_mount() {
+    let apple_headers = [
+        ("origin", "https://appleid.apple.com"),
+        ("sec-fetch-site", "cross-site"),
+    ];
+    let with_apple = config(&APPLE);
+    let app = nested_apple(&with_apple, "/api/auth");
+    let status = |app: Router, method: Method, path: &str, headers: &[(&str, &str)]| {
+        let request = request(method, path, headers);
+        async move { app.oneshot(request).await.unwrap().status() }
+    };
+    assert_eq!(
+        status(
+            app.clone(),
+            Method::POST,
+            "/api/auth/callback/apple",
+            &apple_headers
+        )
+        .await,
+        StatusCode::OK
+    );
+    for (name, method, path) in [
+        ("GET", Method::GET, "/api/auth/callback/apple"),
+        ("trailing slash", Method::POST, "/api/auth/callback/apple/"),
+        ("doubled slash", Method::POST, "/api/auth//callback/apple"),
+        ("case", Method::POST, "/api/auth/callback/Apple"),
+        (
+            "percent-encoded",
+            Method::POST,
+            "/api/auth/callback/%61pple",
+        ),
+        ("other callback", Method::POST, "/api/auth/callback/google"),
+    ] {
+        assert_eq!(
+            status(app.clone(), method, path, &apple_headers).await,
+            StatusCode::FORBIDDEN,
+            "{name}"
+        );
+    }
+    let path = "/api/auth/callback/apple";
+    for (name, headers) in [
+        (
+            "other origin",
+            [
+                ("origin", "https://evil.example"),
+                ("sec-fetch-site", "cross-site"),
+            ],
+        ),
+        (
+            "same-site",
+            [
+                ("origin", "https://appleid.apple.com"),
+                ("sec-fetch-site", "same-site"),
+            ],
+        ),
+    ] {
+        assert_eq!(
+            status(app.clone(), Method::POST, path, &headers).await,
+            StatusCode::FORBIDDEN,
+            "{name}"
+        );
+    }
+    // The same handler mounted anywhere else gets no exemption.
+    let elsewhere = nested_apple(&with_apple, "/other");
+    assert_eq!(
+        status(
+            elsewhere,
+            Method::POST,
+            "/other/callback/apple",
+            &apple_headers
+        )
+        .await,
+        StatusCode::FORBIDDEN
+    );
+    // Apple not configured.
+    let without = nested_apple(&config(&[]), "/api/auth");
+    assert_eq!(
+        status(without, Method::POST, path, &apple_headers).await,
+        StatusCode::FORBIDDEN
+    );
+}

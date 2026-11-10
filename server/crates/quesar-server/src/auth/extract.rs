@@ -13,7 +13,7 @@
 use std::net::SocketAddr;
 use std::sync::Arc;
 
-use axum::extract::{ConnectInfo, FromRequestParts};
+use axum::extract::{ConnectInfo, FromRequestParts, OriginalUri};
 use axum::http::header::{ORIGIN, REFERER};
 use axum::http::request::Parts;
 use axum::http::{HeaderMap, HeaderName, Method};
@@ -156,7 +156,13 @@ impl FromRequestParts<Arc<AppState>> for SameOriginOrApple {
     ) -> Result<Self, ApiError> {
         let services = state.auth_services()?;
         let apple = services.config.providers.apple.is_some();
-        if is_apple_callback(&parts.headers, &parts.method, parts.uri.path(), apple)
+        // A nested router sees the path without its mount prefix; the
+        // exemption is defined on the full path, so read the original.
+        let path = parts
+            .extensions
+            .get::<OriginalUri>()
+            .map_or_else(|| parts.uri.path(), |original| original.0.path());
+        if is_apple_callback(&parts.headers, &parts.method, path, apple)
             || is_same_origin(&parts.headers, &services.config.trusted_origins)
         {
             Ok(Self)
