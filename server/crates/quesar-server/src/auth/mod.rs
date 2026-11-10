@@ -21,6 +21,7 @@ use axum::Router;
 use axum::extract::{OriginalUri, Request, State};
 use axum::middleware::{self, Next};
 use axum::response::Response;
+use quesar_auth::oauth::jwks::JwksCache;
 use quesar_auth::password::{Argon2Hasher, HashError};
 use quesar_auth::{AuthConfig, Clock};
 use quesar_db::PgPool;
@@ -71,6 +72,10 @@ pub struct AuthServices {
     /// `VITE_AUTH_ENABLED` is not exactly `false`. When off, `/methods` offers
     /// nothing (the static build's setting).
     pub auth_enabled: bool,
+    /// `QUESAR_ENV=production`: provider endpoints must then be https.
+    pub production: bool,
+    /// Identity providers' signing keys.
+    pub jwks: JwksCache,
 }
 
 impl std::fmt::Debug for AuthServices {
@@ -110,6 +115,8 @@ impl AuthServices {
             http,
             hashing,
             auth_enabled: environment.read("VITE_AUTH_ENABLED") != Some("false"),
+            production: server.production,
+            jwks: JwksCache::new(),
         })
     }
 

@@ -31,6 +31,7 @@ url = "2"
 zeroize = "1"
 
 [dev-dependencies]
+quesar-auth = { path = "../quesar-auth", features = ["test-support"] }
 quesar-db = { path = "../quesar-db", features = ["test-support"] }
 http-body-util = { version = "0.1", features = ["channel"] }
 tempfile = "3"

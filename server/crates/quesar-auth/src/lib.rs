@@ -10,11 +10,17 @@ pub mod config;
 pub mod email_password;
 pub mod error;
 pub mod ids;
+pub mod oauth;
 pub mod password;
+pub mod providers;
 pub mod rows;
 pub mod session;
 pub mod token;
 pub mod validate;
+
+#[cfg(feature = "test-support")]
+#[path = "../tests/support/mock_idp.rs"]
+pub mod mock_idp;
 
 pub use clock::{Clock, FixedClock, SystemClock};
 pub use config::{

@@ -10,6 +10,7 @@ use crate::router::AppState;
 
 pub mod email;
 pub mod methods;
+pub mod oauth;
 pub mod profile;
 pub mod session;
 
@@ -24,4 +25,6 @@ pub fn router() -> Router<Arc<AppState>> {
         .route("/sessions/revoke", post(session::revoke))
         .route("/sessions/revoke-others", post(session::revoke_others))
         .route("/profile", post(profile::update))
+        .route("/oauth/{provider}/start", post(oauth::start))
+        .route("/callback/{provider}", get(oauth::callback))
 }
