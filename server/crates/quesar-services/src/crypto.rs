@@ -169,6 +169,26 @@ impl SealingKeys {
     }
 }
 
+/// Whether a raw key value is usable, as readiness reports it.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum KeyState {
+    Configured,
+    NotConfigured,
+    /// Present but not 32 bytes in a supported encoding.
+    Invalid,
+}
+
+/// Classifies a raw key with the same parser sealing uses, so readiness cannot
+/// disagree with what [`SealingKeys`] accepts (including non-canonical
+/// trailing bits).
+pub fn key_state(raw: Option<&str>) -> KeyState {
+    match parse_key(raw) {
+        Ok(_) => KeyState::Configured,
+        Err(CryptoError::NotConfigured) => KeyState::NotConfigured,
+        Err(_) => KeyState::Invalid,
+    }
+}
+
 /// Parse a raw key into 32 bytes, wiping every intermediate copy.
 ///
 /// Accepted, as in `parseKey`: 64 hex characters, or base64/base64url with

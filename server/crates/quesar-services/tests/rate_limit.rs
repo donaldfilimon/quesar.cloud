@@ -10,8 +10,8 @@ use http::{HeaderMap, HeaderName, HeaderValue};
 use quesar_db::migrate;
 use quesar_db::test_support::TestDatabase;
 use quesar_services::rate_limit::{
-    Bucket, Limit, ProxyTrust, PruneSampling, RateLimiter, client_ip_from_headers, resolve_secret,
-    window_start,
+    Bucket, Limit, ProxyTrust, PruneSampling, RateLimitSecret, RateLimiter, SecretMissing,
+    client_ip_from_headers, resolve_secret, resolve_secret_for, window_start,
 };
 use serde::Deserialize;
 
@@ -209,13 +209,44 @@ fn headers_that_are_not_utf8_are_ignored() {
     );
 }
 
+fn configured(secret: &str) -> RateLimitSecret {
+    RateLimitSecret::Configured(secret.to_owned())
+}
+
 #[test]
 fn resolves_the_secret_like_the_typescript() {
-    assert_eq!(resolve_secret(Some(" a "), Some("b")), "a");
-    assert_eq!(resolve_secret(Some("  "), Some(" b ")), "b");
-    assert_eq!(resolve_secret(None, Some("b")), "b");
-    assert_eq!(resolve_secret(None, None), "quesar-rate-limit");
-    assert_eq!(resolve_secret(Some(""), Some("")), "quesar-rate-limit");
+    assert_eq!(resolve_secret(Some(" a "), Some("b")), configured("a"));
+    assert_eq!(resolve_secret(Some("  "), Some(" b ")), configured("b"));
+    assert_eq!(resolve_secret(None, Some("b")), configured("b"));
+    assert_eq!(resolve_secret(None, None), RateLimitSecret::Fallback);
+    assert_eq!(
+        resolve_secret(Some(""), Some("")),
+        RateLimitSecret::Fallback
+    );
+    assert_eq!(RateLimitSecret::Fallback.as_bytes(), b"quesar-rate-limit");
+    assert_eq!(configured("a").as_bytes(), b"a");
+}
+
+#[test]
+fn production_refuses_the_public_fallback_secret() {
+    assert_eq!(resolve_secret_for(true, None, None), Err(SecretMissing));
+    assert_eq!(
+        resolve_secret_for(true, Some(" "), Some("")),
+        Err(SecretMissing)
+    );
+    assert_eq!(
+        resolve_secret_for(true, None, Some("s")),
+        Ok(configured("s"))
+    );
+    assert_eq!(
+        resolve_secret_for(false, None, None),
+        Ok(RateLimitSecret::Fallback)
+    );
+}
+
+#[test]
+fn the_secret_never_appears_in_debug_output() {
+    assert!(!format!("{:?}", configured("hunter2-key")).contains("hunter2"));
 }
 
 #[test]

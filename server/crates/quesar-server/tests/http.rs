@@ -221,7 +221,11 @@ async fn an_unready_production_server_refuses_everything_but_the_probe() {
         let body: serde_json::Value = serde_json::from_str(&text(response).await).unwrap();
         assert_eq!(
             body["reasons"],
-            serde_json::json!(["database_unavailable", "auth_origin_invalid"]),
+            serde_json::json!([
+                "database_unavailable",
+                "auth_origin_invalid",
+                "rate_limit_secret_missing"
+            ]),
             "{path}"
         );
     }
@@ -236,6 +240,7 @@ async fn a_configured_production_server_serves_the_site() {
             ("QUESAR_ENV", "production"),
             ("DATABASE_URL", "postgres://quesar@127.0.0.1/quesar"),
             ("PUBLIC_ORIGIN", "https://quesar.cloud"),
+            ("BETTER_AUTH_SECRET", "a-long-enough-test-secret"),
         ],
     );
     assert_eq!(get(&config, "/").await.status(), StatusCode::OK);
@@ -300,6 +305,7 @@ async fn development_and_production_pages_get_their_own_policy() {
                 ("QUESAR_ENV", "production"),
                 ("DATABASE_URL", "postgres://quesar@127.0.0.1/quesar"),
                 ("PUBLIC_ORIGIN", "https://quesar.cloud"),
+                ("BETTER_AUTH_SECRET", "a-long-enough-test-secret"),
             ],
         ),
         "/",

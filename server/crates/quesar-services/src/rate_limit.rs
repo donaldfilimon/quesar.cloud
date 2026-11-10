@@ -131,21 +131,82 @@ pub fn system_now_ms() -> i64 {
         .map_or(0, |elapsed| i64::try_from(elapsed.as_millis()).unwrap_or(0))
 }
 
+/// The HMAC key for client subjects: a configured secret, or the public
+/// constant the TypeScript falls back to. Subjects keyed with the fallback are
+/// unkeyed hashes (IPv4 is small enough to brute-force), so production must
+/// refuse it; see [`resolve_secret_for`].
+#[derive(Clone, PartialEq, Eq)]
+pub enum RateLimitSecret {
+    Configured(String),
+    Fallback,
+}
+
+impl RateLimitSecret {
+    /// The key bytes for [`RateLimiter::new`].
+    pub fn as_bytes(&self) -> &[u8] {
+        match self {
+            Self::Configured(secret) => secret.as_bytes(),
+            Self::Fallback => FALLBACK_SECRET.as_bytes(),
+        }
+    }
+
+    pub fn is_fallback(&self) -> bool {
+        matches!(self, Self::Fallback)
+    }
+}
+
+impl fmt::Debug for RateLimitSecret {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(match self {
+            Self::Configured(_) => "RateLimitSecret::Configured(..)",
+            Self::Fallback => "RateLimitSecret::Fallback",
+        })
+    }
+}
+
+/// Production was asked for a rate-limit key and none is configured.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct SecretMissing;
+
+impl fmt::Display for SecretMissing {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str("rate limiting needs APP_ENCRYPTION_KEY or BETTER_AUTH_SECRET in production")
+    }
+}
+
+impl std::error::Error for SecretMissing {}
+
 /// The HMAC key as the TypeScript derives it: `APP_ENCRYPTION_KEY`, else
-/// `BETTER_AUTH_SECRET`, else a fixed fallback. Each is trimmed and an empty
-/// value counts as unset (`env()` in `src/lib/env.server.ts`). The caller reads
-/// the two environment variables and passes them here.
+/// `BETTER_AUTH_SECRET`, else the fixed fallback, reported as
+/// [`RateLimitSecret::Fallback`]. Each is trimmed and an empty value counts as
+/// unset (`env()` in `src/lib/env.server.ts`). The caller reads the two
+/// environment variables and passes them here.
 pub fn resolve_secret(
     app_encryption_key: Option<&str>,
     better_auth_secret: Option<&str>,
-) -> String {
+) -> RateLimitSecret {
     fn usable(value: Option<&str>) -> Option<&str> {
         value.map(str::trim).filter(|v| !v.is_empty())
     }
     usable(app_encryption_key)
         .or_else(|| usable(better_auth_secret))
-        .unwrap_or(FALLBACK_SECRET)
-        .to_owned()
+        .map_or(RateLimitSecret::Fallback, |secret| {
+            RateLimitSecret::Configured(secret.to_owned())
+        })
+}
+
+/// [`resolve_secret`] for wiring a limiter: in production the fallback is an
+/// error (unlike the TypeScript, whose readiness check prevents it); elsewhere
+/// it is allowed.
+pub fn resolve_secret_for(
+    production: bool,
+    app_encryption_key: Option<&str>,
+    better_auth_secret: Option<&str>,
+) -> Result<RateLimitSecret, SecretMissing> {
+    match resolve_secret(app_encryption_key, better_auth_secret) {
+        RateLimitSecret::Fallback if production => Err(SecretMissing),
+        secret => Ok(secret),
+    }
 }
 
 /// Which proxy header, if any, names the real client address. Read from
@@ -240,7 +301,7 @@ impl fmt::Debug for RateLimiter {
 }
 
 impl RateLimiter {
-    /// `secret` is the HMAC key for client subjects (see [`resolve_secret`]).
+    /// `secret` is the HMAC key for client subjects (see [`resolve_secret_for`]).
     pub fn new(pool: PgPool, secret: impl Into<Vec<u8>>) -> Self {
         Self {
             pool,
