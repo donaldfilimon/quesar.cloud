@@ -26,15 +26,33 @@ bun run server         # http://127.0.0.1:8787
 | `PUBLIC_ORIGIN`   | unset            | The public HTTPS origin. Required in production. `BETTER_AUTH_URL` is read as a fallback.      |
 | `DATABASE_URL`    | unset            | Postgres. Required in production; there is no in-memory fallback.                              |
 | `QUESAR_MIGRATIONS_DIR` | `migrations` | Used by `quesar-server migrate`: the SQL files to apply. |
+| `TRUSTED_PROXY` | unset | Which proxy header names the client address for rate limits: `x-real-ip`, `x-forwarded-for` (rightmost hop) or `cloudflare` (`cf-connecting-ip`). Unset or anything else trusts no header and uses the peer socket address. |
+| `APP_ENCRYPTION_KEY`, `BETTER_AUTH_SECRET` | unset | The first set one keys the rate-limit subject hash (`APP_ENCRYPTION_KEY` also seals data). In production readiness reports `rate_limit_secret_missing` when neither is set. |
 | `RUST_LOG`        | `info`           | Log filter. Logs are JSON on stdout.                                                           |
 
 `/api/readiness` reports the shape of the configuration only. It does not claim
 the database answers.
 
+### Client addresses behind a proxy
+
+Rate limits key on the client address. Deliberate difference from the
+TypeScript, which always trusted `x-real-ip` because it ran behind Vercel (which
+overwrites it): this server trusts **no** header unless `TRUSTED_PROXY` names
+one, and otherwise uses the peer address (`ConnectInfo<SocketAddr>`). Behind
+Caddy, which passes a client-supplied `X-Real-IP` through, either set
+`TRUSTED_PROXY=x-real-ip` and have the Caddyfile overwrite it with
+`header_up X-Real-IP {remote_host}`, or set `TRUSTED_PROXY=x-forwarded-for`
+(Caddy appends the peer to the end). Trusting a header the proxy does not
+overwrite lets every client pick its own rate-limit subject. Under `cloudflare`
+a request without `cf-connecting-ip` uses the peer address, not another header.
+
 ## Migrate
 
 ```bash
 DATABASE_URL=postgres://... quesar-server migrate
+# from a checkout, without a built binary:
+DATABASE_URL=postgres://... bun run server -- migrate
+# or: cargo run --manifest-path server/Cargo.toml -p quesar-server -- migrate
 ```
 
 Applies the pending `migrations/*.sql` (top level only; `migrations/auth/` is
@@ -45,11 +63,16 @@ no argument serves.
 
 ## Database tests
 
-Tests in `quesar-db` need a Postgres, read from `TEST_DATABASE_URL`, and fail
-(never skip) without it. `scripts/dev-postgres.sh start` runs a throwaway one on
+The database tests in both `quesar-db` and `quesar-services` need a Postgres,
+read from `TEST_DATABASE_URL`, and fail (never skip) without it; an empty value
+counts as unset. `scripts/dev-postgres.sh start` runs a throwaway one on
 `127.0.0.1:54329` (`QUESAR_TEST_PG_PORT` changes the port; trust auth, superuser
-`quesar`) and prints its URL; `stop` removes it. `bun run check:server` starts it
-for you unless `TEST_DATABASE_URL` is already exported. Each test gets its own
+`quesar`, TCP only) and prints its URL; `stop` removes it.
+`scripts/dev-postgres.sh exec <cmd...>` starts it, exports `TEST_DATABASE_URL`
+and runs the command in place; if PostgreSQL cannot start it exits with the
+script's status and message instead. `bun run check:server` runs `cargo test`
+through `exec`, so PostgreSQL binaries must be installed locally (unless
+`TEST_DATABASE_URL` is already exported). Each test gets its own
 database via `quesar_db::test_support::TestDatabase` (cargo feature
 `test-support`).
 

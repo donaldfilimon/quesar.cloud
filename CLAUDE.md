@@ -30,7 +30,7 @@ bun run build:static # Next static export into out/, then published into docs/ (
 bun run start        # serve the last `bun run build` on 127.0.0.1:8081 (`preview` is an alias)
 bun run check:parity # compare out/ with docs/: same pages, titles, descriptions and canonical URLs
 bun run db:migrate   # explicit release step: apply migrations/*.sql to DATABASE_URL under advisory lock
-bun run check:server # the Rust server: cargo fmt --check, clippy -D warnings, cargo test (server/)
+bun run check:server # the Rust server: cargo fmt --check, clippy -D warnings, cargo test (server/); starts a throwaway PostgreSQL through scripts/dev-postgres.sh, so PostgreSQL binaries must be installed locally for `bun run check`; `scripts/dev-postgres.sh stop` removes it
 bun run server       # run the Rust server against docs/ on 127.0.0.1:8787
 bun run check        # the gate: format:check, typecheck, lint, test, check:server, build (stops at first failure)
 bun run format       # prettier --write . (.prettierignore skips docs/, notes/, sidecars/, native/, public/)
