@@ -269,17 +269,11 @@ async fn not_found() -> ApiError {
     ApiError::NotFound
 }
 
-/// A known `/api/auth/*` path with a method it does not take: JSON, not
-/// axum's empty 405. axum adds the `Allow` header itself.
-async fn method_not_allowed() -> ApiError {
-    ApiError::MethodNotAllowed
-}
-
 /// The `/api/auth` router. Later tasks add their routes to [`routes::router`].
 pub fn routes(state: Arc<AppState>) -> Router<Arc<AppState>> {
     routes::router()
         .fallback(not_found)
-        .method_not_allowed_fallback(method_not_allowed)
+        .method_not_allowed_fallback(crate::api::method_not_allowed)
         .layer(middleware::from_fn(reissue::reissue_cookie))
         .layer(middleware::from_fn_with_state(state, require_database))
 }

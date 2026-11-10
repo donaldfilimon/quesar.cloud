@@ -89,6 +89,32 @@ check "sign-in without a database is 503" 503 \
 check "auth paths are JSON without a database" "application/json" \
   "$(header content-type "${BASE}/api/auth/nope")"
 
+# --- /api/fn, telemetry and CSP reports without a database ------------------
+# No PUBLIC_ORIGIN, so the trusted origins are the local development ones.
+# The 413 of /api/csp-report and /api/telemetry needs a database (the limiter
+# answers first); the Rust tests cover it.
+FN="${BASE}/api/fn"
+LOCAL='Origin: http://localhost:8080'
+check "unknown function is 404" 404 "$(status -X POST -H "${LOCAL}" "${FN}/nothing.here")"
+check "unknown function is JSON" "application/json" "$(header content-type -X POST -H "${LOCAL}" "${FN}/nothing.here")"
+check "unknown function names the error" "NotFoundError UNKNOWN_FUNCTION" \
+  "$(body -X POST -H "${LOCAL}" "${FN}/nothing.here" \
+    | sed -n 's/.*"code":"\([^"]*\)".*"name":"\([^"]*\)".*/\2 \1/p')"
+check "foreign origin is 403" 403 \
+  "$(status -X POST -H 'Origin: https://evil.example' "${FN}/inquiries.getTurnstileConfig")"
+check "foreign origin gets the envelope" "CrossSiteRequestError" \
+  "$(body -X POST -H 'Origin: https://evil.example' "${FN}/inquiries.getTurnstileConfig" | sed -n 's/.*"name":"\([^"]*\)".*/\1/p')"
+check "no origin headers is 403" 403 "$(status -X POST "${FN}/inquiries.getTurnstileConfig")"
+check "trusted origin is 200" 200 "$(status -X POST -H "${LOCAL}" "${FN}/inquiries.getTurnstileConfig")"
+check "turnstile is off without configuration" '{"ok":true,"result":{"state":"off"}}' \
+  "$(body -X POST -H "${LOCAL}" "${FN}/inquiries.getTurnstileConfig")"
+check "functions are never cached" "no-store" "$(header cache-control -X POST -H "${LOCAL}" "${FN}/inquiries.getTurnstileConfig")"
+check "GET of a function is 405" 405 "$(status -H "${LOCAL}" "${FN}/inquiries.getTurnstileConfig")"
+check "telemetry with Do Not Track is 204" 204 \
+  "$(status -X POST -H 'DNT: 1' -H 'Content-Type: application/json' -d '{"event":"page_view","path":"/"}' "${BASE}/api/telemetry")"
+check "a small CSP report is 204" 204 \
+  "$(status -X POST -H 'Content-Type: application/csp-report' -d '{"csp-report":{"violated-directive":"img-src"}}' "${BASE}/api/csp-report")"
+
 # --- /api/auth over a database ----------------------------------------------
 # psql and openssl may be missing even when dev-postgres.sh finds a keg-only
 # install, so check them before starting anything.

@@ -6,6 +6,20 @@
 //!
 //! `rate_limit` is the database-backed fixed-window limiter of
 //! `src/lib/server/rate-limit.server.ts`, over the same `rate_limits` table.
+//!
+//! `telemetry` holds the anonymous sink's event and path allowlists.
+//! `text` holds the string helpers that measure and trim as ECMAScript does.
+//! `inquiries` holds the contact form's rules and its insert.
+//! `turnstile`, `quasar` and `commerce` are the configuration reads behind the
+//! public functions: they take the environment as plain values and return their
+//! own types, not wire types.
 
+pub mod commerce;
 pub mod crypto;
+pub mod inquiries;
+pub mod quasar;
 pub mod rate_limit;
+pub mod telemetry;
+pub mod text;
+pub mod turnstile;
+pub mod turnstile_verify;

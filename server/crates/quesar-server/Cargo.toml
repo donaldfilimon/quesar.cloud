@@ -15,6 +15,7 @@ base64 = "0.22"
 http-body-util = "0.1"
 percent-encoding = "2"
 quesar-auth = { path = "../quesar-auth" }
+quesar-contract = { path = "../quesar-contract" }
 quesar-db = { path = "../quesar-db" }
 quesar-services = { path = "../quesar-services" }
 serde = { version = "1", features = ["derive"] }

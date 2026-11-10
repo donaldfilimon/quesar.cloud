@@ -1,0 +1,180 @@
+{
+  "description": "Produced by normalizeOrigin() in src/lib/quasar/connection.ts; origin is null where it throws. Regenerate: GEN_CONTRACT_VECTORS=1 bunx vitest run src/lib/server/public-contract.test.ts",
+  "vectors": [
+    {
+      "name": "plain https",
+      "input": "https://example.com",
+      "origin": "https://example.com"
+    },
+    {
+      "name": "default https port is dropped",
+      "input": "https://example.com:443",
+      "origin": "https://example.com"
+    },
+    {
+      "name": "default http port is dropped",
+      "input": "http://example.com:80",
+      "origin": "http://example.com"
+    },
+    {
+      "name": "other port is kept",
+      "input": "http://localhost:4700",
+      "origin": "http://localhost:4700"
+    },
+    {
+      "name": "host is lowercased",
+      "input": "https://Example.COM",
+      "origin": "https://example.com"
+    },
+    {
+      "name": "scheme is case-insensitive",
+      "input": "HTTPS://example.com",
+      "origin": "https://example.com"
+    },
+    {
+      "name": "one trailing slash",
+      "input": "https://example.com/",
+      "origin": "https://example.com"
+    },
+    {
+      "name": "ipv4 literal",
+      "input": "http://127.0.0.1:4700",
+      "origin": "http://127.0.0.1:4700"
+    },
+    {
+      "name": "ipv6 literal",
+      "input": "http://[::1]:4700",
+      "origin": "http://[::1]:4700"
+    },
+    {
+      "name": "ipv6 literal, default port",
+      "input": "https://[2001:db8::1]:443/",
+      "origin": "https://[2001:db8::1]"
+    },
+    {
+      "name": "surrounding whitespace",
+      "input": "  https://example.com  ",
+      "origin": "https://example.com"
+    },
+    {
+      "name": "ecmascript whitespace (bom, nbsp)",
+      "input": "﻿https://example.com ",
+      "origin": "https://example.com"
+    },
+    {
+      "name": "internationalized host",
+      "input": "https://bücher.example",
+      "origin": "https://xn--bcher-kva.example"
+    },
+    {
+      "name": "tab inside the host is stripped",
+      "input": "https://exa\tmple.com",
+      "origin": "https://example.com"
+    },
+    {
+      "name": "path",
+      "input": "https://example.com/api",
+      "origin": null
+    },
+    {
+      "name": "two trailing slashes",
+      "input": "https://example.com//",
+      "origin": null
+    },
+    {
+      "name": "query",
+      "input": "https://example.com?x=1",
+      "origin": null
+    },
+    {
+      "name": "empty query",
+      "input": "https://example.com?",
+      "origin": null
+    },
+    {
+      "name": "fragment",
+      "input": "https://example.com#top",
+      "origin": null
+    },
+    {
+      "name": "userinfo",
+      "input": "https://user@example.com",
+      "origin": null
+    },
+    {
+      "name": "userinfo with password",
+      "input": "https://user:pass@example.com",
+      "origin": null
+    },
+    {
+      "name": "backslash",
+      "input": "https:\\\\example.com",
+      "origin": null
+    },
+    {
+      "name": "backslash in the authority",
+      "input": "https://example.com\\evil",
+      "origin": null
+    },
+    {
+      "name": "ftp scheme",
+      "input": "ftp://example.com",
+      "origin": null
+    },
+    {
+      "name": "no scheme",
+      "input": "example.com",
+      "origin": null
+    },
+    {
+      "name": "scheme only",
+      "input": "https://",
+      "origin": null
+    },
+    {
+      "name": "scheme and slash",
+      "input": "https:///",
+      "origin": null
+    },
+    {
+      "name": "empty",
+      "input": "",
+      "origin": null
+    },
+    {
+      "name": "whitespace only",
+      "input": "   ",
+      "origin": null
+    },
+    {
+      "name": "space inside the host",
+      "input": "https://exa mple.com",
+      "origin": null
+    },
+    {
+      "name": "port out of range",
+      "input": "https://example.com:99999",
+      "origin": null
+    },
+    {
+      "name": "empty port",
+      "input": "https://example.com:",
+      "origin": "https://example.com"
+    },
+    {
+      "name": "non-numeric port",
+      "input": "https://example.com:abc",
+      "origin": null
+    },
+    {
+      "name": "percent-encoded host",
+      "input": "https://exa%6dple.com",
+      "origin": "https://example.com"
+    },
+    {
+      "name": "trailing newline after trim",
+      "input": "https://example.com\n",
+      "origin": "https://example.com"
+    }
+  ]
+}

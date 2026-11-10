@@ -10,38 +10,19 @@
 use std::fmt;
 
 use axum::body::Body;
-use axum::http::{HeaderMap, StatusCode};
+use axum::http::HeaderMap;
 use quesar_auth::password::Password;
 use serde::de::{self, DeserializeOwned, Deserializer, Visitor};
-use zeroize::Zeroize;
 
 use super::error::ApiError;
-use crate::body_limit::{BodyLimitError, read_body_limited};
+use crate::api::body;
 
 /// Sign-up, sign-in and profile bodies are a few hundred bytes.
 pub const AUTH_BODY_MAX: usize = 16 * 1024;
 
+/// [`body::read`] at [`AUTH_BODY_MAX`].
 pub async fn read<T: DeserializeOwned>(headers: &HeaderMap, body: Body) -> Result<T, ApiError> {
-    let bytes = read_body_limited(headers, body, AUTH_BODY_MAX)
-        .await
-        .map_err(|error| match error {
-            BodyLimitError::TooLarge | BodyLimitError::Aborted => ApiError::auth(
-                StatusCode::PAYLOAD_TOO_LARGE,
-                "PAYLOAD_TOO_LARGE",
-                "Request body is too large",
-            ),
-            BodyLimitError::InvalidJson => invalid_body(),
-        })?;
-    let parsed = serde_json::from_slice::<T>(&bytes);
-    // Best effort: zero the buffer when nothing else shares it.
-    if let Ok(mut unique) = bytes.try_into_mut() {
-        unique.as_mut().zeroize();
-    }
-    parsed.map_err(|_| invalid_body())
-}
-
-fn invalid_body() -> ApiError {
-    ApiError::validation("INVALID_BODY", "Invalid request body")
+    body::read(headers, body, AUTH_BODY_MAX).await
 }
 
 /// `#[serde(deserialize_with = "json::password")]`

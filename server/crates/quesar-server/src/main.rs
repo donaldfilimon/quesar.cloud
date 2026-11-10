@@ -2,11 +2,12 @@ use std::net::SocketAddr;
 use std::process::ExitCode;
 use std::sync::Arc;
 
+use quesar_server::api::PublicServices;
 use quesar_server::auth::{AuthServices, check_schema};
 use quesar_server::config::Environment;
 use quesar_server::readiness::runtime_readiness;
 use quesar_server::trace::request_span;
-use quesar_server::{Config, router_with};
+use quesar_server::{Config, router_with_public};
 use tokio::net::TcpListener;
 use tower_http::trace::TraceLayer;
 
@@ -66,8 +67,9 @@ async fn run() -> Result<(), Box<dyn std::error::Error>> {
         }
     };
     // The span records the method and path only, never the query string.
-    let app =
-        router_with(&config, auth).layer(TraceLayer::new_for_http().make_span_with(request_span));
+    let public = PublicServices::build(&config)?;
+    let app = router_with_public(&config, auth, public)
+        .layer(TraceLayer::new_for_http().make_span_with(request_span));
     let listener = TcpListener::bind(config.listen).await?;
     tracing::info!(
         listen = %listener.local_addr()?,

@@ -12,8 +12,12 @@
 //!    a user with any workspace connection is refused, with nothing changed.
 //!    These are external calls, so they run before and outside the
 //!    transaction and cannot be rolled back.
-//! 3. One transaction deletes the per-user rows, unlinks inquiries and, last,
-//!    deletes the `"user"` row, whose cascades remove the credentials, linked
+//! 3. One transaction. Its first statement locks the user row
+//!    (`select … for update`), so a writer that links rows to the user without
+//!    a foreign key (contact inquiries) and holds `for share` on that row
+//!    either commits before the purge reads its tables or waits until the user
+//!    is gone and then stores null. It then deletes the per-user rows, unlinks
+//!    inquiries and, last, deletes the `"user"` row, whose cascades remove the credentials, linked
 //!    accounts, sessions, passkeys and sign-in flows. Any failure rolls back
 //!    all of it, the user row included.
 //!
@@ -307,6 +311,12 @@ pub async fn purge_and_delete(
     }
 
     let mut tx = pool.begin().await?;
+    // First, before any purge statement: see the module documentation. A
+    // missing row (already deleted) changes nothing else.
+    sqlx::query(r#"select id from "user" where id = $1 for update"#)
+        .bind(user_id)
+        .fetch_optional(&mut *tx)
+        .await?;
     let workspace_connections = sqlx::query("delete from workspace_connections where user_id = $1")
         .bind(user_id)
         .execute(&mut *tx)

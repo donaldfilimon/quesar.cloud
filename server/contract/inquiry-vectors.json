@@ -1,0 +1,2229 @@
+{
+  "description": "Produced by coerceInquiryInput() and validateInquiry() in src/lib/inquiry-rules.ts. The token has any trailing lone high surrogate removed (tokenPairCut), because JSON cannot carry one and the Rust side drops the whole pair. Regenerate: GEN_CONTRACT_VECTORS=1 bunx vitest run src/lib/server/public-contract.test.ts",
+  "vectors": [
+    {
+      "name": "complete",
+      "input": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": ""
+      },
+      "coerced": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": true,
+        "value": {
+          "name": "Ada Lovelace",
+          "email": "ada@example.com",
+          "company": "",
+          "topic": "Quesar",
+          "message": "I would like to talk about WDBX provenance."
+        }
+      }
+    },
+    {
+      "name": "fields are trimmed",
+      "input": {
+        "name": "  Ada  ",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "  a real message here  ",
+        "turnstileToken": ""
+      },
+      "coerced": {
+        "name": "  Ada  ",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "  a real message here  ",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": true,
+        "value": {
+          "name": "Ada",
+          "email": "ada@example.com",
+          "company": "",
+          "topic": "Quesar",
+          "message": "a real message here"
+        }
+      }
+    },
+    {
+      "name": "every topic: ABI / WDBX",
+      "input": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "ABI / WDBX",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": ""
+      },
+      "coerced": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "ABI / WDBX",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": true,
+        "value": {
+          "name": "Ada Lovelace",
+          "email": "ada@example.com",
+          "company": "",
+          "topic": "ABI / WDBX",
+          "message": "I would like to talk about WDBX provenance."
+        }
+      }
+    },
+    {
+      "name": "every topic: Other",
+      "input": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": " Other ",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": ""
+      },
+      "coerced": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": " Other ",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": true,
+        "value": {
+          "name": "Ada Lovelace",
+          "email": "ada@example.com",
+          "company": "",
+          "topic": "Other",
+          "message": "I would like to talk about WDBX provenance."
+        }
+      }
+    },
+    {
+      "name": "topic in another case",
+      "input": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": ""
+      },
+      "coerced": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": false,
+        "field": "topic",
+        "error": "Choose a topic."
+      }
+    },
+    {
+      "name": "topic with inner spaces changed",
+      "input": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "ABI/WDBX",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": ""
+      },
+      "coerced": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "ABI/WDBX",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": false,
+        "field": "topic",
+        "error": "Choose a topic."
+      }
+    },
+    {
+      "name": "empty topic",
+      "input": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": ""
+      },
+      "coerced": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": false,
+        "field": "topic",
+        "error": "Choose a topic."
+      }
+    },
+    {
+      "name": "null input",
+      "input": null,
+      "coerced": {
+        "name": "",
+        "email": "",
+        "company": "",
+        "topic": "",
+        "message": "",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": false,
+        "field": "name",
+        "error": "Enter your full name."
+      }
+    },
+    {
+      "name": "string input",
+      "input": "x",
+      "coerced": {
+        "name": "",
+        "email": "",
+        "company": "",
+        "topic": "",
+        "message": "",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": false,
+        "field": "name",
+        "error": "Enter your full name."
+      }
+    },
+    {
+      "name": "number input",
+      "input": 5,
+      "coerced": {
+        "name": "",
+        "email": "",
+        "company": "",
+        "topic": "",
+        "message": "",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": false,
+        "field": "name",
+        "error": "Enter your full name."
+      }
+    },
+    {
+      "name": "array input",
+      "input": [],
+      "coerced": {
+        "name": "",
+        "email": "",
+        "company": "",
+        "topic": "",
+        "message": "",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": false,
+        "field": "name",
+        "error": "Enter your full name."
+      }
+    },
+    {
+      "name": "array of fields",
+      "input": [
+        "Ada Lovelace",
+        "ada@example.com"
+      ],
+      "coerced": {
+        "name": "",
+        "email": "",
+        "company": "",
+        "topic": "",
+        "message": "",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": false,
+        "field": "name",
+        "error": "Enter your full name."
+      }
+    },
+    {
+      "name": "empty object",
+      "input": {},
+      "coerced": {
+        "name": "",
+        "email": "",
+        "company": "",
+        "topic": "",
+        "message": "",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": false,
+        "field": "name",
+        "error": "Enter your full name."
+      }
+    },
+    {
+      "name": "non-string members",
+      "input": {
+        "name": 42,
+        "email": {},
+        "company": null,
+        "topic": [
+          "Quesar"
+        ],
+        "message": true,
+        "turnstileToken": 7
+      },
+      "coerced": {
+        "name": "",
+        "email": "",
+        "company": "",
+        "topic": "",
+        "message": "",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": false,
+        "field": "name",
+        "error": "Enter your full name."
+      }
+    },
+    {
+      "name": "user id fields are ignored",
+      "input": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "",
+        "userId": "victim",
+        "user_id": "victim",
+        "id": 1
+      },
+      "coerced": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": true,
+        "value": {
+          "name": "Ada Lovelace",
+          "email": "ada@example.com",
+          "company": "",
+          "topic": "Quesar",
+          "message": "I would like to talk about WDBX provenance."
+        }
+      }
+    },
+    {
+      "name": "__proto__ member",
+      "input": {
+        "__proto__": {
+          "name": "Ada Lovelace"
+        }
+      },
+      "coerced": {
+        "name": "",
+        "email": "",
+        "company": "",
+        "topic": "",
+        "message": "",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": false,
+        "field": "name",
+        "error": "Enter your full name."
+      }
+    },
+    {
+      "name": "constructor member",
+      "input": {
+        "constructor": {
+          "name": "Ada Lovelace"
+        }
+      },
+      "coerced": {
+        "name": "",
+        "email": "",
+        "company": "",
+        "topic": "",
+        "message": "",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": false,
+        "field": "name",
+        "error": "Enter your full name."
+      }
+    },
+    {
+      "name": "name 1 unit",
+      "input": {
+        "name": "A",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": ""
+      },
+      "coerced": {
+        "name": "A",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": false,
+        "field": "name",
+        "error": "Enter your full name."
+      }
+    },
+    {
+      "name": "name 2 units",
+      "input": {
+        "name": "Al",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": ""
+      },
+      "coerced": {
+        "name": "Al",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": true,
+        "value": {
+          "name": "Al",
+          "email": "ada@example.com",
+          "company": "",
+          "topic": "Quesar",
+          "message": "I would like to talk about WDBX provenance."
+        }
+      }
+    },
+    {
+      "name": "name 80 units",
+      "input": {
+        "name": "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": ""
+      },
+      "coerced": {
+        "name": "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": true,
+        "value": {
+          "name": "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn",
+          "email": "ada@example.com",
+          "company": "",
+          "topic": "Quesar",
+          "message": "I would like to talk about WDBX provenance."
+        }
+      }
+    },
+    {
+      "name": "name 81 units",
+      "input": {
+        "name": "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": ""
+      },
+      "coerced": {
+        "name": "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": false,
+        "field": "name",
+        "error": "Keep your name under 80 characters."
+      }
+    },
+    {
+      "name": "name one astral (2 units)",
+      "input": {
+        "name": "😀",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": ""
+      },
+      "coerced": {
+        "name": "😀",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": true,
+        "value": {
+          "name": "😀",
+          "email": "ada@example.com",
+          "company": "",
+          "topic": "Quesar",
+          "message": "I would like to talk about WDBX provenance."
+        }
+      }
+    },
+    {
+      "name": "name 40 astral (80 units)",
+      "input": {
+        "name": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": ""
+      },
+      "coerced": {
+        "name": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": true,
+        "value": {
+          "name": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀",
+          "email": "ada@example.com",
+          "company": "",
+          "topic": "Quesar",
+          "message": "I would like to talk about WDBX provenance."
+        }
+      }
+    },
+    {
+      "name": "name 41 astral (82 units)",
+      "input": {
+        "name": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": ""
+      },
+      "coerced": {
+        "name": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": false,
+        "field": "name",
+        "error": "Keep your name under 80 characters."
+      }
+    },
+    {
+      "name": "name 39 astral and 2 letters (80 units)",
+      "input": {
+        "name": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀ab",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": ""
+      },
+      "coerced": {
+        "name": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀ab",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": true,
+        "value": {
+          "name": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀ab",
+          "email": "ada@example.com",
+          "company": "",
+          "topic": "Quesar",
+          "message": "I would like to talk about WDBX provenance."
+        }
+      }
+    },
+    {
+      "name": "name 39 astral and 3 letters (81 units)",
+      "input": {
+        "name": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀abc",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": ""
+      },
+      "coerced": {
+        "name": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀abc",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": false,
+        "field": "name",
+        "error": "Keep your name under 80 characters."
+      }
+    },
+    {
+      "name": "name padded with bom to 1 unit",
+      "input": {
+        "name": "﻿﻿A﻿",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": ""
+      },
+      "coerced": {
+        "name": "﻿﻿A﻿",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": false,
+        "field": "name",
+        "error": "Enter your full name."
+      }
+    },
+    {
+      "name": "name padded with bom to 2 units",
+      "input": {
+        "name": "﻿Ab﻿",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": ""
+      },
+      "coerced": {
+        "name": "﻿Ab﻿",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": true,
+        "value": {
+          "name": "Ab",
+          "email": "ada@example.com",
+          "company": "",
+          "topic": "Quesar",
+          "message": "I would like to talk about WDBX provenance."
+        }
+      }
+    },
+    {
+      "name": "name with next-line padding is not trimmed",
+      "input": {
+        "name": "A",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": ""
+      },
+      "coerced": {
+        "name": "A",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": true,
+        "value": {
+          "name": "A",
+          "email": "ada@example.com",
+          "company": "",
+          "topic": "Quesar",
+          "message": "I would like to talk about WDBX provenance."
+        }
+      }
+    },
+    {
+      "name": "name only whitespace",
+      "input": {
+        "name": " \t\n 　",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": ""
+      },
+      "coerced": {
+        "name": " \t\n 　",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": false,
+        "field": "name",
+        "error": "Enter your full name."
+      }
+    },
+    {
+      "name": "name with nul",
+      "input": {
+        "name": "Ada\u0000Lovelace",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": ""
+      },
+      "coerced": {
+        "name": "Ada\u0000Lovelace",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": true,
+        "value": {
+          "name": "Ada\u0000Lovelace",
+          "email": "ada@example.com",
+          "company": "",
+          "topic": "Quesar",
+          "message": "I would like to talk about WDBX provenance."
+        }
+      }
+    },
+    {
+      "name": "email without at",
+      "input": {
+        "name": "Ada Lovelace",
+        "email": "not-an-email",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": ""
+      },
+      "coerced": {
+        "name": "Ada Lovelace",
+        "email": "not-an-email",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": false,
+        "field": "email",
+        "error": "Enter an email address we can reply to."
+      }
+    },
+    {
+      "name": "email two ats",
+      "input": {
+        "name": "Ada Lovelace",
+        "email": "a@b@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": ""
+      },
+      "coerced": {
+        "name": "Ada Lovelace",
+        "email": "a@b@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": false,
+        "field": "email",
+        "error": "Enter an email address we can reply to."
+      }
+    },
+    {
+      "name": "email empty local part",
+      "input": {
+        "name": "Ada Lovelace",
+        "email": "@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": ""
+      },
+      "coerced": {
+        "name": "Ada Lovelace",
+        "email": "@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": false,
+        "field": "email",
+        "error": "Enter an email address we can reply to."
+      }
+    },
+    {
+      "name": "email no dot in domain",
+      "input": {
+        "name": "Ada Lovelace",
+        "email": "ada@example",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": ""
+      },
+      "coerced": {
+        "name": "Ada Lovelace",
+        "email": "ada@example",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": false,
+        "field": "email",
+        "error": "Enter an email address we can reply to."
+      }
+    },
+    {
+      "name": "email dot first in domain",
+      "input": {
+        "name": "Ada Lovelace",
+        "email": "ada@.example",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": ""
+      },
+      "coerced": {
+        "name": "Ada Lovelace",
+        "email": "ada@.example",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": false,
+        "field": "email",
+        "error": "Enter an email address we can reply to."
+      }
+    },
+    {
+      "name": "email dot last in domain",
+      "input": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": ""
+      },
+      "coerced": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": false,
+        "field": "email",
+        "error": "Enter an email address we can reply to."
+      }
+    },
+    {
+      "name": "email only dots in domain",
+      "input": {
+        "name": "Ada Lovelace",
+        "email": "ada@..",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": ""
+      },
+      "coerced": {
+        "name": "Ada Lovelace",
+        "email": "ada@..",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": false,
+        "field": "email",
+        "error": "Enter an email address we can reply to."
+      }
+    },
+    {
+      "name": "email double dot in domain",
+      "input": {
+        "name": "Ada Lovelace",
+        "email": "ada@a..b",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": ""
+      },
+      "coerced": {
+        "name": "Ada Lovelace",
+        "email": "ada@a..b",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": true,
+        "value": {
+          "name": "Ada Lovelace",
+          "email": "ada@a..b",
+          "company": "",
+          "topic": "Quesar",
+          "message": "I would like to talk about WDBX provenance."
+        }
+      }
+    },
+    {
+      "name": "email dot after first character",
+      "input": {
+        "name": "Ada Lovelace",
+        "email": "ada@a.b",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": ""
+      },
+      "coerced": {
+        "name": "Ada Lovelace",
+        "email": "ada@a.b",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": true,
+        "value": {
+          "name": "Ada Lovelace",
+          "email": "ada@a.b",
+          "company": "",
+          "topic": "Quesar",
+          "message": "I would like to talk about WDBX provenance."
+        }
+      }
+    },
+    {
+      "name": "email dot in local part only",
+      "input": {
+        "name": "Ada Lovelace",
+        "email": "a.da@example",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": ""
+      },
+      "coerced": {
+        "name": "Ada Lovelace",
+        "email": "a.da@example",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": false,
+        "field": "email",
+        "error": "Enter an email address we can reply to."
+      }
+    },
+    {
+      "name": "email inner space",
+      "input": {
+        "name": "Ada Lovelace",
+        "email": "ada lovelace@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": ""
+      },
+      "coerced": {
+        "name": "Ada Lovelace",
+        "email": "ada lovelace@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": false,
+        "field": "email",
+        "error": "Enter an email address we can reply to."
+      }
+    },
+    {
+      "name": "email inner tab",
+      "input": {
+        "name": "Ada Lovelace",
+        "email": "ada@exam\tple.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": ""
+      },
+      "coerced": {
+        "name": "Ada Lovelace",
+        "email": "ada@exam\tple.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": false,
+        "field": "email",
+        "error": "Enter an email address we can reply to."
+      }
+    },
+    {
+      "name": "email inner bom",
+      "input": {
+        "name": "Ada Lovelace",
+        "email": "ada@exam﻿ple.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": ""
+      },
+      "coerced": {
+        "name": "Ada Lovelace",
+        "email": "ada@exam﻿ple.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": false,
+        "field": "email",
+        "error": "Enter an email address we can reply to."
+      }
+    },
+    {
+      "name": "email inner next-line is not whitespace",
+      "input": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": ""
+      },
+      "coerced": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": true,
+        "value": {
+          "name": "Ada Lovelace",
+          "email": "ada@example.com",
+          "company": "",
+          "topic": "Quesar",
+          "message": "I would like to talk about WDBX provenance."
+        }
+      }
+    },
+    {
+      "name": "email inner nbsp",
+      "input": {
+        "name": "Ada Lovelace",
+        "email": "ada@example .com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": ""
+      },
+      "coerced": {
+        "name": "Ada Lovelace",
+        "email": "ada@example .com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": false,
+        "field": "email",
+        "error": "Enter an email address we can reply to."
+      }
+    },
+    {
+      "name": "email inner line separator",
+      "input": {
+        "name": "Ada Lovelace",
+        "email": "ada@exam ple.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": ""
+      },
+      "coerced": {
+        "name": "Ada Lovelace",
+        "email": "ada@exam ple.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": false,
+        "field": "email",
+        "error": "Enter an email address we can reply to."
+      }
+    },
+    {
+      "name": "email inner zero-width space is not whitespace",
+      "input": {
+        "name": "Ada Lovelace",
+        "email": "ada@exam​ple.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": ""
+      },
+      "coerced": {
+        "name": "Ada Lovelace",
+        "email": "ada@exam​ple.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": true,
+        "value": {
+          "name": "Ada Lovelace",
+          "email": "ada@exam​ple.com",
+          "company": "",
+          "topic": "Quesar",
+          "message": "I would like to talk about WDBX provenance."
+        }
+      }
+    },
+    {
+      "name": "email trailing newline is trimmed",
+      "input": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com\n",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": ""
+      },
+      "coerced": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com\n",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": true,
+        "value": {
+          "name": "Ada Lovelace",
+          "email": "ada@example.com",
+          "company": "",
+          "topic": "Quesar",
+          "message": "I would like to talk about WDBX provenance."
+        }
+      }
+    },
+    {
+      "name": "email padded with bom",
+      "input": {
+        "name": "Ada Lovelace",
+        "email": "﻿ada@example.com﻿",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": ""
+      },
+      "coerced": {
+        "name": "Ada Lovelace",
+        "email": "﻿ada@example.com﻿",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": true,
+        "value": {
+          "name": "Ada Lovelace",
+          "email": "ada@example.com",
+          "company": "",
+          "topic": "Quesar",
+          "message": "I would like to talk about WDBX provenance."
+        }
+      }
+    },
+    {
+      "name": "email 120 units",
+      "input": {
+        "name": "Ada Lovelace",
+        "email": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": ""
+      },
+      "coerced": {
+        "name": "Ada Lovelace",
+        "email": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": true,
+        "value": {
+          "name": "Ada Lovelace",
+          "email": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa@example.com",
+          "company": "",
+          "topic": "Quesar",
+          "message": "I would like to talk about WDBX provenance."
+        }
+      }
+    },
+    {
+      "name": "email 121 units",
+      "input": {
+        "name": "Ada Lovelace",
+        "email": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": ""
+      },
+      "coerced": {
+        "name": "Ada Lovelace",
+        "email": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": false,
+        "field": "email",
+        "error": "Enter an email address we can reply to."
+      }
+    },
+    {
+      "name": "email astral local at 120 units",
+      "input": {
+        "name": "Ada Lovelace",
+        "email": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀a@x.co",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": ""
+      },
+      "coerced": {
+        "name": "Ada Lovelace",
+        "email": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀a@x.co",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": true,
+        "value": {
+          "name": "Ada Lovelace",
+          "email": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀a@x.co",
+          "company": "",
+          "topic": "Quesar",
+          "message": "I would like to talk about WDBX provenance."
+        }
+      }
+    },
+    {
+      "name": "email astral local at 121 units",
+      "input": {
+        "name": "Ada Lovelace",
+        "email": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀ab@x.co",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": ""
+      },
+      "coerced": {
+        "name": "Ada Lovelace",
+        "email": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀ab@x.co",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": false,
+        "field": "email",
+        "error": "Enter an email address we can reply to."
+      }
+    },
+    {
+      "name": "email with nul",
+      "input": {
+        "name": "Ada Lovelace",
+        "email": "ada\u0000@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": ""
+      },
+      "coerced": {
+        "name": "Ada Lovelace",
+        "email": "ada\u0000@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": true,
+        "value": {
+          "name": "Ada Lovelace",
+          "email": "ada\u0000@example.com",
+          "company": "",
+          "topic": "Quesar",
+          "message": "I would like to talk about WDBX provenance."
+        }
+      }
+    },
+    {
+      "name": "company 120 units",
+      "input": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": ""
+      },
+      "coerced": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": true,
+        "value": {
+          "name": "Ada Lovelace",
+          "email": "ada@example.com",
+          "company": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "topic": "Quesar",
+          "message": "I would like to talk about WDBX provenance."
+        }
+      }
+    },
+    {
+      "name": "company 121 units",
+      "input": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": ""
+      },
+      "coerced": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": false,
+        "field": "company",
+        "error": "Keep the organization under 120 characters."
+      }
+    },
+    {
+      "name": "company 60 astral",
+      "input": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": ""
+      },
+      "coerced": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": true,
+        "value": {
+          "name": "Ada Lovelace",
+          "email": "ada@example.com",
+          "company": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀",
+          "topic": "Quesar",
+          "message": "I would like to talk about WDBX provenance."
+        }
+      }
+    },
+    {
+      "name": "company 61 astral",
+      "input": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": ""
+      },
+      "coerced": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": false,
+        "field": "company",
+        "error": "Keep the organization under 120 characters."
+      }
+    },
+    {
+      "name": "company padded",
+      "input": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "  Acme  ",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": ""
+      },
+      "coerced": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "  Acme  ",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": true,
+        "value": {
+          "name": "Ada Lovelace",
+          "email": "ada@example.com",
+          "company": "Acme",
+          "topic": "Quesar",
+          "message": "I would like to talk about WDBX provenance."
+        }
+      }
+    },
+    {
+      "name": "message 9 units",
+      "input": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "123456789",
+        "turnstileToken": ""
+      },
+      "coerced": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "123456789",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": false,
+        "field": "message",
+        "error": "Add a bit more detail: at least 10 characters."
+      }
+    },
+    {
+      "name": "message 10 units",
+      "input": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "1234567890",
+        "turnstileToken": ""
+      },
+      "coerced": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "1234567890",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": true,
+        "value": {
+          "name": "Ada Lovelace",
+          "email": "ada@example.com",
+          "company": "",
+          "topic": "Quesar",
+          "message": "1234567890"
+        }
+      }
+    },
+    {
+      "name": "message 5 astral (10 units)",
+      "input": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "😀😀😀😀😀",
+        "turnstileToken": ""
+      },
+      "coerced": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "😀😀😀😀😀",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": true,
+        "value": {
+          "name": "Ada Lovelace",
+          "email": "ada@example.com",
+          "company": "",
+          "topic": "Quesar",
+          "message": "😀😀😀😀😀"
+        }
+      }
+    },
+    {
+      "name": "message 4 astral and a letter (9 units)",
+      "input": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "😀😀😀😀a",
+        "turnstileToken": ""
+      },
+      "coerced": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "😀😀😀😀a",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": false,
+        "field": "message",
+        "error": "Add a bit more detail: at least 10 characters."
+      }
+    },
+    {
+      "name": "message 9 units padded with bom",
+      "input": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "﻿123456789﻿",
+        "turnstileToken": ""
+      },
+      "coerced": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "﻿123456789﻿",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": false,
+        "field": "message",
+        "error": "Add a bit more detail: at least 10 characters."
+      }
+    },
+    {
+      "name": "message 9 units padded with next-line",
+      "input": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "123456789",
+        "turnstileToken": ""
+      },
+      "coerced": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "123456789",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": true,
+        "value": {
+          "name": "Ada Lovelace",
+          "email": "ada@example.com",
+          "company": "",
+          "topic": "Quesar",
+          "message": "123456789"
+        }
+      }
+    },
+    {
+      "name": "message 2000 units",
+      "input": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm",
+        "turnstileToken": ""
+      },
+      "coerced": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": true,
+        "value": {
+          "name": "Ada Lovelace",
+          "email": "ada@example.com",
+          "company": "",
+          "topic": "Quesar",
+          "message": "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm"
+        }
+      }
+    },
+    {
+      "name": "message 2001 units",
+      "input": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm",
+        "turnstileToken": ""
+      },
+      "coerced": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": false,
+        "field": "message",
+        "error": "Keep the message under 2000 characters."
+      }
+    },
+    {
+      "name": "message 1000 astral (2000 units)",
+      "input": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀",
+        "turnstileToken": ""
+      },
+      "coerced": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": true,
+        "value": {
+          "name": "Ada Lovelace",
+          "email": "ada@example.com",
+          "company": "",
+          "topic": "Quesar",
+          "message": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀"
+        }
+      }
+    },
+    {
+      "name": "message 1000 astral and a letter (2001 units)",
+      "input": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀a",
+        "turnstileToken": ""
+      },
+      "coerced": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀a",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": false,
+        "field": "message",
+        "error": "Keep the message under 2000 characters."
+      }
+    },
+    {
+      "name": "message 2000 units plus padding",
+      "input": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": " ﻿mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm　",
+        "turnstileToken": ""
+      },
+      "coerced": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": " ﻿mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm　",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": true,
+        "value": {
+          "name": "Ada Lovelace",
+          "email": "ada@example.com",
+          "company": "",
+          "topic": "Quesar",
+          "message": "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm"
+        }
+      }
+    },
+    {
+      "name": "check order: name before email",
+      "input": {
+        "name": "",
+        "email": "bad",
+        "company": "",
+        "topic": "x",
+        "message": "",
+        "turnstileToken": ""
+      },
+      "coerced": {
+        "name": "",
+        "email": "bad",
+        "company": "",
+        "topic": "x",
+        "message": "",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": false,
+        "field": "name",
+        "error": "Enter your full name."
+      }
+    },
+    {
+      "name": "check order: email before company",
+      "input": {
+        "name": "Ada Lovelace",
+        "email": "bad",
+        "company": "ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": ""
+      },
+      "coerced": {
+        "name": "Ada Lovelace",
+        "email": "bad",
+        "company": "ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": false,
+        "field": "email",
+        "error": "Enter an email address we can reply to."
+      }
+    },
+    {
+      "name": "check order: company before topic",
+      "input": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "topic": "x",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": ""
+      },
+      "coerced": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "topic": "x",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": false,
+        "field": "company",
+        "error": "Keep the organization under 120 characters."
+      }
+    },
+    {
+      "name": "check order: topic before message",
+      "input": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "x",
+        "message": "",
+        "turnstileToken": ""
+      },
+      "coerced": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "x",
+        "message": "",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": false,
+        "field": "topic",
+        "error": "Choose a topic."
+      }
+    },
+    {
+      "name": "token 4096 units",
+      "input": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "tttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt"
+      },
+      "coerced": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "tttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": true,
+        "value": {
+          "name": "Ada Lovelace",
+          "email": "ada@example.com",
+          "company": "",
+          "topic": "Quesar",
+          "message": "I would like to talk about WDBX provenance."
+        }
+      }
+    },
+    {
+      "name": "token 4097 units",
+      "input": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "ttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt"
+      },
+      "coerced": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "ttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": true,
+        "value": {
+          "name": "Ada Lovelace",
+          "email": "ada@example.com",
+          "company": "",
+          "topic": "Quesar",
+          "message": "I would like to talk about WDBX provenance."
+        }
+      }
+    },
+    {
+      "name": "token 4098 units is cut",
+      "input": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "tttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt"
+      },
+      "coerced": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "ttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": true,
+        "value": {
+          "name": "Ada Lovelace",
+          "email": "ada@example.com",
+          "company": "",
+          "topic": "Quesar",
+          "message": "I would like to talk about WDBX provenance."
+        }
+      }
+    },
+    {
+      "name": "token cut between letters",
+      "input": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "ttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttéééééééééééééééééééé"
+      },
+      "coerced": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "ttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttééééééé",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": true,
+        "value": {
+          "name": "Ada Lovelace",
+          "email": "ada@example.com",
+          "company": "",
+          "topic": "Quesar",
+          "message": "I would like to talk about WDBX provenance."
+        }
+      }
+    },
+    {
+      "name": "token cut inside a pair",
+      "input": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "tttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt😀"
+      },
+      "coerced": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "tttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt",
+        "tokenPairCut": true
+      },
+      "validation": {
+        "ok": true,
+        "value": {
+          "name": "Ada Lovelace",
+          "email": "ada@example.com",
+          "company": "",
+          "topic": "Quesar",
+          "message": "I would like to talk about WDBX provenance."
+        }
+      }
+    },
+    {
+      "name": "token pair ends at the cut",
+      "input": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "ttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt😀z"
+      },
+      "coerced": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "ttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt😀",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": true,
+        "value": {
+          "name": "Ada Lovelace",
+          "email": "ada@example.com",
+          "company": "",
+          "topic": "Quesar",
+          "message": "I would like to talk about WDBX provenance."
+        }
+      }
+    },
+    {
+      "name": "token padded is kept untrimmed",
+      "input": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "  token-0123456789  "
+      },
+      "coerced": {
+        "name": "Ada Lovelace",
+        "email": "ada@example.com",
+        "company": "",
+        "topic": "Quesar",
+        "message": "I would like to talk about WDBX provenance.",
+        "turnstileToken": "  token-0123456789  ",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": true,
+        "value": {
+          "name": "Ada Lovelace",
+          "email": "ada@example.com",
+          "company": "",
+          "topic": "Quesar",
+          "message": "I would like to talk about WDBX provenance."
+        }
+      }
+    },
+    {
+      "name": "all hostile at once",
+      "input": {
+        "name": [],
+        "email": 1,
+        "company": {},
+        "topic": null,
+        "message": false
+      },
+      "coerced": {
+        "name": "",
+        "email": "",
+        "company": "",
+        "topic": "",
+        "message": "",
+        "turnstileToken": "",
+        "tokenPairCut": false
+      },
+      "validation": {
+        "ok": false,
+        "field": "name",
+        "error": "Enter your full name."
+      }
+    }
+  ]
+}
