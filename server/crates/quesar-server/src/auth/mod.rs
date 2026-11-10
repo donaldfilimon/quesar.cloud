@@ -8,6 +8,11 @@
 pub mod error;
 pub mod extract;
 pub mod hashing;
+pub mod issue;
+pub mod json;
+pub mod reissue;
+pub mod routes;
+pub mod view;
 
 use std::sync::Arc;
 use std::time::Duration;
@@ -63,6 +68,9 @@ pub struct AuthServices {
     /// For identity-provider calls: follows no redirects, times out after 10 s.
     pub http: reqwest::Client,
     pub hashing: Hashing,
+    /// `VITE_AUTH_ENABLED` is not exactly `false`. When off, `/methods` offers
+    /// nothing (the static build's setting).
+    pub auth_enabled: bool,
 }
 
 impl std::fmt::Debug for AuthServices {
@@ -101,6 +109,7 @@ impl AuthServices {
             clock,
             http,
             hashing,
+            auth_enabled: environment.read("VITE_AUTH_ENABLED") != Some("false"),
         })
     }
 
@@ -152,9 +161,10 @@ async fn not_found() -> ApiError {
     ApiError::NotFound
 }
 
-/// The `/api/auth` router. Later tasks add their routes here.
+/// The `/api/auth` router. Later tasks add their routes to [`routes::router`].
 pub fn routes(state: Arc<AppState>) -> Router<Arc<AppState>> {
-    Router::new()
+    routes::router()
         .fallback(not_found)
+        .layer(middleware::from_fn(reissue::reissue_cookie))
         .layer(middleware::from_fn_with_state(state, require_database))
 }

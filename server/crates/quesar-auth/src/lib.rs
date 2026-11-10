@@ -7,6 +7,7 @@
 
 pub mod clock;
 pub mod config;
+pub mod email_password;
 pub mod error;
 pub mod ids;
 pub mod password;

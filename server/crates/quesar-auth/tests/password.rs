@@ -198,3 +198,16 @@ fn password_lengths() {
     );
     assert_eq!(ValidationError::PasswordTooLong.code(), "PASSWORD_TOO_LONG");
 }
+
+#[test]
+fn sign_in_applies_only_the_password_maximum() {
+    assert_eq!(validate::password_max(""), Ok(()));
+    assert_eq!(validate::password_max("abc"), Ok(()));
+    assert_eq!(validate::password_max(&"x".repeat(128)), Ok(()));
+    assert_eq!(
+        validate::password_max(&"x".repeat(129)),
+        Err(ValidationError::PasswordTooLong)
+    );
+    // Characters, not bytes.
+    assert_eq!(validate::password_max(&"é".repeat(128)), Ok(()));
+}

@@ -111,3 +111,15 @@ pub fn password_len(password: &str) -> Result<(), ValidationError> {
         Ok(())
     }
 }
+
+/// Sign-in's only password rule: at most 128 characters. Better Auth's sign-in
+/// checks the maximum and nothing else, so a short password still costs a hash
+/// and fails like any wrong one; applying the minimum here would answer
+/// differently and skip the hash.
+pub fn password_max(password: &str) -> Result<(), ValidationError> {
+    if password.chars().count() > PASSWORD_MAX {
+        Err(ValidationError::PasswordTooLong)
+    } else {
+        Ok(())
+    }
+}

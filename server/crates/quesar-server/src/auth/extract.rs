@@ -23,6 +23,7 @@ use quesar_services::rate_limit::client_ip_from_headers;
 
 use super::AuthServices;
 use super::error::ApiError;
+use super::reissue::ReissueSlot;
 use crate::router::AppState;
 
 const SEC_FETCH_SITE: HeaderName = HeaderName::from_static("sec-fetch-site");
@@ -188,7 +189,8 @@ pub struct AuthUser {
     pub session: SessionRow,
     /// A `Set-Cookie` value to send back when this request extended the
     /// session, so the browser cookie keeps pace with the stored expiry. The
-    /// extractor cannot touch the response; the handler adds it.
+    /// `auth` router's response layer already sends it (see `reissue`); this
+    /// is for inspection.
     pub reissue_cookie: Option<String>,
 }
 
@@ -198,14 +200,23 @@ async fn lookup(parts: &Parts, services: &AuthServices) -> Result<Option<AuthUse
         return Ok(None);
     };
     let found = session::resolve(&services.pool, &token, services.clock.now()).await?;
-    Ok(found.map(|(session, user, refreshed)| AuthUser {
-        user,
-        session,
-        reissue_cookie: if refreshed {
+    Ok(found.map(|(session, user, refreshed)| {
+        let reissue_cookie = if refreshed {
             session::set_cookie_for_presented(&token)
         } else {
             None
-        },
+        };
+        // Hand the cookie to the response layer too, so no handler has to
+        // remember it (see `reissue`).
+        if let (Some(cookie), Some(slot)) = (&reissue_cookie, parts.extensions.get::<ReissueSlot>())
+        {
+            slot.set(cookie.clone());
+        }
+        AuthUser {
+            user,
+            session,
+            reissue_cookie,
+        }
     }))
 }
 
