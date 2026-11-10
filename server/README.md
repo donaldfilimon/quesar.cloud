@@ -7,9 +7,10 @@ same-origin request checks hold without CORS.
 **Status: in development.** It is replacing the Next.js server build in stages;
 the plan and its progress log are in
 `notes/superpowers/plans/2026-11-10-rust-server-and-site-improvements.md`.
-Today it serves the export and answers `/api/readiness`. Accounts, the console
-and the other server features still live in the Node server until their
-milestone lands. Nothing here is deployed.
+Today it serves the export, answers `/api/readiness` and implements the whole
+authentication API (see [Authentication](#authentication)). The console and the
+other server features still live in the Node server until their milestone
+lands. **Nothing here is deployed.**
 
 ## Run
 
@@ -50,9 +51,9 @@ a request without `cf-connecting-ip` uses the peer address, not another header.
 
 ```bash
 DATABASE_URL=postgres://... quesar-server migrate
-# from a checkout, without a built binary:
+# from a checkout, without a built binary (both forms pass `migrate` through):
+DATABASE_URL=postgres://... bun run server migrate
 DATABASE_URL=postgres://... bun run server -- migrate
-# or: cargo run --manifest-path server/Cargo.toml -p quesar-server -- migrate
 ```
 
 Applies the pending `migrations/*.sql` (top level only; `migrations/auth/` is
@@ -60,6 +61,70 @@ ignored) and logs each name. It exits 1 on failure or when `DATABASE_URL` is
 unset. It is interchangeable with `bun run db:migrate`: same `_migrations`
 table, same advisory lock, one transaction per file. Any other argument exits 2;
 no argument serves.
+
+## Authentication
+
+**What exists.** Under `/api/auth/*`: email/password sign-up and sign-in,
+database-backed sessions (revoked by id, never by token), sign-in with Google,
+Apple and X, passkeys (WebAuthn), the admin decision (an `ADMIN_EMAILS` address
+plus a linked Google or Apple identity) and account deletion. The request and
+response contract is the "API reference" section of
+`notes/superpowers/plans/2026-11-10-rust-server-m2.md`.
+
+**Nothing is deployed.** The frontend still talks to the Node server's Better
+Auth until M7 points it at this API. Neither server replaces the other yet, so
+do not point both at one database (below).
+
+### Variables
+
+Names only; the table in `AGENTS.md` describes the shared ones. A missing
+optional variable switches that feature off, it never falls back to a guess.
+
+| Variable | Meaning when missing |
+| --- | --- |
+| `DATABASE_URL` | No database: every `/api/auth/*` route but `/methods` answers 503 `AUTH_UNAVAILABLE`. Required in production. |
+| `PUBLIC_ORIGIN` (`BETTER_AUTH_URL` as a fallback) | Required in production. It is the same-origin rule, the cookie origin and the passkey relying party. An IP-address origin turns passkeys off (`PASSKEYS_NOT_AVAILABLE`). |
+| `QUESAR_ENV` | `production` enforces readiness, refuses http provider endpoints and stops trusting the local dev origins. |
+| `TRUSTED_PROXY` | No proxy header is trusted; rate limits use the socket address. See "Client addresses behind a proxy". |
+| `APP_ENCRYPTION_KEY`, `BETTER_AUTH_SECRET` | Key the rate-limit subject hash; production readiness fails without one. Sessions do not use them (they are random database tokens). |
+| `VITE_AUTH_ENABLED` | Sign-in is on unless this is exactly `false`. When `false`, `/methods` reports nothing and sign-up, sign-in, OAuth and passkey sign-in answer 503. |
+| `GOOGLE_SIGNIN_CLIENT_ID`/`_SECRET` (fall back to `GOOGLE_OAUTH_CLIENT_ID`/`_SECRET`) | No Google sign-in. |
+| `APPLE_CLIENT_ID`, `APPLE_TEAM_ID`, `APPLE_KEY_ID`, `APPLE_PRIVATE_KEY` | No Apple sign-in (all four are needed; an unusable key is logged and turns Apple off). |
+| `TWITTER_CLIENT_ID`/`_SECRET` | No X sign-in. |
+| `ADMIN_EMAILS` | Nobody is admin. |
+| `WDBX_COMMERCE_DIRECTORY`, `WDBX_COMMERCE_CONFIG`, `WDBX_COMMERCE_HOST_KEY` (and `WDBX_BINARY`) | If any `WDBX_COMMERCE_*` is set but the three are not all present, account deletion answers 503 `DELETION_UNAVAILABLE`. |
+
+Provider redirect URIs are `/api/auth/callback/google`, `/api/auth/callback/apple`
+and `/api/auth/callback/twitter` on the public origin. They are unchanged from
+Better Auth, so the URIs already registered carry over; register them for any
+new origin.
+
+### Cookies in development
+
+The session cookie is `__Host-quesar.session_token` with `Secure`,
+`SameSite=Lax` and `Path=/`, in every mode, as the TypeScript sets it. Chrome and
+Firefox accept `Secure` cookies on `http://localhost`, so local development
+works without a different cookie. `curl` does not send them over http: pass the
+`name=value` pair in a `Cookie` header, as `scripts/smoke.sh` does.
+
+### The database must start empty
+
+A Rust database must start empty and be migrated by `quesar-server migrate`.
+Never import Better Auth rows. Better Auth marks X-created users email-verified
+when X returns a confirmed address; this server never does, because that would
+let an X account take over a local account at the same address. Better Auth and
+this server also both write `"user"` and `"account"`, so they must not share a
+database until M8 removes Better Auth.
+
+### Before go-live
+
+- One real Apple sign-in on staging, to confirm Apple echoes the `nonce` claim
+  in the ID token (the TypeScript never checked it; this server does).
+- Register the three OAuth redirect URIs above for the new origin.
+- Make the proxy header trustworthy: the Caddyfile must overwrite `X-Real-IP`
+  (`header_up X-Real-IP {remote_host}`) and the server run with
+  `TRUSTED_PROXY=x-real-ip`, or run with `TRUSTED_PROXY=x-forwarded-for`.
+  Without either, every client shares the proxy's rate-limit subject.
 
 ## Database tests
 
@@ -82,6 +147,14 @@ database via `quesar_db::test_support::TestDatabase` (cargo feature
 bun run check:server   # cargo fmt --check, clippy -D warnings, cargo test
 scripts/smoke.sh       # starts the server against docs/ and checks it with curl
 ```
+
+`scripts/smoke.sh` starts two servers. The first has no database and checks the
+static site and what `/api/auth` answers without one (`/methods` works, the
+rest is 503). The second runs when `scripts/dev-postgres.sh start` succeeds: it
+gets a fresh `quesar_smoke` database, runs `migrate`, and checks the cross-site
+refusals, Apple's form POST, a JSON 404 and 405, and sign-up, `/session`,
+sign-out and `/session` again. Without PostgreSQL binaries it prints a `skip`
+line for those and still passes.
 
 `bun run check` runs `check:server` as one of its steps. The root lint,
 prettier, tsconfig and vitest do not cover this directory.

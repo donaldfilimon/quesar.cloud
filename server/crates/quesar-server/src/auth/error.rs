@@ -39,6 +39,8 @@ pub enum ApiError {
     Unavailable,
     /// 404 `NotFoundError`.
     NotFound,
+    /// 405 `MethodNotAllowedError`: the path exists, the method does not.
+    MethodNotAllowed,
 }
 
 impl ApiError {
@@ -66,6 +68,7 @@ impl ApiError {
             Self::RateLimited { .. } => StatusCode::TOO_MANY_REQUESTS,
             Self::Unavailable => StatusCode::SERVICE_UNAVAILABLE,
             Self::NotFound => StatusCode::NOT_FOUND,
+            Self::MethodNotAllowed => StatusCode::METHOD_NOT_ALLOWED,
         }
     }
 
@@ -78,6 +81,7 @@ impl ApiError {
             Self::RateLimited { .. } => "RateLimitedError",
             Self::Unavailable => "AuthUnavailableError",
             Self::NotFound => "NotFoundError",
+            Self::MethodNotAllowed => "MethodNotAllowedError",
         }
     }
 
@@ -89,6 +93,7 @@ impl ApiError {
             Self::RateLimited { .. } => "RATE_LIMITED",
             Self::Unavailable => "AUTH_UNAVAILABLE",
             Self::NotFound => "NOT_FOUND",
+            Self::MethodNotAllowed => "METHOD_NOT_ALLOWED",
         }
     }
 
@@ -100,6 +105,7 @@ impl ApiError {
             Self::RateLimited { .. } => "Too many requests",
             Self::Unavailable => "Authentication is not available",
             Self::NotFound => "Not found",
+            Self::MethodNotAllowed => "Method not allowed",
         }
     }
 }

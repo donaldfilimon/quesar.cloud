@@ -924,18 +924,29 @@ async fn passkeys_are_off_when_the_origin_cannot_host_them() {
 }
 
 #[tokio::test]
-async fn with_sign_in_switched_off_the_passkey_routes_answer_503() {
+async fn with_sign_in_switched_off_only_the_session_needing_passkey_routes_answer() {
     let h = Harness::with(&[("VITE_AUTH_ENABLED", "false")]).await;
+    // They issue sessions: closed.
     for path in [
         "/passkey/authenticate/options",
         "/passkey/authenticate/verify",
+    ] {
+        let reply = h.post(path, &json!({}), &[]).await;
+        assert_eq!(reply.status, StatusCode::SERVICE_UNAVAILABLE, "{path}");
+    }
+    // They need a session, and none can exist: 401 like /profile.
+    for path in [
         "/passkey/register/options",
         "/passkey/register/verify",
         "/passkey/delete",
     ] {
         let reply = h.post(path, &json!({}), &[]).await;
-        assert_eq!(reply.status, StatusCode::SERVICE_UNAVAILABLE, "{path}");
+        assert_eq!(reply.status, StatusCode::UNAUTHORIZED, "{path}");
     }
+    assert_eq!(
+        h.get("/passkeys", None).await.status,
+        StatusCode::UNAUTHORIZED
+    );
     assert_eq!(count(&h, "select count(*) from auth_flows").await, 0);
     h.finish().await;
 }

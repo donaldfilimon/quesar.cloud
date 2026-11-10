@@ -260,6 +260,32 @@ async fn with_sign_in_switched_off_nothing_issues_a_session_and_no_session_count
         send(Method::GET, "/api/auth/sessions", true).await.0,
         StatusCode::UNAUTHORIZED
     );
+    // Every route that only needs a session answers 401, not 503, like
+    // /profile; the passkey sign-in routes issue sessions and stay 503.
+    for (method, path) in [
+        (Method::GET, "/api/auth/passkeys"),
+        (Method::POST, "/api/auth/passkey/register/options"),
+        (Method::POST, "/api/auth/passkey/register/verify"),
+        (Method::POST, "/api/auth/passkey/delete"),
+        (Method::POST, "/api/auth/delete-account"),
+        (Method::POST, "/api/auth/sessions/revoke"),
+        (Method::POST, "/api/auth/sessions/revoke-others"),
+    ] {
+        let (status, has_cookie, body) = send(method, path, true).await;
+        assert_eq!(status, StatusCode::UNAUTHORIZED, "{path}");
+        assert_eq!(body["error"]["code"], "UNAUTHORIZED", "{path}");
+        assert!(!has_cookie, "{path}");
+    }
+    assert_eq!(
+        send(
+            Method::POST,
+            "/api/auth/passkey/authenticate/options",
+            false
+        )
+        .await
+        .0,
+        StatusCode::SERVICE_UNAVAILABLE
+    );
     // /methods still answers, all false.
     let (status, _, body) = send(Method::GET, "/api/auth/methods", false).await;
     assert_eq!(status, StatusCode::OK);
