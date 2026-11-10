@@ -566,3 +566,69 @@ async fn a_returning_x_user_whose_confirmed_email_appears_later_stays_unverified
     assert_unverified_x_user_blocks_linking(&h).await;
     h.cleanup().await;
 }
+
+#[tokio::test]
+async fn a_password_sign_up_cannot_squat_an_x_placeholder_address() {
+    let h = OAuth::with_twitter().await;
+    let squat = h
+        .post(
+            "/sign-up",
+            &json!({
+                "name": "Squatter",
+                "email": "123@twitter.placeholder.invalid",
+                "password": "synthetic-password-2026",
+            }),
+            &[],
+        )
+        .await;
+    assert_eq!(squat.status, StatusCode::BAD_REQUEST, "{}", squat.text());
+    assert_eq!(squat.error_code(), "INVALID_EMAIL");
+    assert_eq!(h.count(r#""user""#).await, 0);
+
+    // X user 123, with no confirmed email, still signs in.
+    let started = h.start_on("twitter", &json!({})).await;
+    h.idp.respond_with_token_body(
+        200,
+        json!({ "access_token": "mock-x-access-token" }).to_string(),
+    );
+    h.idp.set_userinfo_for(
+        "profile_image_url",
+        200,
+        &json!({ "data": { "id": "123", "name": "Real X User" } }),
+    );
+    h.idp
+        .set_userinfo_for("confirmed_email", 200, &json!({ "data": { "id": "123" } }));
+    let reply = finish(&h, &started).await;
+    assert_eq!(location(&reply), "/console", "{}", reply.text());
+    assert_eq!(user_rows(&h).await[0].1, "123@twitter.placeholder.invalid");
+    h.cleanup().await;
+}
+
+#[tokio::test]
+async fn an_invalid_confirmed_email_and_a_non_https_image_are_not_stored() {
+    let h = OAuth::with_twitter().await;
+    let started = h.start_on("twitter", &json!({})).await;
+    h.idp.respond_with_token_body(
+        200,
+        json!({ "access_token": "mock-x-access-token" }).to_string(),
+    );
+    h.idp.set_userinfo_for(
+        "profile_image_url",
+        200,
+        &json!({ "data": {
+            "id": X_ID, "name": "N", "profile_image_url": "javascript:alert(1)",
+        } }),
+    );
+    h.idp.set_userinfo_for(
+        "confirmed_email",
+        200,
+        &json!({ "data": { "id": X_ID, "confirmed_email": "not an email" } }),
+    );
+    let reply = finish(&h, &started).await;
+    assert_eq!(location(&reply), "/console", "{}", reply.text());
+    let users = user_rows(&h).await;
+    assert_eq!(users[0].1, placeholder());
+    assert!(!users[0].2, "an unusable address is never verified");
+    assert_eq!(users[0].3, None, "a non-https image is dropped");
+    h.cleanup().await;
+}

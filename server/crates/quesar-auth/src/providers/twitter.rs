@@ -21,13 +21,14 @@ use crate::config::OAuthClient;
 use crate::oauth::http::{self, HttpError};
 use crate::oauth::provider::{Identity, ProviderError, ProviderId};
 use crate::providers::Deps;
+use crate::validate;
 
 /// The default scopes of `twitter.mjs`.
 pub const SCOPES: &str = "users.read tweet.read offline.access users.email";
 
 /// The domain of the address a user gets when X reports no confirmed email
 /// (`createPlaceholderEmail`, RFC 6761 `.invalid`).
-const PLACEHOLDER_DOMAIN: &str = "twitter.placeholder.invalid";
+pub const PLACEHOLDER_DOMAIN: &str = "twitter.placeholder.invalid";
 
 /// The URL to send the browser to.
 pub fn authorize_url(
@@ -94,14 +95,18 @@ pub fn placeholder_email(id: &str) -> String {
     format!("{id}@{PLACEHOLDER_DOMAIN}")
 }
 
-/// An X id is a decimal string. Anything that could not sit before the `@` of
-/// the placeholder address is not one (Better Auth throws on those too).
+/// An X id is a decimal string of at most 20 digits (a 64-bit integer). Digits
+/// only, so two ids can never differ just by case on the lowercased
+/// placeholder address, and nothing odd can sit before its `@`.
 fn plausible_id(id: &str) -> bool {
-    !id.is_empty()
-        && id.len() <= 64
-        && id
-            .bytes()
-            .all(|byte| byte.is_ascii_alphanumeric() || byte == b'-' || byte == b'_')
+    (1..=20).contains(&id.len()) && id.bytes().all(|byte| byte.is_ascii_digit())
+}
+
+/// X's `confirmed_email` as an address we will store, or `None` when it fails
+/// the sign-up email syntax rule (then the sign-in goes on with the placeholder
+/// and an unverified email).
+fn usable_confirmed_email(raw: &str) -> Option<String> {
+    validate::email(raw).ok()
 }
 
 /// Exchanges `code`, reads the profile and the confirmed email, and returns
@@ -159,7 +164,7 @@ pub async fn exchange(
     .ok()
     .and_then(|envelope| envelope.data)
     .and_then(|data| data.confirmed_email)
-    .filter(|email| !email.trim().is_empty());
+    .and_then(|email| usable_confirmed_email(&email));
 
     let email_verified = confirmed.is_some();
     Ok(Identity {
@@ -170,4 +175,34 @@ pub async fn exchange(
         name: profile.name,
         image: profile.profile_image_url,
     })
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn ids_are_one_to_twenty_digits() {
+        assert!(plausible_id("1"));
+        assert!(plausible_id("12345678901234567890"));
+        assert!(!plausible_id(""));
+        assert!(!plausible_id("123456789012345678901"));
+        assert!(!plausible_id("12a"));
+        assert!(!plausible_id("AbC"));
+        assert!(!plausible_id("1_2"));
+        assert!(!plausible_id("-1"));
+        assert!(!plausible_id("١٢٣"));
+    }
+
+    #[test]
+    fn confirmed_email_must_pass_the_email_rule() {
+        assert_eq!(
+            usable_confirmed_email("  Me@Example.COM ").as_deref(),
+            Some("me@example.com")
+        );
+        assert_eq!(usable_confirmed_email("not an email"), None);
+        assert_eq!(usable_confirmed_email("   "), None);
+        assert_eq!(usable_confirmed_email("a@b"), None);
+        assert_eq!(usable_confirmed_email("é@example.com"), None);
+    }
 }

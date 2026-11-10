@@ -2,7 +2,7 @@ use std::net::SocketAddr;
 use std::process::ExitCode;
 use std::sync::Arc;
 
-use quesar_server::auth::AuthServices;
+use quesar_server::auth::{AuthServices, check_schema};
 use quesar_server::config::Environment;
 use quesar_server::readiness::runtime_readiness;
 use quesar_server::trace::request_span;
@@ -53,6 +53,7 @@ async fn run() -> Result<(), Box<dyn std::error::Error>> {
     let auth = match config.environment.read("DATABASE_URL") {
         Some(url) => {
             let pool = quesar_db::connect(url).await?;
+            check_schema(&pool).await?;
             Some(AuthServices::build(
                 pool,
                 &config,

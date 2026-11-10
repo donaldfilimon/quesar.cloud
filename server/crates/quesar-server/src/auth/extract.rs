@@ -155,7 +155,8 @@ impl FromRequestParts<Arc<AppState>> for SameOriginOrApple {
         state: &Arc<AppState>,
     ) -> Result<Self, ApiError> {
         let services = state.auth_services()?;
-        let apple = services.config.providers.apple.is_some();
+        // Only while Apple sign-in is usable (configured and its key works).
+        let apple = services.apple().is_some();
         // A nested router sees the path without its mount prefix; the
         // exemption is defined on the full path, so read the original.
         let path = parts

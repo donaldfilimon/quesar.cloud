@@ -719,3 +719,85 @@ async fn the_callback_is_rate_limited_before_any_work() {
     assert_eq!(limited, 1, "the 101st request in the window is limited");
     h.cleanup().await;
 }
+
+fn binding_cleared(reply: &Reply) -> bool {
+    !set_cookie_named(reply, BINDING_COOKIE).is_empty()
+}
+
+#[tokio::test]
+async fn only_a_consumed_flow_clears_the_binding_cookie() {
+    let h = OAuth::new().await;
+    let started = h.start(&json!({})).await;
+
+    // Cross-site navigations that find no flow leave the victim's binding alone.
+    for query in ["state=unknown", "code=x", ""] {
+        let reply = h.callback(query, Some(&started.binding)).await;
+        assert_eq!(location(&reply), "/login?error=state_not_found", "{query}");
+        assert!(
+            !binding_cleared(&reply),
+            "{query}: {:?}",
+            reply.set_cookies()
+        );
+        assert!(reply.set_cookies().is_empty(), "{query}");
+    }
+    // The flow is still there and completes, and then the cookie is cleared.
+    h.issue(&started.nonce);
+    let reply = h.finish(&started).await;
+    assert_eq!(location(&reply), "/console");
+    assert!(binding_cleared(&reply));
+
+    // A flow that is consumed but refused (wrong provider) also clears it.
+    let started = h.start(&json!({})).await;
+    let reply = h
+        .callback_on(
+            "twitter",
+            &format!("code={CODE}&state={}", started.state),
+            Some(&started.binding),
+        )
+        .await;
+    assert_eq!(location(&reply), "/login?error=state_mismatch");
+    assert!(binding_cleared(&reply));
+    h.cleanup().await;
+}
+
+#[tokio::test]
+async fn google_sign_in_ends_the_presented_session_only_on_success() {
+    let h = OAuth::new().await;
+    let up = h
+        .post(
+            "/sign-up",
+            &json!({ "name": "N", "email": "other@example.com", "password": "synthetic-password-2026" }),
+            &[],
+        )
+        .await;
+    let prior = up.session_cookie().unwrap();
+    assert_eq!(h.count("auth_sessions").await, 1);
+
+    // A refused attempt (provider error) keeps it.
+    let started = h.start(&json!({})).await;
+    let cookie = format!("{}; {prior}", started.binding);
+    let reply = h
+        .callback(
+            &format!("error=access_denied&state={}", started.state),
+            Some(&cookie),
+        )
+        .await;
+    assert_error(&reply, "/login?", "access_denied");
+    assert_eq!(h.get_session(&prior).await.status, StatusCode::OK);
+    assert_ne!(h.get_session(&prior).await.result(), Value::Null);
+
+    // A good one replaces it.
+    let started = h.start(&json!({})).await;
+    h.issue(&started.nonce);
+    let cookie = format!("{}; {prior}", started.binding);
+    let reply = h
+        .callback(
+            &format!("code={CODE}&state={}", started.state),
+            Some(&cookie),
+        )
+        .await;
+    assert_eq!(location(&reply), "/console", "{}", reply.text());
+    assert_eq!(h.get_session(&prior).await.result(), Value::Null);
+    assert_eq!(h.count("auth_sessions").await, 1);
+    h.cleanup().await;
+}

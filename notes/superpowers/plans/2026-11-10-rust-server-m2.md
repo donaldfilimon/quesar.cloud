@@ -589,7 +589,7 @@ Shorthand in the Checks column:
 - **SO**: `SameOrigin` (403 `CrossSiteRequestError`).
 - **FM**: `FetchMetadata` (403).
 - **AU**: `AuthUser` (401 `UnauthorizedError`).
-- **RL-a / RL-g**: the `auth` / `auth-general` bucket (429 `RateLimitedError`).
+- **RL-a / RL-g**: the `auth` / `auth-general` bucket (429 `RateLimitedError`). RL-a counts per route and client address (`AuthServices::limit_route`: `sign-up`, `sign-in`, `oauth-start`, `passkey-verify`, each 3 per 10 s), as Better Auth keys its rule by IP plus path; `/delete-account` counts per user id. RL-g counts per client address or per user, as the route says.
 - Every route except `/methods` can answer 503 `AuthUnavailableError` (`AUTH_UNAVAILABLE`): always without a database, and, when `VITE_AUTH_ENABLED=false`, for every route that could issue a session (sign-up, sign-in, OAuth start and callback, passkey sign-in). Routes that only need a session (`/sign-out`, `/session`, `/sessions*`, `/profile`, `/delete-account`, `/passkeys`, `/passkey/register/*`, `/passkey/delete`) stay reachable when sign-in is off and answer 401, because no session can exist; `/methods` then reports `{email:false, passkey:false, social:[]}`.
 - Any JSON body that is malformed, has a wrong field type or is `null` answers 400 `INVALID_BODY`; a missing field takes its empty default (so `{}` to `/sign-in` is `INVALID_EMAIL`). A body over 16 KiB answers 413 `PAYLOAD_TOO_LARGE`.
 - An unknown path under `/api/auth` is 404 `NOT_FOUND`; a known path with another method is 405 `METHOD_NOT_ALLOWED` with an `Allow` header. Both are JSON envelopes.
@@ -599,24 +599,24 @@ Shorthand in the Checks column:
 | Method, path | Checks | Request | Result | Errors (status, code) |
 | --- | --- | --- | --- | --- |
 | GET `/methods` | FM, RL-g | — | `{email, passkey, social: ("google"\|"apple"\|"twitter")[]}` | — |
-| POST `/sign-up` | SO, RL-a | `{name, email, password}` | `{user, session}` + cookie | 400 `INVALID_EMAIL`, `PASSWORD_TOO_SHORT`, `PASSWORD_TOO_LONG`, `ValidationError` (name); 422 `USER_ALREADY_EXISTS` |
+| POST `/sign-up` | SO, RL-a | `{name, email, password}` | `{user, session}` + cookie | 400 `INVALID_EMAIL` (also for any `.invalid` address, X's placeholder domain included), `PASSWORD_TOO_SHORT`, `PASSWORD_TOO_LONG`, `ValidationError` (name); 422 `USER_ALREADY_EXISTS` |
 | POST `/sign-in` | SO, RL-a | `{email, password}` | `{user, session}` + cookie | 400 `INVALID_EMAIL`, `PASSWORD_TOO_LONG`; 401 `INVALID_EMAIL_OR_PASSWORD` |
 | POST `/sign-out` | SO, RL-g | `{}` | `{}` + cookie cleared | — |
-| GET `/session` | FM, RL-g | — | `{user, session}` or `null` (cookie re-sent on refresh) | — |
+| GET `/session` | FM, RL-g | — | `{user, session}` or `null` (cookie re-sent when the session was refreshed) | — |
 | POST `/profile` | SO, AU, RL-g | `{name}` | `{user}` | 400 `ValidationError` |
 | GET `/sessions` | AU, RL-g | — | `{sessions: [{id, createdAt, expiresAt, ipAddress, userAgent, current}]}` | 403 `SESSION_NOT_FRESH` |
 | POST `/sessions/revoke` | SO, AU, RL-g | `{id}` | `{}` | 404 `NOT_FOUND` |
 | POST `/sessions/revoke-others` | SO, AU, RL-g | `{}` | `{revoked: number}` | — |
 | POST `/oauth/{google\|apple\|twitter}/start` | SO, RL-a | `{callbackURL?, errorCallbackURL?}` | `{url}` + binding cookie | 404 `PROVIDER_NOT_CONFIGURED` |
 | GET `/callback/{google\|twitter\|apple}` | FM (navigation passes), RL-g | query `code`, `state`, `error` | 303 to the callback path + session cookie, or 303 to the error path `?error=` one of `access_denied`, `provider_email_unverified`, `state_not_found`, `state_mismatch`, `expired`, `no_code`, `email_not_found`, `account_not_linked`, `failed` | — |
-| POST `/callback/apple` | **none** (sole exemption; it applies only when Apple is configured, on this exact path, with Apple's origin or `Sec-Fetch-Site: cross-site`; otherwise 403), RL-g | form `code`, `state`, `user`, `error` (≤ 16 KiB, `application/x-www-form-urlencoded`) | 303 to `GET /callback/apple?state=…` (nobody is signed in, the flow is not consumed) | 413 `PAYLOAD_TOO_LARGE`; 404 `PROVIDER_NOT_CONFIGURED`; every other outcome (rate limit, wrong content type, unknown, expired or already-posted state) is a 303 to the error path with a fixed `?error=` code, never a 429 JSON |
+| POST `/callback/apple` | **none** (sole exemption; it applies only while Apple sign-in is usable (configured and its key works), on this exact path, with Apple's origin or `Sec-Fetch-Site: cross-site`; otherwise 403), RL-g | form `code`, `state`, `user`, `error` (≤ 16 KiB, `application/x-www-form-urlencoded`) | 303 to `GET /callback/apple?state=…` (nobody is signed in, the flow is not consumed) | 413 `PAYLOAD_TOO_LARGE` (the auth envelope, `no-store`); 403 `CrossSiteRequestError` when Apple is not usable; 404 `PROVIDER_NOT_CONFIGURED`; every other outcome (rate limit, wrong content type, unknown, expired or already-posted state) is a 303 to the error path with a fixed `?error=` code, never a 429 JSON |
 | POST `/passkey/register/options` | SO, AU, RL-g | `{}` | `{flowId, options}` (simplewebauthn `optionsJSON`) | 403 `SESSION_NOT_FRESH`; 404 `PASSKEYS_NOT_AVAILABLE` |
-| POST `/passkey/register/verify` | SO, AU, RL-g | `{flowId, credential, name?}` | `{passkey: {id, name, deviceType, backedUp, createdAt}}` | 400 `CHALLENGE_NOT_FOUND`, `PASSKEY_REGISTRATION_FAILED` (also a duplicate credential or a registration begun under a stale user handle); 404 `PASSKEYS_NOT_AVAILABLE` |
-| POST `/passkey/authenticate/options` | SO, RL-a | `{}` | `{flowId, options}` | 404 `PASSKEYS_NOT_AVAILABLE` |
+| POST `/passkey/register/verify` | SO, AU, RL-g | `{flowId, credential, name?}` | `{passkey: {id, name, deviceType, backedUp, createdAt}}` | 403 `SESSION_NOT_FRESH`; 400 `CHALLENGE_NOT_FOUND`, `PASSKEY_REGISTRATION_FAILED` (also a duplicate credential or a registration begun under a stale user handle); 404 `PASSKEYS_NOT_AVAILABLE` |
+| POST `/passkey/authenticate/options` | SO, RL-g (by client address; it only makes a challenge) | `{}` | `{flowId, options}` | 404 `PASSKEYS_NOT_AVAILABLE` |
 | POST `/passkey/authenticate/verify` | SO, RL-a | `{flowId, credential}` | `{user, session}` + cookie | 400 `CHALLENGE_NOT_FOUND`; 401 `PASSKEY_AUTHENTICATION_FAILED`; 404 `PASSKEYS_NOT_AVAILABLE` |
 | GET `/passkeys` | AU, RL-g | — | `{passkeys: [...]}` | — |
 | POST `/passkey/delete` | SO, AU, RL-g | `{id}` | `{}` | 404 `NOT_FOUND` |
-| POST `/delete-account` | SO, AU, RL-a | `{password?}` | `{}` + cookie cleared | 400 `INVALID_PASSWORD`, `CREDENTIAL_ACCOUNT_NOT_FOUND`, `SESSION_EXPIRED`; 500 `DELETION_FAILED`; 503 `DELETION_UNAVAILABLE` (nothing deleted: the commerce cleanup configuration is partial, or the user has a workspace connection and no revoker is installed yet) |
+| POST `/delete-account` | SO, AU, RL-a | `{password?}` | `{}` + cookie cleared | 400 `INVALID_PASSWORD`, `PASSWORD_TOO_LONG`, `CREDENTIAL_ACCOUNT_NOT_FOUND`, `SESSION_EXPIRED`; 500 `DELETION_FAILED`; 503 `DELETION_UNAVAILABLE` (nothing deleted: the commerce cleanup configuration is partial, or complete (`WDBX_BINARY` plus the three `WDBX_COMMERCE_*` as absolute paths) because the store cannot be reached before M6, or the user has a workspace connection and no revoker is installed yet; deletion works only with no `WDBX_COMMERCE_*` set) |
 
 Account linking, as built:
 - X never links to an existing user by email, and a user created by X is never `emailVerified`, even when X returns a confirmed address (Better Auth marks such users verified; that would let an X account pre-hijack a local one). A colliding address gives `account_not_linked`.
@@ -642,7 +642,7 @@ Each has the default implementers follow unless Donald decides otherwise.
 8. **PKCE verifier and nonce are stored unsealed** in `auth_flows` for 10 minutes. *Default:* accept; sealing would make OAuth depend on `APP_ENCRYPTION_KEY`.
 9. **Apple secret lifetime.** *Default:* re-mint every 30 days in-process (Task 7), stricter than the TypeScript.
 10. **Shared-schema drift until M8.** Better Auth and Rust both write `"user"`/`"account"`. Never point both servers at one database; say so in `server/README.md`.
-11. **Session cookie refresh happens only on `GET /session`.** Other routes extend `expires_at` in the database but do not re-send the cookie. The client calls `/session` on every page load, so the browser's cookie never lags by more than a day. *Default:* accept.
+11. **The session cookie is re-sent on any `/api/auth` response whose authenticated session was refreshed** (the reissue layer), not only on `GET /session`. Routes outside `/api/auth` extend nothing and send no cookie. The client calls `/session` on every page load, so the browser's cookie never lags by more than a day. *Default:* accept.
 
 ### Critical Files for Implementation
 - /home/user/quesar.cloud/src/lib/auth/server.ts

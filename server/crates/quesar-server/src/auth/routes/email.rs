@@ -80,7 +80,7 @@ pub async fn sign_up(
 ) -> Result<Response, ApiError> {
     let services = state.auth_services()?;
     services
-        .limit(Bucket::AuthCredential, &ip.subject(services))
+        .limit_route(Bucket::AuthCredential, "sign-up", &ip.subject(services))
         .await?;
     let input: SignUpBody = json::read(&headers, body).await?;
     let (name, email) =
@@ -126,7 +126,7 @@ pub async fn sign_in(
 ) -> Result<Response, ApiError> {
     let services = state.auth_services()?;
     services
-        .limit(Bucket::AuthCredential, &ip.subject(services))
+        .limit_route(Bucket::AuthCredential, "sign-in", &ip.subject(services))
         .await?;
     let input: SignInBody = json::read(&headers, body).await?;
     let email = validate::email(&input.email).map_err(invalid)?;
@@ -158,11 +158,7 @@ pub async fn sign_in(
         return Err(invalid_credentials());
     };
 
-    // Never reuse a presented token, and drop the one the client held so a
-    // planted cookie cannot outlive the sign-in.
-    if let Some(presented) = session::read_cookie(&headers) {
-        session::delete_by_token(&services.pool, &presented).await?;
-    }
+    // `issue_session` also drops the session the client presented.
     let tx = services.pool.begin().await.map_err(AuthError::from)?;
     let issued = issue_session(services, tx, &user.id, &ip.0, &headers).await?;
     with_cookie(

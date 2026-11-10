@@ -68,6 +68,17 @@ fn new_user_name(identity: &Identity, email: &str) -> String {
     local.trim().chars().take(DISPLAY_NAME_MAX).collect()
 }
 
+/// Longest profile image URL kept, in bytes.
+const IMAGE_MAX: usize = 2048;
+
+/// A provider's profile image URL is kept only if it is an https URL of at
+/// most 2048 bytes; anything else is stored as NULL.
+fn storable_image(image: Option<&str>) -> Option<&str> {
+    let image = image?;
+    let url = url::Url::parse(image).ok()?;
+    (image.len() <= IMAGE_MAX && url.scheme() == "https").then_some(image)
+}
+
 async fn lock(tx: &mut PgConnection, key: &str) -> Result<(), AuthError> {
     sqlx::query("select pg_advisory_xact_lock(hashtextextended($1, 0))")
         .bind(key)
@@ -233,7 +244,7 @@ pub async fn resolve(
     .bind(new_user_name(identity, &email))
     .bind(&email)
     .bind(local_verified)
-    .bind(identity.image.as_deref())
+    .bind(storable_image(identity.image.as_deref()))
     .bind(now)
     .fetch_optional(&mut *tx)
     .await?;
@@ -245,4 +256,25 @@ pub async fn resolve(
         record_verification(tx, &account_id, &email, now).await?;
     }
     Ok(Outcome::SignedIn(user))
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn image_must_be_a_short_https_url() {
+        let ok = "https://pbs.twimg.com/profile_images/1/a.jpg";
+        assert_eq!(storable_image(Some(ok)), Some(ok));
+        assert_eq!(storable_image(None), None);
+        assert_eq!(storable_image(Some("http://example.com/a.jpg")), None);
+        assert_eq!(storable_image(Some("javascript:alert(1)")), None);
+        assert_eq!(storable_image(Some("data:image/png;base64,AAAA")), None);
+        assert_eq!(storable_image(Some("not a url")), None);
+        let long = format!("https://example.com/{}", "a".repeat(2048));
+        assert_eq!(storable_image(Some(&long)), None);
+        let edge = format!("https://example.com/{}", "a".repeat(2048 - 20));
+        assert_eq!(edge.len(), 2048);
+        assert_eq!(storable_image(Some(&edge)), Some(edge.as_str()));
+    }
 }

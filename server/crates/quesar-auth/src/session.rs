@@ -186,6 +186,16 @@ pub async fn delete_by_token(pool: &PgPool, token: &str) -> Result<bool, AuthErr
     Ok(result.rows_affected() > 0)
 }
 
+/// As [`delete_by_token`] inside a transaction, so the old session goes only
+/// if the new one is committed with it.
+pub async fn delete_by_token_in(tx: &mut PgConnection, token: &str) -> Result<bool, AuthError> {
+    let result = sqlx::query("delete from auth_sessions where token_hash = $1")
+        .bind(token_hash(token).to_vec())
+        .execute(&mut *tx)
+        .await?;
+    Ok(result.rows_affected() > 0)
+}
+
 /// The user's unexpired sessions, newest first.
 pub async fn list(
     pool: &PgPool,

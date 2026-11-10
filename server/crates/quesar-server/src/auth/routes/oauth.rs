@@ -107,7 +107,7 @@ pub async fn start(
 ) -> Result<Response, ApiError> {
     let services = state.auth_services()?;
     services
-        .limit(Bucket::AuthCredential, &ip.subject(services))
+        .limit_route(Bucket::AuthCredential, "oauth-start", &ip.subject(services))
         .await?;
     let configured = configured(services, &name).ok_or_else(not_configured)?;
     let provider = configured.id();
@@ -236,34 +236,54 @@ pub async fn callback(
         tracing::warn!(%error, "oauth callback limited");
         return into_response(no_flow("failed"), false);
     }
-    let finish = run(services, &name, parse_query(&uri), &headers, &ip.0).await;
-    into_response(finish, true)
+    let (finish, consumed) = run(services, &name, parse_query(&uri), &headers, &ip.0).await;
+    // The binding cookie is cleared only when a flow was consumed: a request
+    // with no state, an unknown one or a failed lookup (for example a
+    // cross-site link to `?state=x`) must not end a sign-in in progress.
+    into_response(finish, consumed)
 }
 
+/// Runs the callback; the flag is whether a flow row was consumed.
 async fn run(
     services: &AuthServices,
     name: &str,
     query: Query,
     headers: &HeaderMap,
     ip: &str,
-) -> Finish {
+) -> (Finish, bool) {
     let now = services.clock.now();
     let Some(state) = query
         .state
         .as_deref()
         .filter(|state| !state.is_empty() && state.len() <= STATE_MAX_LEN)
     else {
-        return no_flow("state_not_found");
+        return (no_flow("state_not_found"), false);
     };
     // One statement takes the row out: a replay finds nothing.
     let flow = match flow::consume(&services.pool, state, now).await {
         Ok(Some(flow)) => flow,
-        Ok(None) => return no_flow("state_not_found"),
+        Ok(None) => return (no_flow("state_not_found"), false),
         Err(error) => {
             tracing::error!(%error, "oauth flow lookup failed");
-            return no_flow("failed");
+            return (no_flow("failed"), false);
         }
     };
+    (
+        finish_flow(services, &flow, name, &query, headers, ip, now).await,
+        true,
+    )
+}
+
+/// Everything after the flow row is taken out.
+async fn finish_flow(
+    services: &AuthServices,
+    flow: &Flow,
+    name: &str,
+    query: &Query,
+    headers: &HeaderMap,
+    ip: &str,
+    now: time::OffsetDateTime,
+) -> Finish {
     let error_path = paths::safe_error_callback(Some(&flow.error_callback));
     let refuse = |code: &str| failed(&error_path, code);
 
@@ -310,7 +330,7 @@ async fn run(
         return refuse("failed");
     }
 
-    let identity = match exchange(services, &flow, code, name, now).await {
+    let identity = match exchange(services, flow, code, name, now).await {
         Ok(identity) => identity,
         Err(error) => {
             tracing::warn!(%error, "oauth code exchange failed");

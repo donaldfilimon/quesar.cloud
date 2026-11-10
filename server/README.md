@@ -92,7 +92,7 @@ optional variable switches that feature off, it never falls back to a guess.
 | `APPLE_CLIENT_ID`, `APPLE_TEAM_ID`, `APPLE_KEY_ID`, `APPLE_PRIVATE_KEY` | No Apple sign-in (all four are needed; an unusable key is logged and turns Apple off). |
 | `TWITTER_CLIENT_ID`/`_SECRET` | No X sign-in. |
 | `ADMIN_EMAILS` | Nobody is admin. |
-| `WDBX_COMMERCE_DIRECTORY`, `WDBX_COMMERCE_CONFIG`, `WDBX_COMMERCE_HOST_KEY` (and `WDBX_BINARY`) | If any `WDBX_COMMERCE_*` is set but the three are not all present, account deletion answers 503 `DELETION_UNAVAILABLE`. |
+| `WDBX_COMMERCE_DIRECTORY`, `WDBX_COMMERCE_CONFIG`, `WDBX_COMMERCE_HOST_KEY` (and `WDBX_BINARY`) | Account deletion answers 503 `DELETION_UNAVAILABLE` both when any `WDBX_COMMERCE_*` is set but the three are not all present, and when the configuration is complete (`WDBX_BINARY` plus the three as absolute paths), because the commerce store cannot be reached before M6. Deletion works only with none of the `WDBX_COMMERCE_*` variables set and no workspace connection on the user; `WDBX_BINARY` alone is irrelevant. |
 
 Provider redirect URIs are `/api/auth/callback/google`, `/api/auth/callback/apple`
 and `/api/auth/callback/twitter` on the public origin. They are unchanged from

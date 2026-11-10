@@ -49,6 +49,23 @@ fn sign_up_validates_email_then_password_then_name() {
     );
 }
 
+#[test]
+fn sign_up_refuses_the_invalid_tld_and_the_x_placeholder_domain() {
+    for email in [
+        "123@twitter.placeholder.invalid",
+        "123@Twitter.Placeholder.INVALID",
+        "a@example.invalid",
+        "a@b.c.invalid",
+    ] {
+        assert_eq!(
+            email_password::validate_sign_up("Ada", email, "long-enough-1"),
+            Err(ValidationError::InvalidEmail),
+            "{email}"
+        );
+    }
+    assert!(email_password::validate_sign_up("Ada", "a@invalid.example", "long-enough-1").is_ok());
+}
+
 #[tokio::test]
 async fn creating_a_user_writes_the_user_and_a_credential_account() {
     let db = migrated().await;
