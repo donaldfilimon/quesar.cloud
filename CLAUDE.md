@@ -12,6 +12,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 bun is the package manager (`bun.lock`; there is no `package-lock.json`). It must be Bun >= 1.4.2 (`packageManager`/`engines.bun`): `bun.lock` is lockfileVersion 2, which older Bun rejects with "Unknown lockfile version". In Claude Code on the web, `.claude/hooks/session-start.sh` upgrades an older Bun and runs `bun install --frozen-lockfile` at session start. The tools themselves run on Node (>= 24): use `bun run <script>`, never `bun --bun`, and never bare `bun test` (that is Bun's own runner, not vitest).
 
+For Codex Cloud, add `QUESAR_CODEX_CLOUD_BOOTSTRAP=1` to the cloud environment if it runs project SessionStart hooks. The hook runs on fresh startup and shares the Claude Bun bootstrap. Put the global npm bin directory ahead of older Bun installations on the cloud environment's `PATH` so the upgraded Bun remains available after the hook exits. For cloud environments that prepare dependencies through a setup script, run `bun install --frozen-lockfile` there with Bun >= 1.4.2.
+
 ```bash
 bun install          # --frozen-lockfile in the session-start hook
 bun run routes       # regenerate app/ and src/framework/route-registry.gen.ts from src/routes (the build only checks them)
