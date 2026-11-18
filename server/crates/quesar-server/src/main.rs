@@ -8,6 +8,7 @@ use quesar_server::config::Environment;
 use quesar_server::readiness::runtime_readiness;
 use quesar_server::trace::request_span;
 use quesar_server::{Config, router_with_public};
+use quesar_services::catalog::Catalog;
 use tokio::net::TcpListener;
 use tower_http::trace::TraceLayer;
 
@@ -44,6 +45,7 @@ async fn shutdown_signal() {
 
 async fn run() -> Result<(), Box<dyn std::error::Error>> {
     let config = Config::from_env(Environment::from_process())?;
+    Catalog::embedded()?;
     let readiness = runtime_readiness(&config.environment, config.production);
     if !readiness.ready {
         tracing::warn!(reasons = ?readiness.reasons, "configuration is not ready; refusing traffic");

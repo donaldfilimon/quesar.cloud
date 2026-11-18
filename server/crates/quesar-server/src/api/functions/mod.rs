@@ -2,6 +2,7 @@
 
 pub mod config;
 pub mod inquiries;
+mod workspace;
 
 use quesar_services::rate_limit::Bucket;
 
@@ -19,5 +20,5 @@ pub async fn admit<'a>(state: &'a AppState, auth: &AuthUser) -> Result<&'a AuthS
 
 /// Mounts every function of this module.
 pub fn register(router: FnRouter) -> FnRouter {
-    inquiries::register(config::register(router))
+    workspace::register(inquiries::register(config::register(router)))
 }

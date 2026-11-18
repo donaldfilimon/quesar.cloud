@@ -11,6 +11,7 @@ use crate::{
         SendInquiryInput, TurnstileConfig,
     },
     quasar::GetQuasarDefaultOrigin,
+    workspace::{AddNote, AddNoteInput, DeleteNote, DeleteNoteInput, FieldNote, ListNotes},
 };
 
 /// Defaults, never the environment: the export must not depend on `TS_RS_*`.
@@ -40,6 +41,9 @@ fn functions() -> Vec<Entry> {
         entry::<GetTurnstileConfig>(),
         entry::<GetQuasarDefaultOrigin>(),
         entry::<GetCommerceReadiness>(),
+        entry::<ListNotes>(),
+        entry::<AddNote>(),
+        entry::<DeleteNote>(),
     ]
 }
 
@@ -94,6 +98,9 @@ pub fn files() -> Vec<(String, String)> {
     one::<PaymentMode>(&mut out);
     one::<CommerceStorage>(&mut out);
     one::<CommerceReadiness>(&mut out);
+    one::<AddNoteInput>(&mut out);
+    one::<DeleteNoteInput>(&mut out);
+    one::<FieldNote>(&mut out);
     let idx = index(&functions(), &out);
     out.push(("index.ts".to_string(), idx));
     out
@@ -118,7 +125,7 @@ mod tests {
     #[test]
     fn function_names_are_well_formed_and_unique() {
         let names = function_names();
-        assert_eq!(names.len(), 4);
+        assert_eq!(names.len(), 7);
         for name in &names {
             assert!(valid_name(name), "bad function name {name}");
         }

@@ -12,6 +12,7 @@ pub mod commerce;
 pub mod export;
 pub mod inquiries;
 pub mod quasar;
+pub mod workspace;
 
 /// One server function: its wire name and its request and result types.
 pub trait ServerFunction {

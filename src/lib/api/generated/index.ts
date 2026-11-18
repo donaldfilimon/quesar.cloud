@@ -11,6 +11,9 @@ import type { TurnstileConfig } from "./TurnstileConfig";
 import type { PaymentMode } from "./PaymentMode";
 import type { CommerceStorage } from "./CommerceStorage";
 import type { CommerceReadiness } from "./CommerceReadiness";
+import type { AddNoteInput } from "./AddNoteInput";
+import type { DeleteNoteInput } from "./DeleteNoteInput";
+import type { FieldNote } from "./FieldNote";
 
 export type { ErrorBody };
 export type { NoInput };
@@ -22,6 +25,9 @@ export type { TurnstileConfig };
 export type { PaymentMode };
 export type { CommerceStorage };
 export type { CommerceReadiness };
+export type { AddNoteInput };
+export type { DeleteNoteInput };
+export type { FieldNote };
 
 /** Every server function: its input and its result, keyed by wire name. */
 export interface ServerFunctions {
@@ -29,6 +35,9 @@ export interface ServerFunctions {
   "inquiries.getTurnstileConfig": { input: NoInput; result: TurnstileConfig };
   "quasar.getQuasarDefaultOrigin": { input: NoInput; result: string | null };
   "commerce.getCommerceReadiness": { input: NoInput; result: CommerceReadiness };
+  "workspace.listNotes": { input: NoInput; result: Array<FieldNote> };
+  "workspace.addNote": { input: AddNoteInput; result: null };
+  "workspace.deleteNote": { input: DeleteNoteInput; result: null };
 }
 
 export type ServerFunctionName = keyof ServerFunctions;
