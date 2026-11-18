@@ -13,7 +13,7 @@ use axum::routing::get;
 use axum::{Json, Router};
 use quesar_services::rate_limit::ProxyTrust;
 
-use crate::api::{self, ApiError, FnRouter, PublicServices};
+use crate::api::{self, ApiError, FnRouter, PublicServices, SignedInServices};
 use crate::auth::{self, AuthServices};
 use crate::config::Config;
 use crate::csp::PageHeaders;
@@ -33,6 +33,7 @@ pub struct AppState {
     pub(crate) auth: Option<AuthServices>,
     /// What public endpoints need and no database provides.
     pub(crate) public: PublicServices,
+    signed_in: SignedInServices,
     /// `TRUSTED_PROXY`, for the client address.
     pub(crate) proxy_trust: ProxyTrust,
 }
@@ -47,18 +48,32 @@ impl AppState {
         auth: Option<AuthServices>,
         public: PublicServices,
     ) -> Self {
+        Self::with_services(config, auth, public, SignedInServices::build(config))
+    }
+
+    fn with_services(
+        config: &Config,
+        auth: Option<AuthServices>,
+        public: PublicServices,
+        signed_in: SignedInServices,
+    ) -> Self {
         Self {
             site_dir: config.site_dir.clone(),
             readiness: runtime_readiness(&config.environment, config.production),
             page_headers: PageHeaders::new(config.production),
             auth,
             public,
+            signed_in,
             proxy_trust: config.proxy_trust,
         }
     }
 }
 
 impl AppState {
+    pub fn signed_in(&self) -> &SignedInServices {
+        &self.signed_in
+    }
+
     /// The database-backed services, for a handler that degrades without them
     /// instead of failing (contrast [`Self::auth_services`], which is a 503).
     pub fn database(&self) -> Option<&AuthServices> {
@@ -162,7 +177,24 @@ pub fn router_with_functions(
     public: PublicServices,
     functions: FnRouter,
 ) -> Router {
-    let state = Arc::new(AppState::with_public(config, auth, public));
+    router_with_services(
+        config,
+        auth,
+        public,
+        SignedInServices::build(config),
+        functions,
+    )
+}
+
+/// As [`router_with_functions`], with signed-in services supplied by the caller.
+pub fn router_with_services(
+    config: &Config,
+    auth: Option<AuthServices>,
+    public: PublicServices,
+    signed_in: SignedInServices,
+    functions: FnRouter,
+) -> Router {
+    let state = Arc::new(AppState::with_services(config, auth, public, signed_in));
     let functions = api::routes(&state, functions);
     Router::new()
         .route(READINESS_PATH, get(readiness))

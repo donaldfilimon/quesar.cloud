@@ -29,6 +29,25 @@ pub struct ErrorBody {
     pub message: String,
 }
 
+/// A domain refusal returned inside a successful function response.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, TS)]
+pub struct Refusal<R> {
+    #[ts(type = "false")]
+    ok: bool,
+    pub reason: R,
+    pub message: String,
+}
+
+impl<R> Refusal<R> {
+    pub fn new(reason: R, message: impl Into<String>) -> Self {
+        Self {
+            ok: false,
+            reason,
+            message: message.into(),
+        }
+    }
+}
+
 /// The input of a function that takes no argument. It serialises as `null`,
 /// and the TypeScript side sees the type `null`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, TS)]
@@ -43,6 +62,16 @@ mod tests {
         inquiries::{InquiryCode, InquiryField, InquiryResult, SendInquiryInput, TurnstileConfig},
     };
     use serde_json::{Value, json};
+
+    #[test]
+    fn refusal_serializes_and_declares_literal_false() {
+        let refusal = Refusal::new("denied".to_owned(), "Try again.".to_owned());
+        assert_eq!(
+            serde_json::to_value(refusal).unwrap(),
+            json!({"ok": false, "reason": "denied", "message": "Try again."}),
+        );
+        assert!(Refusal::<String>::decl(&ts_rs::Config::new()).contains("ok: false"));
+    }
 
     fn round_trip<T: Serialize + DeserializeOwned + PartialEq + std::fmt::Debug>(
         literal: &str,

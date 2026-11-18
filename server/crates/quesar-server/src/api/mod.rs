@@ -26,6 +26,7 @@ use axum::middleware::{self, Next};
 use axum::response::Response;
 use quesar_auth::AuthConfig;
 use quesar_contract::commerce::CommerceReadiness;
+use quesar_services::crypto::SealingKeys;
 use quesar_services::turnstile::TurnstileConfig;
 
 pub use error::ApiError;
@@ -88,6 +89,22 @@ impl PublicServices {
             quasar_default_origin: functions::config::quasar_default_origin(environment),
             commerce: functions::config::commerce(environment),
             http,
+        }
+    }
+}
+
+/// Startup configuration used by signed-in functions.
+pub struct SignedInServices {
+    pub sealing: SealingKeys,
+}
+
+impl SignedInServices {
+    pub fn build(config: &Config) -> Self {
+        Self {
+            sealing: SealingKeys::new(
+                config.environment.read("APP_ENCRYPTION_KEY"),
+                config.environment.read("APP_ENCRYPTION_KEY_PREVIOUS"),
+            ),
         }
     }
 }

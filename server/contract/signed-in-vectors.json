@@ -1,0 +1,1436 @@
+{
+  "deskLocal": [
+    {
+      "desk": "abbey",
+      "prompt": "semantic routing",
+      "result": {
+        "ok": true,
+        "mode": "local",
+        "desk": "abbey",
+        "text": "Local abbey desk. The model endpoint is not configured, so this stays on the catalog. ABI: Nightly Rust orchestration. Routes persona requests and exposes source-defined tools. Its source workspace requires WDBX. Persona router: Deterministic persona routing. ABI's local routing source selects persona profiles with deterministic rules. Local completion renders persona templates; this does not establish model execution or device selection.",
+        "hits": [
+          {
+            "id": "abi",
+            "title": "ABI",
+            "href": "/architecture?node=abi",
+            "excerpt": "Nightly Rust orchestration. Routes persona requests and exposes source-defined tools. Its source workspace requires WDBX.",
+            "score": 0.5
+          },
+          {
+            "id": "router",
+            "title": "Persona router",
+            "href": "/architecture?node=router",
+            "excerpt": "Deterministic persona routing. ABI's local routing source selects persona profiles with deterministic rules. Local completion renders persona templates; this does not establish model execution or device selection.",
+            "score": 0.5
+          },
+          {
+            "id": "user",
+            "title": "You",
+            "href": "/architecture?node=user",
+            "excerpt": "Operator on a machine you own. Explore browser previews or send a request through a configured server or separately running local service. Each path has its own source and acceptance requirements.",
+            "score": 0
+          },
+          {
+            "id": "quesar",
+            "title": "Quesar",
+            "href": "/architecture?node=quesar",
+            "excerpt": "A browser client for a local website builder. The /quasar screens connect to a separately running service through origin-scoped pairing. The service scaffolds Next.js projects and uses a configured provider for generation. Source implementation does not establish live provider ac",
+            "score": 0
+          }
+        ]
+      }
+    },
+    {
+      "desk": "abbey",
+      "prompt": "xyzzynonmatch",
+      "result": {
+        "ok": true,
+        "mode": "local",
+        "desk": "abbey",
+        "text": "Local abbey desk. The model endpoint is not configured, so this stays on the catalog. Nothing in the on-site catalog matched that wording.",
+        "hits": [
+          {
+            "id": "user",
+            "title": "You",
+            "href": "/architecture?node=user",
+            "excerpt": "Operator on a machine you own. Explore browser previews or send a request through a configured server or separately running local service. Each path has its own source and acceptance requirements.",
+            "score": 0
+          },
+          {
+            "id": "quesar",
+            "title": "Quesar",
+            "href": "/architecture?node=quesar",
+            "excerpt": "A browser client for a local website builder. The /quasar screens connect to a separately running service through origin-scoped pairing. The service scaffolds Next.js projects and uses a configured provider for generation. Source implementation does not establish live provider ac",
+            "score": 0
+          },
+          {
+            "id": "abi",
+            "title": "ABI",
+            "href": "/architecture?node=abi",
+            "excerpt": "Nightly Rust orchestration. Routes persona requests and exposes source-defined tools. Its source workspace requires WDBX.",
+            "score": 0
+          },
+          {
+            "id": "tools",
+            "title": "Tools",
+            "href": "/architecture?node=tools",
+            "excerpt": "Contract-covered plugins and MCP tools. Twelve contract-covered MCP tools including wdbx_query and gpu_status. The optional loopback listener serves MCP 2024-11-05 HTTP+SSE sessions, not Streamable HTTP.",
+            "score": 0
+          }
+        ]
+      }
+    },
+    {
+      "desk": "abbey",
+      "prompt": "a an to",
+      "result": {
+        "ok": true,
+        "mode": "local",
+        "desk": "abbey",
+        "text": "Local abbey desk. The model endpoint is not configured, so this stays on the catalog. Nothing in the on-site catalog matched that wording.",
+        "hits": [
+          {
+            "id": "user",
+            "title": "You",
+            "href": "/architecture?node=user",
+            "excerpt": "Operator on a machine you own. Explore browser previews or send a request through a configured server or separately running local service. Each path has its own source and acceptance requirements.",
+            "score": 0
+          },
+          {
+            "id": "quesar",
+            "title": "Quesar",
+            "href": "/architecture?node=quesar",
+            "excerpt": "A browser client for a local website builder. The /quasar screens connect to a separately running service through origin-scoped pairing. The service scaffolds Next.js projects and uses a configured provider for generation. Source implementation does not establish live provider ac",
+            "score": 0
+          },
+          {
+            "id": "abi",
+            "title": "ABI",
+            "href": "/architecture?node=abi",
+            "excerpt": "Nightly Rust orchestration. Routes persona requests and exposes source-defined tools. Its source workspace requires WDBX.",
+            "score": 0
+          },
+          {
+            "id": "tools",
+            "title": "Tools",
+            "href": "/architecture?node=tools",
+            "excerpt": "Contract-covered plugins and MCP tools. Twelve contract-covered MCP tools including wdbx_query and gpu_status. The optional loopback listener serves MCP 2024-11-05 HTTP+SSE sessions, not Streamable HTTP.",
+            "score": 0
+          }
+        ]
+      }
+    },
+    {
+      "desk": "abbey",
+      "prompt": "DATA, store!",
+      "result": {
+        "ok": true,
+        "mode": "local",
+        "desk": "abbey",
+        "text": "Local abbey desk. The model endpoint is not configured, so this stays on the catalog. Episodes: Signed, content-addressed records. WAL, causal DAGs, witness encoding. Persistence that did not happen is not reported as success.",
+        "hits": [
+          {
+            "id": "memory",
+            "title": "Episodes",
+            "href": "/architecture?node=memory",
+            "excerpt": "Signed, content-addressed records. WAL, causal DAGs, witness encoding. Persistence that did not happen is not reported as success.",
+            "score": 0.5
+          },
+          {
+            "id": "user",
+            "title": "You",
+            "href": "/architecture?node=user",
+            "excerpt": "Operator on a machine you own. Explore browser previews or send a request through a configured server or separately running local service. Each path has its own source and acceptance requirements.",
+            "score": 0
+          },
+          {
+            "id": "quesar",
+            "title": "Quesar",
+            "href": "/architecture?node=quesar",
+            "excerpt": "A browser client for a local website builder. The /quasar screens connect to a separately running service through origin-scoped pairing. The service scaffolds Next.js projects and uses a configured provider for generation. Source implementation does not establish live provider ac",
+            "score": 0
+          },
+          {
+            "id": "abi",
+            "title": "ABI",
+            "href": "/architecture?node=abi",
+            "excerpt": "Nightly Rust orchestration. Routes persona requests and exposes source-defined tools. Its source workspace requires WDBX.",
+            "score": 0
+          }
+        ]
+      }
+    },
+    {
+      "desk": "abbey",
+      "prompt": "KEY",
+      "result": {
+        "ok": true,
+        "mode": "local",
+        "desk": "abbey",
+        "text": "Local abbey desk. The model endpoint is not configured, so this stays on the catalog. Nothing in the on-site catalog matched that wording.",
+        "hits": [
+          {
+            "id": "user",
+            "title": "You",
+            "href": "/architecture?node=user",
+            "excerpt": "Operator on a machine you own. Explore browser previews or send a request through a configured server or separately running local service. Each path has its own source and acceptance requirements.",
+            "score": 0
+          },
+          {
+            "id": "quesar",
+            "title": "Quesar",
+            "href": "/architecture?node=quesar",
+            "excerpt": "A browser client for a local website builder. The /quasar screens connect to a separately running service through origin-scoped pairing. The service scaffolds Next.js projects and uses a configured provider for generation. Source implementation does not establish live provider ac",
+            "score": 0
+          },
+          {
+            "id": "abi",
+            "title": "ABI",
+            "href": "/architecture?node=abi",
+            "excerpt": "Nightly Rust orchestration. Routes persona requests and exposes source-defined tools. Its source workspace requires WDBX.",
+            "score": 0
+          },
+          {
+            "id": "tools",
+            "title": "Tools",
+            "href": "/architecture?node=tools",
+            "excerpt": "Contract-covered plugins and MCP tools. Twelve contract-covered MCP tools including wdbx_query and gpu_status. The optional loopback listener serves MCP 2024-11-05 HTTP+SSE sessions, not Streamable HTTP.",
+            "score": 0
+          }
+        ]
+      }
+    },
+    {
+      "desk": "aviva",
+      "prompt": "semantic routing",
+      "result": {
+        "ok": true,
+        "mode": "local",
+        "desk": "aviva",
+        "text": "Local aviva desk. The model endpoint is not configured, so this stays on the catalog. ABI: Nightly Rust orchestration. Routes persona requests and exposes source-defined tools. Its source workspace requires WDBX. Persona router: Deterministic persona routing. ABI's local routing source selects persona profiles with deterministic rules. Local completion renders persona templates; this does not establish model execution or device selection.",
+        "hits": [
+          {
+            "id": "abi",
+            "title": "ABI",
+            "href": "/architecture?node=abi",
+            "excerpt": "Nightly Rust orchestration. Routes persona requests and exposes source-defined tools. Its source workspace requires WDBX.",
+            "score": 0.5
+          },
+          {
+            "id": "router",
+            "title": "Persona router",
+            "href": "/architecture?node=router",
+            "excerpt": "Deterministic persona routing. ABI's local routing source selects persona profiles with deterministic rules. Local completion renders persona templates; this does not establish model execution or device selection.",
+            "score": 0.5
+          },
+          {
+            "id": "user",
+            "title": "You",
+            "href": "/architecture?node=user",
+            "excerpt": "Operator on a machine you own. Explore browser previews or send a request through a configured server or separately running local service. Each path has its own source and acceptance requirements.",
+            "score": 0
+          },
+          {
+            "id": "quesar",
+            "title": "Quesar",
+            "href": "/architecture?node=quesar",
+            "excerpt": "A browser client for a local website builder. The /quasar screens connect to a separately running service through origin-scoped pairing. The service scaffolds Next.js projects and uses a configured provider for generation. Source implementation does not establish live provider ac",
+            "score": 0
+          }
+        ]
+      }
+    },
+    {
+      "desk": "aviva",
+      "prompt": "xyzzynonmatch",
+      "result": {
+        "ok": true,
+        "mode": "local",
+        "desk": "aviva",
+        "text": "Local aviva desk. The model endpoint is not configured, so this stays on the catalog. Nothing in the on-site catalog matched that wording.",
+        "hits": [
+          {
+            "id": "user",
+            "title": "You",
+            "href": "/architecture?node=user",
+            "excerpt": "Operator on a machine you own. Explore browser previews or send a request through a configured server or separately running local service. Each path has its own source and acceptance requirements.",
+            "score": 0
+          },
+          {
+            "id": "quesar",
+            "title": "Quesar",
+            "href": "/architecture?node=quesar",
+            "excerpt": "A browser client for a local website builder. The /quasar screens connect to a separately running service through origin-scoped pairing. The service scaffolds Next.js projects and uses a configured provider for generation. Source implementation does not establish live provider ac",
+            "score": 0
+          },
+          {
+            "id": "abi",
+            "title": "ABI",
+            "href": "/architecture?node=abi",
+            "excerpt": "Nightly Rust orchestration. Routes persona requests and exposes source-defined tools. Its source workspace requires WDBX.",
+            "score": 0
+          },
+          {
+            "id": "tools",
+            "title": "Tools",
+            "href": "/architecture?node=tools",
+            "excerpt": "Contract-covered plugins and MCP tools. Twelve contract-covered MCP tools including wdbx_query and gpu_status. The optional loopback listener serves MCP 2024-11-05 HTTP+SSE sessions, not Streamable HTTP.",
+            "score": 0
+          }
+        ]
+      }
+    },
+    {
+      "desk": "aviva",
+      "prompt": "a an to",
+      "result": {
+        "ok": true,
+        "mode": "local",
+        "desk": "aviva",
+        "text": "Local aviva desk. The model endpoint is not configured, so this stays on the catalog. Nothing in the on-site catalog matched that wording.",
+        "hits": [
+          {
+            "id": "user",
+            "title": "You",
+            "href": "/architecture?node=user",
+            "excerpt": "Operator on a machine you own. Explore browser previews or send a request through a configured server or separately running local service. Each path has its own source and acceptance requirements.",
+            "score": 0
+          },
+          {
+            "id": "quesar",
+            "title": "Quesar",
+            "href": "/architecture?node=quesar",
+            "excerpt": "A browser client for a local website builder. The /quasar screens connect to a separately running service through origin-scoped pairing. The service scaffolds Next.js projects and uses a configured provider for generation. Source implementation does not establish live provider ac",
+            "score": 0
+          },
+          {
+            "id": "abi",
+            "title": "ABI",
+            "href": "/architecture?node=abi",
+            "excerpt": "Nightly Rust orchestration. Routes persona requests and exposes source-defined tools. Its source workspace requires WDBX.",
+            "score": 0
+          },
+          {
+            "id": "tools",
+            "title": "Tools",
+            "href": "/architecture?node=tools",
+            "excerpt": "Contract-covered plugins and MCP tools. Twelve contract-covered MCP tools including wdbx_query and gpu_status. The optional loopback listener serves MCP 2024-11-05 HTTP+SSE sessions, not Streamable HTTP.",
+            "score": 0
+          }
+        ]
+      }
+    },
+    {
+      "desk": "aviva",
+      "prompt": "DATA, store!",
+      "result": {
+        "ok": true,
+        "mode": "local",
+        "desk": "aviva",
+        "text": "Local aviva desk. The model endpoint is not configured, so this stays on the catalog. Episodes: Signed, content-addressed records. WAL, causal DAGs, witness encoding. Persistence that did not happen is not reported as success.",
+        "hits": [
+          {
+            "id": "memory",
+            "title": "Episodes",
+            "href": "/architecture?node=memory",
+            "excerpt": "Signed, content-addressed records. WAL, causal DAGs, witness encoding. Persistence that did not happen is not reported as success.",
+            "score": 0.5
+          },
+          {
+            "id": "user",
+            "title": "You",
+            "href": "/architecture?node=user",
+            "excerpt": "Operator on a machine you own. Explore browser previews or send a request through a configured server or separately running local service. Each path has its own source and acceptance requirements.",
+            "score": 0
+          },
+          {
+            "id": "quesar",
+            "title": "Quesar",
+            "href": "/architecture?node=quesar",
+            "excerpt": "A browser client for a local website builder. The /quasar screens connect to a separately running service through origin-scoped pairing. The service scaffolds Next.js projects and uses a configured provider for generation. Source implementation does not establish live provider ac",
+            "score": 0
+          },
+          {
+            "id": "abi",
+            "title": "ABI",
+            "href": "/architecture?node=abi",
+            "excerpt": "Nightly Rust orchestration. Routes persona requests and exposes source-defined tools. Its source workspace requires WDBX.",
+            "score": 0
+          }
+        ]
+      }
+    },
+    {
+      "desk": "aviva",
+      "prompt": "KEY",
+      "result": {
+        "ok": true,
+        "mode": "local",
+        "desk": "aviva",
+        "text": "Local aviva desk. The model endpoint is not configured, so this stays on the catalog. Nothing in the on-site catalog matched that wording.",
+        "hits": [
+          {
+            "id": "user",
+            "title": "You",
+            "href": "/architecture?node=user",
+            "excerpt": "Operator on a machine you own. Explore browser previews or send a request through a configured server or separately running local service. Each path has its own source and acceptance requirements.",
+            "score": 0
+          },
+          {
+            "id": "quesar",
+            "title": "Quesar",
+            "href": "/architecture?node=quesar",
+            "excerpt": "A browser client for a local website builder. The /quasar screens connect to a separately running service through origin-scoped pairing. The service scaffolds Next.js projects and uses a configured provider for generation. Source implementation does not establish live provider ac",
+            "score": 0
+          },
+          {
+            "id": "abi",
+            "title": "ABI",
+            "href": "/architecture?node=abi",
+            "excerpt": "Nightly Rust orchestration. Routes persona requests and exposes source-defined tools. Its source workspace requires WDBX.",
+            "score": 0
+          },
+          {
+            "id": "tools",
+            "title": "Tools",
+            "href": "/architecture?node=tools",
+            "excerpt": "Contract-covered plugins and MCP tools. Twelve contract-covered MCP tools including wdbx_query and gpu_status. The optional loopback listener serves MCP 2024-11-05 HTTP+SSE sessions, not Streamable HTTP.",
+            "score": 0
+          }
+        ]
+      }
+    },
+    {
+      "desk": "abi",
+      "prompt": "semantic routing",
+      "result": {
+        "ok": true,
+        "mode": "local",
+        "desk": "abi",
+        "text": "Local abi desk. The model endpoint is not configured, so this stays on the catalog. ABI: Nightly Rust orchestration. Routes persona requests and exposes source-defined tools. Its source workspace requires WDBX. Persona router: Deterministic persona routing. ABI's local routing source selects persona profiles with deterministic rules. Local completion renders persona templates; this does not establish model execution or device selection.",
+        "hits": [
+          {
+            "id": "abi",
+            "title": "ABI",
+            "href": "/architecture?node=abi",
+            "excerpt": "Nightly Rust orchestration. Routes persona requests and exposes source-defined tools. Its source workspace requires WDBX.",
+            "score": 0.5
+          },
+          {
+            "id": "router",
+            "title": "Persona router",
+            "href": "/architecture?node=router",
+            "excerpt": "Deterministic persona routing. ABI's local routing source selects persona profiles with deterministic rules. Local completion renders persona templates; this does not establish model execution or device selection.",
+            "score": 0.5
+          },
+          {
+            "id": "user",
+            "title": "You",
+            "href": "/architecture?node=user",
+            "excerpt": "Operator on a machine you own. Explore browser previews or send a request through a configured server or separately running local service. Each path has its own source and acceptance requirements.",
+            "score": 0
+          },
+          {
+            "id": "quesar",
+            "title": "Quesar",
+            "href": "/architecture?node=quesar",
+            "excerpt": "A browser client for a local website builder. The /quasar screens connect to a separately running service through origin-scoped pairing. The service scaffolds Next.js projects and uses a configured provider for generation. Source implementation does not establish live provider ac",
+            "score": 0
+          }
+        ]
+      }
+    },
+    {
+      "desk": "abi",
+      "prompt": "xyzzynonmatch",
+      "result": {
+        "ok": true,
+        "mode": "local",
+        "desk": "abi",
+        "text": "Local abi desk. The model endpoint is not configured, so this stays on the catalog. Nothing in the on-site catalog matched that wording.",
+        "hits": [
+          {
+            "id": "user",
+            "title": "You",
+            "href": "/architecture?node=user",
+            "excerpt": "Operator on a machine you own. Explore browser previews or send a request through a configured server or separately running local service. Each path has its own source and acceptance requirements.",
+            "score": 0
+          },
+          {
+            "id": "quesar",
+            "title": "Quesar",
+            "href": "/architecture?node=quesar",
+            "excerpt": "A browser client for a local website builder. The /quasar screens connect to a separately running service through origin-scoped pairing. The service scaffolds Next.js projects and uses a configured provider for generation. Source implementation does not establish live provider ac",
+            "score": 0
+          },
+          {
+            "id": "abi",
+            "title": "ABI",
+            "href": "/architecture?node=abi",
+            "excerpt": "Nightly Rust orchestration. Routes persona requests and exposes source-defined tools. Its source workspace requires WDBX.",
+            "score": 0
+          },
+          {
+            "id": "tools",
+            "title": "Tools",
+            "href": "/architecture?node=tools",
+            "excerpt": "Contract-covered plugins and MCP tools. Twelve contract-covered MCP tools including wdbx_query and gpu_status. The optional loopback listener serves MCP 2024-11-05 HTTP+SSE sessions, not Streamable HTTP.",
+            "score": 0
+          }
+        ]
+      }
+    },
+    {
+      "desk": "abi",
+      "prompt": "a an to",
+      "result": {
+        "ok": true,
+        "mode": "local",
+        "desk": "abi",
+        "text": "Local abi desk. The model endpoint is not configured, so this stays on the catalog. Nothing in the on-site catalog matched that wording.",
+        "hits": [
+          {
+            "id": "user",
+            "title": "You",
+            "href": "/architecture?node=user",
+            "excerpt": "Operator on a machine you own. Explore browser previews or send a request through a configured server or separately running local service. Each path has its own source and acceptance requirements.",
+            "score": 0
+          },
+          {
+            "id": "quesar",
+            "title": "Quesar",
+            "href": "/architecture?node=quesar",
+            "excerpt": "A browser client for a local website builder. The /quasar screens connect to a separately running service through origin-scoped pairing. The service scaffolds Next.js projects and uses a configured provider for generation. Source implementation does not establish live provider ac",
+            "score": 0
+          },
+          {
+            "id": "abi",
+            "title": "ABI",
+            "href": "/architecture?node=abi",
+            "excerpt": "Nightly Rust orchestration. Routes persona requests and exposes source-defined tools. Its source workspace requires WDBX.",
+            "score": 0
+          },
+          {
+            "id": "tools",
+            "title": "Tools",
+            "href": "/architecture?node=tools",
+            "excerpt": "Contract-covered plugins and MCP tools. Twelve contract-covered MCP tools including wdbx_query and gpu_status. The optional loopback listener serves MCP 2024-11-05 HTTP+SSE sessions, not Streamable HTTP.",
+            "score": 0
+          }
+        ]
+      }
+    },
+    {
+      "desk": "abi",
+      "prompt": "DATA, store!",
+      "result": {
+        "ok": true,
+        "mode": "local",
+        "desk": "abi",
+        "text": "Local abi desk. The model endpoint is not configured, so this stays on the catalog. Episodes: Signed, content-addressed records. WAL, causal DAGs, witness encoding. Persistence that did not happen is not reported as success.",
+        "hits": [
+          {
+            "id": "memory",
+            "title": "Episodes",
+            "href": "/architecture?node=memory",
+            "excerpt": "Signed, content-addressed records. WAL, causal DAGs, witness encoding. Persistence that did not happen is not reported as success.",
+            "score": 0.5
+          },
+          {
+            "id": "user",
+            "title": "You",
+            "href": "/architecture?node=user",
+            "excerpt": "Operator on a machine you own. Explore browser previews or send a request through a configured server or separately running local service. Each path has its own source and acceptance requirements.",
+            "score": 0
+          },
+          {
+            "id": "quesar",
+            "title": "Quesar",
+            "href": "/architecture?node=quesar",
+            "excerpt": "A browser client for a local website builder. The /quasar screens connect to a separately running service through origin-scoped pairing. The service scaffolds Next.js projects and uses a configured provider for generation. Source implementation does not establish live provider ac",
+            "score": 0
+          },
+          {
+            "id": "abi",
+            "title": "ABI",
+            "href": "/architecture?node=abi",
+            "excerpt": "Nightly Rust orchestration. Routes persona requests and exposes source-defined tools. Its source workspace requires WDBX.",
+            "score": 0
+          }
+        ]
+      }
+    },
+    {
+      "desk": "abi",
+      "prompt": "KEY",
+      "result": {
+        "ok": true,
+        "mode": "local",
+        "desk": "abi",
+        "text": "Local abi desk. The model endpoint is not configured, so this stays on the catalog. Nothing in the on-site catalog matched that wording.",
+        "hits": [
+          {
+            "id": "user",
+            "title": "You",
+            "href": "/architecture?node=user",
+            "excerpt": "Operator on a machine you own. Explore browser previews or send a request through a configured server or separately running local service. Each path has its own source and acceptance requirements.",
+            "score": 0
+          },
+          {
+            "id": "quesar",
+            "title": "Quesar",
+            "href": "/architecture?node=quesar",
+            "excerpt": "A browser client for a local website builder. The /quasar screens connect to a separately running service through origin-scoped pairing. The service scaffolds Next.js projects and uses a configured provider for generation. Source implementation does not establish live provider ac",
+            "score": 0
+          },
+          {
+            "id": "abi",
+            "title": "ABI",
+            "href": "/architecture?node=abi",
+            "excerpt": "Nightly Rust orchestration. Routes persona requests and exposes source-defined tools. Its source workspace requires WDBX.",
+            "score": 0
+          },
+          {
+            "id": "tools",
+            "title": "Tools",
+            "href": "/architecture?node=tools",
+            "excerpt": "Contract-covered plugins and MCP tools. Twelve contract-covered MCP tools including wdbx_query and gpu_status. The optional loopback listener serves MCP 2024-11-05 HTTP+SSE sessions, not Streamable HTTP.",
+            "score": 0
+          }
+        ]
+      }
+    },
+    {
+      "desk": "quesar",
+      "prompt": "semantic routing",
+      "result": {
+        "ok": true,
+        "mode": "local",
+        "desk": "quesar",
+        "text": "Local inspect. The model endpoint is not configured. ABI: Nightly Rust orchestration. Routes persona requests and exposes source-defined tools. Its source workspace requires WDBX. Persona router: Deterministic persona routing. ABI's local routing source selects persona profiles with deterministic rules. Local completion renders persona templates; this does not establish model execution or device selection.",
+        "hits": [
+          {
+            "id": "abi",
+            "title": "ABI",
+            "href": "/architecture?node=abi",
+            "excerpt": "Nightly Rust orchestration. Routes persona requests and exposes source-defined tools. Its source workspace requires WDBX.",
+            "score": 0.5
+          },
+          {
+            "id": "router",
+            "title": "Persona router",
+            "href": "/architecture?node=router",
+            "excerpt": "Deterministic persona routing. ABI's local routing source selects persona profiles with deterministic rules. Local completion renders persona templates; this does not establish model execution or device selection.",
+            "score": 0.5
+          },
+          {
+            "id": "user",
+            "title": "You",
+            "href": "/architecture?node=user",
+            "excerpt": "Operator on a machine you own. Explore browser previews or send a request through a configured server or separately running local service. Each path has its own source and acceptance requirements.",
+            "score": 0
+          },
+          {
+            "id": "quesar",
+            "title": "Quesar",
+            "href": "/architecture?node=quesar",
+            "excerpt": "A browser client for a local website builder. The /quasar screens connect to a separately running service through origin-scoped pairing. The service scaffolds Next.js projects and uses a configured provider for generation. Source implementation does not establish live provider ac",
+            "score": 0
+          }
+        ]
+      }
+    },
+    {
+      "desk": "quesar",
+      "prompt": "xyzzynonmatch",
+      "result": {
+        "ok": true,
+        "mode": "local",
+        "desk": "quesar",
+        "text": "Local inspect. The model endpoint is not configured. Nothing in the on-site catalog matched that wording.",
+        "hits": [
+          {
+            "id": "user",
+            "title": "You",
+            "href": "/architecture?node=user",
+            "excerpt": "Operator on a machine you own. Explore browser previews or send a request through a configured server or separately running local service. Each path has its own source and acceptance requirements.",
+            "score": 0
+          },
+          {
+            "id": "quesar",
+            "title": "Quesar",
+            "href": "/architecture?node=quesar",
+            "excerpt": "A browser client for a local website builder. The /quasar screens connect to a separately running service through origin-scoped pairing. The service scaffolds Next.js projects and uses a configured provider for generation. Source implementation does not establish live provider ac",
+            "score": 0
+          },
+          {
+            "id": "abi",
+            "title": "ABI",
+            "href": "/architecture?node=abi",
+            "excerpt": "Nightly Rust orchestration. Routes persona requests and exposes source-defined tools. Its source workspace requires WDBX.",
+            "score": 0
+          },
+          {
+            "id": "tools",
+            "title": "Tools",
+            "href": "/architecture?node=tools",
+            "excerpt": "Contract-covered plugins and MCP tools. Twelve contract-covered MCP tools including wdbx_query and gpu_status. The optional loopback listener serves MCP 2024-11-05 HTTP+SSE sessions, not Streamable HTTP.",
+            "score": 0
+          }
+        ]
+      }
+    },
+    {
+      "desk": "quesar",
+      "prompt": "a an to",
+      "result": {
+        "ok": true,
+        "mode": "local",
+        "desk": "quesar",
+        "text": "Local inspect. The model endpoint is not configured. Nothing in the on-site catalog matched that wording.",
+        "hits": [
+          {
+            "id": "user",
+            "title": "You",
+            "href": "/architecture?node=user",
+            "excerpt": "Operator on a machine you own. Explore browser previews or send a request through a configured server or separately running local service. Each path has its own source and acceptance requirements.",
+            "score": 0
+          },
+          {
+            "id": "quesar",
+            "title": "Quesar",
+            "href": "/architecture?node=quesar",
+            "excerpt": "A browser client for a local website builder. The /quasar screens connect to a separately running service through origin-scoped pairing. The service scaffolds Next.js projects and uses a configured provider for generation. Source implementation does not establish live provider ac",
+            "score": 0
+          },
+          {
+            "id": "abi",
+            "title": "ABI",
+            "href": "/architecture?node=abi",
+            "excerpt": "Nightly Rust orchestration. Routes persona requests and exposes source-defined tools. Its source workspace requires WDBX.",
+            "score": 0
+          },
+          {
+            "id": "tools",
+            "title": "Tools",
+            "href": "/architecture?node=tools",
+            "excerpt": "Contract-covered plugins and MCP tools. Twelve contract-covered MCP tools including wdbx_query and gpu_status. The optional loopback listener serves MCP 2024-11-05 HTTP+SSE sessions, not Streamable HTTP.",
+            "score": 0
+          }
+        ]
+      }
+    },
+    {
+      "desk": "quesar",
+      "prompt": "DATA, store!",
+      "result": {
+        "ok": true,
+        "mode": "local",
+        "desk": "quesar",
+        "text": "Local inspect. The model endpoint is not configured. Episodes: Signed, content-addressed records. WAL, causal DAGs, witness encoding. Persistence that did not happen is not reported as success.",
+        "hits": [
+          {
+            "id": "memory",
+            "title": "Episodes",
+            "href": "/architecture?node=memory",
+            "excerpt": "Signed, content-addressed records. WAL, causal DAGs, witness encoding. Persistence that did not happen is not reported as success.",
+            "score": 0.5
+          },
+          {
+            "id": "user",
+            "title": "You",
+            "href": "/architecture?node=user",
+            "excerpt": "Operator on a machine you own. Explore browser previews or send a request through a configured server or separately running local service. Each path has its own source and acceptance requirements.",
+            "score": 0
+          },
+          {
+            "id": "quesar",
+            "title": "Quesar",
+            "href": "/architecture?node=quesar",
+            "excerpt": "A browser client for a local website builder. The /quasar screens connect to a separately running service through origin-scoped pairing. The service scaffolds Next.js projects and uses a configured provider for generation. Source implementation does not establish live provider ac",
+            "score": 0
+          },
+          {
+            "id": "abi",
+            "title": "ABI",
+            "href": "/architecture?node=abi",
+            "excerpt": "Nightly Rust orchestration. Routes persona requests and exposes source-defined tools. Its source workspace requires WDBX.",
+            "score": 0
+          }
+        ]
+      }
+    },
+    {
+      "desk": "quesar",
+      "prompt": "KEY",
+      "result": {
+        "ok": true,
+        "mode": "local",
+        "desk": "quesar",
+        "text": "Local inspect. The model endpoint is not configured. Nothing in the on-site catalog matched that wording.",
+        "hits": [
+          {
+            "id": "user",
+            "title": "You",
+            "href": "/architecture?node=user",
+            "excerpt": "Operator on a machine you own. Explore browser previews or send a request through a configured server or separately running local service. Each path has its own source and acceptance requirements.",
+            "score": 0
+          },
+          {
+            "id": "quesar",
+            "title": "Quesar",
+            "href": "/architecture?node=quesar",
+            "excerpt": "A browser client for a local website builder. The /quasar screens connect to a separately running service through origin-scoped pairing. The service scaffolds Next.js projects and uses a configured provider for generation. Source implementation does not establish live provider ac",
+            "score": 0
+          },
+          {
+            "id": "abi",
+            "title": "ABI",
+            "href": "/architecture?node=abi",
+            "excerpt": "Nightly Rust orchestration. Routes persona requests and exposes source-defined tools. Its source workspace requires WDBX.",
+            "score": 0
+          },
+          {
+            "id": "tools",
+            "title": "Tools",
+            "href": "/architecture?node=tools",
+            "excerpt": "Contract-covered plugins and MCP tools. Twelve contract-covered MCP tools including wdbx_query and gpu_status. The optional loopback listener serves MCP 2024-11-05 HTTP+SSE sessions, not Streamable HTTP.",
+            "score": 0
+          }
+        ]
+      }
+    },
+    {
+      "desk": "wdbx",
+      "prompt": "semantic routing",
+      "result": {
+        "ok": true,
+        "mode": "local",
+        "desk": "wdbx",
+        "text": "Local retrieval. This is lexical overlap, not the Rust HNSW. ABI: Nightly Rust orchestration. Routes persona requests and exposes source-defined tools. Its source workspace requires WDBX. Persona router: Deterministic persona routing. ABI's local routing source selects persona profiles with deterministic rules. Local completion renders persona templates; this does not establish model execution or device selection.",
+        "hits": [
+          {
+            "id": "abi",
+            "title": "ABI",
+            "href": "/architecture?node=abi",
+            "excerpt": "Nightly Rust orchestration. Routes persona requests and exposes source-defined tools. Its source workspace requires WDBX.",
+            "score": 0.5
+          },
+          {
+            "id": "router",
+            "title": "Persona router",
+            "href": "/architecture?node=router",
+            "excerpt": "Deterministic persona routing. ABI's local routing source selects persona profiles with deterministic rules. Local completion renders persona templates; this does not establish model execution or device selection.",
+            "score": 0.5
+          },
+          {
+            "id": "user",
+            "title": "You",
+            "href": "/architecture?node=user",
+            "excerpt": "Operator on a machine you own. Explore browser previews or send a request through a configured server or separately running local service. Each path has its own source and acceptance requirements.",
+            "score": 0
+          },
+          {
+            "id": "quesar",
+            "title": "Quesar",
+            "href": "/architecture?node=quesar",
+            "excerpt": "A browser client for a local website builder. The /quasar screens connect to a separately running service through origin-scoped pairing. The service scaffolds Next.js projects and uses a configured provider for generation. Source implementation does not establish live provider ac",
+            "score": 0
+          }
+        ]
+      }
+    },
+    {
+      "desk": "wdbx",
+      "prompt": "xyzzynonmatch",
+      "result": {
+        "ok": true,
+        "mode": "local",
+        "desk": "wdbx",
+        "text": "Local retrieval. This is lexical overlap, not the Rust HNSW. Nothing in the on-site catalog matched that wording.",
+        "hits": [
+          {
+            "id": "user",
+            "title": "You",
+            "href": "/architecture?node=user",
+            "excerpt": "Operator on a machine you own. Explore browser previews or send a request through a configured server or separately running local service. Each path has its own source and acceptance requirements.",
+            "score": 0
+          },
+          {
+            "id": "quesar",
+            "title": "Quesar",
+            "href": "/architecture?node=quesar",
+            "excerpt": "A browser client for a local website builder. The /quasar screens connect to a separately running service through origin-scoped pairing. The service scaffolds Next.js projects and uses a configured provider for generation. Source implementation does not establish live provider ac",
+            "score": 0
+          },
+          {
+            "id": "abi",
+            "title": "ABI",
+            "href": "/architecture?node=abi",
+            "excerpt": "Nightly Rust orchestration. Routes persona requests and exposes source-defined tools. Its source workspace requires WDBX.",
+            "score": 0
+          },
+          {
+            "id": "tools",
+            "title": "Tools",
+            "href": "/architecture?node=tools",
+            "excerpt": "Contract-covered plugins and MCP tools. Twelve contract-covered MCP tools including wdbx_query and gpu_status. The optional loopback listener serves MCP 2024-11-05 HTTP+SSE sessions, not Streamable HTTP.",
+            "score": 0
+          }
+        ]
+      }
+    },
+    {
+      "desk": "wdbx",
+      "prompt": "a an to",
+      "result": {
+        "ok": true,
+        "mode": "local",
+        "desk": "wdbx",
+        "text": "Local retrieval. This is lexical overlap, not the Rust HNSW. Nothing in the on-site catalog matched that wording.",
+        "hits": [
+          {
+            "id": "user",
+            "title": "You",
+            "href": "/architecture?node=user",
+            "excerpt": "Operator on a machine you own. Explore browser previews or send a request through a configured server or separately running local service. Each path has its own source and acceptance requirements.",
+            "score": 0
+          },
+          {
+            "id": "quesar",
+            "title": "Quesar",
+            "href": "/architecture?node=quesar",
+            "excerpt": "A browser client for a local website builder. The /quasar screens connect to a separately running service through origin-scoped pairing. The service scaffolds Next.js projects and uses a configured provider for generation. Source implementation does not establish live provider ac",
+            "score": 0
+          },
+          {
+            "id": "abi",
+            "title": "ABI",
+            "href": "/architecture?node=abi",
+            "excerpt": "Nightly Rust orchestration. Routes persona requests and exposes source-defined tools. Its source workspace requires WDBX.",
+            "score": 0
+          },
+          {
+            "id": "tools",
+            "title": "Tools",
+            "href": "/architecture?node=tools",
+            "excerpt": "Contract-covered plugins and MCP tools. Twelve contract-covered MCP tools including wdbx_query and gpu_status. The optional loopback listener serves MCP 2024-11-05 HTTP+SSE sessions, not Streamable HTTP.",
+            "score": 0
+          }
+        ]
+      }
+    },
+    {
+      "desk": "wdbx",
+      "prompt": "DATA, store!",
+      "result": {
+        "ok": true,
+        "mode": "local",
+        "desk": "wdbx",
+        "text": "Local retrieval. This is lexical overlap, not the Rust HNSW. Episodes: Signed, content-addressed records. WAL, causal DAGs, witness encoding. Persistence that did not happen is not reported as success.",
+        "hits": [
+          {
+            "id": "memory",
+            "title": "Episodes",
+            "href": "/architecture?node=memory",
+            "excerpt": "Signed, content-addressed records. WAL, causal DAGs, witness encoding. Persistence that did not happen is not reported as success.",
+            "score": 0.5
+          },
+          {
+            "id": "user",
+            "title": "You",
+            "href": "/architecture?node=user",
+            "excerpt": "Operator on a machine you own. Explore browser previews or send a request through a configured server or separately running local service. Each path has its own source and acceptance requirements.",
+            "score": 0
+          },
+          {
+            "id": "quesar",
+            "title": "Quesar",
+            "href": "/architecture?node=quesar",
+            "excerpt": "A browser client for a local website builder. The /quasar screens connect to a separately running service through origin-scoped pairing. The service scaffolds Next.js projects and uses a configured provider for generation. Source implementation does not establish live provider ac",
+            "score": 0
+          },
+          {
+            "id": "abi",
+            "title": "ABI",
+            "href": "/architecture?node=abi",
+            "excerpt": "Nightly Rust orchestration. Routes persona requests and exposes source-defined tools. Its source workspace requires WDBX.",
+            "score": 0
+          }
+        ]
+      }
+    },
+    {
+      "desk": "wdbx",
+      "prompt": "KEY",
+      "result": {
+        "ok": true,
+        "mode": "local",
+        "desk": "wdbx",
+        "text": "Local retrieval. This is lexical overlap, not the Rust HNSW. Nothing in the on-site catalog matched that wording.",
+        "hits": [
+          {
+            "id": "user",
+            "title": "You",
+            "href": "/architecture?node=user",
+            "excerpt": "Operator on a machine you own. Explore browser previews or send a request through a configured server or separately running local service. Each path has its own source and acceptance requirements.",
+            "score": 0
+          },
+          {
+            "id": "quesar",
+            "title": "Quesar",
+            "href": "/architecture?node=quesar",
+            "excerpt": "A browser client for a local website builder. The /quasar screens connect to a separately running service through origin-scoped pairing. The service scaffolds Next.js projects and uses a configured provider for generation. Source implementation does not establish live provider ac",
+            "score": 0
+          },
+          {
+            "id": "abi",
+            "title": "ABI",
+            "href": "/architecture?node=abi",
+            "excerpt": "Nightly Rust orchestration. Routes persona requests and exposes source-defined tools. Its source workspace requires WDBX.",
+            "score": 0
+          },
+          {
+            "id": "tools",
+            "title": "Tools",
+            "href": "/architecture?node=tools",
+            "excerpt": "Contract-covered plugins and MCP tools. Twelve contract-covered MCP tools including wdbx_query and gpu_status. The optional loopback listener serves MCP 2024-11-05 HTTP+SSE sessions, not Streamable HTTP.",
+            "score": 0
+          }
+        ]
+      }
+    }
+  ],
+  "modelRequests": [
+    {
+      "kind": "desk",
+      "desk": "abbey",
+      "prompt": "What does the route ledger show?",
+      "request": {
+        "messages": [
+          {
+            "role": "system",
+            "content": "You are responding through a configured model provider on the Quesar website. Quesar's public product surface is an experimental browser client paired with a separately running, operator-owned website-builder service. This website model-request path is separate from that builder. ABI, WDBX, and Abbey have their own source, implementation, and integration boundaries. Do not infer a trained Quesar foundation model, a training pipeline between these projects, or deployed integration from these source surfaces. Be direct, technical, safety-conscious, and explicit about uncertainty. Distinguish source implementation, configured operation, and deployment acceptance. Never imply that an unverified target is a measured result.\n\nYou are Abbey on the Quesar desk. Care first. Use only the catalog hits provided. Never claim AGI, a hosted session, or a benchmark. Under 160 words."
+          },
+          {
+            "role": "user",
+            "content": "Catalog hits:\nQuesar (/architecture?node=quesar): A browser client for a local website builder. The /quasar screens connect to a separately running service through origin-scoped pairing. The service scaffolds Next.js projects and uses a configured provider for generation. Source implementation does not establish live provider ac\nTools (/architecture?node=tools): Contract-covered plugins and MCP tools. Twelve contract-covered MCP tools including wdbx_query and gpu_status. The optional loopback listener serves MCP 2024-11-05 HTTP+SSE sessions, not Streamable HTTP.\nPersona router (/architecture?node=router): Deterministic persona routing. ABI's local routing source selects persona profiles with deterministic rules. Local completion renders persona templates; this does not establish model execution or device selection.\nProvenance (/architecture?node=provenance): Structural provenance of a record. Content addressing, signatures, and causal history expose record commitments and relationships. They do not establish the truth or evidential reliability of a record.\n\nOperator: What does the route ledger show?"
+          }
+        ],
+        "maxTokens": 320
+      }
+    },
+    {
+      "kind": "desk",
+      "desk": "aviva",
+      "prompt": "What does the route ledger show?",
+      "request": {
+        "messages": [
+          {
+            "role": "system",
+            "content": "You are responding through a configured model provider on the Quesar website. Quesar's public product surface is an experimental browser client paired with a separately running, operator-owned website-builder service. This website model-request path is separate from that builder. ABI, WDBX, and Abbey have their own source, implementation, and integration boundaries. Do not infer a trained Quesar foundation model, a training pipeline between these projects, or deployed integration from these source surfaces. Be direct, technical, safety-conscious, and explicit about uncertainty. Distinguish source implementation, configured operation, and deployment acceptance. Never imply that an unverified target is a measured result.\n\nYou are Aviva on the Quesar desk. Clarity, no preamble. Use only the catalog hits. If a fact is not in the hits, say so. Under 140 words."
+          },
+          {
+            "role": "user",
+            "content": "Catalog hits:\nQuesar (/architecture?node=quesar): A browser client for a local website builder. The /quasar screens connect to a separately running service through origin-scoped pairing. The service scaffolds Next.js projects and uses a configured provider for generation. Source implementation does not establish live provider ac\nTools (/architecture?node=tools): Contract-covered plugins and MCP tools. Twelve contract-covered MCP tools including wdbx_query and gpu_status. The optional loopback listener serves MCP 2024-11-05 HTTP+SSE sessions, not Streamable HTTP.\nPersona router (/architecture?node=router): Deterministic persona routing. ABI's local routing source selects persona profiles with deterministic rules. Local completion renders persona templates; this does not establish model execution or device selection.\nProvenance (/architecture?node=provenance): Structural provenance of a record. Content addressing, signatures, and causal history expose record commitments and relationships. They do not establish the truth or evidential reliability of a record.\n\nOperator: What does the route ledger show?"
+          }
+        ],
+        "maxTokens": 320
+      }
+    },
+    {
+      "kind": "desk",
+      "desk": "abi",
+      "prompt": "What does the route ledger show?",
+      "request": {
+        "messages": [
+          {
+            "role": "system",
+            "content": "You are responding through a configured model provider on the Quesar website. Quesar's public product surface is an experimental browser client paired with a separately running, operator-owned website-builder service. This website model-request path is separate from that builder. ABI, WDBX, and Abbey have their own source, implementation, and integration boundaries. Do not infer a trained Quesar foundation model, a training pipeline between these projects, or deployed integration from these source surfaces. Be direct, technical, safety-conscious, and explicit about uncertainty. Distinguish source implementation, configured operation, and deployment acceptance. Never imply that an unverified target is a measured result.\n\nYou are Abi on the Quesar desk. Point to the next inspectable page. Use only the catalog hits. Under 150 words."
+          },
+          {
+            "role": "user",
+            "content": "Catalog hits:\nQuesar (/architecture?node=quesar): A browser client for a local website builder. The /quasar screens connect to a separately running service through origin-scoped pairing. The service scaffolds Next.js projects and uses a configured provider for generation. Source implementation does not establish live provider ac\nTools (/architecture?node=tools): Contract-covered plugins and MCP tools. Twelve contract-covered MCP tools including wdbx_query and gpu_status. The optional loopback listener serves MCP 2024-11-05 HTTP+SSE sessions, not Streamable HTTP.\nPersona router (/architecture?node=router): Deterministic persona routing. ABI's local routing source selects persona profiles with deterministic rules. Local completion renders persona templates; this does not establish model execution or device selection.\nProvenance (/architecture?node=provenance): Structural provenance of a record. Content addressing, signatures, and causal history expose record commitments and relationships. They do not establish the truth or evidential reliability of a record.\n\nOperator: What does the route ledger show?"
+          }
+        ],
+        "maxTokens": 320
+      }
+    },
+    {
+      "kind": "desk",
+      "desk": "quesar",
+      "prompt": "What does the route ledger show?",
+      "request": {
+        "messages": [
+          {
+            "role": "system",
+            "content": "You are responding through a configured model provider on the Quesar website. Quesar's public product surface is an experimental browser client paired with a separately running, operator-owned website-builder service. This website model-request path is separate from that builder. ABI, WDBX, and Abbey have their own source, implementation, and integration boundaries. Do not infer a trained Quesar foundation model, a training pipeline between these projects, or deployed integration from these source surfaces. Be direct, technical, safety-conscious, and explicit about uncertainty. Distinguish source implementation, configured operation, and deployment acceptance. Never imply that an unverified target is a measured result.\n\nYou are the Quesar desk. Describe the matching architecture nodes. Separate current source from what is not claimed. Under 160 words."
+          },
+          {
+            "role": "user",
+            "content": "Catalog hits:\nQuesar (/architecture?node=quesar): A browser client for a local website builder. The /quasar screens connect to a separately running service through origin-scoped pairing. The service scaffolds Next.js projects and uses a configured provider for generation. Source implementation does not establish live provider ac\nTools (/architecture?node=tools): Contract-covered plugins and MCP tools. Twelve contract-covered MCP tools including wdbx_query and gpu_status. The optional loopback listener serves MCP 2024-11-05 HTTP+SSE sessions, not Streamable HTTP.\nPersona router (/architecture?node=router): Deterministic persona routing. ABI's local routing source selects persona profiles with deterministic rules. Local completion renders persona templates; this does not establish model execution or device selection.\nProvenance (/architecture?node=provenance): Structural provenance of a record. Content addressing, signatures, and causal history expose record commitments and relationships. They do not establish the truth or evidential reliability of a record.\n\nOperator: What does the route ledger show?"
+          }
+        ],
+        "maxTokens": 320
+      }
+    },
+    {
+      "kind": "desk",
+      "desk": "wdbx",
+      "prompt": "What does the route ledger show?",
+      "request": {
+        "messages": [
+          {
+            "role": "system",
+            "content": "You are responding through a configured model provider on the Quesar website. Quesar's public product surface is an experimental browser client paired with a separately running, operator-owned website-builder service. This website model-request path is separate from that builder. ABI, WDBX, and Abbey have their own source, implementation, and integration boundaries. Do not infer a trained Quesar foundation model, a training pipeline between these projects, or deployed integration from these source surfaces. Be direct, technical, safety-conscious, and explicit about uncertainty. Distinguish source implementation, configured operation, and deployment acceptance. Never imply that an unverified target is a measured result.\n\nYou are the WDBX desk. This retrieval is lexical over the site catalog, not the Rust HNSW. Rank the hits and say that limit. Under 150 words."
+          },
+          {
+            "role": "user",
+            "content": "Catalog hits:\nQuesar (/architecture?node=quesar): A browser client for a local website builder. The /quasar screens connect to a separately running service through origin-scoped pairing. The service scaffolds Next.js projects and uses a configured provider for generation. Source implementation does not establish live provider ac\nTools (/architecture?node=tools): Contract-covered plugins and MCP tools. Twelve contract-covered MCP tools including wdbx_query and gpu_status. The optional loopback listener serves MCP 2024-11-05 HTTP+SSE sessions, not Streamable HTTP.\nPersona router (/architecture?node=router): Deterministic persona routing. ABI's local routing source selects persona profiles with deterministic rules. Local completion renders persona templates; this does not establish model execution or device selection.\nProvenance (/architecture?node=provenance): Structural provenance of a record. Content addressing, signatures, and causal history expose record commitments and relationships. They do not establish the truth or evidential reliability of a record.\n\nOperator: What does the route ledger show?"
+          }
+        ],
+        "maxTokens": 320
+      }
+    },
+    {
+      "kind": "persona",
+      "persona": "abbey",
+      "prompt": "What does the route ledger show?",
+      "request": {
+        "messages": [
+          {
+            "role": "system",
+            "content": "You are responding through a configured model provider on the Quesar website. Quesar's public product surface is an experimental browser client paired with a separately running, operator-owned website-builder service. This website model-request path is separate from that builder. ABI, WDBX, and Abbey have their own source, implementation, and integration boundaries. Do not infer a trained Quesar foundation model, a training pipeline between these projects, or deployed integration from these source surfaces. Be direct, technical, safety-conscious, and explicit about uncertainty. Distinguish source implementation, configured operation, and deployment acceptance. Never imply that an unverified target is a measured result.\n\nYou are Abbey, MLAI's empathic polymath. Care first. Scaffold. Name uncertainty. Never claim AGI, hosted sessions, or unverified benchmarks. Keep answers under 180 words."
+          },
+          {
+            "role": "user",
+            "content": "What does the route ledger show?"
+          }
+        ],
+        "maxTokens": 280
+      }
+    },
+    {
+      "kind": "persona",
+      "persona": "aviva",
+      "prompt": "What does the route ledger show?",
+      "request": {
+        "messages": [
+          {
+            "role": "system",
+            "content": "You are responding through a configured model provider on the Quesar website. Quesar's public product surface is an experimental browser client paired with a separately running, operator-owned website-builder service. This website model-request path is separate from that builder. ABI, WDBX, and Abbey have their own source, implementation, and integration boundaries. Do not infer a trained Quesar foundation model, a training pipeline between these projects, or deployed integration from these source surfaces. Be direct, technical, safety-conscious, and explicit about uncertainty. Distinguish source implementation, configured operation, and deployment acceptance. Never imply that an unverified target is a measured result.\n\nYou are Aviva, MLAI's unfiltered expert. Clarity always. No preamble. No hedges unless the fact is actually unknown. Keep answers under 140 words."
+          },
+          {
+            "role": "user",
+            "content": "What does the route ledger show?"
+          }
+        ],
+        "maxTokens": 280
+      }
+    },
+    {
+      "kind": "persona",
+      "persona": "abi",
+      "prompt": "What does the route ledger show?",
+      "request": {
+        "messages": [
+          {
+            "role": "system",
+            "content": "You are responding through a configured model provider on the Quesar website. Quesar's public product surface is an experimental browser client paired with a separately running, operator-owned website-builder service. This website model-request path is separate from that builder. ABI, WDBX, and Abbey have their own source, implementation, and integration boundaries. Do not infer a trained Quesar foundation model, a training pipeline between these projects, or deployed integration from these source surfaces. Be direct, technical, safety-conscious, and explicit about uncertainty. Distinguish source implementation, configured operation, and deployment acceptance. Never imply that an unverified target is a measured result.\n\nYou are Abi, MLAI's adaptive moderator. Route the user toward inspectable next steps. Say what the ledger can prove. Keep answers under 160 words."
+          },
+          {
+            "role": "user",
+            "content": "What does the route ledger show?"
+          }
+        ],
+        "maxTokens": 280
+      }
+    }
+  ],
+  "billing": {
+    "plans": [
+      {
+        "id": "pilot",
+        "name": "Pilot",
+        "price": "$2,500/mo",
+        "description": "Private console access, protected LLM API, readiness audit support, and prototype evaluation gates."
+      },
+      {
+        "id": "platform",
+        "name": "Platform",
+        "price": "Custom",
+        "description": "Team workspaces, private deployment support, custom retrieval pipelines, and production reliability reviews."
+      }
+    ],
+    "configurations": [
+      {
+        "paymentLink": null,
+        "provider": null,
+        "config": {
+          "state": "unconfigured",
+          "provider": "manual"
+        },
+        "plans": {
+          "configured": false,
+          "provider": "manual",
+          "reason": "unconfigured"
+        }
+      },
+      {
+        "paymentLink": " ",
+        "provider": null,
+        "config": {
+          "state": "unconfigured",
+          "provider": "manual"
+        },
+        "plans": {
+          "configured": false,
+          "provider": "manual",
+          "reason": "unconfigured"
+        }
+      },
+      {
+        "paymentLink": "not a url",
+        "provider": null,
+        "config": {
+          "state": "misconfigured",
+          "provider": "manual"
+        },
+        "plans": {
+          "configured": false,
+          "provider": "manual",
+          "reason": "misconfigured"
+        }
+      },
+      {
+        "paymentLink": "http://checkout.example.test/link",
+        "provider": null,
+        "config": {
+          "state": "misconfigured",
+          "provider": "manual"
+        },
+        "plans": {
+          "configured": false,
+          "provider": "manual",
+          "reason": "misconfigured"
+        }
+      },
+      {
+        "paymentLink": "https://checkout.example.test/link?source=alpha",
+        "provider": "stripe",
+        "config": {
+          "state": "configured",
+          "provider": "stripe",
+          "paymentLink": "https://checkout.example.test/link?source=alpha"
+        },
+        "plans": {
+          "configured": true,
+          "provider": "stripe",
+          "plans": [
+            {
+              "id": "pilot",
+              "name": "Pilot",
+              "price": "$2,500/mo",
+              "description": "Private console access, protected LLM API, readiness audit support, and prototype evaluation gates."
+            },
+            {
+              "id": "platform",
+              "name": "Platform",
+              "price": "Custom",
+              "description": "Team workspaces, private deployment support, custom retrieval pipelines, and production reliability reviews."
+            }
+          ]
+        }
+      },
+      {
+        "paymentLink": "https://checkout.example.test",
+        "provider": null,
+        "config": {
+          "state": "configured",
+          "provider": "manual",
+          "paymentLink": "https://checkout.example.test/"
+        },
+        "plans": {
+          "configured": true,
+          "provider": "manual",
+          "plans": [
+            {
+              "id": "pilot",
+              "name": "Pilot",
+              "price": "$2,500/mo",
+              "description": "Private console access, protected LLM API, readiness audit support, and prototype evaluation gates."
+            },
+            {
+              "id": "platform",
+              "name": "Platform",
+              "price": "Custom",
+              "description": "Team workspaces, private deployment support, custom retrieval pipelines, and production reliability reviews."
+            }
+          ]
+        }
+      }
+    ],
+    "checkout": [
+      {
+        "planId": "pilot",
+        "paymentLink": "https://checkout.example.test/link?source=alpha",
+        "user": {
+          "id": "fixture/owner",
+          "email": "fixtures+signed in@example.test"
+        },
+        "result": {
+          "ok": true,
+          "url": "https://checkout.example.test/link?source=alpha&prefilled_email=fixtures%2Bsigned+in%40example.test&client_reference_id=fixture%2Fowner"
+        }
+      },
+      {
+        "planId": "pilot",
+        "paymentLink": "https://checkout.example.test/?prefilled_email=old&prefilled_email=older",
+        "user": {
+          "id": "fixture/owner",
+          "email": "fixtures+signed in@example.test"
+        },
+        "result": {
+          "ok": true,
+          "url": "https://checkout.example.test/?prefilled_email=fixtures%2Bsigned+in%40example.test&client_reference_id=fixture%2Fowner"
+        }
+      },
+      {
+        "planId": "pilot",
+        "paymentLink": "https://checkout.example.test",
+        "user": {
+          "id": "fixture/owner",
+          "email": null
+        },
+        "result": {
+          "ok": true,
+          "url": "https://checkout.example.test/?client_reference_id=fixture%2Fowner"
+        }
+      },
+      {
+        "planId": "pilot",
+        "paymentLink": " ",
+        "user": {
+          "id": "fixture/owner",
+          "email": "fixtures+signed in@example.test"
+        },
+        "result": {
+          "ok": false,
+          "error": "Billing checkout is not configured yet.",
+          "nextStep": "Set STRIPE_PAYMENT_LINK to enable self-serve checkout."
+        }
+      },
+      {
+        "planId": "pilot",
+        "paymentLink": "http://checkout.example.test/link",
+        "user": {
+          "id": "fixture/owner",
+          "email": "fixtures+signed in@example.test"
+        },
+        "result": {
+          "ok": false,
+          "error": "Billing checkout is misconfigured.",
+          "nextStep": "STRIPE_PAYMENT_LINK must be an https Stripe payment link."
+        }
+      },
+      {
+        "planId": "platform",
+        "paymentLink": "https://checkout.example.test/link?source=alpha",
+        "user": {
+          "id": "fixture/owner",
+          "email": "fixtures+signed in@example.test"
+        },
+        "result": {
+          "ok": false,
+          "error": "This plan is priced individually and has no self-serve checkout.",
+          "nextStep": "Contact sales to scope a Platform engagement."
+        }
+      },
+      {
+        "planId": "unknown",
+        "paymentLink": "https://checkout.example.test/link?source=alpha",
+        "user": {
+          "id": "fixture/owner",
+          "email": "fixtures+signed in@example.test"
+        },
+        "result": {
+          "ok": false,
+          "error": "Unknown plan"
+        }
+      },
+      {
+        "planId": "constructor",
+        "paymentLink": "https://checkout.example.test/link?source=alpha",
+        "user": {
+          "id": "fixture/owner",
+          "email": "fixtures+signed in@example.test"
+        },
+        "result": {
+          "ok": false,
+          "error": "Unknown plan"
+        }
+      }
+    ]
+  },
+  "telemetry": [
+    {
+      "rows": [],
+      "result": {
+        "events": {},
+        "conversion": {
+          "opens": 0,
+          "successes": 0,
+          "rate": null
+        }
+      }
+    },
+    {
+      "rows": [
+        {
+          "event": "inquiry_open",
+          "count": "3"
+        },
+        {
+          "event": "inquiry_success",
+          "count": 1
+        },
+        {
+          "event": "page_view",
+          "count": 10
+        }
+      ],
+      "result": {
+        "events": {
+          "inquiry_open": 3,
+          "inquiry_success": 1,
+          "page_view": 10
+        },
+        "conversion": {
+          "opens": 3,
+          "successes": 1,
+          "rate": 0.3333
+        }
+      }
+    }
+  ],
+  "constants": {
+    "CHAT_AUDIT_POLICY_VERSION": "2026-09-22.1",
+    "AUDIT_RETENTION_DAYS": 365,
+    "MAX_TURNS": 12,
+    "MAX_CHAT_BYTES": 131072,
+    "MAX_MESSAGE_CHARS": 16000,
+    "REASON_MIN": 8,
+    "REASON_MAX": 200,
+    "INQUIRY_PAGE_SIZE": 25,
+    "SYSTEM_PREAMBLE": "You are responding through a configured model provider on the Quesar website. Quesar's public product surface is an experimental browser client paired with a separately running, operator-owned website-builder service. This website model-request path is separate from that builder. ABI, WDBX, and Abbey have their own source, implementation, and integration boundaries. Do not infer a trained Quesar foundation model, a training pipeline between these projects, or deployed integration from these source surfaces. Be direct, technical, safety-conscious, and explicit about uncertainty. Distinguish source implementation, configured operation, and deployment acceptance. Never imply that an unverified target is a measured result."
+  },
+  "audit": {
+    "id": "00000000-0000-4000-8000-000000000004",
+    "owner": "signed-in-contract-test-owner",
+    "aad": "audit:00000000-0000-4000-8000-000000000004:signed-in-contract-test-owner",
+    "plaintext": "{\"messages\":[{\"role\":\"user\",\"content\":\"Café \\\"fixture\\\"\\n契約\"}],\"reply\":\"Synthetic contract reply.\"}",
+    "digest": "kvkZjj4W0Kqf2zFC1G8C8eHYiLohclrfsb5DpSlyBWc",
+    "key": "BAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQ=",
+    "sealed": "v1.OaZBRUi2RDPwyVFN.jUYN---gRrI5_wMN-n5JMyhAR5JOJtsZvC_FOL4LnrBQwdGu9bBZGak9-kIbnbtlLMWoipYh3nSQc_qxPkCjJXc3rcRr5VwSeUxhQdS7Je_-IZHsK3R0Z9RTOuxXNAAUDFsZZ4DVuqY.5lc4z2GBd4bgQSoVdHc3_Q"
+  }
+}
