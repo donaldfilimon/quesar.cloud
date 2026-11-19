@@ -10,19 +10,12 @@
  * export's own `404.html` is the
  * Pages 404. `docs/` holds ONLY the built site; internal records live in `notes/`.
  */
-import {
-  cpSync,
-  existsSync,
-  readdirSync,
-  readFileSync,
-  rmSync,
-  statSync,
-  writeFileSync,
-} from "node:fs";
+import { cpSync, existsSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { join, relative } from "node:path";
 import { site } from "../src/lib/site-identity.ts";
 import { buildLlmsTxt, llmsPage } from "./llms-txt.ts";
 import { buildSitemap, sitemapEntry } from "./sitemap.ts";
+import { htmlFiles } from "./static-html-files.ts";
 
 const root = process.cwd();
 const src = join(root, "out");
@@ -34,14 +27,8 @@ if (!existsSync(join(src, "index.html"))) {
   process.exit(1);
 }
 
-function htmlFiles(dir: string): string[] {
-  return readdirSync(dir).flatMap((name) => {
-    const path = join(dir, name);
-    if (statSync(path).isDirectory()) return htmlFiles(path);
-    return name.endsWith(".html") ? [path] : [];
-  });
-}
-const empty = htmlFiles(src).filter((file) => !readFileSync(file, "utf8").trim());
+const exportPages = htmlFiles(src);
+const empty = exportPages.filter((file) => !readFileSync(file, "utf8").trim());
 if (empty.length) {
   console.error(
     `[publish-static] empty prerendered HTML:\n  ${empty.map((file) => relative(src, file)).join("\n  ")}`,
@@ -54,7 +41,7 @@ if (!existsSync(join(src, "404.html"))) {
 }
 
 const missing = new Set<string>();
-for (const file of htmlFiles(src)) {
+for (const file of exportPages) {
   const html = readFileSync(file, "utf8");
   // Attribute references only: the inline RSC payload repeats them JSON-escaped.
   for (const [, raw] of html.matchAll(/(?:src|href)="\/_next\/static\/([^"?#]+)"/g)) {
@@ -72,7 +59,7 @@ rmSync(out, { recursive: true, force: true });
 cpSync(src, out, { recursive: true });
 writeFileSync(join(out, ".nojekyll"), "");
 writeFileSync(join(out, "CNAME"), `${DOMAIN}\n`);
-const builtPages = htmlFiles(out).map((file) => readFileSync(file, "utf8"));
+const builtPages = exportPages.map((file) => readFileSync(join(out, relative(src, file)), "utf8"));
 const sitemap = builtPages.flatMap((html) => {
   const entry = sitemapEntry(html);
   return entry ? [entry] : [];
