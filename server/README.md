@@ -7,10 +7,12 @@ same-origin request checks hold without CORS.
 **Status: in development.** It is replacing the Next.js server build in stages;
 the plan and its progress log are in
 `notes/superpowers/plans/2026-11-10-rust-server-and-site-improvements.md`.
-Today it serves the export, answers `/api/readiness` and implements the whole
-authentication API (see [Authentication](#authentication)). The console and the
-other server features still live in the Node server until their milestone
-lands. **Nothing here is deployed.**
+It serves the export, answers `/api/readiness`, and provides the authentication
+API (see [Authentication](#authentication)). It also accepts anonymous
+telemetry and CSP reports. Its `/api/fn/*` routes cover public configuration,
+contact inquiries, and signed-in workspace notes. The frontend still uses the
+Next.js server for its live API calls while the Rust migration is in progress.
+**Nothing here is deployed.**
 
 ## Run
 
