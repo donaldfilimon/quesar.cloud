@@ -1,7 +1,6 @@
 import { Link } from "@/framework/router";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { research } from "@/lib/mlai/categories/research";
 import {
   homeBoundaries,
   homeDocsDoors,
@@ -14,7 +13,7 @@ import { StatusBadge } from "./status-badge";
 
 /**
  * Home sections ported from mlai `src/views/Home.tsx` (control plane, request
- * path, product boundary, docs doors, research preview, closing CTA). The copy
+ * path, product boundary and docs doors). The copy
  * is rewritten to what quesar implements; steps still being built carry an
  * "In development" badge rather than reading as shipping.
  */
@@ -116,60 +115,5 @@ export function HomeProductBoundary() {
         </div>
       </div>
     </Section>
-  );
-}
-
-/** Record tags and dates are stored uppercase; the page sets them as prose. */
-function sentenceCase(value: string): string {
-  return value.charAt(0) + value.slice(1).toLowerCase();
-}
-
-export function HomeResearchPreview() {
-  const featured = research.publications.slice(0, 3);
-  return (
-    <section
-      id="research-preview"
-      aria-labelledby="research-preview-title"
-      className="scroll-mt-20 border-b border-border"
-    >
-      <div className="mx-auto grid max-w-6xl gap-10 px-4 py-16 sm:px-6 sm:py-24 lg:grid-cols-12">
-        <header className="lg:col-span-5">
-          <p className="eyebrow">Research</p>
-          <h2 id="research-preview-title" className="section-title mt-4">
-            Architecture before adjectives.
-          </h2>
-          <p className="mt-5 max-w-[52ch] text-base leading-relaxed text-fg-muted">
-            Selected work on traceable retrieval, governed agents and operational AI safety.
-          </p>
-          <Link
-            to="/research"
-            className="mt-6 inline-block text-sm text-accent underline-offset-4 hover:underline"
-          >
-            Open the research archive
-          </Link>
-        </header>
-        <ol className="min-w-0 divide-y divide-border border-y border-border lg:col-span-7">
-          {featured.map((item) => (
-            <li key={item.slug}>
-              <Link
-                to="/research/$slug"
-                params={{ slug: item.slug }}
-                className="group block py-6 no-underline"
-              >
-                <span className="text-sm text-fg-muted">
-                  {sentenceCase(item.tag)}, {sentenceCase(item.date)}
-                </span>
-                <span className="mt-1.5 block font-display text-xl leading-tight tracking-tight text-fg group-hover:text-accent">
-                  {item.title}
-                </span>
-                <span className="mt-2 line-clamp-3 block text-base leading-relaxed text-fg-muted">
-                  {item.abstract}
-                </span>
-              </Link>
-            </li>
-          ))}
-        </ol>
-      </div>
-    </section>
   );
 }
