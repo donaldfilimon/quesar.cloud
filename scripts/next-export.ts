@@ -7,7 +7,7 @@
  * The RSC payloads (`docs.txt`, `docs/__next.*.txt`) stay where the client router
  * requests them.
  */
-import { existsSync, mkdirSync, renameSync, rmSync } from "node:fs";
+import { existsSync, mkdirSync, renameSync, rmSync, statSync } from "node:fs";
 import { basename, join, relative } from "node:path";
 import { htmlFiles } from "./static-html-files.ts";
 
@@ -20,16 +20,30 @@ if (!existsSync(join(out, "index.html"))) {
 // Served as the host's 404 page, not a route.
 const KEEP = new Set(["index.html", "404.html"]);
 
-let moved = 0;
-for (const file of htmlFiles(out, "_next")) {
-  if (KEEP.has(basename(file))) continue;
-  const base = file.slice(0, -".html".length);
-  if (relative(out, base) === "_not-found") {
-    rmSync(file);
-    continue;
+const internal404 = join(out, "_not-found.html");
+const files = htmlFiles(out, "_next");
+const pages = files
+  .filter((file) => !KEEP.has(basename(file)) && file !== internal404)
+  .map((file) => {
+    const base = file.slice(0, -".html".length);
+    return { file, base, destination: join(base, "index.html") };
+  });
+
+// Check every destination before changing the export. renameSync would
+// otherwise silently replace an existing page.
+for (const { file, base, destination } of pages) {
+  const conflict = existsSync(base) && !statSync(base).isDirectory() ? base : destination;
+  if (existsSync(conflict)) {
+    console.error(
+      `[next-export] cannot move ${relative(out, file)}: ${relative(out, conflict)} already exists.`,
+    );
+    process.exit(1);
   }
-  mkdirSync(base, { recursive: true });
-  renameSync(file, join(base, "index.html"));
-  moved += 1;
 }
-console.log(`[next-export] ${moved} pages moved to <path>/index.html`);
+
+if (files.includes(internal404)) rmSync(internal404);
+for (const { file, base, destination } of pages) {
+  mkdirSync(base, { recursive: true });
+  renameSync(file, destination);
+}
+console.log(`[next-export] ${pages.length} pages moved to <path>/index.html`);
