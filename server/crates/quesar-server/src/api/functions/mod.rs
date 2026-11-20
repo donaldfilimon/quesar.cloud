@@ -1,7 +1,9 @@
 //! The public and signed-in server functions.
 
+mod billing;
 pub mod config;
 pub mod inquiries;
+mod profile;
 mod workspace;
 
 use quesar_services::rate_limit::Bucket;
@@ -20,5 +22,9 @@ pub async fn admit<'a>(state: &'a AppState, auth: &AuthUser) -> Result<&'a AuthS
 
 /// Mounts every function of this module.
 pub fn register(router: FnRouter) -> FnRouter {
-    workspace::register(inquiries::register(config::register(router)))
+    let router = config::register(router);
+    let router = inquiries::register(router);
+    let router = workspace::register(router);
+    let router = profile::register(router);
+    billing::register(router)
 }

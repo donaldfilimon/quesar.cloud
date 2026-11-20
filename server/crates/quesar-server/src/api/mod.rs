@@ -26,6 +26,7 @@ use axum::middleware::{self, Next};
 use axum::response::Response;
 use quesar_auth::AuthConfig;
 use quesar_contract::commerce::CommerceReadiness;
+use quesar_services::billing::BillingConfig;
 use quesar_services::catalog::{Catalog, CatalogError};
 use quesar_services::crypto::SealingKeys;
 use quesar_services::turnstile::TurnstileConfig;
@@ -98,6 +99,7 @@ impl PublicServices {
 pub struct SignedInServices {
     pub sealing: SealingKeys,
     pub catalog: Result<&'static Catalog, &'static CatalogError>,
+    pub billing: BillingConfig,
 }
 
 impl SignedInServices {
@@ -108,6 +110,9 @@ impl SignedInServices {
                 config.environment.read("APP_ENCRYPTION_KEY_PREVIOUS"),
             ),
             catalog: Catalog::embedded(),
+            // Billing applies ECMAScript trim to the raw values, including its
+            // handling of U+FEFF and U+0085, just as env.server.ts does.
+            billing: BillingConfig::from_lookup(|key| config.environment.raw(key)),
         }
     }
 }

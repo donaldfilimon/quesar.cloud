@@ -14,6 +14,7 @@
 //! public functions: they take the environment as plain values and return their
 //! own types, not wire types.
 
+pub mod billing;
 pub mod catalog;
 pub mod commerce;
 pub mod crypto;

@@ -8,9 +8,11 @@
 use serde::{Deserialize, Serialize, de::DeserializeOwned};
 use ts_rs::TS;
 
+pub mod billing;
 pub mod commerce;
 pub mod export;
 pub mod inquiries;
+pub mod profile;
 pub mod quasar;
 pub mod workspace;
 
