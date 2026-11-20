@@ -40,11 +40,6 @@ export type PathParams<P extends string> = P extends `${string}/$${infer Rest}`
     : Record<Rest extends "" ? "_splat" : Rest, string>
   : Record<never, string>;
 
-export interface ErrorComponentProps {
-  error: unknown;
-  reset: () => void;
-}
-
 export interface HeadDescriptor {
   meta?: Array<Record<string, string | undefined>>;
   links?: Array<Record<string, string | undefined>>;
