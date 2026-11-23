@@ -23,8 +23,16 @@ if [ "$(id -u)" = "0" ]; then
   datadir="/tmp/quesar-dev-postgres-${port}"
 else
   as_root=0
-  datadir="${TMPDIR:-/tmp}/quesar-dev-postgres-$(id -u)-${port}"
-  datadir="${datadir//\/\//\/}"
+  # Strip TMPDIR's trailing slash rather than collapsing "//" with a pattern
+  # substitution: macOS's bash 3.2 keeps the backslash of a `\/` replacement.
+  tmp="${TMPDIR:-/tmp}"
+  datadir="${tmp%/}/quesar-dev-postgres-$(id -u)-${port}"
+fi
+
+# PostgreSQL on macOS aborts at startup ("postmaster became multithreaded")
+# when the environment names no valid locale, as in agent and launchd shells.
+if [ -z "${LC_ALL:-}${LANG:-}" ]; then
+  export LC_ALL=C
 fi
 
 # Runs a command as the user that owns the data directory.
