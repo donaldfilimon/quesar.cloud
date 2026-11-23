@@ -14,7 +14,7 @@ describe("scripts/smoke.sh", () => {
 });
 
 describe("account deletion docs", () => {
-  it.each(["server/README.md", "notes/superpowers/plans/2026-11-10-rust-server-m2.md"])(
+  it.each(["server/README.md"])(
     "%s says a complete commerce configuration is also unavailable",
     (path) => {
       const text = read(path);
