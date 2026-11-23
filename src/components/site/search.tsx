@@ -60,9 +60,14 @@ export function SiteSearch() {
     <>
       <SearchIcon className="size-4" strokeWidth={1.75} />
       <span className="hidden text-xs xl:inline">Search</span>
-      <kbd className="hidden rounded-sm bg-bg-subtle px-1.5 py-0.5 font-mono text-2xs text-fg-subtle xl:inline">
-        ⌘K
-      </kbd>
+      {/* The shortcut hint is CSS-generated content, not text, so the
+          button's visible text stays "Search", inside its accessible name
+          "Search the site" (WCAG 2.5.3, axe label-content-name-mismatch). */}
+      <kbd
+        aria-hidden="true"
+        data-shortcut="⌘K"
+        className="hidden rounded-sm bg-bg-subtle px-1.5 py-0.5 font-mono text-2xs text-fg-subtle after:content-[attr(data-shortcut)] xl:inline"
+      />
     </>
   );
 

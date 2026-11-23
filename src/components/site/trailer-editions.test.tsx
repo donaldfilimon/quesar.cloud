@@ -12,9 +12,13 @@ it("shows one selected feature and all twenty-four choices without loading a vid
   expect(html).toContain("Open player for Quesar architecture · 1 min");
   expect(html).toContain("Filter films by duration");
   expect(html).toContain("vision and roadmap");
+  // Each choice is named by its visible text (WCAG 2.5.3), not an aria-label.
+  expect(html).not.toContain('aria-label="Select ');
   for (const film of trailerEditions) {
+    const edition =
+      film.edition === "native30" ? "Native30 · Samantha narration" : "Neural performance";
     expect(html).toContain(
-      `Select ${film.title}, ${film.brand}, ${film.edition === "native30" ? "Native30 · Samantha narration" : "Neural performance"}`,
+      `<strong>${film.title}</strong><small>${film.brand} / ${film.style} / ${edition}</small>`,
     );
     expect(film.video.endsWith(film.master)).toBe(true);
     const receipt = JSON.parse(readFileSync(film.proof, "utf8"));
