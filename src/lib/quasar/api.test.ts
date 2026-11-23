@@ -201,10 +201,12 @@ describe("quasar api", () => {
     const fresh = await import("./api");
     fresh.setFallbackOrigin(async () => "http://fallback.test:4700");
     expect(await fresh.hydrateOrigin()).toBe("http://fallback.test:4700");
-    vi.stubGlobal("localStorage", {
-      getItem: () => null,
-      setItem: () => {
-        throw new Error("Storage unavailable");
+    vi.stubGlobal("window", {
+      localStorage: {
+        getItem: () => null,
+        setItem: () => {
+          throw new Error("Storage unavailable");
+        },
       },
     });
     try {
@@ -217,6 +219,25 @@ describe("quasar api", () => {
       expect(await fresh.hydrateOrigin()).toBe("http://fallback.test:4700");
     } finally {
       vi.unstubAllGlobals();
+    }
+  });
+
+  test("non-browser calls never use Node's global localStorage", async () => {
+    vi.resetModules();
+    const fresh = await import("./api");
+    const original = Object.getOwnPropertyDescriptor(globalThis, "localStorage");
+    const access = vi.fn(() => {
+      throw new Error("Node storage must stay unused");
+    });
+    Object.defineProperty(globalThis, "localStorage", { configurable: true, get: access });
+    try {
+      await fresh.setBaseUrl("http://device.test:4700");
+      fresh.beginColdLoad();
+      expect(await fresh.hydrateOrigin()).toBe("http://device.test:4700");
+      expect(access).not.toHaveBeenCalled();
+    } finally {
+      if (original) Object.defineProperty(globalThis, "localStorage", original);
+      else Reflect.deleteProperty(globalThis, "localStorage");
     }
   });
 

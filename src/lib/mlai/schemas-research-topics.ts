@@ -56,8 +56,5 @@ const ResearchSourceSchema = z.object({
 
 export const ResearchSourcesSchema = z.array(ResearchSourceSchema);
 
-export type ResearchTopicEntry = z.infer<typeof ResearchTopicEntrySchema>;
 export type ResearchTopics = z.infer<typeof ResearchTopicsSchema>;
-export type ResearchSourceSubject = z.infer<typeof ResearchSourceSubjectSchema>;
-export type ResearchSource = z.infer<typeof ResearchSourceSchema>;
 export type ResearchSources = z.infer<typeof ResearchSourcesSchema>;

@@ -206,7 +206,6 @@ export const DocsSchema = z.array(
   }),
 );
 
-export type DocSection = z.infer<typeof DocSectionSchema>;
 export type Docs = z.infer<typeof DocsSchema>;
 export type Doc = Docs[number];
 

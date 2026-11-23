@@ -44,9 +44,16 @@ pub async fn connect(database_url: &str) -> Result<PgPool, DbError> {
 
 /// `connect` for callers that already hold parsed options.
 pub async fn connect_with(options: PgConnectOptions) -> Result<PgPool, DbError> {
+    connect_with_timeout(options, ACQUIRE_TIMEOUT).await
+}
+
+pub(crate) async fn connect_with_timeout(
+    options: PgConnectOptions,
+    acquire_timeout: Duration,
+) -> Result<PgPool, DbError> {
     PgPoolOptions::new()
         .max_connections(MAX_CONNECTIONS)
-        .acquire_timeout(ACQUIRE_TIMEOUT)
+        .acquire_timeout(acquire_timeout)
         .connect_with(options)
         .await
         .map_err(DbError::Connect)

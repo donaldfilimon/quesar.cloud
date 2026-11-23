@@ -7,8 +7,7 @@
  * Several pages word the same tool or crate differently, one field per page.
  * The variants may differ in length but must state the same fact; where they
  * once contradicted each other, both now follow the pinned, dated research
- * records in `./research-records.ts` (reviewed 2026-09-06) and, for WDBX
- * storage, `notes/mlai/superpowers/specs/2026-09-22-single-app-merge-design.md`.
+ * records in `./research-records.ts` (reviewed 2026-09-06).
  *
  * Typed by `../schemas-runtime.ts` and parsed in `../abi-runtime.content.test.ts`;
  * no zod at runtime.

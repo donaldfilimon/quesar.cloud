@@ -1,14 +1,15 @@
 #!/usr/bin/env node
 /**
  * Parity check for a fresh static export (`out/`) against the published site
- * (`docs/`, what quesar.cloud serves; until the cut-over, the Vite build). Every page
+ * (`docs/`, what quesar.cloud serves). Every page
  * in `docs/` must exist in `out/` with the same title, description and canonical
  * URL, and every exported page must render the site shell around real content.
  *
- *   node scripts/next-check.ts [--vite <published dir>] [--next <export dir>]   (defaults: docs, out)
+ *   node scripts/next-check.ts [--published <published dir>] [--next <export dir>]   (defaults: docs, out)
  */
-import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
-import { join, relative, resolve } from "node:path";
+import { existsSync, readFileSync } from "node:fs";
+import { basename, join, relative, resolve } from "node:path";
+import { htmlFiles } from "./static-html-files.ts";
 
 function arg(name: string, fallback: string): string {
   const index = process.argv.indexOf(name);
@@ -16,19 +17,15 @@ function arg(name: string, fallback: string): string {
 }
 
 const root = process.cwd();
-const viteDir = resolve(root, arg("--vite", "docs"));
+const publishedDir = resolve(root, arg("--published", arg("--vite", "docs")));
 const nextDir = resolve(root, arg("--next", "out"));
 // Next's own not-found route; `404.html` is the page that is served.
 const IGNORED = new Set(["_not-found/index.html", "404/index.html"]);
 
 function pages(dir: string): string[] {
-  const walk = (current: string): string[] =>
-    readdirSync(current).flatMap((name) => {
-      const path = join(current, name);
-      if (statSync(path).isDirectory()) return name === "_next" ? [] : walk(path);
-      return name === "index.html" ? [relative(dir, path)] : [];
-    });
-  return walk(dir)
+  return htmlFiles(dir, "_next")
+    .filter((file) => basename(file) === "index.html")
+    .map((file) => relative(dir, file))
     .filter((page) => !IGNORED.has(page))
     .sort();
 }
@@ -50,23 +47,23 @@ function head(page: string) {
   return { titles, description: description && decode(description), canonical };
 }
 
-for (const dir of [viteDir, nextDir]) {
+for (const dir of [publishedDir, nextDir]) {
   if (!existsSync(join(dir, "index.html"))) {
     console.error(`[next-check] ${relative(root, dir)}/index.html is missing; build it first.`);
     process.exit(1);
   }
 }
 
-const vitePages = pages(viteDir);
+const publishedPages = pages(publishedDir);
 const nextPages = new Set(pages(nextDir));
 const problems: string[] = [];
 
-for (const page of vitePages) {
+for (const page of publishedPages) {
   if (!nextPages.has(page)) {
     problems.push(`${page}: missing from the Next export`);
     continue;
   }
-  const want = head(readFileSync(join(viteDir, page), "utf8"));
+  const want = head(readFileSync(join(publishedDir, page), "utf8"));
   const got = head(readFileSync(join(nextDir, page), "utf8"));
   if (got.titles.length !== 1) problems.push(`${page}: ${got.titles.length} <title> tags`);
   if (want.titles.at(-1) !== got.titles[0])
@@ -88,9 +85,9 @@ for (const page of nextPages) {
   }
 }
 
-const extra = [...nextPages].filter((page) => !vitePages.includes(page));
+const extra = [...nextPages].filter((page) => !publishedPages.includes(page));
 console.log(
-  `[next-check] ${vitePages.length} published pages, ${nextPages.size} exported pages (${extra.length} only in the export: ${extra.join(", ") || "none"})`,
+  `[next-check] ${publishedPages.length} published pages, ${nextPages.size} exported pages (${extra.length} only in the export: ${extra.join(", ") || "none"})`,
 );
 if (problems.length) {
   console.error(`[next-check] ${problems.length} problems:\n  ${problems.join("\n  ")}`);

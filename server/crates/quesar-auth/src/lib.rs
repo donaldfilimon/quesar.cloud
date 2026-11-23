@@ -19,6 +19,7 @@ pub mod providers;
 pub mod rows;
 pub mod session;
 pub mod token;
+pub mod user_lock;
 pub mod validate;
 
 #[cfg(feature = "test-support")]

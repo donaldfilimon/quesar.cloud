@@ -47,17 +47,17 @@ to rebuild or publish the website.
 
 ## Architecture
 
-| Area                                                | Source                                                                 |
-| --------------------------------------------------- | ---------------------------------------------------------------------- |
-| Route modules (`createFileRoute`) and server routes | `src/routes/`, generated into `app/` by `scripts/next-routes.ts`       |
-| Router, server functions and their Next.js wiring   | `src/framework/`, `next.config.ts`, `proxy.server.ts`                  |
-| Site UI and explicit server-only notices            | `src/components/site/`                                                 |
-| Typed project/research content                      | `src/lib/site-identity.ts`, `src/lib/home-content.ts`, `src/lib/mlai/` |
-| Cinematic showcase                                  | `src/cinematic/`, with playback support in `src/lib/trailer-engine/`   |
-| First-party authentication                          | `src/lib/auth/`                                                        |
-| Server services and model-provider interface        | `src/lib/server/`, including `llm/`                                    |
-| Database and release migrations                     | `src/lib/db.ts`, `migrations/`, `scripts/migrate.ts`                   |
-| Native shell                                        | `native/`, with its own package and dependency boundary                |
+| Area                                                | Source                                                               |
+| --------------------------------------------------- | -------------------------------------------------------------------- |
+| Route modules (`createFileRoute`) and server routes | `src/routes/`, generated into `app/` by `scripts/next-routes.ts`     |
+| Router, server functions and their Next.js wiring   | `src/framework/`, `next.config.ts`, `proxy.server.ts`                |
+| Site UI and explicit server-only notices            | `src/components/site/`                                               |
+| Typed project/research content                      | `src/lib/site-identity.ts`, `src/lib/mlai/`                          |
+| Cinematic showcase                                  | `src/cinematic/`, with playback support in `src/lib/trailer-engine/` |
+| First-party authentication                          | `src/lib/auth/`                                                      |
+| Server services and model-provider interface        | `src/lib/server/`, including `llm/`                                  |
+| Database and release migrations                     | `src/lib/db.ts`, `migrations/`, `scripts/migrate.ts`                 |
+| Native shell                                        | `native/`, with its own package and dependency boundary              |
 
 The site uses React, TypeScript, Next.js (App Router, webpack) and Tailwind. Read
 [`package.json`](package.json) for exact versions and scripts rather than
@@ -69,7 +69,7 @@ inferring the stack from older project descriptions.
 bun run check
 ```
 
-The gate runs formatting, type checking, linting, Vitest, and the server build.
+The gate runs formatting, type checking, linting, Vitest, the Rust server checks (rustfmt, Clippy and cargo tests) and the Next.js build.
 For changes that affect the static site, also run:
 
 ```bash

@@ -4,12 +4,15 @@
 //! comes from `TEST_DATABASE_URL`; start one with `scripts/dev-postgres.sh start`.
 
 use std::sync::atomic::{AtomicU32, Ordering};
-use std::time::{SystemTime, UNIX_EPOCH};
+use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
 use sqlx::postgres::PgConnectOptions;
 use sqlx::{Connection, PgConnection, PgPool};
 
 static COUNTER: AtomicU32 = AtomicU32::new(0);
+// A heavily loaded test host can spend longer connecting than a live request
+// should wait. Keep that headroom in fixtures only.
+const TEST_ACQUIRE_TIMEOUT: Duration = Duration::from_secs(30);
 
 /// An empty or whitespace-only value (`TEST_DATABASE_URL= cargo test`) is unset.
 fn configured_url(raw: Option<String>) -> Option<String> {
@@ -56,9 +59,18 @@ impl TestDatabase {
             .execute(&mut connection)
             .await
             .unwrap_or_else(|error| panic!("cannot create {name}: {error}"));
-        let pool = crate::connect_with(admin.clone().database(&name))
-            .await
-            .unwrap_or_else(|error| panic!("cannot connect to {name}: {error}"));
+        let pool = match crate::pool::connect_with_timeout(
+            admin.clone().database(&name),
+            TEST_ACQUIRE_TIMEOUT,
+        )
+        .await
+        {
+            Ok(pool) => pool,
+            Err(error) => {
+                drop_database(&admin, &name).await;
+                panic!("cannot connect to {name}: {error:?}");
+            }
+        };
         Self {
             pool,
             name,

@@ -2,6 +2,7 @@
 
 pub mod rules;
 
+use quesar_auth::{AuthError, user_lock};
 use sqlx::PgConnection;
 
 pub use rules::{InquiryInput, Refusal, ValidInquiry};
@@ -23,12 +24,10 @@ pub async fn insert(
     inquiry: &ValidInquiry,
 ) -> Result<(), sqlx::Error> {
     let linked = match user_id {
-        Some(id) => {
-            sqlx::query_scalar::<_, String>(r#"select id from "user" where id = $1 for share"#)
-                .bind(id)
-                .fetch_optional(&mut *conn)
-                .await?
-        }
+        Some(id) => user_lock::share(conn, id)
+            .await
+            .map_err(|AuthError::Database(error)| error)?
+            .then_some(id),
         None => None,
     };
     sqlx::query(

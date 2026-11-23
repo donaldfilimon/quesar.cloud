@@ -18,6 +18,8 @@ it.each(["", " \n\t"])(
     mkdirSync(resolve(dir, "docs"));
     writeFileSync(resolve(dir, "out/index.html"), "<main>Site</main>");
     writeFileSync(resolve(dir, "out/contact/index.html"), html);
+    writeFileSync(resolve(dir, "out/404.html"), "<main>404</main>");
+    writeFileSync(resolve(dir, "out/robots.txt"), "User-agent: *\n");
     writeFileSync(resolve(dir, "docs/index.html"), "Existing published site");
     const result = spawnSync(
       process.execPath,
@@ -69,4 +71,23 @@ it("publishes a Next export: decoded asset paths, RSC payload ignored, Pages fil
   expect(readFileSync(resolve(dir, "docs/robots.txt"), "utf8")).toContain(
     "Sitemap: https://quesar.cloud/sitemap.xml",
   );
+});
+
+it("keeps the previous snapshot when the export lacks robots.txt", () => {
+  const dir = mkdtempSync(resolve(tmpdir(), "quesar-publish-test-"));
+  temporary.push(dir);
+  mkdirSync(resolve(dir, "out"));
+  mkdirSync(resolve(dir, "docs"));
+  writeFileSync(resolve(dir, "out/index.html"), "<main>New snapshot</main>");
+  writeFileSync(resolve(dir, "out/404.html"), "<main>404</main>");
+  const previous = resolve(dir, "docs/index.html");
+  writeFileSync(previous, "Existing published site");
+
+  const result = spawnSync(process.execPath, [resolve(import.meta.dirname, "publish-static.ts")], {
+    cwd: dir,
+    encoding: "utf8",
+  });
+  expect(result.status).toBe(1);
+  expect(readFileSync(previous, "utf8")).toBe("Existing published site");
+  expect(result.stderr).toContain("out/robots.txt is missing");
 });

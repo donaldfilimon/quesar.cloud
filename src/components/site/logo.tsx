@@ -32,16 +32,18 @@ function Mark({ className, mono = false }: { className?: string; mono?: boolean 
 
 export function Logo({ compact = false }: { compact?: boolean }) {
   return (
-    <Link
-      to="/"
-      className="flex items-center gap-2.5 text-fg no-underline"
-      aria-label="Quesar by MLAI — home"
-    >
+    <Link to="/" className="flex items-center gap-2.5 text-fg no-underline">
       <Mark />
       <span className="flex flex-col leading-none">
         <span className="font-display text-[1.05rem] font-bold tracking-tight">Quesar</span>
-        {!compact ? <span className="mt-1 text-xs font-medium text-fg-subtle">by MLAI</span> : null}
+        {!compact ? (
+          <span className="mt-1 text-xs font-medium text-fg-subtle">
+            <span className="sr-only"> </span>by MLAI
+          </span>
+        ) : null}
       </span>
+      {/* The accessible name keeps the visible words first (WCAG 2.5.3). */}
+      <span className="sr-only">, home</span>
     </Link>
   );
 }

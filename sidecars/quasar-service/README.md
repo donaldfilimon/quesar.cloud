@@ -103,13 +103,14 @@ selected OS variables and preview configuration, excluding provider and pairing
 secrets. Generated project code still runs as the operator; this transport gate
 is not an operating-system sandbox.
 
-The runner uses installed Next 16.3.6 request/upgrade handlers directly because
+The runner uses the installed Next.js request/upgrade handlers directly because
 its ordinary custom-server API can register an additional unguarded upgrade
 listener. The template retains its config and supplies basePath/assetPrefix from
 `QUASAR_PREVIEW_BASE_PATH`. Existing or edited projects that remove that contract
 fail to start with a configuration error; restore those two config fields before
 retrying. Future Next upgrades require rerunning the real HTTP/assets/HMR and
-browser live-edit qualification.
+browser live-edit qualification. The template pins Next.js and its ESLint config
+to 16.4.5, the first 16.x release containing the November 3 security fixes.
 
 ## Browser client
 

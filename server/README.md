@@ -7,10 +7,16 @@ same-origin request checks hold without CORS.
 **Status: in development.** It is replacing the Next.js server build in stages;
 the plan and its progress log are in
 `notes/superpowers/plans/2026-11-10-rust-server-and-site-improvements.md`.
-Today it serves the export, answers `/api/readiness` and implements the whole
-authentication API (see [Authentication](#authentication)). The console and the
-other server features still live in the Node server until their milestone
-lands. **Nothing here is deployed.**
+It serves the export, answers `/api/readiness`, and provides the authentication
+API (see [Authentication](#authentication)). It also accepts anonymous
+telemetry and CSP reports. Its `/api/fn/*` routes cover public configuration,
+contact inquiries, and, for a signed-in user, workspace notes, the user's own
+profile (`profile.getProfile`) and billing (`billing.getBillingPlans`,
+`billing.createCheckout`). Their TypeScript types are generated from
+`quesar-contract` into `src/lib/api/generated/`; the contract's `drift` test
+fails when the two differ. The frontend still uses the
+Next.js server for its live API calls while the Rust migration is in progress.
+**Nothing here is deployed.**
 
 ## Run
 
@@ -29,6 +35,8 @@ bun run server         # http://127.0.0.1:8787
 | `QUESAR_MIGRATIONS_DIR` | `migrations` | Used by `quesar-server migrate`: the SQL files to apply. |
 | `TRUSTED_PROXY` | unset | Which proxy header names the client address for rate limits: `x-real-ip`, `x-forwarded-for` (rightmost hop) or `cloudflare` (`cf-connecting-ip`). Unset or anything else trusts no header and uses the peer socket address. |
 | `APP_ENCRYPTION_KEY`, `BETTER_AUTH_SECRET` | unset | The first set one keys the rate-limit subject hash (`APP_ENCRYPTION_KEY` also seals data). In production readiness reports `rate_limit_secret_missing` when neither is set. |
+| `STRIPE_PAYMENT_LINK` | unset | The hosted checkout link `billing.createCheckout` returns for the `pilot` plan, with `client_reference_id` and `prefilled_email` set from the session. Unset, billing reports `unconfigured`; not an `https` URL, `misconfigured`. |
+| `BILLING_PROVIDER` | `manual` | The provider label `billing.getBillingPlans` returns. |
 | `RUST_LOG`        | `info`           | Log filter. Logs are JSON on stdout.                                                           |
 
 `/api/readiness` reports the shape of the configuration only. It does not claim

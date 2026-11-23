@@ -134,7 +134,6 @@ export function TrailerEditions() {
                 <button
                   type="button"
                   aria-pressed={selected.id === film.id}
-                  aria-label={`Select ${film.title}, ${film.brand}, ${editionLabel(film)}`}
                   onClick={() => setSelectedId(film.id)}
                 >
                   <span className="edition-index-number">{String(index + 1).padStart(2, "0")}</span>

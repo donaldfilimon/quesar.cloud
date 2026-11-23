@@ -11,6 +11,15 @@ import type { TurnstileConfig } from "./TurnstileConfig";
 import type { PaymentMode } from "./PaymentMode";
 import type { CommerceStorage } from "./CommerceStorage";
 import type { CommerceReadiness } from "./CommerceReadiness";
+import type { AddNoteInput } from "./AddNoteInput";
+import type { DeleteNoteInput } from "./DeleteNoteInput";
+import type { FieldNote } from "./FieldNote";
+import type { ProfileRecord } from "./ProfileRecord";
+import type { BillingPlan } from "./BillingPlan";
+import type { BillingReason } from "./BillingReason";
+import type { BillingPlansResult } from "./BillingPlansResult";
+import type { CreateCheckoutInput } from "./CreateCheckoutInput";
+import type { CheckoutResult } from "./CheckoutResult";
 
 export type { ErrorBody };
 export type { NoInput };
@@ -22,6 +31,15 @@ export type { TurnstileConfig };
 export type { PaymentMode };
 export type { CommerceStorage };
 export type { CommerceReadiness };
+export type { AddNoteInput };
+export type { DeleteNoteInput };
+export type { FieldNote };
+export type { ProfileRecord };
+export type { BillingPlan };
+export type { BillingReason };
+export type { BillingPlansResult };
+export type { CreateCheckoutInput };
+export type { CheckoutResult };
 
 /** Every server function: its input and its result, keyed by wire name. */
 export interface ServerFunctions {
@@ -29,6 +47,12 @@ export interface ServerFunctions {
   "inquiries.getTurnstileConfig": { input: NoInput; result: TurnstileConfig };
   "quasar.getQuasarDefaultOrigin": { input: NoInput; result: string | null };
   "commerce.getCommerceReadiness": { input: NoInput; result: CommerceReadiness };
+  "workspace.listNotes": { input: NoInput; result: Array<FieldNote> };
+  "workspace.addNote": { input: AddNoteInput; result: null };
+  "workspace.deleteNote": { input: DeleteNoteInput; result: null };
+  "profile.getProfile": { input: NoInput; result: ProfileRecord | null };
+  "billing.getBillingPlans": { input: NoInput; result: BillingPlansResult };
+  "billing.createCheckout": { input: CreateCheckoutInput; result: CheckoutResult };
 }
 
 export type ServerFunctionName = keyof ServerFunctions;

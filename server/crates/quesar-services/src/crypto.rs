@@ -24,7 +24,7 @@ use base64::alphabet::STANDARD;
 use base64::engine::DecodePaddingMode;
 use base64::engine::general_purpose::{GeneralPurpose, GeneralPurposeConfig, URL_SAFE_NO_PAD};
 use hmac::{Hmac, Mac};
-use sha2::Sha256;
+use sha2::{Digest, Sha256};
 use zeroize::Zeroizing;
 
 const VERSION: &str = "v1";
@@ -32,6 +32,11 @@ const IV_BYTES: usize = 12;
 const TAG_BYTES: usize = 16;
 const KEY_BYTES: usize = 32;
 const SUBKEY_PURPOSE: &[u8] = b"quesar:seal";
+
+/// Unkeyed SHA-256 fingerprint of the UTF-8 content, encoded as unpadded base64url.
+pub fn digest(value: &str) -> String {
+    URL_SAFE_NO_PAD.encode(Sha256::digest(value.as_bytes()))
+}
 
 /// Why a sealing operation was refused.
 #[derive(Debug, Clone, PartialEq, Eq)]
