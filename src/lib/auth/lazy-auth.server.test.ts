@@ -31,6 +31,15 @@ vi.mock("./methods.server", () => ({
     return {};
   },
 }));
+/** Better Auth >= 1.7.27 checks its schema on the first database call rather
+ * than while building its context, so make one real adapter call. */
+async function touchDatabase(instance: {
+  $context: Promise<{ adapter: { count: (q: { model: string }) => Promise<number> } }>;
+}) {
+  const context = await instance.$context;
+  await context.adapter.count({ model: "user" }).catch(() => undefined);
+  await new Promise((resolve) => setTimeout(resolve, 20));
+}
 describe("installed Better Auth lazy initialization", () => {
   beforeEach(() => {
     vi.resetModules();
@@ -64,8 +73,7 @@ describe("installed Better Auth lazy initialization", () => {
     const { getAuth } = await import("./server");
     expect(probes.pool).not.toHaveBeenCalled();
     const instance = getAuth();
-    await instance.$context;
-    await new Promise((resolve) => setTimeout(resolve, 20));
+    await touchDatabase(instance);
     expect(getAuth()).toBe(instance);
     expect(probes.pool).toHaveBeenCalledOnce();
     expect(probes.providers).toHaveBeenCalledOnce();
@@ -75,8 +83,7 @@ describe("installed Better Auth lazy initialization", () => {
     vi.stubEnv("NODE_ENV", "development");
     const { getAuth } = await import("./server");
     expect(probes.bootstrap).not.toHaveBeenCalled();
-    await getAuth().$context;
-    await new Promise((resolve) => setTimeout(resolve, 20));
+    await touchDatabase(getAuth());
     expect(probes.bootstrap).toHaveBeenCalled();
   });
 });
