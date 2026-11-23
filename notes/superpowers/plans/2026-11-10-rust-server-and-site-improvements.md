@@ -76,7 +76,7 @@ Audit expiry becomes an in-process daily task under a Postgres advisory lock; `/
 | M9 | Deploy artifacts: Dockerfile, compose (Postgres and Caddy), systemd alternative, backup notes, cutover and rollback runbook | M |
 | M10 | Performance and quality: re-baseline `scripts/check-static.ts` budgets, widen `e2e/accessibility.spec.ts`, media diet for `public/` | M |
 | M11 | Design/UX pass per `notes/superpowers/specs/2026-10-25-blueprint-redesign.md` | L |
-| M12 | Films per `notes/superpowers/plans/2026-10-01-film-completion.md` | XL |
+| M12 | Films (the earlier film-completion plan was removed 2026-11-22) | XL |
 
 Ordering notes:
 
