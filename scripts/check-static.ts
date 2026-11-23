@@ -1,10 +1,10 @@
 import { readFileSync, readdirSync, statSync, existsSync } from "node:fs";
 import { resolve, relative, sep } from "node:path";
 import { gzipSync } from "node:zlib";
-import { parse, type DefaultTreeAdapterMap } from "parse5";
+import { parse } from "parse5";
+import { walkElements } from "./html-elements.ts";
 import { transform } from "lightningcss";
 
-type Node = DefaultTreeAdapterMap["node"];
 // The published site by default; `node scripts/check-static.ts out` checks a fresh export.
 const root = resolve(process.argv[2] ?? "docs");
 const origin = "https://quesar.cloud";
@@ -16,10 +16,6 @@ const budgets = [
   { route: "/research/", preloads: 23, gzip: 247971 },
   { route: "/developers/", preloads: 25, gzip: 235878 },
 ];
-function walk(node: Node, visit: (node: DefaultTreeAdapterMap["element"]) => void) {
-  if ("tagName" in node) visit(node);
-  if ("childNodes" in node) for (const child of node.childNodes) walk(child, visit);
-}
 function files(dir: string): string[] {
   return readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
     const path = resolve(dir, entry.name);
@@ -47,7 +43,7 @@ for (const file of files(root).filter((file) => file.endsWith(".html"))) {
     scripts: new Set<string>(),
     preloads: 0,
   };
-  walk(parse(html), (node) => {
+  walkElements(parse(html), false, (node) => {
     const attrs = Object.fromEntries(node.attrs.map((a) => [a.name, a.value]));
     if (attrs.id) data.ids.add(attrs.id);
     if (node.tagName === "a" && attrs.name) data.ids.add(attrs.name);

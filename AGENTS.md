@@ -5,7 +5,7 @@ Donald's standing rules for this repository. `CLAUDE.md` carries the command set
 - **This is the main MLAI/Quesar site as of 2026-09-22.** It supersedes
   `donaldfilimon/MLAI-CORPORATION-WWW` (Next 16, archived on GitHub). All of it
   was merged in at `8077dd1`; the local `mlai` checkout was retired 2026-09-28
-  (history: `~/at-risk-bundles/2026-09-28-consolidation/mlai.bundle`). Port any
+  (history: `~/at-risk-bundles/2026-09-28-consolidation/mlai.bundle`, no longer on this Mac (checked 2026-11-22) or in Time Machine back to 2026-11-11; the full history is the archived GitHub repo `donaldfilimon/MLAI-CORPORATION-WWW`, merged here at `8077dd1`). Port any
   remaining feature from that history; never revive it for new site work.
 - **Next.js App Router (2026-10-26, Donald's decision).** Asked whether the
   rule above ruled out Next.js, Donald chose to port this repository from

@@ -8,9 +8,13 @@ import { Connection, ORIGIN_KEY, EventPage, type PreviewStatus, type Site } from
 
 const memory = new Map<string, string>();
 
+function browserStorage(): Storage | undefined {
+  return typeof window === "undefined" ? undefined : window.localStorage;
+}
+
 function readLocal(key: string): string | null {
   try {
-    return typeof localStorage === "undefined" ? null : localStorage.getItem(key);
+    return browserStorage()?.getItem(key) ?? null;
   } catch {
     return null;
   }
@@ -29,11 +33,11 @@ const storage = {
   async setItem(key: string, value: string) {
     // Publish the in-memory fallback only after persistence succeeds. Otherwise
     // a rejected save silently becomes the origin on the next cold load.
-    if (typeof localStorage !== "undefined") localStorage.setItem(key, value);
+    browserStorage()?.setItem(key, value);
     memory.set(key, value);
   },
   async removeItem(key: string) {
-    if (typeof localStorage !== "undefined") localStorage.removeItem(key);
+    browserStorage()?.removeItem(key);
     memory.delete(key);
   },
 };

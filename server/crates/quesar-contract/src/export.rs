@@ -5,12 +5,18 @@ use ts_rs::{Config, TS};
 
 use crate::{
     ErrorBody, NoInput, ServerFunction,
+    billing::{
+        BillingPlan, BillingPlansResult, BillingReason, CheckoutResult, CreateCheckout,
+        CreateCheckoutInput, GetBillingPlans,
+    },
     commerce::{CommerceReadiness, CommerceStorage, GetCommerceReadiness, PaymentMode},
     inquiries::{
         GetTurnstileConfig, InquiryCode, InquiryField, InquiryResult, SendInquiry,
         SendInquiryInput, TurnstileConfig,
     },
+    profile::{GetProfile, ProfileRecord},
     quasar::GetQuasarDefaultOrigin,
+    workspace::{AddNote, AddNoteInput, DeleteNote, DeleteNoteInput, FieldNote, ListNotes},
 };
 
 /// Defaults, never the environment: the export must not depend on `TS_RS_*`.
@@ -40,6 +46,12 @@ fn functions() -> Vec<Entry> {
         entry::<GetTurnstileConfig>(),
         entry::<GetQuasarDefaultOrigin>(),
         entry::<GetCommerceReadiness>(),
+        entry::<ListNotes>(),
+        entry::<AddNote>(),
+        entry::<DeleteNote>(),
+        entry::<GetProfile>(),
+        entry::<GetBillingPlans>(),
+        entry::<CreateCheckout>(),
     ]
 }
 
@@ -94,6 +106,15 @@ pub fn files() -> Vec<(String, String)> {
     one::<PaymentMode>(&mut out);
     one::<CommerceStorage>(&mut out);
     one::<CommerceReadiness>(&mut out);
+    one::<AddNoteInput>(&mut out);
+    one::<DeleteNoteInput>(&mut out);
+    one::<FieldNote>(&mut out);
+    one::<ProfileRecord>(&mut out);
+    one::<BillingPlan>(&mut out);
+    one::<BillingReason>(&mut out);
+    one::<BillingPlansResult>(&mut out);
+    one::<CreateCheckoutInput>(&mut out);
+    one::<CheckoutResult>(&mut out);
     let idx = index(&functions(), &out);
     out.push(("index.ts".to_string(), idx));
     out
@@ -118,7 +139,7 @@ mod tests {
     #[test]
     fn function_names_are_well_formed_and_unique() {
         let names = function_names();
-        assert_eq!(names.len(), 4);
+        assert_eq!(names.len(), 10);
         for name in &names {
             assert!(valid_name(name), "bad function name {name}");
         }

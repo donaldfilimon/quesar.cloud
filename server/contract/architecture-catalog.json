@@ -1,0 +1,86 @@
+[
+  {
+    "id": "user",
+    "title": "You",
+    "href": "/architecture?node=user",
+    "excerpt": "Operator on a machine you own. Explore browser previews or send a request through a configured server or separately running local service. Each path has its own source and acceptance requirements.",
+    "searchText": "You Operator on a machine you own. Explore browser previews or send a request through a configured server or separately running local service. Each path has its own source and acceptance requirements. Local orientation Signed-in field console In-browser app surfaces"
+  },
+  {
+    "id": "quesar",
+    "title": "Quesar",
+    "href": "/architecture?node=quesar",
+    "excerpt": "A browser client for a local website builder. The /quasar screens connect to a separately running service through origin-scoped pairing. The service scaffolds Next.js projects and uses a configured provider for generation. Source implementation does not establish live provider ac",
+    "searchText": "Quesar A browser client for a local website builder. The /quasar screens connect to a separately running service through origin-scoped pairing. The service scaffolds Next.js projects and uses a configured provider for generation. Source implementation does not establish live provider acceptance. Browser client Service pairing Local project scaffold and preview"
+  },
+  {
+    "id": "abi",
+    "title": "ABI",
+    "href": "/architecture?node=abi",
+    "excerpt": "Nightly Rust orchestration. Routes persona requests and exposes source-defined tools. Its source workspace requires WDBX.",
+    "searchText": "ABI Nightly Rust orchestration. Routes persona requests and exposes source-defined tools. Its source workspace requires WDBX. CLI wrappers MCP stdio Deterministic persona routing"
+  },
+  {
+    "id": "tools",
+    "title": "Tools",
+    "href": "/architecture?node=tools",
+    "excerpt": "Contract-covered plugins and MCP tools. Twelve contract-covered MCP tools including wdbx_query and gpu_status. The optional loopback listener serves MCP 2024-11-05 HTTP+SSE sessions, not Streamable HTTP.",
+    "searchText": "Tools Contract-covered plugins and MCP tools. Twelve contract-covered MCP tools including wdbx_query and gpu_status. The optional loopback listener serves MCP 2024-11-05 HTTP+SSE sessions, not Streamable HTTP. stdio MCP Optional loopback HTTP+SSE with bearer auth"
+  },
+  {
+    "id": "router",
+    "title": "Persona router",
+    "href": "/architecture?node=router",
+    "excerpt": "Deterministic persona routing. ABI's local routing source selects persona profiles with deterministic rules. Local completion renders persona templates; this does not establish model execution or device selection.",
+    "searchText": "Persona router Deterministic persona routing. ABI's local routing source selects persona profiles with deterministic rules. Local completion renders persona templates; this does not establish model execution or device selection. Deterministic local routing Local persona-template completion"
+  },
+  {
+    "id": "context",
+    "title": "Context pack",
+    "href": "/architecture?node=context",
+    "excerpt": "Proposed inspectable context boundary. Context assembled before execution is an architecture requirement; implementation and qualification need separate evidence.",
+    "searchText": "Context pack Proposed inspectable context boundary. Context assembled before execution is an architecture requirement; implementation and qualification need separate evidence. "
+  },
+  {
+    "id": "wdbx",
+    "title": "WDBX",
+    "href": "/architecture?node=wdbx",
+    "excerpt": "Episodic substrate. WDBX implements durable records, vector retrieval, and structural provenance. Evidence-weighted retrieval remains unimplemented.",
+    "searchText": "WDBX Episodic substrate. WDBX implements durable records, vector retrieval, and structural provenance. Evidence-weighted retrieval remains unimplemented. Layered HNSW MVCC Content addressing"
+  },
+  {
+    "id": "memory",
+    "title": "Episodes",
+    "href": "/architecture?node=memory",
+    "excerpt": "Signed, content-addressed records. WAL, causal DAGs, witness encoding. Persistence that did not happen is not reported as success.",
+    "searchText": "Episodes Signed, content-addressed records. WAL, causal DAGs, witness encoding. Persistence that did not happen is not reported as success. Episode store CBOR witness encoder agreement on golden vectors"
+  },
+  {
+    "id": "embed",
+    "title": "Embeddings",
+    "href": "/architecture?node=embed",
+    "excerpt": "Vectors with a contract. WDBX implements exact and layered-HNSW retrieval with a pluggable scoring seam; evidence-weighted retrieval remains unimplemented.",
+    "searchText": "Embeddings Vectors with a contract. WDBX implements exact and layered-HNSW retrieval with a pluggable scoring seam; evidence-weighted retrieval remains unimplemented. Exact vector search Layered HNSW Pluggable scoring seam"
+  },
+  {
+    "id": "provenance",
+    "title": "Provenance",
+    "href": "/architecture?node=provenance",
+    "excerpt": "Structural provenance of a record. Content addressing, signatures, and causal history expose record commitments and relationships. They do not establish the truth or evidential reliability of a record.",
+    "searchText": "Provenance Structural provenance of a record. Content addressing, signatures, and causal history expose record commitments and relationships. They do not establish the truth or evidential reliability of a record. Content addressing Causal history"
+  },
+  {
+    "id": "compute",
+    "title": "Compute",
+    "href": "/architecture?node=compute",
+    "excerpt": "CPU primitives and optional accelerator source. The compute substrate provides deterministic CPU vector primitives and an accelerator contract. ABI's optional macOS Metal DOT source requires feature linking and successful pipeline initialization; device and workload qualification",
+    "searchText": "Compute CPU primitives and optional accelerator source. The compute substrate provides deterministic CPU vector primitives and an accelerator contract. ABI's optional macOS Metal DOT source requires feature linking and successful pipeline initialization; device and workload qualification remain separate. CPU vector primitives Accelerator contract Optional Metal DOT source"
+  },
+  {
+    "id": "output",
+    "title": "Output",
+    "href": "/architecture?node=output",
+    "excerpt": "Source-scoped output and claims. The website exposes field notes and browser demos. Trace and context-pack guarantees require evidence from the specific runtime path.",
+    "searchText": "Output Source-scoped output and claims. The website exposes field notes and browser demos. Trace and context-pack guarantees require evidence from the specific runtime path. Claims language Field notes console In-browser demos"
+  }
+]

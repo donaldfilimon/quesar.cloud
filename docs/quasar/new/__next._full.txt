@@ -1,20 +1,20 @@
 1:"$Sreact.fragment"
 2:"static/chunks/9756-2d48c2b995ad91ca.js"
-3:"static/chunks/4514-528d9552f8c1e643.js"
-4:"static/chunks/1546-99b37aecf8873e20.js"
+3:"static/chunks/4514-a9830aab53d08be9.js"
+4:"static/chunks/8971-cf7e4aa223212b73.js"
 5:"static/chunks/203-7b0223e2fefe979c.js"
-6:"static/chunks/1856-8d22ee3124cf31ed.js"
-7:"static/chunks/app/layout-7c7991423c323bd2.js"
-8:I[71856,["9756","$2","4514","$3","1546","$4","203","$5","1856","$6","7177","$7"],"RootShell"]
+6:"static/chunks/1856-8b2d4412fffc8f37.js"
+7:"static/chunks/app/layout-7d0d0a2a4622dea0.js"
+8:I[71856,["9756","$2","4514","$3","8971","$4","203","$5","1856","$6","7177","$7"],"RootShell"]
 9:I[57121,[],""]
 a:I[74581,[],""]
-b:I[71856,["9756","$2","4514","$3","1546","$4","203","$5","1856","$6","7177","$7"],"RootNotFound"]
-10:"static/chunks/1198-c1e944e214dbc838.js"
-11:"static/chunks/6792-8e4f2770d364d6e6.js"
+b:I[71856,["9756","$2","4514","$3","8971","$4","203","$5","1856","$6","7177","$7"],"RootNotFound"]
+10:"static/chunks/1198-df0f249966bd2c05.js"
+11:"static/chunks/6792-cb14053a059e9f64.js"
 12:"static/chunks/8064-355273775ab8d1a6.js"
-13:"static/chunks/1011-853cff8b2abe396b.js"
-14:"static/chunks/app/quasar/new/page-8d85741f106f5a40.js"
-15:I[26325,["9756","$2","4514","$3","1198","$10","1546","$4","6792","$11","8064","$12","203","$5","1011","$13","8447","$14"],"default"]
+13:"static/chunks/1011-fbda799cd68b5c6b.js"
+14:"static/chunks/app/quasar/new/page-30cf4c0168e37acf.js"
+15:I[26325,["9756","$2","4514","$3","1198","$10","8971","$4","6792","$11","8064","$12","203","$5","1011","$13","8447","$14"],"default"]
 16:I[90484,[],"OutletBoundary"]
 17:"$Sreact.suspense"
 19:"ViewportBoundary"
@@ -22,12 +22,12 @@ b:I[71856,["9756","$2","4514","$3","1546","$4","203","$5","1856","$6","7177","$7
 1c:"MetadataBoundary"
 1d:I[90484,[],"$1c"]
 1f:I[27123,[],"default",1]
-:HL["/_next/static/css/b2faa010fac09568.css","style"]
+:HL["/_next/static/css/8d64817bf441810c.css","style"]
 d:X
 f:[["children",{"s":"__PAGE__","h":512,"d":{"r":["$","$1","c",{"children":[["$","$L15",null,{}],null,["$","$L16",null,{"children":["$","$17",null,{"name":"Next.MetadataOutlet","children":"$@18"}]}]]}],"p":false,"v":null}}]]
 e:[["children",{"s":"new","h":512,"d":{"r":["$","$1","c",{"children":[null,["$","$L9",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$La",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$d"},"c":"$Qf"}]]
 c:[["children",{"s":"quasar","h":512,"d":{"r":["$","$1","c",{"children":[null,["$","$L9",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$La",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$d"},"c":"$Qe"}]]
-0:{"P":null,"c":["","quasar","new"],"q":"","i":false,"t":{"t":{"s":"","h":528,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/b2faa010fac09568.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]],["$","html",null,{"lang":"en","data-theme":"dark","className":"dark","suppressHydrationWarning":true,"children":[["$","head",null,{"children":[["$","script",null,{"dangerouslySetInnerHTML":{"__html":"(function(){try{var t=localStorage.getItem(\"mlai-theme\");var theme=t===\"light\"||t===\"dark\"?t:(window.matchMedia(\"(prefers-color-scheme: light)\").matches?\"light\":\"dark\");document.documentElement.dataset.theme=theme;document.documentElement.classList.toggle(\"dark\",theme===\"dark\");}catch(e){document.documentElement.dataset.theme=\"dark\";document.documentElement.classList.add(\"dark\");}})();"}}],["$","link",null,{"rel":"icon","type":"image/svg+xml","href":"/favicon.svg"}],["$","link",null,{"rel":"manifest","href":"/manifest.webmanifest"}],["$","link",null,{"rel":"apple-touch-icon","href":"/apple-touch-icon.png"}],["$","link",null,{"rel":"alternate","type":"application/rss+xml","title":"Quesar lab notes, research and releases","href":"/feed.xml"}]]}],["$","body",null,{"className":"antialiased","children":["$","$L8",null,{"children":["$","$L9",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$La",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","$Lb",null,{}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}]}]}]]}]]}],"p":false,"v":null},"c":"$Qc"},"h":{"r":["$","$1","h",{"children":[null,["$","$L1a",null,{"children":"$L1b"}],["$","$L1d",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$17",null,{"name":"Next.Metadata","children":"$L1e"}]}],null]}],null]}],"p":false,"v":null}},"m":"$undefined","G":["$1f",[]],"S":true,"r":"$undefined","s":"$undefined","a":"$undefined","l":"$undefined","p":"$undefined","d":"$undefined","b":"538ce9dacd37"}
+0:{"P":null,"c":["","quasar","new"],"q":"","i":false,"t":{"t":{"s":"","h":528,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/8d64817bf441810c.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]],["$","html",null,{"lang":"en","data-theme":"dark","className":"dark","suppressHydrationWarning":true,"children":[["$","head",null,{"children":[["$","script",null,{"dangerouslySetInnerHTML":{"__html":"(function(){try{var t=localStorage.getItem(\"mlai-theme\");var theme=t===\"light\"||t===\"dark\"?t:(window.matchMedia(\"(prefers-color-scheme: light)\").matches?\"light\":\"dark\");document.documentElement.dataset.theme=theme;document.documentElement.classList.toggle(\"dark\",theme===\"dark\");}catch(e){document.documentElement.dataset.theme=\"dark\";document.documentElement.classList.add(\"dark\");}})();"}}],["$","link",null,{"rel":"icon","type":"image/svg+xml","href":"/favicon.svg"}],["$","link",null,{"rel":"manifest","href":"/manifest.webmanifest"}],["$","link",null,{"rel":"apple-touch-icon","href":"/apple-touch-icon.png"}],["$","link",null,{"rel":"alternate","type":"application/rss+xml","title":"Quesar lab notes, research and releases","href":"/feed.xml"}]]}],["$","body",null,{"className":"antialiased","children":["$","$L8",null,{"children":["$","$L9",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$La",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","$Lb",null,{}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}]}]}]]}]]}],"p":false,"v":null},"c":"$Qc"},"h":{"r":["$","$1","h",{"children":[null,["$","$L1a",null,{"children":"$L1b"}],["$","$L1d",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$17",null,{"name":"Next.Metadata","children":"$L1e"}]}],null]}],null]}],"p":false,"v":null}},"m":"$undefined","G":["$1f",[]],"S":true,"r":"$undefined","s":"$undefined","a":"$undefined","l":"$undefined","p":"$undefined","d":"$undefined","b":"c6f9419a315d"}
 d:C
 1b:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]
 18:null

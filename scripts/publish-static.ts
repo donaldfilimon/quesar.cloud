@@ -10,19 +10,12 @@
  * export's own `404.html` is the
  * Pages 404. `docs/` holds ONLY the built site; internal records live in `notes/`.
  */
-import {
-  cpSync,
-  existsSync,
-  readdirSync,
-  readFileSync,
-  rmSync,
-  statSync,
-  writeFileSync,
-} from "node:fs";
+import { cpSync, existsSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { join, relative } from "node:path";
 import { site } from "../src/lib/site-identity.ts";
 import { buildLlmsTxt, llmsPage } from "./llms-txt.ts";
 import { buildSitemap, sitemapEntry } from "./sitemap.ts";
+import { htmlFiles } from "./static-html-files.ts";
 
 const root = process.cwd();
 const src = join(root, "out");
@@ -34,28 +27,23 @@ if (!existsSync(join(src, "index.html"))) {
   process.exit(1);
 }
 
-function htmlFiles(dir: string): string[] {
-  return readdirSync(dir).flatMap((name) => {
-    const path = join(dir, name);
-    if (statSync(path).isDirectory()) return htmlFiles(path);
-    return name.endsWith(".html") ? [path] : [];
-  });
+for (const required of ["404.html", "robots.txt"]) {
+  if (!existsSync(join(src, required))) {
+    console.error(`[publish-static] out/${required} is missing from the export.`);
+    process.exit(1);
+  }
 }
-const empty = htmlFiles(src).filter((file) => !readFileSync(file, "utf8").trim());
+
+const exportPages = htmlFiles(src).map((file) => ({ file, html: readFileSync(file, "utf8") }));
+const empty = exportPages.filter(({ html }) => !html.trim());
 if (empty.length) {
   console.error(
-    `[publish-static] empty prerendered HTML:\n  ${empty.map((file) => relative(src, file)).join("\n  ")}`,
+    `[publish-static] empty prerendered HTML:\n  ${empty.map(({ file }) => relative(src, file)).join("\n  ")}`,
   );
   process.exit(1);
 }
-if (!existsSync(join(src, "404.html"))) {
-  console.error("[publish-static] out/404.html is missing; the export must include the 404 page.");
-  process.exit(1);
-}
-
 const missing = new Set<string>();
-for (const file of htmlFiles(src)) {
-  const html = readFileSync(file, "utf8");
+for (const { file, html } of exportPages) {
   // Attribute references only: the inline RSC payload repeats them JSON-escaped.
   for (const [, raw] of html.matchAll(/(?:src|href)="\/_next\/static\/([^"?#]+)"/g)) {
     const asset = decodeURIComponent(raw);
@@ -68,24 +56,27 @@ if (missing.size) {
   process.exit(1);
 }
 
+const robots = readFileSync(join(src, "robots.txt"), "utf8");
+const sitemap = exportPages.flatMap(({ html }) => {
+  const entry = sitemapEntry(html);
+  return entry ? [entry] : [];
+});
+const llms = exportPages.flatMap(({ html }) => {
+  const page = llmsPage(html);
+  return page ? [page] : [];
+});
+const sitemapXml = buildSitemap(sitemap);
+const llmsTxt = buildLlmsTxt(llms, site.name);
+
 rmSync(out, { recursive: true, force: true });
 cpSync(src, out, { recursive: true });
 writeFileSync(join(out, ".nojekyll"), "");
 writeFileSync(join(out, "CNAME"), `${DOMAIN}\n`);
-const builtPages = htmlFiles(out).map((file) => readFileSync(file, "utf8"));
-const sitemap = builtPages.flatMap((html) => {
-  const entry = sitemapEntry(html);
-  return entry ? [entry] : [];
-});
-writeFileSync(join(out, "sitemap.xml"), buildSitemap(sitemap));
-const llms = builtPages.flatMap((html) => {
-  const page = llmsPage(html);
-  return page ? [page] : [];
-});
-writeFileSync(join(out, "llms.txt"), buildLlmsTxt(llms, site.name));
+writeFileSync(join(out, "sitemap.xml"), sitemapXml);
+writeFileSync(join(out, "llms.txt"), llmsTxt);
 writeFileSync(
   join(out, "robots.txt"),
-  `${readFileSync(join(out, "robots.txt"), "utf8").trimEnd()}\n\nSitemap: https://${DOMAIN}/sitemap.xml\n`,
+  `${robots.trimEnd()}\n\nSitemap: https://${DOMAIN}/sitemap.xml\n`,
 );
 console.log(`[publish-static] sitemap.xml lists ${sitemap.length} pages`);
 console.log(`[publish-static] llms.txt lists ${llms.length} pages`);

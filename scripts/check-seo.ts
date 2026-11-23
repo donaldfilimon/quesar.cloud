@@ -15,8 +15,8 @@ import { readFileSync, readdirSync, existsSync } from "node:fs";
 import { resolve, relative, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parse, type DefaultTreeAdapterMap } from "parse5";
+import { walkElements } from "./html-elements.ts";
 
-type Node = DefaultTreeAdapterMap["node"];
 type Element = DefaultTreeAdapterMap["element"];
 
 export type PageFacts = {
@@ -34,12 +34,6 @@ export type PageFacts = {
 };
 
 const maxDescription = 160;
-
-function walk(node: Node, visit: (node: Element) => void) {
-  if ("tagName" in node) visit(node);
-  if ("childNodes" in node) for (const child of node.childNodes) walk(child, visit);
-  if ("content" in node && node.content) walk(node.content as unknown as Node, visit);
-}
 
 function text(node: Element): string {
   return node.childNodes.map((child) => ("value" in child ? child.value : "")).join("");
@@ -61,10 +55,10 @@ export function pageFacts(html: string, route: string): PageFacts {
   };
   const document = parse(html);
   const head = new Set<Element>();
-  walk(document, (node) => {
-    if (node.tagName === "head") walk(node, (inner) => head.add(inner));
+  walkElements(document, true, (node) => {
+    if (node.tagName === "head") walkElements(node, true, (inner) => head.add(inner));
   });
-  walk(document, (node) => {
+  walkElements(document, true, (node) => {
     const attrs = Object.fromEntries(node.attrs.map((a) => [a.name, a.value]));
     if ("data-server-only-page" in attrs) facts.serverOnly = true;
     // Metadata counts only from <head>: a stray body <meta> must not satisfy a rule.

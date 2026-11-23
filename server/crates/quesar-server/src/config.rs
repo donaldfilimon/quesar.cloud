@@ -58,10 +58,13 @@ impl Environment {
         self.0.iter().map(|(k, v)| (k.as_str(), v.as_str()))
     }
 
+    pub(crate) fn raw(&self, name: &str) -> Option<&str> {
+        self.0.get(name).map(String::as_str)
+    }
+
     pub fn read(&self, name: &str) -> Option<&str> {
-        self.0
-            .get(name)
-            .map(|value| value.trim())
+        self.raw(name)
+            .map(str::trim)
             .filter(|value| !value.is_empty())
     }
 }

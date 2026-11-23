@@ -2,10 +2,12 @@
   "hooks": {
     "SessionStart": [
       {
+        "matcher": "^startup$",
         "hooks": [
           {
             "type": "command",
-            "command": "'/Users/donaldfilimon/dev/active/quesar.cloud/.codex/hooks/session-start.sh'"
+            "command": "if [ \"${QUESAR_CODEX_CLOUD_BOOTSTRAP:-}\" = 1 ]; then root=$(git rev-parse --show-toplevel) && exec \"$root/.codex/hooks/session-start.sh\"; fi",
+            "timeout": 300
           }
         ]
       }
