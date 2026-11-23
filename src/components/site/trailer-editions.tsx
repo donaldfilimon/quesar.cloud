@@ -44,7 +44,7 @@ function FilmPlayer({ film }: { film: TrailerEdition }) {
         >
           <img src={film.poster} width={1920} height={1080} alt="" decoding="async" />
           <span className="edition-play-label">
-            <Play size={22} aria-hidden="true" /> {failed ? "Retry film" : "Open player"}
+            <Play size={22} aria-hidden="true" /> {failed ? "Retry player" : "Open player"}
           </span>
         </button>
       )}
